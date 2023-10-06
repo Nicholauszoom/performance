@@ -9484,6 +9484,9 @@ class GeneralController extends Controller
             // $employee->pension_fund = $request->pension_fund;
             // $employee->physical_address = $request->physical_address;
             $employee->update();
+            $autheniticateduser = auth()->user()->emp_id;
+
+            $auditLog = SysHelpers::AuditLog(1, "Employee Details with Employee Id .$employee->emp_id. are Updated by Employee Id ".$autheniticateduser, $request);
 
             // Start of Employee Details
             $profile = EmployeeDetail::where('employeeID', $id)->first();
@@ -9517,6 +9520,8 @@ class GeneralController extends Controller
                 // $profile->marriage_date = $request->marriage_date;
                 $profile->save();
             }
+
+
 
             $msg = "Employee Details Have Been Updated successfully";
             return redirect('flex/employee-profile/' . base64_encode($id))->with('msg', $msg);

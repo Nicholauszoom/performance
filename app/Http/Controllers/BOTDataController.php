@@ -60,13 +60,11 @@ class BOTDataController extends Controller
             "directorsCommittee" => 'none',
         ];
 
-dd($data);
         $endpoint = '192.168.100.102:8000/api/individualInformation';
         $response = Http::post($endpoint, $data);
        // dd($response->response);
         if ($response->status() === 200) {
          $data = $response->json();
-         dd($data);
         } else {
             $statusCode = $response->status();
             $errorMessage = $response['error']['message'];
