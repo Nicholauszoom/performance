@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::table('grievances', function (Blueprint $table) {
             //
-            $table->timestamps();
+            // $table->timestamps();
         });
     }
 
