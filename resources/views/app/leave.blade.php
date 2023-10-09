@@ -84,8 +84,8 @@
                 </div>
 
                     <div class="form-group col-6">
-                    <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name" for="stream" >Nature of Leave <span  class="text-danger">*</span></label>
-                            <select class="form-control form-select  select " required id="docNo" name="nature">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12"  for="nature" >Nature of Leave <span  class="text-danger">*</span></label>
+                            <select class="form-control form-select   select @error('emp_ID') is-invalid @enderror"  id="docNo" name="nature" required>
                                 <option value="" class="text-center"> -- select Leave Type Here -- </option>
                             @foreach($leave_type as $key)
                             <option value="{{ $key->id }}" class="text-center"> {{ $key->type }} </option>
@@ -715,41 +715,6 @@
 @include('app.includes.leave_operations')
 
 <script>
-    $('#docNo').change(function() {
-        var id = $(this).val();
-        var url = '{{ route('getSubs',': id ') }}';
-        url = url.replace(':id', id);
-
-        $('#subs_cat').find('option').not(':first').remove();
-
-        $.ajax({
-            url: url,
-            type: 'get',
-            dataType: 'json',
-            success: function(response) {
-                //  let subs=response.data;
-
-                console.log(response);
-                //  $("#first").remove();
-
-                for (var i = 0; i < response.length; i++) {
-
-                    var id = subs[i].id;
-                    var name = subs[i].name;
-                    var option = "<option value='" + id + "'>" + name + "</option>";
-
-                    $("#subs_cat").append(option);
-                    $("#sub").show();
-
-
-                }
-
-            }
-        });
-    });
-</script>
-
-<script>
     $(function() {
         var today = new Date();
         var dd = today.getDate();
@@ -826,7 +791,7 @@
 
 <script>
 
-    $('#docNo').chang  e(function(){
+    $('#docNo').change(function(){
         var id = $(this).val();
         const start = document.getElementById("start-date").value;
         const end = document.getElementById("end-date").value;
@@ -878,7 +843,4 @@
 
 
     </script>
-
-  <script>
-
 @endpush
