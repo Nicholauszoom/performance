@@ -13,10 +13,10 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('unpaid_leave', function (Blueprint $table) {
-            //
-            $table->integer('status');
-        });
+        // Schema::table('unpaid_leave', function (Blueprint $table) {
+        //     //
+        //     $table->integer('status');
+        // });
     }
 
     /**
@@ -26,9 +26,9 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::table('unpaid_leave', function (Blueprint $table) {
-            //
-            $table->dropColumn('status');
-        });
+        // Schema::table('unpaid_leave', function (Blueprint $table) {
+        //     //
+        //     $table->dropColumn('status');
+        // });
     }
 };
