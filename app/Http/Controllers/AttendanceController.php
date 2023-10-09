@@ -347,6 +347,54 @@ class AttendanceController extends Controller
 
 
       }
+      public function getDetailsSub($uid = 0)
+      {
+
+        $par=$uid;
+
+
+        $raw=explode('|',$par);
+        $id=$raw[0];
+        $start=$raw[1];
+        $end=$raw[2];
+        $empID=$raw[3];
+
+        if ($start==null || $end==null ) {
+          $total_days=0;
+        }
+        else
+        {
+          $days= SysHelpers::countWorkingDays($start,$end);
+          $holidays=SysHelpers::countHolidays($start,$end);
+          $total_days=$days-$holidays;
+        }
+
+
+
+                //For Gender
+                $gender = EMPL::where('id', $empID)->value('gender');
+                if ($gender !== null) {
+                    dd($gender);
+                } else {
+                    // Handle the case where no employee with the specified empID was found.
+                }
+        if($gender=="Male"){$gender=1; }else { $gender=2;  }
+        // For Male Employees
+        if ($gender==1) {
+          $data['data'] = LeaveSubType::where('category_id', $id)->Where('sex',0)->get();
+          // return response()->json($data);
+          return json_encode($data);
+        }
+        // For Female Employees
+        else
+        {
+          $data = LeaveSubType::where('category_id', $id)->get();
+          // return json_encode($data);
+              return response()->json(['data'=>$data,'days'=>$total_days]);
+        }
+
+
+      }
 
 
   public  function check_leave_balance(Request $request){
@@ -1563,6 +1611,33 @@ public function saveLeave(Request $request) {
 
     return view('app.customleave_report', $data);
 
+    }
+
+    // For Clear Old Leaves
+    public function clear_leaves()
+    {
+        $employees=EMPL::get();
+        foreach ($employees as $employee) {
+                $date=date('Y').'-'.'01-01';
+                $leave_balance = $this->attendance_model->getLeaveBalance($employee->emp_id,$employee->hire_date, $date);
+                $leaves=new Leaves();
+                $emp=$employee->emp_id;
+                $leaves->empID = $emp;
+                $leaves->start =Date('Y-m-d') ;
+                $leaves->end=Date('Y-m-d') ;
+                $leaves->leave_address="auto";
+                $leaves->mobile = $employee->mobile;
+                $leaves->nature = 1;
+                $leaves->remaining=5;
+                $leaves->days=$leave_balance ;
+                $leaves->reason="Automatic applied!";
+                $leaves->position="Default Apllication";
+                $leaves->status=3;
+                $leaves->state=0;
+                $leaves->save();
+    }
+
+    return back();
     }
 
 

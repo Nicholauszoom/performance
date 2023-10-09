@@ -30,6 +30,7 @@
    <div class="card border-top  border-top-width-3 border-top-main border-bottom-main rounded-0 col-lg-12 ">
     <div class="card-header">
         <h5 class="text-warning"> Apply Leave On Behalf </h5>
+        <a href="{{route('attendance.clear-leaves')}}" class="btn btn-main float-end"> Clear Old Leaves</a>
     </div>
     {{-- id="applyLeave" --}}
     <div class="card-body">
@@ -46,7 +47,7 @@
             <div class="row">
                 <div class="form-group col-6">
                     <label class="col-form-label ">Employee Name: </label>
-                        <select name="empID" class="form-control select">
+                        <select name="empID" id="empID" class="form-control select">
                             <option value=""> -- Choose Employee Here -- </option>
                             @foreach($employees as $item)
                             <option value="{{ $item->emp_id }}" class="text-center"> {{ $item->fname }} {{ $item->mname }} {{ $item->lname }} </option>
@@ -795,8 +796,9 @@
         var id = $(this).val();
         const start = document.getElementById("start-date").value;
         const end = document.getElementById("end-date").value;
-      var par= id+'|'+start+'|'+end;
-        var url = '{{ route("getSubs", ":id") }}';
+        const empID = document.getElementById("empID").value;
+      var par= id+'|'+start+'|'+end+'|'+empID;
+        var url = '{{ route("getLeaveSubs", ":id") }}';
         url = url.replace(':id', par);
 
         if (id==1) {

@@ -411,6 +411,8 @@ Route::middleware('auth')->middleware([Setting::class])->group(function(){
     Route::any('/cancelLeave/{id}' ,'cancelLeave')->name('attendance.cancelLeave');
     //for manager
     Route::any('/leave' ,'leave')->name('attendance.leave');
+    Route::any('/clear-leaves' ,'clear_leaves')->name('attendance.clear-leaves');
+
     Route::post('/saveLeaveOnBehalf' ,'saveLeaveOnBehalf')->name('attendance.saveLeaveOnBehalf'); //atendance controller
 
     Route::any('/approveLeave/{id}' ,'approveLeave')->name('attendance.approveLeave');
@@ -502,6 +504,7 @@ Route::middleware('auth')->middleware([Setting::class])->group(function(){
 
         // for fetching sub leave type
         Route::get('get/details/{id}', 'getDetails')->name('getSubs');
+        Route::get('get/detailsSub/{id}', 'getDetailsSub')->name('getLeaveSubs');
         Route::any('/check_leave_balance' ,'check_leave_balance')->name('attendance.check_leave_balance');
 
 
