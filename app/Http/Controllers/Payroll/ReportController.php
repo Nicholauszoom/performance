@@ -3539,25 +3539,31 @@ public function processOneEmployee($employee, $request, $nature){
                 if ($request->leave_employee == Null || $request->leave_employee == "All") {
                     if ($department != 'All' && $position != 'All') {
                         $_employees = Employee::where('state', '=', 1)->where('department', $department)->where('position', $position)->get();
+                        
                     } elseif ($department != 'All' && $position == 'All') {
                         $_employees = Employee::where('state', '=', 1)->where('department', $department)->get();
+                       
                     } elseif ($department == 'All') {
                         $_employees = Employee::where('state', '=', 1)->get();
                     }
                     foreach ($_employees  as $employee) {
                         $employees[] =  $this->gettingEmployeeAnnualLeavesReport($employee, $request, $_nature->id);
+                      
                     }
                 } else {
                     $_employees = Employee::where('emp_id', $request->leave_employee)->where('state', '=', 1)->get();
+                      dd($employees);
                     //$employees = $this->flexperformance_model->userprofile($request->leave_employee);
                     foreach ($_employees  as $employee) {
                         $employees[] =  $this->gettingEmployeeAnnualLeavesReport($employee, $request, $_nature->id);
+                     
                     }
                 }
             }
             //  dd( $employees);
 
         } else {
+           
             if ($request->leave_employee == Null || $request->leave_employee == "All") {
                 if ($department != 'All' && $position != 'All') {
                     $employees = Employee::where('state', '=', 1)->where('department', $department)->where('position', $position)->get();
@@ -3565,13 +3571,18 @@ public function processOneEmployee($employee, $request, $nature){
                     $employees = Employee::where('state', '=', 1)->where('department', $department)->get();
                 } elseif ($department == 'All') {
                     $employees = Employee::where('state', '=', 1)->get();
+                 //   dd($employees);
+                
                 }
+
                 foreach ($employees  as $employee) {
                     $this->gettingEmployeeAnnualLeavesReport($employee, $request, $nature);
+                    // dd( $this->gettingEmployeeAnnualLeavesReport($employee, $request, $nature));
                 }
             } else {
                 $employees = Employee::where('emp_id', $request->leave_employee)->where('state', '=', 1)->get();
                 //$employees = $this->flexperformance_model->userprofile($request->leave_employee);
+                
                 foreach ($employees  as $employee) {
                     $this->gettingEmployeeAnnualLeavesReport($employee, $request, $nature);
                 }
@@ -3587,6 +3598,7 @@ public function processOneEmployee($employee, $request, $nature){
         }
 
         $data['employees'] =  $employees;
+        
         $data['nature'] =  $nature;
         $data['leave_name'] = $leave_name;
         $data['date'] = $request->duration;
