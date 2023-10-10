@@ -442,7 +442,7 @@ Route::middleware('auth')->middleware([Setting::class])->group(function(){
        Route::any('/employee-profile/{id}','viewProfile')->name('flex.viewProfile');
 
        Route::post('/save-details','updateEmployeeDetails')->name('flex.saveDetails');
-       Route::post('/save-details-employment','updateEmployeeDetails')->name('flex.saveDetailsEmployment');
+       Route::post('/save-details-employment','updateSpecificEmployeeDetails')->name('flex.saveDetailsEmployment');
        Route::post('/save-details-basic','employeeBasicDetails')->name('flex.saveBasicDetails');
        Route::post('/save-details-address','employeeAddressDetails')->name('flex.saveAddressDetails');
        Route::post('/save-details-person','employeePersonDetails')->name('flex.savePersonDetails');

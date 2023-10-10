@@ -294,6 +294,8 @@ class AttendanceController extends Controller
             $data['days']=$interval->days;
             $data['title'] = 'Leave';
             $data['leaveBalance'] = $this->attendance_model->getLeaveBalance(Auth::user()->emp_id, Auth::user()->hire_date, date('Y-m-d'));
+            $data['sickLeaveBalance'] = $this->attendance_model->getLeaveBalance(Auth::user()->emp_id, Auth::user()->hire_date, date('Y-m-d'));
+            $data['compasionteLeaveBalance'] = Leaves::where('empID', Auth::user()->emp_id)->where('status',3)->where('nature',3)->value('remaining');
 
             // dd($data['leaveBalance']);
             $data['leave_type'] = $this->attendance_model->leave_type();
