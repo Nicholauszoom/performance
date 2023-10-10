@@ -16,10 +16,10 @@ return new class extends Migration
         Schema::table('leaves', function (Blueprint $table) {
             //
                //new fields
-               $table->string('position')->nullable();
-               $table->string('level1', 10)->nullable();
-               $table->string('level2', 10)->nullable();
-               $table->string('level3', 10)->nullable();
+            //    $table->string('position')->nullable();
+            //    $table->string('level1', 10)->nullable();
+            //    $table->string('level2', 10)->nullable();
+            //    $table->string('level3', 10)->nullable();
         });
     }
 

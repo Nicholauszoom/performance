@@ -13,9 +13,9 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('grievances', function (Blueprint $table) {
+        Schema::table('temp_payroll_logs', function (Blueprint $table) {
             //
-            // $table->timestamps();
+            $table->double('gross');
         });
     }
 
@@ -26,7 +26,7 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::table('grivancies', function (Blueprint $table) {
+        Schema::table('temp_payroll_logs', function (Blueprint $table) {
             //
         });
     }

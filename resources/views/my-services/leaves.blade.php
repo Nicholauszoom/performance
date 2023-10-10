@@ -150,35 +150,35 @@
           {{-- start of add approval modal --}}
 
 <div id="approval" class="modal fade" tabindex="-1">
-  <div class="modal-dialog modal-dialog-centered modal-md">
-      <div class="modal-content">
+    <div class="modal-dialog modal-dialog-centered modal-md">
+        <div class="modal-content">
 
-        <div class="modal-header">
-          <button type="button" class="btn-close " data-bs-dismiss="modal">
+            <div class="modal-header">
+            <button type="button" class="btn-close " data-bs-dismiss="modal">
 
-          </button>
-      </div>
-      <modal-body class="p-4">
-        <h6 class="text-center">Are you Sure ?</h6>
-        <div class="row ">
-          <div class="col-4 mx-auto">
-            <button  type="submit" class="btn bg-main btn-sm px-4 " >Yes</button>
+            </button>
+        </div>
+        <modal-body class="p-4">
+            <h6 class="text-center">Are you Sure ?</h6>
+            <div class="row ">
+            <div class="col-4 mx-auto">
+                <button  type="submit" class="btn bg-main btn-sm px-4 " >Yes</button>
 
-            <button type="button" class="btn bg-danger btn-sm  px-4 text-light" data-bs-dismiss="modal">
-              No
-          </button>
-          </div>
+                <button type="button" class="btn bg-danger btn-sm  px-4 text-light" data-bs-dismiss="modal">
+                No
+            </button>
+            </div>
+
+
+            </div>
+        </modal-body>
+        <modal-footer>
+
+        </modal-footer>
 
 
         </div>
-      </modal-body>
-      <modal-footer>
-
-      </modal-footer>
-
-
-      </div>
-  </div>
+    </div>
 </div>
 
 {{-- end of add approval modal --}}
@@ -194,7 +194,11 @@
     </div>
 
     <div class="card-body">
-        <p><b>Days Accrued: <code class="text-success"> {{ $totalAccrued .' Days' }}</b></code></p>
+        <p><b>Annual Leave Days Accrued: <code class="text-success"> {{ $totalAccrued .' Days' }}</b></code></p>
+        {{-- <p><b>Sick Leave Days Accrued: <code class="text-success"> {{ $sickLeaveBalance .' Days' }}</b></code></p>
+        <p><b>Compassionate Leave Days Accrued: <code class="text-success"> {{ $compasionteLeaveBalance .' Days' }}</b></code></p>
+        <p><b>Maternity Leave Days Accrued: <code class="text-success"> {{ $totalAccrued .' Days' }}</b></code></p>
+        <p><b>Study Leave Days Accrued: <code class="text-success"> {{ $totalAccrued .' Days' }}</b></code></p> --}}
 
 
         @if(Session::has('note'))      {{ session('note') }}  @endif
