@@ -1179,6 +1179,9 @@ class AttendanceModel extends Model
 
         $prev_month = date("Y-m-d", strtotime('-1 month', strtotime($today)));
         $last_month_date = date('Y-m-t', strtotime($prev_month));
+        $givenDate = Carbon::parse($today);
+        $firstDayOfMonth = $givenDate->firstOfMonth()->toDateString();
+        $lastDayOfMonth = $givenDate->endOfMonth()->toDateString();
 
         if ($empID == 'All') {
             if ($department != 'All' && $position != 'All') {
@@ -1192,7 +1195,8 @@ class AttendanceModel extends Model
                     ->where('employee.state', 1)
                     ->where('leaves.status',3)
                     ->where('employee.department', $department)
-                    ->where('start', '>=', $last_month_date)
+                     ->where('start', '>=', $firstDayOfMonth)
+                    ->where('start', '<=', $lastDayOfMonth)
                     ->where('nature', $nature)
                     ->get();
             } elseif ($department != 'All' && $position == 'All') {
@@ -1204,7 +1208,8 @@ class AttendanceModel extends Model
                     ->where('leaves.status',3)
                     ->select('leaves.*', 'employee.*', 'department.name as department_name', 'position.name as  position_name')->where('employee.state', 1)
                     ->where('employee.department', $department)
-                    ->where('start', '>=', $last_month_date)
+                    ->where('start', '>=', $firstDayOfMonth)
+                    ->where('start', '<=', $lastDayOfMonth)
                     ->where('nature', $nature)
                     ->get();
             } elseif ($department == 'All') {
@@ -1216,7 +1221,8 @@ class AttendanceModel extends Model
                     ->join('position', 'position.id', '=', 'employee.position')
                     ->where('leaves.status',3)
                     ->select('leaves.*', 'employee.*', 'department.name as department_name', 'position.name as  position_name')->where('employee.state', 1)
-                    ->where('start', '>=', $last_month_date)
+                    ->where('start', '>=', $firstDayOfMonth)
+                    ->where('start', '<=', $lastDayOfMonth)
                     ->where('nature', $nature)
                     ->get();
             }
@@ -1228,6 +1234,8 @@ class AttendanceModel extends Model
                 ->join('position', 'position.id', '=', 'employee.position')
                 ->where('leaves.status',3)
                 ->select('leaves.*', 'employee.*', 'department.name as department_name', 'position.name as  position_name')->where('start', '>=', $last_month_date)
+                ->where('start', '>=', $firstDayOfMonth)
+                ->where('start', '<=', $lastDayOfMonth)
                 ->where('nature', $nature)
                 ->where('employee.emp_id', $empID)
                 ->get();
