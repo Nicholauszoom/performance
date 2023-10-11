@@ -294,10 +294,11 @@ class AttendanceController extends Controller
             $data['days']=$interval->days;
             $data['title'] = 'Leave';
             $data['leaveBalance'] = $this->attendance_model->getLeaveBalance(Auth::user()->emp_id, Auth::user()->hire_date, date('Y-m-d'));
-            $data['sickLeaveBalance'] = $this->attendance_model->getLeaveBalance(Auth::user()->emp_id, Auth::user()->hire_date, date('Y-m-d'));
-            $data['compasionteLeaveBalance'] = Leaves::where('empID', Auth::user()->emp_id)->where('status',3)->where('nature',3)->value('remaining');
-
-            // dd($data['leaveBalance']);
+            $data['sickLeaveBalance'] = $this->getRemainingDaysForLeave(Auth::user()->emp_id, 2);
+            $data['compassionateLeaveBalance'] = $this->getRemainingDaysForLeave(Auth::user()->emp_id, 3);
+            $data['maternityLeaveBalance'] = $this->getRemainingDaysForLeave(Auth::user()->emp_id, 4);
+            $data['paternityLeaveBalance'] =$this->getRemainingDaysForLeave(Auth::user()->emp_id, 5);
+            $data['studyLeaveBalance'] = $this->getRemainingDaysForLeave(Auth::user()->emp_id, 6);
             $data['leave_type'] = $this->attendance_model->leave_type();
 
 
@@ -397,6 +398,21 @@ class AttendanceController extends Controller
 
 
       }
+
+
+   public function getRemainingDaysForLeave($employeeId, $natureId) {
+        $maxDays = LeaveType::where('id', $natureId)->value('max_days');
+        $currentYear = date('Y');
+        $startDate = $currentYear . '-01-01'; // Start of the current year
+        $endDate = date('Y-m-d'); // Current date
+
+        $daysSpent = Leaves::where('empId', $employeeId)
+            ->where('nature', $natureId)
+            ->whereBetween('created_at', [$startDate, $endDate])
+            ->sum('days');
+
+        return $maxDays - $daysSpent;
+    }
 
 
   public  function check_leave_balance(Request $request){

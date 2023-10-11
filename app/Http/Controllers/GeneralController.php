@@ -9937,27 +9937,37 @@ class GeneralController extends Controller
         return redirect('flex/employee-profile/' . base64_encode($empID))->with('msg', $msg);
     }
 
-    public function employeeDependant(Request $request){
+    public function employeeDependant(Request $request) {
+        // Start of dependants details
+        $emp_id = $request->employeeID;
 
-            // start of depedants details
-            $emp_id = $request->employeeID;
+        // Check if the dependant already exists with the same details
+        $existingDependant = EmployeeDependant::where('employeeID', $emp_id)
+            ->where('dep_name', $request->dep_name)
+            ->where('dep_surname', $request->dep_surname)
+            ->where('dep_birthdate', $request->dep_birthdate)
+            ->where('dep_gender', $request->dep_gender)
+            ->where('dep_certificate', $request->dep_certificate)
+            ->first();
 
-            $dependant = EmployeeDependant::firstOrNew([
-                'employeeID' => $emp_id,
-                'dep_certificate' => $request->dep_certficate,
-            ]);
-
-                $dependant->dep_name = $request->dep_name;
-                $dependant->dep_surname = $request->dep_surname;
-                $dependant->dep_birthdate = $request->dep_birthdate;
-                $dependant->dep_gender = $request->dep_gender;
-                $dependant->dep_certificate = $request->dep_certificate;
-                $dependant->dep_certificate = $request->dep_certificate;
-
-                    $dependant->save();
-
-            $msg = "Employee Details Have Been Updated successfully";
+        if ($existingDependant) {
+            $msg = "Dependant with the same details already exists.";
             return redirect('flex/employee-profile/' . base64_encode($emp_id))->with('msg', $msg);
+        } else {
+            // Create a new dependant if it doesn't exist
+            $dependant = new EmployeeDependant();
+            $dependant->employeeID = $emp_id; // Set the employee ID
+            $dependant->dep_name = $request->dep_name;
+            $dependant->dep_surname = $request->dep_surname;
+            $dependant->dep_birthdate = $request->dep_birthdate;
+            $dependant->dep_gender = $request->dep_gender;
+            $dependant->dep_certificate = $request->dep_certificate;
+
+            $dependant->save();
+
+            $msg = "Dependant added successfully.";
+            return redirect('flex/employee-profile/' . base64_encode($emp_id))->with('msg', $msg);
+        }
     }
     public function employeeSpouse(Request $request){
 
