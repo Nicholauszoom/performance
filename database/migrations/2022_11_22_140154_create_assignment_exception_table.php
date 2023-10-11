@@ -14,7 +14,7 @@ class CreateAssignmentExceptionTable extends Migration
     public function up()
     {
         Schema::create('assignment_exception', function (Blueprint $table) {
-            $table->integer('id')->primary();
+            $table->id();
             $table->string('assignment_id', 45);
             $table->string('emp_id', 45);
             $table->string('exception_type', 100)->nullable();

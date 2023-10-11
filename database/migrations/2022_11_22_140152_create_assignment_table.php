@@ -14,7 +14,7 @@ class CreateAssignmentTable extends Migration
     public function up()
     {
         Schema::create('assignment', function (Blueprint $table) {
-            $table->integer('id')->primary();
+            $table->id();
             $table->string('name', 200);
             $table->string('project', 45);
             $table->string('activity', 45);

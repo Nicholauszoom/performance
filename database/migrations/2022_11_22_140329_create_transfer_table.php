@@ -14,7 +14,7 @@ class CreateTransferTable extends Migration
     public function up()
     {
         Schema::create('transfer', function (Blueprint $table) {
-            $table->integer('id')->primary();
+            $table->id();
             $table->string('empID', 10);
             $table->string('parameter', 100);
             $table->integer('parameterID')->comment("1-Salary, 2-Position, 3-Deptment, 4-Branch, 5-");

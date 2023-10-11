@@ -14,7 +14,7 @@ class CreateTaskRatingsTable extends Migration
     public function up()
     {
         Schema::create('task_ratings', function (Blueprint $table) {
-            $table->integer('id')->primary();
+            $table->id();
             $table->string('title', 100);
             $table->string('description', 100);
             $table->double('lower_limit');

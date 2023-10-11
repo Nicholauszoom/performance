@@ -19,7 +19,7 @@ class CreateNotificationsTable extends Migration
             $table->string('message', 110);
             $table->integer('for');
             $table->string('recom_by', 110)->nullable();
-            $table->integer('id')->primary();
+            $table->id();
             
             $table->unique(['type', 'for'], 'unique_index');
             $table->timestamps();

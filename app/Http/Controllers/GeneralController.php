@@ -124,7 +124,7 @@ class GeneralController extends Controller
     {
 
         if ($request->method() == "POST") {
-            $empID = session('emp_id');
+            $empID = auth()->user()->emp_id;
 
             $username = $request->input('username');
             $password = $request->input('password');
@@ -144,7 +144,7 @@ class GeneralController extends Controller
 
                     if ($result) {
                         $data = array(
-                            'empID' => session('emp_id'),
+                            'empID' => auth()->user()->emp_id,
                             'password' => $password_hash,
                             'time' => date('Y-m-d'),
                         );
@@ -326,7 +326,7 @@ class GeneralController extends Controller
     public function bank(Request $request)
     {
         if (session('mng_bank_info')) {
-            $id = session('emp_id');
+            $id = auth()->user()->emp_id;
             $data['banks'] = $this->flexperformance_model->bank();
             $data['branch'] = $this->flexperformance_model->bank_branch();
             $data['title'] = "Bank";
@@ -340,7 +340,7 @@ class GeneralController extends Controller
     {
 
         $this->authenticateUser('view-organization');
-        $id = session('emp_id');
+        $id = auth()->user()->emp_id;
         $data['employee'] = $this->flexperformance_model->customemployee();
         $data['cost_center'] = $this->flexperformance_model->costCenter();
         $data['parent_department'] = $this->flexperformance_model->departmentdropdown();
@@ -434,7 +434,7 @@ class GeneralController extends Controller
 
     public function alldepartment(Request $request)
     {
-        $id = session('emp_id');
+        $id = auth()->user()->emp_id;
         $data['department'] = $this->flexperformance_model->alldepartment();
         $data['title'] = "Department";
         return view('app.department', $data);
@@ -508,7 +508,7 @@ class GeneralController extends Controller
                 'parent_pattern' => $parent_code,
                 'reports_to' => $parent_id,
                 'level' => $parent_level + 1,
-                'created_by' => session('emp_id'),
+                'created_by' => auth()->user()->emp_id,
             );
 
             $identifiers = $this->flexperformance_model->departmentAdd($departmentData);
@@ -534,7 +534,7 @@ class GeneralController extends Controller
     public function branch(Request $request)
     {
         $this->authenticateUser('view-organization');
-        $id = session('emp_id');
+        $id = auth()->user()->emp_id;
         $data['branch'] = $this->flexperformance_model->branch();
         // $data['department'] = $this->flexperformance_model->alldepartment();
         $data['countrydrop'] = $this->flexperformance_model->countrydropdown();
@@ -545,7 +545,7 @@ class GeneralController extends Controller
     public function costCenter()
     {
         $this->authenticateUser('view-organization');
-        $id = session('emp_id');
+        $id = auth()->user()->emp_id;
         $data['cost_center'] = $this->flexperformance_model->costCenter();
         $data['countrydrop'] = $this->flexperformance_model->countrydropdown();
         $data['title'] = "Cost Center";
@@ -556,7 +556,7 @@ class GeneralController extends Controller
 
     public function nationality(Request $request)
     {
-        $id = session('emp_id');
+        $id = auth()->user()->emp_id;
         $data['nationality'] = $this->flexperformance_model->nationality();
         $data['title'] = "Employee Nationality";
         return view('app.nationality', $data);
@@ -1169,7 +1169,7 @@ class GeneralController extends Controller
                     'start' => $start_final,
                     'end' => $end_final,
                     'amount' => $request->input('amount'),
-                    'recommended_by' => session('emp_id'),
+                    'recommended_by' => auth()->user()->emp_id,
                     'date_recommended' => date('Y-m-d'),
                     'date_approved' => date('Y-m-d'),
                 );
@@ -1254,7 +1254,7 @@ class GeneralController extends Controller
             $budgetID = $this->uri->segment(3);
             $data = array(
                 'status' => 1,
-                'approved_by' => session('emp_id'),
+                'approved_by' => auth()->user()->emp_id,
                 'date_approved' => date('Y-m-d'),
             );
             $result = $this->flexperformance_model->updateBudget($data, $budgetID);
@@ -1272,7 +1272,7 @@ class GeneralController extends Controller
             $budgetID = $this->uri->segment(3);
             $data = array(
                 'status' => 2,
-                'approved_by' => session('emp_id'),
+                'approved_by' => auth()->user()->emp_id,
                 'date_approved' => date('Y-m-d'),
             );
             $result = $this->flexperformance_model->updateBudget($data, $budgetID);
@@ -1299,7 +1299,7 @@ class GeneralController extends Controller
 
     public function training_application()
     {
-        $empID = session('emp_id');
+        $empID = auth()->user()->emp_id;
 
         $data['budget'] = $this->flexperformance_model->budget();
         $data['my_applications'] = $this->flexperformance_model->my_training_applications($empID);
@@ -1348,7 +1348,7 @@ class GeneralController extends Controller
         $data = array(
             'empID' => $empID,
             'skills_ID' => $course,
-            'nominated_by' => session('emp_id'),
+            'nominated_by' => auth()->user()->emp_id,
         );
         $result = $this->flexperformance_model->requesttraining($data);
         if ($result) {
@@ -1367,7 +1367,7 @@ class GeneralController extends Controller
     public function requestTraining2(Request $request)
     {
         if ($request->method() == "POST") {
-            $empID = session('emp_id');
+            $empID = auth()->user()->emp_id;
             $course = $request->input('course');
             $data = array(
                 'empID' => $empID,
@@ -1398,7 +1398,7 @@ class GeneralController extends Controller
             $requestID = $this->uri->segment(3);
             $data = array(
                 'status' => 1,
-                'recommended_by' => session('emp_id'),
+                'recommended_by' => auth()->user()->emp_id,
                 'date_recommended' => date('Y-m-d'),
             );
             $result = $this->flexperformance_model->updateTrainingRequest($data, $requestID);
@@ -1416,7 +1416,7 @@ class GeneralController extends Controller
             $requestID = $this->uri->segment(3);
             $data = array(
                 'status' => 4, //Held or Suspended
-                'recommended_by' => session('emp_id'),
+                'recommended_by' => auth()->user()->emp_id,
                 'date_recommended' => date('Y-m-d'),
             );
             $result = $this->flexperformance_model->updateTrainingRequest($data, $requestID);
@@ -1434,7 +1434,7 @@ class GeneralController extends Controller
             $requestID = $this->uri->segment(3);
             $data = array(
                 'status' => 3, //Held or Suspended
-                'approved_by' => session('emp_id'),
+                'approved_by' => auth()->user()->emp_id,
                 'date_approved' => date('Y-m-d'),
             );
             $result = $this->flexperformance_model->updateTrainingRequest($data, $requestID);
@@ -1452,7 +1452,7 @@ class GeneralController extends Controller
             $requestID = $this->uri->segment(3);
             $data = array(
                 'status' => 5, //DisApproved
-                'approved_by' => session('emp_id'),
+                'approved_by' => auth()->user()->emp_id,
                 'date_approved' => date('Y-m-d'),
             );
             $result = $this->flexperformance_model->updateTrainingRequest($data, $requestID);
@@ -1470,7 +1470,7 @@ class GeneralController extends Controller
             $requestID = $this->uri->segment(3);
             $data = array(
                 'status' => 3, //Confirmed
-                'confirmed_by' => session('emp_id'),
+                'confirmed_by' => auth()->user()->emp_id,
                 'date_confirmed' => date('Y-m-d'),
             );
             $result = $this->flexperformance_model->confirmTrainingRequest($data, $requestID);
@@ -1488,7 +1488,7 @@ class GeneralController extends Controller
             $requestID = $this->uri->segment(3);
             $data = array(
                 'status' => 6, //DisApproved
-                'confirmed_by' => session('emp_id'),
+                'confirmed_by' => auth()->user()->emp_id,
                 'date_confirmed' => date('Y-m-d'),
             );
             $result = $this->flexperformance_model->unconfirmTrainingRequest($data, $requestID);
@@ -1618,7 +1618,7 @@ class GeneralController extends Controller
                     'certificate' => $data["file_name"],
                     'status' => 1,
                     'remarks' => $remarks,
-                    'accepted_by' => session('emp_id'),
+                    'accepted_by' => auth()->user()->emp_id,
                     'date_accepted' => date('Y-m-d'),
                 );
                 $data_skills = array(
@@ -1713,7 +1713,7 @@ class GeneralController extends Controller
                     'amount' => $request->input('amount'),
                     'type' => $request->input('type'),
                     'description' => $request->input('description'),
-                    'created_by' => session('emp_id'),
+                    'created_by' => auth()->user()->emp_id,
                 );
             } else {
                 $data = array(
@@ -1723,7 +1723,7 @@ class GeneralController extends Controller
                     'type' => $request->input('type'),
                     'description' => $request->input('description'),
                     'mandatory' => 0,
-                    'created_by' => session('emp_id'),
+                    'created_by' => auth()->user()->emp_id,
                 );
             }
 
@@ -1880,7 +1880,7 @@ class GeneralController extends Controller
                 'code' => strtoupper($request->input('code')),
                 'driving_licence' => $licence,
                 'minimum_qualification' => $request->input('qualification'),
-                'created_by' => session('emp_id'),
+                'created_by' => auth()->user()->emp_id,
                 'position_code' => $this->code_generator(6),
                 'parent_code' => $parent_code,
                 'level' => $level + 1,
@@ -2390,14 +2390,14 @@ class GeneralController extends Controller
     {
 
         $data['title'] = "Overtime";
-        $data['my_overtimes'] = $this->flexperformance_model->my_overtimes(session('emp_id'));
+        $data['my_overtimes'] = $this->flexperformance_model->my_overtimes(auth()->user()->emp_id);
         $data['overtimeCategory'] = $this->flexperformance_model->overtimeCategory();
         $data['employees'] = $this->flexperformance_model->Employee();
 
-        $data['line_overtime'] = $this->flexperformance_model->lineOvertimes(session('emp_id'));
+        $data['line_overtime'] = $this->flexperformance_model->lineOvertimes(auth()->user()->emp_id);
 
         // elseif (session('line')!=0) {
-        //   $data['adv_overtime'] = $this->flexperformance_model->overtimesLinemanager(session('emp_id'));
+        //   $data['adv_overtime'] = $this->flexperformance_model->overtimesLinemanager(auth()->user()->emp_id);
         // }
         // elseif (session('conf_overtime')!=0) {
         //   $data['adv_overtime'] = $this->flexperformance_model->overtimesHR();
@@ -2443,7 +2443,7 @@ class GeneralController extends Controller
                 'time_start' => $start,
                 'time_end' => $end,
                 'reason' => $request->input('reason'),
-                'empID' => session('emp_id'),
+                'empID' => auth()->user()->emp_id,
             );
 
             $this->flexperformance_model->update_overtime($data, $overtimeID);
@@ -2466,7 +2466,7 @@ class GeneralController extends Controller
         $data = array(
             'status' => 5,
             'time_confirmed_line' => date('Y-m-d h:i:s'),
-            'linemanager' => session('emp_id'),
+            'linemanager' => auth()->user()->emp_id,
         );
         $this->flexperformance_model->update_overtime($data, $overtimeID);
         echo "<p class='alert alert-success text-center'>Overtime Confirmed Successifully</p>";
@@ -2580,7 +2580,7 @@ class GeneralController extends Controller
         // // $rate = $this->flexperformance_model->get_overtime_rate();
 
         // if($status==4){
-        $signatory = session('emp_id');
+        $signatory = auth()->user()->emp_id;
         $time_approved = date('Y-m-d');
         $amount = 0;
 
@@ -2617,7 +2617,7 @@ class GeneralController extends Controller
         // $rate = $this->flexperformance_model->get_overtime_rate();
 
         if ($status == 0) {
-            $signatory = session('emp_id');
+            $signatory = auth()->user()->emp_id;
             $time_approved = date('Y-m-d');
             $result = $this->flexperformance_model->lineapproveOvertime($overtimeID, $time_approved);
 
@@ -2641,7 +2641,7 @@ class GeneralController extends Controller
         // $rate = $this->flexperformance_model->get_overtime_rate();
 
         // if($status==0){
-        $signatory = session('emp_id');
+        $signatory = auth()->user()->emp_id;
         $time_approved = date('Y-m-d');
         $result = $this->flexperformance_model->hrapproveOvertime($overtimeID, $signatory, $time_approved);
         if ($result == true) {
@@ -2665,7 +2665,7 @@ class GeneralController extends Controller
         // // $rate = $this->flexperformance_model->get_overtime_rate();
 
         // if($status==0){
-        $signatory = session('emp_id');
+        $signatory = auth()->user()->emp_id;
         $time_approved = date('Y-m-d');
         $result = $this->flexperformance_model->fin_approveOvertime($overtimeID, $signatory, $time_approved);
         if ($result == true) {
@@ -2848,6 +2848,7 @@ class GeneralController extends Controller
     {
 
         $this->authenticateUser('view-employee');
+        
 
 
         // if(session('mng_emp')){
@@ -2855,7 +2856,7 @@ class GeneralController extends Controller
         //   } elseif(session('mng_emp') ){
         $data['employee'] = $this->flexperformance_model->employee();
         /*}elseif(session('mng_emp')){
-        $data['employee'] = $this->flexperformance_model->employeelinemanager(session('emp_id'));
+        $data['employee'] = $this->flexperformance_model->employeelinemanager(auth()->user()->emp_id);
         }*/
 
         $data['title'] = "Employee";
@@ -3073,7 +3074,7 @@ class GeneralController extends Controller
                 'empID' => $empID,
                 'parameter' => 'Position',
                 'parameterID' => 2,
-                'recommended_by' => session('emp_id'),
+                'recommended_by' => auth()->user()->emp_id,
                 'date_recommended' => date('Y-m-d'),
                 'date_approved' => date('Y-m-d'),
                 'old' => $request->input('old'),
@@ -3098,7 +3099,7 @@ class GeneralController extends Controller
     'empID' =>$empID,
     'parameter' =>'Branch',
     'parameterID' =>4,
-    'recommended_by' =>session('emp_id'),
+    'recommended_by' =>auth()->user()->emp_id,
     'date_recommended' =>date('Y-m-d'),
     'date_approved' =>date('Y-m-d'),
     'old' =>$request->input('old'),
@@ -3196,7 +3197,7 @@ class GeneralController extends Controller
                 'last_updated' => date('Y-m-d'),
             );
             $transferUpdates = array(
-                'approved_by' => session('emp_id'),
+                'approved_by' => auth()->user()->emp_id,
                 'status' => 1,
                 'date_approved' => date('Y-m-d'),
             );
@@ -3225,7 +3226,7 @@ class GeneralController extends Controller
                 'last_updated' => date('Y-m-d'),
             );
             $transferUpdates = array(
-                'approved_by' => session('emp_id'),
+                'approved_by' => auth()->user()->emp_id,
                 'status' => 1,
                 'date_approved' => date('Y-m-d'),
             );
@@ -3254,7 +3255,7 @@ class GeneralController extends Controller
                 'last_updated' => date('Y-m-d'),
             );
             $transferUpdates = array(
-                'approved_by' => session('emp_id'),
+                'approved_by' => auth()->user()->emp_id,
                 'status' => 1,
                 'date_approved' => date('Y-m-d'),
             );
@@ -3296,7 +3297,7 @@ class GeneralController extends Controller
                 'empID' => $empID,
                 'parameter' => 'Salary',
                 'parameterID' => 1,
-                'recommended_by' => session('emp_id'),
+                'recommended_by' => auth()->user()->emp_id,
                 'date_recommended' => date('Y-m-d'),
                 'date_approved' => date('Y-m-d'),
                 'old' => $request->input('old'),
@@ -3623,7 +3624,7 @@ class GeneralController extends Controller
         $this->authenticateUser('view-loan');
 
         // if(session('mng_paym') ||session('recom_paym') ||session('appr_paym')){
-        $data['myloan'] = $this->flexperformance_model->mysalary_advance(session('emp_id'));
+        $data['myloan'] = $this->flexperformance_model->mysalary_advance(auth()->user()->emp_id);
 
         // if(session('recom_loan')!='' &&session('appr_loan')){
 
@@ -3637,7 +3638,7 @@ class GeneralController extends Controller
         // }
 
         $data['employee'] = $this->flexperformance_model->customemployee();
-        $data['max_amount'] = $this->flexperformance_model->get_max_salary_advance(session('emp_id'));
+        $data['max_amount'] = $this->flexperformance_model->get_max_salary_advance(auth()->user()->emp_id);
         $data['title'] = "Loans and Salaries";
         $data['pendingPayroll'] = $this->payroll_model->pendingPayrollCheck();
         return view('app.salary_advance', $data);
@@ -3649,14 +3650,14 @@ class GeneralController extends Controller
 
     public function current_loan_progress(Request $request)
     {
-        $data['max_amount'] = $this->flexperformance_model->get_max_salary_advance(session('emp_id'));
-        $data['myloan'] = $this->flexperformance_model->mysalary_advance_current(session('emp_id'));
+        $data['max_amount'] = $this->flexperformance_model->get_max_salary_advance(auth()->user()->emp_id);
+        $data['myloan'] = $this->flexperformance_model->mysalary_advance_current(auth()->user()->emp_id);
 
-        $this->flexperformance_model->update_salary_advance_notification_staff(session('emp_id'));
+        $this->flexperformance_model->update_salary_advance_notification_staff(auth()->user()->emp_id);
 
         if (session('recom_loan') != '' && session('appr_loan') != '') {
             $data['otherloan'] = $this->flexperformance_model->hr_fin_salary_advance_current();
-            $this->flexperformance_model->update_salary_advance_notification_hr_fin(session('emp_id'));
+            $this->flexperformance_model->update_salary_advance_notification_hr_fin(auth()->user()->emp_id);
         } elseif (session('recom_loan') != '') {
             $data['otherloan'] = $this->flexperformance_model->hr_salary_advance_current();
             $this->flexperformance_model->update_salary_advance_notification_hr();
@@ -3689,7 +3690,7 @@ class GeneralController extends Controller
             }
 
             $data = array(
-                'empID' => session('emp_id'),
+                'empID' => auth()->user()->emp_id,
                 'amount' => $amount,
                 'deduction_amount' => $deduction_amount,
                 'type' => 1,
@@ -3730,7 +3731,7 @@ class GeneralController extends Controller
                 'empID' => $request->input("employee"),
                 'amount' => $request->input("amount"),
                 'deduction_amount' => $deduction,
-                'approved_hr' => session('emp_id'),
+                'approved_hr' => auth()->user()->emp_id,
                 'status' => 1,
                 'notification' => 3,
                 'approved_date_hr' => date('Y-m-d'),
@@ -3751,7 +3752,7 @@ class GeneralController extends Controller
 
     public function confirmed_loans(Request $request)
     {
-        $empID = session('emp_id');
+        $empID = auth()->user()->emp_id;
 
         $this->authenticateUser('view-loan');
 
@@ -3829,7 +3830,7 @@ class GeneralController extends Controller
             $data = array(
 
                 'approved_date_finance' => date('Y-m-d'),
-                'approved_finance' => session('emp_id'),
+                'approved_finance' => auth()->user()->emp_id,
                 'status' => 1,
                 'notification' => 3,
             );
@@ -3847,7 +3848,7 @@ class GeneralController extends Controller
             $data = array(
 
                 'approved_date_hr' => date('Y-m-d'),
-                'approved_hr' => session('emp_id'),
+                'approved_hr' => auth()->user()->emp_id,
                 'status' => 6,
                 'notification' => 3,
             );
@@ -3880,7 +3881,7 @@ class GeneralController extends Controller
 
             $hrdata = array(
                 'approved_date_hr' => date('Y-m-d'),
-                'approved_hr' => session('emp_id'),
+                'approved_hr' => auth()->user()->emp_id,
                 // 'status' => 6,
                 'notification' => 3,
             );
@@ -3889,7 +3890,7 @@ class GeneralController extends Controller
 
             $data = array(
                 'approved_date_finance' => date('Y-m-d'),
-                'approved_finance' => session('emp_id'),
+                'approved_finance' => auth()->user()->emp_id,
                 // 'status' => 1,
                 // 'notification' => 3,
             );
@@ -3899,7 +3900,7 @@ class GeneralController extends Controller
 
             $todate = date('Y-m-d');
 
-            $result = $this->flexperformance_model->approve_loan($loanID, session('emp_id'), $todate);
+            $result = $this->flexperformance_model->approve_loan($loanID, auth()->user()->emp_id, $todate);
             if ($result == true) {
                 echo "<p class='alert alert-success text-center'>Loan Approved Successifully</p>";
             } else {
@@ -4107,7 +4108,7 @@ class GeneralController extends Controller
         $chart->labels(['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'])->load($api);
         $data['chart'] = $chart;
 
-        $strategyStatistics = $this->performanceModel->strategy_info(session('current_strategy')->strategyID);
+        $strategyStatistics = $this->performanceModel->strategy_info(1);
 
         $payrollMonth = $this->payroll_model->recent_payroll_month(date('Y-m-d'));
 
@@ -4138,8 +4139,8 @@ class GeneralController extends Controller
         $data["strategyProgress"] = $strategyProgress;
         $data["monthly"] = $rate_per_month;
 
-        $data['taskline'] = $this->performanceModel->total_taskline(session('emp_id'));
-        $data['taskstaff'] = $this->performanceModel->total_taskstaff(session('emp_id'));
+        $data['taskline'] = $this->performanceModel->total_taskline(auth()->user()->emp_id);
+        $data['taskstaff'] = $this->performanceModel->total_taskstaff(auth()->user()->emp_id);
 
         $data['payroll_totals'] = $this->payroll_model->payrollTotals("payroll_logs", $payrollMonth);
         $data['total_allowances'] = $this->payroll_model->total_allowances("allowance_logs", $payrollMonth);
@@ -4166,11 +4167,11 @@ class GeneralController extends Controller
         $data['net_total'] = $this->netTotalSummation($payrollMonth);
 
         // start of overtime
-        $data['my_overtimes'] = $this->flexperformance_model->my_overtimes(session('emp_id'));
+        $data['my_overtimes'] = $this->flexperformance_model->my_overtimes(auth()->user()->emp_id);
         $data['overtimeCategory'] = $this->flexperformance_model->overtimeCategory();
         $data['employees'] = EMPL::all();
 
-        $data['line_overtime'] = $this->flexperformance_model->lineOvertimes(session('emp_id'));
+        $data['line_overtime'] = $this->flexperformance_model->lineOvertimes(auth()->user()->emp_id);
         // end of overtime
 
         //start payroll reconciliation summary
@@ -4183,9 +4184,23 @@ class GeneralController extends Controller
 
 
         $datewell = explode("-", $calendar);
-        $mm = $datewell[1];
-        $dd = $datewell[2];
-        $yyyy = $datewell[0];
+
+        if (count($datewell) === 3 && array_key_exists(0, $datewell) && array_key_exists(1, $datewell) && array_key_exists(2, $datewell)) {
+            $yyyy = $datewell[0];
+            $mm = $datewell[1];
+            $dd = $datewell[2];
+        
+           
+        } else {
+            // Date components are not present or not properly formatted
+        
+        $mm = "00";
+        $dd = "00";
+        $yyyy = "0000";
+
+        }
+
+        
 
         $termination_date = $yyyy . "-" . $mm . "-" . $dd;
         $j_mm = "01";
@@ -4195,10 +4210,15 @@ class GeneralController extends Controller
         $empID = auth()->user()->emp_id;
         $today = date('Y-m-d');
 
+        // dd($payrollMonth);
+        
+
         $current_payroll_month = $payrollMonth;
         $reportType = 1;  //Staff = 1, temporary = 2
         //$reportformat = $request->input('type'); //Staff = 1, temporary = 2
         $previous_payroll_month_raw = date('Y-m', strtotime(date('Y-m-d', strtotime($current_payroll_month . "-1 month"))));
+
+        // dd($previous_payroll_month_raw);?
         $previous_payroll_month = $this->reports_model->prevPayrollMonth($previous_payroll_month_raw);
 
         // dd($previous_payroll_month_raw);
@@ -4321,9 +4341,10 @@ class GeneralController extends Controller
         if (session('password_set') == "1") {
             return view('auth.password-change');
         } else {
-            $employee = EMPL::where('emp_id', session('emp_id'))->first();
+            $employee = EMPL::where('emp_id', auth()->user()->emp_id)->first();
+            
             if (empty($employee->photo)) {
-                return redirect()->route('flex.userdata', base64_encode(session('emp_id')));
+                return redirect()->route('flex.userdata', base64_encode(auth()->user()->emp_id));
             }
 
             $data['parent'] = 'Dashboard';
@@ -4456,7 +4477,7 @@ class GeneralController extends Controller
             'prop_type' => $type,
             'prop_name' => $request->input("name"),
             'serial_no' => $request->input("serial"),
-            'given_by' => session('emp_id'),
+            'given_by' => auth()->user()->emp_id,
             'given_to' => $request->input("employee"),
         );
 
@@ -4475,7 +4496,7 @@ class GeneralController extends Controller
         $datalog = array(
             'state' => 0,
             'empID' => $empID,
-            'author' => session('emp_id'),
+            'author' => auth()->user()->emp_id,
         );
 
         $this->flexperformance_model->employeestatelog($datalog);
@@ -4519,7 +4540,7 @@ class GeneralController extends Controller
         $data = array(
             'empID' => $request->input("empID"),
             'initiator' => $request->input("initiator"),
-            'confirmed_by' => session('emp_id'),
+            'confirmed_by' => auth()->user()->emp_id,
             'date_confirmed' => date('Y-m-d'),
             'reason' => $request->input("reason"),
             'exit_date' => date('Y-m-d', strtotime($exit_date)),
@@ -4528,7 +4549,7 @@ class GeneralController extends Controller
         $datalog = array(
             'state' => 3,
             'empID' => $request->input("empID"),
-            'author' => session('emp_id'),
+            'author' => auth()->user()->emp_id,
         );
         //          echo json_encode($data);
 
@@ -4548,7 +4569,7 @@ class GeneralController extends Controller
         $datalog = array(
             'state' => 1,
             'empID' => $empID,
-            'author' => session('emp_id'),
+            'author' => auth()->user()->emp_id,
         );
 
         $result = $this->flexperformance_model->updateemployeestatelog($datalog, $empID);
@@ -4620,7 +4641,7 @@ class GeneralController extends Controller
             'prop_type' => "Employee Package",
             'prop_name' => "Employee ID, Health Insuarance Card Email and System Access",
             'serial_no' => $empID,
-            'given_by' => session('emp_id'),
+            'given_by' => auth()->user()->emp_id,
             'given_to' => $empID,
         );
 
@@ -4634,7 +4655,7 @@ class GeneralController extends Controller
             'state' => 1,
             'current_state' => 1,
             'empID' => $empID,
-            'author' => session('emp_id'),
+            'author' => auth()->user()->emp_id,
         );
 
         $result = $this->flexperformance_model->activateEmployee($property, $datagroup, $datalog, $empID, $logID, $todate);
@@ -4669,7 +4690,7 @@ class GeneralController extends Controller
             'state' => 4,
             'current_state' => 4,
             'empID' => $empID,
-            'author' => session('emp_id'),
+            'author' => auth()->user()->emp_id,
         );
         //        echo json_encode($datalog);
 
@@ -4699,9 +4720,9 @@ class GeneralController extends Controller
 
     public function inactive_employee(Request $request)
     {
-        $this->authenticateUser('activate-employee');
+        $this->authenticateUser('view-employee');
 
-        if (session('mng_emp') || session('vw_emp') || session('appr_emp') || session('mng_roles_grp')) {
+        // if (session('mng_emp') || session('vw_emp') || session('appr_emp') || session('mng_roles_grp')) {
             $data['employee1'] = $this->flexperformance_model->inactive_employee1();
             $data['employee2'] = $this->flexperformance_model->inactive_employee2();
             $data['employee3'] = $this->flexperformance_model->inactive_employee3();
@@ -4711,9 +4732,9 @@ class GeneralController extends Controller
 
             // dd($data['employee2']);
             return view('app.inactive_employee', $data);
-        } else {
-            echo 'Unauthorized Access';
-        }
+        // } else {
+        //     echo 'Unauthorized Access';
+        // }
     }
 
     ###########################UNPAID LESVE #################################
@@ -6002,7 +6023,7 @@ class GeneralController extends Controller
     public function addToBonus(Request $request)
     {
         $empID = $request->input('employee');
-        $init_author = session('emp_id');
+        $init_author = auth()->user()->emp_id;
         $amount = $request->input('amount');
         $days = $request->input('days');
         $percent = $request->input('percent');
@@ -6099,7 +6120,7 @@ class GeneralController extends Controller
     public function confirmBonus($id)
     {
         $bonusID = $id;
-        $appr_author = session('emp_id');
+        $appr_author = auth()->user()->emp_id;
         $data = array(
             'state' => 1,
             'appr_author' => $appr_author,
@@ -6121,7 +6142,7 @@ class GeneralController extends Controller
     public function recommendBonus($id)
     {
         $bonusID = $id;
-        $appr_author = session('emp_id');
+        $appr_author = auth()->user()->emp_id;
         $data = array(
             'state' => 2,
             'recom_author' => $appr_author,
@@ -6174,7 +6195,7 @@ class GeneralController extends Controller
                     'name' => $request->input('name'),
                     'grouped_by' => $request->input('grouped_by'),
                     'type' => 1,
-                    'created_by' => session('emp_id'),
+                    'created_by' => auth()->user()->emp_id,
                 );
 
                 $this->flexperformance_model->addgroup($data);
@@ -6183,7 +6204,7 @@ class GeneralController extends Controller
 
                 return redirect('/flex/financial_group');
             } else {
-                // $id =session('emp_id');
+                // $id =auth()->user()->emp_id;
                 $data['role'] = $this->flexperformance_model->allrole();
                 $data['financialgroups'] = $this->flexperformance_model->finencialgroups();
                 $data['rolesgroups'] = $this->flexperformance_model->rolesgroups();
@@ -6204,7 +6225,7 @@ class GeneralController extends Controller
             if ($request->type == "addrole") {
                 $data = array(
                     'name' => $request->input('name'),
-                    'created_by' => session('emp_id'),
+                    'created_by' => auth()->user()->emp_id,
                 );
 
                 $result = $this->flexperformance_model->addrole($data);
@@ -6221,7 +6242,7 @@ class GeneralController extends Controller
                     'name' => $request->input('name'),
                     //'type' => $request->input('type'),
                     'type' => 2,
-                    'created_by' => session('emp_id'),
+                    'created_by' => auth()->user()->emp_id,
                 );
 
                 $this->flexperformance_model->addgroup($data);
@@ -6230,7 +6251,7 @@ class GeneralController extends Controller
                 //$this->department();
                 return redirect('/flex/role');
             } else {
-                // $id =session('emp_id');
+                // $id =auth()->user()->emp_id;
                 $data['role'] = $this->flexperformance_model->allrole();
                 $data['financialgroups'] = $this->flexperformance_model->finencialgroups();
                 $data['rolesgroups'] = $this->flexperformance_model->rolesgroups();
@@ -6989,7 +7010,7 @@ class GeneralController extends Controller
 
     public function addEmployee(Request $request)
     {
-        if (session('mng_emp') || session('vw_emp') || session('appr_emp') || session('mng_roles_grp')) {
+        $this->authenticateUser('add-employee');
             $data['pdrop'] = $this->flexperformance_model->positiondropdown();
             $data['contract'] = $this->flexperformance_model->contractdrop();
             $data['ldrop'] = $this->flexperformance_model->linemanagerdropdown();
@@ -7006,9 +7027,7 @@ class GeneralController extends Controller
             $data["child"] = "Register Employee";
             // return $data['ldrop'];
             return view('app.employeeAdd', $data);
-        } else {
-            echo 'Unauthorized Access';
-        }
+       
     }
 
     public function getPositionSalaryRange(Request $request)
@@ -7327,7 +7346,7 @@ class GeneralController extends Controller
                         'prop_type' => "Employee Package",
                         'prop_name' => "Employee ID, Health Insuarance Card, Email Address and System Access",
                         'serial_no' => $empID,
-                        'given_by' => session('emp_id'),
+                        'given_by' => auth()->user()->emp_id,
                         'given_to' => $empID,
                     );
                     $datagroup = array(
@@ -7416,13 +7435,15 @@ class GeneralController extends Controller
                             'old_position' => 0,
                             'new_position' => $request->input("position"),
                             'status' => 5, //new employee
-                            'recommended_by' => session('emp_id'),
+                            'recommended_by' => auth()->user()->emp_id,
                             'approved_by' => '',
                             'date_recommended' => date('Y-m-d'),
                             'date_approved' => '',
                         );
 
                         $this->flexperformance_model->employeeTransfer($data_transfer);
+
+                        // dd("I am here");
 
                         $response_array['empID'] = $empID;
                         $response_array['status'] = "OK";
@@ -7566,7 +7587,7 @@ class GeneralController extends Controller
 
     public function grievances(Request $request)
     {
-        $empID = session('emp_id');
+        $empID = auth()->user()->emp_id;
         $data['title'] = 'Grievances and Disciplinary';
         $data['my_grievances'] = $this->flexperformance_model->my_grievances($empID);
         //if(session('griev_hr')!=''){
@@ -7593,7 +7614,7 @@ class GeneralController extends Controller
                     $data = array(
                         'title' => $request->input("title"),
                         'description' => $request->input("description"),
-                        'empID' => session('emp_id'),
+                        'empID' => auth()->user()->emp_id,
                         'anonymous' => 1,
                         'attachment' => $path . $data["file_name"],
                         'forwarded' => 1,
@@ -7603,7 +7624,7 @@ class GeneralController extends Controller
                     $data = array(
                         'title' => $request->input("title"),
                         'description' => $request->input("description"),
-                        'empID' => session('emp_id'),
+                        'empID' => auth()->user()->emp_id,
                         'attachment' => $path . $data["file_name"],
                     );
                 }
@@ -7618,7 +7639,7 @@ class GeneralController extends Controller
                     $data = array(
                         'title' => $request->input("title"),
                         'description' => $request->input("description"),
-                        'empID' => session('emp_id'),
+                        'empID' => auth()->user()->emp_id,
                         'attachment' => "N/A",
                         'anonymous' => 1,
                         'forwarded' => 1,
@@ -7628,7 +7649,7 @@ class GeneralController extends Controller
                     $data = array(
                         'title' => $request->input("title"),
                         'description' => $request->input("description"),
-                        'empID' => session('emp_id'),
+                        'empID' => auth()->user()->emp_id,
                         'attachment' => "N/A",
                     );
                 }
@@ -7676,7 +7697,7 @@ class GeneralController extends Controller
     public function auditLogsDestry(Request $request)
     {
         $logData = array(
-            'empID' => session('emp_id'),
+            'empID' => auth()->user()->emp_id,
             'description' => "Cleared Audit logs",
             'agent' => $request->userAgent(),
             'ip_address' => $request->ip(),
@@ -7751,7 +7772,7 @@ class GeneralController extends Controller
 
         if ($result == true) {
             $logData = array(
-                'empID' => session('emp_id'),
+                'empID' => auth()->user()->emp_id,
                 'description' => "Cleared Audit logs",
                 'agent' => session('agent'),
                 //        'platform' =>$this->agent->platform(),
@@ -8061,7 +8082,7 @@ class GeneralController extends Controller
                         'end_date' => $to,
                         'days' => $days,
                         'date' => date('Y-m-d'),
-                        'init' => session('emp_id'),
+                        'init' => auth()->user()->emp_id,
                     );
 
                     $this->flexperformance_model->addPartialPayment($data);
@@ -8185,7 +8206,7 @@ class GeneralController extends Controller
 
             if ($transfers) {
                 $emp_id = $transfers->empID;
-                $approver = session('emp_id');
+                $approver = auth()->user()->emp_id;
                 $date = date('Y-m-d');
                 $result = $this->flexperformance_model->approveRegistration($emp_id, $transferID, $approver, $date);
                 if ($result == true) {
@@ -8235,10 +8256,10 @@ class GeneralController extends Controller
         $this->authenticateUser('view-termination');
 
         $data['title'] = "Termination";
-        $data['my_overtimes'] = $this->flexperformance_model->my_overtimes(session('emp_id'));
+        $data['my_overtimes'] = $this->flexperformance_model->my_overtimes(auth()->user()->emp_id);
         $data['employees'] = $this->flexperformance_model->Employee();
         $terminations = Termination::orderBy('created_at', 'desc')->get();
-        $data['line_overtime'] = $this->flexperformance_model->lineOvertimes(session('emp_id'));
+        $data['line_overtime'] = $this->flexperformance_model->lineOvertimes(auth()->user()->emp_id);
 
         $i = 1;
         $employee = Auth::User()->id;
@@ -8265,9 +8286,9 @@ class GeneralController extends Controller
         $this->authenticateUser('add-termination');
 
         $data['title'] = "Terminate Employee";
-        $data['my_overtimes'] = $this->flexperformance_model->my_overtimes(session('emp_id'));
+        $data['my_overtimes'] = $this->flexperformance_model->my_overtimes(auth()->user()->emp_id);
         $data['employees'] = $this->flexperformance_model->Employee();
-        $data['line_overtime'] = $this->flexperformance_model->lineOvertimes(session('emp_id'));
+        $data['line_overtime'] = $this->flexperformance_model->lineOvertimes(auth()->user()->emp_id);
 
         // }
         $data['pendingPayroll'] = $this->payroll_model->pendingPayrollCheck();
@@ -8734,7 +8755,7 @@ class GeneralController extends Controller
         $this->authenticateUser('add-promotion');
 
         $data['title'] = "Promote Employee";
-        $data['my_overtimes'] = $this->flexperformance_model->my_overtimes(session('emp_id'));
+        $data['my_overtimes'] = $this->flexperformance_model->my_overtimes(auth()->user()->emp_id);
         $data['employees'] = $this->flexperformance_model->employee();
         $data['pdrop'] = Position::all();
         $data['contract'] = $this->flexperformance_model->contractdrop();
@@ -8875,7 +8896,7 @@ class GeneralController extends Controller
         $this->authenticateUser('add-increment');
 
         $data['title'] = "Increment Salary";
-        $data['my_overtimes'] = $this->flexperformance_model->my_overtimes(session('emp_id'));
+        $data['my_overtimes'] = $this->flexperformance_model->my_overtimes(auth()->user()->emp_id);
         $data['employees'] = $this->flexperformance_model->employee();
         $data['pdrop'] = $this->flexperformance_model->positiondropdown();
         $data['contract'] = $this->flexperformance_model->contractdrop();
@@ -10759,7 +10780,7 @@ class GeneralController extends Controller
         //            $updates = array(
         //                'remarks' => $request->input("remarks"),
         //                'support_document' => $path . $uploadData["file_name"],
-        //                'forwarded_by' => session('emp_id'),
+        //                'forwarded_by' => auth()->user()->emp_id,
         //                'forwarded' => 1,
         //            );
 
@@ -10770,7 +10791,7 @@ class GeneralController extends Controller
 
         //            $data = array(
         //                'remarks' => $request->input("remarks"),
-        //                'forwarded_by' => session('emp_id'),
+        //                'forwarded_by' => auth()->user()->emp_id,
         //                'forwarded' => 1,
         //            );
         //        }
@@ -10803,7 +10824,7 @@ class GeneralController extends Controller
         //            $updates = array(
         //                'remarks' => $request->input("remarks"),
         //                'support_document' => $path . $uploadData["file_name"],
-        //                'forwarded_by' => session('emp_id'),
+        //                'forwarded_by' => auth()->user()->emp_id,
         //                'forwarded' => 1,
         //                'status' => 1,
         //            );
@@ -10815,7 +10836,7 @@ class GeneralController extends Controller
 
         //            $data = array(
         //                'remarks' => $request->input("remarks"),
-        //                'forwarded_by' => session('emp_id'),
+        //                'forwarded_by' => auth()->user()->emp_id,
         //                'forwarded' => 1,
         //                'status' => 1,
         //            );
@@ -10910,11 +10931,11 @@ class GeneralController extends Controller
     public function myOvertimes()
     {
         $data['title'] = "Overtime";
-        $data['my_overtimes'] = $this->flexperformance_model->my_overtimes(session('emp_id'));
+        $data['my_overtimes'] = $this->flexperformance_model->my_overtimes(auth()->user()->emp_id);
         $data['overtimeCategory'] = $this->flexperformance_model->overtimeCategory();
         $data['employees'] = $this->flexperformance_model->Employee();
 
-        $data['line_overtime'] = $this->flexperformance_model->lineOvertimes(session('emp_id'));
+        $data['line_overtime'] = $this->flexperformance_model->lineOvertimes(auth()->user()->emp_id);
 
         $data['pendingPayroll'] = $this->payroll_model->pendingPayrollCheck();
         $data['parent'] = 'My Services';
@@ -10925,7 +10946,7 @@ class GeneralController extends Controller
     public function overtime_on_behalf()
     {
         $data['title'] = "Overtime";
-        $data['my_overtimes'] = $this->flexperformance_model->my_overtimes(session('emp_id'));
+        $data['my_overtimes'] = $this->flexperformance_model->my_overtimes(auth()->user()->emp_id);
         $data['overtimeCategory'] = $this->flexperformance_model->overtimeCategory();
         $data['employees'] = $this->flexperformance_model->Employee();
 
@@ -10952,7 +10973,7 @@ class GeneralController extends Controller
         $data['my_loans'] = $this->flexperformance_model->my_confirmedloan($empID);
 
         $data['employee'] = $this->flexperformance_model->customemployee();
-        $data['max_amount'] = $this->flexperformance_model->get_max_salary_advance(session('emp_id'));
+        $data['max_amount'] = $this->flexperformance_model->get_max_salary_advance(auth()->user()->emp_id);
         $data['title'] = "Loans and Salaries";
         $data['pendingPayroll'] = $this->payroll_model->pendingPayrollCheck();
 
@@ -11021,11 +11042,14 @@ class GeneralController extends Controller
     // For My Biodata
     public function my_biodata(Request $request)
     {
+        
         $id = auth()->user()->emp_id;
 
 
         $extra = $request->input('extra');
         $data['employee'] = $this->flexperformance_model->userprofile($id);
+
+        // dd($this->flexperformance_model->userprofile($id));
         $data['kin'] = $this->flexperformance_model->getkin($id);
         $data['property'] = $this->flexperformance_model->getproperty($id);
         $data['propertyexit'] = $this->flexperformance_model->getpropertyexit($id);
@@ -11044,6 +11068,7 @@ class GeneralController extends Controller
         $data['skills_have'] = $this->flexperformance_model->skills_have($id);
         $data['month_list'] = $this->flexperformance_model->payroll_month_list();
         $data['title'] = "Profile";
+        $data['empID'] =$id;
         $empID = $id;
         $data['details'] = EmployeeDetail::where('employeeID', $empID)->first();
 

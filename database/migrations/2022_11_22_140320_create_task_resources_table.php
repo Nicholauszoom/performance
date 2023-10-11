@@ -14,7 +14,7 @@ class CreateTaskResourcesTable extends Migration
     public function up()
     {
         Schema::create('task_resources', function (Blueprint $table) {
-            $table->integer('id')->primary();
+            $table->id();
             $table->string('name', 300);
             $table->decimal('cost', 15, 2);
             $table->integer('taskID');

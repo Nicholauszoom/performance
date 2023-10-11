@@ -14,7 +14,7 @@ class CreateTaskSettingsTable extends Migration
     public function up()
     {
         Schema::create('task_settings', function (Blueprint $table) {
-            $table->integer('id')->primary();
+            $table->id();
             $table->string('name', 100);
             $table->double('behaviour')->nullable();
             $table->double('quantity')->nullable();

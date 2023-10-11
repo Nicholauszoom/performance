@@ -427,7 +427,7 @@ Route::middleware('auth')->middleware([Setting::class])->group(function(){
        Route::get('error', [HomeController::class,'home']);
        Route::any('/cancelOvertime/{id}','cancelOvertime')->name('flex.cancelOvertime');
        Route::any('/download_payslip','download_payslip')->name('flex.download_payslip');
-       Route::any('/userdata/{id}','userdata')->name('flex.userdata');
+       Route::any('/userdata','userdata')->name('flex.userdata');
        Route::any('user-image', 'updateImg')->name('flex.userimage');
 
        Route::any('/userprofile/{id}','userprofile')->name('flex.userprofile');

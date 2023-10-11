@@ -14,7 +14,7 @@ class CreateTempArrearsTable extends Migration
     public function up()
     {
         Schema::create('temp_arrears', function (Blueprint $table) {
-            $table->bigInteger('id')->primary();
+            $table->id();
             $table->string('empID', 10);
             $table->decimal('amount', 15, 2);
             $table->decimal('paid', 15, 2)->default(0.00);

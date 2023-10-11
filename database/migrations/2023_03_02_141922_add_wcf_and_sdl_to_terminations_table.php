@@ -16,8 +16,8 @@ return new class extends Migration
         Schema::table('terminations', function (Blueprint $table) {
             //
 
-            $table->decimal('wcf', 20, 2);
-            $table->decimal('sdl', 20, 2);
+            // $table->decimal('wcf', 20, 2);
+            // $table->decimal('sdl', 20, 2);
         });
     }
 

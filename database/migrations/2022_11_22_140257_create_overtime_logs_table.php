@@ -14,7 +14,7 @@ class CreateOvertimeLogsTable extends Migration
     public function up()
     {
         Schema::create('overtime_logs', function (Blueprint $table) {
-            $table->integer('id')->primary();
+            $table->id();
             $table->string('empID', 10);
             $table->dateTime('time_start')->useCurrent();
             $table->dateTime('time_end')->useCurrent();

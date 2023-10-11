@@ -14,7 +14,7 @@ class CreateRetireTable extends Migration
     public function up()
     {
         Schema::create('retire', function (Blueprint $table) {
-            $table->integer('id')->primary();
+            $table->id();
             $table->integer('retire_age')->default(60);
             $table->integer('notify_before')->default(5);
             $table->timestamps();

@@ -14,7 +14,7 @@ class CreateProjectSegmentTable extends Migration
     public function up()
     {
         Schema::create('project_segment', function (Blueprint $table) {
-            $table->integer('id')->primary()->unique();
+            $table->id();->unique();
             $table->string('name', 100);
            // $table->string('created_at', 45);
             $table->string('created_by', 45);

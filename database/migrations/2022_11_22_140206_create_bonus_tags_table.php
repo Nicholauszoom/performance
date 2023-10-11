@@ -14,7 +14,7 @@ class CreateBonusTagsTable extends Migration
     public function up()
     {
         Schema::create('bonus_tags', function (Blueprint $table) {
-            $table->integer('id')->primary();
+            $table->id();
             $table->string('name', 50);
             $table->timestamps();
         });
