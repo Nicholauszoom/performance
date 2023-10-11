@@ -47,15 +47,16 @@
                     @if(isset($employee))
                     @foreach($employee as $emp)
                     @if($emp->emp_id == $row->level1)
-                    <td>{{ $emp->fname.' '.$emp->mname.' '.$emp->lname }}</td>
+                         <td>{{ $emp->fname.' '.$emp->mname.' '.$emp->lname }}</td>
                     @endif
                     @endforeach
                     @endif
                     @isset($is_all)
-                        <td>  @php
-                            echo App\Models\LeaveType::where('id',$row->nature)->first()->type;
+                        <td>
+                            @php
+                                echo App\Models\LeaveType::where('id',$row->nature)->first()->type;
                             @endphp
-                            </td>
+                        </td>
                     @endisset
                     <td>{{ $row->leave_address }}</td>
                     <td> {{ $row->start }} </td>
