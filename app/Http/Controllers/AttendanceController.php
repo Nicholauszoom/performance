@@ -1193,7 +1193,7 @@ public function saveLeave(Request $request) {
 
         } catch (Exception $exception) {
 
-        $msg = "Leave Request Has been Approves Successfully But Email is not sent(SMPT problem) !";
+        $msg = "Leave Request Has been Approved Successfully But Email is not sent(SMPT problem) !";
         // return redirect('flex/view-action/'.$emp,$data)->with('msg', $msg);
         return redirect('flex/attendance/leave')->with('msg', $msg);
         }
@@ -1202,7 +1202,7 @@ public function saveLeave(Request $request) {
 
 
 
-        $msg = "Leave Request Has been Approves Successfully !";
+        $msg = "Leave Request Has been Approved Successfully !";
         // return redirect('flex/view-action/'.$emp,$data)->with('msg', $msg);
         return redirect('flex/attendance/leave')->with('msg', $msg);
 
