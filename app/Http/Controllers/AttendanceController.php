@@ -294,8 +294,11 @@ class AttendanceController extends Controller
             $data['days']=$interval->days;
             $data['title'] = 'Leave';
             $data['leaveBalance'] = $this->attendance_model->getLeaveBalance(Auth::user()->emp_id, Auth::user()->hire_date, date('Y-m-d'));
-
-            // dd($data['leaveBalance']);
+            $data['sickLeaveBalance'] = $this->getRemainingDaysForLeave(Auth::user()->emp_id, 2);
+            $data['compassionateLeaveBalance'] = $this->getRemainingDaysForLeave(Auth::user()->emp_id, 3);
+            $data['maternityLeaveBalance'] = $this->getRemainingDaysForLeave(Auth::user()->emp_id, 4);
+            $data['paternityLeaveBalance'] =$this->getRemainingDaysForLeave(Auth::user()->emp_id, 5);
+            $data['studyLeaveBalance'] = $this->getRemainingDaysForLeave(Auth::user()->emp_id, 6);
             $data['leave_type'] = $this->attendance_model->leave_type();
 
 
@@ -347,6 +350,69 @@ class AttendanceController extends Controller
 
 
       }
+      public function getDetailsSub($uid = 0)
+      {
+
+        $par=$uid;
+
+
+        $raw=explode('|',$par);
+        $id=$raw[0];
+        $start=$raw[1];
+        $end=$raw[2];
+        $empID=$raw[3];
+
+        if ($start==null || $end==null ) {
+          $total_days=0;
+        }
+        else
+        {
+          $days= SysHelpers::countWorkingDays($start,$end);
+          $holidays=SysHelpers::countHolidays($start,$end);
+          $total_days=$days-$holidays;
+        }
+
+
+
+                //For Gender
+                $gender = EMPL::where('id', $empID)->value('gender');
+                if ($gender !== null) {
+                    dd($gender);
+                } else {
+                    // Handle the case where no employee with the specified empID was found.
+                }
+        if($gender=="Male"){$gender=1; }else { $gender=2;  }
+        // For Male Employees
+        if ($gender==1) {
+          $data['data'] = LeaveSubType::where('category_id', $id)->Where('sex',0)->get();
+          // return response()->json($data);
+          return json_encode($data);
+        }
+        // For Female Employees
+        else
+        {
+          $data = LeaveSubType::where('category_id', $id)->get();
+          // return json_encode($data);
+              return response()->json(['data'=>$data,'days'=>$total_days]);
+        }
+
+
+      }
+
+
+   public function getRemainingDaysForLeave($employeeId, $natureId) {
+        $maxDays = LeaveType::where('id', $natureId)->value('max_days');
+        $currentYear = date('Y');
+        $startDate = $currentYear . '-01-01'; // Start of the current year
+        $endDate = date('Y-m-d'); // Current date
+
+        $daysSpent = Leaves::where('empId', $employeeId)
+            ->where('nature', $natureId)
+            ->whereBetween('created_at', [$startDate, $endDate])
+            ->sum('days');
+
+        return $maxDays - $daysSpent;
+    }
 
 
   public  function check_leave_balance(Request $request){
@@ -1563,6 +1629,33 @@ public function saveLeave(Request $request) {
 
     return view('app.customleave_report', $data);
 
+    }
+
+    // For Clear Old Leaves
+    public function clear_leaves()
+    {
+        $employees=EMPL::get();
+        foreach ($employees as $employee) {
+                $date=date('Y').'-'.'01-01';
+                $leave_balance = $this->attendance_model->getLeaveBalance($employee->emp_id,$employee->hire_date, $date);
+                $leaves=new Leaves();
+                $emp=$employee->emp_id;
+                $leaves->empID = $emp;
+                $leaves->start =Date('Y-m-d') ;
+                $leaves->end=Date('Y-m-d') ;
+                $leaves->leave_address="auto";
+                $leaves->mobile = $employee->mobile;
+                $leaves->nature = 1;
+                $leaves->remaining=5;
+                $leaves->days=$leave_balance ;
+                $leaves->reason="Automatic applied!";
+                $leaves->position="Default Apllication";
+                $leaves->status=3;
+                $leaves->state=0;
+                $leaves->save();
+    }
+
+    return back();
     }
 
 

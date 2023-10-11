@@ -9461,6 +9461,53 @@ class GeneralController extends Controller
         return redirect('flex/employee-profile/' . base64_encode($id))->with('msg', $msg);
     }
 
+    public function updateSpecificEmployeeDetails(Request $request)
+    {
+
+        request()->validate(
+            [
+                // Start of Employment Details
+                'employment_date' => 'nullable',
+                'former_title' => 'nullable',
+                'current_title' => 'nullable',
+                'line_manager' => 'nullable|regex:/^[A-Za-z0-9 ]+$/'
+            ]
+        );
+
+        $id = $request->employeeID;
+
+        if (auth()->user()->emp_id != $id) {
+            $this->authenticateUser('edit-employee');
+        }
+
+        // dd($request->landmark);
+        $empl = Employee::where('emp_id', $id)->first();
+
+        if ($empl) {
+            // updating employee data
+            $employee = Employee::where('emp_id', $id)->first();
+            $employee->line_manager = $request->line_manager;
+            $employee->update();
+
+            // Start of Employee Details
+            $profile = EmployeeDetail::where('employeeID', $id)->first();
+
+            if ($profile) {
+                $profile->former_title = $request->former_title;
+                $profile->update();
+            } else {
+                $profile = new EmployeeDetail();
+                $profile->former_title = $request->former_title;
+
+                $profile->save();
+            }
+        }
+
+        $msg = "Employee Details Have Been Updated successfully";
+        return redirect('flex/employee-profile/' . base64_encode($id))->with('msg', $msg);
+    }
+
+
     public function employeeBasicDetails(Request $request){
         request()->validate(
             [
@@ -9911,42 +9958,37 @@ class GeneralController extends Controller
         return redirect('flex/employee-profile/' . base64_encode($empID))->with('msg', $msg);
     }
 
-    public function employeeDependant(Request $request){
+    public function employeeDependant(Request $request) {
+        // Start of dependants details
+        $emp_id = $request->employeeID;
 
-            // start of depedants details
-            $emp_id = $request->employeeID;
-            $cert = $request->dep_certficate;
-            $dependant = EmployeeDependant::where('employeeID', $emp_id)
-                ->Where('dep_certificate', 'LIKE', $request->dep_certficate)
-                ->where('dep_surname', $request->dep_surname)
-                ->first();
-            if ($dependant) {
+        // Check if the dependant already exists with the same details
+        $existingDependant = EmployeeDependant::where('employeeID', $emp_id)
+            ->where('dep_name', $request->dep_name)
+            ->where('dep_surname', $request->dep_surname)
+            ->where('dep_birthdate', $request->dep_birthdate)
+            ->where('dep_gender', $request->dep_gender)
+            ->where('dep_certificate', $request->dep_certificate)
+            ->first();
 
-                // $dependant->employeeID=$request->employeeID;
-                $dependant->dep_name = $request->dep_name;
-                $dependant->dep_surname = $request->dep_surname;
-                $dependant->dep_birthdate = $request->dep_birthdate;
-                $dependant->dep_gender = $request->dep_gender;
-                $dependant->dep_certificate = $request->dep_certificate;
-
-                $dependant->update();
-            } else {
-                if ($request->dep_name != '' || $request->dep_certificate != '') {
-                    $dependant = new EmployeeDependant();
-
-                    $dependant->employeeID = $request->employeeID;
-                    $dependant->dep_name = $request->dep_name;
-                    $dependant->dep_surname = $request->dep_surname;
-                    $dependant->dep_birthdate = $request->dep_birthdate;
-                    $dependant->dep_gender = $request->dep_gender;
-                    $dependant->dep_certificate = $request->dep_certificate;
-
-                    $dependant->save();
-                }
-            }
-
-            $msg = "Employee Details Have Been Updated successfully";
+        if ($existingDependant) {
+            $msg = "Dependant with the same details already exists.";
             return redirect('flex/employee-profile/' . base64_encode($emp_id))->with('msg', $msg);
+        } else {
+            // Create a new dependant if it doesn't exist
+            $dependant = new EmployeeDependant();
+            $dependant->employeeID = $emp_id; // Set the employee ID
+            $dependant->dep_name = $request->dep_name;
+            $dependant->dep_surname = $request->dep_surname;
+            $dependant->dep_birthdate = $request->dep_birthdate;
+            $dependant->dep_gender = $request->dep_gender;
+            $dependant->dep_certificate = $request->dep_certificate;
+
+            $dependant->save();
+
+            $msg = "Dependant added successfully.";
+            return redirect('flex/employee-profile/' . base64_encode($emp_id))->with('msg', $msg);
+        }
     }
     public function employeeSpouse(Request $request){
 
@@ -10021,7 +10063,7 @@ class GeneralController extends Controller
             $qualification->course = $request->course;
             $qualification->start_year = $request->start_year;
             $qualification->end_year = $request->finish_year;
-            $qualification->final_score = $request->final_score;
+            $qualification->final_score = $request->final_score ?? 'null';
             $qualification->study_location = $request->study_location;
             // $qualification->certificate = $request->certificate;
 

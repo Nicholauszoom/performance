@@ -26,167 +26,137 @@
     {{ session('msg') }}
     </div>
     @endif
-<div class="card border-top  border-top-width-3 border-top-main border-bottom-main rounded-0 col-lg-12 ">
-    <div class="card-header">
-        <h5 class="text-warning"> Apply Leave</h5>
-    </div>
-    {{-- id="applyLeave" --}}
-    <div class="card-body">
+    <div class="card border-top border-top-width-3 border-top-main border-bottom-main rounded-0 col-lg-12">
+        <div class="card-header">
+            <h5 class="text-warning">Apply Leave</h5>
+        </div>
 
-
-      <div class="col-6 form-group text-sucess text-secondary" id="remaining" style="display:none">
-        <code class="text-success">  <span id="remain" class="text-success"></span> </code>
-
-      </div>
-
-        <form  autocomplete="off" action="{{ url('flex/attendance/save_leave') }}"  method="post"  enctype="multipart/form-data">
-          @csrf
-            <!-- START -->
+        <div class="card-body">
             <div class="row">
-
-
-            <div class="form-group col-6">
-                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">Start Date <span  class="text-danger">*</span></label>
-                <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12">
-                    <div class="has-feedback">
-                        <input type="date" name="start" id="start-date" class="form-control col-xs-12 " placeholder="Start Date"  required="" >
-                        <span class="fa fa-calendar-o form-control-feedback right" aria-hidden="true"></span>
+                <div class="col-md-6">
+                    <form autocomplete="off" action="{{ url('flex/attendance/save_leave') }}" method="post" enctype="multipart/form-data">
+                        @csrf
+                        <div class="row">
+                            <div class="form-group col-md-6">
+                                <label for="start-date">Start Date <span class="text-danger">*</span></label>
+                                <input type="date" name="start" id="start-date" class="form-control" required>
+                            </div>
+                            <input type="text" name="limit" hidden value="{{ $totalAccrued }}">
+                            <input type="text" name="empId" id="empID" hidden value="{{ Auth::User()->emp_id }}">
+                            <div class="form-group col-md-6">
+                                <label for="end-date">End Date <span class="text-danger">*</span></label>
+                                <input type="date" required id="end-date" name="end" class="form-control">
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="docNo">Nature of Leave <span class="text-danger">*</span></label>
+                                <select class="form-control" required id="docNo" name="nature">
+                                    <option value="">Select Nature</option>
+                                    @php
+                                    $gender = Auth::user()->gender == 'Male' ? 1 : 2;
+                                    @endphp
+                                    @foreach($leave_type as $key)
+                                        @if ($key->gender <= 0 || $key->gender == $gender)
+                                            <option value="{{ $key->id }}">{{ $key->type }} Leave</option>
+                                        @endif
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="form-group col-md-6" id="sub" style="display:none">
+                                <label for="subs_cat">Sub Category <span class="text-danger">*</span></label>
+                                <select name="sub_cat" class="form-control select custom-select" id="subs_cat"></select>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="address">Leave Address <span class="text-danger">*</span></label>
+                                <input required="required" type="text" id="address" name="address" class="form-control">
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="mobile">Mobile <span class="text-danger">*</span></label>
+                                <input required="required" class="form-control" type="tel" maxlength="10" name="mobile">
+                            </div>
+                            <div class="form-group col-md-6" style="display:none" id="attachment">
+                                <label for="image">Attachment <span class="text-danger">*</span></label>
+                                <input class="form-control" type="file" name="image">
+                            </div>
+                            <div class="form-group col-12 mb-2">
+                                <label for="reason">Reason For Leave <span class="text-danger">*</span></label>
+                                <textarea maxlength="256" class="form-control" name="reason" placeholder="Reason" required="required" rows="3"></textarea>
+                            </div>
+                            @if($deligate > 0)
+                            <div class="form-group col-md-6">
+                                <label for="deligate">Deligate Position To <span class="text-danger">*</span></label>
+                                <select name="deligate" @if($deligate > 0) required @endif class="form-control" id="deligate">
+                                    <option value="">Select Deligate</option>
+                                    @foreach($employees as $item)
+                                    <option value="{{ $item->emp_id }}">{{ $item->fname }} {{ $item->mname }} {{ $item->lname }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            @endif
                         </div>
-                <span class="text-danger"><?php// echo form_error("fname");?></span>
+
+                        <div class="form-group py-2">
+                            <button class="float-end btn btn-main" type="button" data-bs-toggle="modal" data-bs-target="#approval">Submit</button>
+                        </div>
+                    </form>
+                </div>
+                <div class="col-md-6">
+                    <div class="card-container">
+                        <div class="card specific-card">
+                            <div class="card-body">
+                                <p><b>Sick Leave Days Remaining: <code class="text-success">{{ $sickLeaveBalance .' Days' }}</b></code></p>
+                            </div>
+                        </div>
+                        @php
+                        $gender = Auth::user()->gender == 'Male' ? 1 : 2;
+                        @endphp
+
+                        <div class="card specific-card">
+                            <div class="card-body">
+                                @if ($gender == 1)
+                                    <p><b>Paternity Leave Days Remaining: <code class="text-success">{{ $paternityLeaveBalance .' Days' }}</b></code></p>
+                                @else
+                                    <p><b>Maternity Leave Days Remaining: <code class="text-success">{{ $maternityLeaveBalance .' Days' }}</b></code></p>
+                                @endif
+                            </div>
+                        </div>
+
+                        <div class="card specific-card">
+                            <div class="card-body">
+                                <p><b>Compassionate Leave Days Remaining: <code class="text-success">{{ $compassionateLeaveBalance .' Days' }}</b></code></p>
+                            </div>
+                        </div>
+                        <div class="card specific-card">
+                            <div class="card-body">
+                                <p><b>Study Leave Days Remaining: <code class="text-success">{{ $studyLeaveBalance .' Days' }}</b></code></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-
-        </div>
-            <input type="text" name="limit" hidden value="<?php echo $totalAccrued; ?>">
-            <input type="text" name="empId" id="empID" hidden value="{{ Auth::User()->emp_id }}">
-
-        <div class="form-group col-6">
-          <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name"> End Date <span  class="text-danger">*</span>
-          </label>
-          <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12">
-            <div class="has-feedback">
-            <input type="date" required="" id="end-date" placeholder="End Date" name="end" class="form-control col-xs-12 " >
-            <span class="fa fa-calendar-o form-control-feedback right" aria-hidden="true"></span>
-          </div>
-            <span class="text-danger"><?php// echo form_error("fname");?></span>
-          </div>
-        </div>
-
-        <div class="form-group col-6">
-          <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name" for="stream" >Nature of Leave <span  class="text-danger">*</span></label>
-                  <select class="form-control form-select  select @error('emp_ID') is-invalid @enderror" required id="docNo" name="nature">
-                    <option value="">&nbsp;</option>
-                      <?php  $sex = Auth::user()->gender;
-                      if ($sex=='Male') { $gender = 1; }else if($sex=='Female') {$gender = 2; }
-                      foreach($leave_type as $key){ if($key->gender > 0 && $key->gender!= $gender) continue; ?>
-                     <option value="<?php echo $key->id; ?>"><?php echo $key->type; ?> Leave</option> <?php  } ?>
-                  </select>
-
-        </div>
-        {{-- @if($days<336) --}}
-        <div class="col-6 form-group" id="sub" style="display:none">
-          <label class="control-label col-md-3 col-sm-3 col-xs-12 ">Sub Category <span  class="text-danger">*</span></label>
-          <select name="sub_cat" class="form-control select custom-select" id="subs_cat">
-          </select>
-        </div>
-        {{-- @endif --}}
-
-        <div class="form-group col-6">
-          <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">Leave Address <span  class="text-danger">*</span>
-          </label>
-          <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12">
-            <input required="required" type="text" id="address" name="address" class="form-control col-md-7 col-xs-12">
-            <span class="text-danger"><?php// echo form_error("lname");?></span>
-          </div>
-        </div>
-        <div class="form-group col-6">
-          <label for="middle-name" class="control-label col-md-3 col-sm-3 col-xs-12">Mobile <span  class="text-danger">*</span></label>
-          <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12">
-            <input required="required" class="form-control col-md-7 col-xs-12" type="tel" maxlength="10" name="mobile">
-            <span class="text-danger"><?php// echo form_error("mname");?></span>
-          </div>
-        </div>
-          {{-- start of attachment --}}
-
-          <div class="form-group col-6" style="display:none" id="attachment">
-            <label for="middle-name" class="control-label col-md-3 col-sm-3 col-xs-12">Attachment<span  class="text-danger">*</span></label></label>
-            <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12">
-              <input class="form-control col-md-7 col-xs-12"  type="file" name="image">
-              <span class="text-danger"><?php// echo form_error("mname");?></span>
-            </div>
-          </div>
-        <div class="form-group col-12 mb-2">
-          <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">Reason For Leave <span  class="text-danger">*</span>
-          </label>
-          <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12">
-            <textarea maxlength="256" class="form-control col-md-7 col-xs-12" name="reason" placeholder="Reason" required="required" rows="3"></textarea>
-            <span class="text-danger"><?php// echo form_error("lname");?></span>
-          </div>
-        </div>
-        @if($deligate > 0)
-        <div class="form-group col-6">
-          <label class="control-label " for="first-name" for="stream" >Deligate Position To <span  class="text-danger">*</span></label>
-
-          <select name="deligate" @if($deligate>0) required  @endif class="form-control form-select select" id="">
-            <option value="">&nbsp;</option>
-            @foreach( $employees as $item)
-            <option value=" {{ $item->emp_id }}">{{ $item->fname }} {{ $item->mname }} {{ $item->lname }}</option>
-            @endforeach
-          </select>
-
-        </div>
-        @endif
-
-
-            <!-- END -->
-            <div class="form-group py-2">
-              <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12 col-md-offset-3">
-                <button class="float-end btn btn-main" type="button" data-bs-toggle="modal" data-bs-target="#approval"> Submit </button>
-
-              </div>
-            </div>
-
-          </div>
-
-          {{-- start of add approval modal --}}
-
-<div id="approval" class="modal fade" tabindex="-1">
-    <div class="modal-dialog modal-dialog-centered modal-md">
-        <div class="modal-content">
-
-            <div class="modal-header">
-            <button type="button" class="btn-close " data-bs-dismiss="modal">
-
-            </button>
-        </div>
-        <modal-body class="p-4">
-            <h6 class="text-center">Are you Sure ?</h6>
-            <div class="row ">
-            <div class="col-4 mx-auto">
-                <button  type="submit" class="btn bg-main btn-sm px-4 " >Yes</button>
-
-                <button type="button" class="btn bg-danger btn-sm  px-4 text-light" data-bs-dismiss="modal">
-                No
-            </button>
-            </div>
-
-
-            </div>
-        </modal-body>
-        <modal-footer>
-
-        </modal-footer>
-
-
         </div>
     </div>
-</div>
 
-{{-- end of add approval modal --}}
-
-
-            </form>
+    <!-- Add approval modal -->
+    <div id="approval" class="modal fade" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered modal-md">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <h6 class="text-center">Are you Sure?</h6>
+                    <div class="row">
+                        <div class="col-4 mx-auto">
+                            <button type="submit" class="btn bg-main btn-sm px-4">Yes</button>
+                            <button type="button" class="btn bg-danger btn-sm px-4 text-light" data-bs-dismiss="modal">No</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer"></div>
+            </div>
+        </div>
     </div>
-</div>
+
 {{-- / --}}
 <div class="card border-top  border-top-width-3 border-top-main rounded-0" >
     <div class="card-header">
@@ -194,7 +164,11 @@
     </div>
 
     <div class="card-body">
-        <p><b>Days Accrued: <code class="text-success"> {{ $totalAccrued .' Days' }}</b></code></p>
+        <p><b>Annual Leave Days Accrued: <code class="text-success"> {{ $totalAccrued .' Days' }}</b></code></p>
+        {{-- <p><b>Sick Leave Days Accrued: <code class="text-success"> {{ $sickLeaveBalance .' Days' }}</b></code></p>
+        <p><b>Compassionate Leave Days Accrued: <code class="text-success"> {{ $compasionteLeaveBalance .' Days' }}</b></code></p>
+        <p><b>Maternity Leave Days Accrued: <code class="text-success"> {{ $totalAccrued .' Days' }}</b></code></p>
+        <p><b>Study Leave Days Accrued: <code class="text-success"> {{ $totalAccrued .' Days' }}</b></code></p> --}}
 
 
         @if(Session::has('note'))      {{ session('note') }}  @endif
