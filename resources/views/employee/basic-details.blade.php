@@ -61,7 +61,7 @@
 
 
                             <div class="card-footer ">
-                                <button type="submit" class="btn btn-main float-end"> Save Details</button>
+                                <button type="submit" class="btn btn-main float-end"  > Save Details</button>
                             </div>
                         </form>
 

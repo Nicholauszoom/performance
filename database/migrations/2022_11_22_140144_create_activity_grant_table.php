@@ -14,7 +14,7 @@ class CreateActivityGrantTable extends Migration
     public function up()
     {
         Schema::create('activity_grant', function (Blueprint $table) {
-            $table->bigInteger('id')->primary();
+            $table->id();
             $table->string('activity_code', 50);
             $table->string('grant_code', 50);
             $table->timestamps();

@@ -44,7 +44,6 @@
                                 <option value="{{ $item->emp_id }}" class="text-center"> {{ $item->fname }} {{ $item->mname }} {{ $item->lname }} </option>
                                 @endforeach
                             </select>
-                           
                     </div>
 
                     <div class="form-group col-6">
@@ -96,7 +95,7 @@
                 </div>
                 <hr>
                 <div class="modal-footer">
-                  
+
                     <button type="submit" class="btn btn-perfrom">Save Leave Approval</button>
                 </div>
             </form>
@@ -136,7 +135,7 @@
                         <tr>
                             <td>{{ $item->empID}}</td>
                             <td>{{ $item->employee->fname }} {{ $item->employee->mname }} {{ $item->employee->lname }}</td>
-                           <td> {{ $item->levelOne->fname }} {{ $item->levelOne->mname }} {{ $item->levelOne->lname }} </td> 
+                           <td> {{ $item->levelOne->fname ?? '-' }} {{ $item->levelOne->mname ??'-'}} {{ $item->levelOne->lname ?? '-' }} </td>
                            <td>@if( $item->levelTwo != null){{ $item->levelTwo->fname }} {{ $item->levelTwo->mname }} {{ $item->levelTwo->lname }} @else - @endif </td>
                            <td>@if( $item->levelThree != null){{ $item->levelThree->fname }} {{ $item->levelThree->mname }} {{ $item->levelThree->lname }} @else -@endif</td>
                             <td>{{ $item->escallation_time }}</td>
@@ -152,7 +151,7 @@
                         </tr>
 
                         @endforeach
-                 
+
                     </tbody>
                 </table>
             </div>
@@ -172,8 +171,8 @@
 
 @push('footer-script')
     <script>
-      
-   
+
+
 
         function deleteApproval(id) {
 
@@ -227,7 +226,7 @@
                 }
             });
 
-       
+
         }
     </script>
 @endpush

@@ -14,7 +14,7 @@ class CreateLoanLogsTable extends Migration
     public function up()
     {
         Schema::create('loan_logs', function (Blueprint $table) {
-            $table->integer('id')->primary();
+            $table->id();
             $table->integer('loanID');
             $table->double('policy')->default(0.15);
             $table->decimal('paid', 15, 2)->nullable();

@@ -14,7 +14,7 @@ class CreateOnceOffDeductionTable extends Migration
     public function up()
     {
         Schema::create('once_off_deduction', function (Blueprint $table) {
-            $table->integer('id')->primary();
+            $table->id();
             $table->string('empID', 10);
             $table->string('description', 50)->default('Unclassified');
             $table->string('policy', 50)->default('Fixed Amount');

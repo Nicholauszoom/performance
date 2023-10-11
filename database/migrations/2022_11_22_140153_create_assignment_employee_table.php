@@ -14,7 +14,7 @@ class CreateAssignmentEmployeeTable extends Migration
     public function up()
     {
         Schema::create('assignment_employee', function (Blueprint $table) {
-            $table->integer('id')->primary();
+            $table->id();
             $table->string('assignment_id', 45);
             $table->string('emp_id', 45);
             $table->string('status', 45)->default('0');

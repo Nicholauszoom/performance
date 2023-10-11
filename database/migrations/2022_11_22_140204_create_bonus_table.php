@@ -14,7 +14,7 @@ class CreateBonusTable extends Migration
     public function up()
     {
         Schema::create('bonus', function (Blueprint $table) {
-            $table->integer('id')->primary();
+            $table->id();
             $table->string('empID', 10);
             $table->decimal('amount', 15, 2);
             $table->integer('name');

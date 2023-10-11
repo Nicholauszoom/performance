@@ -2634,7 +2634,7 @@ as gross,
         return $row->wcf;
     }
     public function recent_payroll_month($currentDate) {
-        $query = "SELECT IF((SELECT COUNT(id) FROM payroll_months)>0, (SELECT payroll_date FROM payroll_months WHERE state = 0 ORDER BY id DESC LIMIT 1), " . $currentDate . ") as payroll_date ";
+        $query = "SELECT IF((SELECT COUNT(id) FROM payroll_months)>0, (SELECT payroll_date FROM payroll_months WHERE state = 0 ORDER BY id DESC LIMIT 1), Null) as payroll_date ";
         $row = DB::select(DB::raw($query));
         // $row = DB::statement($query);
         // dd($row->result);

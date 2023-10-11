@@ -2,9 +2,8 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use App\Models\AccessControll\Role;
-use App\Models\AccessControll\Permission;
-use App\Models\AccessControll\User;
+use Illuminate\Support\Facades\DB;
+
 
 class UserRoleSeeder extends Seeder
 {
@@ -15,30 +14,28 @@ class UserRoleSeeder extends Seeder
      */
     public function run()
     { 
-        //
-        $user = User::where('email','admin@gmail.com')->first();
+         // Insert employee role data here
+         $employeeRoles = [
+            [
+                'user_id' => 1, // User ID of the employee
+                'role_id' => 1, // Role ID (e.g., role with ID 1)
+            ],
+        ];
 
-        
+        // Insert employee roles into the 'employee_role' pivot table
+        DB::table('users_roles')->insert($employeeRoles);
 
-        $permission = Permission::all();
 
-        $permission = $permission->toArray();
-        //dd($permission);
-       
-        $role = new Role;
-        $role2 = new Role;
-        $role->slug  = 'superAdmin';
-        $role->name  = 'superAdmin';
-        $role->save();
-        
-        
-        $role2->slug  = 'jobSeeker';
-        $role2->name  = 'jobSeeker';
-        $role2->save();
-         $role->refreshPermissions($permission);
+         // Insert employee role data here
+         $employeeRoles = [
+            [
+                'UserID' => "EMP001", // User ID of the employee
+                'role' => 1, // Role ID (e.g., role with ID 1)
+                'group_name'=>'0',            ],
+        ];
 
-       
-        $user->roles()->attach($role->id);
+        // Insert employee roles into the 'employee_role' pivot table
+        DB::table('emp_role')->insert($employeeRoles);
 
 
 

@@ -14,7 +14,7 @@ class CreateGrantsTable extends Migration
     public function up()
     {
         Schema::create('grants', function (Blueprint $table) {
-            $table->integer('id')->primary();
+            $table->id();
             $table->string('code', 50);
             $table->string('name', 100);
             $table->string('description', 200);

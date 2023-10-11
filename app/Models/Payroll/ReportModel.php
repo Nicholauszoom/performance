@@ -595,8 +595,8 @@ FROM payroll_logs pl, employee e WHERE e.emp_id = pl.empID and e.contract_type =
     function get_termination($date)
     {
 
-        $calender = explode('-', $date);
-        $date = $calender[0] . "-" . $calender[1];
+        $calendar = explode('-', $date);
+        $date =  isset($calendar) && is_array($calendar) && count($calendar) >= 2 ? '%' . $calendar[0] . '-' . $calendar[1] . '%' : null;
 
         $query  = "SELECT t.*,e.pf_membership_no,e.cost_center as costCenterName,e.account_no,de.name,e.emp_id,e.mname,e.fname,e.lname,CONCAT(e.fname,' ', IF(e.mname != null,e.mname,' '),' ', e.lname) as name from terminations t,employee e,department de where e.emp_id = t.employeeID and e.department = de.id and t.terminationDate LIKE '%" . $date . "%' ";
         return (DB::select(DB::raw($query)));
@@ -1509,9 +1509,9 @@ and e.branch = b.code and e.line_manager = el.emp_id and c.id = e.contract_type 
 
         $row = DB::table('payroll_logs')->where('payroll_date', $date)->select('id')->count();
 
-        $calender = explode('-', $date);
-        if(count($calender) > 2){
-            $terminationDate = '%' . $calender[0] . '-' . $calender[1] . '%';
+        $calendar = explode('-', $date);
+        if(count($calendar) > 2){
+            $terminationDate = '%' . $calendar[0] . '-' . $calendar[1] . '%';
         }else{
             $terminationDate = 'null';
 
@@ -1524,8 +1524,8 @@ and e.branch = b.code and e.line_manager = el.emp_id and c.id = e.contract_type 
     }
 
     public function new_employee($date,$date2){
-       // $calender = explode('-', $date);
-       // $date2 = '%' . $calender[0] . '-' . $calender[1] . '%';
+       // $calendar = explode('-', $date);
+       // $date2 = '%' . $calendar[0] . '-' . $calendar[1] . '%';
         $query = "SELECT count(pl.empID) as total from payroll_logs pl where pl.payroll_date = '".$date."' and pl.empID NOT IN (SELECT pl2.empID from payroll_logs pl2 where pl2.payroll_date = '".$date2."')";
 
        $row =  DB::select(DB::raw($query));
@@ -1535,8 +1535,8 @@ and e.branch = b.code and e.line_manager = el.emp_id and c.id = e.contract_type 
     }
 
     public function new_employee1($date,$date2){
-        // $calender = explode('-', $date);
-        // $date2 = '%' . $calender[0] . '-' . $calender[1] . '%';
+        // $calendar = explode('-', $date);
+        // $date2 = '%' . $calendar[0] . '-' . $calendar[1] . '%';
          $query = "SELECT count(pl.empID) as total from temp_payroll_logs pl where pl.payroll_date = '".$date."' and pl.empID NOT IN (SELECT pl2.empID from payroll_logs pl2 where pl2.payroll_date = '".$date2."')";
 
         $row =  DB::select(DB::raw($query));
@@ -1571,8 +1571,8 @@ and e.branch = b.code and e.line_manager = el.emp_id and c.id = e.contract_type 
         //$row = DB::select(DB::raw($query));
         $row = DB::table('temp_payroll_logs')->where('payroll_date', $date)->select('id')->count();
 
-        $calender = explode('-', $date);
-        $terminationDate = '%' . $calender[0] . '-' . $calender[1] . '%';
+        $calendar = explode('-', $date);
+        $terminationDate = '%' . $calendar[0] . '-' . $calendar[1] . '%';
         $row2 = DB::table('terminations')->where('terminationDate', 'like', $terminationDate)->select('id')->count();
 
 
@@ -1581,9 +1581,9 @@ and e.branch = b.code and e.line_manager = el.emp_id and c.id = e.contract_type 
     }
 
     function terminated_salary($previous_payroll_month){
-      $calender = explode('-', $previous_payroll_month);
-      if(count($calender) > 2){
-        $terminationDate = '%' . $calender[0] . '-' . $calender[1] . '%';
+      $calendar = explode('-', $previous_payroll_month);
+      if(count($calendar) > 2){
+        $terminationDate = '%' . $calendar[0] . '-' . $calendar[1] . '%';
     }else{
         $terminationDate = 'null';
 
@@ -1596,9 +1596,9 @@ and e.branch = b.code and e.line_manager = el.emp_id and c.id = e.contract_type 
     }
 
     function terminated_employee($date){
-        $calender = explode('-', $date);
-        if(count($calender) > 2){
-            $terminationDate = '%' . $calender[0] . '-' . $calender[1] . '%';
+        $calendar = explode('-', $date);
+        if(count($calendar) > 2){
+            $terminationDate = '%' . $calendar[0] . '-' . $calendar[1] . '%';
         }else{
             $terminationDate = 'null';
 
@@ -1641,11 +1641,11 @@ and e.branch = b.code and e.line_manager = el.emp_id and c.id = e.contract_type 
     {
 
 
-        $calender1 = explode('-', $current_payroll_month);
-        $calender2 = explode('-', $previous_payroll_month);
+        $calendar1 = explode('-', $current_payroll_month);
+        $calendar2 = explode('-', $previous_payroll_month);
 
-       // $previous_terminationDate = $calender2[0] . '-' . $calender2[1];
-        $current_terminationDate = $calender1[0] . '-' . $calender1[1];
+       // $previous_terminationDate = $calendar2[0] . '-' . $calendar2[1];
+        $current_terminationDate =  isset($calendar1) && is_array($calendar1) && count($calendar1) >= 2 ? '%' . $calendar1[0] . '-' . $calendar1[1] . '%' : null;
         $subquery = "SELECT SUM(tm.actual_salary - tm.salaryEnrollment) as amount from terminations tm where  tm.terminationDate like '%" . $current_terminationDate . "%'";
         $row1 = DB::select(DB::raw($subquery));
 
@@ -1672,10 +1672,10 @@ and e.branch = b.code and e.line_manager = el.emp_id and c.id = e.contract_type 
 
 
 
-        $calender1 = explode('-', $current_payroll_month);
-        $calender2 = explode('-', $previous_payroll_month);
-        // $previous_terminationDate = $calender2[0] . '-' . $calender2[1];
-        $current_terminationDate = $calender1[0] . '-' . $calender1[1];
+        $calendar1 = explode('-', $current_payroll_month);
+        $calendar2 = explode('-', $previous_payroll_month);
+        // $previous_terminationDate = $calendar2[0] . '-' . $calendar2[1];
+        $current_terminationDate = $calendar1[0] . '-' . $calendar1[1];
         $subquery = "SELECT SUM(tm.actual_salary - tm.salaryEnrollment) as amount from terminations tm where  tm.terminationDate like '%" . $current_terminationDate . "%'";
         $row1 = DB::select(DB::raw($subquery));
 
@@ -1709,11 +1709,11 @@ and e.branch = b.code and e.line_manager = el.emp_id and c.id = e.contract_type 
         //     return $data;
         // }
 
-        $calender1 = explode('-', $current_payroll_month);
-        $calender2 = explode('-', $previous_payroll_month);
+        $calendar1 = explode('-', $current_payroll_month);
+        $calendar2 = explode('-', $previous_payroll_month);
 
-       // $previous_terminationDate = $calender2[0] . '-' . $calender2[1];
-        $current_terminationDate = $calender1[0] . '-' . $calender1[1];
+       // $previous_terminationDate = $calendar2[0] . '-' . $calendar2[1];
+        $current_terminationDate = isset($calendar1) && is_array($calendar1) && count($calendar1) >= 2 ? '%' . $calendar1[0] . '-' . $calendar1[1] . '%' : null;
         $subquery = "SELECT SUM(tm.salaryEnrollment-tm.actual_salary) as amount from terminations tm where tm.salaryEnrollment > tm.actual_salary and tm.terminationDate like '%" . $current_terminationDate . "%'";
         $row1 = DB::select(DB::raw($subquery));
         //dd($row1);
@@ -1753,11 +1753,11 @@ and e.branch = b.code and e.line_manager = el.emp_id and c.id = e.contract_type 
         //     return $data;
         // }
 
-        $calender1 = explode('-', $current_payroll_month);
-        $calender2 = explode('-', $previous_payroll_month);
+        $calendar1 = explode('-', $current_payroll_month);
+        $calendar2 = explode('-', $previous_payroll_month);
 
-       // $previous_terminationDate = $calender2[0] . '-' . $calender2[1];
-        $current_terminationDate = $calender1[0] . '-' . $calender1[1];
+       // $previous_terminationDate = $calendar2[0] . '-' . $calendar2[1];
+        $current_terminationDate = $calendar1[0] . '-' . $calendar1[1];
         $subquery = "SELECT SUM(tm.salaryEnrollment-tm.actual_salary) as amount from terminations tm where tm.salaryEnrollment > tm.actual_salary and tm.terminationDate like '%" . $current_terminationDate . "%'";
         $row1 = DB::select(DB::raw($subquery));
 
@@ -1795,11 +1795,11 @@ and e.branch = b.code and e.line_manager = el.emp_id and c.id = e.contract_type 
         //     return $data;
         // }
 
-        $calender1 = explode('-', $current_payroll_month);
-        $calender2 = explode('-', $previous_payroll_month);
+        $calendar1 = explode('-', $current_payroll_month);
+        $calendar2 = explode('-', $previous_payroll_month);
 
-       // $previous_terminationDate = $calender2[0] . '-' . $calender2[1];
-        $current_terminationDate = $calender1[0] . '-' . $calender1[1];
+       // $previous_terminationDate = $calendar2[0] . '-' . $calendar2[1];
+        $current_terminationDate = $calendar1[0] . '-' . $calendar1[1];
         $subquery = "SELECT SUM(tm.salaryEnrollment-tm.actual_salary) as amount from terminations tm where tm.salaryEnrollment > tm.actual_salary and tm.terminationDate like '%" . $current_terminationDate . "%'";
         $row1 = DB::select(DB::raw($subquery));
 
@@ -1829,8 +1829,8 @@ and e.branch = b.code and e.line_manager = el.emp_id and c.id = e.contract_type 
             $data['actual_salary'] = 0;
             return $data;
         }
-        $calender = explode('-', $date);
-        $terminationDate = $calender[0] . '-' . $calender[1];
+        $calendar = explode('-', $date);
+        $terminationDate = $calendar[0] . '-' . $calendar[1];
         $subquery = "SELECT SUM(tm.salaryEnrollment-tm.actual_salary) as amount from terminations tm where tm.salaryEnrollment > tm.actual_salary and tm.terminationDate like '%" . $terminationDate . "%'";
         $row1 = DB::select(DB::raw($subquery));
 
@@ -1853,8 +1853,8 @@ and e.branch = b.code and e.line_manager = el.emp_id and c.id = e.contract_type 
 
     public function total_basic($date)
     {
-        $calender = explode('-', $date);
-        $terminationDate = '%' . $calender[0] . '-' . $calender[1] . '%';
+        $calendar = explode('-', $date);
+        $terminationDate = '%' . $calendar[0] . '-' . $calendar[1] . '%';
 
         $query = "SELECT SUM(pl.actual_salary) as total_amount from payroll_logs pl where  pl.payroll_date = '" . $date . "'";
 
@@ -1868,8 +1868,8 @@ and e.branch = b.code and e.line_manager = el.emp_id and c.id = e.contract_type 
 
     public function total_basic1($date)
     {
-        $calender = explode('-', $date);
-        $terminationDate = '%' . $calender[0] . '-' . $calender[1] . '%';
+        $calendar = explode('-', $date);
+        $terminationDate = '%' . $calendar[0] . '-' . $calendar[1] . '%';
 
         $query = "SELECT SUM(pl.actual_salary) as total_amount from temp_payroll_logs pl where  pl.payroll_date = '" . $date . "'";
 
@@ -1935,11 +1935,11 @@ and e.branch = b.code and e.line_manager = el.emp_id and c.id = e.contract_type 
     public function employee_basic_decrease($current_payroll_month, $previous_payroll_month)
     {
 
-        $calender1 = explode('-', $current_payroll_month);
-        $calender2 = explode('-', $previous_payroll_month);
+        $calendar1 = explode('-', $current_payroll_month);
+        $calendar2 = explode('-', $previous_payroll_month);
 
-       // $previous_terminationDate = $calender2[0] . '-' . $calender2[1];
-        $current_terminationDate = $calender1[0] . '-' . $calender1[1];
+       // $previous_terminationDate = $calendar2[0] . '-' . $calendar2[1];
+        $current_terminationDate = $calendar1[0] . '-' . $calendar1[1];
         //dd($current_terminationDate);
         // $subquery = "SELECT SUM(tm.salaryEnrollment-tm.actual_salary) as amount from terminations tm where tm.salaryEnrollment > tm.actual_salary and tm.terminationDate like '%" . $current_terminationDate . "%'";
         // $row1 = DB::select(DB::raw($subquery));
@@ -1963,8 +1963,8 @@ and e.branch = b.code and e.line_manager = el.emp_id and c.id = e.contract_type 
         return $row;
 
 
-        $calender = explode('-', $current_payroll_month);
-        $terminationDate = '%' . $calender[0] . '-' . $calender[1] . '%';
+        $calendar = explode('-', $current_payroll_month);
+        $terminationDate = '%' . $calendar[0] . '-' . $calendar[1] . '%';
         $query = "SELECT  'Less Decrease in Basic Pay incomparison to Last M' as description,e.emp_id,e.hire_date,e.contract_end,e.fname,e.lname,
         (SELECT salary from payroll_logs pl where e.emp_id = pl.empID and payroll_date = '" . $current_payroll_month . "' limit 1) as current_amount,
          (SELECT salary from payroll_logs pl where e.emp_id = pl.empID and payroll_date = '" . $previous_payroll_month . "' limit 1) as previous_amount
@@ -1996,11 +1996,11 @@ and e.branch = b.code and e.line_manager = el.emp_id and c.id = e.contract_type 
     public function employee_basic_decrease1($current_payroll_month, $previous_payroll_month)
     {
 
-        $calender1 = explode('-', $current_payroll_month);
-        $calender2 = explode('-', $previous_payroll_month);
+        $calendar1 = explode('-', $current_payroll_month);
+        $calendar2 = explode('-', $previous_payroll_month);
 
-       // $previous_terminationDate = $calender2[0] . '-' . $calender2[1];
-        $current_terminationDate = $calender1[0] . '-' . $calender1[1];
+       // $previous_terminationDate = $calendar2[0] . '-' . $calendar2[1];
+        $current_terminationDate = $calendar1[0] . '-' . $calendar1[1];
         //dd($current_terminationDate);
         // $subquery = "SELECT SUM(tm.salaryEnrollment-tm.actual_salary) as amount from terminations tm where tm.salaryEnrollment > tm.actual_salary and tm.terminationDate like '%" . $current_terminationDate . "%'";
         // $row1 = DB::select(DB::raw($subquery));
@@ -2024,8 +2024,8 @@ and e.branch = b.code and e.line_manager = el.emp_id and c.id = e.contract_type 
         return $row;
 
 
-        $calender = explode('-', $current_payroll_month);
-        $terminationDate = '%' . $calender[0] . '-' . $calender[1] . '%';
+        $calendar = explode('-', $current_payroll_month);
+        $terminationDate = '%' . $calendar[0] . '-' . $calendar[1] . '%';
         $query = "SELECT  'Less Decrease in Basic Pay incomparison to Last M' as description,e.emp_id,e.hire_date,e.contract_end,e.fname,e.lname,
         (SELECT salary from payroll_logs pl where e.emp_id = pl.empID and payroll_date = '" . $current_payroll_month . "' limit 1) as current_amount,
          (SELECT salary from payroll_logs pl where e.emp_id = pl.empID and payroll_date = '" . $previous_payroll_month . "' limit 1) as previous_amount
@@ -2054,10 +2054,10 @@ and e.branch = b.code and e.line_manager = el.emp_id and c.id = e.contract_type 
     }
 
     public function employee_decrease($current_payroll_month, $previous_payroll_month){
-        $calender = explode('-',$previous_payroll_month);
+        $calendar = explode('-',$previous_payroll_month);
 
-        if(count($calender) > 2){
-            $terminationDate = '%'.$calender[0] . '-' . $calender[1].'%';
+        if(count($calendar) > 2){
+            $terminationDate = '%'.$calendar[0] . '-' . $calendar[1].'%';
 
         }else{
             $terminationDate = 'null';
@@ -2074,10 +2074,10 @@ and e.branch = b.code and e.line_manager = el.emp_id and c.id = e.contract_type 
     }
 
     public function employee_decrease1($current_payroll_month, $previous_payroll_month){
-        $calender = explode('-',$previous_payroll_month);
+        $calendar = explode('-',$previous_payroll_month);
 
-        if(count($calender) > 2){
-            $terminationDate = '%'.$calender[0] . '-' . $calender[1].'%';
+        if(count($calendar) > 2){
+            $terminationDate = '%'.$calendar[0] . '-' . $calendar[1].'%';
 
         }else{
             $terminationDate = 'null';
@@ -2095,10 +2095,10 @@ and e.branch = b.code and e.line_manager = el.emp_id and c.id = e.contract_type 
 
     public function allowance_by_employee($current_payroll_month, $previous_payroll_month)
     {
-        $calender = explode('-', $current_payroll_month);
-        $calender1 = explode('-', $previous_payroll_month);
-        if(count($calender1) > 2){
-            $previous_termination_date = $calender1[0] . '-' . $calender1[1];
+        $calendar = explode('-', $current_payroll_month);
+        $calendar1 = explode('-', $previous_payroll_month);
+        if(count($calendar1) > 2){
+            $previous_termination_date = $calendar1[0] . '-' . $calendar1[1];
 
         }else{
             $previous_termination_date = 'null';
@@ -2106,7 +2106,7 @@ and e.branch = b.code and e.line_manager = el.emp_id and c.id = e.contract_type 
         }
 
 
-        $current_termination_date = $calender[0] . '-' . $calender[1];
+        $current_termination_date = $calendar[0] . '-' . $calendar[1];
 
         $query = "
 
@@ -2291,10 +2291,10 @@ and e.branch = b.code and e.line_manager = el.emp_id and c.id = e.contract_type 
 
     public function allowance_by_employee1($current_payroll_month, $previous_payroll_month)
     {
-        $calender = explode('-', $current_payroll_month);
-        $calender1 = explode('-', $previous_payroll_month);
-        if(count($calender1) > 2){
-            $previous_termination_date = $calender1[0] . '-' . $calender1[1];
+        $calendar = explode('-', $current_payroll_month);
+        $calendar1 = explode('-', $previous_payroll_month);
+        if(count($calendar1) > 2){
+            $previous_termination_date = $calendar1[0] . '-' . $calendar1[1];
 
         }else{
             $previous_termination_date = 'null';
@@ -2302,7 +2302,7 @@ and e.branch = b.code and e.line_manager = el.emp_id and c.id = e.contract_type 
         }
 
 
-        $current_termination_date = $calender[0] . '-' . $calender[1];
+        $current_termination_date = $calendar[0] . '-' . $calendar[1];
 
         $query = "
 
@@ -2597,10 +2597,10 @@ IF((SELECT SUM(amount)  FROM allowance_logs WHERE allowance_logs.description = a
 
     public function total_terminated_allowance($current_payroll_month, $previous_payroll_month, $type)
     {
-        $calender1 = explode('-', $current_payroll_month);
-        $calender2 = explode('-', $previous_payroll_month);
-        $current_termination = '%'.$calender1[0] . '-' . $calender1[1].'%';
-        $previous_termination = !empty($previous_payroll_month) ? '%'.$calender2[0] . '-' . $calender2[1].'%' : null;
+        $calendar1 = explode('-', $current_payroll_month);
+        $calendar2 = explode('-', $previous_payroll_month);
+        $current_termination = '%'.$calendar1[0] . '-' . $calendar1[1].'%';
+        $previous_termination = !empty($previous_payroll_month) ? '%'.$calendar2[0] . '-' . $calendar2[1].'%' : null;
 
         if ($type == "N-Overtime") {
             $query = "SELECT CONCAT('Add/Less N-Overtime') as description,
@@ -2677,10 +2677,10 @@ IF((SELECT SUM(amount)  FROM allowance_logs WHERE allowance_logs.description = a
 
     public function all_terminated_allowance($current_payroll_month, $previous_payroll_month)
     {
-        $calender1 = explode('-', $current_payroll_month);
-        $calender2 = explode('-', $previous_payroll_month);
-        $current_termination = '%'.$calender1[0] . '-' . $calender1[1].'%';
-        $previous_termination = !empty($previous_payroll_month) ? '%'.$calender2[0] . '-' . $calender2[1].'%' : null;
+        $calendar1 = explode('-', $current_payroll_month);
+        $calendar2 = explode('-', $previous_payroll_month);
+        $current_termination = isset($calendar1) && is_array($calendar1) && count($calendar1) >= 2 ? '%' . $calendar1[0] . '-' . $calendar1[1] . '%' : null;
+        $previous_termination = !empty($previous_payroll_month) ? '%'.$calendar2[0] . '-' . $calendar2[1].'%' : null;
         $data = [];
 
 
@@ -2889,8 +2889,8 @@ IF((SELECT SUM(amount)  FROM allowance_logs WHERE allowance_logs.description = a
     {
         // $query =  "DELETE FROM financial_logs where Date(created_at) Like '2023-02-19%'";
         // DB::insert(DB::raw($query));
-        $calender = explode('-', $payroll_date);
-        $date = !empty($payroll_date)?$calender[0] . '-' . $calender[1]:null;
+        $calendar = explode('-', $payroll_date);
+        $date = !empty($payroll_date)?$calendar[0] . '-' . $calendar[1]:null;
 
         $query = "SELECT SUM(pl.salary+pl.allowances)+(IF((SELECT SUM(tm.total_gross) from terminations tm where terminationDate like '%" . $date . "%') > 0,(SELECT SUM(tm.total_gross) from terminations tm where terminationDate like '%" . $date . "%'),0)) as total_gross FROM payroll_logs pl, employee e
         WHERE e.emp_id = pl.empID and e.contract_type != 2 and pl.payroll_date = '" . $payroll_date . "'";
@@ -2908,8 +2908,8 @@ IF((SELECT SUM(amount)  FROM allowance_logs WHERE allowance_logs.description = a
     public function gross_management($payroll_date)
     {
 
-        $calender = explode('-', $payroll_date);
-        $date = !empty($payroll_date)?$calender[0] . '-' . $calender[1]:null;
+        $calendar = explode('-', $payroll_date);
+        $date = !empty($payroll_date)?$calendar[0] . '-' . $calendar[1]:null;
 
         $query = "SELECT SUM(pl.salary)+(IF((SELECT SUM(tm.total_gross) from terminations tm,employee e2 where e2.emp_id = tm.employeeID and e2.cost_center = 'Management' and terminationDate like '%" . $date . "%') > 0,(SELECT SUM(tm.total_gross) from terminations tm,employee e2 where tm.employeeID = e2.emp_id and e.cost_center = 'Management' and terminationDate like '%" . $date . "%'),0)) as total_gross FROM payroll_logs pl, employee e
         WHERE e.emp_id = pl.empID  and e.cost_center = 'Management'  and e.contract_type != 2  and pl.payroll_date = '" . $payroll_date . "'";
@@ -2934,8 +2934,8 @@ IF((SELECT SUM(amount)  FROM allowance_logs WHERE allowance_logs.description = a
     }
     public function gross($payroll_date){
 
-        $calender = explode('-', $payroll_date);
-        $date = !empty($payroll_date)?$calender[0] . '-' . $calender[1]:null;
+        $calendar = explode('-', $payroll_date);
+        $date = !empty($payroll_date)?$calendar[0] . '-' . $calendar[1]:null;
 
         $query = "SELECT SUM(pl.salary)+(IF((SELECT SUM(tm.total_gross) from terminations tm  where tm.terminationDate like '%" . $date . "%') > 0,(SELECT SUM(tm.total_gross) from terminations tm where  tm.terminationDate like '%" . $date . "%'),0)) as total_gross FROM payroll_logs pl, employee e
         WHERE e.emp_id = pl.empID   and e.contract_type != 2  and pl.payroll_date = '" . $payroll_date . "'";
@@ -2971,8 +2971,8 @@ IF((SELECT SUM(amount)  FROM allowance_logs WHERE allowance_logs.description = a
     }
 
     public function contributions($payroll_date){
-        $calender = explode('-', $payroll_date);
-        $date = !empty($payroll_date)?$calender[0] . '-' . $calender[1]:null;
+        $calendar = explode('-', $payroll_date);
+        $date = !empty($payroll_date)?$calendar[0] . '-' . $calendar[1]:null;
         //paye
         $query = "SELECT SUM(pl.taxdue)+(IF((SELECT SUM(tm.paye) from terminations tm,employee e2 where e2.emp_id = tm.employeeID  and terminationDate like '%" . $date . "%') > 0,(SELECT SUM(tm.paye) from terminations tm,employee e2 where tm.employeeID = e2.emp_id  and terminationDate like '%" . $date . "%'),0)) as paye FROM payroll_logs pl, employee e
         WHERE e.emp_id = pl.empID  and e.contract_type != 2  and pl.payroll_date = '" . $payroll_date . "'";
@@ -3008,8 +3008,8 @@ IF((SELECT SUM(amount)  FROM allowance_logs WHERE allowance_logs.description = a
      }
 
      public function net_terminal_benefit($payroll_date){
-        $calender = explode('-', $payroll_date);
-        $date = !empty($payroll_date)?$calender[0] . '-' . $calender[1]:null;
+        $calendar = explode('-', $payroll_date);
+        $date = !empty($payroll_date)?$calendar[0] . '-' . $calendar[1]:null;
         $query = "SELECT tm.take_home as amount,'Terminal Benefit' as Description,e.fname as name from terminations tm,employee e where e.emp_id = tm.employeeID and tm.terminationDate like '%".$date."%'";
 
         $row = DB::select(DB::raw($query));
@@ -3062,8 +3062,8 @@ IF((SELECT SUM(amount)  FROM allowance_logs WHERE allowance_logs.description = a
     public function gross_non_management($payroll_date)
     {
 
-        $calender = explode('-', $payroll_date);
-        $date = !empty($payroll_date)?$calender[0] . '-' . $calender[1]:null;
+        $calendar = explode('-', $payroll_date);
+        $date = !empty($payroll_date)?$calendar[0] . '-' . $calendar[1]:null;
 
         $query = "SELECT SUM(pl.salary)+(IF((SELECT SUM(tm.total_gross) from terminations tm,employee e2 where e2.emp_id = tm.employeeID and e2.cost_center = 'Non Management' and terminationDate like '%" . $date . "%') > 0,(SELECT SUM(tm.total_gross) from terminations tm,employee e2 where tm.employeeID = e2.emp_id and e.cost_center = 'Non Management' and terminationDate like '%" . $date . "%'),0)) as total_gross FROM payroll_logs pl, employee e
         WHERE e.emp_id = pl.empID  and e.cost_center = 'Non Management'  and e.contract_type != 2  and pl.payroll_date = '" . $payroll_date . "'";
@@ -3088,8 +3088,8 @@ IF((SELECT SUM(amount)  FROM allowance_logs WHERE allowance_logs.description = a
 
     public function s_grossMonthly1($payroll_date)
     {
-        $calender = explode('-', $payroll_date);
-        $date = $calender[0] . '-' . $calender[1];
+        $calendar = explode('-', $payroll_date);
+        $date = $calendar[0] . '-' . $calendar[1];
         $query = "SELECT SUM(pl.salary+pl.allowances)+(IF((SELECT SUM(tm.total_gross) from terminations tm where terminationDate like '%" . $date . "%') > 0,(SELECT SUM(tm.total_gross) from terminations tm where terminationDate like '%" . $date . "%'),0)) as total_gross FROM temp_payroll_logs pl, employee e
         WHERE e.emp_id = pl.empID and e.contract_type != 2 and pl.payroll_date = '" . $payroll_date . "' group by pl.payroll_date";
 

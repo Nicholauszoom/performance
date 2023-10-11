@@ -49,7 +49,7 @@
 
                             <div class="col-md-6 mb-2">
                                 <label for="">Final Score & Grades</label>
-                                <input type="text" name="final_score"  id="final_score"  placeholder="Final Score & Grades" class="form-control" >
+                                <input type="text" name="final_score"  id="final_score"  placeholder="Final Score & Grades" class="form-control" required >
                             </div>
 
                             <div class="col-md-6 mb-2">

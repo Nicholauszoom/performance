@@ -14,7 +14,7 @@ class CreateEmployeeOvertimeTable extends Migration
     public function up()
     {
         Schema::create('employee_overtime', function (Blueprint $table) {
-            $table->integer('id')->primary();
+            $table->id();
             $table->string('empID', 10)->index('empID');
             $table->dateTime('time_start');
             $table->dateTime('time_end');

@@ -14,7 +14,7 @@ class CreateAssignmentTaskTable extends Migration
     public function up()
     {
         Schema::create('assignment_task', function (Blueprint $table) {
-            $table->integer('id')->primary();
+            $table->id();
             $table->integer('assignment_employee_id');
             $table->string('task_name', 200);
             $table->string('description');
