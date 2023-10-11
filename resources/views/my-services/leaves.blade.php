@@ -194,7 +194,11 @@
     </div>
 
     <div class="card-body">
-        <p><b>Days Accrued: <code class="text-success"> {{ $totalAccrued .' Days' }}</b></code></p>
+        <p><b>Annual Leave Days Accrued: <code class="text-success"> {{ $totalAccrued .' Days' }}</b></code></p>
+        {{-- <p><b>Sick Leave Days Accrued: <code class="text-success"> {{ $sickLeaveBalance .' Days' }}</b></code></p>
+        <p><b>Compassionate Leave Days Accrued: <code class="text-success"> {{ $compasionteLeaveBalance .' Days' }}</b></code></p>
+        <p><b>Maternity Leave Days Accrued: <code class="text-success"> {{ $totalAccrued .' Days' }}</b></code></p>
+        <p><b>Study Leave Days Accrued: <code class="text-success"> {{ $totalAccrued .' Days' }}</b></code></p> --}}
 
 
         @if(Session::has('note'))      {{ session('note') }}  @endif

@@ -84,7 +84,7 @@
                     <td><?php echo number_format($employee->opening_balance < 0?0:$employee->opening_balance, 2); ?></td>
                     {{-- <td><?php echo number_format($employee->accrual_amount, 2); ?></td>
                     <td><?php echo number_format($employee->accrual_amount * $employee->opening_balance, 2); ?></td> --}}
-                    @if($nature == 1)<td><?php echo number_format($employee->accrual_days, 3); ?></td> @endif
+                    @if($nature == 1)<td><?php echo number_format($employee->accrual_rate, 3); ?></td> @endif
                     <td><?php echo number_format(($employee->opening_balance < 0?($employee->days_spent +(-1*$employee->opening_balance)):$employee->days_spent),2) ?></td>
                     <td><?php echo number_format($employee->current_balance, 2); ?></td>
                     @if($nature == 1)   <td><?php echo number_format($employee->current_balance * $employee->accrual_amount, 2); ?></td> @endif

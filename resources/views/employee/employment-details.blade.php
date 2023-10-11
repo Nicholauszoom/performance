@@ -96,8 +96,19 @@
                             <div class="form-group col-12 mb-2">
                                 <label for="">Line Manager</label>
                                 <br>
-                                <p>Current:  {{ App\Models\Employee::all()->where('emp_id',$line_managerID)->first()->full_name;
-                                }} </p>
+                                <p>
+                                    Current:
+                                    @php
+                                    $employee = App\Models\Employee::where('emp_id', $line_managerID)->first();
+                                    @endphp
+
+                                    @if ($employee)
+                                        {{ $employee->full_name }}
+                                    @else
+                                        Line manager not found
+                                    @endif
+                                </p>
+
                                 <label for="">Update Line Manager</label>
                                 <select class="form-control select @error('line_manager') is-invalid @enderror" name="line_manager">
                                     <option value="<?php echo $line_managerID; ?>"> Select New Line Manager </option>
