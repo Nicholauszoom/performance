@@ -1,6 +1,6 @@
 @extends('layouts.vertical', ['title' => 'Dashboard'])
 
-@push('head-script')
+{{-- @push('head-script')
     <script src="{{ asset('assets/js/components/tables/datatables/datatables.min.js') }}"></script>
 
     <script src="{{ asset('assets/js/components/tables/datatables/extensions/pdfmake/pdfmake.min.js') }}"></script>
@@ -11,7 +11,18 @@
 @push('head-scriptTwo')
     <script src="{{ asset('assets/js/pages/datatables_basic.js') }}"></script>
     <script src="{{ asset('assets/js/pages/datatables_extension_buttons_html5.js') }} "></script>
+@endpush --}}
+
+
+@push('head-script')
+    <script src="{{ asset('assets/js/components/tables/datatables/datatables.min.js') }}"></script>
+    <script src="{{ asset('assets/js/components/tables/datatables/extensions/buttons.min.js') }}"></script>
 @endpush
+
+@push('head-scriptTwo')
+    <script src="{{ asset('assets/js/pages/datatables_extension_buttons_excel.js') }}"></script>
+@endpush
+
 
 @section('content')
     <!-- Column selectors -->
@@ -24,7 +35,7 @@
             <h5 class="mb-0">Position : {{ $position_name }}</h5>
             @endif
         </div>
-        <table class="table datatable-button-html5-columns">
+        <table class="table datatable-excel-filter">
             <thead>
                 <tr>
                     <th>No</th>
