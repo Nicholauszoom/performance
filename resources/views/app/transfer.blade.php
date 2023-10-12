@@ -166,7 +166,7 @@
                                 </td>
                                 <td class="options-width">
                                     <div class="d-flex">
-                                        <a href="<?php echo  url('').'/flex/userprofile/'.$row->empID; ?>" title="Employee Info and Details" class="icon-2 info-tooltip ms-2">
+                                        <a href="<?php echo  url('').'/flex/userprofile/'.  base64_encode($row->empID); ?>" title="Employee Info and Details" class="icon-2 info-tooltip ms-2">
                                             <button type="button" class="btn btn-info btn-xs"><i class="ph-info"></i></button>
                                         </a>
                                         <?php if($row->status==5){ ?>
@@ -174,11 +174,11 @@
                                             <button type="button" class="btn btn-danger btn-xs"><i class="ph-x"></i></button>
                                         </a>
                                         <?php if($row->parameterID==5){
-                                            if(session('mng_paym')){  ?>
+                                            // if(session('mng_paym')){  ?>
                                                 <a href="javascript:void(0)" onclick="approveRegistration(<?php echo $row->id; ?>)" title="Accept" class="icon-2 info-tooltip ms-2">
                                                     <button type="button" class="btn btn-success btn-xs"><i class="ph-check"></i></button>
                                                 </a>
-                                        <?php } } }?>
+                                        <?php }  }?>
                                     </div>
                                 </td>
                             </tr>

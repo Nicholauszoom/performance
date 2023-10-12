@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateExceptionTypeTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -13,14 +13,15 @@ class CreateExceptionTypeTable extends Migration
      */
     public function up()
     {
-        Schema::create('exception_type', function (Blueprint $table) {
+        Schema::create('leave_forfeitings', function (Blueprint $table) {
             $table->id();
-            $table->string('name', 100);
-            //$table->string('created_at', 45);
-            $table->string('created_by', 45);
+            $table->string('empID', 10);
+            $table->string('nature', 10);
+            $table->string('days', 10);
             $table->timestamps();
         });
     }
+
 
     /**
      * Reverse the migrations.
@@ -29,6 +30,6 @@ class CreateExceptionTypeTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('exception_type');
+        Schema::dropIfExists('leave_forfeitings');
     }
-}
+};

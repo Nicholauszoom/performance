@@ -13,12 +13,15 @@ class CreateOvertimesTable extends Migration
      */
     public function up()
     {
+        Schema::dropIfExists('overtimes');
+
         Schema::create('overtimes', function (Blueprint $table) {
             $table->id();
             $table->integer('overtimeID');
             $table->string('empID', 10);
             $table->dateTime('time_start')->useCurrent();
             $table->dateTime('time_end')->useCurrent();
+            $table->string('overtime_category');
             $table->decimal('amount', 15, 4);
             $table->string('linemanager', 10);
             $table->string('hr', 10);
@@ -26,6 +29,7 @@ class CreateOvertimesTable extends Migration
             $table->dateTime('confirmation_time')->useCurrent();
             $table->date('approval_time')->default('2019-06-19');
             $table->integer('status')->default(0)->comment("0-Waiting For Payment,1- Scheduled For Payment On Next Payroll");
+            $table->integer('days')->default(0);
             $table->timestamps();
         });
     }

@@ -270,7 +270,6 @@
                                         class="nav-link {{ request()->routeIs('flex.submitInputs') ? 'active' : null }}"
                                         href="{{ route('flex.submitInputs') }}"> Submit Inputs </a></li>
                             @endcan
-                         
                                 @can('view-payroll')
                                 <li class="nav-item"><a
                                         class="nav-link {{ request()->routeIs('payroll.payroll') ? 'active' : null }}"
@@ -282,7 +281,6 @@
                                     class="nav-link {{ request()->routeIs('flex.approved_financial_payments') ? 'active' : null }}"
                                     href="{{ route('flex.approved_financial_payments') }}">Payroll Approvers </a></li>
                         @endcan
-                       
 
                             {{-- start of payslip link  --}}
                             @can('view-payslip')
@@ -290,8 +288,6 @@
                                         class="nav-link {{ request()->routeIs('payroll.employee_payslip') ? 'active' : null }}"
                                         href="{{ route('payroll.employee_payslip') }}"> Payslip </a></li>
                             @endcan
-
-                          
                             {{-- / --}}
 
                             {{-- start of incentives link --}}
@@ -304,7 +300,6 @@
                             {{-- / --}}
 
                             {{--  start of pending payments link --}}
-                         
 
                             @can('view-payslip')
                                 <li class="nav-item"><a

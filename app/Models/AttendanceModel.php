@@ -413,6 +413,7 @@ class AttendanceModel extends Model
 
         $row = DB::select(DB::raw($query));
         $employee = DB::table('employee')->where('emp_id', $empID)->first();
+        $remain = DB::table('leaves')->where('empID', $empID)   ->latest('created_at')->first();
         //$date = $employee->hire_date;
         $d1 = new DateTime($hireDate);
         // $todayDate = date('Y-m-d');
@@ -539,6 +540,71 @@ class AttendanceModel extends Model
         $days_this_month = intval(date('t', strtotime($last_month_date)));
         $accrual_days = (($days * $employee->accrual_rate) / 30) + $months * $employee->accrual_rate + $years * 12 * $employee->accrual_rate;
         //$days * $employee->accrual_rate / $days_this_month +
+        $interval = $d1->diff($d2);
+        $diffInMonths  = $interval->m;
+        //    dd($diffInMonths);
+        $spent = $row[0]->days_spent;
+        // $accrued = $row[0]->days_accrued;
+
+        // $accrual= 7*$accrued/90;
+        $accrual = 0;
+        if ($nature == 1) {
+            $maximum_days = $accrual_days - $spent;
+        } else {
+            $days_entitled  = $this->days_entilted($nature);
+
+            $maximum_days = $days_entitled - $spent;
+        }
+
+
+        //dd($days);
+
+
+
+        return $maximum_days;
+    }
+    function getLeaveBalance3($empID, $hireDate, $today, $nature)
+    {
+
+        $today = date("Y-m-d", strtotime($today));
+
+
+        //$prev_month = date("Y-m-d", strtotime('-1 month', strtotime($today)));
+
+        //$last_month_date = date('Y-m-t', strtotime($prev_month));
+
+        $calender = explode('-', $today);
+
+
+        $last_month_date = $calender[0] . '-01-01';
+
+        //dd($today);
+
+        $query = "SELECT  IF( (SELECT COUNT(id)  FROM leaves WHERE nature= '" . $nature . "' AND empID = '" . $empID . "')=0, 0, (SELECT SUM(days)  FROM leaves WHERE nature= '" . $nature . "' and empID = '" . $empID . "' and start <= '" . $today . "'  GROUP BY nature )) as days_spent, DATEDIFF('" . $today . "','" . $hireDate . "') as days_accrued limit 1";
+
+        $row = DB::select(DB::raw($query));
+        $employee = DB::table('employee')->where('emp_id', $empID)->first();
+        //$date = $employee->hire_date;
+        $d1 = new DateTime($hireDate);
+        // $d1 = new DateTime($hireDate);
+        $year = $d1->format('Y');
+
+// $year now contains the four-digit year from the DateTime object
+
+
+        // $todayDate = date('Y-m-d');
+        $d2 = new DateTime($last_month_date);
+
+        $diff = $d1->diff($d2);
+
+        $years = $diff->y;
+        $months = $diff->m;
+        $days = $diff->d;
+
+        $days_this_month = intval(date('t', strtotime($last_month_date)));
+        $accrual_days = (($days * $employee->accrual_rate) / 30) + $months * $employee->accrual_rate + $years * 12 * $employee->accrual_rate;
+        //$days * $employee->accrual_rate / $days_this_month +
+        // dd($accrual_days);
         $interval = $d1->diff($d2);
         $diffInMonths  = $interval->m;
         //    dd($diffInMonths);
@@ -801,6 +867,49 @@ class AttendanceModel extends Model
 
         return $days_spent;
     }
+    public function days_spent3($empID, $hireDate, $today, $nature)
+    {
+
+        $today = date("Y-m-d", strtotime($today));
+
+        $hireYear = date('Y', strtotime($hireDate));
+        $currentYear = date('Y', strtotime($today));
+        // if ($hireYear !== $currentYear) {
+
+
+            $leaves = Leaves::where('empID', $empID)
+                ->where('nature', $nature)->where('status', 3) // Include status = 3
+                ->where('state', 0) // Include state = 0
+                ->whereRaw('YEAR(start) = ? AND YEAR(end) = ?', [$currentYear, $currentYear])
+                ->get();
+
+                $totalDays = 0;
+
+    foreach ($leaves as $leave) {
+        $startDate = date_create($leave->start);
+        $endDate = date_create($leave->end);
+
+        if ($endDate < date_create($today)) {
+            // If the leave has ended, use the difference between start and end date
+            $difference = date_diff($startDate, $endDate);
+            $totalDays += $difference->days;
+        } else {
+            // If the leave has not ended, calculate the difference between start date and today
+            $difference = date_diff($startDate, date_create($today));
+            $totalDays += $difference->days;
+        }
+    }
+    return $totalDays;
+    // }
+
+    //     } else {
+
+
+    //         echo "Hire date and current date are in the same year.";
+    //     }
+
+
+}
 
 
     function getOpeningLeaveBalance($empID, $hireDate, $today, $nature)

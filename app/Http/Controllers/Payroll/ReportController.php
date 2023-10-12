@@ -3684,9 +3684,9 @@ public function processOneEmployee($employee, $request, $nature){
         $employee->days_entitled = $this->attendance_model->days_entilted($nature);
 
 
-        $employee->days_spent = $this->attendance_model->days_spent2($employee->emp_id, $employee->hire_date, $request->duration, $nature);
+        $employee->days_spent = $this->attendance_model->days_spent3($employee->emp_id, $employee->hire_date, $request->duration, $nature);
 
-        $employee->opening_balance = $this->attendance_model->getOpeningLeaveBalance2($employee->emp_id, $employee->hire_date, $request->duration, $nature);
+        $employee->opening_balance = $this->attendance_model->getLeaveBalance3($employee->emp_id, $employee->hire_date, $request->duration, $nature);
 
         $employee->current_balance = $this->attendance_model->getLeaveBalance2($employee->emp_id, $employee->hire_date, $request->duration, $nature);
 

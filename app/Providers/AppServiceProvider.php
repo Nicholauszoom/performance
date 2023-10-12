@@ -29,7 +29,7 @@ class AppServiceProvider extends ServiceProvider
         //
         if (config('app.env') === 'production') {
             URL::forceScheme('https');
-            Cookie::defaults(['secure' => true, 'sameSite' => 'none']);
+            // Cookie::defaults(['secure' => true, 'sameSite' => 'none']);
         }
     }
 }
