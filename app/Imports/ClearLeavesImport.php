@@ -2,8 +2,7 @@
 
 namespace App\Imports;
 
-use App\Models\EMPL;
-use App\Models\Leaves;
+use App\Models\LeaveForfeiting;
 use Illuminate\Support\Facades\Log;
 use Maatwebsite\Excel\Concerns\ToCollection;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
@@ -21,22 +20,14 @@ class ClearLeavesImport implements ToCollection, WithHeadingRow
 
                 $empId = $row['payroll_number'];
                 $remaining = $row['leave_days_forfeited'];
-                $employee = EMPL::where('emp_id',$empId )->first();
-                $accrual_rate = $employee->accrual_rate;
-
-                $employee= EMPL::where('emp_id',$empId )->first()
-                ->update(['accrual-rate',$remaining/$employee->accrual_rate] );
-
                 // Update the record if 'Payroll Number' key exists
-                $leave =   Leaves::where('empId', $empId)
-                            ->where('nature', 1)
-                            ->update(['remaining' => $remaining,
-                                    'start'=>'00-00-0000',
-                                    'end'=>'00-00-0000'
+                $leave =   LeaveForfeiting::create([
+                            'empID'=>$empId,
+                            'nature'=> 1,
+                            'days' => $remaining
                         ]);
 
-                $employee= EMPL::where('emp_id',$empId )->first()
-                ->update(['accrual-rate',$accrual_rate] );
+                        Log::info($leave);
             } else {
                 // Handle the case where 'Payroll Number' key is missing
                 // You can log an error, skip the row, or take appropriate action.

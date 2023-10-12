@@ -426,7 +426,7 @@ class AttendanceModel extends Model
         $days = $diff->d;
 
         $days_this_month = intval(date('t', strtotime($last_month_date)));
-        $accrual_days = (($days * $employee->accrual_rate) / 30) + $months * $employee->accrual_rate + $years * 12 * $employee->accrual_rate + $remain->remaining;
+        $accrual_days = (($days * $employee->accrual_rate) / 30) + $months * $employee->accrual_rate + $years * 12 * $employee->accrual_rate;
         //$days * $employee->accrual_rate / $days_this_month +
         $interval = $d1->diff($d2);
         $diffInMonths  = $interval->m;
