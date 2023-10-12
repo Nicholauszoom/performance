@@ -13,10 +13,15 @@ class CreateDepartmentsTable extends Migration
      */
     public function up()
     {
+        Schema::dropIfExists('department');
+
         Schema::create('department', function (Blueprint $table) {
             $table->increments('id');
+            $table->string('dept_no');
             $table->integer('code')->default(1);
             $table->string('name');
+            $table->string('cost_center_id');
+            $table->string('company');
             $table->integer('type')->default(1)->comment("1-Department, 2-Subdepartment");
             $table->integer('hod')->nullable();
             $table->integer('reports_to')->default(3);

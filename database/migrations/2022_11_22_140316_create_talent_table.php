@@ -14,7 +14,7 @@ class CreateTalentTable extends Migration
     public function up()
     {
         Schema::create('talent', function (Blueprint $table) {
-            $table->integer('id')->primary();
+            $table->id();
             $table->string('empID', 10);
             $table->double('score');
             $table->string('description', 200);

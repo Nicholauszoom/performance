@@ -122,26 +122,26 @@
                                 foreach ($summary as $row){
                                     $i++;
                                     $amount = $row->salary + $row->allowances-$row->pension_employer-$row->loans-$row->deductions-$row->meals-$row->taxdue;
-                                    $total_netpay +=  $amount;
+                                    $total_netpay +=  round($amount,2);
 
-                                    $total_gross_salary += ($row->salary + $row->allowances);
-                                    $total_salary = $total_salary + $row->salary;
-                                    $total_allowance = $total_allowance + $row->allowances ;
-                                    $total_arrears = $total_arrears + $row->arrears_allowance;
-                                    $total_overtime = $total_overtime +$row->overtime;
-                                    $total_house_rent = $total_house_rent + $row->house_rent;
-                                    $total_others = $total_others + $row->other_payments ;
+                                    $total_gross_salary += round(($row->salary + $row->allowances),2);
+                                    $total_salary = round($total_salary + $row->salary,2);
+                                    $total_allowance = round($total_allowance + $row->allowances,2) ;
+                                    $total_arrears = round($total_arrears + $row->arrears_allowance,2);
+                                    $total_overtime = round($total_overtime +$row->overtime,2);
+                                    $total_house_rent = round($total_house_rent + $row->house_rent,2);
+                                    $total_others = round($total_others + $row->other_payments,2) ;
                                     $total_taxs += round($row->taxdue,0);
 
-                                    $total_pension = $total_pension + $row->pension_employer;
-                                    $total_deduction += ($row->salary + $row->allowances)-$amount;
-                                    $total_sdl = $total_sdl + $row->sdl;
-                                    $total_wcf = $total_wcf + $row->wcf;
-                                    $total_taxable_amount += intval($row->salary + $row->allowances-$row->pension_employer);
-                                    $total_loans = $total_loans + $row->total_loans;
-                                    $total_teller_allowance += $row->teller_allowance;
+                                    $total_pension = round($total_pension + $row->pension_employer,2);
+                                    $total_deduction += round(($row->salary + $row->allowances)-$amount,2);
+                                    $total_sdl = round($total_sdl + $row->sdl,2);
+                                    $total_wcf = round($total_wcf + $row->wcf,2);
+                                    $total_taxable_amount += round($row->salary + $row->allowances-$row->pension_employer,2);
+                                    $total_loans = round($total_loans + $row->total_loans,2);
+                                    $total_teller_allowance += round($row->teller_allowance,2);
 
-                                    $others += $row->deductions;
+                                    $others += round($row->deductions,2);
 
 
                                 ?>
@@ -245,18 +245,18 @@
 
                                 </tr>
                                 @php
-                                    $others += $row2->loan_balance;
-                                    $total_arrears +=$row2->arrears;
-                                    $total_overtime +=($row2->normal_days_overtime_amount+$row2->public_overtime_amount);
+                                    $others += round($row2->loan_balance,2);
+                                    $total_arrears +=round($row2->arrears,2);
+                                    $total_overtime +=round(($row2->normal_days_overtime_amount+$row2->public_overtime_amount),2);
 
-                                    $total_salary += $row2->salaryEnrollment;
-                                    $total_others += $row2->leavePay + $row2->leaveAllowance+$row2->transport_allowance+$row2->nightshift_allowance;
-                                    $total_taxable_amount += $row2->taxable;
-                                    $total_taxs += $row2->paye;
+                                    $total_salary += round($row2->salaryEnrollment,2);
+                                    $total_others += round($row2->leavePay + $row2->leaveAllowance+$row2->transport_allowance+$row2->nightshift_allowance,2);
+                                    $total_taxable_amount += round($row2->taxable,2);
+                                    $total_taxs += round($row2->paye,2);
                                     //$total_netpay += ($row2->taxable -$row2->paye);
-                                    $total_deduction += $row2->pension_employee + $row2->paye + $row2->otherDeductions;
-                                    $total_pension += $row2->pension_employee;
-                                    $total_gross_salary += $row2->total_gross;
+                                    $total_deduction +=round( $row2->pension_employee + $row2->paye + $row2->otherDeductions,2);
+                                    $total_pension += round($row2->pension_employee,2);
+                                    $total_gross_salary += round($row2->total_gross,2);
 
                                     // $total_gross_salary += ($row2->salaryEnrollment + $row2->leaveAllowance + $row2->leavePay);
 

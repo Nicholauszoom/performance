@@ -11,7 +11,7 @@
 
 @section('content')
 
-  @if (session('mng_emp') || session('vw_emp') || session('appr_emp'))
+@can('view-employee')
   <div class="card border-top  border-top-width-3 border-top-main rounded-0">
     <div class="card-header  mb-0">
       <h5 class="text-main">Employees</h5>
@@ -21,13 +21,13 @@
       <div class="d-flex justify-content-between">
         <h4 class="lead text-warning ">List of Employees</h4>
 
-        @if (session('mng_emp'))
+        
         @can('add-employee')
           <a href="{{ url('/flex/addEmployee') }}" class="btn btn-main">
             <i class="ph-plus me-2"></i> Register New Employee
           </a>
         @endcan
-        @endif
+
       </div>
     </div>
 
@@ -77,7 +77,7 @@
                     <i class="ph-info"></i>
                 </a>
 
-                @if (session('mng_emp'))
+                @can('edit-employee')
                 <a  href="{{ route('flex.viewProfile', base64_encode($row->emp_id)) }}" class="btn btn-main  btn-sm"   title="Info and Details">
                     <i class="ph-pen"></i>
                 </a>
@@ -93,7 +93,7 @@
                     <a href="<?php echo  url('').'flex/project/evaluateEmployee/'.$row->emp_id.'|'.$row->department; ?>" title="Update">
                         <button type="button" class="btn btn-success btn-xs"><i class="">Evaluate</i></button>
                     </a> --}}
-                @endif
+                    @endcan
             </td>
 
             @endcan
@@ -102,7 +102,7 @@
       </tbody>
     </table>
   </div>
-  @endif
+  @endcan
 
 
 

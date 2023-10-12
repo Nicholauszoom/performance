@@ -14,7 +14,7 @@ class CreateSkillsTable extends Migration
     public function up()
     {
         Schema::create('skills', function (Blueprint $table) {
-            $table->integer('id')->primary();
+            $table->id();
             $table->integer('position_ref');
             $table->string('name', 100);
             $table->string('description', 300)->default('N/A');

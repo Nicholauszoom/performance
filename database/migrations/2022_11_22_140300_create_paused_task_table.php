@@ -14,7 +14,7 @@ class CreatePausedTaskTable extends Migration
     public function up()
     {
         Schema::create('paused_task', function (Blueprint $table) {
-            $table->integer('id')->primary();
+            $table->id();
             $table->string('description', 1000);
             $table->string('title', 200)->default('N/A');
             $table->integer('initial_quantity')->default(1);

@@ -14,7 +14,7 @@ class CreatePayrollMonthsTable extends Migration
     public function up()
     {
         Schema::create('payroll_months', function (Blueprint $table) {
-            $table->integer('id')->primary();
+            $table->id();
             $table->date('payroll_date')->default('2019-09-28');
             $table->integer('state')->default(1);
             $table->double('wcf')->default(0.01);

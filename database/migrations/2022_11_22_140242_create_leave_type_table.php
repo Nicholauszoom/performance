@@ -14,7 +14,7 @@ class CreateLeaveTypeTable extends Migration
     public function up()
     {
         Schema::create('leave_type', function (Blueprint $table) {
-            $table->integer('id')->primary();
+            $table->id();
             $table->string('type', 50)->nullable();
             $table->integer('gender')->default(0)->comment("0-All, 1-male, 2-female");
             $table->string('max_days', 50)->nullable();

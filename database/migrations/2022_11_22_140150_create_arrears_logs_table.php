@@ -14,7 +14,7 @@ class CreateArrearsLogsTable extends Migration
     public function up()
     {
         Schema::create('arrears_logs', function (Blueprint $table) {
-            $table->bigInteger('id')->primary();
+            $table->id();
             $table->bigInteger('arrear_id');
             $table->decimal('amount_paid', 15, 2);
             $table->string('init_by', 10);

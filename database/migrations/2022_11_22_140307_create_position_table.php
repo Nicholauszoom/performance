@@ -14,7 +14,7 @@ class CreatePositionTable extends Migration
     public function up()
     {
         Schema::create('position', function (Blueprint $table) {
-            $table->integer('id')->primary();
+            $table->id();
             $table->string('name', 100);
             $table->string('code', 10);
             $table->integer('dept_id')->index('department_fk');

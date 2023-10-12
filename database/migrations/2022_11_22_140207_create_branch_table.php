@@ -14,12 +14,14 @@ class CreateBranchTable extends Migration
     public function up()
     {
         Schema::create('branch', function (Blueprint $table) {
-            $table->integer('id')->primary();
+            $table->id();
             $table->string('name', 50);
             $table->string('code', 4)->default('0');
-            $table->string('street', 50);
-            $table->string('region', 50);
-            $table->string('country', 50);
+            $table->string('street', 50)->nullable();
+            $table->string('region', 50)->nullable();
+            $table->string('country', 50)->nullable();
+            $table->string('location_code', 50)->nullable();
+            $table->string('location_id', 50)->nullable();
             $table->timestamps();
         });
     }

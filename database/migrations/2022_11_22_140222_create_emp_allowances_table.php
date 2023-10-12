@@ -14,7 +14,7 @@ class CreateEmpAllowancesTable extends Migration
     public function up()
     {
         Schema::create('emp_allowances', function (Blueprint $table) {
-            $table->integer('id')->primary();
+            $table->id();
             $table->string('empID', 10);
             $table->integer('allowance')->index('package');
             $table->integer('group_name')->default(0);

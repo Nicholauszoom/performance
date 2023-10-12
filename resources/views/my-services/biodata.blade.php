@@ -85,6 +85,8 @@
         $national_id = $row->national_id;
         $tin = $row->tin;
         $title=$row->job_title;
+
+        // dd("I am here");
   }
 
   foreach($active_properties as $rowActive) {
@@ -273,7 +275,8 @@
                                              <h6 class="text-main"> NIDA Number </h6>
                                          </div>
                                          <div class="col-6 col-md-6 col-6 col-lg-6">
-                                             <p class="text-muted"> <?php echo $national_id; ?></p>
+                                             <p class="text-muted"> {{ isset($national_id) ? $national_id : "Variable 'national_id' is not set." }}
+</p>
                                          </div>
                                          <div class="col-6 col-md-6 col-6 col-lg-6">
                                              <h6 class="text-main">Passport Number:</h6>

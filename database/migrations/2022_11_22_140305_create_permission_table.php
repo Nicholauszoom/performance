@@ -14,7 +14,7 @@ class CreatePermissionTable extends Migration
     public function up()
     {
         Schema::create('permission', function (Blueprint $table) {
-            $table->integer('id')->primary();
+            $table->id();
             $table->string('code', 1)->unique('id2');
             $table->string('name', 100);
             $table->integer('permission_type')->default(1)->comment("1-HR, 2-Performance, 3-Financial, 4-Line manager, 5-General");

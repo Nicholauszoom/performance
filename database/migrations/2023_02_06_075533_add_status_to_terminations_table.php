@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::table('terminations', function (Blueprint $table) {
             //
-             $table->string('status')->default('pending');
+            //  $table->string('status')->default('pending');
         });
     }
 

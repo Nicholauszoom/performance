@@ -14,7 +14,7 @@ class CreateTempDeductionLogsTable extends Migration
     public function up()
     {
         Schema::create('temp_deduction_logs', function (Blueprint $table) {
-            $table->integer('id')->primary();
+            $table->id();
             $table->string('empID', 10);
             $table->integer('deductionID');
             $table->integer('deductionCode');
