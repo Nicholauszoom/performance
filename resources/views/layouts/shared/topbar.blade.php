@@ -278,7 +278,7 @@
                 </a>
 
                 <div class="dropdown-menu dropdown-menu-end">
-                    <a href="{{ route('flex.userprofile', base64_encode(session('emp_id'))) }}" class="dropdown-item">
+                    <a href="{{ route('flex.userprofile', base64_encode(auth()->user()->emp_id)) }}" class="dropdown-item">
                         <i class="ph-user-circle me-2"></i>
                         My profile
                     </a>

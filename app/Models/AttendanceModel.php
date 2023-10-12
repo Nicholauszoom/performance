@@ -8,6 +8,7 @@ use DateTime;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\App;
 
 class AttendanceModel extends Model
 {
@@ -447,59 +448,6 @@ class AttendanceModel extends Model
         return $maximum_days;
     }
 
-    function getLeaveBalanceSick($empID, $hireDate, $today)
-    {
-
-        $natures = [2,3,4,5];
-        $nature = 1;
-
-        $today = date("Y-m-d", strtotime($today));
-
-
-        $prev_month = date("Y-m-d", strtotime('-1 month', strtotime($today)));
-
-        $last_month_date = date('Y-m-t', strtotime($prev_month));
-
-        //dd($today);
-
-        $query = "SELECT  IF( (SELECT COUNT(id)  FROM leaves WHERE nature= '" . $nature . "' AND empID = '" . $empID . "')=0, 0, (SELECT SUM(days)  FROM leaves WHERE nature= '" . $nature . "' and empID = '" . $empID . "' and start <= '" . $today . "'  GROUP BY nature )) as days_spent, DATEDIFF('" . $today . "','" . $hireDate . "') as days_accrued limit 1";
-
-        $row = DB::select(DB::raw($query));
-        $employee = DB::table('employee')->where('emp_id', $empID)->first();
-        //$date = $employee->hire_date;
-        $d1 = new DateTime($hireDate);
-        // $todayDate = date('Y-m-d');
-        $d2 = new DateTime($today);
-
-        $diff = $d1->diff($d2);
-
-        $years = $diff->y;
-        $months = $diff->m;
-        $days = $diff->d;
-
-        $days_this_month = intval(date('t', strtotime($last_month_date)));
-        $accrual_days = (($days * $employee->accrual_rate) / 30) + $months * $employee->accrual_rate + $years * 12 * $employee->accrual_rate;
-        //$days * $employee->accrual_rate / $days_this_month +
-        $interval = $d1->diff($d2);
-        $diffInMonths  = $interval->m;
-        //    dd($diffInMonths);
-        $spent = $row[0]->days_spent;
-        // $accrued = $row[0]->days_accrued;
-
-        // $accrual= 7*$accrued/90;
-        $accrual = 0;
-        if ($nature == 1) {
-            $maximum_days = $accrual_days - $spent;
-        } else {
-            $days_entitled  = $this->days_entilted($nature);
-
-            $maximum_days = $days_entitled - $spent;
-        }
-
-
-        //dd($days);
-        return $maximum_days;
-    }
 
     function getLeaveBalance_report($empID, $hireDate, $today, $nature)
     {
@@ -1287,6 +1235,9 @@ class AttendanceModel extends Model
 
         $prev_month = date("Y-m-d", strtotime('-1 month', strtotime($today)));
         $last_month_date = date('Y-m-t', strtotime($prev_month));
+        $givenDate = Carbon::parse($today);
+        $firstDayOfMonth = $givenDate->firstOfMonth()->toDateString();
+        $lastDayOfMonth = $givenDate->endOfMonth()->toDateString();
 
         if ($empID == 'All') {
             if ($department != 'All' && $position != 'All') {
@@ -1300,7 +1251,8 @@ class AttendanceModel extends Model
                     ->where('employee.state', 1)
                     ->where('leaves.status',3)
                     ->where('employee.department', $department)
-                    ->where('start', '>=', $last_month_date)
+                     ->where('start', '>=', $firstDayOfMonth)
+                    ->where('start', '<=', $lastDayOfMonth)
                     ->where('nature', $nature)
                     ->get();
             } elseif ($department != 'All' && $position == 'All') {
@@ -1312,7 +1264,8 @@ class AttendanceModel extends Model
                     ->where('leaves.status',3)
                     ->select('leaves.*', 'employee.*', 'department.name as department_name', 'position.name as  position_name')->where('employee.state', 1)
                     ->where('employee.department', $department)
-                    ->where('start', '>=', $last_month_date)
+                    ->where('start', '>=', $firstDayOfMonth)
+                    ->where('start', '<=', $lastDayOfMonth)
                     ->where('nature', $nature)
                     ->get();
             } elseif ($department == 'All') {
@@ -1324,7 +1277,8 @@ class AttendanceModel extends Model
                     ->join('position', 'position.id', '=', 'employee.position')
                     ->where('leaves.status',3)
                     ->select('leaves.*', 'employee.*', 'department.name as department_name', 'position.name as  position_name')->where('employee.state', 1)
-                    ->where('start', '>=', $last_month_date)
+                    ->where('start', '>=', $firstDayOfMonth)
+                    ->where('start', '<=', $lastDayOfMonth)
                     ->where('nature', $nature)
                     ->get();
             }
@@ -1336,6 +1290,8 @@ class AttendanceModel extends Model
                 ->join('position', 'position.id', '=', 'employee.position')
                 ->where('leaves.status',3)
                 ->select('leaves.*', 'employee.*', 'department.name as department_name', 'position.name as  position_name')->where('start', '>=', $last_month_date)
+                ->where('start', '>=', $firstDayOfMonth)
+                ->where('start', '<=', $lastDayOfMonth)
                 ->where('nature', $nature)
                 ->where('employee.emp_id', $empID)
                 ->get();

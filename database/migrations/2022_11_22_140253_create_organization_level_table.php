@@ -14,7 +14,7 @@ class CreateOrganizationLevelTable extends Migration
     public function up()
     {
         Schema::create('organization_level', function (Blueprint $table) {
-            $table->integer('id')->primary();
+            $table->id();
             $table->string('name', 200);
             $table->decimal('minSalary', 15, 2);
             $table->decimal('maxSalary', 15, 2);

@@ -14,7 +14,7 @@ class CreateGroupsTable extends Migration
     public function up()
     {
         Schema::create('groups', function (Blueprint $table) {
-            $table->integer('id')->primary();
+            $table->id();
             $table->integer('type')->default(1)->comment("1-Financial Group(Allowances, Bonuses and Deductions), 2-Role Group");
             $table->string('name', 50);
             $table->string('created_by', 10);

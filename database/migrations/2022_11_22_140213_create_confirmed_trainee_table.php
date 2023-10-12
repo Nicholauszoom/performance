@@ -14,7 +14,7 @@ class CreateConfirmedTraineeTable extends Migration
     public function up()
     {
         Schema::create('confirmed_trainee', function (Blueprint $table) {
-            $table->integer('id')->primary();
+            $table->id();
             $table->integer('skillsID');
             $table->string('empID', 10);
             $table->decimal('cost', 15, 2);

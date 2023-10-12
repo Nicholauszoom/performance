@@ -14,7 +14,7 @@ class CreateTempPayrollLogsTable extends Migration
     public function up()
     {
         Schema::create('temp_payroll_logs', function (Blueprint $table) {
-            $table->integer('id')->primary();
+            $table->id();
             $table->string('empID', 10)->index('empID');
             $table->double('salary')->nullable();
             $table->double('allowances')->default(0);

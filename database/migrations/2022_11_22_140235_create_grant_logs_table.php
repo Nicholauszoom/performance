@@ -14,7 +14,7 @@ class CreateGrantLogsTable extends Migration
     public function up()
     {
         Schema::create('grant_logs', function (Blueprint $table) {
-            $table->integer('id')->primary();
+            $table->id();
             $table->string('funder', 45);
             $table->string('project', 45);
             $table->string('activity', 45);

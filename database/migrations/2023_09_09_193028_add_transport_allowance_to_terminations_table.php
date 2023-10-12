@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::table('terminations', function (Blueprint $table) {
             //
-            $table->double('transport_allowance');
+            // $table->double('transport_allowance');
         });
     }
 

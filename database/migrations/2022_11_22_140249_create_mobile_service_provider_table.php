@@ -14,7 +14,7 @@ class CreateMobileServiceProviderTable extends Migration
     public function up()
     {
         Schema::create('mobile_service_provider', function (Blueprint $table) {
-            $table->integer('id')->primary();
+            $table->id();
             $table->string('service_name', 50);
             $table->string('number_prefix', 50);
             $table->string('service_provider_name', 50);

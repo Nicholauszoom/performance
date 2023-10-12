@@ -14,7 +14,7 @@ class CreateLeaveApplicationTable extends Migration
     public function up()
     {
         Schema::create('leave_application', function (Blueprint $table) {
-            $table->integer('id')->primary();
+            $table->id();
             $table->string('empID', 11)->nullable();
             $table->date('start')->nullable();
             $table->date('end')->nullable();

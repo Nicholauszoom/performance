@@ -14,7 +14,7 @@ class CreateCompanyEmailsTable extends Migration
     public function up()
     {
         Schema::create('company_emails', function (Blueprint $table) {
-            $table->integer('id')->primary();
+            $table->id();
             $table->string('host', 100);
             $table->string('username', 50);
             $table->string('password', 50);

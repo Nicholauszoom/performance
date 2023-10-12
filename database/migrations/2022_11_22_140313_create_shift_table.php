@@ -14,7 +14,7 @@ class CreateShiftTable extends Migration
     public function up()
     {
         Schema::create('shift', function (Blueprint $table) {
-            $table->integer('id')->primary();
+            $table->id();
             $table->string('title', 100);
             $table->time('start_time');
             $table->time('end_time');
