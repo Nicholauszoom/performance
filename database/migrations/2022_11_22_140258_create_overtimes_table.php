@@ -29,7 +29,7 @@ class CreateOvertimesTable extends Migration
             $table->dateTime('confirmation_time')->useCurrent();
             $table->date('approval_time')->default('2019-06-19');
             $table->integer('status')->default(0)->comment("0-Waiting For Payment,1- Scheduled For Payment On Next Payroll");
-            $table->integer('days')->default(0);
+            $table->double('days')->default(0);
             $table->timestamps();
         });
     }
