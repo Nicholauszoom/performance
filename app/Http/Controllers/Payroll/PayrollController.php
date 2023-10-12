@@ -181,7 +181,7 @@ class PayrollController extends Controller
 
         $this->authenticateUser('view-payslip');
 
-        if (session('mng_paym') || session('recom_paym') || session('appr_paym')) {
+        // if (session('mng_paym') || session('recom_paym') || session('appr_paym')) {
 
             $title = 'Employee Payslip';
             $parent = 'Payroll';
@@ -191,9 +191,9 @@ class PayrollController extends Controller
             $data['employee'] = $this->payroll_model->customemployee();
 
             return view('payroll.employee_payslip', compact('data', 'title', 'parent', 'child'));
-        } else {
-            echo 'Unauthorised Access';
-        }
+        // } else {
+        //     echo 'Unauthorised Access';
+        // }
     }
 
     public function payroll()
@@ -210,6 +210,8 @@ class PayrollController extends Controller
 
         $data['payrollList'] = $this->payroll_model->payrollMonthList();
         $data['title'] = "Payroll";
+
+        // dd($data);
 
         // dd($data['pendingPayroll']);
         //echo $data['pendingPayroll_month'];
