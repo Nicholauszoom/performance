@@ -22,9 +22,9 @@ use App\Models\LeaveApproval;
 use Illuminate\Http\Response;
 use App\Http\Middleware\Leave;
 use App\Models\AttendanceModel;
+
+
 use App\Models\Payroll\Payroll;
-
-
 use App\Models\PerformanceModel;
 use App\Models\EmailNotification;
 use App\CustomModels\PayrollModel;
@@ -35,10 +35,13 @@ use App\Models\Payroll\ReportModel;
 use App\Models\Payroll\ImprestModel;
 use App\Notifications\EmailRequests;
 use Illuminate\Support\Facades\Auth;
+use Maatwebsite\Excel\Facades\Excel;
 use App\CustomModels\flexFerformanceModel;
 use App\Models\Payroll\FlexPerformanceModel;
 use Illuminate\Support\Facades\Notification;
+use App\Imports\ExcelImport; // Create this import
 use App\Http\Controllers\API\PushNotificationController;
+use App\Imports\ClearLeavesImport;
 
 class AttendanceController extends Controller
 {
@@ -493,10 +496,31 @@ public function saveLeave(Request $request) {
         $empID  = Auth::user()->emp_id;
 
         // Check if there is a pending leave in the given number of days (start,end)
-        $pendingLeave = Leaves::where('empId',$empID)->where('state',1)->whereDate('end','>=',$start)->first();
-        // dd($pendingLeave);
-        if($pendingLeave){
-            return $url->with('error','You have a pending '.$pendingLeave->type->type .' application within the requested leave time');
+        $pendingLeave = Leaves::where('empId', $empID)
+        ->where('state', 1)
+        ->whereDate('end', '>=', $start)
+        ->first();
+
+        $approvedLeave = Leaves::where('empId', $empID)
+            ->where('state', 0)
+            ->whereDate('end', '>=', $start)
+            ->whereDate('end', '>=', $start)
+            ->first();
+
+        if ($pendingLeave || $approvedLeave) {
+            $message = 'You have a ';
+
+            if ($pendingLeave) {
+                $message .= 'pending ' . $pendingLeave->type->type . ' application ';
+            }
+
+            if ($approvedLeave) {
+                $message .= ($pendingLeave ? 'and ' : '') . 'approved ' . $approvedLeave->type->type . ' application ';
+            }
+
+            $message .= 'within the requested leave time';
+
+            return $url->with('error', $message);
         }
 
         // Checking used leave days based on leave type and sub type
@@ -1632,31 +1656,46 @@ public function saveLeave(Request $request) {
     }
 
     // For Clear Old Leaves
-    public function clear_leaves()
-    {
-        $employees=EMPL::get();
-        foreach ($employees as $employee) {
-                $date=date('Y').'-'.'01-01';
-                $leave_balance = $this->attendance_model->getLeaveBalance($employee->emp_id,$employee->hire_date, $date);
-                $leaves=new Leaves();
-                $emp=$employee->emp_id;
-                $leaves->empID = $emp;
-                $leaves->start =Date('Y-m-d') ;
-                $leaves->end=Date('Y-m-d') ;
-                $leaves->leave_address="auto";
-                $leaves->mobile = $employee->mobile;
-                $leaves->nature = 1;
-                $leaves->remaining=5;
-                $leaves->days=$leave_balance ;
-                $leaves->reason="Automatic applied!";
-                $leaves->position="Default Apllication";
-                $leaves->status=3;
-                $leaves->state=0;
-                $leaves->save();
-    }
+            public function clear_leaves(Request $request)
+            {
+            // Validate the uploaded file
+            $request->validate([
+                'file' => 'required|mimes:xlsx,xls',
+            ]);
+            // Handle the file upload and data extraction
+            $file = $request->file('file');
+            $import = new ClearLeavesImport;
+            Excel::import($import, $file);
 
-    return back();
-    }
+
+            return redirect()->back()->with('success', 'File uploaded and data extracted successfully.');
+        }
+
+    // // Handle the file upload and data extraction
+    // $file = $request->file('file');
+    //     $employees=EMPL::get();
+    //     foreach ($employees as $employee) {
+    //             $date=date('Y').'-'.'01-01';
+    //             $leave_balance = $this->attendance_model->getLeaveBalance($employee->emp_id,$employee->hire_date, $date);
+    //             $leaves=new Leaves();
+    //             $emp=$employee->emp_id;
+    //             $leaves->empID = $emp;
+    //             $leaves->start =Date('Y-m-d') ;
+    //             $leaves->end=Date('Y-m-d') ;
+    //             $leaves->leave_address="auto";
+    //             $leaves->mobile = $employee->mobile;
+    //             $leaves->nature = 1;
+    //             $leaves->remaining=5;
+    //             $leaves->days=$leave_balance ;
+    //             $leaves->reason="Automatic applied!";
+    //             $leaves->position="Default Apllication";
+    //             $leaves->status=3;
+    //             $leaves->state=0;
+    //             $leaves->save();
+    // }
+
+    // return back();
+    // }
 
 
 
@@ -1910,11 +1949,32 @@ public function saveLeave(Request $request) {
         $empID  = $request->empID;
 
         // Check if there is a pending leave in the given number of days (start,end)
-        $pendingLeave = Leaves::where('empId',$empID)->where('state',1)->whereDate('end','>=',$start)->first();
-        // dd($pendingLeave);
-        if($pendingLeave){
-            return $url->with('error','You have a pending '.$pendingLeave->type->type .' application within the requested leave time');
+        $pendingLeave = Leaves::where('empId', $empID)
+        ->where('state', 1)
+        ->whereDate('end', '>=', $start)
+        ->first();
+
+        $approvedLeave = Leaves::where('empId', $empID)
+            ->where('state', 0)
+            ->whereDate('end', '>=', $start)
+            ->first();
+
+        if ($pendingLeave || $approvedLeave) {
+            $message = 'You have a ';
+
+            if ($pendingLeave) {
+                $message .= 'pending ' . $pendingLeave->type->type . ' application ';
+            }
+
+            if ($approvedLeave) {
+                $message .= ($pendingLeave ? 'and ' : '') . 'approved ' . $approvedLeave->type->type . ' application ';
+            }
+
+            $message .= 'within the requested leave time';
+
+            return $url->with('error', $message);
         }
+
 
         // Checking used leave days based on leave type and sub type
         $leaves=Leaves::where('empID',$empID)->where('nature',$nature)->where('sub_category',$request->sub_cat)->whereNot('reason','Automatic applied!')->whereYear('created_at',date('Y'))->sum('days');

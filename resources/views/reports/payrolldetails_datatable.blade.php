@@ -151,10 +151,12 @@
                                 <td class="text-end">{{ number_format($row->wcf, 2) }}</td>
                                 <td class="text-end">{{ number_format($row->loans, 2) }}</td>
 
-                                <td class="text-end">{{ number_format(intval($row->deductions), 2) }}</td>
+                                <td class="text-end">{{ number_format($row->deductions, 2) }}</td>
 
                                 <td class="text-end">
-                                    {{ number_format(intval($row->salary) + intval($row->allowances) - intval($amount), 2) }}
+
+
+                                    {{ number_format($row->salary + $row->allowances - $amount, 2) }}
                                 </td>
                                 <td class="text-end">{{ number_format($amount, 2) }}</td>
 

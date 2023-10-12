@@ -11,6 +11,7 @@ class EMPL extends Model
 {
     use HasFactory;
     protected $table= 'employee';
+    protected $fillable = ['accrual_rate'];
 
 
     // for relationship

@@ -28,10 +28,10 @@
     </div>
     @endif
    <div class="card border-top  border-top-width-3 border-top-main border-bottom-main rounded-0 col-lg-12 ">
-    <div class="card-header">
+    {{-- <div class="card-header">
         <h5 class="text-warning"> Apply Leave On Behalf </h5>
         <a href="{{route('attendance.clear-leaves')}}" class="btn btn-main float-end"> Clear Old Leaves</a>
-    </div>
+    </div> --}}
     {{-- id="applyLeave" --}}
     <div class="card-body">
 
@@ -133,6 +133,17 @@
             <span class="text-danger"><?php// echo form_error("lname");?></span>
           </div>
         </div>
+        @if($deligate > 0)
+        <div class="form-group col-md-6">
+            <label for="deligate">Deligate Position To <span class="text-danger">*</span></label>
+            <select name="deligate" @if($deligate > 0) required @endif class="form-control" id="deligate">
+                <option value="">Select Deligate</option>
+                @foreach($employees as $item)
+                <option value="{{ $item->emp_id }}">{{ $item->fname }} {{ $item->mname }} {{ $item->lname }}</option>
+                @endforeach
+            </select>
+        </div>
+        @endif
 
 
             <!-- END -->

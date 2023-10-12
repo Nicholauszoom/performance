@@ -47,6 +47,7 @@
                                 <label for="end-date">End Date <span class="text-danger">*</span></label>
                                 <input type="date" required id="end-date" name="end" class="form-control">
                             </div>
+
                             <div class="form-group col-md-6">
                                 <label for="docNo">Nature of Leave <span class="text-danger">*</span></label>
                                 <select class="form-control" required id="docNo" name="nature">
@@ -61,26 +62,32 @@
                                     @endforeach
                                 </select>
                             </div>
+
                             <div class="form-group col-md-6" id="sub" style="display:none">
                                 <label for="subs_cat">Sub Category <span class="text-danger">*</span></label>
                                 <select name="sub_cat" class="form-control select custom-select" id="subs_cat"></select>
                             </div>
+
                             <div class="form-group col-md-6">
                                 <label for="address">Leave Address <span class="text-danger">*</span></label>
                                 <input required="required" type="text" id="address" name="address" class="form-control">
                             </div>
+
                             <div class="form-group col-md-6">
                                 <label for="mobile">Mobile <span class="text-danger">*</span></label>
                                 <input required="required" class="form-control" type="tel" maxlength="10" name="mobile">
                             </div>
+
                             <div class="form-group col-md-6" style="display:none" id="attachment">
                                 <label for="image">Attachment <span class="text-danger">*</span></label>
                                 <input class="form-control" type="file" name="image">
                             </div>
+
                             <div class="form-group col-12 mb-2">
                                 <label for="reason">Reason For Leave <span class="text-danger">*</span></label>
                                 <textarea maxlength="256" class="form-control" name="reason" placeholder="Reason" required="required" rows="3"></textarea>
                             </div>
+
                             @if($deligate > 0)
                             <div class="form-group col-md-6">
                                 <label for="deligate">Deligate Position To <span class="text-danger">*</span></label>
@@ -92,10 +99,31 @@
                                 </select>
                             </div>
                             @endif
+
                         </div>
 
                         <div class="form-group py-2">
                             <button class="float-end btn btn-main" type="button" data-bs-toggle="modal" data-bs-target="#approval">Submit</button>
+                        </div>
+
+                        <div id="approval" class="modal fade" tabindex="-1">
+                            <div class="modal-dialog modal-dialog-centered modal-md">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                    </div>
+                                    <div class="modal-body p-4">
+                                        <h6 class="text-center">Are you Sure?</h6>
+                                        <div class="row">
+                                            <div class="col-4 mx-auto">
+                                                <button type="submit" class="btn bg-main btn-sm px-4">Yes</button>
+                                                <button type="button" class="btn bg-danger btn-sm px-4 text-light" data-bs-dismiss="modal">No</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer"></div>
+                                </div>
+                            </div>
                         </div>
                     </form>
                 </div>
@@ -137,25 +165,7 @@
     </div>
 
     <!-- Add approval modal -->
-    <div id="approval" class="modal fade" tabindex="-1">
-        <div class="modal-dialog modal-dialog-centered modal-md">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body p-4">
-                    <h6 class="text-center">Are you Sure?</h6>
-                    <div class="row">
-                        <div class="col-4 mx-auto">
-                            <button type="submit" class="btn bg-main btn-sm px-4">Yes</button>
-                            <button type="button" class="btn bg-danger btn-sm px-4 text-light" data-bs-dismiss="modal">No</button>
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer"></div>
-            </div>
-        </div>
-    </div>
+
 
 {{-- / --}}
 <div class="card border-top  border-top-width-3 border-top-main rounded-0" >
@@ -165,10 +175,6 @@
 
     <div class="card-body">
         <p><b>Annual Leave Days Accrued: <code class="text-success"> {{ $totalAccrued .' Days' }}</b></code></p>
-        {{-- <p><b>Sick Leave Days Accrued: <code class="text-success"> {{ $sickLeaveBalance .' Days' }}</b></code></p>
-        <p><b>Compassionate Leave Days Accrued: <code class="text-success"> {{ $compasionteLeaveBalance .' Days' }}</b></code></p>
-        <p><b>Maternity Leave Days Accrued: <code class="text-success"> {{ $totalAccrued .' Days' }}</b></code></p>
-        <p><b>Study Leave Days Accrued: <code class="text-success"> {{ $totalAccrued .' Days' }}</b></code></p> --}}
 
 
         @if(Session::has('note'))      {{ session('note') }}  @endif
