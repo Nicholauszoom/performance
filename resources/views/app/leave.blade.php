@@ -28,10 +28,10 @@
     </div>
     @endif
    <div class="card border-top  border-top-width-3 border-top-main border-bottom-main rounded-0 col-lg-12 ">
-    <div class="card-header">
+    {{-- <div class="card-header">
         <h5 class="text-warning"> Apply Leave On Behalf </h5>
         <a href="{{route('attendance.clear-leaves')}}" class="btn btn-main float-end"> Clear Old Leaves</a>
-    </div>
+    </div> --}}
     {{-- id="applyLeave" --}}
     <div class="card-body">
 
