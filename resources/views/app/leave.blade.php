@@ -133,6 +133,17 @@
             <span class="text-danger"><?php// echo form_error("lname");?></span>
           </div>
         </div>
+        @if($deligate > 0)
+        <div class="form-group col-md-6">
+            <label for="deligate">Deligate Position To <span class="text-danger">*</span></label>
+            <select name="deligate" @if($deligate > 0) required @endif class="form-control" id="deligate">
+                <option value="">Select Deligate</option>
+                @foreach($employees as $item)
+                <option value="{{ $item->emp_id }}">{{ $item->fname }} {{ $item->mname }} {{ $item->lname }}</option>
+                @endforeach
+            </select>
+        </div>
+        @endif
 
 
             <!-- END -->
