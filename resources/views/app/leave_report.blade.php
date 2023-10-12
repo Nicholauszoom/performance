@@ -15,7 +15,7 @@
 
 @section('content')
 <div class="row">
-    <div class="col-md-6">
+    <div class="col-md-7">
         <div class="card border-top border-top-width-3 border-top-main rounded-0 p-2">
             <div class="card-header">
                 <h5 class="text-warning">Annual Leave Clearing</h5>
@@ -25,13 +25,16 @@
                     @csrf
                     <div class="mb-3">
                         <div class="form-group row align-items-center">
-                            <label for="attachment" class="control-label col-md-3 col-sm-3 col-xs-12">Attachment <span class="text-danger">*</span></label>
-                            <div class="col-md-9 col-lg-9 col-xs-12 d-flex align-items-center">
-                                <div class="col-6 pr-2"> <!-- Reduce the column width and adjust the margin to the right -->
-                                    <input class="form-control col-md-7 col-xs-12" type="file" name="file" requiredes accept=".xls, .xlsx">
+                            <div class="col-md-12 col-lg-12 col-xs-12 d-flex gap-5">
+                                <div class="col-8 d-flex ">
+                                    <label for="attachment" class="control-label col-md-3">Attachment <span class="text-danger">*</span></label>
+                                    <div class="col-9"> <!-- Reduce the column width and adjust the margin to the right -->
+                                        <input class="form-control col-md-12 col-xs-12" type="file" name="file" requiredes accept=".xls, .xlsx">
+                                    </div>
                                 </div>
-                                <div class="col-3"> <!-- Adjust the column width, no need to adjust the margin -->
-                                    <button type="submit" class="btn btn-main w-100">Upload Excel Document</button>
+
+                                <div class="col-4"> <!-- Adjust the column width, no need to adjust the margin -->
+                                    <button type="submit" class="btn btn-main w-75">Upload</button>
                                 </div>
                             </div>
                         </div>
