@@ -496,10 +496,31 @@ public function saveLeave(Request $request) {
         $empID  = Auth::user()->emp_id;
 
         // Check if there is a pending leave in the given number of days (start,end)
-        $pendingLeave = Leaves::where('empId',$empID)->where('state',1)->whereDate('end','>=',$start)->first();
-        // dd($pendingLeave);
-        if($pendingLeave){
-            return $url->with('error','You have a pending '.$pendingLeave->type->type .' application within the requested leave time');
+        $pendingLeave = Leaves::where('empId', $empID)
+        ->where('state', 1)
+        ->whereDate('end', '>=', $start)
+        ->first();
+
+        $approvedLeave = Leaves::where('empId', $empID)
+            ->where('state', 0)
+            ->whereDate('end', '>=', $start)
+            ->whereDate('end', '>=', $start)
+            ->first();
+
+        if ($pendingLeave || $approvedLeave) {
+            $message = 'You have a ';
+
+            if ($pendingLeave) {
+                $message .= 'pending ' . $pendingLeave->type->type . ' application ';
+            }
+
+            if ($approvedLeave) {
+                $message .= ($pendingLeave ? 'and ' : '') . 'approved ' . $approvedLeave->type->type . ' application ';
+            }
+
+            $message .= 'within the requested leave time';
+
+            return $url->with('error', $message);
         }
 
         // Checking used leave days based on leave type and sub type
@@ -1928,11 +1949,32 @@ public function saveLeave(Request $request) {
         $empID  = $request->empID;
 
         // Check if there is a pending leave in the given number of days (start,end)
-        $pendingLeave = Leaves::where('empId',$empID)->where('state',1)->whereDate('end','>=',$start)->first();
-        // dd($pendingLeave);
-        if($pendingLeave){
-            return $url->with('error','You have a pending '.$pendingLeave->type->type .' application within the requested leave time');
+        $pendingLeave = Leaves::where('empId', $empID)
+        ->where('state', 1)
+        ->whereDate('end', '>=', $start)
+        ->first();
+
+        $approvedLeave = Leaves::where('empId', $empID)
+            ->where('state', 0)
+            ->whereDate('end', '>=', $start)
+            ->first();
+
+        if ($pendingLeave || $approvedLeave) {
+            $message = 'You have a ';
+
+            if ($pendingLeave) {
+                $message .= 'pending ' . $pendingLeave->type->type . ' application ';
+            }
+
+            if ($approvedLeave) {
+                $message .= ($pendingLeave ? 'and ' : '') . 'approved ' . $approvedLeave->type->type . ' application ';
+            }
+
+            $message .= 'within the requested leave time';
+
+            return $url->with('error', $message);
         }
+
 
         // Checking used leave days based on leave type and sub type
         $leaves=Leaves::where('empID',$empID)->where('nature',$nature)->where('sub_category',$request->sub_cat)->whereNot('reason','Automatic applied!')->whereYear('created_at',date('Y'))->sum('days');

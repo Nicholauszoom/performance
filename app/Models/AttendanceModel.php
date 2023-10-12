@@ -413,6 +413,7 @@ class AttendanceModel extends Model
 
         $row = DB::select(DB::raw($query));
         $employee = DB::table('employee')->where('emp_id', $empID)->first();
+        $remain = DB::table('leaves')->where('empID', $empID)   ->latest('created_at')->first();
         //$date = $employee->hire_date;
         $d1 = new DateTime($hireDate);
         // $todayDate = date('Y-m-d');
@@ -425,7 +426,7 @@ class AttendanceModel extends Model
         $days = $diff->d;
 
         $days_this_month = intval(date('t', strtotime($last_month_date)));
-        $accrual_days = (($days * $employee->accrual_rate) / 30) + $months * $employee->accrual_rate + $years * 12 * $employee->accrual_rate;
+        $accrual_days = (($days * $employee->accrual_rate) / 30) + $months * $employee->accrual_rate + $years * 12 * $employee->accrual_rate + $remain->remaining;
         //$days * $employee->accrual_rate / $days_this_month +
         $interval = $d1->diff($d2);
         $diffInMonths  = $interval->m;
@@ -590,7 +591,7 @@ class AttendanceModel extends Model
 
 // $year now contains the four-digit year from the DateTime object
 
-       
+
         // $todayDate = date('Y-m-d');
         $d2 = new DateTime($last_month_date);
 
@@ -870,12 +871,12 @@ class AttendanceModel extends Model
     {
 
         $today = date("Y-m-d", strtotime($today));
-    
+
         $hireYear = date('Y', strtotime($hireDate));
         $currentYear = date('Y', strtotime($today));
         // if ($hireYear !== $currentYear) {
-        
-        
+
+
             $leaves = Leaves::where('empID', $empID)
                 ->where('nature', $nature)->where('status', 3) // Include status = 3
                 ->where('state', 0) // Include state = 0
@@ -900,14 +901,14 @@ class AttendanceModel extends Model
     }
     return $totalDays;
     // }
-                
+
     //     } else {
-          
+
 
     //         echo "Hire date and current date are in the same year.";
     //     }
 
-  
+
 }
 
 
