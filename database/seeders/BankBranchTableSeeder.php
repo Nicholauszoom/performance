@@ -13,7 +13,7 @@ class BankBranchTableSeeder extends Seeder
             [
                 'id' => 1,
                 'name' => 'Head Office',
-                'bank' => 11,
+                'bank' => 1,
                 'street' => 'Upanga',
                 'region' => 'Dar es Salaam',
                 'country' => 'Tanzania',

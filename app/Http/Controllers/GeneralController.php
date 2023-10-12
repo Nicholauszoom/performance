@@ -2500,7 +2500,6 @@ class GeneralController extends Controller
 
 
         $data['bonus'] = $this->payroll_model->selectBonus();
-        $data['pendingPayroll'] = $this->payroll_model->pendingPayrollCheck();
         $data['incentives'] = $this->payroll_model->employee_bonuses();
         $data['employee'] = $this->payroll_model->customemployee();
 
@@ -3606,14 +3605,14 @@ class GeneralController extends Controller
     {
         $this->authenticateUser('view-transfer');
 
-        // $data['leave'] =  $this->attendance_model->leavereport();
-        if (session('mng_emp') || session('vw_emp') || session('appr_emp') || session('mng_roles_grp')) {
+        // // $data['leave'] =  $this->attendance_model->leavereport();
+        // if (session('mng_emp') || session('vw_emp') || session('appr_emp') || session('mng_roles_grp')) {
             $data['transfers'] = $this->flexperformance_model->employeeTransfers();
             $data['title'] = "Transfers";
             return view('app.transfer', $data);
-        } else {
-            echo 'Unauthorized Access';
-        }
+        // } else {
+        //     echo 'Unauthorized Access';
+        // }
     }
 
     // ###################LEAVE######################################
@@ -5376,7 +5375,9 @@ class GeneralController extends Controller
     public function allowance(Request $request)
     {
 
-        if (session('mng_paym') || session('recom_paym') || session('appr_paym')) {
+             $this->authenticateUser('add-payroll');
+
+
             $data['allowance'] = $this->flexperformance_model->allowance();
             $data['meals'] = $this->flexperformance_model->meals_deduction();
             $data['pendingPayroll'] = $this->payroll_model->pendingPayrollCheck();
@@ -5384,15 +5385,18 @@ class GeneralController extends Controller
             $data['child'] = "Allowances";
 
             return view('allowance.allowance', $data);
-        } else {
-            echo "Unauthorized Access";
-        }
+        // } else {
+        //     echo "Unauthorized Access";
+        // }
     }
 
     public function allowance_overtime(Request $request)
     {
 
-        if (session('mng_paym') || session('recom_paym') || session('appr_paym')) {
+        // if (session('mng_paym') || session('recom_paym') || session('appr_paym')) {
+
+            $this->authenticateUser('add-payroll');
+
             $data['overtimes'] = $this->flexperformance_model->overtime_allowances();
             $data['overtimess'] = $this->flexperformance_model->overtime_allowances();
             $data['meals'] = $this->flexperformance_model->meals_deduction();
@@ -5402,15 +5406,17 @@ class GeneralController extends Controller
             $data['title'] = "Overtime";
 
             return view('overtime.allowance_overtime', $data);
-        } else {
-            echo "Unauthorized Access";
-        }
+        // } else {
+        //     echo "Unauthorized Access";
+        // }
     }
 
     public function statutory_deductions(Request $request)
     {
 
-        if (session('mng_paym') || session('recom_paym') || session('appr_paym')) {
+           $this->authenticateUser('add-payroll');
+
+        // if (session('mng_paym') || session('recom_paym') || session('appr_paym')) {
             $data['allowance'] = $this->flexperformance_model->allowance();
             $data['overtimes'] = $this->flexperformance_model->overtime_allowances();
             $data['deduction'] = $this->flexperformance_model->deductions();
@@ -5426,14 +5432,16 @@ class GeneralController extends Controller
             $data['child'] = "Statutory Deductions";
 
             return view('app.statutory_deduction', $data);
-        } else {
-            echo "Unauthorized Access";
-        }
+        // } else {
+        //     echo "Unauthorized Access";
+        // }
     }
 
     public function non_statutory_deductions(Request $request)
     {
-        if (session('mng_paym') || session('recom_paym') || session('appr_paym')) {
+
+        $this->authenticateUser('add-payroll');
+
             $data['allowance'] = $this->flexperformance_model->allowance();
             $data['currencies'] = $this->flexperformance_model->get_currencies();
             $data['overtimes'] = $this->flexperformance_model->overtime_allowances();
@@ -5443,9 +5451,7 @@ class GeneralController extends Controller
             $data['pendingPayroll'] = $this->payroll_model->pendingPayrollCheck();
             $data['title'] = "Non-Statutory Deductions";
             return view('app.non_statutory_deductions', $data);
-        } else {
-            echo "Unauthorized Access";
-        }
+       
     }
 
     public function addAllowance(Request $request)
@@ -6186,7 +6192,7 @@ class GeneralController extends Controller
     {
 
         $this->authenticateUser('add-payroll');
-        if (session('mng_roles_grp')) {
+        // if (session('mng_roles_grp')) {
             $request_type = $request->method();
 
             if ($request_type == "POST") {
@@ -6214,14 +6220,13 @@ class GeneralController extends Controller
                 $data['child'] = "Financial Settings";
                 return view('app.financial_group', $data);
             }
-        } else {
-            echo "Unauthorized Access";
-        }
+        
     }
 
     public function role(Request $request)
     {
-        if (session('mng_roles_grp')) {
+             $this->authenticateUser('add-payroll');
+
             if ($request->type == "addrole") {
                 $data = array(
                     'name' => $request->input('name'),
@@ -6259,14 +6264,11 @@ class GeneralController extends Controller
                 $data['title'] = "Roles and Groups";
                 return view('app.role', $data);
             }
-        } else {
-            echo "Unauthorized Access";
-        }
+      
     }
 
     public function financial_groups_byRole_details($id)
     {
-        if (session('mng_roles_grp')) {
             $id = base64_decode($id);
 
             $data['members'] = $this->flexperformance_model->roles_byid($id);
@@ -6275,14 +6277,11 @@ class GeneralController extends Controller
             $data['groupInfo'] = $this->flexperformance_model->group_byid($id);
             $data['title'] = "Groups";
             return view('app.groups_by_role', $data);
-        } else {
-            echo "Unauthorized Access";
-        }
+       
     }
 
     public function financial_groups_details($id)
     {
-        if (session('mng_roles_grp')) {
             $id = base64_decode($id);
 
             $data['members'] = $this->flexperformance_model->members_byid($id);
@@ -6294,14 +6293,12 @@ class GeneralController extends Controller
             $data['child'] = "Groups";
 
             return view('app.financial_groups_details', $data);
-        } else {
-            echo "Unauthorized Access";
-        }
+    
     }
 
     public function groups(Request $request)
     {
-        if (session('mng_roles_grp')) {
+        $this->authenticateUser('add-payroll');
             $id = base64_decode($request->id);
 
             $data['members'] = $this->flexperformance_model->members_byid($id);
@@ -6310,9 +6307,7 @@ class GeneralController extends Controller
             $data['groupInfo'] = $this->flexperformance_model->group_byid($id);
             $data['title'] = "Groups";
             return view('app.groups', $data);
-        } else {
-            echo "Unauthorized Access";
-        }
+  
     }
 
 
@@ -6320,6 +6315,9 @@ class GeneralController extends Controller
     //
     public function removeEmployeeByRoleFromGroup(Request $request)
     {
+
+        $this->authenticateUser('add-payroll');
+
         $method = $request->method();
 
         if ($method == "POST") {
@@ -6359,6 +6357,9 @@ class GeneralController extends Controller
     public function removeEmployeeFromGroup(Request $request)
     {
 
+        $this->authenticateUser('add-payroll');
+
+
         $method = $request->method();
 
         if ($method == "POST") {
@@ -6394,6 +6395,9 @@ class GeneralController extends Controller
     public function removeEmployeeFromRole(Request $request)
     {
 
+        $this->authenticateUser('add-payroll');
+
+
         $method = $request->method();
 
         if ($method == "POST") {
@@ -6427,6 +6431,8 @@ class GeneralController extends Controller
 
     public function addEmployeeToGroupByRoles(Request $request)
     {
+
+        $this->authenticateUser('add-payroll');
 
         $method = $request->method();
 
@@ -6502,6 +6508,9 @@ class GeneralController extends Controller
 
     public function addEmployeeToGroup(Request $request)
     {
+
+        $this->authenticateUser('add-payroll');
+
 
         $method = $request->method();
 
@@ -8263,6 +8272,7 @@ class GeneralController extends Controller
 
         $i = 1;
         $employee = Auth::User()->id;
+        
 
         $role = UserRole::where('user_id', $employee)->first();
         $role_id = $role->role_id;
