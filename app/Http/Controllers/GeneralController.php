@@ -4036,7 +4036,7 @@ class GeneralController extends Controller
     public function organisation_reports()
     {
         $this->authenticateUser('view-report');
-        if (session('mng_paym') || session('recom_paym') || session('appr_paym')) {
+        // if (session('mng_paym') || session('recom_paym') || session('appr_paym')) {
             $data['month_list'] = $this->flexperformance_model->payroll_month_list();
             $data['year_list'] = $this->flexperformance_model->payroll_year_list();
             $data['projects'] = $this->project_model->allProjects();
@@ -4048,9 +4048,9 @@ class GeneralController extends Controller
             $data['leave_type'] = $this->attendance_model->leave_type();
             $data['employee'] = Employee::all();
             return view('app.organisation_reports', $data);
-        } else {
-            echo 'Unauthorized Access';
-        }
+        // } else {
+        //     echo 'Unauthorized Access';
+        // }
     }
 
     public function not_logged_in()
