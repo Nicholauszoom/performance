@@ -13,10 +13,14 @@ class CreateTempPayrollLogsTable extends Migration
      */
     public function up()
     {
+        
         Schema::create('temp_payroll_logs', function (Blueprint $table) {
             $table->id();
             $table->string('empID', 10)->index('empID');
             $table->double('salary')->nullable();
+            $table->double('taxable_amount')->nullable();
+            $table->double('excess_added')->nullable();
+            $table->double('rate')->nullable();
             $table->double('allowances')->default(0);
             $table->double('pension_employee')->nullable();
             $table->double('pension_employer')->nullable();
@@ -37,9 +41,14 @@ class CreateTempPayrollLogsTable extends Migration
             $table->integer('bank_branch')->default(1);
             $table->string('account_no', 20)->default('0128J092341550');
             $table->decimal('less_takehome', 20, 2)->default(0.00);
+            $table->string('currency')->nullable();
+            $table->string('years')->nullable();
+            $table->double('actual_salary')->nullable();
+            $table->double('gross')->nullable();
             $table->timestamps();
         });
     }
+
 
     /**
      * Reverse the migrations.

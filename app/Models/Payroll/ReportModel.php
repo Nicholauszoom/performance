@@ -1572,7 +1572,12 @@ and e.branch = b.code and e.line_manager = el.emp_id and c.id = e.contract_type 
         $row = DB::table('temp_payroll_logs')->where('payroll_date', $date)->select('id')->count();
 
         $calendar = explode('-', $date);
-        $terminationDate = '%' . $calendar[0] . '-' . $calendar[1] . '%';
+        if(count($calendar) > 2){
+            $terminationDate = '%' . $calendar[0] . '-' . $calendar[1] . '%';
+        }else{
+            $terminationDate = 'null';
+    
+        }
         $row2 = DB::table('terminations')->where('terminationDate', 'like', $terminationDate)->select('id')->count();
 
 

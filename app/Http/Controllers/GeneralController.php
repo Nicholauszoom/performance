@@ -2847,7 +2847,7 @@ class GeneralController extends Controller
     {
 
         $this->authenticateUser('view-employee');
-        
+
 
 
         // if(session('mng_emp')){
@@ -4036,7 +4036,7 @@ class GeneralController extends Controller
     public function organisation_reports()
     {
         $this->authenticateUser('view-report');
-        if (session('mng_paym') || session('recom_paym') || session('appr_paym')) {
+        // if (session('mng_paym') || session('recom_paym') || session('appr_paym')) {
             $data['month_list'] = $this->flexperformance_model->payroll_month_list();
             $data['year_list'] = $this->flexperformance_model->payroll_year_list();
             $data['projects'] = $this->project_model->allProjects();
@@ -4048,9 +4048,9 @@ class GeneralController extends Controller
             $data['leave_type'] = $this->attendance_model->leave_type();
             $data['employee'] = Employee::all();
             return view('app.organisation_reports', $data);
-        } else {
-            echo 'Unauthorized Access';
-        }
+        // } else {
+        //     echo 'Unauthorized Access';
+        // }
     }
 
     public function not_logged_in()
@@ -4173,12 +4173,12 @@ class GeneralController extends Controller
         $data['line_overtime'] = $this->flexperformance_model->lineOvertimes(auth()->user()->emp_id);
         // end of overtime
 
-       
+
         if (session('password_set') == "1") {
             return view('auth.password-change');
         } else {
             $employee = EMPL::where('emp_id', auth()->user()->emp_id)->first();
-            
+
             if (empty($employee->photo)) {
                 return redirect()->route('flex.userdata', base64_encode(auth()->user()->emp_id));
             }
@@ -6873,7 +6873,7 @@ class GeneralController extends Controller
             $data["child"] = "Register Employee";
             // return $data['ldrop'];
             return view('app.employeeAdd', $data);
-       
+
     }
 
     public function getPositionSalaryRange(Request $request)
@@ -10931,7 +10931,7 @@ class GeneralController extends Controller
     // For My Biodata
     public function my_biodata(Request $request)
     {
-        
+
         $id = auth()->user()->emp_id;
 
 

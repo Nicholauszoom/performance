@@ -13,6 +13,8 @@ class CreatePayrollMonthsTable extends Migration
      */
     public function up()
     {
+
+
         Schema::create('payroll_months', function (Blueprint $table) {
             $table->id();
             $table->date('payroll_date')->default('2019-09-28');
@@ -21,9 +23,11 @@ class CreatePayrollMonthsTable extends Migration
             $table->double('sdl')->default(0.045);
             $table->string('init_author', 10);
             $table->string('recom_author', 110)->nullable();
+            $table->string('recom_author2', 110)->nullable();
             $table->string('appr_author', 10);
             $table->date('init_date');
             $table->string('recom_date', 110)->nullable();
+            $table->string('recom_date2', 110)->nullable();
             $table->date('appr_date');
             $table->integer('arrears')->default(0)->comment("0-No, 1-Yes");
             $table->integer('pay_checklist')->default(0)->comment("0-Not Ready, 1-Ready");

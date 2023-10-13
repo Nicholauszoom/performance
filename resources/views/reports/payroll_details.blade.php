@@ -131,7 +131,7 @@
                                     $total_overtime = round($total_overtime +$row->overtime,2);
                                     $total_house_rent = round($total_house_rent + $row->house_rent,2);
                                     $total_others = round($total_others + $row->other_payments,2) ;
-                                    $total_taxs += round($row->taxdue,0);
+                                    $total_taxs += round($row->taxdue,2);
 
                                     $total_pension = round($total_pension + $row->pension_employer,2);
                                     $total_deduction += round(($row->salary + $row->allowances)-$amount,2);
@@ -184,10 +184,10 @@
                             <td class="text-end">{{ number_format($row->pension_employer, 2) }}</td>
                             <td class="text-end">{{ number_format($row->loans, 2) }}</td>
 
-                            <td class="text-end">{{ number_format(intval($row->deductions), 2) }}</td>
+                            <td class="text-end">{{ number_format($row->deductions, 2) }}</td>
 
                             <td class="text-end">
-                                {{ number_format(intval($row->salary) + intval($row->allowances) - intval($amount), 2) }}
+                                {{ number_format($row->salary + $row->allowances - $amount, 2) }}
                             </td>
                             <td class="text-end">{{ number_format($amount, 2) }}</td>
 

@@ -17,7 +17,7 @@ class DatabaseSeeder extends Seeder
         $this->call(LeaveSubCatSeeder::class);
         $this->call(LeaveTypeSeeder::class);
         $this->call(UserSeeder::class);
-        $this->call(DepartmentSeeder::class);
+        // $this->call(DepartmentSeeder::class);
         $this->call(ModuleSeeder::class);
         $this->call(PermisionSeeder::class);
         $this->call(RolePermissionSeeder::class);

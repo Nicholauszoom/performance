@@ -13,33 +13,45 @@ class CreatePayrollLogsTable extends Migration
      */
     public function up()
     {
+
+
         Schema::create('payroll_logs', function (Blueprint $table) {
             $table->id();
             $table->string('empID', 10)->index('empID');
-            $table->decimal('salary', 15, 2)->nullable();
-            $table->decimal('allowances', 15, 2)->default(0.00);
-            $table->decimal('pension_employee', 15, 2)->nullable();
-            $table->decimal('pension_employer', 15, 2)->nullable();
-            $table->decimal('medical_employee', 15, 2)->default(0.00);
-            $table->decimal('medical_employer', 15, 2)->default(0.00);
-            $table->decimal('taxdue', 15, 2)->nullable();
-            $table->decimal('meals', 15, 2)->default(0.00);
+            $table->double('salary')->nullable();
+            $table->double('allowances')->default(0.00);
+            $table->double('pension2')->default(0.00);
+            $table->double('taxable_amount')->default(0.00);
+            $table->double('gross')->default(0.00);
+            $table->double('excess_added')->default(0.00);
+            $table->double('pension_employee')->nullable();
+            $table->double('pension_employer')->nullable();
+            $table->double('medical_employee')->default(0.00);
+            $table->double('medical_employer')->default(0.00);
+            $table->double('taxdue')->nullable();
+            $table->double('meals')->default(0.00);
             $table->integer('department');
             $table->integer('position');
             $table->integer('branch');
             $table->string('pension_fund', 100);
             $table->string('membership_no', 20)->default('PSSF/2019/000910');
-            $table->decimal('sdl', 15, 2);
-            $table->decimal('wcf', 15, 2);
-            $table->decimal('less_takehome', 15, 2)->default(0.00)->comment("0-Complete Take Home");
+            $table->double('sdl');
+            $table->double('wcf');
+            $table->double('less_takehome')->default(0.00)->comment("0-Complete Take Home");
             $table->dateTime('due_date')->useCurrent();
             $table->date('payroll_date')->nullable();
             $table->integer('bank')->default(1);
             $table->integer('bank_branch')->default(1);
             $table->string('account_no', 20)->default('0128J092341550');
+            $table->double('rate')->nullable();
+            $table->double('currency')->nullable();
+            $table->string('years')->nullable();
+            $table->string('receipt_no')->nullable();
+            $table->string('receipt_date')->nullable();
+            $table->double('actual_salary')->default(0.00);
             $table->timestamps();
         });
-    }
+    }	
 
     /**
      * Reverse the migrations.

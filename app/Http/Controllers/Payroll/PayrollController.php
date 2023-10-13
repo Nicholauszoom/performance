@@ -1351,6 +1351,8 @@ class PayrollController extends Controller
                     // recommend to Head of Finance email
                     $position_data = SysHelpers::position('Managing Director');
 
+                    if($position_data){
+
                     $fullname = $position_data['full_name'];
                     $email_data = array(
                         'subject' => 'Payroll Run Notification',
@@ -1361,6 +1363,9 @@ class PayrollController extends Controller
 
                     //kmarealle@bancabc.co.tz
                     Notification::route('mail', $email_data['email'])->notify(new EmailRequests($email_data));
+
+
+                }
 
                     $description = "Recommendation of payroll of date " . $todate;
 
