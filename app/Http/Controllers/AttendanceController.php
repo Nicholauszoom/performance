@@ -296,7 +296,23 @@ class AttendanceController extends Controller
             $interval = $d2->diff($d1);
             $data['days']=$interval->days;
             $data['title'] = 'Leave';
-            $data['leaveBalance'] = $this->attendance_model->getLeaveBalance(Auth::user()->emp_id, Auth::user()->hire_date, date('Y-m-d'));
+            //$max_leave_days = 10000;
+            $today = date('Y-m-d');
+            $arryear = explode('-',$today);
+            $year = $arryear[0];
+
+            $employeeHiredate = explode('-', Auth::user()->hire_date);
+            $employeeHireYear = $employeeHiredate[0];
+            $employeeDate =  '';
+
+
+            if($employeeHireYear == $year  ){
+                $employeeDate =Auth::user()->hire_date;
+
+            }else{
+                $employeeDate = $year.('-01-01');
+            }
+            $data['leaveBalance'] = $this->attendance_model->getLeaveBalance(Auth::user()->emp_id,$employeeDate, date('Y-m-d'));
             $data['sickLeaveBalance'] = $this->getRemainingDaysForLeave(Auth::user()->emp_id, 2);
             $data['compassionateLeaveBalance'] = $this->getRemainingDaysForLeave(Auth::user()->emp_id, 3);
             $data['maternityLeaveBalance'] = $this->getRemainingDaysForLeave(Auth::user()->emp_id, 4);
@@ -380,7 +396,7 @@ class AttendanceController extends Controller
                 //For Gender
                 $gender = EMPL::where('id', $empID)->value('gender');
                 if ($gender !== null) {
-                    dd($gender);
+                    // dd($gender);
                 } else {
                     // Handle the case where no employee with the specified empID was found.
                 }
@@ -533,8 +549,20 @@ public function saveLeave(Request $request) {
 
         //$max_leave_days = 10000;
 
+        $employeeHiredate = explode('-', Auth::user()->hire_date);
+        $employeeHireYear = $employeeHiredate[0];
+        $employeeDate =  '';
+
+
+        if($employeeHireYear == $year  ){
+            $employeeDate =Auth::user()->hire_date;
+
+        }else{
+            $employeeDate = $year.('-01-01');
+        }
+
         // Annual leave accurated days
-        $annualleaveBalance = $this->attendance_model->getLeaveBalance(session('emp_id'), session('hire_date'), date('Y-m-d'));
+        $annualleaveBalance = $this->attendance_model->getLeaveBalance(session('emp_id'), $employeeDate, date('Y-m-d'));
 
         // For  Requested days
          if($nature == 1){
@@ -556,7 +584,7 @@ public function saveLeave(Request $request) {
          $total_remaining=$leaves+$different_days;
 
         // For Working days
-        $d1 = new DateTime (Auth::user()->hire_date);
+        $d1 = new DateTime ($employeeDate);
         $d2 = new DateTime();
         $interval = $d2->diff($d1);
         $day= SysHelpers::countWorkingDays($d1,$d2);
@@ -686,7 +714,7 @@ public function saveLeave(Request $request) {
 
                 // for annual leave
                 if ($request->nature==1) {
-                    $annualleaveBalance = $this->attendance_model->getLeaveBalance(auth()->user()->emp_id,auth()->user()->hire_date, date('Y-m-d'));
+                    $annualleaveBalance = $this->attendance_model->getLeaveBalance(auth()->user()->emp_id,$employeeDate, date('Y-m-d'));
 
                     // checking annual leave balance
                     if($different_days<$annualleaveBalance)
@@ -910,7 +938,7 @@ public function saveLeave(Request $request) {
             if ($request->nature==1)
             {
 
-                      $annualleaveBalance = $this->attendance_model->getLeaveBalance(auth()->user()->emp_id,auth()->user()->hire_date, date('Y-m-d'));
+                      $annualleaveBalance = $this->attendance_model->getLeaveBalance(auth()->user()->emp_id,$employeeDate, date('Y-m-d'));
 
                       // checking annual leave balance
                       if($different_days < $annualleaveBalance)
@@ -1985,9 +2013,19 @@ public function saveLeave(Request $request) {
         $max_leave_days= $type->max_days;
 
         //$max_leave_days = 10000;
+        $employeeHiredate = explode('-',$employee->hire_date);
+        $employeeHireYear = $employeeHiredate[0];
+        $employeeDate =  '';
 
+
+        if($employeeHireYear == $year  ){
+            $employeeDate = $employee->hire_date;
+
+        }else{
+            $employeeDate = $year-01-01;
+        }
         // Annual leave accurated days
-        $annualleaveBalance = $this->attendance_model->getLeaveBalance($empID, $employee->hire_date, date('Y-m-d'));
+        $annualleaveBalance = $this->attendance_model->getLeaveBalance($empID, $employeeDate, date('Y-m-d'));
 
         // For  Requested days
          if($nature == 1){
@@ -2009,7 +2047,7 @@ public function saveLeave(Request $request) {
          $total_remaining=$leaves+$different_days;
 
         // For Working days
-        $d1 = new DateTime ($employee->hire_date);
+        $d1 = new DateTime ($employeeDate);
         $d2 = new DateTime();
         $interval = $d2->diff($d1);
         $day= SysHelpers::countWorkingDays($d1,$d2);
@@ -2137,7 +2175,8 @@ public function saveLeave(Request $request) {
 
                 // for annual leave
                 if ($request->nature==1) {
-                    $annualleaveBalance = $this->attendance_model->getLeaveBalance($empID,$employee->hire_date, date('Y-m-d'));
+                    $annualleaveBalance = $this->attendance_model->getLeaveBalance($empID,$employeeDate, date('Y-m-d'));
+
 
                     // checking annual leave balance
                     if($different_days<$annualleaveBalance)
@@ -2363,7 +2402,7 @@ public function saveLeave(Request $request) {
 
 
 
-                      $annualleaveBalance = $this->attendance_model->getLeaveBalance($empID,$employee->hire_date, date('Y-m-d'));
+                      $annualleaveBalance = $this->attendance_model->getLeaveBalance($empID,$employeeDate, date('Y-m-d'));
 
                       // checking annual leave balance
                       if($different_days < $annualleaveBalance)
