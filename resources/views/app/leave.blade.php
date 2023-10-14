@@ -271,7 +271,14 @@
                     </div>
                 </td>
                 <td>
-                    {{ $item->remaining }} Days
+                    @if ($item->type->type == 'Annual')
+                    {{number_format(($item->remaining + $item->days ), 2)}} Days
+                    @else
+                        {{ $item->remaining +$item->days }} Days
+                    @endif
+
+
+
                 </td>
                 <td class="text-center">
 
@@ -398,7 +405,11 @@
                     </div>
                 </td>
                 <td>
+                    @if ($item->type->type == 'Annual')
+                    {{ number_format($item->remaining, 2) }} Days
+                @else
                     {{ $item->remaining }} Days
+                @endif
                 </td>
                 <td class="text-center">
 

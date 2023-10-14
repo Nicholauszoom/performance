@@ -428,6 +428,7 @@ class AttendanceController extends Controller
         $daysSpent = Leaves::where('empId', $employeeId)
             ->where('nature', $natureId)
             ->whereBetween('created_at', [$startDate, $endDate])
+            ->where('state',0)
             ->sum('days');
 
         return $maxDays - $daysSpent;
