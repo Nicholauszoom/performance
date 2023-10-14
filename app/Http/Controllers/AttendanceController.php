@@ -1995,11 +1995,13 @@ public function saveLeave(Request $request) {
         $different_days = SysHelpers::countWorkingDays($start,$end)-$holidays;
          }
          else{
-
+            // if($nature == 2){
+               
+            // }
            // $holidays=SysHelpers::countHolidays($start,$end);
            // $different_days = SysHelpers::countWorkingDays($start,$end)-$holidays;
         $different_days = SysHelpers::countWorkingDaysForOtherLeaves($start,$end);
-
+ 
         // $startDate = Carbon::parse($start);
         // $endDate = Carbon::parse($end);
         // $different_days = $endDate->diffInDays($startDate);
@@ -2117,8 +2119,9 @@ public function saveLeave(Request $request) {
             {
 
               $total_leave_days=$leaves+$different_days;
-
-              if($total_leave_days<$max_leave_days || $request->nature==1)
+              
+              $leave_type=LeaveType::where('id',$nature)->first();
+              if($total_leave_days<$max_leave_days || $request->nature==1 && $leave_type->type !=='Sick')
               {
                 $remaining=$max_leave_days-($leave_balance+$different_days);
                 $leaves=new Leaves();
@@ -2341,6 +2344,116 @@ public function saveLeave(Request $request) {
         {
 
           $total_leave_days=$leaves+$different_days;
+          $leave_type=LeaveType::where('id',$nature)->first();
+     
+          if($leave_type->type ==="Sick"){
+            // dd($leave_type);
+        
+            if ($total_leave_days >= $max_leave_days) {
+              $extradays = $total_leave_days - $max_leave_days;
+              
+                // Specify the condition based on the `emp_id` to check if the record already exists.
+               
+                $remaining=$max_leave_days +$extradays-($leave_balance+$different_days);
+                
+                $leaves=new Leaves();
+                   // $empID=Auth::user()->emp_id;
+                   $leaves->empID = $empID;
+                   $leaves->start = $request->start;
+                   $leaves->end=$request->end;
+                   $leaves->leave_address=$request->address;
+                   $leaves->mobile = $request->mobile;
+                   $leaves->nature = $request->nature;
+                   $leaves->deligated=$request->deligate;
+       
+                   $leaves->days = $different_days+$extradays;
+
+                   $leaves->reason = $request->reason;
+                  $leaves->remaining = $remaining;
+                  $leaves->sub_category = $request->sub_cat;
+                  $leaves->application_date = date('Y-m-d');
+                       
+             
+              
+                  if ($request->hasfile('image')) {
+                    $request->validate([
+                       // 'image' => 'required|clamav',
+                    ]);
+                    $request->validate([
+                        'image' => 'mimes:jpg,png,jpeg,pdf|max:2048',
+                    ]);
+                    $newImageName = $request->image->hashName();
+                    $request->image->move(public_path('storage/leaves'), $newImageName);
+                    $leaves->attachment =  $newImageName;
+    
+                  }
+
+                  
+                  $leaves->save();
+                  $condition = [
+                    'emp_id' => $empID,
+                  'appliedBy' => Auth::user()->emp_id,
+                  'leaveId' => $leaves->id
+                  
+                     
+                ]; 
+                // dd($condition['leaveId']);
+                // Replace with the actual emp_id.
+              
+                  // Create data to insert for extra days.
+                  $extraData = [
+                      'emp_id' => $condition['emp_id'],
+                       'appliedBy' => $condition['appliedBy'],
+                       'leaveId' => $condition['leaveId'],
+                      'forfeit_days' => $extradays];
+                      DB::table('sick_leave_forfeit_days')->updateOrInsert($condition, $extraData);
+
+
+                   
+                      // Add other fields as needed.
+                        // Use the DB facade to insert or update the data directly into the table.
+         
+                  $leave_type=LeaveType::where('id',$nature)->first();
+                  $type_name=$leave_type->type;
+
+                  $linemanager =  LeaveApproval::where('empID',$empID)->first();
+                  $linemanager_data = SysHelpers::employeeData($linemanager->level1);
+                  $employee_data = SysHelpers::employeeData($empID);
+                  $fullname = $linemanager_data['full_name'];
+                  $email_data = array(
+                      'subject' => 'Employee Leave Approval',
+                      'view' => 'emails.linemanager.leave-approval',
+                      'email' => $linemanager_data['email'],
+                      'full_name' => $fullname,
+                      'employee_name'=>$employee_data['full_name'],
+                      'next' => parse_url(route('attendance.leave'), PHP_URL_PATH)
+                  );
+
+                  try {
+    
+                    Notification::route('mail', $linemanager_data['email'])->notify(new EmailRequests($email_data));
+    
+                } catch (Exception $exception) {
+                    $msg=$type_name." Leave Request is submitted successfully but email not sent(SMTP Problem)!";
+                  return $url->with('msg', $msg);
+                }
+                  $msg=$type_name." Leave Request is submitted successfully!";
+                  return $url->with('msg', $msg);
+                  }
+                  else
+                  {
+    
+                    $leave_type=LeaveType::where('id',$nature)->first();
+                    $type_name=$leave_type->type;
+                    $msg="Sorry, You have Insufficient ".$type_name." Leave Days Balance";
+                    return $url->with('msg', $msg);
+    
+                  }
+    
+
+            }
+
+          }
 
           if($total_leave_days<$max_leave_days)
           {
@@ -2529,6 +2642,7 @@ public function saveLeave(Request $request) {
               $type_name=$leave_type->type;
 
  //fetch Line manager data from employee table and send email
+ 
                $linemanager =  LeaveApproval::where('empID',$empID)->first();
                $linemanager_data = SysHelpers::employeeData($linemanager->level1);
                $employee_data = SysHelpers::employeeData($empID);
@@ -2564,11 +2678,17 @@ public function saveLeave(Request $request) {
 
 
            }
-          }else{
-               $msg="Error!! start date should be less than end date!";
-              return redirect()->back()->with('msg', $msg);
-          }
+           
+          
 
-      }
+      
+      else{
+        $msg="Error!! start date should be less than end date!";
+       return redirect()->back()->with('msg', $msg);
+   }
 
-}
+    }
+
+  }
+
+

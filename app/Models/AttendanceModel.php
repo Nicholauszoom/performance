@@ -437,6 +437,7 @@ class AttendanceModel extends Model
         // $accrual= 7*$accrued/90;
         $accrual = 0;
         if ($nature == 1) {
+          
             $maximum_days = $accrual_days - $spent;
         } else {
             $days_entitled  = $this->days_entilted($nature);
