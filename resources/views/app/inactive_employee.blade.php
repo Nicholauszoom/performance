@@ -133,7 +133,7 @@
                   </a>
                 <?php }
 
-                if ($row->log_state==3 && ($row->initiator != session('emp_id'))){ ?>
+                if ($row->log_state==3 && ($row->initiator != auth()->user()->emp_id)){ ?>
                   <a href="javascript:void(0)" onclick="deactivateEmployee(<?php echo $row->logID; ?>,'<?php echo $row->emp_id; ?>')"  title="Confirm exit employee" class="me-2 text-body">
                     <button type="button" class="btn btn-main btn-xs"><i class="ph-check"></i></button>
                   </a>
@@ -210,7 +210,7 @@
                   </a>
                 <?php }
 
-                if ($row->log_state==3 && ($row->initiator != session('emp_id'))){ ?>
+                if ($row->log_state==3 && ($row->initiator != auth()->user()->emp_id)){ ?>
                   <a href="javascript:void(0)" onclick="deactivateEmployee(<?php echo $row->logID; ?>,'<?php echo $row->emp_id; ?>')"  title="Confirm exit employee" class="me-2 text-body">
                     <button type="button" class="btn btn-main btn-sm"><i class="ph-check"></i></button>
                   </a>

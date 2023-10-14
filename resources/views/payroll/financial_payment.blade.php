@@ -128,7 +128,7 @@
 
                     <div role="tabpanel" role="tabpanel" class="tab-pane fade active show" id="payrollReportTab"
                         aria-labelledby="home-tab">
-                        <?php if ($pendingPayroll == 0 && session('mng_paym')) { ?>
+                        <?php if ($pendingPayroll == 0 ) { ?>
                         <?php } ?>
 
                         <div class="col-md-12 col-sm-6 col-xs-12">

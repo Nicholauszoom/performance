@@ -22,7 +22,7 @@
     @endphp
             {{-- start of run payroll --}}
             @can('add-payroll')
-            @if ($pendingPayroll == 0 && session('mng_paym'))
+            @if ($pendingPayroll == 0)
 
                 <div class="col-lg-12">
 

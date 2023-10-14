@@ -35,7 +35,7 @@ $payroll_state = $data['payroll_state'];
 
 
     <div class="card-body">
-        <?php //if($pendingPayroll==0 && session('mng_paym')){ ?>
+        <?php //if($pendingPayroll==0 ){ ?>
         <div class="col-lg-6 offset-3">
             <!-- Basic layout-->
             <div class="card">

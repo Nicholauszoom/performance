@@ -4,7 +4,7 @@
 
     //$CI_Model = get_instance();
     $CI_Model->load->model('attendance_model');
-    $attendanceState = $CI_Model->attendance_model->checkAttendanceState(session('emp_id'), date('Y-m-d'));
+    $attendanceState = $CI_Model->attendance_model->checkAttendanceState(auth()->user()->emp_id, date('Y-m-d'));
     if($attendanceState){
       foreach($attendanceState as $value){ $state = 1; $duestate = $value->state; }
   }
@@ -48,13 +48,13 @@
 
 
   if(session('mng_emp')){
-    $imprest = $CI_Model->imprest_model->waitingImprests_hr(session('emp_id'));
+    $imprest = $CI_Model->imprest_model->waitingImprests_hr(auth()->user()->emp_id);
   }
   if(session('recom_paym')){
-    $imprest = $CI_Model->imprest_model->waitingImprests_fin(session('emp_id'));
+    $imprest = $CI_Model->imprest_model->waitingImprests_fin(auth()->user()->emp_id);
   }
   if(session('appr_paym')){
-    $imprest = $CI_Model->imprest_model->waitingImprests_appr(session('emp_id'));
+    $imprest = $CI_Model->imprest_model->waitingImprests_appr(auth()->user()->emp_id);
   }
   if(!isset($imprest)){
     $imprest = [];
@@ -62,7 +62,7 @@
 
 
   if(session('appr_leave')){
-    $overtimes = $CI_Model->flexperformance_model->waitingOvertimes_line(session('emp_id'));
+    $overtimes = $CI_Model->flexperformance_model->waitingOvertimes_line(auth()->user()->emp_id);
   }
   if(session('mng_emp')){
     $overtimes = $CI_Model->flexperformance_model->waitingOvertimes_hr();
@@ -108,7 +108,7 @@
                     <span class=" fa fa-angle-down"></span>
                   </a>
                   <ul class="dropdown-menu dropdown-usermenu pull-right">
-                    <li><a href="<?php echo  url(''); ?>/flex/userprofile/".session('emp_id'); ?>"> Profile</a></li>
+                    <li><a href="<?php echo  url(''); ?>/flex/userprofile/".auth()->user()->emp_id; ?>"> Profile</a></li>
                     <li>
                       <a href="<?php echo  url(''); ?>/flex/login_info"; ?>">
                         <span>Account Setting</span>
