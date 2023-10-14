@@ -36,7 +36,7 @@
                        <p class='alert alert-warning text-center'>No Arrears Payments Can Be Scheduled until the Pending Payoll is Responded</p>
                      <?php } ?>
                     <h2>Arrears Payments <small><?php echo date('F, Y',strtotime($payroll_month)); ?></small> &nbsp;&nbsp;&nbsp;
-                      <?php if($pendingPayroll==0 && session('mng_paym')){ ?>
+                      <?php if($pendingPayroll==0 ){ ?>
                      <button type="button" onclick="payAll('<?php echo $payroll_month;?>');" class="btn btn-main btn-md">PAY ALL ARREARS IN THIS MONTH</button>
                    <?php } ?>
                    </h2>

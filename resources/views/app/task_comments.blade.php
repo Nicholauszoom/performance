@@ -70,7 +70,7 @@
                                 <ul id="commentsList" class="messages">
 
                                   <?php foreach ($comment as $row) { 
-                                    if ($row->staff==session('emp_id')) { ?>
+                                    if ($row->staff==auth()->user()->emp_id) { ?>
 
                                   <li class="me"><br>
                                     <img class="avatar" src="<?php echo url('uploads/userprofile/').$row->photo; ?>" alt="">

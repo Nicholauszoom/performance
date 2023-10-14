@@ -72,7 +72,7 @@
                         </li>
                       </ul>
 
-                      <a href="<?php echo  url(''); ?>/flex/editemployee/".session('emp_id'); ?>" class="btn btn-success"><i class="fa fa-edit m-right-xs"></i>Edit Profile</a>
+                      <a href="<?php echo  url(''); ?>/flex/editemployee/".auth()->user()->emp_id; ?>" class="btn btn-success"><i class="fa fa-edit m-right-xs"></i>Edit Profile</a>
                       <br />
 
                       <!-- start skills -->
@@ -218,7 +218,7 @@
                                 <tr>
                                   <td><h4>Employee ID:</h4></td>
                                   <td><h4>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                  <?php echo session('emp_id'); ?></h4></td>
+                                  <?php echo auth()->user()->emp_id; ?></h4></td>
                                 </tr>
                                 <tr>
                                   <td><h4>Department:</h4></td>
@@ -408,7 +408,7 @@
                           <div class="clearfix"></div>
                         </div>
                         <div class="card-body">
-                            <form action="<?php echo  url(''); ?>/flex/assignrole/<?php echo session('emp_id'); ?>" method="post">
+                            <form action="<?php echo  url(''); ?>/flex/assignrole/<?php echo auth()->user()->emp_id; ?>" method="post">
                     <table class="table">
                       <thead>
                         <tr>
@@ -556,7 +556,7 @@
                       </div> 
                       
                       <div class="modal-footer">
-                      <input hidden="hidden"  name="employee" value="<?php echo session('emp_id'); ?>">
+                      <input hidden="hidden"  name="employee" value="<?php echo auth()->user()->emp_id; ?>">
                           <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                           <input type="submit"  value="Add" name="add" class="btn btn-main"/>
                       </div>
@@ -582,7 +582,7 @@
                           </div>
                           <div class="modal-body">
                           <!-- Modal Form -->
-                          <form id="demo-form2" enctype="multipart/form-data"  method="post" action="<?php echo  url(''); ?>/flex/addkin/<?php echo session('emp_id'); ?>"  data-parsley-validate class="form-horizontal form-label-left">
+                          <form id="demo-form2" enctype="multipart/form-data"  method="post" action="<?php echo  url(''); ?>/flex/addkin/<?php echo auth()->user()->emp_id; ?>"  data-parsley-validate class="form-horizontal form-label-left">
                         <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">First Name 
                         </label>
@@ -680,7 +680,7 @@
                           <!-- Modal Form -->
                           <form id="demo-form2" enctype="multipart/form-data"  method="post" action="<?php echo  url('')."flex/reports/payslip/"; ?>"  data-parsley-validate class="form-horizontal form-label-left">
                         
-                        <input type="text" hidden="hidden" value="<?php echo session('emp_id'); ?>" name="employee">
+                        <input type="text" hidden="hidden" value="<?php echo auth()->user()->emp_id; ?>" name="employee">
                         <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">Payslip For The Month Of
                         </label>

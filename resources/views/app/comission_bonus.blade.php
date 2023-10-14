@@ -31,7 +31,7 @@
           <?php if($pendingPayroll > 0){ ?>
              <p class='alert alert-warning text-center'>No Incentive Payments Can Be Scheduled until the Pending Payoll is Responded</p>
            <?php } ?>             
-          <?php if($pendingPayroll==0 && session('mng_paym')){ ?>
+          <?php if($pendingPayroll==0 ){ ?>
           <div class="card-head offset-3">
             <h2> Incentives Tag</h2>
             <form autocomplete="off" id="addBonusTag" class="form-horizontal form-label-left">
@@ -111,7 +111,7 @@
                       </div>
                       <div class="form-group">
                        <div class="col-md-9 col-sm-9 col-xs-12 col-md-offset-3">
-                       <?php if($pendingPayroll==0 && session('mng_paym')){ ?>
+                       <?php if($pendingPayroll==0 ){ ?>
                        <button type="reset" class="btn btn-default">Cancel</button>
                        <button  class="btn btn-main">Add</button>
                        <?php }else { ?>                            
@@ -156,7 +156,7 @@
                         <?php  } else { ?>
                         <span class="label label-warning">NOT APPROVED</span><br>
                         <?php  } ?>
-                      <?php if($row->state==0 && session('mng_paym')){ ?>
+                      <?php if($row->state==0 ){ ?>
                         <a href="javascript:void(0)" onclick="deleteBonus(<?php echo $row->id; ?>)"  title="Delete Incentive" class="icon-2 info-tooltip"><button type="button" class="btn btn-danger btn-xs"><i class="ph-x"></i></button> </a>
                         <?php }  ?>  
                     </td>

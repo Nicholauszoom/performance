@@ -426,7 +426,12 @@ class AttendanceModel extends Model
         $days = $diff->d;
 
         $days_this_month = intval(date('t', strtotime($last_month_date)));
+        $remaining_after_forfeitDays = LeaveForfeiting::where('empID', $empID)->value('days') ?? 0;
+
+        // dd($remaining_after_forfeitDays);
+
         $accrual_days = (($days * $employee->accrual_rate) / 30) + $months * $employee->accrual_rate + $years * 12 * $employee->accrual_rate;
+
         //$days * $employee->accrual_rate / $days_this_month +
         $interval = $d1->diff($d2);
         $diffInMonths  = $interval->m;
@@ -437,13 +442,15 @@ class AttendanceModel extends Model
         // $accrual= 7*$accrued/90;
         $accrual = 0;
         if ($nature == 1) {
-          
-            $maximum_days = $accrual_days - $spent;
+            $maximum_days = $accrual_days - $spent + floatval($remaining_after_forfeitDays);
+            // dd($maximum_days);
         } else {
             $days_entitled  = $this->days_entilted($nature);
 
             $maximum_days = $days_entitled - $spent;
         }
+
+
 
 
         //dd($days);

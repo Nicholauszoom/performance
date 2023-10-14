@@ -115,7 +115,7 @@
                             <td>{{ $merital_status }}</td>
                         </tr>
 
-                        @if (session('mng_emp') || session('emp_id') == $empID)
+                        @if (session('mng_emp') || auth()->user()->emp_id == $empID)
                             <tr>
                                 <td>Date of Birth:</td>
                                 <td>{{ $birthdate[2] . '-' . $birthdate[1] . '-' . $birthdate[0] }}</td>
@@ -234,7 +234,7 @@
             </div>
 
 
-            @if (session('mng_roles_grp') || session('emp_id') == $empID)
+            @if (session('mng_roles_grp') || auth()->user()->emp_id == $empID)
                 <div class="row">
                     <div class="col-md-12">
                         <div class="card rounded-0 ">
