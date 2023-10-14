@@ -2002,9 +2002,9 @@ public function saveLeave(Request $request) {
 
 
 
-
+        $leave_type=LeaveType::where('id',$nature)->first();
         // For Employees with less than 12 months of employement
-        if($day <= 365)
+        if($day <= 365 && $leave_type->type !=="Sick" )
         {
 
             //  For Leaves with sub Category
