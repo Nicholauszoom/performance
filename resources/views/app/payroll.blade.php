@@ -20,7 +20,7 @@
     </div>
 
     <div class="row">
-        <?php if($pendingPayroll==0 && session('mng_paym')){ ?>
+        <?php if($pendingPayroll==0 ){ ?>
             <div class="col-md-12 col-sm-6 col-xs-12">
                 <div class="card">
                     <div class="card-head">

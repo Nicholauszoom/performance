@@ -62,7 +62,7 @@ $sum_arrears = $sum_paid = $sum_outstanding = $sum_last_paid=$sum_takehome=$sum_
                           <th><b>Paid</b></th>
                           <th><b>Outstanding</b></th>
                           <th><b>Last Payment</b></th>
-                          <?php if($pendingPayroll== 0 && session('mng_paym')){ ?>
+                          <?php if($pendingPayroll== 0 ){ ?>
                             <th>&nbsp;&nbsp;<button type="submit" name="submit" value ="submit" class="btn btn-main">CONFIRM PAYMENT</button></th>
                           <?php }  ?>
                         </tr>
@@ -101,7 +101,7 @@ $sum_arrears = $sum_paid = $sum_outstanding = $sum_last_paid=$sum_takehome=$sum_
                           <td ><?php echo number_format($paid); ?></td>
                           <td align="center"><?php echo number_format($outstanding); ?></td>
                           <td align="center"><?php echo number_format($last_paid); ?></td>
-                          <?php if($pendingPayroll==0 && session('mng_paym')){ ?>
+                          <?php if($pendingPayroll==0 ){ ?>
                           <td>
                             <div class="form-group">
                               <div class="col-sm-9">                             

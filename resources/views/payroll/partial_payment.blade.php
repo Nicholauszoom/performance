@@ -87,7 +87,7 @@ $partial_payments = $data['partial_payments'];
                                         <?php } ?>
                                     </td>
                                     <td id="status<?php echo $row->empID; ?>">
-                                        <?php if ($row->status == 0 /* && session('mng_paym') */) { ?>
+                                        <?php if ($row->status == 0 /*  */) { ?>
                                         <a href="javascript:void(0)"
                                             onclick="deletePayment(<?php echo $row->id; ?>)"
                                             title="Delete Payment" class="icon-2 info-tooltip">
@@ -106,7 +106,7 @@ $partial_payments = $data['partial_payments'];
                     <p class='alert alert-warning text-center'>No Incentive Payments Can Be Scheduled until
                         the Pending Payoll is Responded</p>
                     <?php } ?>
-                    <?php if ($pendingPayroll == 0 /*&& session('mng_paym') */) { ?>
+                    <?php if ($pendingPayroll == 0 /* */) { ?>
                     <div class="card-head">
                         <h2> Partial Payment</h2>
                         <div class="clearfix"></div>
@@ -156,7 +156,7 @@ $partial_payments = $data['partial_payments'];
                         <!--<div class="ln_solid"></div>-->
                         <div class="form-group">
                             <div class="col-md-9 col-sm-9 col-xs-12 col-md-offset-3">
-                                <?php if ($pendingPayroll == 0 /*&& session('mng_paym') */) { ?>
+                                <?php if ($pendingPayroll == 0 /* */) { ?>
                                 <button type="reset" class="btn btn-default">Cancel</button>
                                 <button class="btn btn-main">Submit</button>
                                 <?php } else { ?>

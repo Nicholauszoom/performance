@@ -9,7 +9,7 @@
                 <div class="d-flex justify-content-between mb-3">
                     <h4 class="text-main">Update Password</h4>
 
-                    <a href="<?php echo  url('') .'/flex/userprofile/'.session('emp_id'); ?>" class="btn btn-main btn-xs">Back</a>
+                    <a href="<?php echo  url('') .'/flex/userprofile/'.auth()->user()->emp_id; ?>" class="btn btn-main btn-xs">Back</a>
                 </div>
 
                 @if (session()->has('status'))
@@ -25,7 +25,7 @@
                     @csrf
                     @method('PUT')
 
-                    <input type="hidden" name="emp_id" value="{{ session('emp_id') }}">
+                    <input type="hidden" name="emp_id" value="{{ auth()->user()->emp_id }}">
 
                     <div class="mb-3">
                         <label for="current_password" class="form-label">Current Password <span class="text-danger">*</span></label>

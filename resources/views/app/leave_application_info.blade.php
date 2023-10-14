@@ -57,7 +57,7 @@
                           <ul id="myTab" class="nav nav-tabs bar_tabs" role="tablist">
                             <li role="presentation" class="active"><a href="#description" id="home-tab" role="tab" data-toggle="tab" aria-expanded="true">DETAILS</a>
                             </li>
-                            <?php if(session('emp_id') ==$applicant && $status !=1 && $status!=2){  ?>
+                            <?php if(auth()->user()->emp_id ==$applicant && $status !=1 && $status!=2){  ?>
                             <li role="presentation" class=""><a href="#updateLeave" role="tab" id="profile-tab2" data-toggle="tab" aria-expanded="false"><font class = "text-info"><i class="fa fa-edit"></i>&nbsp;&nbsp;<b>UPDATE LEAVE</b></font></a>
                             </li>
                             <?php } ?>
@@ -93,7 +93,7 @@
                                 <span class="label label-danger">Overdue</span></div> <?php } ?> <br></p>                     
                           </div> 
 
-                            <?php if(session('emp_id') ==$applicant && $status !=1 && $status!=2){  ?>
+                            <?php if(auth()->user()->emp_id ==$applicant && $status !=1 && $status!=2){  ?>
                              <!--Update Leave-->
                             <div role="tabpanel" class="tab-pane fade active" id="updateLeave" aria-labelledby="profile-tab">
                             <div id="resultFeed"></div>

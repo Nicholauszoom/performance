@@ -131,7 +131,7 @@
                                             </div>
                                             @if ($state == 1)
                                             {{-- start of pending payroll --}}
-                                                @if ($pendingPayroll == 1 && $payroll->state == 1 && session('appr_paym'))
+                                                @if ($pendingPayroll == 1 && $payroll->state == 1)
                                                     <div>
                                                         @can('approve-payroll')
                                                         {{-- approve pending payroll button --}}
