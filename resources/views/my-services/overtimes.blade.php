@@ -3,8 +3,8 @@
 @push('head-script')
     <script src="{{ asset('assets/js/components/tables/datatables/datatables.min.js') }}"></script>
     <script src="{{ asset('assets/js/components/forms/selects/select2.min.js') }}"></script>
-    <script src="{{ asset('assets/js/components/ui/moment/moment.min.js') }}"></script>
-    <script src="{{ asset('assets/js/components/pickers/daterangepicker.js') }}"></script>
+    {{-- <script src="{{ asset('assets/js/components/ui/moment/moment.min.js') }}"></script> --}}
+    {{-- <script src="{{ asset('assets/js/components/pickers/daterangepicker.js') }}"></script> --}}
     <script src="{{ asset('assets/js/components/pickers/datepicker.min.js') }}"></script>
 @endpush
 
@@ -70,7 +70,7 @@
                                     <div class="col-sm-12">
                                         <div class="input-group">
                                             <span class="input-group-text"><i class="ph-calendar"></i></span>
-                                            <input type="text" required placeholder="Start Time" name="time_start"
+                                            <input type="date" required placeholder="Start Time" name="time_start"
                                                 id="time_start" class="form-control daterange-single">
                                         </div>
                                     </div>
@@ -82,7 +82,7 @@
                                     <div class="col-sm-12">
                                         <div class="input-group">
                                             <span class="input-group-text"><i class="ph-calendar"></i></span>
-                                            <input type="text" required placeholder="Finish Time" name="time_finish"
+                                            <input type="date" required placeholder="Finish Time" name="time_finish"
                                                 id="time_end" class="form-control daterange-single">
                                         </div>
                                     </div>

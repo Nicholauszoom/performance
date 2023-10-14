@@ -4,8 +4,8 @@
     <script src="{{ asset('assets/js/components/forms/selects/select2.min.js') }}"></script>
 
     <script src="{{ asset('assets/js/components/ui/moment/moment.min.js') }}"></script>
-    <script src="{{ asset('assets/js/components/pickers/daterangepicker.js') }}"></script>
-    <script src="{{ asset('assets/js/components/pickers/datepicker.min.js') }}"></script>
+    {{-- <script src="{{ asset('assets/js/components/pickers/daterangepicker.js') }}"></script> --}}
+    {{-- <script src="{{ asset('assets/js/components/pickers/datepicker.min.js') }}"></script> --}}
 @endpush
 
 @push('head-scriptTwo')
@@ -113,8 +113,8 @@
                             <label class="form-label">Birthdate:</label>
                             <div class="input-group">
                                 <span class="input-group-text"><i class="ph-calendar"></i></span>
-                                <input type="text" placeholder="Date of Birth"
-                                    class="form-control daterange-single @error('birthdate') is-invalid @enderror"
+                                <input type="date" placeholder="Date of Birth"
+                                    class="form-control @error('birthdate') is-invalid @enderror"
                                     name="bithdate" value="{{ old('birthdate') }}" id="birthdate">
                             </div>
                             <span id="age" class="text-danger"></span>
@@ -247,7 +247,7 @@
 
                             <div class="input-group">
                                 <span class="input-group-text"><i class="ph-calendar"></i></span>
-                                <input type="text"
+                                <input type="date"
                                     class="form-control daterange-single @error('contract_start') is-invalid @enderror"
                                     name="contract_start" id="contract_start">
                             </div>
@@ -260,7 +260,7 @@
 
                             <div class="input-group">
                                 <span class="input-group-text"><i class="ph-calendar"></i></span>
-                                <input type="text"
+                                <input type="date"
                                     class="form-control daterange-single @error('contract_end') is-invalid @enderror"
                                     name="contract_end" id="contract_end">
                             </div>
