@@ -75,8 +75,6 @@ class AttendanceController extends Controller
             return redirect()->route('login');
         }
 
-
-
         if(!Auth::user()->can($permissions)){
 
           abort(Response::HTTP_UNAUTHORIZED,'500|Page Not Found');
@@ -172,19 +170,90 @@ class AttendanceController extends Controller
    {
 
       //$this->authenticateUser('view-leave');
-      $data['myleave'] =Leaves::where('empID',Auth::user()->emp_id)->get();
-    //   dd($data);
-      if(session('appr_leave')){
-        $data['otherleave'] = $this->attendance_model->leave_line(session('emp_id'));
-      }else{
-        $data['otherleave'] = $this->attendance_model->other_leaves(session('emp_id'));
+      $data['myleave'] = Leaves::where('empID', Auth::user()->emp_id)->get();
+
+      if (session('appr_leave')) {
+          $data['otherleave'] = $this->attendance_model->leave_line(session('emp_id'));
+      } else {
+          $data['otherleave'] = $this->attendance_model->other_leaves(session('emp_id'));
       }
-      $data['leave_types'] =LeaveType::all();
+     
+     
+      
+      // Now, you have the 'appliedBy' value for the specific leave
+
+      
+      $data['leave_types'] = LeaveType::all();
+      
 
       $data['leaves'] =Leaves::whereNot('state',0)->orderBy('id','DESC')->get();
+     
 
       $data['approved_leaves'] =Leaves::where('state',0)->orderBy('id','DESC')->get();
+      $full_names = []; // Initialize an array to store full names
+      $appliedBy=[];
+    //  dd($data['leaves']);
 
+// Check if 'leaves' is not empty and has at least one item
+// Process leaves
+if ($data['leaves']->isNotEmpty()) {
+  foreach ($data['leaves'] as $key => $leave) {
+      $uniqueLeaveID = $leave['id'];
+
+      // Fetch 'appliedBy' value from 'sick_leave_forfeit_days' based on the unique 'leaveID'
+      $appliedByValue = DB::table('sick_leave_forfeit_days')
+          ->where('leaveID', $uniqueLeaveID)
+          ->value('appliedBy');
+
+      // Fetch 'forfeit_days' value from 'sick_leave_forfeit_days' based on the unique 'leaveID'
+      $forfeitDaysValue = DB::table('sick_leave_forfeit_days')
+          ->where('leaveID', $uniqueLeaveID)
+          ->value('forfeit_days');
+
+      if ($appliedByValue !== null) {
+          // Fetch 'full_name' from 'EMPL' model based on 'emp_id'
+          $full_name = EMPL::where('emp_id', $appliedByValue)->value('full_name');
+
+          // Add the 'appliedBy' attribute to the leave item
+          $data['leaves'][$key]['appliedBy'] = $full_name;
+
+          // Add the 'forfeit_days' attribute to the leave item
+          $data['leaves'][$key]['forfeit_days'] = $forfeitDaysValue;
+      }
+  }
+}
+
+
+// Process leaves
+if ($data['approved_leaves']->isNotEmpty()) {
+  foreach ($data['approved_leaves'] as $key => $leave) {
+      $uniqueLeaveID = $leave['id'];
+
+      // Fetch 'appliedBy' value from 'sick_leave_forfeit_days' based on the unique 'leaveID'
+      $appliedByValue = DB::table('sick_leave_forfeit_days')
+          ->where('leaveID', $uniqueLeaveID)
+          ->value('appliedBy');
+
+      if ($appliedByValue !== null) {
+          // Fetch 'full_name' from 'EMPL' model based on 'emp_id'
+          $full_name = EMPL::where('emp_id', $appliedByValue)->value('full_name');
+
+          // Add the 'appliedBy' attribute to the leave item
+          $data['approved_leaves'][$key]['appliedBy'] = $full_name;
+      }
+  }
+}
+
+
+
+
+// Now, you have an array of 'full_name' values corresponding to each leave
+//dd($full_names);
+
+$data['leave_types'] = LeaveType::all();
+
+      
+   
       $data['leaveBalance'] = $this->attendance_model->getLeaveBalance(Auth::user()->emp_id, Auth::user()->hire_date, date('Y-m-d'));
 
       $employ=EMPL::whereNot('state',4)->get();
@@ -2092,7 +2161,7 @@ public function saveLeave(Request $request) {
 
                 $leave_type=LeaveType::where('id',$nature)->first();
                 $type_name=$leave_type->type;
-                $msg="Sorry, You have Insufficient ".$type_name." Leave Days Balance1";
+                $msg="Sorry, You have Insufficient ".$type_name." Leave Days Balance";
 
                 return $url->with('msg', $msg);
               }
@@ -2339,7 +2408,7 @@ public function saveLeave(Request $request) {
               
                 // Specify the condition based on the `emp_id` to check if the record already exists.
                
-                $remaining=$max_leave_days +$extradays-($leave_balance+$different_days);
+                $remaining=$max_leave_days -($leave_balance+$different_days);
                 
                 $leaves=new Leaves();
                    // $empID=Auth::user()->emp_id;
@@ -2375,11 +2444,12 @@ public function saveLeave(Request $request) {
 
                   
                   $leaves->save();
+                  // dd($leaves->nature);
                   $condition = [
                     'emp_id' => $empID,
                   'appliedBy' => Auth::user()->emp_id,
-                  'leaveId' => $leaves->id
-                  
+                  'leaveId' => $leaves->id,
+                  'nature' =>$leaves->nature                  
                      
                 ]; 
                 // dd($condition['leaveId']);
@@ -2390,8 +2460,10 @@ public function saveLeave(Request $request) {
                       'emp_id' => $condition['emp_id'],
                        'appliedBy' => $condition['appliedBy'],
                        'leaveId' => $condition['leaveId'],
+                       'nature' =>$condition['nature'],
                       'forfeit_days' => $extradays];
-                      DB::table('sick_leave_forfeit_days')->updateOrInsert($condition, $extraData);
+                      
+                      DB::table('sick_leave_forfeit_days')->updateOrInsert($condition, array_merge($extraData, ['updated_at' => now(), 'created_at' => now()]));
 
 
                    
@@ -2405,6 +2477,7 @@ public function saveLeave(Request $request) {
                   $linemanager_data = SysHelpers::employeeData($linemanager->level1);
                   $employee_data = SysHelpers::employeeData($empID);
                   $fullname = $linemanager_data['full_name'];
+                
                   $email_data = array(
                       'subject' => 'Employee Leave Approval',
                       'view' => 'emails.linemanager.leave-approval',

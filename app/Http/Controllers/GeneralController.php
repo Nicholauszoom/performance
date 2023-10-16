@@ -10062,8 +10062,8 @@ class GeneralController extends Controller
     // For viewing userbiodata
     public function userdata(Request $request, $id)
     {
-        $id = base64_decode($id);
-
+        $id = base64_decode($id); 
+    
         if (auth()->user()->emp_id != $id) {
             $this->authenticateUser('view-employee');
         }
