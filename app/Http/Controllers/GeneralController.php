@@ -5443,6 +5443,28 @@ class GeneralController extends Controller
     }
 
 
+    public function addPrevMonthSalaryArrears(){
+
+
+        $data = array(
+            "name" => "arrear",
+            "amount" => 0,
+            "mode" => "1",
+            "taxable" => "YES",
+            "pensionable" => "YES",
+            "Isrecursive" => "TEMPORARY",
+            "Isbik" => "YES",
+            "state" => 1,
+            "percent" => 0,
+        );
+
+        $result = $this->flexperformance_model->addAllowance($data);
+    }
+
+
+
+
+
     public function submitInputs(Request $request)
     {
 
