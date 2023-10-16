@@ -370,13 +370,6 @@ class ReportController extends Controller
         $data['payroll_month'] = $payrollMonth;
         $data['pension_fund'] = $pensionFund;
 
-
-        $info = $this->reports_model->company_info();
-
-
-
-        $summary = $data['summary'];
-
         return view('reports.temp_payroll1', $data);
 
         // include(app_path() . '/reports/temp_payroll.php');

@@ -5443,6 +5443,28 @@ class GeneralController extends Controller
     }
 
 
+    public function addPrevMonthSalaryArrears(){
+
+
+        $data = array(
+            "name" => "arrear",
+            "amount" => 0,
+            "mode" => "1",
+            "taxable" => "YES",
+            "pensionable" => "YES",
+            "Isrecursive" => "TEMPORARY",
+            "Isbik" => "YES",
+            "state" => 1,
+            "percent" => 0,
+        );
+
+        $result = $this->flexperformance_model->addAllowance($data);
+    }
+
+
+
+
+
     public function submitInputs(Request $request)
     {
 
@@ -8649,6 +8671,7 @@ class GeneralController extends Controller
         $old->newPosition = $request->newPosition;
         $old->oldLevel = $empl->emp_level;
         $old->newLevel = $request->newLevel;
+        $old->effective_date = $request->effective_date;
         $old->created_by = Auth::user()->id;
         $old->action = "promoted";
         $old->save();
@@ -8793,6 +8816,7 @@ class GeneralController extends Controller
         $old->newPosition = $empl->position;;
         $old->oldLevel = $empl->emp_level;
         $old->newLevel = $empl->emp_level;
+        $old->effective_date = $empl->effective_date;
         $old->created_by = Auth::user()->id;
         $old->action = "incremented";
 
@@ -10062,8 +10086,8 @@ class GeneralController extends Controller
     // For viewing userbiodata
     public function userdata(Request $request, $id)
     {
-        $id = base64_decode($id); 
-    
+        $id = base64_decode($id);
+
         if (auth()->user()->emp_id != $id) {
             $this->authenticateUser('view-employee');
         }

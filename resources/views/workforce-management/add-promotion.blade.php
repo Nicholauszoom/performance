@@ -9,7 +9,7 @@
     <script src="{{ asset('assets/js/pages/datatables_basic.js') }}"></script>
     <script src="{{ asset('assets/js/pages/form_select2.js') }}"></script>
 
-    
+
 	<!-- Theme JS files -->
 	<script src="{{ asset('assets/js/vendor/notifications/noty.min.js') }}"></script>
 
@@ -55,7 +55,7 @@
 
                             <div class="modal-body">
                                 <div class="row mb-3">
-                                    <div class="col-md-12 col-lg-12">
+                                    <div class="col-md-6 col-lg-6">
                                         <div class="mb-3">
                                             <label class="form-label"> Employee:</label>
                                             <select class="form-control select @error('department') is-invalid @enderror" id="docNo" name="emp_ID">
@@ -158,6 +158,10 @@
                                             <p class="text-danger mt-1"> Input field Error </p>
                                         @enderror
                                 </div>
+                                <div class="col-md-6 col-lg-6 mb-3">
+                                <label class="form-label " for="start-date">Effective Date:</label>
+                                <input type="date" name="effective_date" id="effective_date" class="form-control" required>
+                            </div>
 
 
                             </div>
