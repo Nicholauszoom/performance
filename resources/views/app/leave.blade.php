@@ -245,8 +245,15 @@
                 </td>
                 <td>
                     {{ $item->days }} Days
-                    <br>From <b>{{ $item->start }}</b><br>To <b>{{ $item->end }}</b>
+                    <br>From <b>{{ $item->start }}</b>
+                    <br>To <b>{{ $item->end }}</b>
+                    
+                    @if (!empty($item->appliedBy))
+                        <br>Applied By <b>{{ $item->appliedBy }}</b>
+                        <br>with <b> {{$item->forfeit_days}} <br> extra days  
+                    @endif
                 </td>
+                
                 <td>
                     Nature: <b>{{ $item->type->type }}</b>
                 </td>
@@ -271,7 +278,14 @@
                     </div>
                 </td>
                 <td>
-                    {{ $item->remaining }} Days
+                    @if ($item->type->type == 'Annual')
+                    {{number_format(($item->remaining + $item->days ), 2)}} Days
+                    @else
+                        {{ $item->remaining +$item->days }} Days
+                    @endif
+
+
+
                 </td>
                 <td class="text-center">
 
@@ -370,9 +384,19 @@
                 <td>{{ $item->employee->fname }} {{ $item->employee->mname }}
                     {{ $item->employee->lname }}
                 </td>
-                <td>
+                {{-- <td>
                     {{ $item->days }} Days
                     <br>From <b>{{ $item->start }}</b><br>To <b>{{ $item->end }}</b>
+                </td> --}}
+                <td>
+                    {{ $item->days }} Days
+                    <br>From <b>{{ $item->start }}</b>
+                    <br>To <b>{{ $item->end }}</b>
+                    
+                    @if (!empty($item->appliedBy))
+                        <br>Applied By <b>{{ $item->appliedBy }}</b>
+                         <br>with <b> {{$item->forfeit_days}} <br> extra days                    
+                    @endif
                 </td>
                 <td>
                     Nature: <b>{{ $item->type->type }}</b>
@@ -398,7 +422,11 @@
                     </div>
                 </td>
                 <td>
+                    @if ($item->type->type == 'Annual')
+                    {{ number_format($item->remaining, 2) }} Days
+                @else
                     {{ $item->remaining }} Days
+                @endif
                 </td>
                 <td class="text-center">
 

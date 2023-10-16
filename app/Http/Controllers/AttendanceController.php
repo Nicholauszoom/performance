@@ -75,8 +75,6 @@ class AttendanceController extends Controller
             return redirect()->route('login');
         }
 
-
-
         if(!Auth::user()->can($permissions)){
 
           abort(Response::HTTP_UNAUTHORIZED,'500|Page Not Found');
@@ -172,19 +170,90 @@ class AttendanceController extends Controller
    {
 
       //$this->authenticateUser('view-leave');
-      $data['myleave'] =Leaves::where('empID',Auth::user()->emp_id)->get();
-    //   dd($data);
-      if(session('appr_leave')){
-        $data['otherleave'] = $this->attendance_model->leave_line(session('emp_id'));
-      }else{
-        $data['otherleave'] = $this->attendance_model->other_leaves(session('emp_id'));
+      $data['myleave'] = Leaves::where('empID', Auth::user()->emp_id)->get();
+
+      if (session('appr_leave')) {
+          $data['otherleave'] = $this->attendance_model->leave_line(session('emp_id'));
+      } else {
+          $data['otherleave'] = $this->attendance_model->other_leaves(session('emp_id'));
       }
-      $data['leave_types'] =LeaveType::all();
+     
+     
+      
+      // Now, you have the 'appliedBy' value for the specific leave
+
+      
+      $data['leave_types'] = LeaveType::all();
+      
 
       $data['leaves'] =Leaves::whereNot('state',0)->orderBy('id','DESC')->get();
+     
 
       $data['approved_leaves'] =Leaves::where('state',0)->orderBy('id','DESC')->get();
+      $full_names = []; // Initialize an array to store full names
+      $appliedBy=[];
+    //  dd($data['leaves']);
 
+// Check if 'leaves' is not empty and has at least one item
+// Process leaves
+if ($data['leaves']->isNotEmpty()) {
+  foreach ($data['leaves'] as $key => $leave) {
+      $uniqueLeaveID = $leave['id'];
+
+      // Fetch 'appliedBy' value from 'sick_leave_forfeit_days' based on the unique 'leaveID'
+      $appliedByValue = DB::table('sick_leave_forfeit_days')
+          ->where('leaveID', $uniqueLeaveID)
+          ->value('appliedBy');
+
+      // Fetch 'forfeit_days' value from 'sick_leave_forfeit_days' based on the unique 'leaveID'
+      $forfeitDaysValue = DB::table('sick_leave_forfeit_days')
+          ->where('leaveID', $uniqueLeaveID)
+          ->value('forfeit_days');
+
+      if ($appliedByValue !== null) {
+          // Fetch 'full_name' from 'EMPL' model based on 'emp_id'
+          $full_name = EMPL::where('emp_id', $appliedByValue)->value('full_name');
+
+          // Add the 'appliedBy' attribute to the leave item
+          $data['leaves'][$key]['appliedBy'] = $full_name;
+
+          // Add the 'forfeit_days' attribute to the leave item
+          $data['leaves'][$key]['forfeit_days'] = $forfeitDaysValue;
+      }
+  }
+}
+
+
+// Process leaves
+if ($data['approved_leaves']->isNotEmpty()) {
+  foreach ($data['approved_leaves'] as $key => $leave) {
+      $uniqueLeaveID = $leave['id'];
+
+      // Fetch 'appliedBy' value from 'sick_leave_forfeit_days' based on the unique 'leaveID'
+      $appliedByValue = DB::table('sick_leave_forfeit_days')
+          ->where('leaveID', $uniqueLeaveID)
+          ->value('appliedBy');
+
+      if ($appliedByValue !== null) {
+          // Fetch 'full_name' from 'EMPL' model based on 'emp_id'
+          $full_name = EMPL::where('emp_id', $appliedByValue)->value('full_name');
+
+          // Add the 'appliedBy' attribute to the leave item
+          $data['approved_leaves'][$key]['appliedBy'] = $full_name;
+      }
+  }
+}
+
+
+
+
+// Now, you have an array of 'full_name' values corresponding to each leave
+//dd($full_names);
+
+$data['leave_types'] = LeaveType::all();
+
+      
+   
       $data['leaveBalance'] = $this->attendance_model->getLeaveBalance(Auth::user()->emp_id, Auth::user()->hire_date, date('Y-m-d'));
 
       $employ=EMPL::whereNot('state',4)->get();
@@ -235,68 +304,29 @@ class AttendanceController extends Controller
             $data['leaves'] =Leaves::get();
 
 
-            // Start of Escallation
-            // $leaves=Leaves::get();
-            // if ($leaves) {
-
-            //   foreach($leaves as $item)
-            //   {
-            //       $today= new DateTime();
-            //       $applied =$item->updated_at;
-            //       $diff= $today->diff($applied);
-            //       $range=$diff->days;
-            //       $approval=LeaveApproval::where('empID',$item->empID)->first();
-
-            //       if ($approval) {
-            //         if ($range>$approval->escallation_time) {
-            //           $leave=Leaves::where('id' ,$item->id)->first();
-            //           $status=$leave->status;
-
-            //           if ($status == 0) {
-            //             if ($approval->level2 != null) {
-            //               $leave->status=1;
-            //               $leave->updated_at=$today;
-            //               $leave->update();
-
-            //             }
-
-            //           }
-            //           elseif ($status == 1)
-            //           {
-            //             if ($approval->level3 != null) {
-            //               $leave->status=2;
-            //               $leave->updated_at=$today;
-            //               $leave->update();
-            //             }
-            //             else
-            //             {
-            //               $leave->status=0;
-            //               $leave->updated_at=$today;
-            //               $leave->update();
-            //             }
-            //           }
-            //           elseif ($status == 2)
-            //           {
-            //             if ($approval->level1 != null) {
-            //               $leave->status=0;
-            //               $leave->updated_at=$today;
-            //               $leave->update();
-            //             }
-            //           }
-            //         }
-            //       }
-
-            //   }
-            // }
-            // End of Escallation
-
             // For Working days
             $d1 = new DateTime (Auth::user()->hire_date);
             $d2 = new DateTime();
             $interval = $d2->diff($d1);
             $data['days']=$interval->days;
             $data['title'] = 'Leave';
-            $data['leaveBalance'] = $this->attendance_model->getLeaveBalance(Auth::user()->emp_id, Auth::user()->hire_date, date('Y-m-d'));
+            //$max_leave_days = 10000;
+            $today = date('Y-m-d');
+            $arryear = explode('-',$today);
+            $year = $arryear[0];
+
+            $employeeHiredate = explode('-', Auth::user()->hire_date);
+            $employeeHireYear = $employeeHiredate[0];
+            $employeeDate =  '';
+
+
+            if($employeeHireYear == $year  ){
+                $employeeDate =Auth::user()->hire_date;
+
+            }else{
+                $employeeDate = $year.('-01-01');
+            }
+            $data['leaveBalance'] = $this->attendance_model->getLeaveBalance(Auth::user()->emp_id,$employeeDate, date('Y-m-d'));
             $data['sickLeaveBalance'] = $this->getRemainingDaysForLeave(Auth::user()->emp_id, 2);
             $data['compassionateLeaveBalance'] = $this->getRemainingDaysForLeave(Auth::user()->emp_id, 3);
             $data['maternityLeaveBalance'] = $this->getRemainingDaysForLeave(Auth::user()->emp_id, 4);
@@ -380,7 +410,7 @@ class AttendanceController extends Controller
                 //For Gender
                 $gender = EMPL::where('id', $empID)->value('gender');
                 if ($gender !== null) {
-                    dd($gender);
+                    // dd($gender);
                 } else {
                     // Handle the case where no employee with the specified empID was found.
                 }
@@ -412,6 +442,7 @@ class AttendanceController extends Controller
         $daysSpent = Leaves::where('empId', $employeeId)
             ->where('nature', $natureId)
             ->whereBetween('created_at', [$startDate, $endDate])
+            ->where('state',0)
             ->sum('days');
 
         return $maxDays - $daysSpent;
@@ -533,8 +564,20 @@ public function saveLeave(Request $request) {
 
         //$max_leave_days = 10000;
 
+        $employeeHiredate = explode('-', Auth::user()->hire_date);
+        $employeeHireYear = $employeeHiredate[0];
+        $employeeDate =  '';
+
+
+        if($employeeHireYear == $year  ){
+            $employeeDate =Auth::user()->hire_date;
+
+        }else{
+            $employeeDate = $year.('-01-01');
+        }
+
         // Annual leave accurated days
-        $annualleaveBalance = $this->attendance_model->getLeaveBalance(session('emp_id'), session('hire_date'), date('Y-m-d'));
+        $annualleaveBalance = $this->attendance_model->getLeaveBalance(session('emp_id'), $employeeDate, date('Y-m-d'));
 
         // For  Requested days
          if($nature == 1){
@@ -556,7 +599,7 @@ public function saveLeave(Request $request) {
          $total_remaining=$leaves+$different_days;
 
         // For Working days
-        $d1 = new DateTime (Auth::user()->hire_date);
+        $d1 = new DateTime ($employeeDate);
         $d2 = new DateTime();
         $interval = $d2->diff($d1);
         $day= SysHelpers::countWorkingDays($d1,$d2);
@@ -686,7 +729,7 @@ public function saveLeave(Request $request) {
 
                 // for annual leave
                 if ($request->nature==1) {
-                    $annualleaveBalance = $this->attendance_model->getLeaveBalance(auth()->user()->emp_id,auth()->user()->hire_date, date('Y-m-d'));
+                    $annualleaveBalance = $this->attendance_model->getLeaveBalance(auth()->user()->emp_id,$employeeDate, date('Y-m-d'));
 
                     // checking annual leave balance
                     if($different_days<$annualleaveBalance)
@@ -910,7 +953,7 @@ public function saveLeave(Request $request) {
             if ($request->nature==1)
             {
 
-                      $annualleaveBalance = $this->attendance_model->getLeaveBalance(auth()->user()->emp_id,auth()->user()->hire_date, date('Y-m-d'));
+                      $annualleaveBalance = $this->attendance_model->getLeaveBalance(auth()->user()->emp_id,$employeeDate, date('Y-m-d'));
 
                       // checking annual leave balance
                       if($different_days < $annualleaveBalance)
@@ -1985,9 +2028,19 @@ public function saveLeave(Request $request) {
         $max_leave_days= $type->max_days;
 
         //$max_leave_days = 10000;
+        $employeeHiredate = explode('-',$employee->hire_date);
+        $employeeHireYear = $employeeHiredate[0];
+        $employeeDate =  '';
 
+
+        if($employeeHireYear == $year  ){
+            $employeeDate = $employee->hire_date;
+
+        }else{
+            $employeeDate = $year-01-01;
+        }
         // Annual leave accurated days
-        $annualleaveBalance = $this->attendance_model->getLeaveBalance($empID, $employee->hire_date, date('Y-m-d'));
+        $annualleaveBalance = $this->attendance_model->getLeaveBalance($empID, $employeeDate, date('Y-m-d'));
 
         // For  Requested days
          if($nature == 1){
@@ -1995,11 +2048,13 @@ public function saveLeave(Request $request) {
         $different_days = SysHelpers::countWorkingDays($start,$end)-$holidays;
          }
          else{
-
+            // if($nature == 2){
+               
+            // }
            // $holidays=SysHelpers::countHolidays($start,$end);
            // $different_days = SysHelpers::countWorkingDays($start,$end)-$holidays;
         $different_days = SysHelpers::countWorkingDaysForOtherLeaves($start,$end);
-
+ 
         // $startDate = Carbon::parse($start);
         // $endDate = Carbon::parse($end);
         // $different_days = $endDate->diffInDays($startDate);
@@ -2009,16 +2064,16 @@ public function saveLeave(Request $request) {
          $total_remaining=$leaves+$different_days;
 
         // For Working days
-        $d1 = new DateTime ($employee->hire_date);
+        $d1 = new DateTime ($employeeDate);
         $d2 = new DateTime();
         $interval = $d2->diff($d1);
         $day= SysHelpers::countWorkingDays($d1,$d2);
 
 
 
-
+        $leave_type=LeaveType::where('id',$nature)->first();
         // For Employees with less than 12 months of employement
-        if($day <= 365)
+        if($day <= 365 && $leave_type->type !=="Sick" )
         {
 
             //  For Leaves with sub Category
@@ -2106,7 +2161,7 @@ public function saveLeave(Request $request) {
 
                 $leave_type=LeaveType::where('id',$nature)->first();
                 $type_name=$leave_type->type;
-                $msg="Sorry, You have Insufficient ".$type_name." Leave Days Balance1";
+                $msg="Sorry, You have Insufficient ".$type_name." Leave Days Balance";
 
                 return $url->with('msg', $msg);
               }
@@ -2117,8 +2172,9 @@ public function saveLeave(Request $request) {
             {
 
               $total_leave_days=$leaves+$different_days;
-
-              if($total_leave_days<$max_leave_days || $request->nature==1)
+              
+              $leave_type=LeaveType::where('id',$nature)->first();
+              if($total_leave_days<$max_leave_days || $request->nature==1 && $leave_type->type !=='Sick')
               {
                 $remaining=$max_leave_days-($leave_balance+$different_days);
                 $leaves=new Leaves();
@@ -2137,7 +2193,8 @@ public function saveLeave(Request $request) {
 
                 // for annual leave
                 if ($request->nature==1) {
-                    $annualleaveBalance = $this->attendance_model->getLeaveBalance($empID,$employee->hire_date, date('Y-m-d'));
+                    $annualleaveBalance = $this->attendance_model->getLeaveBalance($empID,$employeeDate, date('Y-m-d'));
+
 
                     // checking annual leave balance
                     if($different_days<$annualleaveBalance)
@@ -2341,6 +2398,120 @@ public function saveLeave(Request $request) {
         {
 
           $total_leave_days=$leaves+$different_days;
+          $leave_type=LeaveType::where('id',$nature)->first();
+     
+          if($leave_type->type ==="Sick"){
+            // dd($leave_type);
+        
+            if ($total_leave_days >= $max_leave_days) {
+              $extradays = $total_leave_days - $max_leave_days;
+              
+                // Specify the condition based on the `emp_id` to check if the record already exists.
+               
+                $remaining=$max_leave_days -($leave_balance+$different_days);
+                
+                $leaves=new Leaves();
+                   // $empID=Auth::user()->emp_id;
+                   $leaves->empID = $empID;
+                   $leaves->start = $request->start;
+                   $leaves->end=$request->end;
+                   $leaves->leave_address=$request->address;
+                   $leaves->mobile = $request->mobile;
+                   $leaves->nature = $request->nature;
+                   $leaves->deligated=$request->deligate;
+       
+                   $leaves->days = $different_days+$extradays;
+
+                   $leaves->reason = $request->reason;
+                  $leaves->remaining = $remaining;
+                  $leaves->sub_category = $request->sub_cat;
+                  $leaves->application_date = date('Y-m-d');
+                       
+             
+              
+                  if ($request->hasfile('image')) {
+                    $request->validate([
+                       // 'image' => 'required|clamav',
+                    ]);
+                    $request->validate([
+                        'image' => 'mimes:jpg,png,jpeg,pdf|max:2048',
+                    ]);
+                    $newImageName = $request->image->hashName();
+                    $request->image->move(public_path('storage/leaves'), $newImageName);
+                    $leaves->attachment =  $newImageName;
+    
+                  }
+
+                  
+                  $leaves->save();
+                  // dd($leaves->nature);
+                  $condition = [
+                    'emp_id' => $empID,
+                  'appliedBy' => Auth::user()->emp_id,
+                  'leaveId' => $leaves->id,
+                  'nature' =>$leaves->nature                  
+                     
+                ]; 
+                // dd($condition['leaveId']);
+                // Replace with the actual emp_id.
+              
+                  // Create data to insert for extra days.
+                  $extraData = [
+                      'emp_id' => $condition['emp_id'],
+                       'appliedBy' => $condition['appliedBy'],
+                       'leaveId' => $condition['leaveId'],
+                       'nature' =>$condition['nature'],
+                      'forfeit_days' => $extradays];
+                      
+                      DB::table('sick_leave_forfeit_days')->updateOrInsert($condition, array_merge($extraData, ['updated_at' => now(), 'created_at' => now()]));
+
+
+                   
+                      // Add other fields as needed.
+                        // Use the DB facade to insert or update the data directly into the table.
+         
+                  $leave_type=LeaveType::where('id',$nature)->first();
+                  $type_name=$leave_type->type;
+
+                  $linemanager =  LeaveApproval::where('empID',$empID)->first();
+                  $linemanager_data = SysHelpers::employeeData($linemanager->level1);
+                  $employee_data = SysHelpers::employeeData($empID);
+                  $fullname = $linemanager_data['full_name'];
+                
+                  $email_data = array(
+                      'subject' => 'Employee Leave Approval',
+                      'view' => 'emails.linemanager.leave-approval',
+                      'email' => $linemanager_data['email'],
+                      'full_name' => $fullname,
+                      'employee_name'=>$employee_data['full_name'],
+                      'next' => parse_url(route('attendance.leave'), PHP_URL_PATH)
+                  );
+
+                  try {
+    
+                    Notification::route('mail', $linemanager_data['email'])->notify(new EmailRequests($email_data));
+    
+                } catch (Exception $exception) {
+                    $msg=$type_name." Leave Request is submitted successfully but email not sent(SMTP Problem)!";
+                  return $url->with('msg', $msg);
+                }
+                  $msg=$type_name." Leave Request is submitted successfully!";
+                  return $url->with('msg', $msg);
+                  }
+                  else
+                  {
+    
+                    $leave_type=LeaveType::where('id',$nature)->first();
+                    $type_name=$leave_type->type;
+                    $msg="Sorry, You have Insufficient ".$type_name." Leave Days Balance";
+                    return $url->with('msg', $msg);
+    
+                  }
+    
+
+            }
+
+          }
 
           if($total_leave_days<$max_leave_days)
           {
@@ -2363,7 +2534,7 @@ public function saveLeave(Request $request) {
 
 
 
-                      $annualleaveBalance = $this->attendance_model->getLeaveBalance($empID,$employee->hire_date, date('Y-m-d'));
+                      $annualleaveBalance = $this->attendance_model->getLeaveBalance($empID,$employeeDate, date('Y-m-d'));
 
                       // checking annual leave balance
                       if($different_days < $annualleaveBalance)
@@ -2529,6 +2700,7 @@ public function saveLeave(Request $request) {
               $type_name=$leave_type->type;
 
  //fetch Line manager data from employee table and send email
+ 
                $linemanager =  LeaveApproval::where('empID',$empID)->first();
                $linemanager_data = SysHelpers::employeeData($linemanager->level1);
                $employee_data = SysHelpers::employeeData($empID);
@@ -2564,11 +2736,17 @@ public function saveLeave(Request $request) {
 
 
            }
-          }else{
-               $msg="Error!! start date should be less than end date!";
-              return redirect()->back()->with('msg', $msg);
-          }
+           
+          
 
-      }
+      
+      else{
+        $msg="Error!! start date should be less than end date!";
+       return redirect()->back()->with('msg', $msg);
+   }
 
-}
+    }
+
+  }
+
+

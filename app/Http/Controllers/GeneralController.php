@@ -5288,7 +5288,7 @@ class GeneralController extends Controller
             $data['pendingPayroll'] = $this->payroll_model->pendingPayrollCheck();
             $data['title'] = "Non-Statutory Deductions";
             return view('app.non_statutory_deductions', $data);
-       
+
     }
 
     public function addAllowance(Request $request)
@@ -6057,7 +6057,7 @@ class GeneralController extends Controller
                 $data['child'] = "Financial Settings";
                 return view('app.financial_group', $data);
             }
-        
+
     }
 
     public function role(Request $request)
@@ -6101,7 +6101,7 @@ class GeneralController extends Controller
                 $data['title'] = "Roles and Groups";
                 return view('app.role', $data);
             }
-      
+
     }
 
     public function financial_groups_byRole_details($id)
@@ -6114,7 +6114,7 @@ class GeneralController extends Controller
             $data['groupInfo'] = $this->flexperformance_model->group_byid($id);
             $data['title'] = "Groups";
             return view('app.groups_by_role', $data);
-       
+
     }
 
     public function financial_groups_details($id)
@@ -6130,7 +6130,7 @@ class GeneralController extends Controller
             $data['child'] = "Groups";
 
             return view('app.financial_groups_details', $data);
-    
+
     }
 
     public function groups(Request $request)
@@ -6144,7 +6144,7 @@ class GeneralController extends Controller
             $data['groupInfo'] = $this->flexperformance_model->group_byid($id);
             $data['title'] = "Groups";
             return view('app.groups', $data);
-  
+
     }
 
 
@@ -8109,7 +8109,7 @@ class GeneralController extends Controller
 
         $i = 1;
         $employee = Auth::User()->id;
-        
+
 
         $role = UserRole::where('user_id', $employee)->first();
         $role_id = $role->role_id;
@@ -10062,8 +10062,8 @@ class GeneralController extends Controller
     // For viewing userbiodata
     public function userdata(Request $request, $id)
     {
-        $id = base64_decode($id);
-
+        $id = base64_decode($id); 
+    
         if (auth()->user()->emp_id != $id) {
             $this->authenticateUser('view-employee');
         }
@@ -10120,7 +10120,7 @@ class GeneralController extends Controller
 
         // return view('employee.userprofile', $data);
 
-        return view('employee.employee-biodata', $data, compact('details', 'emergency', 'spouse', 'children', 'parents', 'childs'));
+        return view('employee.employee-biodata', $data, compact('details', 'emergency', 'spouse', 'children', 'parents'));
     }
 
     // For updating profile image

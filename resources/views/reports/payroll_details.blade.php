@@ -83,12 +83,10 @@
                         <tr style="border-bottom:2px solid rgb(9, 5, 64);">
 
                             <th><b>Pay No</b></th>
-
                             <th colspan="2" style="margin-bottom: 30px;" class="text-center"><b>Name</b><br>
                             </th>
                             <th class="text-end" style="margin-bottom: 30px;"><b>Basic Salary</b></th>
                             <th class="text-end" style="margin-bottom: 30px;"><b>Overtime</b></th>
-
                             <th class="text-end" style="margin-bottom: 30px;"><b>Respons. Allowance</b></th>
                             <th class="text-end" style="margin-bottom: 30px;"><b>House Allowance</b></th>
                             <th class="text-end" style="margin-bottom: 30px;"><b>Arrears</b></th>
@@ -97,8 +95,6 @@
                             <th class="text-end" style="margin-bottom: 30px;"><b>Tax Benefit</b></th>
                             <th class="text-end" style="margin-bottom: 30px;"><b>Taxable Gross</b></th>
                             <th class="text-end" style="margin-bottom: 30px;"><b>PAYE</b></th>
-
-
                             <th class="text-end" style="margin-bottom: 30px;"><b>NSSF</b></th>
                             <th class="text-end" style="margin-bottom: 30px;"><b>Loan Board</b></th>
                             <th class="text-end" style="margin-bottom: 30px;"><b>Advance/Others</b></th>

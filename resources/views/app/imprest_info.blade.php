@@ -78,7 +78,7 @@
                                         </a>
                                     </li>
                       
-                                      <?php if ($applicant == session('emp_id') && $status==0 || $status==6){ ?>
+                                      <?php if ($applicant == auth()->user()->emp_id && $status==0 || $status==6){ ?>
                                      
                                         <li class="nav-item" role="presentation">
                                           <a href="#UpdateImprest" class="nav-link" data-bs-toggle="tab" aria-selected="false"
@@ -97,7 +97,7 @@
                                     </li>
                                     
                                       <?php 
-                                      if($applicant == session('emp_id')){ 
+                                      if($applicant == auth()->user()->emp_id){ 
                                       if ($status==0 || $status==6 ){ ?>
                                         <li class="nav-item" role="presentation">
                                           <a href="#add_new_requirement" class="nav-link " data-bs-toggle="tab" aria-selected="false"
@@ -246,7 +246,7 @@
           
                                        <!--Add requirement-->
                                        <?php 
-                                        if($applicant == session('emp_id')){
+                                        if($applicant == auth()->user()->emp_id){
                                         if ($status==0 || $status==6){ ?>
                                       <div role="tabpanel" class="tab-pane fade active" id="add_new_requirement" aria-labelledby="profile-tab">
                                         <div class="col-md-6 col-sm-6 col-xs-6 offset-3">
@@ -324,7 +324,7 @@
                                                   <td>
                                                   <?php echo number_format($row->final_amount, 2); ?>
                                                   <?php if( $row->status==2 || $row->status==7){
-                                                    if($applicant == session('emp_id')){ ?> 
+                                                    if($applicant == auth()->user()->emp_id){ ?> 
                                                   <a title="Upload Evidence" class="icon-2 info-tooltip"><button type="button" id="modal" data-toggle="modal" data-target="#uploadEvidence<?php echo $row->id; ?>" class="btn btn-main btn-xs "> RETIREMENT</button> </a>
           
                                                   <!-- UPLOAD EVIDENCE MODAL (RETIREMENT)-->
@@ -386,7 +386,7 @@
                                                   <span class='label label-info'>DOWNLOAD</span></div></a> 
                                                   <?php } else { ?>
                                                   <div class="col-md-12"><span class="label label-warning">NO EVIDENCE</span></div>
-                                                  <?php } if($applicant == session('emp_id')){ ?>
+                                                  <?php } if($applicant == auth()->user()->emp_id){ ?>
                                                   <a href="javascript:void(0)" onclick="deleteEvidence(<?php echo $row->id;?> )" title="Cancel Retirement" class="icon-2 info-tooltip">
                                                   <div class="col-md-12"><span class="label label-danger"><i class="fa fa-times"></i> CANCEL RETIREMENT</span>
                                                   </div> </a>
@@ -410,7 +410,7 @@
                                                   <td class="options-width">
                                                   <?php if($row->status==0 || $row->status==5){  
           
-                                                    if($applicant == session('emp_id')){ ?>
+                                                    if($applicant == auth()->user()->emp_id){ ?>
                                                     <!-- NO Modifications allowed after approval, Recommend or  Confirmatiom -->
                                                       <a title="Update" class="icon-2 info-tooltip"><button type="button" id="modal" data-toggle="modal" data-target="#UpdateRequirementModal<?php echo $row->id; ?>" class="btn btn-main btn-xs"> <i class="ph-"></i></button>
                                                       </a>
@@ -422,7 +422,7 @@
                                                   <?php 
                                                   if($status==0 || $status==1 || $status==6){
           
-                                                    if( $status != 3 && session('mng_paym')){ 
+                                                    if( $status != 3 ){ 
           
                                                    if($row->status==0 || $row->status==1){ ?>
                                                    <!-- <a href="javascript:void(0)" onclick="deleteRequirement(<?php echo $row->id;?>)"   title="Delete" class="icon-2 info-tooltip"><button class="btn btn-danger btn-xs"><i class="ph-trash-o"></i></button> </a>
@@ -460,7 +460,7 @@
                                                     <a href="javascript:void(0)" onclick="deleteRequirement(<?php echo $row->id;?>)"   title="Delete" class="icon-2 info-tooltip"><button class="btn btn-danger btn-xs"><i class="ph-x"></i></button> </a>
                                                      
                                                 <?php   // Update REQUIREMENT
-                                                    if($applicant == session('emp_id')){  ?>
+                                                    if($applicant == auth()->user()->emp_id){  ?>
                                                     <!-- NO Modifications allowed after approval, Recommend or  Confirmatiom -->
                     
                                             <!--Update Modal -->
