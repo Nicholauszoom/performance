@@ -8794,6 +8794,7 @@ class GeneralController extends Controller
         $old->newPosition = $empl->position;;
         $old->oldLevel = $empl->emp_level;
         $old->newLevel = $empl->emp_level;
+        $old->effective_date = $empl->effective_date;
         $old->created_by = Auth::user()->id;
         $old->action = "incremented";
 
