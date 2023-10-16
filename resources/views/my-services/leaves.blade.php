@@ -615,4 +615,21 @@ Swal.fire({
       });
     });
     </script>
+
+<script>
+    var date = new Date();
+    var tdate = date.getDate();
+    var month = date.getMonth() + 1;
+    if(tdate<10){
+        month =  '0' + month;
+    }
+    if(month < 10){
+        month = '0' + month;
+    }
+    var year  = date.getFullYear();
+    var minDate = year + "-" + month + "-" + tdate;
+    document.getElementById("start-date").setAttribute('min', minDate)
+    document.getElementById("end-date").setAttribute('min', minDate)
+    console.log(date);
+</script>
 @endpush

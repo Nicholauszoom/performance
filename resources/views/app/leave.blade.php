@@ -62,7 +62,7 @@
                 <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">Start Date <span  class="text-danger">*</span></label>
                 <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12">
                     <div class="has-feedback">
-                        <input type="date" name="start" id="start-date" class="form-control col-xs-12 " placeholder="Start Date"  required="" >
+                        <input type="date" name="start" id="start-date" class="form-control col-xs-12 " placeholder="Start Date"  required=""  >
                         <span class="fa fa-calendar-o form-control-feedback right" aria-hidden="true"></span>
                         </div>
                 <span class="text-danger"><?php// echo form_error("fname");?></span>
@@ -887,5 +887,22 @@
     });
 
 
+    </script>
+
+    <script>
+        var date = new Date();
+        var tdate = date.getDate();
+        var month = date.getMonth() + 1;
+        if(tdate<10){
+            month =  '0' + month;
+        }
+        if(month < 10){
+            month = '0' + month;
+        }
+        var year  = date.getFullYear();
+        var minDate = year + "-" + month + "-" + tdate;
+        document.getElementById("start-date").setAttribute('min', minDate)
+        document.getElementById("end-date").setAttribute('min', minDate)
+        console.log(date);
     </script>
 @endpush
