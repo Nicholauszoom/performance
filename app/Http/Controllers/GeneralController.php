@@ -8649,6 +8649,7 @@ class GeneralController extends Controller
         $old->newPosition = $request->newPosition;
         $old->oldLevel = $empl->emp_level;
         $old->newLevel = $request->newLevel;
+        $old->effective_date = $request->effective_date;
         $old->created_by = Auth::user()->id;
         $old->action = "promoted";
         $old->save();
@@ -10062,8 +10063,8 @@ class GeneralController extends Controller
     // For viewing userbiodata
     public function userdata(Request $request, $id)
     {
-        $id = base64_decode($id); 
-    
+        $id = base64_decode($id);
+
         if (auth()->user()->emp_id != $id) {
             $this->authenticateUser('view-employee');
         }
