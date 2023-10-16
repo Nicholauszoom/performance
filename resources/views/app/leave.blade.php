@@ -50,7 +50,7 @@
                         <select name="empID" id="empID" class="form-control select">
                             <option value=""> -- Choose Employee Here -- </option>
                             @foreach($employees as $item)
-                            <option value="{{ $item->emp_id }}" class="text-center"> {{ $item->fname }} {{ $item->mname }} {{ $item->lname }} </option>
+                            <option required value="{{ $item->emp_id }}" class="text-center"> {{ $item->fname }} {{ $item->mname }} {{ $item->lname }} </option>
                             @endforeach
                         </select>
                 </div>

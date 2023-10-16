@@ -1985,6 +1985,7 @@ public function saveLeave(Request $request) {
         $url = redirect('flex/attendance/leave');
 
         $employee = EMPL::where('emp_id', $request->empID)->first();
+        // dd($employee);
 
      if($start <= $end){
 
@@ -2033,7 +2034,7 @@ public function saveLeave(Request $request) {
         // For Leave Nature days
         $type=LeaveType::where('id',$nature)->first();
         $max_leave_days= $type->max_days;
-
+         
         //$max_leave_days = 10000;
         $employeeHiredate = explode('-',$employee->hire_date);
         $employeeHireYear = $employeeHiredate[0];
