@@ -616,7 +616,7 @@ Swal.fire({
     });
     </script>
 
-<script>
+{{-- <script>
     var date = new Date();
     var tdate = date.getDate();
     var month = date.getMonth() + 1;
@@ -631,5 +631,5 @@ Swal.fire({
     document.getElementById("start-date").setAttribute('min', minDate)
     document.getElementById("end-date").setAttribute('min', minDate)
     console.log(date);
-</script>
+</script> --}}
 @endpush
