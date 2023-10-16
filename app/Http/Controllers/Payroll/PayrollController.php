@@ -1341,7 +1341,7 @@ class PayrollController extends Controller
         $state = 1;
 
         if ($payrollMonth != "") {
-            $empID = session('emp_id');
+            $empID = auth()->user()->emp_id;
             $todate = date('Y-m-d');
 
             $check = $this->payroll_model->pendingPayrollCheck();
@@ -1392,7 +1392,7 @@ class PayrollController extends Controller
         $state = 3;
 
         if ($payrollMonth != "") {
-            $empID = session('emp_id');
+            $empID = auth()->user()->emp_id;
             $todate = date('Y-m-d');
 
             $check = $this->payroll_model->pendingPayrollCheck();
@@ -1453,7 +1453,7 @@ class PayrollController extends Controller
             $payroll_date = $payrollMonth;
             $payroll_month = date('Y-m', strtotime($payrollMonth));
             $todate = date('Y-m-d');
-            $empID = session('emp_id');
+            $empID = auth()->user()->emp_id;
 
             $check = $this->payroll_model->payrollcheck($payroll_month);
             if ($check == 0) {
@@ -1705,7 +1705,7 @@ class PayrollController extends Controller
 
         if ($result == true) {
             $logData = array(
-                'empID' => session('emp_id'),
+                'empID' => auth()->user()->emp_id,
                 'description' => "Generating checklist with arrears payment of payroll of date " . $payrollMonth,
                 'agent' => session('agent'),
                 'platform' => $this->agent->platform(),
@@ -1759,7 +1759,7 @@ class PayrollController extends Controller
 
         if ($result == true) {
             $logData = array(
-                'empID' => session('emp_id'),
+                'empID' => auth()->user()->emp_id,
                 'description' => "Generating checklist with arrears payment of payroll of date " . $payrollMonth,
                 'agent' => session('agent'),
                 'platform' => $this->agent->platform(),
@@ -1805,7 +1805,7 @@ class PayrollController extends Controller
                         $data = array(
                             'arrear_id' => $arrearID,
                             'amount' => $amountPaid,
-                            'init_by' => session('emp_id'),
+                            'init_by' => auth()->user()->emp_id,
                             'date_confirmed' => $payment_date
                         );
 
@@ -1843,7 +1843,7 @@ class PayrollController extends Controller
                 $data = array(
                     'arrear_id' => $arrearID,
                     'amount' => ($employee->amount - $employee->paid),
-                    'init_by' => session('emp_id'),
+                    'init_by' => auth()->user()->emp_id,
                     'date_confirmed' => $payment_date
                 );
 
@@ -1870,7 +1870,7 @@ class PayrollController extends Controller
         if ($this->uri->segment(3) != '') {
             $updates = array(
                 'status' => 0,
-                'confirmed_by' => session('emp_id')
+                'confirmed_by' => auth()->user()->emp_id
             );
 
             $arrearID = $this->uri->segment(3);
@@ -1889,7 +1889,7 @@ class PayrollController extends Controller
         if ($this->uri->segment(3) != '') {
             $updates = array(
                 'status' => 1,
-                'confirmed_by' => session('emp_id')
+                'confirmed_by' => auth()->user()->emp_id
             );
 
             $arrearID = $this->uri->segment(3);
@@ -1948,7 +1948,7 @@ class PayrollController extends Controller
         if ($this->uri->segment(3) != '') {
             $updates = array(
                 'status' => 2,
-                'recommended_by' => session('emp_id')
+                'recommended_by' => auth()->user()->emp_id
             );
 
             $arrearID = $this->uri->segment(3);
@@ -1956,7 +1956,7 @@ class PayrollController extends Controller
             if ($result == true) {
 
                 $logData = array(
-                    'empID' => session('emp_id'),
+                    'empID' => auth()->user()->emp_id,
                     'description' => "Recommendation of Arreas on date " . date('Y-m-d'),
                     'agent' => session('agent'),
                     'platform' => $this->agent->platform(),
