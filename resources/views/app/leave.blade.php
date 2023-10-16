@@ -247,13 +247,13 @@
                     {{ $item->days }} Days
                     <br>From <b>{{ $item->start }}</b>
                     <br>To <b>{{ $item->end }}</b>
-                    
+
                     @if (!empty($item->appliedBy))
                         <br>Applied By <b>{{ $item->appliedBy }}</b>
-                        <br>with <b> {{$item->forfeit_days}} <br> extra days  
+                        <br>with <b> {{$item->forfeit_days}} <br> extra days
                     @endif
                 </td>
-                
+
                 <td>
                     Nature: <b>{{ $item->type->type }}</b>
                 </td>
@@ -392,10 +392,10 @@
                     {{ $item->days }} Days
                     <br>From <b>{{ $item->start }}</b>
                     <br>To <b>{{ $item->end }}</b>
-                    
+
                     @if (!empty($item->appliedBy))
                         <br>Applied By <b>{{ $item->appliedBy }}</b>
-                         <br>with <b> {{$item->forfeit_days}} <br> extra days                    
+                         <br>with <b> {{$item->forfeit_days}} <br> extra days
                     @endif
                 </td>
                 <td>
@@ -425,7 +425,11 @@
                     @if ($item->type->type == 'Annual')
                     {{ number_format($item->remaining, 2) }} Days
                 @else
-                    {{ $item->remaining }} Days
+                        @if($item->remaining < 0)
+                            0 Days
+                        @else
+                            {{ $item->remaining  }} Days
+                            @endif
                 @endif
                 </td>
                 <td class="text-center">
