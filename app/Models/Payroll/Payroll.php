@@ -206,19 +206,13 @@ class Payroll extends Model
     }
     public function initPayroll($dateToday, $payroll_date, $payroll_month, $empID)
     {
-<<<<<<< HEAD
          // Extract the year from the payroll_date
-=======
-
-        
-
->>>>>>> 043f7a6ba542c23fd7831d90ca5d754352ec4fc3
         $year = date('Y', strtotime($payroll_date));
 
         // Calculate the number of days in the month of the payroll_date
         $days = intval(date('t', strtotime($payroll_date)));
-       
-       
+
+
         $payroll_date = date($payroll_date);
         /// dd($payroll_date);
         //   $query = "SELECT DATEDIFF('".$payroll_date."',e.hire_date) as datediff from employee e";
@@ -291,7 +285,7 @@ FROM employee e, emp_allowances ea,  allowances a WHERE e.emp_id = ea.empID AND 
 	    FROM  employee e, overtimes o WHERE  o.empID =  e.emp_id and e.state = 1 and e.login_user != 1 GROUP BY o.empID, o.overtime_category";
             DB::insert(DB::raw($query));
             //UPDATE SALARY ADVANCE.
-           
+
             //INSERT SALARY ADVANCE, FORCED DEDUCTIONS and other LOANS INTO LOAN LOGS
             $query = "INSERT into temp_loan_logs(loanID, policy, paid, remained, payment_date) SELECT id as loanID, IF( (deduction_amount = 0), (SELECT rate_employee FROM deduction where id = 3), deduction_amount ) as policy, IF(((paid+deduction_amount) > amount), amount, deduction_amount) as  paid, (amount - IF(((paid+deduction_amount) >= amount), amount-paid,  ((paid+deduction_amount)))) as remained,  '" . $payroll_date . "' as payment_date FROM loan  WHERE  state = 1 AND NOT type = 3";
             DB::insert(DB::raw($query));
@@ -380,7 +374,7 @@ FROM employee e, emp_allowances ea,  allowances a WHERE e.emp_id = ea.empID AND 
             actual_salary
 
 	        )
-         
+
             --  SELECT data for insertion
 	    SELECT
 
@@ -1350,7 +1344,7 @@ IF(
 
             $query = "update temp_payroll_logs set wcf = gross*(SELECT rate_employer from deduction where id=2)";
             DB::insert(DB::raw($query));
-            
+
         });
         return true;
     }
@@ -1426,7 +1420,7 @@ FROM employee e, emp_allowances ea,  allowances a WHERE e.emp_id = ea.empID AND 
 
 	    FROM  employee e, overtimes o WHERE  o.empID =  e.emp_id and e.state = 1 and e.login_user != 1 GROUP BY o.empID, o.overtime_category";
             DB::insert(DB::raw($query));
-           
+
             //INSERT SALARY ADVANCE, FORCED DEDUCTIONS and other LOANS INTO LOAN LOGS
             $query = "INSERT into loan_logs(loanID, policy, paid, remained, payment_date) SELECT id as loanID, IF( (deduction_amount = 0), (SELECT rate_employee FROM deduction where id = 3), deduction_amount ) as policy, IF(((paid+deduction_amount) > amount), amount, deduction_amount) as  paid, (amount - IF(((paid+deduction_amount) >= amount), amount-paid,  ((paid+deduction_amount)))) as remained,  '" . $payroll_date . "' as payment_date FROM loan  WHERE  state = 1 AND NOT type = 3";
             DB::insert(DB::raw($query));
@@ -1481,7 +1475,7 @@ FROM employee e, emp_allowances ea,  allowances a WHERE e.emp_id = ea.empID AND 
             $query = " UPDATE loan SET state = 0 WHERE amount = paid and state = 1";
             DB::insert(DB::raw($query));
 
-            
+
             //INSERT PAYROLL LOG TABLE
             $query = "INSERT INTO payroll_logs(
 
@@ -2544,7 +2538,7 @@ as gross,
         });
         return true;
 
-        
+
     }
     //START  RUN PAYROLL FOR SCANIA
 
