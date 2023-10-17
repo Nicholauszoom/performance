@@ -98,7 +98,7 @@
                                     $i++;
                                     $amount = $row->salary + $row->allowances-$row->pension_employer-$row->loans-$row->deductions-$row->meals-$row->taxdue;
                                     $total_netpay +=  round($amount,0);
-                                    $total_arrears +=round($row->arrears,2);
+                                    $total_arrears +=round($row->arrears_allowance,2);
 
                                     $total_gross_salary += round(($row->salary + $row->allowances),2);
                                     $total_salary = round($total_salary + $row->salary,2);
@@ -138,7 +138,7 @@
                                     <td class="text-end">{{ number_format($row->teller_allowance, 2) }}</td>
                                     <td class="text-end">{{ number_format($row->house_rent, 2) }}</td>
 
-                                    <td class="text-end">{{ number_format($row->arrears, 2) }}</td>
+                                    <td class="text-end">{{ number_format($row->arrears_allowance, 2) }}</td>
 
                                     <td class="text-end">{{ number_format($row->other_payments, 2) }}</td>
 

@@ -206,7 +206,13 @@ class Payroll extends Model
     }
     public function initPayroll($dateToday, $payroll_date, $payroll_month, $empID)
     {
+<<<<<<< HEAD
          // Extract the year from the payroll_date
+=======
+
+        
+
+>>>>>>> 043f7a6ba542c23fd7831d90ca5d754352ec4fc3
         $year = date('Y', strtotime($payroll_date));
 
         // Calculate the number of days in the month of the payroll_date
@@ -1358,6 +1364,7 @@ IF(
 
             $query = "update temp_payroll_logs set wcf = gross*(SELECT rate_employer from deduction where id=2)";
             DB::insert(DB::raw($query));
+            
         });
         return true;
     }
@@ -2545,8 +2552,13 @@ as gross,
             DB::table('bonus')->delete();
             DB::table('overtimes')->delete();
             DB::table('once_off_deduction')->delete();
+
+            $query = "UPDATE allowances SET state = 0 WHERE type = 0 and Isrecursive = 'NO'";
+            DB::insert(DB::raw($query));
         });
         return true;
+
+        
     }
     //START  RUN PAYROLL FOR SCANIA
 
