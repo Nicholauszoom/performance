@@ -97,7 +97,7 @@
                                 foreach ($summary as $row){
                                     $i++;
                                     $amount = $row->salary + $row->allowances-$row->pension_employer-$row->loans-$row->deductions-$row->meals-$row->taxdue;
-                                    $total_netpay +=  round($amount,0);
+                                    $total_netpay =round($total_netpay,2)+  round($amount,2);
                                     $total_arrears +=round($row->arrears_allowance,2);
 
                                     $total_gross_salary += round(($row->salary + $row->allowances),2);
@@ -106,7 +106,7 @@
                                     $total_overtime = round($total_overtime +$row->overtime,2);
                                     $total_house_rent = round($total_house_rent + $row->house_rent,2);
                                     $total_others = round($total_others + $row->other_payments,2) ;
-                                    $total_taxs += round($row->taxdue,0);
+                                    $total_taxs += round($row->taxdue,2);
 
 
                                     $total_pension = round($total_pension + $row->pension_employer,2);
