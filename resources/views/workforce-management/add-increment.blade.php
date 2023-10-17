@@ -48,7 +48,7 @@
 
                             <div class="modal-body">
                                 <div class="row mb-3">
-                                    <div class="col-md-12 col-lg-12">
+                                    <div class="col-md-6 col-lg-6">
                                         <div class="mb-3">
                                             <label class="form-label"> Employee:</label>
                                             <select class="form-control select @error('emp_ID') is-invalid @enderror" id="docNo" name="emp_ID">
@@ -84,6 +84,11 @@
                                         @error('name')
                                             <p class="text-danger mt-1"> Input field Error </p>
                                         @enderror
+                                </div>
+
+                                <div class="col-md-6 col-lg-6 mb-3">
+                                    <label class="form-label " for="start-date">Effective Date:</label>
+                                    <input type="date" name="effective_date" id="effective_date" class="form-control" required>
                                 </div>
 
 
