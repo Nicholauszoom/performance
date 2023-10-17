@@ -5460,11 +5460,11 @@ class GeneralController extends Controller
         $last_day_of_month = date('Y-m-t', strtotime($previous_payroll_month));
 
         $days = intval(date('t', strtotime($previous_payroll_month)));
-        
+
         $startDate = $previous_payroll_month;
         $endDate = $last_day_of_month;
         $daysInMonth = Carbon::parse($endDate)->daysInMonth; // Get the number of days in the month
-        
+
         $employees = Employee::select([
             'emp_id',
             DB::raw("({$daysInMonth} - DAY(hire_date) + 1) * salary / 30 as partialpayment"),
@@ -5476,16 +5476,16 @@ class GeneralController extends Controller
         })
         ->get();
 
-      
+
        foreach($employees as $employee){
-    
+
 
         // dd($employee->partialpayment);
         $data = array(
             "name" => "arrears",
             "amount" => $employee->partialpayment, //The amount
             "mode" => "1",  //1 fixed value
-            "type" => "0", 
+            "type" => "0",
             "taxable" => "YES",
             "pensionable" => "YES",
             "Isrecursive" => "NO",
@@ -5510,7 +5510,7 @@ class GeneralController extends Controller
 
         $result = $this->flexperformance_model->assign_allowance($data);
        }
-        
+
 
 
     }
@@ -5523,16 +5523,16 @@ class GeneralController extends Controller
     {
 
 
-        
+
         $this->authenticateUser('edit-payroll');
         $date = date_create_from_format('d/m/Y', $request->date);
         $data['pending_payroll'] = 0;
 
-        
+
 
         if ($date) {
 
-        
+
 
         $date = $date->format('m/d/Y');
         $date = date("Y-m-d", strtotime($date));
@@ -9645,7 +9645,7 @@ class GeneralController extends Controller
 
             $employee->national_id = $request->NIDA;
             $employee->tin = $request->TIN;
-            $employee->pension_fund = $request->pension;
+            $employee->pf_membership_no = $request->pension;
             $employee->form_4_index = $request->HESLB;
             //  $employee->physical_address = $request->physical_address;
             $employee->update();
