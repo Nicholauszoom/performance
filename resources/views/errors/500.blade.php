@@ -35,8 +35,16 @@
           <div class="row">
             <div class="col-lg-8 col-12 col-sm-10 offset-lg-2 offset-sm-1">
               <h1 class="m-0">500</h1>
-              <h6>Error 🙊</h6>
-              <p>Its always time for a coffee break. We should be back by the time you finish you coffee ☕️.</p>
+              <h6>Oops! Something went wrong.</h6>
+              <p>
+                We apologize for the inconvenience. It seems there was an error while processing your request. Please notify Our team of this issue, to resolve it as quickly as possible.
+
+                In the meantime, you can try the following:
+
+                Refresh the page and try again.
+                Check your internet connection.
+                If the problem persists, please contact our support team at [support@cits.co.tz] .
+                Thank you for your understanding, and we appreciate your patience.</p>
             </div>
           </div>
         </div>
