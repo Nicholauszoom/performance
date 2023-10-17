@@ -206,11 +206,19 @@ class Payroll extends Model
     }
     public function initPayroll($dateToday, $payroll_date, $payroll_month, $empID)
     {
+<<<<<<< HEAD
+         // Extract the year from the payroll_date
+=======
 
         
 
+>>>>>>> 043f7a6ba542c23fd7831d90ca5d754352ec4fc3
         $year = date('Y', strtotime($payroll_date));
+
+        // Calculate the number of days in the month of the payroll_date
         $days = intval(date('t', strtotime($payroll_date)));
+       
+       
         $payroll_date = date($payroll_date);
         /// dd($payroll_date);
         //   $query = "SELECT DATEDIFF('".$payroll_date."',e.hire_date) as datediff from employee e";
@@ -341,6 +349,7 @@ FROM employee e, emp_allowances ea,  allowances a WHERE e.emp_id = ea.empID AND 
 
 
             //INSERT PAYROLL LOG TABLE
+            // INSERT data into the temp_payroll_logs table
             $query = "INSERT INTO temp_payroll_logs(
             gross,
             taxable_amount,
@@ -371,7 +380,8 @@ FROM employee e, emp_allowances ea,  allowances a WHERE e.emp_id = ea.empID AND 
             actual_salary
 
 	        )
-
+         
+            --  SELECT data for insertion
 	    SELECT
 
 
