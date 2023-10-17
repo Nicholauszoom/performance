@@ -118,7 +118,7 @@
                                 foreach ($summary as $row){
                                     $i++;
                                     $amount = $row->salary + $row->allowances-$row->pension_employer-$row->loans-$row->deductions-$row->meals-$row->taxdue;
-                                    $total_netpay +=  round($amount,2);
+                                    $total_netpay = round($amount,2)+ round($amount,2);
 
                                     $total_gross_salary += round(($row->salary + $row->allowances),2);
                                     $total_salary = round($total_salary + $row->salary,2);
