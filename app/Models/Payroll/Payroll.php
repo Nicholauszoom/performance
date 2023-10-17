@@ -220,145 +220,164 @@ class Payroll extends Model
        
        
         $payroll_date = date($payroll_date);
-        /// dd($payroll_date);
-        //   $query = "SELECT DATEDIFF('".$payroll_date."',e.hire_date) as datediff from employee e";
-        //   DD(DB::select(DB::raw($query)));
-         // Start a database transaction
+        
         DB::transaction(function () use ($dateToday, $payroll_date, $payroll_month, $empID, $days, $year) {
-            
-            $last_date = date("Y-m-t", strtotime($payroll_date));
-             // Calculate the last day of the month for the payroll_date
 
-                       
-            $query = "UPDATE allowances SET state = IF(month('" . $payroll_date . "') = 12,1,0) WHERE type = 1";
-            DB::insert(DB::raw($query));
-            // Update the allowances table based on a condition
-            
+            $last_date = date("Y-m-t", strtotime($payroll_date));
+            DB::table('allowances')
+            ->where('type', 1)
+            ->update(['state' => DB::raw("IF(MONTH('$payroll_date') = 12, 1, 0)")]);
 
             //Insert into Pending Payroll Table
-            $query = "INSERT INTO payroll_months (payroll_date, state, init_author, appr_author, init_date, appr_date,sdl, wcf) VALUES
-        ('" . $payroll_date . "', 2, '" . $empID . "', '', '" . $dateToday . "', '" . $payroll_date . "', (SELECT rate_employer from deduction where id=4 ), (SELECT rate_employer from deduction where id=2 ) )";
-            DB::insert(DB::raw($query));
-             // Insert a new record into the payroll_months table
-
-
+            DB::table('payroll_months')->insert([
+                'payroll_date' => $payroll_date,
+                'state' => 2,
+                'init_author' => $empID,
+                'init_date' => $dateToday,
+                'appr_date' => $payroll_date,
+                'sdl' => DB::table('deduction')->where('id', 4)->value('rate_employer'),
+                'wcf' => DB::table('deduction')->where('id', 2)->value('rate_employer')
+            ]);
+            
             //INSERT ALLOWANCES
-              // Insert data into the temp_allowance_logs table (code truncated here)
-            $query = "INSERT INTO temp_allowance_logs(empID, description, policy, amount, payment_date,benefit_in_kind)
-
-                SELECT ea.empID AS empID, a.name AS description,
-                
-
-
-
-
-            IF( (ea.mode = 1), 'Fixed Amount', CONCAT(100*ea.percent,'% ( Basic Salary )') ) AS policy,
-
-            IF((e.unpaid_leave = 0)
-            ,0,IF((ea.mode = 1),
-                    ea.amount,
-                    IF(a.type = 1,IF(DATEDIFF('" . $last_date . "',e.hire_date) < 365,
-                    ((DATEDIFF('" . $last_date . "',e.hire_date)+1)/365)*e.salary,ea.percent*e.salary),
-
-                    (ea.percent*
-                    IF((month(e.hire_date) = month('" . $payroll_date . "')) AND (year(e.hire_date) = year('" . $payroll_date . "')),
-                    ((" . $days . " - (day(e.hire_date)+1))*e.salary/30),e.salary)
-                    )
-
-                )
-                )
-
-            ) AS amount,
-
-
-
-            '" . $payroll_date . "' AS payment_date,
-            a.Isbik as benefit_in_kind
-
-            FROM employee e, emp_allowances ea,  allowances a WHERE e.emp_id = ea.empID AND a.id = ea.allowance AND a.state = 1 AND e.state = 1 and e.login_user != 1";
-                        DB::insert(DB::raw($query));
-                        //INSERT BONUS
-                        $query = " INSERT INTO temp_allowance_logs(empID, description, policy, amount, payment_date)
-
-                    SELECT b.empID AS empID, bt.name AS description,
-
-                    'Fixed Amount' AS policy,
-
-                    IF((e.unpaid_leave = 0),0,SUM(b.amount)) AS amount,
-
-                    '" . $payroll_date . "' AS payment_date
-
-                    FROM employee e,  bonus b, bonus_tags bt WHERE e.emp_id =  b.empID and bt.id = b.name AND b.state = 1 and e.state = 1 and e.login_user != 1 GROUP BY b.empID, bt.name";
-                        DB::insert(DB::raw($query));
-
-                        //INSERT OVERTIME
-                        $query = " INSERT INTO temp_allowance_logs(empID, description, policy, amount, payment_date)
-                    SELECT o.empID AS empID,
-                    IF(o.overtime_category = 1,'N-Overtime','S-Overtime') AS description,
-
-                    'Fixed Amount' AS policy,
-
-                    IF((e.unpaid_leave = 0),0,SUM(o.amount)) AS amount,
-
-                    '" . $payroll_date . "' AS payment_date
-
-	    FROM  employee e, overtimes o WHERE  o.empID =  e.emp_id and e.state = 1 and e.login_user != 1 GROUP BY o.empID, o.overtime_category";
-            DB::insert(DB::raw($query));
+            DB::table('temp_allowance_logs')->insert([
+                [
+                    'empID' => DB::raw('ea.empID'),
+                    'description' => DB::raw('a.name'),
+                    'policy' => DB::raw("CASE
+                        WHEN ea.mode = 1 THEN 'Fixed Amount'
+                        ELSE CONCAT(100 * ea.percent, '% ( Basic Salary )')
+                    END"),
+                    'amount' => DB::raw("CASE
+                        WHEN e.unpaid_leave = 0 THEN 0
+                        WHEN ea.mode = 1 THEN ea.amount
+                        WHEN a.type = 1 AND DATEDIFF('$last_date', e.hire_date) < 365 THEN (DATEDIFF('$last_date', e.hire_date) + 1) / 365 * e.salary
+                        ELSE ea.percent * CASE
+                            WHEN (month(e.hire_date) = month('$payroll_date')) AND (year(e.hire_date) = year('$payroll_date')) THEN (($days - (DAY(e.hire_date) + 1)) * e.salary / 30)
+                            ELSE e.salary
+                        END
+                    END"),
+                    'payment_date' => $payroll_date,
+                    'benefit_in_kind' => DB::raw('a.Isbik')
+                ]
+            ])
+            ->join('employee as e', 'e.emp_id', '=', 'ea.empID')
+            ->join('allowances as a', 'a.id', '=', 'ea.allowance')
+            ->where('a.state', 1)
+            ->where('e.state', 1)
+            ->where('e.login_user', '!=', 1);
+            //INSERT BONUS
+            DB::table('temp_allowance_logs')->insert(function ($query) use ($payroll_date) {
+                $query->select([
+                    'b.empID AS empID',
+                    'bt.name AS description',
+                    DB::raw("'Fixed Amount' AS policy"),
+                    DB::raw('IF(e.unpaid_leave = 0, 0, SUM(b.amount)) AS amount'),
+                    DB::raw("'$payroll_date' AS payment_date"),
+                ])
+                ->from('employee as e')
+                ->join('bonus as b', 'e.emp_id', '=', 'b.empID')
+                ->join('bonus_tags as bt', 'bt.id', '=', 'b.name')
+                ->where('b.state', 1)
+                ->where('e.state', 1)
+                ->where('e.login_user', '!=', 1)
+                ->groupBy('b.empID', 'bt.name');
+            });
+            
+            //INSERT OVERTIME
+            DB::table('temp_allowance_logs')->insert(function ($query) use ($payroll_date) {
+                $query->select([
+                    'o.empID AS empID',
+                    DB::raw("IF(o.overtime_category = 1, 'N-Overtime', 'S-Overtime') AS description"),
+                    DB::raw("'Fixed Amount' AS policy"),
+                    DB::raw('IF(e.unpaid_leave = 0, 0, SUM(o.amount)) AS amount'),
+                    DB::raw("'$payroll_date' AS payment_date"),
+                ])
+                ->from('employee as e')
+                ->join('overtimes as o', 'o.empID', '=', 'e.emp_id')
+                ->where('e.state', 1)
+                ->where('e.login_user', '!=', 1)
+                ->groupBy('o.empID', 'o.overtime_category');
+            });
+            
             //UPDATE SALARY ADVANCE.
            
             //INSERT SALARY ADVANCE, FORCED DEDUCTIONS and other LOANS INTO LOAN LOGS
-            $query = "INSERT into temp_loan_logs(loanID, policy, paid, remained, payment_date) SELECT id as loanID, IF( (deduction_amount = 0), (SELECT rate_employee FROM deduction where id = 3), deduction_amount ) as policy, IF(((paid+deduction_amount) > amount), amount, deduction_amount) as  paid, (amount - IF(((paid+deduction_amount) >= amount), amount-paid,  ((paid+deduction_amount)))) as remained,  '" . $payroll_date . "' as payment_date FROM loan  WHERE  state = 1 AND NOT type = 3";
-            DB::insert(DB::raw($query));
+            DB::table('temp_loan_logs')->insert(function ($query) use ($payroll_date) {
+                $query->select([
+                    'id AS loanID',
+                    DB::raw("IF(deduction_amount = 0, (SELECT rate_employee FROM deduction WHERE id = 3), deduction_amount) AS policy"),
+                    DB::raw("IF((paid + deduction_amount) > amount, amount, deduction_amount) AS paid"),
+                    DB::raw("(amount - IF((paid + deduction_amount) >= amount, amount - paid, paid + deduction_amount)) AS remained"),
+                    DB::raw("'$payroll_date' AS payment_date"),
+                ])
+                ->from('loan')
+                ->where('state', 1)
+                ->where('type', '!=', 3);
+            });
+            
             //INSERT HESLB INTO LOGS
-            $query = "INSERT into temp_loan_logs(loanID, policy, paid, remained, payment_date) SELECT id as loanID, IF( (deduction_amount = 0), (SELECT rate_employee FROM deduction where id = 3), deduction_amount ) as policy, IF(((paid+deduction_amount) > amount), amount, ((SELECT rate_employee FROM deduction where id = 3)*(SELECT salary from employee where emp_id=empID and state != 4 and login_user != 1))) as  paid,
-             (amount - IF(
-                ((paid+deduction_amount) >= amount),
-                 amount-paid,
-                 (
-                    (
-                        paid + ((SELECT rate_employee FROM deduction where id = 3)*(SELECT salary from employee where emp_id=empID and state != 4 and login_user != 1))
-                        ))
-
-                        )) as remained,
-             '" . $payroll_date . "' as payment_date FROM loan  WHERE  state = 1 AND type = 3";
-            DB::insert(DB::raw($query));
+            DB::table('temp_loan_logs')->insert(function ($query) use ($payroll_date) {
+                $query->select([
+                    'id AS loanID',
+                    DB::raw("IF(deduction_amount = 0, (SELECT rate_employee FROM deduction WHERE id = 3), deduction_amount) AS policy"),
+                    DB::raw("IF((paid + deduction_amount) > amount, amount, (SELECT rate_employee FROM deduction WHERE id = 3) * (SELECT salary FROM employee WHERE emp_id = empID AND state != 4 AND login_user != 1)) AS paid"),
+                    DB::raw("amount - IF((paid + deduction_amount) >= amount, amount - paid, paid + (SELECT rate_employee FROM deduction WHERE id = 3) * (SELECT salary FROM employee WHERE emp_id = empID AND state != 4 AND login_user != 1)) AS remained"),
+                    DB::raw("'$payroll_date' AS payment_date"),
+                ])
+                ->from('loan')
+                ->where('state', 1)
+                ->where('type', 3);
+            });
+            
             //INSERT DEDUCTION LOGS
-            $query = "INSERT INTO temp_deduction_logs(empID, description, policy, paid, payment_date)
-
-	    SELECT ed.empID as empID, name as description,
-
-	    IF( (d.mode = 1), 'Fixed Amount', CONCAT(100*d.percent,'% ( Basic Salary )') ) as policy,
-
-	    IF((e.unpaid_leave = 0),0,IF( (d.mode = 1), d.amount, (d.percent*IF((month(e.hire_date) = month('" . $payroll_date . "')) AND (year(e.hire_date) = year('" . $payroll_date . "'))
-                  ,((" . $days . "- day(e.hire_date)+1)*e.salary/30),e.salary)) )) as paid,
-
-	    '" . $payroll_date . "' as payment_date
-
-	    FROM emp_deductions ed,  deductions d, employee e WHERE e.emp_id = ed.empID and e.state = 1 and e.login_user != 1 AND ed.deduction = d.id AND  d.state = 1";
-            DB::insert(DB::raw($query));
+            DB::table('temp_deduction_logs')->insert(function ($query) use ($payroll_date, $days) {
+                $query->select([
+                    'ed.empID AS empID',
+                    'd.name AS description',
+                    DB::raw("IF(d.mode = 1, 'Fixed Amount', CONCAT(100 * d.percent, '% ( Basic Salary )')) AS policy"),
+                    DB::raw("IF(e.unpaid_leave = 0, 0, IF(d.mode = 1, d.amount, d.percent * IF(month(e.hire_date) = MONTH('$payroll_date') AND YEAR(e.hire_date) = YEAR('$payroll_date'), (($days - DAY(e.hire_date) + 1) * e.salary / 30), e.salary))) AS paid"),
+                    DB::raw("'$payroll_date' AS payment_date"),
+                ])
+                ->from('emp_deductions AS ed')
+                ->join('deductions AS d', 'ed.deduction', '=', 'd.id')
+                ->join('employee AS e', 'ed.empID', '=', 'e.emp_id')
+                ->where('e.state', 1)
+                ->where('e.login_user', '!=', 1)
+                ->where('d.state', 1);
+            });
+            
             //DEDUCTION LOGS FROM IMPREST REFUND
-            $query = "INSERT INTO temp_deduction_logs(empID, description, policy, paid, payment_date)
-
-	    SELECT empID, description, policy, paid, '" . $payroll_date . "'
-
-	    FROM once_off_deduction";
-            DB::insert(DB::raw($query));
+            DB::table('temp_deduction_logs')->insert(function ($query) use ($payroll_date) {
+                $query->select([
+                    'empID',
+                    'description',
+                    'policy',
+                    'paid',
+                    DB::raw("'$payroll_date' AS payment_date"),
+                ])
+                ->from('once_off_deduction');
+            });
+            
             // DEDUCTION LOGS FOR EXPATRIATES(HOUSING ALLOWANCE REFUND)
             // Housing Allowance has id = 6
-            $query = "INSERT INTO temp_deduction_logs(empID, description, policy, paid, payment_date)
-
-	    	SELECT ea.empID AS empID, 'Housing Allowance Compasation' AS description,
-
-	    IF( (ea.mode = 1), 'Fixed Amount', CONCAT(100*ea.percent,'% ( Basic Salary )') ) AS policy,
-
-	    IF((e.unpaid_leave = 0),0,IF( (ea.mode = 1), ea.amount, (ea.percent*IF((month(e.hire_date) = month('" . $payroll_date . "')) AND (year(e.hire_date) = year('" . $payroll_date . "'))
-                  ,((" . $days . "- day(e.hire_date)+1)*e.salary/30),e.salary)) )) AS paid,
-
-	     '" . $payroll_date . "' AS payment_date
-
-
-	    FROM employee e, emp_allowances ea,  allowances a WHERE e.emp_id = ea.empID AND a.id = ea.allowance AND e.is_expatriate = 1 and e.state = 1 and e.login_user != 1 AND a.id = 6";
-            DB::insert(DB::raw($query));
+            DB::table('temp_deduction_logs')->insert(function ($query) use ($payroll_date) {
+                $query->select([
+                    'ea.empID AS empID',
+                    DB::raw("'Housing Allowance Compensation' AS description"),
+                    DB::raw("IF(ea.mode = 1, 'Fixed Amount', CONCAT(100 * ea.percent, '% ( Basic Salary )' )) AS policy"),
+                    DB::raw("IF(e.unpaid_leave = 0, 0, IF(ea.mode = 1, ea.amount, (ea.percent * IF(MONTH(e.hire_date) = MONTH('$payroll_date') AND YEAR(e.hire_date) = YEAR('$payroll_date'), ((DAY('$payroll_date') - DAY(e.hire_date) + 1) * e.salary / 30), e.salary))) AS paid"),
+                    DB::raw("'$payroll_date' AS payment_date"),
+                ])
+                ->from('employee as e')
+                ->join('emp_allowances as ea', 'e.emp_id', '=', 'ea.empID')
+                ->join('allowances as a', 'a.id', '=', 'ea.allowance')
+                ->where('e.is_expatriate', 1)
+                ->where('e.state', 1) 
+                ->where('e.login_user', '!=', 1)
+                ->where('a.id', 6);
+            });
+            
             //STOP LOAN
 
 
