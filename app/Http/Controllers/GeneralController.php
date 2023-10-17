@@ -5443,22 +5443,76 @@ class GeneralController extends Controller
     }
 
 
-    public function addPrevMonthSalaryArrears(){
+    public function addPrevMonthSalaryArrears($date){
 
 
+        // dd($date);
+        // $date="20-11-2023";
+
+        $previous_payroll_month_raw = date('Y-m', strtotime(date('d-m-Y', strtotime($date . "-1 month"))));
+
+        // dd($previous_payroll_month_raw);
+
+        $previous_payroll_month = $this->reports_model->prevPayrollMonth($previous_payroll_month_raw);
+
+        $previous_payroll_month=date('Y-m-d',strtotime($previous_payroll_month));
+
+        $last_day_of_month = date('Y-m-t', strtotime($previous_payroll_month));
+
+        $days = intval(date('t', strtotime($previous_payroll_month)));
+        
+        $startDate = $previous_payroll_month;
+        $endDate = $last_day_of_month;
+        $daysInMonth = Carbon::parse($endDate)->daysInMonth; // Get the number of days in the month
+        
+        $employees = Employee::select([
+            'emp_id',
+            DB::raw("({$daysInMonth} - DAY(hire_date) + 1) * salary / 30 as partialpayment"),
+
+        ])
+        ->where(function ($query) use ($startDate, $endDate) {
+            $query->where('hire_date', '>', $startDate,)
+                ->where('hire_date', '<=', $endDate);
+        })
+        ->get();
+
+      
+       foreach($employees as $employee){
+    
+
+        // dd($employee->partialpayment);
         $data = array(
-            "name" => "arrear",
-            "amount" => 0,
-            "mode" => "1",
+            "name" => "arrears",
+            "amount" => $employee->partialpayment, //The amount
+            "mode" => "1",  //1 fixed value
+            "type" => "0", 
             "taxable" => "YES",
             "pensionable" => "YES",
-            "Isrecursive" => "TEMPORARY",
-            "Isbik" => "YES",
-            "state" => 1,
+            "Isrecursive" => "NO",
+            "Isbik" => "NO",
+            "state" => 1, //1 active state
             "percent" => 0,
         );
 
-        $result = $this->flexperformance_model->addAllowance($data);
+        $result=DB::table('allowances')->insertGetId($data);
+
+        // $result = $this->flexperformance_model->addAllowance($data);
+
+        $data = array(
+            'empID' => $employee->emp_id,
+            'allowance' => $result,
+            'amount' => $employee->partialpayment,
+            'mode' => "1", //fixed
+            'percent' => "0", //percent
+            'currency' => "TZS",
+            'rate' => 1,
+        );
+
+        $result = $this->flexperformance_model->assign_allowance($data);
+       }
+        
+
+
     }
 
 
@@ -5469,16 +5523,20 @@ class GeneralController extends Controller
     {
 
 
+        
         $this->authenticateUser('edit-payroll');
         $date = date_create_from_format('d/m/Y', $request->date);
         $data['pending_payroll'] = 0;
 
+        
 
         if ($date) {
 
+        
+
         $date = $date->format('m/d/Y');
         $date = date("Y-m-d", strtotime($date));
-
+        $this->addPrevMonthSalaryArrears($date);
         if ($request->method() == 'POST') {
             $month  = $this->payroll_model->checkPayrollMonth($date);
             $submission  = $this->payroll_model->checkInputMonth($date);

@@ -1703,7 +1703,7 @@ function getMeaslById($deductionID)
 
 function allowance()
 	{
-		$query='SELECT @s:=@s+1 SNo, a.* FROM allowances a, (SELECT @s:=0) as s';
+		$query='SELECT @s:=@s+1 SNo, a.* FROM allowances a , (SELECT @s:=0) as s  WHERE a.state=1';
 
 		return DB::select(DB::raw($query));
 	}
