@@ -10202,7 +10202,7 @@ class GeneralController extends Controller
 
         // return view('employee.userprofile', $data);
 
-        return view('employee.employee-biodata', $data, compact('details', 'emergency', 'spouse', 'children', 'parents'));
+        return view('employee.employee-biodata', $data, compact('details', 'emergency', 'spouse', 'children', 'parents','childs'));
     }
 
     // For updating profile image
