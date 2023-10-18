@@ -77,6 +77,8 @@ class PasswordController extends Controller
 
         $result = $this->passSave($request->user()->emp_id, $employee, $userPass, $request);
 
+        // dd($result);
+
         return back()->with('status', 'updated');
 
     }
