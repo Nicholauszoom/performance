@@ -340,9 +340,13 @@ class PayrollController extends Controller
 
             $data['termination_salary'] = $this->reports_model->terminated_salary($previous_payroll_month);
         }
-        $total_allowances = $this->reports_model->total_allowance1($current_payroll_month, $previous_payroll_month);
+        $total_allowances = $this->reports_model->total_allowance1($current_payroll_month, $previous_payroll_month);  //Last month
+
+        // dd($current_payroll_month, $previous_payroll_month);
 
         $descriptions = [];
+
+        //This month
         foreach ($total_allowances as $row) {
 
             if ($row->allowance == "N-Overtime") {
@@ -442,6 +446,9 @@ class PayrollController extends Controller
             }
             elseif ($row->allowance == "Night Shift Allowance") {
                 $allowance = $this->reports_model->total_terminated_allowance($current_payroll_month, $previous_payroll_month, 'nightshift_allowance');
+
+                // dd($row);
+
                 if (count($allowance) > 0) {
                     for ($i = 0; $i < count($allowance); $i++) {
                         $row->current_amount += $allowance[$i]->current_amount;
@@ -453,6 +460,9 @@ class PayrollController extends Controller
                 }
             }
         }
+
+
+        // dd($total_allowances);
         $all_terminal_allowance = $this->reports_model->all_terminated_allowance($current_payroll_month, $previous_payroll_month);
 
         $result = $this->arrayRecursiveDiff($all_terminal_allowance, $descriptions);
@@ -473,31 +483,23 @@ class PayrollController extends Controller
 
 
         $data['total_allowances'] = $total_allowances;
-        // $data['total_allowances'] = $this->reports_model->total_allowance($current_payroll_month, $previous_payroll_month);
 
 
 
         $data['total_previous_basic'] = !empty($previous_payroll_month) ? $this->reports_model->total_basic($previous_payroll_month) : 0;
         $data['total_current_basic'] = !empty($current_payroll_month) ? $this->reports_model->total_basic1($current_payroll_month) : 0;
-        //dd($data['total_current_basic'],$data['total_previous_basic']);
         $data['total_previous_net'] = !empty($previous_payroll_month) ? $this->reports_model->s_grossMonthly($previous_payroll_month) : 0;
         $data['total_current_net'] = $this->reports_model->s_grossMonthly1($current_payroll_month);
 
         $data['current_decrease'] =  $this->reports_model->basic_decrease1($previous_payroll_month, $current_payroll_month);
 
-        // $data['current_decrease'] = $this->reports_model->basic_decrease($current_payroll_month);
 
-        // $data['previous_increase'] = $this->reports_model->basic_increase($previous_payroll_month);
-        // $data['current_increase'] = $this->reports_model->basic_increase1($previous_payroll_month,$current_payroll_month);
         $data['current_increase'] = $this->reports_model->basic_increase_temp($previous_payroll_month, $current_payroll_month);
 
-        //    dd($data['current_increase']);
 
         $data['termination'] = $this->reports_model->get_termination($current_payroll_month);
 
 
-        //$pdf = Pdf::loadView('reports.payroll_reconciliation_summary1', $data);
-        // $pdf = Pdf::loadView('reports.payroll_details',$data);
 
 
         if ($request->type == 1)
@@ -506,14 +508,7 @@ class PayrollController extends Controller
         $pdf = Pdf::loadView('reports.payroll_reconciliation_summary1', $data)->setPaper('a4', 'potrait');
         return $pdf->download('payroll_reconciliation_summary.pdf');
 
-        //return $pdf->download('sam.pdf');
-        //$pdf = Pdf::loadView('reports.payroll_reconciliation_summary1',$data)->setPaper('a4', 'potrait');
 
-        //return $pdf->download('payroll_reconciliation_summary.pdf');
-        //return view('reports.payroll_reconciliation_summary1', $data);
-
-        // return view('reports.samplepdf', $data);
-        //    dd($data['payroll_state']);
         return view('payroll.reconsiliation_summary', $data);
     }
 

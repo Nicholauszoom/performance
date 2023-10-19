@@ -148,11 +148,11 @@
                             <span class="badge bg-pending">PENDING</span><br>
 
                         <?php if(!$row->pay_checklist==1){ ?>
-                            <script>   setTimeout(function(){
+                            <!-- <script>   setTimeout(function(){
                                     var url = "<?php echo url('flex/payroll/temp_payroll_info/?pdate='.base64_encode($payrollList[0]->payroll_date))?>"
                                     window.location.href = url;
                                 }, 1000)
-                            </script>
+                            </script> -->
                         <?php  }?>
 
                         <?php } else { ?>
