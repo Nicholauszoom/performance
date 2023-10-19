@@ -2120,7 +2120,7 @@ class ReportController extends Controller
 
         //allowances
         $data['summary'] = $this->reports_model->allowance_by_employee($current_payroll_month, $previous_payroll_month);
-        //dd($data['summary']);
+        // dd($data['summary']);
         $raw_name = [];
         $required_allowance = [];
 
