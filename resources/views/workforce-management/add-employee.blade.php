@@ -2,7 +2,6 @@
 
 @push('head-script')
     <script src="{{ asset('assets/js/components/forms/selects/select2.min.js') }}"></script>
-
 	<script src="{{ asset('assets/js/components/ui/moment/moment.min.js') }}"></script>
 	<script src="{{ asset('assets/js/components/pickers/daterangepicker.js') }}"></script>
 	<script src="{{ asset('assets/js/components/pickers/datepicker.min.js') }}"></script>
@@ -413,7 +412,7 @@
                     data: 'dept_id=' + stateID,
                     success: function(html) {
                         console.log(html);
-                        
+
                         let jq_json_obj = $.parseJSON(html);
                         let jq_obj = eval(jq_json_obj);
 
