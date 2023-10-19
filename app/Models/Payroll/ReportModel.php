@@ -1593,7 +1593,7 @@ and e.branch = b.code and e.line_manager = el.emp_id and c.id = e.contract_type 
         $terminationDate = 'null';
 
     }
-      $query = "SELECT SUM(net_pay) as amount from terminations where terminationDate LIKE '".$terminationDate."'";
+      $query = "SELECT SUM(salaryEnrollment) as amount from terminations where terminationDate LIKE '".$terminationDate."'";
       $row = DB::select(DB::raw($query));
 
       return $row[0]->amount;
@@ -2609,8 +2609,8 @@ IF((SELECT SUM(amount)  FROM allowance_logs WHERE allowance_logs.description = a
 
         if ($type == "N-Overtime") {
             $query = "SELECT CONCAT('Add/Less N-Overtime') as description,
-        (IF((SELECT SUM(normal_days_overtime_amount)  FROM terminations WHERE    terminations.terminationDate LIKE '" . $current_termination . "') > 0,(SELECT SUM(normal_days_overtime_amount)  FROM terminations WHERE  terminations.terminationDate LIKE '" . $current_termination . "'),0)) as current_amount,
-         (IF((SELECT SUM(normal_days_overtime_amount)  FROM terminations WHERE  terminations.terminationDate LIKE '" . $previous_termination . "') > 0,(SELECT SUM(normal_days_overtime_amount)  FROM terminations WHERE  terminations.terminationDate LIKE '" . $previous_termination . "'),0)) as previous_amount
+        (IF((SELECT SUM(normal_days_overtime_amount)  FROM terminations WHERE    terminations.terminationDate LIKE '" . $current_termination . "') > 0,(SELECT SUM(normal_days_overtime_amount)  FROM terminations WHERE  tm.id = terminations.id and  terminations.terminationDate LIKE '" . $current_termination . "'),0)) as current_amount,
+         (IF((SELECT SUM(normal_days_overtime_amount)  FROM terminations WHERE  terminations.terminationDate LIKE '" . $previous_termination . "') > 0,(SELECT SUM(normal_days_overtime_amount)  FROM terminations WHERE  tm.id = terminations.id and  terminations.terminationDate LIKE '" . $previous_termination . "'),0)) as previous_amount
          from terminations tm";
         } elseif ($type == "S-Overtime") {
 

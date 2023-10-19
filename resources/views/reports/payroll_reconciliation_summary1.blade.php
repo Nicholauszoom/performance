@@ -210,38 +210,7 @@
                             @foreach ($total_allowances as $row)
                                 @php $i++;  @endphp
                                 @if ($row->current_amount - $row->previous_amount != 0)
-                                    @if ($row->description == 'Add/Less Leave Pay' || $row->description == 'Add/Less Leave Allowance')
-                                        <tr style="border-bottom:1px solid rgb(211, 211, 230)">
-                                            <td class="text-start">{{ '000' . $i + 4 }}</td>
-                                            <td class="text-start">
-                                                @if ($row->description == 'Add/Less S-Overtime')
-                                                    Add/Less Sunday Overtime Hours
-                                                @elseif($row->description == 'Add/Less N-Overtime')
-                                                    Add/Less Normal Day Overtime Hours
-                                                @else
-                                                    {{ $row->description }}
-                                                @endif
-                                            </td>
-
-                                            <td class="text-end">{{ number_format(0, 2) }}</td>
-                                            <td class="text-end">
-                                                {{ number_format($row->description == 'Add/Less S-Overtime' ? $row->current_amount  : $row->current_amount, 2) }}
-                                            </td>
-                                            <td class="text-end">
-                                                {{ number_format($row->description == 'Add/Less S-Overtime' ? $row->current_amount  : $row->current_amount, 2) }}
-                                            </td>
-                                            <td class="text-end"></td>
-                                        </tr>
-                                        @php
-                                            $total_previous += 0;
-                                            $total_current += $row->description == 'Add/Less S-Overtime' ? $row->current_amount  : $row->current_amount;
-                                            $total_amount += $row->description == 'Add/Less S-Overtime' ? $row->current_amount  : $row->current_amount;
-
-                                          //  $total_amount += $row->difference;
-
-
-                                        @endphp
-                                    @else
+                                       
                                         <tr style="border-bottom:1px solid rgb(211, 211, 230)">
                                             <td class="text-start">{{ '000' . $i + 14 }}</td>
                                             <td class="text-start">
@@ -268,7 +237,6 @@
                                             $total_amount += $row->current_amount-$row->previous_amount;
 
                                         @endphp
-                                    @endif
                                 @endif
                             @endforeach
                         @endif

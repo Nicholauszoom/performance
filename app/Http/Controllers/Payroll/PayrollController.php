@@ -350,13 +350,16 @@ class PayrollController extends Controller
         foreach ($total_allowances as $row) {
 
             if ($row->allowance == "N-Overtime") {
+                
 
                 $allowance = $this->reports_model->total_terminated_allowance($current_payroll_month, $previous_payroll_month, 'N-Overtime');
+
+                // dd($allowance);
                 if (count($allowance) > 0) {
                     for ($i = 0; $i < count($allowance); $i++) {
                         $row->current_amount += $allowance[$i]->current_amount;
-                        $row->previous_amount += 0;
-                        $row->difference += ($allowance[$i]->current_amount);
+                        $row->previous_amount += $allowance[$i]->previous_amount;
+                        $row->difference += ($allowance[$i]->current_amount - $allowance[$i]->previous_amount);
 
                         array_push($descriptions, $row->description);
                     }
@@ -367,8 +370,8 @@ class PayrollController extends Controller
                     if (count($allowance) > 0) {
                         for ($i = 0; $i < count($allowance); $i++) {
                             $row->current_amount += $allowance[$i]->current_amount;
-                            $row->previous_amount += 0;
-                            $row->difference += ($allowance[$i]->current_amount);
+                            $row->previous_amount += $allowance[$i]->previous_amount;
+                            $row->difference += ($allowance[$i]->current_amount - $allowance[$i]->previous_amount);
 
                             array_push($descriptions, $row->description);
                         }
@@ -379,8 +382,8 @@ class PayrollController extends Controller
                 if (count($allowance) > 0) {
                     for ($i = 0; $i < count($allowance); $i++) {
                         $row->current_amount += $allowance[$i]->current_amount;
-                        $row->previous_amount += 0;
-                        $row->difference += ($allowance[$i]->current_amount);
+                        $row->previous_amount += $allowance[$i]->previous_amount;
+                        $row->difference += ($allowance[$i]->current_amount - $allowance[$i]->previous_amount);
 
                         array_push($descriptions, $row->description);
                     }
@@ -391,8 +394,8 @@ class PayrollController extends Controller
                 if (count($allowance) > 0) {
                     for ($i = 0; $i < count($allowance); $i++) {
                         $row->current_amount += $allowance[$i]->current_amount;
-                        $row->previous_amount += 0;
-                        $row->difference += ($allowance[$i]->current_amount);
+                        $row->previous_amount += $allowance[$i]->previous_amount;
+                        $row->difference += ($allowance[$i]->current_amount - $allowance[$i]->previous_amount);
 
                         array_push($descriptions, $row->description);
                     }
@@ -403,8 +406,34 @@ class PayrollController extends Controller
                 if (count($allowance) > 0) {
                     for ($i = 0; $i < count($allowance); $i++) {
                         $row->current_amount += $allowance[$i]->current_amount;
-                        $row->previous_amount += 0;
-                        $row->difference += ($allowance[$i]->current_amount);
+                        $row->previous_amount += $allowance[$i]->previous_amount;
+                        $row->difference += ($allowance[$i]->current_amount - $allowance[$i]->previous_amount);
+
+                        array_push($descriptions, $row->description);
+                    }
+                }
+            } elseif ($row->allowance == "Transport Allowance") {
+
+                $allowance = $this->reports_model->total_terminated_allowance($current_payroll_month, $previous_payroll_month, 'transport_allowance');
+
+                if (count($allowance) > 0) {
+                    for ($i = 0; $i < count($allowance); $i++) {
+                        $row->current_amount += $allowance[$i]->current_amount;
+                        $row->previous_amount += $allowance[$i]->previous_amount;
+                        $row->difference += ($allowance[$i]->current_amount - $allowance[$i]->previous_amount);
+
+                        array_push($descriptions, $row->description);
+                    }
+                }
+            } elseif ($row->allowance == "Night Shift Allowance") {
+
+                $allowance = $this->reports_model->total_terminated_allowance($current_payroll_month, $previous_payroll_month, 'nightshift_allowance');
+
+                if (count($allowance) > 0) {
+                    for ($i = 0; $i < count($allowance); $i++) {
+                        $row->current_amount += $allowance[$i]->current_amount;
+                        $row->previous_amount += $allowance[$i]->previous_amount;
+                        $row->difference += ($allowance[$i]->current_amount - $allowance[$i]->previous_amount);
 
                         array_push($descriptions, $row->description);
                     }
@@ -414,8 +443,8 @@ class PayrollController extends Controller
                 if (count($allowance) > 0) {
                     for ($i = 0; $i < count($allowance); $i++) {
                         $row->current_amount += $allowance[$i]->current_amount;
-                        $row->previous_amount += 0;
-                        $row->difference += ($allowance[$i]->current_amount);
+                        $row->previous_amount += $allowance[$i]->previous_amount;
+                        $row->difference += ($allowance[$i]->current_amount - $allowance[$i]->previous_amount);
 
                         array_push($descriptions, $row->description);
                     }
@@ -425,35 +454,8 @@ class PayrollController extends Controller
                 if (count($allowance) > 0) {
                     for ($i = 0; $i < count($allowance); $i++) {
                         $row->current_amount += $allowance[$i]->current_amount;
-                        $row->previous_amount += 0;
-                        $row->difference += ($allowance[$i]->current_amount);
-
-                        array_push($descriptions, $row->description);
-                    }
-                }
-            }
-            elseif ($row->allowance == "Transport Allowance") {
-                $allowance = $this->reports_model->total_terminated_allowance($current_payroll_month, $previous_payroll_month, 'transport_allowance');
-                if (count($allowance) > 0) {
-                    for ($i = 0; $i < count($allowance); $i++) {
-                        $row->current_amount += $allowance[$i]->current_amount;
-                        $row->previous_amount += 0;
-                        $row->difference += ($allowance[$i]->current_amount);
-
-                        array_push($descriptions, $row->description);
-                    }
-                }
-            }
-            elseif ($row->allowance == "Night Shift Allowance") {
-                $allowance = $this->reports_model->total_terminated_allowance($current_payroll_month, $previous_payroll_month, 'nightshift_allowance');
-
-                // dd($row);
-
-                if (count($allowance) > 0) {
-                    for ($i = 0; $i < count($allowance); $i++) {
-                        $row->current_amount += $allowance[$i]->current_amount;
-                        $row->previous_amount += 0;
-                        $row->difference += ($allowance[$i]->current_amount);
+                        $row->previous_amount += $allowance[$i]->previous_amount;
+                        $row->difference += ($allowance[$i]->current_amount - $allowance[$i]->previous_amount);
 
                         array_push($descriptions, $row->description);
                     }
