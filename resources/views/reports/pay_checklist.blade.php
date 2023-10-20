@@ -169,7 +169,7 @@
                                                     <b>TOTAL<b>
                                                     </b></td>
                                        
-                                        <td colspan="2" class="text-end"><b><b>{{ number_format($total_netpay, 0) }}</b></b></td>
+                                        <td colspan="2" class="text-end"><b><b>{{ number_format($total_netpay, 2) }}</b></b></td>
         
                                     </tr>
                                 </tfoot>
