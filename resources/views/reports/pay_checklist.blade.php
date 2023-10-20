@@ -111,7 +111,7 @@
                                         $i++;
                                         $amount = $row->salary + $row->allowances-$row->pension_employer-$row->loans-$row->deductions-$row->meals-$row->taxdue;
                                         $total_netpay = round($total_netpay,2) + round($amount/$row->rate,2);
-                                        $amount=round($amount);
+                                        $amount=round($amount,2);
                                         $total_gross_salary += ($row->salary + $row->allowances);
                                         $total_salary = $total_salary + $row->salary;
                                         $total_allowance = $total_allowance + $row->allowances ;
