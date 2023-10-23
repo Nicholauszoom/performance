@@ -5429,7 +5429,7 @@ class GeneralController extends Controller
     {
         $this->authenticateUser('edit-payroll');
 
-        $date = date_create_from_format('d/m/Y', $request->date);
+        $date = date_create_from_format('Y-m-d', $request->date);
 
         $data['pending_payroll'] = 0;
 
@@ -5467,6 +5467,7 @@ class GeneralController extends Controller
             }
 
         } else {
+
             return view('payroll.submit_inputs', $data);
         }
 
