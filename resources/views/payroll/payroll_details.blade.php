@@ -56,10 +56,16 @@
 
                                     <th   class="text-center"><b>Name</b><br>
                                     </th>
+                                    <th  class="text-end"><b>Account Number</b></th>
+                                    <th  class="text-end"><b>Pension Number</b></th>
+                                    <th  class="text-end"><b>Depertment</b></th>
+                                    <th  class="text-end"><b>Cost Center</b></th>
                                     <th  class="text-end"><b>Basic Salary</b></th>
+                                    <th  class="text-end"><b>Net Basic Salary</b></th>
+
                                     <th  class="text-end"><b>Overtime</b></th>
 
-                                    <th  class="text-end"><b>Respons. Allowance</b></th>
+                                    <th  class="text-end"><b>Response Allowance</b></th>
                                     <th  class="text-end"><b>House Allowance</b></th>
                                     <th  class="text-end"><b>Arrears</b></th>
                                     <th  class="text-end"><b>Other Payment</b></th>
@@ -67,9 +73,11 @@
                                     <th  class="text-end"><b>Tax Benefit</b></th>
                                     <th  class="text-end"><b>Taxable Gross</b></th>
                                     <th  class="text-end"><b>PAYE</b></th>
-                                    <th  class="text-end"><b>NSSF</b></th>
-                                    <th  class="text-end"><b>WCF</b></th>
+                                    <th  class="text-end"><b>NSSF Employee</b></th>
+                                    <th  class="text-end"><b>NSSF Employer</b></th>
+                                    <th  class="text-end"><b>NSSF Payable</b></th>
                                     <th  class="text-end"><b>SDL</b></th>
+                                    <th  class="text-end"><b>WCF</b></th>
                                     <th  class="text-end"><b>Loan Board</b></th>
                                     <th  class="text-end"><b>Advance/Others</b></th>
                                     <th  class="text-end"><b>Total Deduction</b></th>
@@ -128,8 +136,17 @@
 
                                     <td class="" style="margin-right: 0px" colspan="">{{ $row->fname }}  {{ $row->mname }}  {{ $row->lname }}
                                     </td>
+                                    <td class="" style="margin-right: 0px" colspan="">{{ $row->account_no }}
+                                    </td>
+                                    <td class="" style="margin-right: 0px" colspan="">{{ $row->pf_membership_no }}
+                                    </td>
+                                    <td class="" style="margin-right: 0px" colspan="">{{ $row->name }}
+                                    </td>
+                                    <td class="" style="margin-right: 0px" colspan="">{{ $row->costCenterName }}
+                                    </td>
 
 
+                                    <td class="text-end">{{ number_format($row->actual_salary, 2) }}</td>
                                     <td class="text-end">{{ number_format($row->salary, 2) }}</td>
 
                                     <td class="text-end">{{ number_format($row->overtime, 2) }}</td>
@@ -151,8 +168,10 @@
                                     <td class="text-end">{{ number_format($row->taxdue, 2) }}</td>
 
                                     <td class="text-end">{{ number_format($row->pension_employer, 2) }}</td>
-                                    <td class="text-end">{{ number_format($row->wcf, 2) }}</td>
+                                    <td class="text-end">{{ number_format($row->pension_employer, 2) }}</td>
+                                    <td class="text-end">{{ number_format($row->pension_employer*2, 2) }}</td>
                                     <td class="text-end">{{ number_format($row->sdl, 2) }}</td>
+                                    <td class="text-end">{{ number_format($row->wcf, 2) }}</td>
                                     <td class="text-end">{{ number_format($row->loans, 2) }}</td>
 
                                     <td class="text-end">{{ number_format($row->deductions, 2) }}</td>
