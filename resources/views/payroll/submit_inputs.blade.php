@@ -25,34 +25,31 @@
                         <form autocomplete="off" id="submitInputs" method="POST">
                             <div class="mb-3 row">
                                 @if($pending_payroll == 0)
-                                <div class="col-7 row">
-                                    <label class="form-label col-md-3 text-center font-bold">
-                                        <h6>Payroll Month:</h6>
-                                    </label>
+                                    <div class="col-7 row">
+                                        <label class="form-label col-md-3 text-center font-bold">
+                                            <h6>Payroll Month:</h6>
+                                        </label>
 
-                                    <div class="col-md-9">
-                                        <input type="date" required placeholder="Payroll Month" name="date" class="form-control col-md-7 has-feedback-left" id="payrollDate" aria-describedby="inputSuccess2Status">
-                                        <span class="ph-calendar-o form-control-feedback right" aria-hidden="true"></span>
+                                        <div class="col-md-9">
+                                            <input type="date" required placeholder="Payroll Month" name="date" class="form-control col-md-7 has-feedback-left" id="payrollDate" aria-describedby="inputSuccess2Status">
+                                        </div>
                                     </div>
-                                </div>
 
-                                <div class="col-3">
-                                    <button name="init" type="submit" class="btn btn-main">Submit</button>
-                                </div>
+                                    <div class="col-3">
+                                        <button name="init" type="submit" class="btn btn-main">Submit</button>
+                                    </div>
                                 @else
-                            <div class="d-flex justify-content-center align-items-center">
-                                <p class='alert alert-warning text-center'>Note! There is Pending payroll</p>
-                            </div>
+
+                                    <div class="d-flex justify-content-center align-items-center">
+                                        <p class='alert alert-warning text-center'>Note! There is Pending payroll</p>
+                                    </div>
                                 @endif
-
                             </div>
-                            <div class="d-flex justify-content-end align-items-center">
 
-                            </div>
+                            <div class="d-flex justify-content-end align-items-center"></div>
                         </form>
                     </div>
                 </div>
-
             </div>
         </div>
     </div >
@@ -66,30 +63,28 @@
 
             $.ajax({
                 url: "{{route('flex.submitInputs')}}",
-                headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
-                type: "post",
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                type: "POST",
                 data: new FormData(this),
                 processData: false,
                 contentType: false,
                 cache: false,
                 async: true,
-                beforeSend: function () {
-                    $('.request__spinner').show() },
-                    complete: function(){
-
-                    }
-
             }).done(function(data) {
+                alert("data");
+
+                $('#payrollDate').prop('disabled', true );
+
                 $('#payrollFeedback').fadeOut('fast', function() {
-                    $('#payrollFeedback').fadeIn('fast').html(data);
+                    // $('#payrollFeedback').fadeIn('fast').html(data);
                 });
                 setTimeout(function() {
                     location.reload();
-                }, 5000)
+                }, 3000)
             })
             .fail(function(data) {
-                // alert('Payroll Failed!! ...');
-                // Basic initialization
                 new Noty({
                     text: 'Payroll Failed!! ...',
                     type: 'error'

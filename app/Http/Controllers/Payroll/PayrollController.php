@@ -2,24 +2,20 @@
 
 namespace App\Http\Controllers\Payroll;
 
-use App\Http\Controllers\Controller;
-
-use Illuminate\Http\Request;
-use App\Models\Payroll\Payroll;
-use App\Models\Payroll\FlexPerformanceModel;
-use App\Models\Payroll\ReportModel;
 use App\Helpers\SysHelpers;
-use Illuminate\Support\Facades\Notification;
-use App\Notifications\EmailRequests;
-use App\Notifications\EmailPayslip;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Http\Response;
-use App\models\Employee;
+use App\Http\Controllers\Controller;
 use App\Models\AttendanceModel;
-
-
+use App\models\Employee;
+use App\Models\Payroll\FlexPerformanceModel;
+use App\Models\Payroll\Payroll;
+use App\Models\Payroll\ReportModel;
+use App\Notifications\EmailPayslip;
+use App\Notifications\EmailRequests;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Notification;
 
 class PayrollController extends Controller
 {
@@ -44,14 +40,11 @@ class PayrollController extends Controller
             return redirect()->route('login');
         }
 
-
-
         if (!Auth::user()->can($permissions)) {
 
             abort(Response::HTTP_UNAUTHORIZED, '500|Page Not Found');
         }
     }
-
 
     public function initPayroll(Request $request)
     {
@@ -83,7 +76,6 @@ class PayrollController extends Controller
                         $result = $this->payroll_model->initPayroll($today, $payroll_date, $payroll_month, $empID);
                         //notify the finance
 
-
                         /*copy allocation table to logs*/
 
                         $all_allocations = $this->flexperformance_model->getAllocation();
@@ -95,12 +87,11 @@ class PayrollController extends Controller
                                 'grant_code' => $all_allocation->grant_code,
                                 'percent' => $all_allocation->percent,
                                 'isActive' => $all_allocation->isActive,
-                                'payroll_date' => $payroll_date
+                                'payroll_date' => $payroll_date,
                             );
 
                             $this->payroll_model->insertAllocation($data_allocation_log);
                         }
-
 
                         //copying arrears pending
                         $arrears_pending = $this->payroll_model->arrearsPending();
@@ -120,7 +111,6 @@ class PayrollController extends Controller
                             }
                         }
 
-
                         $arrears_id = $this->payroll_model->arrearsPendingByArrearId();
                         if ($arrears_id) {
                             foreach ($arrears_id as $arrear_id) {
@@ -136,7 +126,7 @@ class PayrollController extends Controller
 
                                     $arrears_update = array(
                                         'paid' => $total_paid,
-                                        'amount_last_paid' => $last_paid
+                                        'amount_last_paid' => $last_paid,
                                     );
                                     $this->payroll_model->updateArrear($arrear_id->arrear_id, $arrears_update);
                                 }
@@ -147,7 +137,7 @@ class PayrollController extends Controller
                         if ($result == true) {
                             // $linemanager_data = SysHelpers::employeeData(auth()->user()->full_name);
 
-                            $description  = "Run payroll of date " . $payroll_date;
+                            $description = "Run payroll of date " . $payroll_date;
                             // dd('Payroll Run and Email has been sent');
                             //$result = SysHelpers::auditLog(1,$description,$request);
 
@@ -178,19 +168,18 @@ class PayrollController extends Controller
     public function employee_payslip()
     {
 
-
         $this->authenticateUser('view-payslip');
 
         // if (session('mng_paym') || session('recom_paym') || session('appr_paym')) {
 
-            $title = 'Employee Payslip';
-            $parent = 'Payroll';
-            $child = 'Payslip';
-            $data['payrollList'] = $this->payroll_model->payrollMonthList();
-            $data['month_list'] = $this->payroll_model->payroll_month_list();
-            $data['employee'] = $this->payroll_model->customemployee();
+        $title = 'Employee Payslip';
+        $parent = 'Payroll';
+        $child = 'Payslip';
+        $data['payrollList'] = $this->payroll_model->payrollMonthList();
+        $data['month_list'] = $this->payroll_model->payroll_month_list();
+        $data['employee'] = $this->payroll_model->customemployee();
 
-            return view('payroll.employee_payslip', compact('data', 'title', 'parent', 'child'));
+        return view('payroll.employee_payslip', compact('data', 'title', 'parent', 'child'));
         // } else {
         //     echo 'Unauthorised Access';
         // }
@@ -199,7 +188,6 @@ class PayrollController extends Controller
     public function payroll()
     {
         // if (session('mng_paym') || session('recom_paym') || session('appr_paym')) {
-
 
         $this->authenticateUser('view-payroll');
 
@@ -216,12 +204,10 @@ class PayrollController extends Controller
         // dd($data['pendingPayroll']);
         //echo $data['pendingPayroll_month'];
 
-
-
         return view('payroll.payroll', [
             'data' => $data,
             'parent' => 'Payroll',
-            'child' => 'Payroll'
+            'child' => 'Payroll',
 
         ]);
 
@@ -235,7 +221,7 @@ class PayrollController extends Controller
     {
         return view('payroll.payslip', [
             'parent' => 'Payroll',
-            'child' => 'Payslip'
+            'child' => 'Payslip',
         ]);
     }
 
@@ -243,7 +229,7 @@ class PayrollController extends Controller
     {
         return view('payroll.incentives', [
             'parent' => 'Payroll',
-            'child' => 'Incentives'
+            'child' => 'Incentives',
         ]);
     }
 
@@ -251,16 +237,14 @@ class PayrollController extends Controller
     {
         return view('payroll.partial-payment', [
             'parent' => 'Payroll',
-            'child' => 'Partial Payment'
+            'child' => 'Partial Payment',
         ]);
     }
-
 
     public function temp_payroll_info(Request $request)
     {
         $payrollMonth = base64_decode($request->pdate);
         //$payrollMonth = '2023-07-17';
-
 
         $data['payroll_details'] = $this->payroll_model->getPayroll($payrollMonth);
         $data['payroll_month_info'] = $this->payroll_model->payroll_month_info($payrollMonth);
@@ -269,12 +253,10 @@ class PayrollController extends Controller
         $data['payroll_date'] = $payrollMonth;
         $data['payroll_totals'] = $this->payroll_model->temp_payrollTotals("temp_payroll_logs", $payrollMonth);
 
-
         $data['total_allowances'] = $this->payroll_model->total_allowances("allowance_logs", $payrollMonth);
         $data['total_bonuses'] = $this->payroll_model->total_bonuses($payrollMonth);
         $data['total_loans'] = $this->payroll_model->total_loans("loan_logs", $payrollMonth);
         $data['total_overtimes'] = $this->payroll_model->total_overtimes($payrollMonth);
-
 
         $data['total_allowances'] = $this->payroll_model->total_allowances("temp_allowance_logs", $payrollMonth);
         //      $data['total_loans'] =  $this->payroll_model->total_loans("temp_loan_logs",$payrollMonth);
@@ -311,7 +293,7 @@ class PayrollController extends Controller
         $today = date('Y-m-d');
 
         $current_payroll_month = $request->input('payrolldate');
-        $reportType = 1;  //Staff = 1, temporary = 2
+        $reportType = 1; //Staff = 1, temporary = 2
         $reportformat = $request->input('type'); //Staff = 1, temporary = 2
         $previous_payroll_month_raw = date('Y-m', strtotime(date('Y-m-d', strtotime($current_payroll_month . "-1 month"))));
         $previous_payroll_month = $this->reports_model->prevPayrollMonth($previous_payroll_month_raw);
@@ -327,9 +309,6 @@ class PayrollController extends Controller
         $data['total_current_overtime'] = $this->reports_model->s_overtime1($current_payroll_month);
         $data['terminated_employee'] = $this->reports_model->terminated_employee($previous_payroll_month);
 
-
-
-
         $data['new_employee'] = $this->reports_model->new_employee1($current_payroll_month, $previous_payroll_month);
         //dd($data['new_employee']);
         if ($data['new_employee'] > 0) {
@@ -340,7 +319,7 @@ class PayrollController extends Controller
 
             $data['termination_salary'] = $this->reports_model->terminated_salary($previous_payroll_month);
         }
-        $total_allowances = $this->reports_model->total_allowance1($current_payroll_month, $previous_payroll_month);  //Last month
+        $total_allowances = $this->reports_model->total_allowance1($current_payroll_month, $previous_payroll_month); //Last month
 
         // dd($current_payroll_month, $previous_payroll_month);
 
@@ -350,7 +329,6 @@ class PayrollController extends Controller
         foreach ($total_allowances as $row) {
 
             if ($row->allowance == "N-Overtime") {
-                
 
                 $allowance = $this->reports_model->total_terminated_allowance($current_payroll_month, $previous_payroll_month, 'N-Overtime');
 
@@ -463,7 +441,6 @@ class PayrollController extends Controller
             }
         }
 
-
         // dd($total_allowances);
         $all_terminal_allowance = $this->reports_model->all_terminated_allowance($current_payroll_month, $previous_payroll_month);
 
@@ -471,53 +448,41 @@ class PayrollController extends Controller
 
         foreach ($result as $row) {
 
-            array_push($total_allowances, (object)[
+            array_push($total_allowances, (object) [
                 'description' => $row['description'],
                 'allowance' => $row['description'],
                 'current_amount' => $row['current_amount'],
                 'previous_amount' => $row['previous_amount'],
-                'difference' => $row['current_amount'] - $row['previous_amount']
+                'difference' => $row['current_amount'] - $row['previous_amount'],
             ]);
         }
 
-
-
-
-
         $data['total_allowances'] = $total_allowances;
-
-
 
         $data['total_previous_basic'] = !empty($previous_payroll_month) ? $this->reports_model->total_basic($previous_payroll_month) : 0;
         $data['total_current_basic'] = !empty($current_payroll_month) ? $this->reports_model->total_basic1($current_payroll_month) : 0;
         $data['total_previous_net'] = !empty($previous_payroll_month) ? $this->reports_model->s_grossMonthly($previous_payroll_month) : 0;
         $data['total_current_net'] = $this->reports_model->s_grossMonthly1($current_payroll_month);
 
-        $data['current_decrease'] =  $this->reports_model->basic_decrease1($previous_payroll_month, $current_payroll_month);
-
+        $data['current_decrease'] = $this->reports_model->basic_decrease1($previous_payroll_month, $current_payroll_month);
 
         $data['current_increase'] = $this->reports_model->basic_increase_temp($previous_payroll_month, $current_payroll_month);
 
-
         $data['termination'] = $this->reports_model->get_termination($current_payroll_month);
 
-
-
-
-        if ($request->type == 1)
+        if ($request->type == 1) {
             return view('payroll.reconsiliation_summary', $data);
+        }
 
         $pdf = Pdf::loadView('reports.payroll_reconciliation_summary1', $data)->setPaper('a4', 'potrait');
         return $pdf->download('payroll_reconciliation_summary.pdf');
 
-
         return view('payroll.reconsiliation_summary', $data);
     }
 
-
-    function arrayRecursiveDiff($aArray1, $aArray2)
+    public function arrayRecursiveDiff($aArray1, $aArray2)
     {
-        $aReturn = array();;
+        $aReturn = array();
         //bool in_array( $val, $array_name, $mode );
         for ($i = 0; $i < count($aArray1); $i++) {
             if (in_array($aArray1[$i]['description'], $aArray2)) {
@@ -531,8 +496,6 @@ class PayrollController extends Controller
         return $aArray1;
     }
 
-
-
     public function get_reconsiliation_summary1(Request $request)
     {
 
@@ -544,9 +507,7 @@ class PayrollController extends Controller
 
         //dd($calendar);
 
-
         $previousDate = date('Y-m-d', strtotime($calendar . ' -1 months'));
-
 
         $datewell = explode("-", $calendar);
         $mm = $datewell[1];
@@ -562,7 +523,7 @@ class PayrollController extends Controller
         $today = date('Y-m-d');
 
         $current_payroll_month = $request->payrolldate;
-        $reportType = 1;  //Staff = 1, temporary = 2
+        $reportType = 1; //Staff = 1, temporary = 2
         //$reportformat = $request->input('type'); //Staff = 1, temporary = 2
         $previous_payroll_month_raw = date('Y-m', strtotime(date('Y-m-d', strtotime($current_payroll_month . "-1 month"))));
         $previous_payroll_month = $this->reports_model->prevPayrollMonth($previous_payroll_month_raw);
@@ -578,16 +539,12 @@ class PayrollController extends Controller
 
         $data['terminated_employee'] = $this->reports_model->terminated_employee($previous_payroll_month);
 
-
-
         $data['new_employee'] = $this->reports_model->new_employee($current_payroll_month, $previous_payroll_month);
         //dd($data['new_employee']);
         if ($data['new_employee'] > 0) {
 
             $data['new_employee_salary'] = $this->reports_model->new_employee_salary($current_payroll_month, $previous_payroll_month);
         }
-
-
 
         if ($data['terminated_employee'] > 0) {
 
@@ -659,23 +616,17 @@ class PayrollController extends Controller
 
         foreach ($result as $row) {
 
-            array_push($total_allowances, (object)[
+            array_push($total_allowances, (object) [
                 'description' => $row['description'],
                 'allowance' => $row['description'],
                 'current_amount' => $row['current_amount'],
                 'previous_amount' => $row['previous_amount'],
-                'difference' => $row['current_amount'] - $row['previous_amount']
+                'difference' => $row['current_amount'] - $row['previous_amount'],
             ]);
         }
 
-
-
-
-
         $data['total_allowances'] = $total_allowances;
         // $data['total_allowances'] = $this->reports_model->total_allowance($current_payroll_month, $previous_payroll_month);
-
-
 
         $data['total_previous_basic'] = !empty($previous_payroll_month) ? $this->reports_model->total_basic($previous_payroll_month) : 0;
         $data['total_current_basic'] = !empty($current_payroll_month) ? $this->reports_model->total_basic($current_payroll_month) : 0;
@@ -683,25 +634,21 @@ class PayrollController extends Controller
         $data['total_previous_net'] = !empty($previous_payroll_month) ? $this->reports_model->s_grossMonthly($previous_payroll_month) : 0;
         $data['total_current_net'] = $this->reports_model->s_grossMonthly($current_payroll_month);
 
-        $data['current_decrease'] =  $this->reports_model->basic_decrease($previous_payroll_month, $current_payroll_month);
+        $data['current_decrease'] = $this->reports_model->basic_decrease($previous_payroll_month, $current_payroll_month);
         // dd($data['previous_decrease']);
         // $data['current_decrease'] = $this->reports_model->basic_decrease($current_payroll_month);
 
         // $data['previous_increase'] = $this->reports_model->basic_increase($previous_payroll_month);
         $data['current_increase'] = $this->reports_model->basic_increase($previous_payroll_month, $current_payroll_month);
 
-       ($data['current_increase']);
+        ($data['current_increase']);
         $data['termination'] = $this->reports_model->get_termination($current_payroll_month);
-
-
-
 
         $data['payroll_state'] = $request->payrollState;
 
-
-
-        if ($request->type == 1)
+        if ($request->type == 1) {
             return view('payroll.reconsiliation_summary', $data);
+        }
 
         $pdf = Pdf::loadView('reports.payroll_reconciliation_summary1', $data)->setPaper('a4', 'potrait');
         return $pdf->download('payroll_reconciliation_summary.pdf');
@@ -731,7 +678,6 @@ class PayrollController extends Controller
 
         $data['title'] = "Payroll Info";
 
-
         $calendar = $payrollMonth;
         $datewell = explode("-", $calendar);
         $mm = $datewell[1];
@@ -746,12 +692,6 @@ class PayrollController extends Controller
         $empID = auth()->user()->emp_id;
         $today = date('Y-m-d');
 
-
-
-
-
-
-
         return view('payroll.payroll_info', $data);
     }
 
@@ -762,8 +702,6 @@ class PayrollController extends Controller
 
         $data['payroll_date'] = $calendar;
         $data['payrollMonth'] = $calendar;
-
-
 
         $datewell = explode("-", $calendar);
         $mm = $datewell[1];
@@ -779,7 +717,7 @@ class PayrollController extends Controller
         $today = date('Y-m-d');
 
         $current_payroll_month = $calendar;
-        $reportType = 1;  //Staff = 1, temporary = 2
+        $reportType = 1; //Staff = 1, temporary = 2
         $reportformat = $request->input('type'); //Staff = 1, temporary = 2
         $previous_payroll_month_raw = date('Y-m', strtotime(date('Y-m-d', strtotime($current_payroll_month . "-1 month"))));
         $previous_payroll_month = $this->reports_model->prevPayrollMonth($previous_payroll_month_raw);
@@ -791,7 +729,6 @@ class PayrollController extends Controller
 
         $data['count_previous_month'] = $this->reports_model->s_count($previous_payroll_month);
         $data['count_current_month'] = $this->reports_model->s_count($current_payroll_month);
-
 
         $data['total_allowances'] = $this->reports_model->total_allowance($current_payroll_month, $previous_payroll_month);
 
@@ -807,11 +744,8 @@ class PayrollController extends Controller
         $data['previous_increase'] = $this->reports_model->basic_increase($previous_payroll_month);
         $data['current_increase'] = $this->reports_model->basic_increase($current_payroll_month);
 
-
         //$pdf = Pdf::loadView('reports.payroll_reconciliation_summary1', $data);
         // $pdf = Pdf::loadView('reports.payroll_details',$data);
-
-
 
         //return $pdf->download('sam.pdf');
         // $pdf = Pdf::loadView('reports.samplepdf')->setPaper('a4', 'potrait');
@@ -879,7 +813,6 @@ class PayrollController extends Controller
         return view('app.less_payments', $data);
     }
 
-
     public function less_payments_print(Request $request)
     {
 
@@ -888,7 +821,6 @@ class PayrollController extends Controller
         $data['authorization'] = $this->reports_model->payrollAuthorization($payrollMonth);
         //$data['employee_list'] =  $this->payroll_model->employeeTempPayrollList($payrollMonth, "temp_allowance_logs", "temp_deduction_logs", "temp_loan_logs", "temp_payroll_logs", "temp_arrears");
         $data['info'] = $this->reports_model->company_info();
-
 
         $employee_list = $this->reports_model->temp_pay_checklist($payrollMonth);
         $authorization = $this->reports_model->payrollAuthorization($payrollMonth);
@@ -911,8 +843,6 @@ class PayrollController extends Controller
             $data['payroll_month'] = $payrollMonth;
 
             $data['total_heslb'] = $this->payroll_model->total_heslb("loan_logs", $payrollMonth);
-
-
 
             $confirmed = 1;
             $payroll_date = $payrollMonth;
@@ -947,7 +877,6 @@ class PayrollController extends Controller
             $data['payroll_month'] = $payrollMonth;
             $data['total_heslb'] = $this->payroll_model->total_heslb("loan_logs", $payrollMonth);
 
-
             $authorization = $this->reports_model->payrollAuthorization($payrollMonth);
             $toDate = date('Y-m-d');
             $employee_list = $this->reports_model->pay_checklist($payrollMonth);
@@ -967,11 +896,10 @@ class PayrollController extends Controller
             $total_heslb = $this->payroll_model->total_heslb("loan_logs", $payrollMonth);
         }
 
-
         include app_path() . '/reports/payroll_info_view.php';
     }
 
-    function concatArrays($arrays)
+    public function concatArrays($arrays)
     {
         $buf = [];
         foreach ($arrays as $arr) {
@@ -1164,7 +1092,7 @@ class PayrollController extends Controller
         return json_encode($data);
     }
 
-    function sendMail($empEmail, $empName, $email, $subject, $message)
+    public function sendMail($empEmail, $empName, $email, $subject, $message)
     {
         $this->load->library('phpmailer_lib');
         $mail = $this->phpmailer_lib->load(); // PHPMailer object
@@ -1188,7 +1116,6 @@ class PayrollController extends Controller
         $mail->Password = $password;
         $mail->SMTPSecure = $smtpsecure;
         $mail->Port = $port;
-
 
         $mail->setFrom($senderEmail, $senderName);
         $mail->addReplyTo($empEmail, $empName);
@@ -1234,7 +1161,6 @@ class PayrollController extends Controller
             $data["parent"] = "Payroll";
             $data["child"] = "Incentives";
 
-
             return view('app.comission_bonus', $data);
         } else {
             echo "Unauthorized Access";
@@ -1252,7 +1178,6 @@ class PayrollController extends Controller
         $title = "Comission and Bonuses";
         $parent = "Comission and Bonuses";
         $child = "Comission and Bonuses";
-
 
         return view('payroll.partial_payment', compact('title', 'parent', 'child', 'data'));
         // } else {
@@ -1272,7 +1197,7 @@ class PayrollController extends Controller
         }
     }
 
-    function calculateSalary()
+    public function calculateSalary()
     {
         if ($_POST) {
 
@@ -1322,7 +1247,6 @@ class PayrollController extends Controller
             // echo "PAYE: ".$paye."<br>";
             // echo "TAKE HOME: ".$takeHome."<br>";
 
-
             if ($totalPay) {
                 echo "<h4 class='modal-title' id='amountTakeHome'><b>Net pay: " . number_format($totalPay, 2) . " /=<br><br></h4>";
             } else {
@@ -1331,7 +1255,7 @@ class PayrollController extends Controller
         }
     }
 
-    function recommendpayrollByFinance($pdate, $message)
+    public function recommendpayrollByFinance($pdate, $message)
     {
 
         $payrollMonth = $pdate;
@@ -1348,21 +1272,20 @@ class PayrollController extends Controller
                     // recommend to Head of Finance email
                     $position_data = SysHelpers::position('Managing Director');
 
-                    if($position_data){
+                    if ($position_data) {
 
-                    $fullname = $position_data['full_name'];
-                    $email_data = array(
-                        'subject' => 'Payroll Run Notification',
-                        'view' => 'emails.head-human.notification',
-                        'email' => $position_data['email'],
-                        'full_name' => $fullname,
-                    );
+                        $fullname = $position_data['full_name'];
+                        $email_data = array(
+                            'subject' => 'Payroll Run Notification',
+                            'view' => 'emails.head-human.notification',
+                            'email' => $position_data['email'],
+                            'full_name' => $fullname,
+                        );
 
-                    //kmarealle@bancabc.co.tz
-                    Notification::route('mail', $email_data['email'])->notify(new EmailRequests($email_data));
+                        //kmarealle@bancabc.co.tz
+                        Notification::route('mail', $email_data['email'])->notify(new EmailRequests($email_data));
 
-
-                }
+                    }
 
                     $description = "Recommendation of payroll of date " . $todate;
 
@@ -1382,7 +1305,7 @@ class PayrollController extends Controller
             echo json_encode($response_array);
         }
     }
-    function recommendpayrollByHr($pdate, $message)
+    public function recommendpayrollByHr($pdate, $message)
     {
 
         $payrollMonth = $pdate;
@@ -1429,8 +1352,8 @@ class PayrollController extends Controller
         }
     }
 
-    function runpayroll($pdate)
-    {           //
+    public function runpayroll($pdate)
+    { //
         // return false;
         // $fullname = $position_data['full_name'];
         // $email_data = array(
@@ -1546,7 +1469,7 @@ class PayrollController extends Controller
                     'pension_employer' => $partial_pension_employer,
                     'taxdue' => $partial_taxdue,
                     'sdl' => $partial_sdl,
-                    'wcf' => $partial_wcf
+                    'wcf' => $partial_wcf,
                 );
 
                 $this->flexperformance_model->updatePayrollLog($partial_payment->empID, $payroll_date, $data_update_payroll_log);
@@ -1557,13 +1480,13 @@ class PayrollController extends Controller
         }
     }
 
-    function generate_checklist(Request $request)
+    public function generate_checklist(Request $request)
     {
         $payrollMonth = base64_decode($request->pdate);
         $result = false;
         if ($payrollMonth != '') {
             $updates = array(
-                'pay_checklist' => 1
+                'pay_checklist' => 1,
             );
 
             $arrears = $this->payroll_model->approved_arrears();
@@ -1583,13 +1506,13 @@ class PayrollController extends Controller
                         'init_by' => $init,
                         'confirmed_by' => $confirmed,
                         'payment_date' => $payment_date,
-                        'payroll_date' => $payrollMonth
+                        'payroll_date' => $payrollMonth,
                     );
 
                     $dataUpdates = array(
                         'paid' => $amountPaid + $amountAlreadyPaid,
                         'amount_last_paid' => $amountPaid,
-                        'last_paid_date' => $payment_date
+                        'last_paid_date' => $payment_date,
                     );
                     $result = $this->payroll_model->update_payroll_month_only($updates, $payrollMonth, $arrearID, $dataLogs, $dataUpdates);
                 }
@@ -1623,10 +1546,10 @@ class PayrollController extends Controller
             $response_array['message'] = "<p class='alert alert-danger text-center'>FAILED! No Payroll Month addressed, Payroll Checklist NOT Generated, Please Try again, If the Error persists Contact Your System Admin</p>";
         }
         header('Content-type: application/json');
-        return  $response_array;
+        return $response_array;
     }
 
-    function arrearsPayment()
+    public function arrearsPayment()
     {
         if ($_POST) {
             $result = false;
@@ -1648,13 +1571,13 @@ class PayrollController extends Controller
                     'amount_paid' => $amountPaid,
                     'init_by' => $init,
                     'confirmed_by' => $confirmed,
-                    'payment_date' => $payment_date
+                    'payment_date' => $payment_date,
                 );
 
                 $dataUpdates = array(
                     'paid' => $amountPaid + $amountAlreadyPaid,
                     'amount_last_paid' => $amountPaid,
-                    'last_paid_date' => $payment_date
+                    'last_paid_date' => $payment_date,
                 );
                 $result = $this->payroll_model->arrearsPayment($arrearID, $dataLogs, $dataUpdates);
             }
@@ -1667,20 +1590,23 @@ class PayrollController extends Controller
         }
     }
 
-    function temp_submitLessPayments()
+    public function temp_submitLessPayments()
     {
         $payrollMonth = $request->input('payroll_date');
         $result = false;
         $updates = array(
             'arrears' => 1,
-            'pay_checklist' => 1
+            'pay_checklist' => 1,
         );
         $empList = $this->payroll_model->employeePayrollList($payrollMonth, "temp_allowance_logs", "temp_deduction_logs", "temp_loan_logs", "temp_payroll_logs");
         foreach ($empList as $row) {
             $empID = $row->empID;
             $expected_takehome = $request->input('expected_takehome' . $empID);
             $actual_takehome = $request->input('actual_takehome' . $empID);
-            if ($expected_takehome == $actual_takehome) continue;
+            if ($expected_takehome == $actual_takehome) {
+                continue;
+            }
+
             $update_arrears = array(
                 'empID' => $empID,
                 'amount' => $expected_takehome - $actual_takehome,
@@ -1691,14 +1617,13 @@ class PayrollController extends Controller
             );
             $update_payroll_months = array(
                 'arrears' => 1,
-                'pay_checklist' => 1
+                'pay_checklist' => 1,
             );
             $update_payroll_logs = array(
-                'less_takehome' => $expected_takehome - $actual_takehome
+                'less_takehome' => $expected_takehome - $actual_takehome,
             );
             $result = $this->payroll_model->temp_lessPayments($update_arrears, $update_payroll_months, $update_payroll_logs, $empID, $payrollMonth);
         }
-
 
         if ($result == true) {
             $logData = array(
@@ -1706,7 +1631,7 @@ class PayrollController extends Controller
                 'description' => "Generating checklist with arrears payment of payroll of date " . $payrollMonth,
                 'agent' => session('agent'),
                 'platform' => $this->agent->platform(),
-                'ip_address' => $this->input->ip_address()
+                'ip_address' => $this->input->ip_address(),
             );
 
             $result = $this->flexperformance_model->insertAuditLog($logData);
@@ -1721,20 +1646,23 @@ class PayrollController extends Controller
         echo json_encode($response_array);
     }
 
-    function submitLessPayments()
+    public function submitLessPayments()
     {
         $payrollMonth = $request->input('payroll_date');
         $result = false;
         $updates = array(
             'arrears' => 1,
-            'pay_checklist' => 1
+            'pay_checklist' => 1,
         );
         $empList = $this->payroll_model->employeePayrollList($payrollMonth, "allowance_logs", "deduction_logs", "loan_logs", "payroll_logs");
         foreach ($empList as $row) {
             $empID = $row->empID;
             $expected_takehome = $request->input('expected_takehome' . $empID);
             $actual_takehome = $request->input('actual_takehome' . $empID);
-            if ($expected_takehome == $actual_takehome) continue;
+            if ($expected_takehome == $actual_takehome) {
+                continue;
+            }
+
             $update_arrears = array(
                 'empID' => $empID,
                 'amount' => $expected_takehome - $actual_takehome,
@@ -1745,14 +1673,13 @@ class PayrollController extends Controller
             );
             $update_payroll_months = array(
                 'arrears' => 1,
-                'pay_checklist' => 1
+                'pay_checklist' => 1,
             );
             $update_payroll_logs = array(
-                'less_takehome' => $expected_takehome - $actual_takehome
+                'less_takehome' => $expected_takehome - $actual_takehome,
             );
             $result = $this->payroll_model->lessPayments($update_arrears, $update_payroll_months, $update_payroll_logs, $empID, $payrollMonth);
         }
-
 
         if ($result == true) {
             $logData = array(
@@ -1760,7 +1687,7 @@ class PayrollController extends Controller
                 'description' => "Generating checklist with arrears payment of payroll of date " . $payrollMonth,
                 'agent' => session('agent'),
                 'platform' => $this->agent->platform(),
-                'ip_address' => $this->input->ip_address()
+                'ip_address' => $this->input->ip_address(),
             );
 
             $result = $this->flexperformance_model->insertAuditLog($logData);
@@ -1775,7 +1702,7 @@ class PayrollController extends Controller
         echo json_encode($response_array);
     }
 
-    function arrearsPayment_schedule()
+    public function arrearsPayment_schedule()
     {
         if ($_POST) {
             $result = false;
@@ -1794,7 +1721,7 @@ class PayrollController extends Controller
                         $updates = array(
                             'amount' => $amountPaid,
                             'status' => 0,
-                            'confirmed_by' => ""
+                            'confirmed_by' => "",
                         );
                         $result = $this->payroll_model->updatePendingArrear($arrearID, $updates);
                     } else {
@@ -1803,7 +1730,7 @@ class PayrollController extends Controller
                             'arrear_id' => $arrearID,
                             'amount' => $amountPaid,
                             'init_by' => auth()->user()->emp_id,
-                            'date_confirmed' => $payment_date
+                            'date_confirmed' => $payment_date,
                         );
 
                         $result = $this->payroll_model->arrearsPayment_schedule($data);
@@ -1833,7 +1760,7 @@ class PayrollController extends Controller
                 $updates = array(
                     'amount' => $outstanding,
                     'status' => 0,
-                    'confirmed_by' => ""
+                    'confirmed_by' => "",
                 );
                 $result = $this->payroll_model->updatePendingArrear($arrearID, $updates);
             } else {
@@ -1841,7 +1768,7 @@ class PayrollController extends Controller
                     'arrear_id' => $arrearID,
                     'amount' => ($employee->amount - $employee->paid),
                     'init_by' => auth()->user()->emp_id,
-                    'date_confirmed' => $payment_date
+                    'date_confirmed' => $payment_date,
                 );
 
                 $result = $this->payroll_model->arrearsPayment_schedule($data);
@@ -1867,7 +1794,7 @@ class PayrollController extends Controller
         if ($this->uri->segment(3) != '') {
             $updates = array(
                 'status' => 0,
-                'confirmed_by' => auth()->user()->emp_id
+                'confirmed_by' => auth()->user()->emp_id,
             );
 
             $arrearID = $this->uri->segment(3);
@@ -1886,13 +1813,12 @@ class PayrollController extends Controller
         if ($this->uri->segment(3) != '') {
             $updates = array(
                 'status' => 1,
-                'confirmed_by' => auth()->user()->emp_id
+                'confirmed_by' => auth()->user()->emp_id,
             );
 
             $arrearID = $this->uri->segment(3);
 
             $result = $this->payroll_model->confirmPendingArrear($arrearID, $updates);
-
 
             $arrear = $this->payroll_model->getArrear($arrearID);
 
@@ -1924,7 +1850,7 @@ class PayrollController extends Controller
 
                         $arrears_update = array(
                             'paid' => $total_paid,
-                            'amount_last_paid' => $last_paid
+                            'amount_last_paid' => $last_paid,
                         );
                         $this->payroll_model->updateArrear($arrear[0]->arrear_id, $arrears_update);
                     }
@@ -1945,7 +1871,7 @@ class PayrollController extends Controller
         if ($this->uri->segment(3) != '') {
             $updates = array(
                 'status' => 2,
-                'recommended_by' => auth()->user()->emp_id
+                'recommended_by' => auth()->user()->emp_id,
             );
 
             $arrearID = $this->uri->segment(3);
@@ -1957,7 +1883,7 @@ class PayrollController extends Controller
                     'description' => "Recommendation of Arreas on date " . date('Y-m-d'),
                     'agent' => session('agent'),
                     'platform' => $this->agent->platform(),
-                    'ip_address' => $this->input->ip_address()
+                    'ip_address' => $this->input->ip_address(),
                 );
 
                 $result = $this->flexperformance_model->insertAuditLog($logData);
@@ -1969,7 +1895,7 @@ class PayrollController extends Controller
         }
     }
 
-    function cancelpayroll($type)
+    public function cancelpayroll($type)
     {
         //dd($type);
         /*get the payroll month*/
@@ -2054,21 +1980,16 @@ class PayrollController extends Controller
         }
     }
 
-
     public function send_payslip_email($date, $employee)
     {
         //dd($request->all());
         $empID = $employee->empID;
-                                    //For redirecting Purpose
+        //For redirecting Purpose
 
         // $profile = $request->input("profile"); //For redirecting Purpose
         $date_separate = explode("-", $date);
 
-        $start=$date;
-
-
-
-
+        $start = $date;
 
         $mm = $date_separate[1];
         $yyyy = $date_separate[0];
@@ -2081,45 +2002,42 @@ class PayrollController extends Controller
 
         $check = $this->reports_model->payslipcheck($payroll_month, $empID);
 
+        $emp = Employee::where('emp_id', $empID)->first();
+        $data['slipinfo'] = $this->reports_model->payslip_info($empID, $payroll_month_end, $payroll_month);
+        $data['leaves'] = $this->reports_model->leaves($empID, $payroll_month_end);
+        $data['annualLeaveSpent'] = $this->reports_model->annualLeaveSpent($empID, $payroll_month_end);
+        $data['allowances'] = $this->reports_model->allowances($empID, $payroll_month);
+        $data['deductions'] = $this->reports_model->deductions($empID, $payroll_month);
+        $data['loans'] = $this->reports_model->loans($empID, $payroll_month);
+        $data['salary_advance_loan'] = $this->reports_model->loansPolicyAmount($empID, $payroll_month);
+        $data['total_allowances'] = $this->reports_model->total_allowances($empID, $payroll_month);
+        $data['total_pensions'] = $this->reports_model->total_pensions($empID, $payroll_date);
+        $data['total_deductions'] = $this->reports_model->total_deductions($empID, $payroll_month);
+        $data['companyinfo'] = $this->reports_model->company_info();
+        $data['arrears_paid'] = $this->reports_model->employeeArrearByMonth($empID, $payroll_date);
+        $data['arrears_paid_all'] = $this->reports_model->employeeArrearAllPaid($empID, $payroll_date);
+        $data['arrears_all'] = $this->reports_model->employeeArrearAll($empID, $payroll_date);
+        $data['arrears_paid'] = $this->reports_model->employeeArrearByMonth($empID, $payroll_date);
+        $data['paid_with_arrears'] = $this->reports_model->employeePaidWithArrear($empID, $payroll_date);
+        $data['paid_with_arrears_d'] = $this->reports_model->employeeArrearPaidAll($empID, $payroll_date);
+        $data['salary_advance_loan_remained'] = $this->reports_model->loansAmountRemained($empID, $payroll_date);
+        $data['leaveBalance'] = $this->attendance_model->getLeaveBalance($empID, $emp->hire_date, $payroll_month_end);
 
-            $emp = Employee::where('emp_id',$empID)->first();
-            $data['slipinfo'] = $this->reports_model->payslip_info($empID, $payroll_month_end, $payroll_month);
-            $data['leaves'] = $this->reports_model->leaves($empID, $payroll_month_end);
-            $data['annualLeaveSpent'] = $this->reports_model->annualLeaveSpent($empID, $payroll_month_end);
-            $data['allowances'] = $this->reports_model->allowances($empID, $payroll_month);
-            $data['deductions'] = $this->reports_model->deductions($empID, $payroll_month);
-            $data['loans'] = $this->reports_model->loans($empID, $payroll_month);
-            $data['salary_advance_loan'] = $this->reports_model->loansPolicyAmount($empID, $payroll_month);
-            $data['total_allowances'] = $this->reports_model->total_allowances($empID, $payroll_month);
-            $data['total_pensions'] = $this->reports_model->total_pensions($empID, $payroll_date);
-            $data['total_deductions'] = $this->reports_model->total_deductions($empID, $payroll_month);
-            $data['companyinfo'] = $this->reports_model->company_info();
-            $data['arrears_paid'] = $this->reports_model->employeeArrearByMonth($empID, $payroll_date);
-            $data['arrears_paid_all'] = $this->reports_model->employeeArrearAllPaid($empID, $payroll_date);
-            $data['arrears_all'] = $this->reports_model->employeeArrearAll($empID, $payroll_date);
-            $data['arrears_paid'] = $this->reports_model->employeeArrearByMonth($empID, $payroll_date);
-            $data['paid_with_arrears'] = $this->reports_model->employeePaidWithArrear($empID, $payroll_date);
-            $data['paid_with_arrears_d'] = $this->reports_model->employeeArrearPaidAll($empID, $payroll_date);
-            $data['salary_advance_loan_remained'] = $this->reports_model->loansAmountRemained($empID, $payroll_date);
-            $data['leaveBalance'] = $this->attendance_model->getLeaveBalance($empID, $emp->hire_date, $payroll_month_end);
+        $data['payroll_date'] = $date;
 
-            $data['payroll_date'] =$date;
+        $date = explode('-', $payroll_date);
+        $payroll_month = $date[0] . '-' . $date[1];
 
-            $date = explode('-', $payroll_date);
-            $payroll_month = $date[0] . '-' . $date[1];
+        $data['bank_loan'] = $this->reports_model->bank_loans($empID, $payroll_month);
+        $data['total_bank_loan'] = $this->reports_model->sum_bank_loans($empID, $payroll_month);
 
-            $data['bank_loan'] = $this->reports_model->bank_loans($empID, $payroll_month);
-            $data['total_bank_loan'] = $this->reports_model->sum_bank_loans($empID, $payroll_month);
+        //include(app_path() . '/reports/customleave_report.php');
+        // include app_path() . '/reports/payslip.php';
 
-            //include(app_path() . '/reports/customleave_report.php');
-            // include app_path() . '/reports/payslip.php';
+        //return view('payroll.payslip_details_pdf', $data);
+        // $pdf = Pdf::loadView('payroll.payslip', $data)->setPaper('a4', 'potrait');
 
-            //return view('payroll.payslip_details_pdf', $data);
-           // $pdf = Pdf::loadView('payroll.payslip', $data)->setPaper('a4', 'potrait');
-
-          $pdf = Pdf::loadView('payroll.payslip_details_pdf', $data)->setPaper('a4', 'potrait');
-
-
+        $pdf = Pdf::loadView('payroll.payslip_details_pdf', $data)->setPaper('a4', 'potrait');
 
         // $pdf = Pdf::loadView('payroll.payslip2', $data)->setPaper('a4', 'potrait');
 
@@ -2131,34 +2049,27 @@ class PayrollController extends Controller
         // return $monthName;
 
         $email_data = array(
-            'subject' => 'Payslip for '.$monthName.' '.$date_separate[0],
+            'subject' => 'Payslip for ' . $monthName . ' ' . $date_separate[0],
             'view' => 'emails.payslip',
             'email' => "",
             'pdf' => $pdf,
-            'month'=>$monthName.' '.$date_separate[0],
+            'month' => $monthName . ' ' . $date_separate[0],
             'full_name' => $emp->fname,
         );
 
-
         Notification::route('mail', $employee->email)->notify(new EmailPayslip($email_data));
-
-
 
         // $data_all['emp_id'] = $payroll_emp_ids;
 
         // return view('app.reports/payslip_all', $data_all);
     }
 
-
-    function send_payslips(Request $request)
+    public function send_payslips(Request $request)
     {
-
-
 
         $payrollDate = $request->input("payrollDate");
         //Get All Employee Emails
         // $payrollDate = $this->uri->segment(3);
-
 
         $employees = $this->payroll_model->send_payslips($payrollDate);
         $this->payroll_model->updatePayrollMail($payrollDate);
@@ -2169,8 +2080,6 @@ class PayrollController extends Controller
         }
         echo json_encode($response_array);
     }
-
-
 
     public function mailConfiguration()
     {
@@ -2194,7 +2103,7 @@ class PayrollController extends Controller
                 'name' => $request->input('name'),
                 'secure' => $request->input('encryption'),
                 'port' => $request->input('port'),
-                'email' => $request->input('username')
+                'email' => $request->input('username'),
             );
 
             try {
@@ -2223,7 +2132,7 @@ class PayrollController extends Controller
         }
     }
 
-    function employeeFilter()
+    public function employeeFilter()
     {
         $type = $this->uri->segment(3);
 
@@ -2236,13 +2145,13 @@ class PayrollController extends Controller
         echo json_encode($data);
     }
 
-    function password_generator($size)
+    public function password_generator($size)
     {
         $char = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$';
         $init = strlen($char);
         $init--;
 
-        $result = NULL;
+        $result = null;
 
         for ($x = 1; $x <= $size; $x++) {
             $index = rand(0, $init);
@@ -2252,7 +2161,7 @@ class PayrollController extends Controller
         return $result;
     }
 
-    function TestMail()
+    public function TestMail()
     {
         $this->load->library('Phpmailer_lib');
         $mail = $this->phpmailer_lib->load();
@@ -2271,7 +2180,6 @@ class PayrollController extends Controller
         //For localhost uses
         // $mail->SMTPSecure = 'ssl';
         // $mail->Port     = 465;
-
 
         $mail->setFrom('flex@cits.co.tz', "My NAme is Miraji");
         $mail->addReplyTo('flex@cits.co.tz', 'CodexWorld');
