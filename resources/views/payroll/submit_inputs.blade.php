@@ -73,8 +73,6 @@
                 cache: false,
                 async: true,
             }).done(function(data) {
-                alert("data");
-
                 $('#payrollDate').prop('disabled', true );
 
                 $('#payrollFeedback').fadeOut('fast', function() {
