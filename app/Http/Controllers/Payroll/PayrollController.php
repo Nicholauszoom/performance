@@ -62,10 +62,12 @@ class PayrollController extends Controller
 
                     // DATE MANIPULATION
                     $calendar = $request->payrolldate;
-                    $datewell = explode("/", $calendar);
+                    
+                    $datewell = explode("-", $calendar);
+                  
                     $mm = $datewell[1];
-                    $dd = $datewell[0];
-                    $yyyy = $datewell[2];
+                    $dd = $datewell[2];
+                    $yyyy = $datewell[0];
                     $payroll_date = $yyyy . "-" . $mm . "-" . $dd;
                     $payroll_month = $yyyy . "-" . $mm;
                     $empID = auth()->user()->emp_id;

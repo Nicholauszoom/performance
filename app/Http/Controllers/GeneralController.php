@@ -5434,8 +5434,9 @@ class GeneralController extends Controller
         $data['pending_payroll'] = 0;
 
         if ($date) {
+            
             $date = $date->format('m/d/Y');
-
+    
             $date = date("Y-m-d", strtotime($date));
 
             $this->addPrevMonthSalaryArrears($date);

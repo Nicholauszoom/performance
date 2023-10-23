@@ -76,11 +76,11 @@
                 
 
                 $('#payrollFeedback').fadeOut('fast', function() {
-                    // $('#payrollFeedback').fadeIn('fast').html(data);
+                    $('#payrollFeedback').fadeIn('fast').html(data);
                 });
                 setTimeout(function() {
                     location.reload();
-                }, 3000)
+                }, 5000)
             })
             .fail(function(data) {
                 new Noty({
