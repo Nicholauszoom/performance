@@ -326,13 +326,17 @@ $data['leave_types'] = LeaveType::all();
             $employeeHireYear = $employeeHiredate[0];
             $employeeDate =  '';
 
-
+       
             if($employeeHireYear == $year  ){
-                $employeeDate =Auth::user()->hire_date;
+                $employeeDate = Auth::user()->hire_date;
 
             }else{
                 $employeeDate = $year.('-01-01');
             }
+
+            // dd($employeeDate);
+           
+
             $data['leaveBalance'] = $this->attendance_model->getLeaveBalance(Auth::user()->emp_id,$employeeDate, date('Y-m-d'));
             $data['sickLeaveBalance'] = $this->getRemainingDaysForLeave(Auth::user()->emp_id, 2);
             $data['compassionateLeaveBalance'] = $this->getRemainingDaysForLeave(Auth::user()->emp_id, 3);
@@ -344,6 +348,8 @@ $data['leave_types'] = LeaveType::all();
 
             $data['parent'] = 'My Services';
             $data['child'] = 'Leaves';
+            // dd($data);
+            
          return view('my-services/leaves', $data);
      }
 
@@ -584,12 +590,14 @@ public function saveLeave(Request $request) {
         }
 
         // Annual leave accurated days
-        $annualleaveBalance = $this->attendance_model->getLeaveBalance(session('emp_id'), $employeeDate, date('Y-m-d'));
-
+        $annualleaveBalance = $this->attendance_model->getLeaveBalance(session('emp_id'), Auth::user()->hire_date, date('Y-m-d'));
+      // dd($annualleaveBalance);
         // For  Requested days
          if($nature == 1){
         $holidays=SysHelpers::countHolidays($start,$end);
+        dd($holidays);
         $different_days = SysHelpers::countWorkingDays($start,$end)-$holidays;
+
          }
          else{
 
