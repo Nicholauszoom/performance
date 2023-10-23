@@ -407,16 +407,23 @@ class AttendanceModel extends Model
 
         $last_month_date = date('Y-m-t', strtotime($prev_month));
 
-        //dd($today);
-
-        $query = "SELECT  IF( (SELECT COUNT(id)  FROM leaves WHERE nature= '" . $nature . "' AND empID = '" . $empID . "')=0, 0, (SELECT SUM(days)  FROM leaves WHERE nature= '" . $nature . "' and empID = '" . $empID . "' and start <= '" . $today . "'  GROUP BY nature )) as days_spent, DATEDIFF('" . $today . "','" . $hireDate . "') as days_accrued limit 1";
+        $query = "SELECT  
+                IF(
+                    (SELECT COUNT(id) FROM leaves WHERE nature = '" . $nature . "' AND empID = '" . $empID . "') = 0, 
+                    0, 
+                    (SELECT SUM(days) FROM leaves WHERE nature = '" . $nature . "' AND empID = '" . $empID . "' AND start <= '" . $today . "' AND leave_address != 'auto' AND start BETWEEN '" . $hireDate . "' AND '" . $today . "' GROUP BY nature)
+                ) as days_spent, 
+                DATEDIFF('" . $today . "','" . $hireDate . "') as days_accrued";
+                
 
         $row = DB::select(DB::raw($query));
+
         $employee = DB::table('employee')->where('emp_id', $empID)->first();
+
         $remain = DB::table('leaves')->where('empID', $empID)   ->latest('created_at')->first();
-        //$date = $employee->hire_date;
+
         $d1 = new DateTime($hireDate);
-        // $todayDate = date('Y-m-d');
+
         $d2 = new DateTime($today);
 
         $diff = $d1->diff($d2);
@@ -426,34 +433,26 @@ class AttendanceModel extends Model
         $days = $diff->d;
 
         $days_this_month = intval(date('t', strtotime($last_month_date)));
-        $remaining_after_forfeitDays = LeaveForfeiting::where('empID', $empID)->value('days') ?? 0;
 
-        // dd($remaining_after_forfeitDays);
+        $remaining_after_forfeitDays = LeaveForfeiting::where('empID', $empID)->value('days') ?? 0;
 
         $accrual_days = (($days * $employee->accrual_rate) / 30) + $months * $employee->accrual_rate + $years * 12 * $employee->accrual_rate;
 
-        //$days * $employee->accrual_rate / $days_this_month +
         $interval = $d1->diff($d2);
-        $diffInMonths  = $interval->m;
-        //    dd($diffInMonths);
-        $spent = $row[0]->days_spent;
-        // $accrued = $row[0]->days_accrued;
 
-        // $accrual= 7*$accrued/90;
+        $diffInMonths  = $interval->m;
+
+        $spent = $row[0]->days_spent;
+
         $accrual = 0;
         if ($nature == 1) {
             $maximum_days = $accrual_days - $spent + floatval($remaining_after_forfeitDays);
-            // dd($maximum_days);
         } else {
             $days_entitled  = $this->days_entilted($nature);
 
             $maximum_days = $days_entitled - $spent;
         }
 
-
-
-
-        //dd($days);
         return $maximum_days;
     }
 

@@ -461,7 +461,7 @@ class ReportController extends Controller
         $info = $this->reports_model->company_info();
 
         $data['payroll_date'] = $request->date;
-
+        // dd($data);
         $summary = $data['summary'];
 
         if ($request->type == 1)
