@@ -81,7 +81,7 @@
                                     <th  class="text-end"><b>Loan Board</b></th>
                                     <th  class="text-end"><b>Advance/Others</b></th>
                                     <th  class="text-end"><b>Total Deduction</b></th>
-                                    <th  class="text-end"><b>Ammount Payable</b></th>
+                                    <th  class="text-end"><b>Amount Payable</b></th>
 
 
                     </tr>
