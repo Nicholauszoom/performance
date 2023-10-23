@@ -4,84 +4,76 @@ namespace App\Http\Controllers;
 
 //use App\Http\Controllers\Controller;
 
-use DateTime;
-use Carbon\Carbon;
-use App\Models\EMPL;
-use App\Models\Role;
 use App\Charts\EmployeeLineChart;
-use App\Models\User;
-use App\Models\Holiday;
-use App\Models\Project;
-use App\Models\Employee;
-use App\Models\Position;
-use App\Models\UserRole;
-use App\Models\AdhocTask;
-use App\Models\Approvals;
-use App\Models\Grievance;
-use App\Models\Promotion;
-use App\Models\TimeRatio;
-use Illuminate\Http\File;
-use App\Models\AuditTrail;
-use App\Models\BankBranch;
 use App\Helpers\SysHelpers;
-use App\Models\ProjectTask;
-use App\Models\TargetRatio;
-use App\Models\Termination;
-use App\Models\Disciplinary;
-use App\Models\ProjectModel;
-use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use App\Imports\ImportSalaryIncrement;
+use App\Models\AccessControll\Departments;
+use App\Models\AdhocTask;
 use App\Models\ApprovalLevel;
-use App\Models\FinancialLogs;
-use App\Models\LeaveApproval;
+use App\Models\Approvals;
+use App\Models\AttendanceModel;
+use App\Models\BankBranch;
 use App\Models\BehaviourRatio;
+use App\Models\Disciplinary;
+use App\Models\EducationQualification;
+use App\Models\EmailNotification;
+use App\Models\EmergencyContact;
+use App\Models\EMPL;
+use App\Models\Employee;
+use App\Models\EmployeeComplain;
+use App\Models\EmployeeDependant;
 use App\Models\EmployeeDetail;
-use App\Models\InputSubmission;
-//use PHPClamAV\Scanner;
-use PHPClamav\Facades\Clamav;
-use App\Models\Leaves;
 use App\Models\EmployeeParent;
+use App\Models\EmployeePerformance;
 use App\Models\EmployeeSkills;
 use App\Models\EmployeeSpouse;
-use App\Models\PositionSkills;
-use App\Models\AttendanceModel;
+use App\Models\EmploymentHistory;
+use App\Models\FinancialLogs;
+use App\Models\Grievance;
+use App\Models\Holiday;
+use App\Models\InputSubmission;
+use App\Models\LeaveApproval;
+//use PHPClamAV\Scanner;
+use App\Models\Payroll\FlexPerformanceModel;
+use App\Models\Payroll\ImprestModel;
 use App\Models\Payroll\Payroll;
-use Barryvdh\DomPDF\Facade\Pdf;
-use Elibyy\TCPDF\Facades\TCPDF;
-use App\Models\EmergencyContact;
-use App\Models\EmployeeComplain;
+use App\Models\Payroll\ReportModel;
 use App\Models\PerformanceModel;
 use App\Models\PerformanceRatio;
-use App\Models\EmailNotification;
-use App\Models\EmployeeDependant;
-use App\Models\EmploymentHistory;
-use Illuminate\Support\Facades\DB;
-use App\Models\EmployeePerformance;
-use App\Models\Payroll\ReportModel;
-use App\Http\Controllers\Controller;
-use App\Models\Payroll\ImprestModel;
-use App\Notifications\EmailRequests;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Facades\Gate;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Mail;
-use App\Notifications\RegisteredUser;
-use App\Models\EducationQualification;
-use Illuminate\Support\Facades\Redirect;
-use PhpOffice\PhpSpreadsheet\Writer\Xls;
+use App\Models\Position;
+use App\Models\PositionSkills;
 use App\Models\ProfessionalCertification;
-use PhpOffice\PhpSpreadsheet\Spreadsheet;
-use App\Models\AccessControll\Departments;
-use App\Models\Payroll\FlexPerformanceModel;
-use Illuminate\Support\Facades\Notification;
-use Maatwebsite\Excel\Facades\Excel;
-use Maatwebsite\Excel\Concerns\Importable;
-use App\Imports\ImportSalaryIncrement;
-use Illuminate\Support\Facades\Storage;
-// use Barryvdh\DomPDF\Facade\Pdf;
-use Illuminate\Http\Response;
+use App\Models\Project;
+use App\Models\ProjectModel;
+use App\Models\ProjectTask;
+use App\Models\Promotion;
+use App\Models\Role;
+use App\Models\TargetRatio;
+use App\Models\Termination;
+use App\Models\TimeRatio;
+use App\Models\User;
+use App\Models\UserRole;
+use App\Notifications\EmailRequests;
+use App\Notifications\RegisteredUser;
+use Barryvdh\DomPDF\Facade\Pdf;
+use Carbon\Carbon;
+use DateTime;
 use Exception;
-
+use Illuminate\Http\File;
+use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Notification;
+use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Storage;
+use Maatwebsite\Excel\Concerns\Importable;
+use Maatwebsite\Excel\Facades\Excel;
+// use Barryvdh\DomPDF\Facade\Pdf;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xls;
 
 class GeneralController extends Controller
 {
@@ -104,21 +96,17 @@ class GeneralController extends Controller
         $this->payroll_model = new Payroll;
     }
 
-
     public function authenticateUser($permissions)
     {
         if (!Auth::check()) {
             return redirect()->route('login');
         }
 
-
-
         if (!Auth::user()->can($permissions)) {
 
             abort(Response::HTTP_UNAUTHORIZED);
         }
     }
-
 
     public function update_login_info(Request $request)
     {
@@ -181,14 +169,11 @@ class GeneralController extends Controller
     public function userprofile(Request $request, $id)
     {
 
-
         $id = base64_decode($id);
 
         if (auth()->user()->emp_id != $id) {
             $this->authenticateUser('edit-employee');
         }
-
-
 
         $extra = $request->input('extra');
         $data['employee'] = $this->flexperformance_model->userprofile($id);
@@ -284,8 +269,6 @@ class GeneralController extends Controller
         }
     }
 
-
-
     public function updatecontract(Request $request)
     {
         $id = $request->input('id');
@@ -356,20 +339,10 @@ class GeneralController extends Controller
         return view('app.department', $data);
     }
 
-
-
-
-
-
-
-
-
-
-
     public function departmentCost()
     {
         $data['projects'] = $this->flexperformance_model->costProjects();
-        $data['departments'] =  $this->flexperformance_model->costDepartments();
+        $data['departments'] = $this->flexperformance_model->costDepartments();
         $data['parent'] = "Department";
         $data['child'] = "Costs";
 
@@ -404,17 +377,6 @@ class GeneralController extends Controller
             DB::table('department_cost')->insert($data);
         }
     }
-
-
-
-
-
-
-
-
-
-
-
 
     public function organization_level(Request $request)
     {
@@ -552,8 +514,6 @@ class GeneralController extends Controller
         return view('app.cost_center', $data);
     }
 
-
-
     public function nationality(Request $request)
     {
         $id = auth()->user()->emp_id;
@@ -625,7 +585,6 @@ class GeneralController extends Controller
             return view('app.company_info', $data);
         }
     }
-
 
     public function UpdateCompanyInfo(Request $request)
     {
@@ -727,7 +686,6 @@ class GeneralController extends Controller
 
     public function updateCostCenter(Request $request)
     {
-
 
         $branchID = $request->input('costCenterID');
         $updates = array(
@@ -1087,7 +1045,6 @@ class GeneralController extends Controller
     public function deleteDepartment($id)
     {
 
-
         $data = array(
             'state' => 0,
         );
@@ -1105,7 +1062,6 @@ class GeneralController extends Controller
 
     public function activateDepartment($id)
     {
-
 
         $data = array(
             'state' => 1,
@@ -2005,9 +1961,7 @@ class GeneralController extends Controller
 
                 // start of name information validation
 
-
                 'reason' => 'required|alpha',
-
 
             ]
         );
@@ -2019,9 +1973,6 @@ class GeneralController extends Controller
         $linemanager = $request->input('linemanager');
 
         $empID = auth()->user()->emp_id;
-
-
-
 
         $split_start = explode("  at  ", $start);
         $split_finish = explode("  at  ", $finish);
@@ -2039,7 +1990,6 @@ class GeneralController extends Controller
         $finish_final = date('Y-m-d ', strtotime($finish_calendar));
 
         $maxRange = ((strtotime($finish_final) - strtotime($start_final)) / 3600);
-
 
         // dd('Email Sent Successfully');
         //$linemanager = $this->flexperformance_model->get_linemanagerID($empID);
@@ -2219,19 +2169,16 @@ class GeneralController extends Controller
 
         $overtime_name = $this->flexperformance_model->get_overtime_name($overtime_category);
 
-
-        $result =   $this->flexperformance_model->direct_insert_overtime($empID, $signatory, $overtime_category, $date, $days, $percent, $line_maager);
+        $result = $this->flexperformance_model->direct_insert_overtime($empID, $signatory, $overtime_category, $date, $days, $percent, $line_maager);
         if ($result == true) {
             $amount = $days * ($employee_data->salary / 176) * $percent;
 
-            SysHelpers::FinancialLogs($empID,$overtime_name, '0.00', number_format($amount, 2), 'Payroll Input');
+            SysHelpers::FinancialLogs($empID, $overtime_name, '0.00', number_format($amount, 2), 'Payroll Input');
 
             echo "<p class='alert alert-success text-center'>Overtime Request saved Successifully</p>";
         } else {
             echo "<p class='alert alert-danger text-center'>Overtime Request not saved Successifully</p>";
         }
-
-
 
         // $split_start = explode("  at  ", $start);
         // $split_finish = explode("  at  ", $finish);
@@ -2483,11 +2430,8 @@ class GeneralController extends Controller
         echo "<p class='alert alert-success text-center'>Overtime Recommended Successifully</p>";
     }
 
-
-
     public function approved_financial_payments(Request $request)
     {
-
 
         $this->authenticateUser('edit-payroll');
         // if(session('mng_paym')||session('recom_paym')||session('appr_paym')){
@@ -2497,7 +2441,6 @@ class GeneralController extends Controller
         $data['pending_arrears'] = $this->payroll_model->pending_arrears_payment();
         $data['monthly_arrears'] = $this->payroll_model->all_arrears_payroll_month();
         $data['month_list'] = $this->flexperformance_model->payroll_month_list();
-
 
         $data['bonus'] = $this->payroll_model->selectBonus();
         $data['incentives'] = $this->payroll_model->employee_bonuses();
@@ -2593,8 +2536,7 @@ class GeneralController extends Controller
         $result = $this->flexperformance_model->approveOvertime($overtimeID, $signatory, $time_approved);
         if ($result == true) {
 
-
-            SysHelpers::FinancialLogs($emp_id,$overtime_name, '0.00', number_format($overtime, 2), 'Payroll Input');
+            SysHelpers::FinancialLogs($emp_id, $overtime_name, '0.00', number_format($overtime, 2), 'Payroll Input');
 
             echo "<p class='alert alert-success text-center'>Overtime Approved Successifully</p>";
         } else {
@@ -2701,7 +2643,6 @@ class GeneralController extends Controller
         }
     }
 
-
     public function cancelApprovedOvertimes($id)
     {
         $data = $this->flexperformance_model->getDeletedOvertime($id);
@@ -2801,7 +2742,6 @@ class GeneralController extends Controller
     {
         $id = $request->input('id');
 
-
         if ($request->type == 'updatename') {
 
             $data = array(
@@ -2847,8 +2787,6 @@ class GeneralController extends Controller
     {
 
         $this->authenticateUser('view-employee');
-
-
 
         // if(session('mng_emp')){
         //     $data['employee'] = $this->flexperformance_model->employee();
@@ -3607,9 +3545,9 @@ class GeneralController extends Controller
 
         // // $data['leave'] =  $this->attendance_model->leavereport();
         // if (session('mng_emp') || session('vw_emp') || session('appr_emp') || session('mng_roles_grp')) {
-            $data['transfers'] = $this->flexperformance_model->employeeTransfers();
-            $data['title'] = "Transfers";
-            return view('app.transfer', $data);
+        $data['transfers'] = $this->flexperformance_model->employeeTransfers();
+        $data['title'] = "Transfers";
+        return view('app.transfer', $data);
         // } else {
         //     echo 'Unauthorized Access';
         // }
@@ -3896,7 +3834,6 @@ class GeneralController extends Controller
 
             $this->flexperformance_model->update_loan($data, $loanID);
 
-
             $todate = date('Y-m-d');
 
             $result = $this->flexperformance_model->approve_loan($loanID, auth()->user()->emp_id, $todate);
@@ -4037,17 +3974,17 @@ class GeneralController extends Controller
     {
         $this->authenticateUser('view-report');
         // if (session('mng_paym') || session('recom_paym') || session('appr_paym')) {
-            $data['month_list'] = $this->flexperformance_model->payroll_month_list();
-            $data['year_list'] = $this->flexperformance_model->payroll_year_list();
-            $data['projects'] = $this->project_model->allProjects();
-            $data['employee'] = Employee::where('state', '=', 1)->get();
+        $data['month_list'] = $this->flexperformance_model->payroll_month_list();
+        $data['year_list'] = $this->flexperformance_model->payroll_year_list();
+        $data['projects'] = $this->project_model->allProjects();
+        $data['employee'] = Employee::where('state', '=', 1)->get();
 
-            $data['departments'] = Departments::all();
+        $data['departments'] = Departments::all();
 
-            $data['title'] = "Organisation Reports";
-            $data['leave_type'] = $this->attendance_model->leave_type();
-            $data['employee'] = Employee::all();
-            return view('app.organisation_reports', $data);
+        $data['title'] = "Organisation Reports";
+        $data['leave_type'] = $this->attendance_model->leave_type();
+        $data['employee'] = Employee::all();
+        return view('app.organisation_reports', $data);
         // } else {
         //     echo 'Unauthorized Access';
         // }
@@ -4078,11 +4015,7 @@ class GeneralController extends Controller
 
             ->pluck('count');
 
-
-
         $chart = new EmployeeLineChart;
-
-
 
         $chart->dataset('New Employee Registered Chart', 'bar', $employee)->options([
 
@@ -4092,12 +4025,8 @@ class GeneralController extends Controller
 
         ]);
 
-
-
         return $chart->api();
     }
-
-
 
     public function home(Request $request)
     {
@@ -4173,7 +4102,6 @@ class GeneralController extends Controller
         $data['line_overtime'] = $this->flexperformance_model->lineOvertimes(auth()->user()->emp_id);
         // end of overtime
 
-
         if (session('password_set') == "1") {
             return view('auth.password-change');
         } else {
@@ -4189,9 +4117,9 @@ class GeneralController extends Controller
         }
     }
 
-    function arrayRecursiveDiff($aArray1, $aArray2)
+    public function arrayRecursiveDiff($aArray1, $aArray2)
     {
-        $aReturn = array();;
+        $aReturn = array();
         //bool in_array( $val, $array_name, $mode );
         for ($i = 0; $i < count($aArray1); $i++) {
             if (in_array($aArray1[$i]['description'], $aArray2)) {
@@ -4481,7 +4409,6 @@ class GeneralController extends Controller
             'given_to' => $empID,
         );
 
-
         $datagroup = array(
             'empID' => $empID,
             'group_name' => 1,
@@ -4519,7 +4446,7 @@ class GeneralController extends Controller
         $todate = date('Y-m-d');
 
         $final_state = array(
-            'current_state' => 1
+            'current_state' => 1,
         );
 
         $datalog = array(
@@ -4559,15 +4486,15 @@ class GeneralController extends Controller
         $this->authenticateUser('view-employee');
 
         // if (session('mng_emp') || session('vw_emp') || session('appr_emp') || session('mng_roles_grp')) {
-            $data['employee1'] = $this->flexperformance_model->inactive_employee1();
-            $data['employee2'] = $this->flexperformance_model->inactive_employee2();
-            $data['employee3'] = $this->flexperformance_model->inactive_employee3();
+        $data['employee1'] = $this->flexperformance_model->inactive_employee1();
+        $data['employee2'] = $this->flexperformance_model->inactive_employee2();
+        $data['employee3'] = $this->flexperformance_model->inactive_employee3();
 
-            $data['title'] = "Employee";
-            $data['parent'] = "Inactive employee";
+        $data['title'] = "Employee";
+        $data['parent'] = "Inactive employee";
 
-            // dd($data['employee2']);
-            return view('app.inactive_employee', $data);
+        // dd($data['employee2']);
+        return view('app.inactive_employee', $data);
         // } else {
         //     echo 'Unauthorized Access';
         // }
@@ -4588,7 +4515,6 @@ class GeneralController extends Controller
     {
 
         $data['employees'] = $this->flexperformance_model->Employee();
-
 
         return view("unpaidleave.add-unpaid-leave", $data);
     }
@@ -4638,9 +4564,6 @@ class GeneralController extends Controller
         return redirect(route('flex.unpaid_leave'));
     }
 
-
-
-
     #####################DEDUCTIONS############################################
 
     public function delete_deduction($id, Request $request)
@@ -4682,7 +4605,6 @@ class GeneralController extends Controller
         header("Content-type: application/json");
         echo json_encode($json_array);
     }
-
 
     public function deduction_info($pattern)
     {
@@ -4738,8 +4660,7 @@ class GeneralController extends Controller
 
             $deductionName = DB::table('deductions')->select('name')->where('id', $request->input('deduction'))->first();
 
-
-          //  SysHelpers::FinancialLogs($request->input('empID'), 'Assigned ' . $deductionName->name, '0', $deductionName->amount / $deductionName->rate . ' ' . $deductionName->currency, 'Payroll Input');
+            //  SysHelpers::FinancialLogs($request->input('empID'), 'Assigned ' . $deductionName->name, '0', $deductionName->amount / $deductionName->rate . ' ' . $deductionName->currency, 'Payroll Input');
 
             if ($result == true) {
                 SysHelpers::AuditLog(1, "Assigned a Deduction to an Employee of ID =" . $request->input('empID') . "", $request);
@@ -4804,7 +4725,7 @@ class GeneralController extends Controller
 
                     $deductionName = DB::table('deduction')->select('name')->where('id', $request->input('deductionID'))->limit(1)->first();
 
-                    SysHelpers::FinancialLogs($request->input('empID'), $deductionName->name, number_format($deductionName->amount / $deductionName->rate,2) . ' ' . $deductionName->currency, '0.00', 'Payroll Input');
+                    SysHelpers::FinancialLogs($request->input('empID'), $deductionName->name, number_format($deductionName->amount / $deductionName->rate, 2) . ' ' . $deductionName->currency, '0.00', 'Payroll Input');
 
                     //SysHelpers::FinancialLogs($empID, 'Removed from deduction', $deductionName->name, '0', 'Payroll Input');
                 }
@@ -4835,7 +4756,6 @@ class GeneralController extends Controller
                 echo "<p class='alert alert-warning text-center'>No Group Selected! Please Select Atlest One Employee</p>";
             } else {
 
-
                 foreach ($arr as $group) {
                     $groupID = $group;
 
@@ -4843,7 +4763,7 @@ class GeneralController extends Controller
 
                     $deductionName = DB::table('deduction')->select('name')->where('id', $deductionID)->limit(1)->first();
 
-                    SysHelpers::FinancialLogs($request->input('empID'), $deductionName->name, number_format($deductionName->amount / $deductionName->rate,2) . ' ' . $deductionName->currency, '0.00', 'Payroll Input');
+                    SysHelpers::FinancialLogs($request->input('empID'), $deductionName->name, number_format($deductionName->amount / $deductionName->rate, 2) . ' ' . $deductionName->currency, '0.00', 'Payroll Input');
 
                     // SysHelpers::FinancialLogs($groupID, 'Removed Group from deduction', $deductionName->name, '0', 'Payroll Input');
                 }
@@ -4977,8 +4897,6 @@ class GeneralController extends Controller
     public function updateCommonDeductions(Request $request)
     {
         // dd('update');
-
-
 
         if (isset($request->deductionID)) {
             $deductionID = $request->input('deductionID');
@@ -5212,16 +5130,15 @@ class GeneralController extends Controller
     public function allowance(Request $request)
     {
 
-             $this->authenticateUser('add-payroll');
+        $this->authenticateUser('add-payroll');
 
+        $data['allowance'] = $this->flexperformance_model->allowance();
+        $data['meals'] = $this->flexperformance_model->meals_deduction();
+        $data['pendingPayroll'] = $this->payroll_model->pendingPayrollCheck();
+        $data['parent'] = "Settings";
+        $data['child'] = "Allowances";
 
-            $data['allowance'] = $this->flexperformance_model->allowance();
-            $data['meals'] = $this->flexperformance_model->meals_deduction();
-            $data['pendingPayroll'] = $this->payroll_model->pendingPayrollCheck();
-            $data['parent'] = "Settings";
-            $data['child'] = "Allowances";
-
-            return view('allowance.allowance', $data);
+        return view('allowance.allowance', $data);
         // } else {
         //     echo "Unauthorized Access";
         // }
@@ -5232,17 +5149,17 @@ class GeneralController extends Controller
 
         // if (session('mng_paym') || session('recom_paym') || session('appr_paym')) {
 
-            $this->authenticateUser('add-payroll');
+        $this->authenticateUser('add-payroll');
 
-            $data['overtimes'] = $this->flexperformance_model->overtime_allowances();
-            $data['overtimess'] = $this->flexperformance_model->overtime_allowances();
-            $data['meals'] = $this->flexperformance_model->meals_deduction();
-            $data['pendingPayroll'] = $this->payroll_model->pendingPayrollCheck();
-            $data['parent'] = "Settings";
-            $data['child'] = "Overtime";
-            $data['title'] = "Overtime";
+        $data['overtimes'] = $this->flexperformance_model->overtime_allowances();
+        $data['overtimess'] = $this->flexperformance_model->overtime_allowances();
+        $data['meals'] = $this->flexperformance_model->meals_deduction();
+        $data['pendingPayroll'] = $this->payroll_model->pendingPayrollCheck();
+        $data['parent'] = "Settings";
+        $data['child'] = "Overtime";
+        $data['title'] = "Overtime";
 
-            return view('overtime.allowance_overtime', $data);
+        return view('overtime.allowance_overtime', $data);
         // } else {
         //     echo "Unauthorized Access";
         // }
@@ -5251,24 +5168,24 @@ class GeneralController extends Controller
     public function statutory_deductions(Request $request)
     {
 
-           $this->authenticateUser('add-payroll');
+        $this->authenticateUser('add-payroll');
 
         // if (session('mng_paym') || session('recom_paym') || session('appr_paym')) {
-            $data['allowance'] = $this->flexperformance_model->allowance();
-            $data['overtimes'] = $this->flexperformance_model->overtime_allowances();
-            $data['deduction'] = $this->flexperformance_model->deductions();
-            $data['pension'] = $this->flexperformance_model->pension_fund();
-            $data['meals'] = $this->flexperformance_model->meals_deduction();
-            $data['pendingPayroll'] = $this->payroll_model->pendingPayrollCheck();
-            $data['deduction'] = $this->flexperformance_model->deduction();
+        $data['allowance'] = $this->flexperformance_model->allowance();
+        $data['overtimes'] = $this->flexperformance_model->overtime_allowances();
+        $data['deduction'] = $this->flexperformance_model->deductions();
+        $data['pension'] = $this->flexperformance_model->pension_fund();
+        $data['meals'] = $this->flexperformance_model->meals_deduction();
+        $data['pendingPayroll'] = $this->payroll_model->pendingPayrollCheck();
+        $data['deduction'] = $this->flexperformance_model->deduction();
 
-            $data['paye'] = $this->flexperformance_model->paye();
-            $data['pendingPayroll'] = $this->payroll_model->pendingPayrollCheck();
+        $data['paye'] = $this->flexperformance_model->paye();
+        $data['pendingPayroll'] = $this->payroll_model->pendingPayrollCheck();
 
-            $data['parent'] = "Settings";
-            $data['child'] = "Statutory Deductions";
+        $data['parent'] = "Settings";
+        $data['child'] = "Statutory Deductions";
 
-            return view('app.statutory_deduction', $data);
+        return view('app.statutory_deduction', $data);
         // } else {
         //     echo "Unauthorized Access";
         // }
@@ -5279,15 +5196,15 @@ class GeneralController extends Controller
 
         $this->authenticateUser('add-payroll');
 
-            $data['allowance'] = $this->flexperformance_model->allowance();
-            $data['currencies'] = $this->flexperformance_model->get_currencies();
-            $data['overtimes'] = $this->flexperformance_model->overtime_allowances();
-            $data['deduction'] = $this->flexperformance_model->deductions();
-            $data['pension'] = $this->flexperformance_model->pension_fund();
-            $data['meals'] = $this->flexperformance_model->meals_deduction();
-            $data['pendingPayroll'] = $this->payroll_model->pendingPayrollCheck();
-            $data['title'] = "Non-Statutory Deductions";
-            return view('app.non_statutory_deductions', $data);
+        $data['allowance'] = $this->flexperformance_model->allowance();
+        $data['currencies'] = $this->flexperformance_model->get_currencies();
+        $data['overtimes'] = $this->flexperformance_model->overtime_allowances();
+        $data['deduction'] = $this->flexperformance_model->deductions();
+        $data['pension'] = $this->flexperformance_model->pension_fund();
+        $data['meals'] = $this->flexperformance_model->meals_deduction();
+        $data['pendingPayroll'] = $this->payroll_model->pendingPayrollCheck();
+        $data['title'] = "Non-Statutory Deductions";
+        return view('app.non_statutory_deductions', $data);
 
     }
 
@@ -5372,7 +5289,6 @@ class GeneralController extends Controller
 
         );
 
-
         DB::table('deductions')->insert($data);
         echo "Record inserted successfully.<br/>";
         return redirect('flex/non_statutory_deductions');
@@ -5430,8 +5346,7 @@ class GeneralController extends Controller
 
             $allowanceName = DB::table('allowances')->select('name')->where('id', $request->input('allowance'))->limit(1)->first();
 
-           // SysHelpers::FinancialLogs($data['empID'], 'Assign ' . $allowanceName->name, '0.00', ($data['amount'] != 0) ? $data['amount'] . ' ' . $data['currency'] : $data['percent'] . '%',  'Payroll Input');
-
+            // SysHelpers::FinancialLogs($data['empID'], 'Assign ' . $allowanceName->name, '0.00', ($data['amount'] != 0) ? $data['amount'] . ' ' . $data['currency'] : $data['percent'] . '%',  'Payroll Input');
 
             if ($result == true) {
                 // $this->flexperformance_model->audit_log("Assigned an allowance to Employee with Id = " . $request->input('empID') . " ");
@@ -5442,9 +5357,8 @@ class GeneralController extends Controller
         }
     }
 
-
-    public function addPrevMonthSalaryArrears($date){
-
+    public function addPrevMonthSalaryArrears($date)
+    {
 
         // dd($date);
         // $date="20-11-2023";
@@ -5455,7 +5369,7 @@ class GeneralController extends Controller
 
         $previous_payroll_month = $this->reports_model->prevPayrollMonth($previous_payroll_month_raw);
 
-        $previous_payroll_month=date('Y-m-d',strtotime($previous_payroll_month));
+        $previous_payroll_month = date('Y-m-d', strtotime($previous_payroll_month));
 
         $last_day_of_month = date('Y-m-t', strtotime($previous_payroll_month));
 
@@ -5470,99 +5384,89 @@ class GeneralController extends Controller
             DB::raw("({$daysInMonth} - DAY(hire_date) + 1) * salary / 30 as partialpayment"),
 
         ])
-        ->where(function ($query) use ($startDate, $endDate) {
-            $query->where('hire_date', '>', $startDate,)
-                ->where('hire_date', '<=', $endDate);
-        })
-        ->get();
+            ->where(function ($query) use ($startDate, $endDate) {
+                $query->where('hire_date', '>', $startDate, )
+                    ->where('hire_date', '<=', $endDate);
+            })
+            ->get();
 
+        foreach ($employees as $employee) {
 
-       foreach($employees as $employee){
+            // dd($employee->partialpayment);
+            $data = array(
+                "name" => "arrears",
+                "amount" => $employee->partialpayment, //The amount
+                "mode" => "1", //1 fixed value
+                "type" => "0",
+                "taxable" => "YES",
+                "pensionable" => "YES",
+                "Isrecursive" => "NO",
+                "Isbik" => "NO",
+                "state" => 1, //1 active state
+                "percent" => 0,
+            );
 
+            $result = DB::table('allowances')->insertGetId($data);
 
-        // dd($employee->partialpayment);
-        $data = array(
-            "name" => "arrears",
-            "amount" => $employee->partialpayment, //The amount
-            "mode" => "1",  //1 fixed value
-            "type" => "0",
-            "taxable" => "YES",
-            "pensionable" => "YES",
-            "Isrecursive" => "NO",
-            "Isbik" => "NO",
-            "state" => 1, //1 active state
-            "percent" => 0,
-        );
+            // $result = $this->flexperformance_model->addAllowance($data);
 
-        $result=DB::table('allowances')->insertGetId($data);
+            $data = array(
+                'empID' => $employee->emp_id,
+                'allowance' => $result,
+                'amount' => $employee->partialpayment,
+                'mode' => "1", //fixed
+                'percent' => "0", //percent
+                'currency' => "TZS",
+                'rate' => 1,
+            );
 
-        // $result = $this->flexperformance_model->addAllowance($data);
-
-        $data = array(
-            'empID' => $employee->emp_id,
-            'allowance' => $result,
-            'amount' => $employee->partialpayment,
-            'mode' => "1", //fixed
-            'percent' => "0", //percent
-            'currency' => "TZS",
-            'rate' => 1,
-        );
-
-        $result = $this->flexperformance_model->assign_allowance($data);
-       }
-
-
+            $result = $this->flexperformance_model->assign_allowance($data);
+        }
 
     }
 
-
-
-
-
     public function submitInputs(Request $request)
     {
-
-
-
         $this->authenticateUser('edit-payroll');
+
         $date = date_create_from_format('d/m/Y', $request->date);
+
         $data['pending_payroll'] = 0;
 
-
-
         if ($date) {
+            $date = $date->format('m/d/Y');
 
+            $date = date("Y-m-d", strtotime($date));
 
+            $this->addPrevMonthSalaryArrears($date);
 
-        $date = $date->format('m/d/Y');
-        $date = date("Y-m-d", strtotime($date));
-        $this->addPrevMonthSalaryArrears($date);
-        if ($request->method() == 'POST') {
-            $month  = $this->payroll_model->checkPayrollMonth($date);
-            $submission  = $this->payroll_model->checkInputMonth($date);
-            if ($month < 1) {
-                if ($submission < 1) {
-                    $allowances = $this->payroll_model->getAssignedAllowance();
-                    foreach ($allowances as $row) {
-                        if ($row->state == 1) {
-                            SysHelpers::FinancialLogs($row->empID,$row->name, '0', ($row->amount != 0) ? number_format($row->amount, 2) . ' ' . $row->currency : $row->percent . '%',  'Payroll Input', $date);
+            if ($request->method() == 'POST') {
+                $month = $this->payroll_model->checkPayrollMonth($date);
+                $submission = $this->payroll_model->checkInputMonth($date);
+
+                if ($month < 1) {
+                    if ($submission < 1) {
+                        $allowances = $this->payroll_model->getAssignedAllowance();
+                        foreach ($allowances as $row) {
+                            if ($row->state == 1) {
+                                SysHelpers::FinancialLogs($row->empID, $row->name, '0', ($row->amount != 0) ? number_format($row->amount, 2) . ' ' . $row->currency : $row->percent . '%', 'Payroll Input', $date);
+                            }
                         }
+                        $deductions = $this->payroll_model->getAssignedDeduction();
+                        foreach ($deductions as $row) {
+                            SysHelpers::FinancialLogs($row->empID, $row->name, '0', ($row->amount != 0) ? number_format($row->amount, 2) . ' ' . $row->currency : $row->percent . '%', 'Payroll Input', $date);
+                        }
+                        InputSubmission::create(['empID' => auth()->user()->emp_id, 'date' => $date]);
+                        echo "<p class='alert alert-success text-center'>Inputs  submitted Successfuly</p>";
+                    } else {
+                        echo "<p class='alert alert-danger text-center'>Inputs for this payroll month already submitted</p>";
                     }
-                    $deductions = $this->payroll_model->getAssignedDeduction();
-                    foreach ($deductions as $row) {
-                        SysHelpers::FinancialLogs($row->empID,$row->name, '0', ($row->amount != 0) ? number_format($row->amount, 2) . ' ' . $row->currency : $row->percent . '%',  'Payroll Input', $date);
-                    }
-                    InputSubmission::create(['empID' => auth()->user()->emp_id, 'date' => $date]);
-                    echo "<p class='alert alert-success text-center'>Inputs  submitted Successfuly</p>";
                 } else {
-                    echo "<p class='alert alert-danger text-center'>Inputs for this payroll month already submitted</p>";
+                    echo "<p class='alert alert-danger text-center'>You cant submit inputs to previous payroll Month</p>";
                 }
-            } else {
-                echo "<p class='alert alert-danger text-center'>You cant submit inputs to previous payroll Month</p>";
             }
-        }
 
-    }else {
+        } else {
             return view('payroll.submit_inputs', $data);
         }
 
@@ -5629,7 +5533,7 @@ class GeneralController extends Controller
 
                     // SysHelpers::FinancialLogs($row->empID, 'Removed from '.$allowanceName->name, '0', ($data['amount'] != 0)? $data['amount'].' '.$data['currency'] : $data['percent'].'%',  'Payroll Input');
 
-                    SysHelpers::FinancialLogs($empID,$allowanceName->name, $amount->percent != 0 ? ($amount->percent * 100) . '%' : number_format($amount->amount,2) . ' ' . $amount->currency, '0.00', 'Payroll Input');
+                    SysHelpers::FinancialLogs($empID, $allowanceName->name, $amount->percent != 0 ? ($amount->percent * 100) . '%' : number_format($amount->amount, 2) . ' ' . $amount->currency, '0.00', 'Payroll Input');
 
                     $result = $this->flexperformance_model->remove_individual_from_allowance($empID, $allowanceID);
                 }
@@ -5642,8 +5546,6 @@ class GeneralController extends Controller
             }
         }
     }
-
-
 
     public function remove_group_from_allowance(Request $request)
     {
@@ -6110,124 +6012,122 @@ class GeneralController extends Controller
 
         $this->authenticateUser('add-payroll');
         // if (session('mng_roles_grp')) {
-            $request_type = $request->method();
+        $request_type = $request->method();
 
-            if ($request_type == "POST") {
+        if ($request_type == "POST") {
 
-                $data = array(
-                    'name' => $request->input('name'),
-                    'grouped_by' => $request->input('grouped_by'),
-                    'type' => 1,
-                    'created_by' => auth()->user()->emp_id,
-                );
+            $data = array(
+                'name' => $request->input('name'),
+                'grouped_by' => $request->input('grouped_by'),
+                'type' => 1,
+                'created_by' => auth()->user()->emp_id,
+            );
 
-                $this->flexperformance_model->addgroup($data);
+            $this->flexperformance_model->addgroup($data);
 
-                session('notegroup', "<p class='alert alert-success text-center'>Group Added Successifully</p>");
+            session('notegroup', "<p class='alert alert-success text-center'>Group Added Successifully</p>");
 
-                return redirect('/flex/financial_group');
-            } else {
-                // $id =auth()->user()->emp_id;
-                $data['role'] = $this->flexperformance_model->allrole();
-                $data['financialgroups'] = $this->flexperformance_model->finencialgroups();
-                $data['rolesgroups'] = $this->flexperformance_model->rolesgroups();
-                $data['pendingPayroll'] = $this->payroll_model->pendingPayrollCheck();
-                $data['title'] = "Financial Groups";
-                $data['parent'] = "Settings";
-                $data['child'] = "Financial Settings";
-                return view('app.financial_group', $data);
-            }
+            return redirect('/flex/financial_group');
+        } else {
+            // $id =auth()->user()->emp_id;
+            $data['role'] = $this->flexperformance_model->allrole();
+            $data['financialgroups'] = $this->flexperformance_model->finencialgroups();
+            $data['rolesgroups'] = $this->flexperformance_model->rolesgroups();
+            $data['pendingPayroll'] = $this->payroll_model->pendingPayrollCheck();
+            $data['title'] = "Financial Groups";
+            $data['parent'] = "Settings";
+            $data['child'] = "Financial Settings";
+            return view('app.financial_group', $data);
+        }
 
     }
 
     public function role(Request $request)
     {
-             $this->authenticateUser('add-payroll');
+        $this->authenticateUser('add-payroll');
 
-            if ($request->type == "addrole") {
-                $data = array(
-                    'name' => $request->input('name'),
-                    'created_by' => auth()->user()->emp_id,
-                );
+        if ($request->type == "addrole") {
+            $data = array(
+                'name' => $request->input('name'),
+                'created_by' => auth()->user()->emp_id,
+            );
 
-                $result = $this->flexperformance_model->addrole($data);
-                if ($result == true) {
-                    // $this->flexperformance_model->audit_log("Created New Role with empty permission set");
-                    session('note', "<p class='alert alert-success text-center'>Role Added Successifully</p>");
-                    return redirect('/flex/role');
-                } else {
-                    echo "<p class='alert alert-danger text-center'>Department Registration has FAILED, Contact Your Admin</p>";
-                }
-            } elseif ($request->type == "addgroup") {
-
-                $data = array(
-                    'name' => $request->input('name'),
-                    //'type' => $request->input('type'),
-                    'type' => 2,
-                    'created_by' => auth()->user()->emp_id,
-                );
-
-                $this->flexperformance_model->addgroup($data);
-
-                session('notegroup', "<p class='alert alert-success text-center'>Group Added Successifully</p>");
-                //$this->department();
+            $result = $this->flexperformance_model->addrole($data);
+            if ($result == true) {
+                // $this->flexperformance_model->audit_log("Created New Role with empty permission set");
+                session('note', "<p class='alert alert-success text-center'>Role Added Successifully</p>");
                 return redirect('/flex/role');
             } else {
-                // $id =auth()->user()->emp_id;
-                $data['role'] = $this->flexperformance_model->allrole();
-                $data['financialgroups'] = $this->flexperformance_model->finencialgroups();
-                $data['rolesgroups'] = $this->flexperformance_model->rolesgroups();
-                $data['pendingPayroll'] = $this->payroll_model->pendingPayrollCheck();
-                $data['title'] = "Roles and Groups";
-                return view('app.role', $data);
+                echo "<p class='alert alert-danger text-center'>Department Registration has FAILED, Contact Your Admin</p>";
             }
+        } elseif ($request->type == "addgroup") {
+
+            $data = array(
+                'name' => $request->input('name'),
+                //'type' => $request->input('type'),
+                'type' => 2,
+                'created_by' => auth()->user()->emp_id,
+            );
+
+            $this->flexperformance_model->addgroup($data);
+
+            session('notegroup', "<p class='alert alert-success text-center'>Group Added Successifully</p>");
+            //$this->department();
+            return redirect('/flex/role');
+        } else {
+            // $id =auth()->user()->emp_id;
+            $data['role'] = $this->flexperformance_model->allrole();
+            $data['financialgroups'] = $this->flexperformance_model->finencialgroups();
+            $data['rolesgroups'] = $this->flexperformance_model->rolesgroups();
+            $data['pendingPayroll'] = $this->payroll_model->pendingPayrollCheck();
+            $data['title'] = "Roles and Groups";
+            return view('app.role', $data);
+        }
 
     }
 
     public function financial_groups_byRole_details($id)
     {
-            $id = base64_decode($id);
+        $id = base64_decode($id);
 
-            $data['members'] = $this->flexperformance_model->roles_byid($id);
-            $data['nonmembers'] = $this->flexperformance_model->nonmembers_roles_byid($id);
-            $data['headcounts'] = $this->flexperformance_model->memberscount($id);
-            $data['groupInfo'] = $this->flexperformance_model->group_byid($id);
-            $data['title'] = "Groups";
-            return view('app.groups_by_role', $data);
+        $data['members'] = $this->flexperformance_model->roles_byid($id);
+        $data['nonmembers'] = $this->flexperformance_model->nonmembers_roles_byid($id);
+        $data['headcounts'] = $this->flexperformance_model->memberscount($id);
+        $data['groupInfo'] = $this->flexperformance_model->group_byid($id);
+        $data['title'] = "Groups";
+        return view('app.groups_by_role', $data);
 
     }
 
     public function financial_groups_details($id)
     {
-            $id = base64_decode($id);
+        $id = base64_decode($id);
 
-            $data['members'] = $this->flexperformance_model->members_byid($id);
-            $data['nonmembers'] = $this->flexperformance_model->nonmembers_byid($id);
-            $data['headcounts'] = $this->flexperformance_model->memberscount($id);
-            $data['groupInfo'] = $this->flexperformance_model->group_byid($id);
-            $data['title'] = "Groups";
-            $data['parent'] = "Financial Setting";
-            $data['child'] = "Groups";
+        $data['members'] = $this->flexperformance_model->members_byid($id);
+        $data['nonmembers'] = $this->flexperformance_model->nonmembers_byid($id);
+        $data['headcounts'] = $this->flexperformance_model->memberscount($id);
+        $data['groupInfo'] = $this->flexperformance_model->group_byid($id);
+        $data['title'] = "Groups";
+        $data['parent'] = "Financial Setting";
+        $data['child'] = "Groups";
 
-            return view('app.financial_groups_details', $data);
+        return view('app.financial_groups_details', $data);
 
     }
 
     public function groups(Request $request)
     {
         $this->authenticateUser('add-payroll');
-            $id = base64_decode($request->id);
+        $id = base64_decode($request->id);
 
-            $data['members'] = $this->flexperformance_model->members_byid($id);
-            $data['nonmembers'] = $this->flexperformance_model->nonmembers_byid($id);
-            $data['headcounts'] = $this->flexperformance_model->memberscount($id);
-            $data['groupInfo'] = $this->flexperformance_model->group_byid($id);
-            $data['title'] = "Groups";
-            return view('app.groups', $data);
+        $data['members'] = $this->flexperformance_model->members_byid($id);
+        $data['nonmembers'] = $this->flexperformance_model->nonmembers_byid($id);
+        $data['headcounts'] = $this->flexperformance_model->memberscount($id);
+        $data['groupInfo'] = $this->flexperformance_model->group_byid($id);
+        $data['title'] = "Groups";
+        return view('app.groups', $data);
 
     }
-
-
 
     //
     public function removeEmployeeByRoleFromGroup(Request $request)
@@ -6276,7 +6176,6 @@ class GeneralController extends Controller
 
         $this->authenticateUser('add-payroll');
 
-
         $method = $request->method();
 
         if ($method == "POST") {
@@ -6313,7 +6212,6 @@ class GeneralController extends Controller
     {
 
         $this->authenticateUser('add-payroll');
-
 
         $method = $request->method();
 
@@ -6427,7 +6325,6 @@ class GeneralController extends Controller
     {
 
         $this->authenticateUser('add-payroll');
-
 
         $method = $request->method();
 
@@ -6661,7 +6558,6 @@ class GeneralController extends Controller
     public function role_info(Request $request)
     {
 
-
         // dd(Gate::allows('View Employee Summaryy'));
 
         $id = base64_decode($request->id);
@@ -6669,13 +6565,11 @@ class GeneralController extends Controller
         $permissions = DB::table('permission')->get();
         $permissions_raw = array();
 
-
-
         foreach ($permissions as $row) {
             array_push($permissions_raw, array(
                 'id' => $row->id,
                 'name' => $row->name,
-                'type' => $row->permission_type
+                'type' => $row->permission_type,
             ));
         }
 
@@ -6701,11 +6595,9 @@ class GeneralController extends Controller
         $groupsnot = $this->flexperformance_model->rolesgroupsnot();
         $members = $this->flexperformance_model->role_members_byid($id);
 
-
         return view('app.updaterole', compact('role', 'permissions', 'permissions_grouped', 'employeesnot', 'groupsnot', 'members'));
 
         // $data['groupsnot'] = $this->flexperformance_model->rolesgroupsnot();
-
 
         // if (session('mng_roles_grp')) {
         //     $id = base64_decode($request->id);
@@ -6750,18 +6642,15 @@ class GeneralController extends Controller
     public function updaterole(Request $request)
     {
 
-
-
         // dd($request->id);
         if (isset($_POST['assign'])) {
 
             $result = DB::table('role')->where('id', $request->roleID)->update([
                 // 'id' => $req->input('name'),
-                'permissions' => json_encode($request->permissions)
+                'permissions' => json_encode($request->permissions),
             ]);
 
             // dd($result);
-
 
             if ($result == 1) {
                 SysHelpers::AuditLog(1, "Added Permissions to a Role  permission tag as " . json_encode($request->permissions) . " ", $request);
@@ -6818,7 +6707,7 @@ class GeneralController extends Controller
                 return redirect('/flex/userprofile/' . base64_encode($userID) . '#tab_role');
             } else {
                 session('note', "<p class='alert alert-danger text-center'>FAILED: Role(s) NOT Granted, Please Try Again!</p>");
-                return redirect('/flex/userprofile/?id=' . base64_encode($userID)  . '#tab_role');
+                return redirect('/flex/userprofile/?id=' . base64_encode($userID) . '#tab_role');
             }
         }
     }
@@ -6937,22 +6826,22 @@ class GeneralController extends Controller
     public function addEmployee(Request $request)
     {
         $this->authenticateUser('add-employee');
-            $data['pdrop'] = $this->flexperformance_model->positiondropdown();
-            $data['contract'] = $this->flexperformance_model->contractdrop();
-            $data['ldrop'] = $this->flexperformance_model->linemanagerdropdown();
-            $data['ddrop'] = $this->flexperformance_model->departmentdropdown();
-            $data['currencies'] = $this->flexperformance_model->get_currencies();
+        $data['pdrop'] = $this->flexperformance_model->positiondropdown();
+        $data['contract'] = $this->flexperformance_model->contractdrop();
+        $data['ldrop'] = $this->flexperformance_model->linemanagerdropdown();
+        $data['ddrop'] = $this->flexperformance_model->departmentdropdown();
+        $data['currencies'] = $this->flexperformance_model->get_currencies();
 
-            $data['pensiondrop'] = $this->flexperformance_model->pensiondropdown();
-            $data['branch'] = $this->flexperformance_model->branchdropdown();
-            $data['bankdrop'] = $this->flexperformance_model->bank();
-            $data['countrydrop'] = $this->flexperformance_model->countrydropdown();
+        $data['pensiondrop'] = $this->flexperformance_model->pensiondropdown();
+        $data['branch'] = $this->flexperformance_model->branchdropdown();
+        $data['bankdrop'] = $this->flexperformance_model->bank();
+        $data['countrydrop'] = $this->flexperformance_model->countrydropdown();
 
-            $data['title'] = "Add Employee";
-            $data['parent'] = "Employee";
-            $data["child"] = "Register Employee";
-            // return $data['ldrop'];
-            return view('app.employeeAdd', $data);
+        $data['title'] = "Add Employee";
+        $data['parent'] = "Employee";
+        $data["child"] = "Register Employee";
+        // return $data['ldrop'];
+        return view('app.employeeAdd', $data);
 
     }
 
@@ -7043,15 +6932,15 @@ class GeneralController extends Controller
 
         if ($request->method() == 'POST') {
             if ($request->emp_id == 'all') {
-                $employee =  Employee::all();
+                $employee = Employee::all();
                 if ($request->type == 'All') {
-                    $employee =  Employee::all();
+                    $employee = Employee::all();
                 } elseif ($request->type == 1) {
-                    $employee =  Employee::all()->where('branch', 1)->where('emp_id', '!=', 102927)->where('emp_id', '!=', 102928)->where('emp_id', '!=', 100281);
+                    $employee = Employee::all()->where('branch', 1)->where('emp_id', '!=', 102927)->where('emp_id', '!=', 102928)->where('emp_id', '!=', 100281);
                 } elseif ($request->type == 1) {
-                    $employee =  Employee::all()->whereNot('branch', 1);
+                    $employee = Employee::all()->whereNot('branch', 1);
                 } else {
-                    $employee =  Employee::all();
+                    $employee = Employee::all();
                 }
             } else {
                 $employee = Employee::all()->where('emp_id', $request->emp_id);
@@ -7076,7 +6965,6 @@ class GeneralController extends Controller
                     return redirect()->back()->with(['error' => 'Password change Failed to to Email SMTP problems']);
                 }
             }
-
 
             return redirect()->back()->with(['success' => 'Password changed successfully']);
         } else {
@@ -7137,7 +7025,6 @@ class GeneralController extends Controller
             //         ]);
             // //     }
 
-
             // DATE MANIPULATION
             $calendar = str_replace('/', '-', $request->input('birthdate'));
             $contract_end = str_replace('/', '-', $request->input('contract_end'));
@@ -7153,10 +7040,6 @@ class GeneralController extends Controller
 
             $currency = $request->input("currency");
             $rate = $this->flexperformance_model->get_rate($currency);
-
-
-
-
 
             if (($required / 365) > 16) {
 
@@ -7238,8 +7121,7 @@ class GeneralController extends Controller
 
                     SysHelpers::FinancialLogs($id, 'Add Employee', '', '', 'Employee Registration');
 
-                    SysHelpers::FinancialLogs($id, 'Salary', '0.00', number_format($request->input("salary"),2), 'Employee Registration');
-
+                    SysHelpers::FinancialLogs($id, 'Salary', '0.00', number_format($request->input("salary"), 2), 'Employee Registration');
 
                     //register employee to leave approve maping
 
@@ -7250,7 +7132,6 @@ class GeneralController extends Controller
                     // $approval->level3 = $request->level_3;
                     $approval->escallation_time = 2;
                     $approval->save();
-
 
                     //end leave approve mapping
 
@@ -7289,7 +7170,7 @@ class GeneralController extends Controller
                             'fname' => $request->fname,
                             'lname' => $request->lname,
                             'username' => $emp_id,
-                            'password' => $password
+                            'password' => $password,
                         );
 
                         $user = User::first();
@@ -7587,9 +7468,6 @@ class GeneralController extends Controller
         }
     }
 
-
-
-
     public function audit_logs(Request $request)
     {
         if (session('mng_audit')) {
@@ -7643,8 +7521,6 @@ class GeneralController extends Controller
         } else {
             abort(400, 'Bad Request');
         }
-
-
 
         //    retrun redirectback();
     }
@@ -7799,16 +7675,16 @@ class GeneralController extends Controller
         }*/
         //exit($host.$port);
         $d =
-            $config = array(
-                'protocol' => 'TLS',
-                'smtp_host' => 'smtp.gmail.com',
-                'smtp_port' => 587,
-                'smtp_user' => 'mirajissa1@gmail.com', // change it to yours
-                'smtp_pass' => 'Mirajissa1@1994', // change it to yours
-                'mailtype' => 'html',
-                'charset' => 'iso-8859-1',
-                'wordwrap' => true,
-            );
+        $config = array(
+            'protocol' => 'TLS',
+            'smtp_host' => 'smtp.gmail.com',
+            'smtp_port' => 587,
+            'smtp_user' => 'mirajissa1@gmail.com', // change it to yours
+            'smtp_pass' => 'Mirajissa1@1994', // change it to yours
+            'mailtype' => 'html',
+            'charset' => 'iso-8859-1',
+            'wordwrap' => true,
+        );
 
         $message = "This is my email";
         $this->load->library('email', $config);
@@ -7846,16 +7722,16 @@ class GeneralController extends Controller
         }*/
         //exit($host.$port);
         $d =
-            $config = array(
-                'protocol' => 'TLS',
-                'smtp_host' => 'smtp.gmail.com',
-                'smtp_port' => 587,
-                'smtp_user' => 'mirajissa1@gmail.com', // change it to yours
-                'smtp_pass' => 'Mirajissa1@1994', // change it to yours
-                'mailtype' => 'text',
-                'charset' => 'iso-8859-1',
-                'wordwrap' => true,
-            );
+        $config = array(
+            'protocol' => 'TLS',
+            'smtp_host' => 'smtp.gmail.com',
+            'smtp_port' => 587,
+            'smtp_user' => 'mirajissa1@gmail.com', // change it to yours
+            'smtp_pass' => 'Mirajissa1@1994', // change it to yours
+            'mailtype' => 'text',
+            'charset' => 'iso-8859-1',
+            'wordwrap' => true,
+        );
 
         $message = "This is my email";
         $this->load->library('email', $config);
@@ -8060,21 +7936,21 @@ class GeneralController extends Controller
         $amount_staff_bank = 0;
         foreach ($staff_bank_totals as $row) {
             $amount_staff_bank += $row->salary +
-                $row->allowances - $row->pension - $row->loans - $row->deductions - $row->meals - $row->taxdue;
+            $row->allowances - $row->pension - $row->loans - $row->deductions - $row->meals - $row->taxdue;
         }
 
         /*amount bank temporary*/
         $amount_temporary_bank = 0;
         foreach ($temporary_bank_totals as $row) {
             $amount_temporary_bank += $row->salary +
-                $row->allowances - $row->pension - $row->loans - $row->deductions - $row->meals - $row->taxdue;
+            $row->allowances - $row->pension - $row->loans - $row->deductions - $row->meals - $row->taxdue;
         }
 
         /*mwp total*/
         $amount_mwp = 0;
         foreach ($temporary_mwp_total as $row) {
             $amount_mwp += $row->salary +
-                $row->allowances - $row->pension - $row->loans - $row->deductions - $row->meals - $row->taxdue;
+            $row->allowances - $row->pension - $row->loans - $row->deductions - $row->meals - $row->taxdue;
         }
 
         $total = $amount_mwp + $amount_staff_bank + $amount_temporary_bank;
@@ -8172,7 +8048,6 @@ class GeneralController extends Controller
         }
     }
 
-
     // start of terminations functions
 
     // For all Terminations Page
@@ -8190,7 +8065,6 @@ class GeneralController extends Controller
         $i = 1;
         $employee = Auth::User()->id;
 
-
         $role = UserRole::where('user_id', $employee)->first();
         $role_id = $role->role_id;
         $terminate = Approvals::where('process_name', 'Termination Approval')->first();
@@ -8205,7 +8079,6 @@ class GeneralController extends Controller
 
         return view('workforce-management.termination', $data, compact('terminations', 'i'));
     }
-
 
     // For Add Termination Page
     public function addTermination()
@@ -8224,8 +8097,6 @@ class GeneralController extends Controller
 
         return view('workforce-management.add-termination', $data);
     }
-
-
 
     // For Saving Termination
     public function saveTermination(Request $request)
@@ -8286,9 +8157,6 @@ class GeneralController extends Controller
         $nightshift_allowance = $request->nightshift_allowance;
         $transport_allowance = $request->transport_allowance;
 
-
-
-
         $termination = new Termination();
         $termination->employeeID = $request->employeeID;
         $termination->terminationDate = $request->terminationDate;
@@ -8316,10 +8184,6 @@ class GeneralController extends Controller
         $termination->otherDeductions = $request->otherDeductions;
         $termination->otherPayments = $request->otherPayments;
 
-
-
-
-
         $msg = "Employee Termination Benefits have been saved successfully";
 
         $calendar = $request->terminationDate;
@@ -8331,7 +8195,6 @@ class GeneralController extends Controller
         $payroll_month = $yyyy . "-" . $mm;
         $empID = auth()->user()->emp_id;
         $today = date('Y-m-d');
-
 
         $normal_days_overtime_amount = ($employee_actual_salary / 176) * 1.5 * $normalDays;
         $public_overtime_amount = ($employee_actual_salary / 176) * 2.0 * $publicDays;
@@ -8355,11 +8218,7 @@ class GeneralController extends Controller
             $nightshift_allowance +
             $otherPayments;
 
-
-
         //overtime calculation
-
-
 
         //check whether if is after payroll or before payroll
         $check_termination_date = $this->flexperformance_model->check_termination_payroll_date($payroll_month);
@@ -8390,11 +8249,10 @@ class GeneralController extends Controller
 
         $paye1 = DB::table('paye')->where('maximum', '>', $taxable)->where('minimum', '<=', $taxable)->first();
 
-
         $deduction_rate = $this->flexperformance_model->get_deduction_rate();
 
         $paye = $paye1->excess_added + $paye1->rate * ($taxable - $paye1->minimum);
-        $take_home = $taxable -  $paye;
+        $take_home = $taxable - $paye;
 
         $termination->total_gross = $total_gross;
         //wcf and sdl
@@ -8421,13 +8279,11 @@ class GeneralController extends Controller
     }
 
     // For Aprroving termination
-    public function  approveTermination($id)
+    public function approveTermination($id)
     {
         $this->authenticateUser('confirm-termination');
 
         $employee = Auth::User()->id;
-
-
 
         $role = UserRole::where('user_id', $employee)->first();
         $role_id = $role->role_id;
@@ -8453,7 +8309,6 @@ class GeneralController extends Controller
 
                 $position = Position::where('id', $employee)->first();
 
-
                 // chacking level 1
                 if ($approval->level1 == $employeeID) {
                     $empID = $request->deligated;
@@ -8463,16 +8318,12 @@ class GeneralController extends Controller
 
                         $this->attendance_model->save_deligated($leave->empID);
 
-
                         $level1 = DB::table('leave_approvals')->Where('level1', $empID)->update(['level1' => $leave->deligated]);
                         $level2 = DB::table('leave_approvals')->Where('level2', $empID)->update(['level2' => $leave->deligated]);
                         $level3 = DB::table('leave_approvals')->Where('level3', $empID)->update(['level3' => $leave->deligated]);
                         // dd($request->deligate);
 
                     }
-
-
-
 
                     $leave->status = 3;
                     $leave->state = 0;
@@ -8486,8 +8337,6 @@ class GeneralController extends Controller
                     if ($leave->deligated != null) {
                         $id = Auth::user()->emp_id;
                         $this->attendance_model->save_deligated($leave->empID);
-
-
 
                         $level1 = DB::table('leave_approvals')->Where('level1', $id)->update(['level1' => $leave->deligated]);
                         $level2 = DB::table('leave_approvals')->Where('level2', $id)->update(['level2' => $leave->deligated]);
@@ -8507,8 +8356,6 @@ class GeneralController extends Controller
                     if ($leave->deligated != null) {
                         $id = Auth::user()->emp_id;
                         $this->attendance_model->save_deligated($leave->empID);
-
-
 
                         $level1 = DB::table('leave_approvals')->Where('level1', $id)->update(['level1' => $leave->deligated]);
                         $level2 = DB::table('leave_approvals')->Where('level2', $id)->update(['level2' => $leave->deligated]);
@@ -8540,7 +8387,6 @@ class GeneralController extends Controller
             return redirect('flex/termination')->with(['error' => $msg]);
         }
     }
-
 
     // For Cancelling Termination
     public function cancelTermination($id)
@@ -8577,7 +8423,6 @@ class GeneralController extends Controller
 
         $name = $termination->employee->fname . ' ' . $termination->employee->mname . ' ' . $termination->employee->lname;
 
-
         $pdf = Pdf::loadView('reports.terminalbenefit2', compact('termination', 'employee_info'));
         // $pdf->setPaper([0, 0, 885.98, 396.85], 'landscape');
         $pdf->setPaper('landscape');
@@ -8586,21 +8431,17 @@ class GeneralController extends Controller
         //return view('workforce-management.terminal-balance', compact('termination','employee_info'));
     }
 
-
     // For getting employee informations
     public function get_employee_available_info(Request $request)
     {
-        $terminationDate =  $request->terminationDate;
+        $terminationDate = $request->terminationDate;
         $employeeID = $request->employeeID;
-
-
 
         $level1 = DB::table('leave_approvals')->Where('level1', $employeeID)->count();
         $level2 = DB::table('leave_approvals')->Where('level2', $employeeID)->count();
         $level3 = DB::table('leave_approvals')->Where('level3', $employeeID)->count();
 
         $data['deligate'] = $level1 + $level2 + $level3;
-
 
         $leave_entitled = Employee::where('emp_id', $employeeID)->first();
 
@@ -8643,18 +8484,15 @@ class GeneralController extends Controller
         $data['employee_actual_salary'] = $employee_actual_salary;
         $data['leave_allowance'] = $leave_allowance;
         $data['employee_salary'] = ($employee_actual_salary == $employee_salary) ? ($employee_salary * $dd / 30) : $employee_salary;
-        return  json_encode($data);
+        return json_encode($data);
     }
     // end of terminations functions
-
 
     // For view promotion/increment
     public function promotion()
     {
 
-
         $this->authenticateUser('view-promotions');
-
 
         $data['title'] = "Promtion|Increment";
         $data['employees'] = $this->flexperformance_model->Employee();
@@ -8689,17 +8527,11 @@ class GeneralController extends Controller
         $data['ldrop'] = $this->flexperformance_model->linemanagerdropdown();
         $data['ddrop'] = $this->flexperformance_model->departmentdropdown();
 
-
         $data['parent'] = 'Workforce';
         $data['child'] = 'Promote Employee';
 
-
-
-
         return view('workforce-management.add-promotion', $data);
     }
-
-
 
     // For Save Promotion
     public function savePromotion(Request $request)
@@ -8715,7 +8547,6 @@ class GeneralController extends Controller
                 'newSalary' => 'required',
             ]
         );
-
 
         $id = $request->emp_ID;
         $empl = Employee::where('emp_id', $id)->first();
@@ -8735,7 +8566,7 @@ class GeneralController extends Controller
         $old->save();
         // saving new employee data
 
-        SysHelpers::FinancialLogs($id, 'Salary', number_format($empl->salary * $empl->rate,2), number_format($request->newSalary * $empl->rate,2), 'Salary Increment');
+        SysHelpers::FinancialLogs($id, 'Salary', number_format($empl->salary * $empl->rate, 2), number_format($request->newSalary * $empl->rate, 2), 'Salary Increment');
 
         // $promotion =Employee::where('emp_id',$id)->first();
         // $promotion->position=$request->newPosition;
@@ -8743,13 +8574,12 @@ class GeneralController extends Controller
         // $promotion->emp_level=$request->newLevel;
         // $promotion->update();
 
-
         $msg = "Employee Promotion has been saved successfully";
         return redirect('flex/promotion')->with('msg', $msg);
     }
 
     // For Approve Promotion
-    public function  approvePromotion($id)
+    public function approvePromotion($id)
     {
 
         $this->authenticateUser('add-promotion');
@@ -8771,7 +8601,6 @@ class GeneralController extends Controller
                 // dd($promotion);
                 $promotion->status = "Successful";
                 $promotion->update();
-
 
                 $increment = Employee::where('emp_id', $promotion->employeeID)->first();
                 $increment->salary = $promotion->newSalary;
@@ -8810,7 +8639,6 @@ class GeneralController extends Controller
     public function addBulkIncrement(Request $request)
     {
 
-
         $data1 = Excel::import(new ImportSalaryIncrement, $request->file('file')->store('files'));
 
         $msg = "Employee Salary  Incremention and Arrears has been requested successfully !";
@@ -8831,12 +8659,8 @@ class GeneralController extends Controller
         $data['ldrop'] = $this->flexperformance_model->linemanagerdropdown();
         $data['ddrop'] = $this->flexperformance_model->departmentdropdown();
 
-
         $data['parent'] = 'Workforce';
         $data['child'] = 'Increment Salary';
-
-
-
 
         return view('workforce-management.add-increment', $data);
     }
@@ -8856,8 +8680,6 @@ class GeneralController extends Controller
             ]
         );
 
-
-
         $oldSalary = $request->oldSalary;
         $oldRate = $request->oldRate;
 
@@ -8871,7 +8693,7 @@ class GeneralController extends Controller
         $old->oldSalary = $empl->salary;
         $old->newSalary = $request->newSalary;
         $old->oldPosition = $empl->position;
-        $old->newPosition = $empl->position;;
+        $old->newPosition = $empl->position;
         $old->oldLevel = $empl->emp_level;
         $old->newLevel = $empl->emp_level;
         $old->effective_date = $empl->effective_date;
@@ -8880,14 +8702,11 @@ class GeneralController extends Controller
 
         $old->save();
 
-        SysHelpers::FinancialLogs($id, 'Salary', number_format($oldSalary * $oldRate,2), number_format($request->newSalary * $oldRate,2), 'Salary Increment');
-
+        SysHelpers::FinancialLogs($id, 'Salary', number_format($oldSalary * $oldRate, 2), number_format($request->newSalary * $oldRate, 2), 'Salary Increment');
 
         $msg = "Employee Salary  Incremention has been requested successfully !";
         return redirect('flex/promotion')->with('msg', $msg);
     }
-
-
 
     // fetching employee department's positions
     public function getDetails($id = 0)
@@ -8903,7 +8722,6 @@ class GeneralController extends Controller
     }
     // end of reconcilliation summary
 
-
     //start of education qualifications
     public function addQualification(Request $request)
     {
@@ -8918,7 +8736,6 @@ class GeneralController extends Controller
                 'finish_year' => 'required',
             ]
         );
-
 
         $id = $request->employeeID;
 
@@ -8938,14 +8755,12 @@ class GeneralController extends Controller
                 'image' => 'required|image|mimes:pdf|max:5048',
             ]);
 
-
             $file = $request->file('image');
             $filename = time() . '.' . $file->getClientOriginalExtension();
             $file->move('uploads/certificates/', $filename);
             $qualification->certificate = $filename;
         }
         $qualification->save();
-
 
         $msg = "Education Qualification has been added successfully";
         return redirect('flex/userprofile/' . base64_encode($id))->with('msg', $msg);
@@ -8973,7 +8788,6 @@ class GeneralController extends Controller
     public function addComplain(Request $request)
     {
 
-
         return view('workforce-management.add-complain');
     }
 
@@ -8989,7 +8803,6 @@ class GeneralController extends Controller
     }
     // end of add discipllinary function
 
-
     // start of save disciplinary action
     public function saveDisciplinary(Request $request)
     {
@@ -9001,12 +8814,10 @@ class GeneralController extends Controller
             ]
         );
 
-
         $id = $request->employeeID;
 
         $emp = EMPL::where('emp_id', $id)->first();
         $department = $emp->department;
-
 
         // dd($emp);
 
@@ -9029,12 +8840,7 @@ class GeneralController extends Controller
         $disciplinary->appeal_findings = $request->appeal_findings;
         $disciplinary->appeal_outcomes = $request->appeal_outcomes;
 
-
-
-
-
         $disciplinary->save();
-
 
         $msg = "Disciplinary Action Has been save Successfully !";
         return redirect('flex/grievancesCompain')->with('msg', $msg);
@@ -9045,7 +8851,6 @@ class GeneralController extends Controller
     public function viewDisciplinary(Request $request, $id)
     {
 
-
         $this->authenticateUser('view-grivance');
         $did = base64_decode($id);
 
@@ -9053,16 +8858,13 @@ class GeneralController extends Controller
 
         $data['actions'] = Disciplinary::where('id', $did)->with('employee')->with('departments')->get();
 
-
         return view('workforce-management.view-action', $data);
     }
     // end of view single displinary action
 
-
     // start of edit disciplinary action
     public function editDisciplinary(Request $request, $id)
     {
-
 
         $this->authenticateUser('edit-grivance');
         $did = base64_decode($id);
@@ -9071,11 +8873,9 @@ class GeneralController extends Controller
 
         $data['actions'] = Disciplinary::where('id', $did)->with('employee')->with('departments')->get();
 
-
         return view('workforce-management.edit-action', $data);
     }
     // end of edit disciplinary action
-
 
     // start of update disciplinary action
     public function updateDisciplinary(Request $request)
@@ -9087,7 +8887,6 @@ class GeneralController extends Controller
         //     'employeeID' => 'required',
         //      ]
         //     );
-
 
         $id = $request->id;
         $disciplinary = Disciplinary::where('id', $id)->first();
@@ -9105,8 +8904,6 @@ class GeneralController extends Controller
 
         $data['actions'] = Disciplinary::where('id', $id)->with('employee')->with('departments')->get();
 
-
-
         $msg = "Disciplinary Action Has been Updated Successfully !";
         // return redirect('flex/view-action/'.$emp,$data)->with('msg', $msg);
         return view('workforce-management.view-action', $data)->with('msg', $msg);
@@ -9123,7 +8920,6 @@ class GeneralController extends Controller
             ]
         );
 
-
         $id = $request->employeeID;
 
         $complain = new EmployeeComplain();
@@ -9131,14 +8927,11 @@ class GeneralController extends Controller
         $complain->description = $request->description;
         $complain->save();
 
-
         $msg = "Your Disciplinary Action Has been save Successfully !";
         return redirect('flex/grievancesCompain')->with('msg', $msg);
     }
 
     // end of grievances
-
-
 
     // start of profile (employee biodata)
     public function viewProfile(Request $request, $id)
@@ -9149,7 +8942,6 @@ class GeneralController extends Controller
         if (auth()->user()->emp_id != $empID) {
             $this->authenticateUser('edit-employee');
         }
-
 
         $data['employee'] = $this->flexperformance_model->userprofile($empID);
         $data['title'] = "Employee";
@@ -9169,14 +8961,11 @@ class GeneralController extends Controller
 
         $children = EmployeeDependant::where('employeeID', $empID)->get();
 
-
         $spouse = EmployeeSpouse::where('employeeID', $empID)->first();
 
         $parents = EmployeeParent::where('employeeID', $empID)->get();
 
         $data['qualifications'] = EducationQualification::where('employeeID', $empID)->orderBy('end_year', 'desc')->get();
-
-
 
         $data['certifications'] = ProfessionalCertification::where('employeeID', $empID)->orderBy('cert_end', 'desc')->get();
 
@@ -9198,8 +8987,6 @@ class GeneralController extends Controller
     }
     // end of profile
 
-
-
     //start of update employee biodata detail
 
     public function updateEmployeeDetails(Request $request)
@@ -9214,7 +9001,6 @@ class GeneralController extends Controller
                 'mname' => 'nullable',
                 'lname' => 'required',
                 'maide_name' => 'nullable',
-
 
                 // start of biographical informations
                 'bithdate' => 'nullable',
@@ -9294,12 +9080,11 @@ class GeneralController extends Controller
                 'hist_industry' => 'nullable',
                 'hist_position' => 'nullable',
                 'hist_reason' => 'nullable',
-                'cert_status' => 'nullable'
+                'cert_status' => 'nullable',
 
                 // start of former works
             ]
         );
-
 
         $id = $request->employeeID;
 
@@ -9322,7 +9107,6 @@ class GeneralController extends Controller
             $employee->gender = $request->gender;
             $employee->birthdate = $request->birthdate;
             $employee->merital_status = $request->merital;
-
 
             // dd($request->current_job);
             $employee->national_id = $request->NIDA;
@@ -9364,10 +9148,6 @@ class GeneralController extends Controller
                 $profile->save();
             }
 
-
-
-
-
             if ($request->image != null) {
                 $user = $request->empID;
 
@@ -9378,7 +9158,7 @@ class GeneralController extends Controller
                     ]);
                     $newImageName = $request->image->hashName();
 
-                    Storage::disk('public')->put('profile/'.$newImageName, file_get_contents($request->image));
+                    Storage::disk('public')->put('profile/' . $newImageName, file_get_contents($request->image));
                     $employee->photo = $newImageName;
                 }
                 // saving data
@@ -9399,7 +9179,7 @@ class GeneralController extends Controller
                 'employment_date' => 'nullable',
                 'former_title' => 'nullable',
                 'current_title' => 'nullable',
-                'line_manager' => 'nullable|regex:/^[A-Za-z0-9 ]+$/'
+                'line_manager' => 'nullable|regex:/^[A-Za-z0-9 ]+$/',
             ]
         );
 
@@ -9436,8 +9216,8 @@ class GeneralController extends Controller
         return redirect('flex/employee-profile/' . base64_encode($id))->with('msg', $msg);
     }
 
-
-    public function employeeBasicDetails(Request $request){
+    public function employeeBasicDetails(Request $request)
+    {
         request()->validate(
             [
 
@@ -9451,8 +9231,6 @@ class GeneralController extends Controller
             ]);
 
         $id = $request->employeeID;
-
-
 
         if (auth()->user()->emp_id != $id) {
             $this->authenticateUser('edit-employee');
@@ -9468,12 +9246,11 @@ class GeneralController extends Controller
             $employee->mname = $request->mname;
             $employee->lname = $request->lname;
             //$employee->mobile = $request->mobile;
-           // $employee->line_manager = $request->line_manager;
-           // $employee->job_title = $request->current_job;
+            // $employee->line_manager = $request->line_manager;
+            // $employee->job_title = $request->current_job;
             // $employee->gender = $request->gender;
             // $employee->birthdate = $request->birthdate;
             // $employee->merital_status = $request->merital;
-
 
             // dd($request->current_job);
             // $employee->national_id = $request->NIDA;
@@ -9483,7 +9260,7 @@ class GeneralController extends Controller
             $employee->update();
             $autheniticateduser = auth()->user()->emp_id;
 
-            $auditLog = SysHelpers::AuditLog(1, "Employee Details with Employee Id .$employee->emp_id. are Updated by Employee Id ".$autheniticateduser, $request);
+            $auditLog = SysHelpers::AuditLog(1, "Employee Details with Employee Id .$employee->emp_id. are Updated by Employee Id " . $autheniticateduser, $request);
 
             // Start of Employee Details
             $profile = EmployeeDetail::where('employeeID', $id)->first();
@@ -9510,7 +9287,7 @@ class GeneralController extends Controller
                 // $profile->birthplace = $request->birthplace;
                 // $profile->birthcountry = $request->birthcountry;
                 // $profile->religion = $request->religion;
-                 $profile->employeeID = $request->employeeID;
+                $profile->employeeID = $request->employeeID;
                 // $profile->passport_number = $request->passport_number;
                 // $profile->former_title = $request->former_title;
                 // $profile->divorced_date = $request->divorced_date;
@@ -9518,96 +9295,13 @@ class GeneralController extends Controller
                 $profile->save();
             }
 
-
-
             $msg = "Employee Details Have Been Updated successfully";
             return redirect('flex/employee-profile/' . base64_encode($id))->with('msg', $msg);
-       }
-   }
+        }
+    }
 
-   public function employeeAddressDetails(Request $request){
-     // request()->validate(
-     //     [
-
-     //         // start of name information validation
-     //         'mname' => 'nullable',
-     //         'maide_name' => 'nullable',
-     //         'prefix' => 'nullable',
-     //         'bithdate' => 'nullable',
-     //     ]);
-
-     $id = $request->employeeID;
-
-
-
-     if (auth()->user()->emp_id != $id) {
-         $this->authenticateUser('edit-employee');
-     }
-
-     // dd($request->landmark);
-     $empl = Employee::where('emp_id', $id)->first();
-
-     if ($empl) {
-         // updating employee data
-         $employee = Employee::where('emp_id', $id)->first();
-         // $employee->fname = $request->fname;
-         // $employee->mname = $request->mname;
-         // $employee->lname = $request->lname;
-         $employee->mobile = $request->mobile;
-        // $employee->line_manager = $request->line_manager;
-        // $employee->job_title = $request->current_job;
-        //   $employee->gender = $request->gender;
-        //   $employee->birthdate = $request->birthdate;
-        //   $employee->merital_status = $request->merital;
-
-
-         // $employee->national_id = $request->NIDA;
-         // $employee->form_4_index = $request->HELSB;
-         // $employee->pension_fund = $request->pension_fund;
-          $employee->physical_address = $request->physical_address;
-         $employee->update();
-
-         // Start of Employee Details
-         $profile = EmployeeDetail::where('employeeID', $id)->first();
-
-         if ($profile) {
-
-              //$profile->marriage_date = $request->marriage_date;
-             //$profile->maide_name = $request->maide_name;
-            //   $profile->birthplace = $request->birthplace;
-            //   $profile->birthcountry = $request->birthcountry;
-            //   $profile->religion = $request->religion;
-             // $profile->employeeID = $request->employeeID;
-             // $profile->passport_number = $request->passport_number;
-             $profile->landmark = $request->landmark;
-            // $profile->prefix = $request->prefix;
-             // $profile->former_title = $request->former_title;
-            //  $profile->divorced_date = $request->divorced_date;
-
-             $profile->update();
-         } else {
-             $profile = new EmployeeDetail();
-             //$profile->prefix = $request->prefix;
-             // $profile->maide_name = $request->maide_name;
-            //   $profile->birthplace = $request->birthplace;
-            //   $profile->birthcountry = $request->birthcountry;
-            //   $profile->religion = $request->religion;
-               $profile->employeeID = $request->employeeID;
-             // $profile->passport_number = $request->passport_number;
-             // $profile->former_title = $request->former_title;
-            //  $profile->divorced_date = $request->divorced_date;
-            //  $profile->marriage_date = $request->marriage_date;
-             $profile->save();
-         }
-             $msg = "Employee Details Have Been Updated successfully";
-             return redirect('flex/employee-profile/' . base64_encode($id))->with('msg', $msg);
-
-           }
-
-     }
-
-
-     public function employeePersonDetails(Request $request){
+    public function employeeAddressDetails(Request $request)
+    {
         // request()->validate(
         //     [
 
@@ -9620,7 +9314,84 @@ class GeneralController extends Controller
 
         $id = $request->employeeID;
 
+        if (auth()->user()->emp_id != $id) {
+            $this->authenticateUser('edit-employee');
+        }
 
+        // dd($request->landmark);
+        $empl = Employee::where('emp_id', $id)->first();
+
+        if ($empl) {
+            // updating employee data
+            $employee = Employee::where('emp_id', $id)->first();
+            // $employee->fname = $request->fname;
+            // $employee->mname = $request->mname;
+            // $employee->lname = $request->lname;
+            $employee->mobile = $request->mobile;
+            // $employee->line_manager = $request->line_manager;
+            // $employee->job_title = $request->current_job;
+            //   $employee->gender = $request->gender;
+            //   $employee->birthdate = $request->birthdate;
+            //   $employee->merital_status = $request->merital;
+
+            // $employee->national_id = $request->NIDA;
+            // $employee->form_4_index = $request->HELSB;
+            // $employee->pension_fund = $request->pension_fund;
+            $employee->physical_address = $request->physical_address;
+            $employee->update();
+
+            // Start of Employee Details
+            $profile = EmployeeDetail::where('employeeID', $id)->first();
+
+            if ($profile) {
+
+                //$profile->marriage_date = $request->marriage_date;
+                //$profile->maide_name = $request->maide_name;
+                //   $profile->birthplace = $request->birthplace;
+                //   $profile->birthcountry = $request->birthcountry;
+                //   $profile->religion = $request->religion;
+                // $profile->employeeID = $request->employeeID;
+                // $profile->passport_number = $request->passport_number;
+                $profile->landmark = $request->landmark;
+                // $profile->prefix = $request->prefix;
+                // $profile->former_title = $request->former_title;
+                //  $profile->divorced_date = $request->divorced_date;
+
+                $profile->update();
+            } else {
+                $profile = new EmployeeDetail();
+                //$profile->prefix = $request->prefix;
+                // $profile->maide_name = $request->maide_name;
+                //   $profile->birthplace = $request->birthplace;
+                //   $profile->birthcountry = $request->birthcountry;
+                //   $profile->religion = $request->religion;
+                $profile->employeeID = $request->employeeID;
+                // $profile->passport_number = $request->passport_number;
+                // $profile->former_title = $request->former_title;
+                //  $profile->divorced_date = $request->divorced_date;
+                //  $profile->marriage_date = $request->marriage_date;
+                $profile->save();
+            }
+            $msg = "Employee Details Have Been Updated successfully";
+            return redirect('flex/employee-profile/' . base64_encode($id))->with('msg', $msg);
+
+        }
+
+    }
+
+    public function employeePersonDetails(Request $request)
+    {
+        // request()->validate(
+        //     [
+
+        //         // start of name information validation
+        //         'mname' => 'nullable',
+        //         'maide_name' => 'nullable',
+        //         'prefix' => 'nullable',
+        //         'bithdate' => 'nullable',
+        //     ]);
+
+        $id = $request->employeeID;
 
         if (auth()->user()->emp_id != $id) {
             $this->authenticateUser('edit-employee');
@@ -9636,12 +9407,11 @@ class GeneralController extends Controller
             // $employee->mname = $request->mname;
             // $employee->lname = $request->lname;
             // $employee->mobile = $request->mobile;
-           // $employee->line_manager = $request->line_manager;
-           // $employee->job_title = $request->current_job;
-           //   $employee->gender = $request->gender;
-           //   $employee->birthdate = $request->birthdate;
-           //   $employee->merital_status = $request->merital;
-
+            // $employee->line_manager = $request->line_manager;
+            // $employee->job_title = $request->current_job;
+            //   $employee->gender = $request->gender;
+            //   $employee->birthdate = $request->birthdate;
+            //   $employee->merital_status = $request->merital;
 
             $employee->national_id = $request->NIDA;
             $employee->tin = $request->TIN;
@@ -9655,129 +9425,80 @@ class GeneralController extends Controller
 
             if ($profile) {
 
-                 //$profile->marriage_date = $request->marriage_date;
+                //$profile->marriage_date = $request->marriage_date;
                 //$profile->maide_name = $request->maide_name;
-               //   $profile->birthplace = $request->birthplace;
-               //   $profile->birthcountry = $request->birthcountry;
-               //   $profile->religion = $request->religion;
+                //   $profile->birthplace = $request->birthplace;
+                //   $profile->birthcountry = $request->birthcountry;
+                //   $profile->religion = $request->religion;
                 $profile->employeeID = $request->employeeID;
                 $profile->passport_number = $request->passport_number;
                 // $profile->landmark = $request->landmark;
-               // $profile->prefix = $request->prefix;
+                // $profile->prefix = $request->prefix;
                 // $profile->former_title = $request->former_title;
-               //  $profile->divorced_date = $request->divorced_date;
+                //  $profile->divorced_date = $request->divorced_date;
 
                 $profile->update();
             } else {
                 $profile = new EmployeeDetail();
                 //$profile->prefix = $request->prefix;
                 // $profile->maide_name = $request->maide_name;
-               //   $profile->birthplace = $request->birthplace;
-               //   $profile->birthcountry = $request->birthcountry;
-               //   $profile->religion = $request->religion;
-                  $profile->employeeID = $request->employeeID;
+                //   $profile->birthplace = $request->birthplace;
+                //   $profile->birthcountry = $request->birthcountry;
+                //   $profile->religion = $request->religion;
+                $profile->employeeID = $request->employeeID;
                 $profile->passport_number = $request->passport_number;
                 // $profile->former_title = $request->former_title;
-               //  $profile->divorced_date = $request->divorced_date;
-               //  $profile->marriage_date = $request->marriage_date;
+                //  $profile->divorced_date = $request->divorced_date;
+                //  $profile->marriage_date = $request->marriage_date;
                 $profile->save();
             }
-                $msg = "Employee Details Have Been Updated successfully";
-                return redirect('flex/employee-profile/' . base64_encode($id))->with('msg', $msg);
-
-              }
-
-        }
-
-
-
-
-   public function employeeBioDetails(Request $request){
-   // dd($request);
-    // request()->validate(
-    //     [
-
-    //         // start of name information validation
-    //         'mname' => 'nullable',
-    //         'maide_name' => 'nullable',
-    //         'prefix' => 'nullable',
-    //         'bithdate' => 'nullable',
-    //     ]);
-
-    $id = $request->employeeID;
-
-
-
-    if (auth()->user()->emp_id != $id) {
-        $this->authenticateUser('edit-employee');
-    }
-
-    // dd($request->landmark);
-    $empl = Employee::where('emp_id', $id)->first();
-
-    if ($empl) {
-        // updating employee data
-        $employee = Employee::where('emp_id', $id)->first();
-        // $employee->fname = $request->fname;
-        // $employee->mname = $request->mname;
-        // $employee->lname = $request->lname;
-        //$employee->mobile = $request->mobile;
-       // $employee->line_manager = $request->line_manager;
-       // $employee->job_title = $request->current_job;
-         $employee->gender = $request->gender;
-         $employee->birthdate = $request->birthdate;
-         $employee->merital_status = $request->merital;
-
-
-        // $employee->national_id = $request->NIDA;
-        // $employee->form_4_index = $request->HELSB;
-        // $employee->pension_fund = $request->pension_fund;
-        // $employee->physical_address = $request->physical_address;
-        $employee->update();
-
-        // Start of Employee Details
-        $profile = EmployeeDetail::where('employeeID', $id)->first();
-
-        if ($profile) {
-
-             $profile->marriage_date = $request->marriage_date;
-            //$profile->maide_name = $request->maide_name;
-             $profile->birthplace = $request->birthplace;
-             $profile->birthcountry = $request->birthcountry;
-             $profile->religion = $request->religion;
-            // $profile->employeeID = $request->employeeID;
-            // $profile->passport_number = $request->passport_number;
-            // $profile->landmark = $request->landmark;
-           // $profile->prefix = $request->prefix;
-            // $profile->former_title = $request->former_title;
-            $profile->divorced_date = $request->divorced_date;
-
-            $profile->update();
-        } else {
-            $profile = new EmployeeDetail();
-            //$profile->prefix = $request->prefix;
-            // $profile->maide_name = $request->maide_name;
-             $profile->birthplace = $request->birthplace;
-             $profile->birthcountry = $request->birthcountry;
-             $profile->religion = $request->religion;
-            //  $profile->employeeID = $request->employeeID;
-            // $profile->passport_number = $request->passport_number;
-            // $profile->former_title = $request->former_title;
-            $profile->divorced_date = $request->divorced_date;
-            $profile->marriage_date = $request->marriage_date;
-            $profile->save();
-        }
             $msg = "Employee Details Have Been Updated successfully";
             return redirect('flex/employee-profile/' . base64_encode($id))->with('msg', $msg);
 
-          }
+        }
 
     }
 
+    public function employeeBioDetails(Request $request)
+    {
+        // dd($request);
+        // request()->validate(
+        //     [
 
-    public function employeeDetails(Request $request){
+        //         // start of name information validation
+        //         'mname' => 'nullable',
+        //         'maide_name' => 'nullable',
+        //         'prefix' => 'nullable',
+        //         'bithdate' => 'nullable',
+        //     ]);
+
         $id = $request->employeeID;
 
+        if (auth()->user()->emp_id != $id) {
+            $this->authenticateUser('edit-employee');
+        }
+
+        // dd($request->landmark);
+        $empl = Employee::where('emp_id', $id)->first();
+
+        if ($empl) {
+            // updating employee data
+            $employee = Employee::where('emp_id', $id)->first();
+            // $employee->fname = $request->fname;
+            // $employee->mname = $request->mname;
+            // $employee->lname = $request->lname;
+            //$employee->mobile = $request->mobile;
+            // $employee->line_manager = $request->line_manager;
+            // $employee->job_title = $request->current_job;
+            $employee->gender = $request->gender;
+            $employee->birthdate = $request->birthdate;
+            $employee->merital_status = $request->merital;
+
+            // $employee->national_id = $request->NIDA;
+            // $employee->form_4_index = $request->HELSB;
+            // $employee->pension_fund = $request->pension_fund;
+            // $employee->physical_address = $request->physical_address;
+            $employee->update();
 
             // Start of Employee Details
             $profile = EmployeeDetail::where('employeeID', $id)->first();
@@ -9785,75 +9506,115 @@ class GeneralController extends Controller
             if ($profile) {
 
                 $profile->marriage_date = $request->marriage_date;
-                $profile->maide_name = $request->maide_name;
+                //$profile->maide_name = $request->maide_name;
                 $profile->birthplace = $request->birthplace;
                 $profile->birthcountry = $request->birthcountry;
                 $profile->religion = $request->religion;
-                $profile->employeeID = $request->employeeID;
-                $profile->passport_number = $request->passport_number;
-                $profile->landmark = $request->landmark;
-                $profile->prefix = $request->prefix;
-                $profile->former_title = $request->former_title;
+                // $profile->employeeID = $request->employeeID;
+                // $profile->passport_number = $request->passport_number;
+                // $profile->landmark = $request->landmark;
+                // $profile->prefix = $request->prefix;
+                // $profile->former_title = $request->former_title;
                 $profile->divorced_date = $request->divorced_date;
 
                 $profile->update();
             } else {
                 $profile = new EmployeeDetail();
-                $profile->prefix = $request->prefix;
-                $profile->maide_name = $request->maide_name;
+                //$profile->prefix = $request->prefix;
+                // $profile->maide_name = $request->maide_name;
                 $profile->birthplace = $request->birthplace;
                 $profile->birthcountry = $request->birthcountry;
                 $profile->religion = $request->religion;
-                $profile->employeeID = $request->employeeID;
-                $profile->passport_number = $request->passport_number;
-                $profile->former_title = $request->former_title;
+                //  $profile->employeeID = $request->employeeID;
+                // $profile->passport_number = $request->passport_number;
+                // $profile->former_title = $request->former_title;
                 $profile->divorced_date = $request->divorced_date;
                 $profile->marriage_date = $request->marriage_date;
                 $profile->save();
             }
+            $msg = "Employee Details Have Been Updated successfully";
+            return redirect('flex/employee-profile/' . base64_encode($id))->with('msg', $msg);
 
+        }
+
+    }
+
+    public function employeeDetails(Request $request)
+    {
+        $id = $request->employeeID;
+
+        // Start of Employee Details
+        $profile = EmployeeDetail::where('employeeID', $id)->first();
+
+        if ($profile) {
+
+            $profile->marriage_date = $request->marriage_date;
+            $profile->maide_name = $request->maide_name;
+            $profile->birthplace = $request->birthplace;
+            $profile->birthcountry = $request->birthcountry;
+            $profile->religion = $request->religion;
+            $profile->employeeID = $request->employeeID;
+            $profile->passport_number = $request->passport_number;
+            $profile->landmark = $request->landmark;
+            $profile->prefix = $request->prefix;
+            $profile->former_title = $request->former_title;
+            $profile->divorced_date = $request->divorced_date;
+
+            $profile->update();
+        } else {
+            $profile = new EmployeeDetail();
+            $profile->prefix = $request->prefix;
+            $profile->maide_name = $request->maide_name;
+            $profile->birthplace = $request->birthplace;
+            $profile->birthcountry = $request->birthcountry;
+            $profile->religion = $request->religion;
+            $profile->employeeID = $request->employeeID;
+            $profile->passport_number = $request->passport_number;
+            $profile->former_title = $request->former_title;
+            $profile->divorced_date = $request->divorced_date;
+            $profile->marriage_date = $request->marriage_date;
+            $profile->save();
+        }
 
         $msg = "Employee Details Have Been Updated successfully";
         return redirect('flex/employee-profile/' . base64_encode($id))->with('msg', $msg);
 
-
-
     }
 
-
-    public function employeeEmergency(Request $request){
+    public function employeeEmergency(Request $request)
+    {
         $id = $request->employeeID;
 
         $emergency = EmergencyContact::where('employeeID', $id)->first();
 
-            if ($emergency) {
+        if ($emergency) {
 
-                $emergency->employeeID = $request->employeeID;
-                $emergency->em_fname = $request->em_fname;
-                $emergency->em_mname = $request->em_mname;
-                $emergency->em_sname = $request->em_lname;
-                $emergency->em_relationship = $request->em_relationship;
-                $emergency->em_occupation = $request->em_occupation;
-                $emergency->em_phone = $request->em_phone;
-                $emergency->update();
-            } else {
-                $emergency = new EmergencyContact();
-                $emergency->employeeID = $request->employeeID;
-                $emergency->em_fname = $request->em_fname;
-                $emergency->em_mname = $request->em_mname;
-                $emergency->em_sname = $request->em_lname;
-                $emergency->em_relationship = $request->em_relationship;
-                $emergency->em_occupation = $request->em_occupation;
-                $emergency->em_phone = $request->em_phone;
-                $emergency->save();
-            }
+            $emergency->employeeID = $request->employeeID;
+            $emergency->em_fname = $request->em_fname;
+            $emergency->em_mname = $request->em_mname;
+            $emergency->em_sname = $request->em_lname;
+            $emergency->em_relationship = $request->em_relationship;
+            $emergency->em_occupation = $request->em_occupation;
+            $emergency->em_phone = $request->em_phone;
+            $emergency->update();
+        } else {
+            $emergency = new EmergencyContact();
+            $emergency->employeeID = $request->employeeID;
+            $emergency->em_fname = $request->em_fname;
+            $emergency->em_mname = $request->em_mname;
+            $emergency->em_sname = $request->em_lname;
+            $emergency->em_relationship = $request->em_relationship;
+            $emergency->em_occupation = $request->em_occupation;
+            $emergency->em_phone = $request->em_phone;
+            $emergency->save();
+        }
 
-            $msg = "Employee Details Have Been Updated successfully";
+        $msg = "Employee Details Have Been Updated successfully";
         return redirect('flex/employee-profile/' . base64_encode($id))->with('msg', $msg);
     }
 
-
-    public function employeeParent(Request $request){
+    public function employeeParent(Request $request)
+    {
         $empID = $request->employeeID;
         $parent = EmployeeParent::where('employeeID', $empID)
             ->Where('parent_relation', 'LIKE', $request->parent_relation)
@@ -9887,7 +9648,8 @@ class GeneralController extends Controller
         return redirect('flex/employee-profile/' . base64_encode($empID))->with('msg', $msg);
     }
 
-    public function employeeDependant(Request $request) {
+    public function employeeDependant(Request $request)
+    {
         // Start of dependants details
         $emp_id = $request->employeeID;
 
@@ -9919,47 +9681,49 @@ class GeneralController extends Controller
             return redirect('flex/employee-profile/' . base64_encode($emp_id))->with('msg', $msg);
         }
     }
-    public function employeeSpouse(Request $request){
+    public function employeeSpouse(Request $request)
+    {
 
         $id = $request->employeeID;
 
-            // start of spouse details
-            $spouse = EmployeeSpouse::where('employeeID', $id)->first();
+        // start of spouse details
+        $spouse = EmployeeSpouse::where('employeeID', $id)->first();
 
-            if ($spouse) {
+        if ($spouse) {
 
-                $spouse->employeeID = $request->employeeID;
-                $spouse->spouse_fname = $request->spouse_name;
-                $spouse->spouse_birthdate = $request->spouse_birthdate;
-                $spouse->spouse_birthplace = $request->spouse_birthplace;
-                $spouse->spouse_birthcountry = $request->spouse_birthcountry;
-                $spouse->spouse_nationality = $request->spouse_nationality;
-                $spouse->spouse_passport = $request->spouse_passport;
-                $spouse->spouse_employer = $request->spouse_employer;
-                $spouse->spouse_job_title = $request->spouse_job_title;
-                $spouse->spouse_nida = $request->spouse_nida;
-                $spouse->update();
-            } else {
-                $spouse = new EmployeeSpouse();
+            $spouse->employeeID = $request->employeeID;
+            $spouse->spouse_fname = $request->spouse_name;
+            $spouse->spouse_birthdate = $request->spouse_birthdate;
+            $spouse->spouse_birthplace = $request->spouse_birthplace;
+            $spouse->spouse_birthcountry = $request->spouse_birthcountry;
+            $spouse->spouse_nationality = $request->spouse_nationality;
+            $spouse->spouse_passport = $request->spouse_passport;
+            $spouse->spouse_employer = $request->spouse_employer;
+            $spouse->spouse_job_title = $request->spouse_job_title;
+            $spouse->spouse_nida = $request->spouse_nida;
+            $spouse->update();
+        } else {
+            $spouse = new EmployeeSpouse();
 
-                $spouse->employeeID = $request->employeeID;
-                $spouse->spouse_fname = $request->spouse_name;
-                $spouse->spouse_birthdate = $request->spouse_birthdate;
-                $spouse->spouse_birthplace = $request->spouse_birthplace;
-                $spouse->spouse_birthcountry = $request->spouse_birthcountry;
-                $spouse->spouse_nationality = $request->spouse_nationality;
-                $spouse->spouse_passport = $request->spouse_passport;
-                $spouse->spouse_employer = $request->spouse_employer;
-                $spouse->spouse_job_title = $request->spouse_job_title;
-                $spouse->spouse_nida = $request->spouse_nida;
+            $spouse->employeeID = $request->employeeID;
+            $spouse->spouse_fname = $request->spouse_name;
+            $spouse->spouse_birthdate = $request->spouse_birthdate;
+            $spouse->spouse_birthplace = $request->spouse_birthplace;
+            $spouse->spouse_birthcountry = $request->spouse_birthcountry;
+            $spouse->spouse_nationality = $request->spouse_nationality;
+            $spouse->spouse_passport = $request->spouse_passport;
+            $spouse->spouse_employer = $request->spouse_employer;
+            $spouse->spouse_job_title = $request->spouse_job_title;
+            $spouse->spouse_nida = $request->spouse_nida;
 
-                $spouse->save();
-            }
-            $msg = "Employee Details Have Been Updated successfully";
-            return redirect('flex/employee-profile/' . base64_encode($id))->with('msg', $msg);
+            $spouse->save();
+        }
+        $msg = "Employee Details Have Been Updated successfully";
+        return redirect('flex/employee-profile/' . base64_encode($id))->with('msg', $msg);
     }
 
-    public function employeeHistory(Request $request){
+    public function employeeHistory(Request $request)
+    {
         $id = $request->employeeID;
         if ($request->hist_employer != null && $request->hist_position != null) {
             $history = new EmploymentHistory();
@@ -9980,10 +9744,11 @@ class GeneralController extends Controller
         return redirect('flex/employee-profile/' . base64_encode($id))->with('msg', $msg);
     }
 
-    public function educationQualification(Request $request){
-         // For Educational Qualifiation
-         $id = $request->employeeID;
-         if ($request->institute != null && $request->course != null) {
+    public function educationQualification(Request $request)
+    {
+        // For Educational Qualifiation
+        $id = $request->employeeID;
+        if ($request->institute != null && $request->course != null) {
             $qualification = new EducationQualification();
 
             $qualification->employeeID = $request->employeeID;
@@ -10015,7 +9780,8 @@ class GeneralController extends Controller
         return redirect('flex/employee-profile/' . base64_encode($id))->with('msg', $msg);
     }
 
-    public function professionalCertificate(Request $request){
+    public function professionalCertificate(Request $request)
+    {
         $id = $request->employeeID;
 
         if ($request->cert_qualification != null && $request->cert_number != null) {
@@ -10041,14 +9807,11 @@ class GeneralController extends Controller
             $certification->save();
         }
 
-
         $msg = "Employee Details Have Been Updated successfully";
         return redirect('flex/employee-profile/' . base64_encode($id))->with('msg', $msg);
     }
 
-
     // end of update employee details
-
 
     // delete child/dependant  function
     public function deleteChild($id)
@@ -10066,7 +9829,6 @@ class GeneralController extends Controller
 
         return redirect('flex/employee-profile/' . base64_encode($empID))->with('msg', 'Employee Dependant is Deleted successfully !');
     }
-
 
     public function deleteParent($id)
     {
@@ -10150,7 +9912,6 @@ class GeneralController extends Controller
             $this->authenticateUser('view-employee');
         }
 
-
         $extra = $request->input('extra');
         $data['employee'] = $this->flexperformance_model->userprofile($id);
 
@@ -10180,13 +9941,11 @@ class GeneralController extends Controller
 
         $children = EmployeeDependant::where('employeeID', $empID)->get();
 
-
         $spouse = EmployeeSpouse::where('employeeID', $empID)->first();
 
         $parents = EmployeeParent::where('employeeID', $empID)->get();
 
         $data['qualifications'] = EducationQualification::where('employeeID', $empID)->orderBy('end_year', 'desc')->get();
-
 
         $data['certifications'] = ProfessionalCertification::where('employeeID', $empID)->orderBy('cert_end', 'desc')->get();
 
@@ -10202,7 +9961,7 @@ class GeneralController extends Controller
 
         // return view('employee.userprofile', $data);
 
-        return view('employee.employee-biodata', $data, compact('details', 'emergency', 'spouse', 'children', 'parents','childs'));
+        return view('employee.employee-biodata', $data, compact('details', 'emergency', 'spouse', 'children', 'parents', 'childs'));
     }
 
     // For updating profile image
@@ -10218,8 +9977,6 @@ class GeneralController extends Controller
             $this->authenticateUser('edit-employee');
         }
 
-
-
         $employee = EMPL::where('emp_id', $user)->first();
         if ($request->hasfile('image')) {
 
@@ -10227,23 +9984,17 @@ class GeneralController extends Controller
                 'image' => 'required|mimes:jpg,png,jpeg,pdf',
             ]);
 
-
-
             $newImageName = $request->image->hashName();
-            Storage::disk('public')->put('profile/'.$newImageName, file_get_contents($request->image));
-
+            Storage::disk('public')->put('profile/' . $newImageName, file_get_contents($request->image));
 
             // $path = $filePath->path();
             //$scanner = new Scanner();
             // $result = Clamav::scanFile($filePath);
 
-
             //    $filename=time().'.'.$file->getClientOriginalExtension();
             //    $file->move('uploads/userprofile/', $filename);
             $employee->photo = $newImageName;
         }
-
-
 
         // saving data
         $employee->update();
@@ -10253,13 +10004,10 @@ class GeneralController extends Controller
         return redirect()->back();
     }
 
-
-
     // start view all holidays function
 
     public function holidays()
     {
-
 
         $data['holidays'] = Holiday::orderBy('date', 'asc')->get();
         $i = 1;
@@ -10271,8 +10019,6 @@ class GeneralController extends Controller
 
     // end of view all holidays functions
 
-
-
     // saving new holiday function
     public function addHoliday(Request $request)
     {
@@ -10282,8 +10028,6 @@ class GeneralController extends Controller
                 'date' => 'required',
             ]
         );
-
-
 
         $holiday = new Holiday();
         $holiday->name = $request->name;
@@ -10320,20 +10064,17 @@ class GeneralController extends Controller
             ]
         );
 
-
         $id = $request->id;
         $holiday = Holiday::find($id);
         $holiday->name = $request->name;
         $holiday->date = $request->date;
-        $holiday->recurring = $request->recurring == true ? '1' : '0';;
+        $holiday->recurring = $request->recurring == true ? '1' : '0';
         $holiday->update();
-
 
         $msg = "Holiday has been save Successfully !";
         return redirect('flex/holidays')->with('msg', $msg);
     }
     // end of update holiday function
-
 
     // For Updating Holiday Year
     public function updateHolidayYear()
@@ -10361,8 +10102,6 @@ class GeneralController extends Controller
     }
     // end of delete holiday function
 
-
-
     // start of view email notification settings
     public function emailNotification()
     {
@@ -10376,7 +10115,6 @@ class GeneralController extends Controller
         return view('setting.email-notifications', $data, compact('i'));
     }
     // end of view email notification settings
-
 
     // start of edit email notification settings function
     public function editNotification(Request $request, $id)
@@ -10395,25 +10133,20 @@ class GeneralController extends Controller
     }
     // end of edit email notification settings function
 
-
-
     // start of update holiday function
     public function updateNotification(Request $request)
     {
 
         $id = $request->id;
         $email = EmailNotification::find($id);
-        $email->status = $request->status == true ? '1' : '0';;
+        $email->status = $request->status == true ? '1' : '0';
         $email->update();
-
 
         $msg = "Email Permission has been Updated Successfully !";
         return redirect('flex/email-notifications')->with('msg', $msg);
     }
 
     // end of update holiday function
-
-
 
     // start of view all approvals settings
     public function viewApprovals()
@@ -10429,8 +10162,6 @@ class GeneralController extends Controller
     }
     // end of view email notification settings
 
-
-
     // start of add approval function
 
     public function saveApprovals(Request $request)
@@ -10443,20 +10174,16 @@ class GeneralController extends Controller
             ]
         );
 
-
-
         $approval = new Approvals();
         $approval->process_name = $request->process_name;
         $approval->escallation = $request->escallation == true ? '1' : '0';
         $approval->escallation_time = $request->escallation_time;
         $approval->save();
 
-
         $msg = "Approval has been added Successfully !";
         return redirect('flex/approvals')->with('msg', $msg);
     }
     // end of add approval function
-
 
     // start of view approval levels function
     public function viewApprovalLevels(Request $request, $id)
@@ -10477,9 +10204,6 @@ class GeneralController extends Controller
     }
     // end of view approval levels function
 
-
-
-
     // start of add approval level function
 
     public function saveApprovalLevel(Request $request)
@@ -10491,8 +10215,6 @@ class GeneralController extends Controller
                 'rank' => 'required',
             ]
         );
-
-
 
         $Level = new ApprovalLevel();
         $Level->approval_id = $request->approval_id;
@@ -10509,16 +10231,12 @@ class GeneralController extends Controller
         $approval->levels = $approval->levels + 1;
         $approval->update();
 
-
         $Level->save();
-
 
         $msg = "Approval has been added Successfully !";
         return redirect('flex/approval_levels/' . base64_encode($appID))->with('msg', $msg);
     }
     // end of add approval level function
-
-
 
     // start of delete approval
     public function deleteApproval($id)
@@ -10548,13 +10266,10 @@ class GeneralController extends Controller
     }
     // end of delete approval
 
-
-
     //  For Employee Biodata download
     public function viewBiodata(Request $request)
     {
         $id = $request->emp_id;
-
 
         $extra = $request->input('extra');
         $data['employee'] = $this->flexperformance_model->userprofile($id);
@@ -10585,13 +10300,11 @@ class GeneralController extends Controller
 
         $children = EmployeeDependant::where('employeeID', $empID)->get();
 
-
         $spouse = EmployeeSpouse::where('employeeID', $empID)->first();
 
         $parents = EmployeeParent::where('employeeID', $empID)->get();
 
         $data['qualifications'] = EducationQualification::where('employeeID', $empID)->orderBy('end_year', 'desc')->get();
-
 
         $data['certifications'] = ProfessionalCertification::where('employeeID', $empID)->orderBy('cert_end', 'desc')->get();
 
@@ -10616,8 +10329,6 @@ class GeneralController extends Controller
         return $pdf->download('employee_biodata.pdf');
         // return view('reports.employee-data', $data, compact('details', 'emergency', 'spouse', 'children', 'parents', 'childs'));
     }
-
-
 
     // Start of leave approvals
 
@@ -10648,8 +10359,6 @@ class GeneralController extends Controller
             ]
         );
 
-
-
         $approval = new LeaveApproval();
         $approval->empID = $request->empID;
         $approval->level1 = $request->level_1;
@@ -10657,7 +10366,6 @@ class GeneralController extends Controller
         $approval->level3 = $request->level_3;
         $approval->escallation_time = $request->escallation_time;
         $approval->save();
-
 
         $msg = "Leave Approval has been added Successfully !";
         return redirect('flex/leave-approvals')->with('msg', $msg);
@@ -10677,7 +10385,6 @@ class GeneralController extends Controller
         $data['child'] = 'Edit Leave Approval';
         return view('setting.edit-leave-approval', $data);
     }
-
 
     // For Deleting Leave Approval
     public function deleteLeaveApproval($id)
@@ -10705,7 +10412,6 @@ class GeneralController extends Controller
         return redirect('flex/leave-approvals')->with('msg', $msg);
     }
     // End of Leave Approvals
-
 
     // For All Grievances
 
@@ -10863,7 +10569,6 @@ class GeneralController extends Controller
         return back()->with('msg', $msg);
     }
 
-
     // For Grievance Feedback
 
     public function update_grievance(Request $request)
@@ -10929,17 +10634,12 @@ class GeneralController extends Controller
         return view('overtime.overtime_onbehalf', $data);
     }
 
-
-
-
     // For My Loans
     public function myLoans(Request $request)
     {
 
-
         $empID = auth()->user()->emp_id;
         $data['myloan'] = $this->flexperformance_model->mysalary_advance($empID);
-
 
         $data['my_loans'] = $this->flexperformance_model->my_confirmedloan($empID);
 
@@ -10983,10 +10683,8 @@ class GeneralController extends Controller
 
                 // start of name information validation
 
-
                 'title' => 'nullable|alpha',
                 'description' => 'required|alpha',
-
 
             ]
         );
@@ -11016,7 +10714,6 @@ class GeneralController extends Controller
 
         $id = auth()->user()->emp_id;
 
-
         $extra = $request->input('extra');
         $data['employee'] = $this->flexperformance_model->userprofile($id);
 
@@ -11039,7 +10736,7 @@ class GeneralController extends Controller
         $data['skills_have'] = $this->flexperformance_model->skills_have($id);
         $data['month_list'] = $this->flexperformance_model->payroll_month_list();
         $data['title'] = "Profile";
-        $data['empID'] =$id;
+        $data['empID'] = $id;
         $empID = $id;
         $data['details'] = EmployeeDetail::where('employeeID', $empID)->first();
 
@@ -11047,13 +10744,11 @@ class GeneralController extends Controller
 
         $data['children'] = EmployeeDependant::where('employeeID', $empID)->get();
 
-
         $data['spouse'] = EmployeeSpouse::where('employeeID', $empID)->first();
 
         $data['parents'] = EmployeeParent::where('employeeID', $empID)->get();
 
         $data['qualifications'] = EducationQualification::where('employeeID', $empID)->orderBy('end_year', 'desc')->get();
-
 
         $data['certifications'] = ProfessionalCertification::where('employeeID', $empID)->orderBy('cert_end', 'desc')->get();
 
@@ -11071,7 +10766,6 @@ class GeneralController extends Controller
         return view('my-services/biodata', $data);
     }
     // end of self services
-
 
     // For All Projects
     public function projects()
@@ -11103,7 +10797,6 @@ class GeneralController extends Controller
         $project = Project::where('id', $id)->first();
         return view('performance.edit_project', compact('project'));
     }
-
 
     // For Saving New Project
     public function update_project(Request $request)
@@ -11168,7 +10861,7 @@ class GeneralController extends Controller
         $task = ProjectTask::where('id', $id)->first();
 
         $task->status = 1;
-        $task->complete_date = Carbon::now();;
+        $task->complete_date = Carbon::now();
 
         $task->update();
 
@@ -11182,11 +10875,10 @@ class GeneralController extends Controller
         $performance->type = 'project';
         $performance->save();
 
-
         $tasks = ProjectTask::where('project_id', $task->project_id)->get();
 
         $project = Project::where('id', $task->project_id)->first();
-        return view('performance.single_project', compact('project', 'tasks',));
+        return view('performance.single_project', compact('project', 'tasks', ));
     }
 
     public function edit_project_task($id)
@@ -11211,7 +10903,6 @@ class GeneralController extends Controller
         $task = AdhocTask::where('id', $id)->first();
         return view('performance.asses_adhoctask', compact('task'));
     }
-
 
     // For saving task Assessment
     public function save_task_assessment(Request $request)
@@ -11264,11 +10955,8 @@ class GeneralController extends Controller
             $perf->save();
         }
 
-
-
         return view('performance.asses_task', compact('task'));
     }
-
 
     // For saving task Assessment
     public function save_adhoctask_assessment(Request $request)
@@ -11322,7 +11010,6 @@ class GeneralController extends Controller
             $perf->save();
         }
 
-
         return view('performance.asses_adhoctask', compact('task'));
     }
     //For Saving Project Ratio
@@ -11340,7 +11027,6 @@ class GeneralController extends Controller
 
         return redirect('flex/view-project/' . $request->project);
     }
-
 
     // For Deleting  Project Tasks
     public function delete_project_task($id)
@@ -11403,7 +11089,7 @@ class GeneralController extends Controller
         $task = AdhocTask::where('id', $id)->first();
 
         $task->status = 1;
-        $task->complete_date = Carbon::now();;
+        $task->complete_date = Carbon::now();
 
         $task->update();
 
@@ -11427,7 +11113,7 @@ class GeneralController extends Controller
         }
 
         $project = AdhocTask::all();
-        return view('performance.tasks', compact('project',));
+        return view('performance.tasks', compact('project', ));
     }
 
     //   For Viewing All Performance ratios
@@ -11509,105 +11195,103 @@ class GeneralController extends Controller
 
         $item1 = 0;
         $item1_count = 0;
-        $data['item1_data'] =  array();
+        $data['item1_data'] = array();
 
         $item2 = 0;
         $item2_count = 0;
-        $data['item2_data'] =  array();
+        $data['item2_data'] = array();
 
         $item3 = 0;
         $item3_count = 0;
-        $data['item3_data'] =  array();
+        $data['item3_data'] = array();
 
         $item4 = 0;
         $item4_count = 0;
-        $data['item4_data'] =  array();
+        $data['item4_data'] = array();
 
         $item5 = 0;
         $item5_count = 0;
-        $data['item5_data'] =  array();
+        $data['item5_data'] = array();
 
         $item6 = 0;
         $item6_count = 0;
-        $data['item6_data'] =  array();
+        $data['item6_data'] = array();
 
         $item7 = 0;
         $item7_count = 0;
-        $data['item7_data'] =  array();
+        $data['item7_data'] = array();
 
         $item8 = 0;
         $item8_count = 0;
-        $data['item8_data'] =  array();
+        $data['item8_data'] = array();
 
         $item9 = 0;
         $item9_count = 0;
-        $data['item9_data'] =  array();
+        $data['item9_data'] = array();
 
         $item10 = 0;
         $item10_count = 0;
-        $data['item10_data'] =  array();
+        $data['item10_data'] = array();
 
         $item11 = 0;
         $item11_count = 0;
-        $data['item11_data'] =  array();
+        $data['item11_data'] = array();
 
         $item12 = 0;
         $item12_count = 0;
-        $data['item12_data'] =  array();
+        $data['item12_data'] = array();
 
         $item13 = 0;
         $item13_count = 0;
-        $data['item13_data'] =  array();
-
+        $data['item13_data'] = array();
 
         $item14 = 0;
         $item14_count = 0;
-        $data['item14_data'] =  array();
-
+        $data['item14_data'] = array();
 
         $item15 = 0;
         $item15_count = 0;
-        $data['item15_data'] =  array();
+        $data['item15_data'] = array();
 
         $item16 = 0;
         $item16_count = 0;
-        $data['item16_data'] =  array();
+        $data['item16_data'] = array();
 
         $item17 = 0;
         $item17_count = 0;
-        $data['item17_data'] =  array();
+        $data['item17_data'] = array();
 
         $item18 = 0;
         $item18_count = 0;
-        $data['item18_data'] =  array();
+        $data['item18_data'] = array();
 
         $item19 = 0;
         $item19_count = 0;
-        $data['item19_data'] =  array();
+        $data['item19_data'] = array();
 
         $item20 = 0;
         $item20_count = 0;
-        $data['item20_data'] =  array();
+        $data['item20_data'] = array();
 
         $item21 = 0;
         $item21_count = 0;
-        $data['item21_data'] =  array();
+        $data['item21_data'] = array();
 
         $item22 = 0;
         $item22_count = 0;
-        $data['item22_data'] =  array();
+        $data['item22_data'] = array();
 
         $item23 = 0;
         $item23_count = 0;
-        $item23_data['item23_data']  =  array();
+        $item23_data['item23_data'] = array();
 
         $item24 = 0;
         $item24_count = 0;
-        $data['item24_data'] =  array();
+        $data['item24_data'] = array();
 
         $item25 = 0;
         $item25_count = 0;
-        $data['item25_data'] =  array();
+        $data['item25_data'] = array();
 
         foreach ($employee as $item) {
             $performance = DB::table('employee')
@@ -11616,9 +11300,9 @@ class GeneralController extends Controller
                 ->whereNotNull('employee_performances.performance')
                 ->where('employee_performances.type', '!=', 'pip')
 
-                // ->join('adhoc_tasks', 'employee.emp_id', '=', 'adhoc_tasks.assigned')
+            // ->join('adhoc_tasks', 'employee.emp_id', '=', 'adhoc_tasks.assigned')
                 ->avg('employee_performances.performance')
-                // ->get()
+            // ->get()
             ;
 
             $behaviour = DB::table('employee')
@@ -11627,9 +11311,8 @@ class GeneralController extends Controller
                 ->whereNotNull('employee_performances.behaviour')
                 ->where('employee_performances.type', '!=', 'pip')
 
-                // ->join('adhoc_tasks', 'employee.emp_id', '=', 'adhoc_tasks.assigned')
+            // ->join('adhoc_tasks', 'employee.emp_id', '=', 'adhoc_tasks.assigned')
                 ->avg('employee_performances.behaviour');
-
 
             // For Behaviour Needs Improvement
             if ($behaviour > 0 && $behaviour < 20) {
@@ -11733,7 +11416,6 @@ class GeneralController extends Controller
                 }
             }
 
-
             // For Behaviour Very Strong
             if ($behaviour >= 60 && $behaviour < 80) {
                 //For Improvement
@@ -11767,7 +11449,6 @@ class GeneralController extends Controller
                     array_push($data['item20_data'], ['full_name' => $item->NAME, 'emp_id' => $item->emp_id, 'department' => $item->DEPARTMENT, 'performance' => $performance, 'behavior' => $behaviour]);
                 }
             }
-
 
             // For Behaviour Outstanding
             if ($behaviour >= 80 && $behaviour < 100) {
@@ -11808,7 +11489,6 @@ class GeneralController extends Controller
                 }
             }
 
-
             // var_dump($performance);
         }
 
@@ -11847,11 +11527,7 @@ class GeneralController extends Controller
         $data['outstanding_very_strong'] = ($item24 > 0) ? $item24_count : 0;
         $data['outstanding'] = ($item25 > 0) ? $item25_count : 0;
 
-
         // return  $data;
-
-
-
 
         return view('performance.report', $data);
     }
@@ -11859,111 +11535,108 @@ class GeneralController extends Controller
     public function performanceDetails($id)
     {
 
-
         //$employee = EMPL::all();
         $employee = $this->flexperformance_model->employee();
 
         $item1 = 0;
         $item1_count = 0;
-        $data['item1_data'] =  array();
+        $data['item1_data'] = array();
 
         $item2 = 0;
         $item2_count = 0;
-        $data['item2_data'] =  array();
+        $data['item2_data'] = array();
 
         $item3 = 0;
         $item3_count = 0;
-        $data['item3_data'] =  array();
+        $data['item3_data'] = array();
 
         $item4 = 0;
         $item4_count = 0;
-        $data['item4_data'] =  array();
+        $data['item4_data'] = array();
 
         $item5 = 0;
         $item5_count = 0;
-        $data['item5_data'] =  array();
+        $data['item5_data'] = array();
 
         $item6 = 0;
         $item6_count = 0;
-        $data['item6_data'] =  array();
+        $data['item6_data'] = array();
 
         $item7 = 0;
         $item7_count = 0;
-        $data['item7_data'] =  array();
+        $data['item7_data'] = array();
 
         $item8 = 0;
         $item8_count = 0;
-        $data['item8_data'] =  array();
+        $data['item8_data'] = array();
 
         $item9 = 0;
         $item9_count = 0;
-        $data['item9_data'] =  array();
+        $data['item9_data'] = array();
 
         $item10 = 0;
         $item10_count = 0;
-        $data['item10_data'] =  array();
+        $data['item10_data'] = array();
 
         $item11 = 0;
         $item11_count = 0;
-        $data['item11_data'] =  array();
+        $data['item11_data'] = array();
 
         $item12 = 0;
         $item12_count = 0;
-        $data['item12_data'] =  array();
+        $data['item12_data'] = array();
 
         $item13 = 0;
         $item13_count = 0;
-        $data['item13_data'] =  array();
-
+        $data['item13_data'] = array();
 
         $item14 = 0;
         $item14_count = 0;
-        $data['item14_data'] =  array();
-
+        $data['item14_data'] = array();
 
         $item15 = 0;
         $item15_count = 0;
-        $data['item15_data'] =  array();
+        $data['item15_data'] = array();
 
         $item16 = 0;
         $item16_count = 0;
-        $data['item16_data'] =  array();
+        $data['item16_data'] = array();
 
         $item17 = 0;
         $item17_count = 0;
-        $data['item17_data'] =  array();
+        $data['item17_data'] = array();
 
         $item18 = 0;
         $item18_count = 0;
-        $data['item18_data'] =  array();
+        $data['item18_data'] = array();
 
         $item19 = 0;
         $item19_count = 0;
-        $data['item19_data'] =  array();
+        $data['item19_data'] = array();
 
         $item20 = 0;
         $item20_count = 0;
-        $data['item20_data'] =  array();
+        $data['item20_data'] = array();
 
         $item21 = 0;
         $item21_count = 0;
-        $data['item21_data'] =  array();
+        $data['item21_data'] = array();
 
         $item22 = 0;
         $item22_count = 0;
-        $data['item22_data'] =  array();
+        $data['item22_data'] = array();
 
         $item23 = 0;
         $item23_count = 0;
-        $item23_data =  array();
+        $item23_data = array();
 
         $item24 = 0;
         $item24_count = 0;
-        $data['item24_data'] =  array();
+        $data['item24_data'] = array();
 
         $item25 = 0;
         $item25_count = 0;
-        $data['item25_data'] =  array();
+        $data['item25_data'] = array();
 
         foreach ($employee as $item) {
             $performance = DB::table('employee')
@@ -11972,9 +11645,9 @@ class GeneralController extends Controller
                 ->whereNotNull('employee_performances.performance')
                 ->where('employee_performances.type', '!=', 'pip')
 
-                // ->join('adhoc_tasks', 'employee.emp_id', '=', 'adhoc_tasks.assigned')
+            // ->join('adhoc_tasks', 'employee.emp_id', '=', 'adhoc_tasks.assigned')
                 ->avg('employee_performances.performance')
-                // ->get()
+            // ->get()
             ;
 
             $behaviour = DB::table('employee')
@@ -11983,9 +11656,8 @@ class GeneralController extends Controller
                 ->whereNotNull('employee_performances.behaviour')
                 ->where('employee_performances.type', '!=', 'pip')
 
-                // ->join('adhoc_tasks', 'employee.emp_id', '=', 'adhoc_tasks.assigned')
+            // ->join('adhoc_tasks', 'employee.emp_id', '=', 'adhoc_tasks.assigned')
                 ->avg('employee_performances.behaviour');
-
 
             // For Behaviour Needs Improvement
             if ($behaviour > 0 && $behaviour < 20) {
@@ -12089,7 +11761,6 @@ class GeneralController extends Controller
                 }
             }
 
-
             // For Behaviour Very Strong
             if ($behaviour >= 60 && $behaviour < 80) {
                 //For Improvement
@@ -12124,7 +11795,6 @@ class GeneralController extends Controller
                 }
             }
 
-
             // For Behaviour Outstanding
             if ($behaviour >= 80 && $behaviour < 100) {
                 //For Improvement
@@ -12153,7 +11823,6 @@ class GeneralController extends Controller
                     $item25_count++;
                 }
             }
-
 
             //  var_dump($performance);
         }
@@ -12202,9 +11871,6 @@ class GeneralController extends Controller
         return view('performance.performance_details', $data2);
     }
 
-
-
-
     public function performance_ratio()
     {
         $ratio = PerformanceRatio::first();
@@ -12234,10 +11900,8 @@ class GeneralController extends Controller
             $ratio->save();
         }
 
-
         return redirect('flex/performance');
     }
-
 
     public function employee_profiles()
     {
@@ -12285,10 +11949,8 @@ class GeneralController extends Controller
             $ratio->save();
         }
 
-
         return redirect('flex/performance');
     }
-
 
     public function talent_matrix()
     {
@@ -12321,34 +11983,31 @@ class GeneralController extends Controller
         $item9 = 0;
         $item9_count = 0;
 
-
         foreach ($employee as $item) {
             $performance = DB::table('employee')
                 ->join('employee_performances', 'employee.emp_id', '=', 'employee_performances.empID')
                 ->where('employee.emp_id', $item->emp_id)
                 ->whereNotNull('employee_performances.performance')
-                // ->join('adhoc_tasks', 'employee.emp_id', '=', 'adhoc_tasks.assigned')
+            // ->join('adhoc_tasks', 'employee.emp_id', '=', 'adhoc_tasks.assigned')
                 ->avg('employee_performances.performance')
-                // ->get()
+            // ->get()
             ;
 
             $behaviour = DB::table('employee')
                 ->join('employee_performances', 'employee.emp_id', '=', 'employee_performances.empID')
                 ->where('employee.emp_id', $item->emp_id)
                 ->whereNotNull('employee_performances.behaviour')
-                // ->join('adhoc_tasks', 'employee.emp_id', '=', 'adhoc_tasks.assigned')
+            // ->join('adhoc_tasks', 'employee.emp_id', '=', 'adhoc_tasks.assigned')
                 ->avg('employee_performances.behaviour');
 
             $position = PositionSkills::where('position_ref', $item->position)->count();
             $skills = EmployeeSkills::where('empID', $item->emp_id)->count();
 
-
             if ($skills > 0 && $position) {
-                $potential =   number_format($skills / $position, 2) * 100;
+                $potential = number_format($skills / $position, 2) * 100;
             } else {
                 $potential = 0;
             }
-
 
             // $achieved= EmployeePerformance::where('empID',$item->emp_id)->avg('achieved');
             // $target= EmployeePerformance::where('empID',$item->emp_id)->avg('target');
@@ -12420,7 +12079,6 @@ class GeneralController extends Controller
         $data['high_performer_medium_potential'] = ($item2 > 0) ? $item2_count : 0;
         $data['high_performer_low_potential'] = ($item3 > 0) ? $item3_count : 0;
 
-
         // For Column 2
         $data['medium_performer_high_potential'] = ($item4 > 0) ? $item6_count : 0;
         $data['medium_performer_potential'] = ($item5 > 0) ? $item5_count : 0;
@@ -12430,7 +12088,6 @@ class GeneralController extends Controller
         $data['low_performer_high_potential'] = ($item7 > 0) ? $item7_count : 0;
         $data['low_performer_medium_potential'] = ($item8 > 0) ? $item8_count : 0;
         $data['low_performer_potential'] = ($item9 > 0) ? $item9_count : 0;
-
 
         return view('talent.talent_matrix', $data);
     }
