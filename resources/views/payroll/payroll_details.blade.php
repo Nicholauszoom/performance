@@ -138,7 +138,7 @@
                                     </td>
                                     <td class="" style="margin-right: 0px" colspan="">{{ $row->account_no }}
                                     </td>
-                                    <td class="" style="margin-right: 0px" colspan="">{{ $row->pf_membership_no }}
+                                    <td class="" style="margin-right: 0px" colspan="">{{ $row->membership_no  }}
                                     </td>
                                     <td class="" style="margin-right: 0px" colspan="">{{ $row->name }}
                                     </td>
