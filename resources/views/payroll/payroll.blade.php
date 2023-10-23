@@ -7,9 +7,6 @@
 @push('head-scriptTwo')
     <script src="{{ asset('assets/js/form_layouts.js') }}"></script>
     <script src="{{ asset('assets/js/pages/datatables_basic.js') }}"></script>
-
-    <script src="{{ asset('assets/date-picker/moment.min.js') }}"></script>
-    <script src="{{ asset('assets/date-picker/daterangepicker.js') }}"></script>
 @endpush
 
 @section('content')
@@ -20,220 +17,208 @@
         $pendingPayroll = $data['pendingPayroll'];
         $pending_overtime = $data['pending_overtime'];
     @endphp
-            {{-- start of run payroll --}}
-            @can('add-payroll')
-            @if ($pendingPayroll == 0)
 
-                <div class="col-lg-12">
+    @can('add-payroll')
+        @if ($pendingPayroll == 0)
+            <div class="col-lg-12">
+                <div class="card border-top  border-top-width-3 border-top-main rounded-0">
+                    <div class="card-header">
+                        <h5 class="card-title">Payroll</h5>
+                    </div>
 
-                    <div class="card border-top  border-top-width-3 border-top-main rounded-0">
-                        <div class="card-header">
-                            <h5 class="card-title">Payroll</h5>
-                        </div>
+                    <div class="card-body">
+                        <div id="payrollFeedback"></div>
 
-                        <div class="card-body">
-                            <div id="payrollFeedback"></div>
-
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <form autocomplete="off" id="initPayroll" method="POST">
-                                        <div class="mb-3 row">
-                                            @if($pending_overtime == 0)
+                        <div class="row">
+                            <div class="col-md-12">
+                                <form autocomplete="off" id="initPayroll" method="POST">
+                                    <div class="mb-3 row">
+                                        @if($pending_overtime == 0)
                                             <div class="col-7 row">
                                                 <label class="form-label col-md-3 text-center font-bold">
                                                     <h6>Payroll Month:</h6>
                                                 </label>
 
                                                 <div class="col-md-9">
-                                                    <input type="text" required placeholder="Payroll Month" name="payrolldate" class="form-control col-md-7 has-feedback-left" id="payrollDate" aria-describedby="inputSuccess2Status">
-                                                    <span class="ph-calendar-o form-control-feedback right" aria-hidden="true"></span>
+                                                    <input type="date" required placeholder="Payroll Month" name="payrolldate" class="form-control col-md-7 has-feedback-left" id="payrollDate" aria-describedby="inputSuccess2Status">
                                                 </div>
                                             </div>
 
                                             <div class="col-3">
                                                 <button name="init" type="submit" class="btn btn-main">Change Payroll Period</button>
                                             </div>
-                                            @else
-                                        <div class="d-flex justify-content-center align-items-center">
-                                            <p class='alert alert-warning text-center'>Note! There is Pending Overtimes  To be Confirmed</p>
-                                        </div>
-                                            @endif
+                                        @else
+                                            <div class="d-flex justify-content-center align-items-center">
+                                                <p class='alert alert-warning text-center'>Note! There is Pending Overtimes  To be Confirmed</p>
+                                            </div>
+                                        @endif
+                                    </div>
 
-                                        </div>
-                                        <div class="d-flex justify-content-end align-items-center">
-
-                                        </div>
-                                    </form>
-                                </div>
+                                    <div class="d-flex justify-content-end align-items-center"></div>
+                                </form>
                             </div>
-
                         </div>
+
                     </div>
-                </div >
-            @endif
-            @endcan
-            {{-- / --}}
+                </div>
+            </div >
+        @endif
+    @endcan
+
+    <div class="col-lg-12 col-md-12 col-sm-6" id="hideList">
+        <div class="card border-top  border-top-width-3 border-top-main rounded-0">
+            <div class="card-header">
+                <h5 class="card-title text-warning">Payroll List</h5>
+            </div>
+
+            <div class="card-body">
+                <table class="table datatable-basic">
+                    <thead>
+                        <tr>
+                            <th>S/N</th>
+                            <th>Payroll Month</th>
+                            <th>Status</th>
+                            {{-- <th>Mail status</th> --}}
+                            <th>Option</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        <?php
+                            foreach ($payrollList as $row) { ?>
+
+                        <tr id="domain<?php echo $row->id;?>">
+                            <td width="1px"><?php echo $row->SNo; ?></td>
+                            <td><?php echo date('F, Y', strtotime($row->payroll_date));; ?>
+                            </td>
+                            <td>
+                                <?php if($row->state==1 || $row->state==2 ){   ?>
+                                <span class="badge bg-pending bg-opacity-10 bg-pending">PENDING</span>
 
 
-            {{-- start of payslip mail list --}}
-            {{-- @can('view-payroll') --}}
-            <div class="col-lg-12 col-md-12 col-sm-6" id="hideList">
-                <div class="card border-top  border-top-width-3 border-top-main rounded-0">
-                    <div class="card-header">
-                        <h5 class="card-title text-warning">Payroll List</h5>
-                    </div>
+                                <?php if(!$row->pay_checklist==1){ ?>
+                                <script>
+                                setTimeout(function() {
+                                    var url =
+                                        "{{route('payroll.temp_payroll_info',['pdate'=>base64_encode($row->payroll_date)])}}"
+                                    window.location.href = url;
+                                }, 1000)
+                                </script>
+                                <?php  }?>
 
-                    <div class="card-body">
-                        <table class="table datatable-basic">
-                            <thead>
-                                <tr>
-                                    <th>S/N</th>
-                                    <th>Payroll Month</th>
-                                    <th>Status</th>
-                                    {{-- <th>Mail status</th> --}}
-                                    <th>Option</th>
-                                    <th></th>
-                                </tr>
-                            </thead>
+                                <?php } else { ?>
+                                <span class="badge bg-success bg-opacity-20 text-success">APPROVED</span>
+                                <br>
+                                <?php  } ?>
+                            </td>
+                            {{-- <td>
+                                <?php if($row->email_status==0){ ?>
+                                <span class="badge bg-warning bg-opacity-10 bg-pending">NOT SENT</span>
+                                <br>
+                                <?php } else { ?>
+                                <span class="badge bg-success bg-opacity-20 text-success">SENT</span>
 
-                            <tbody>
-                                <?php
-                                    foreach ($payrollList as $row) { ?>
+                                <?php  } ?>
+                            </td> --}}
 
-                                <tr id="domain<?php echo $row->id;?>">
-                                    <td width="1px"><?php echo $row->SNo; ?></td>
-                                    <td><?php echo date('F, Y', strtotime($row->payroll_date));; ?>
-                                    </td>
-                                    <td>
-                                        <?php if($row->state==1 || $row->state==2 ){   ?>
-                                        <span class="badge bg-pending bg-opacity-10 bg-pending">PENDING</span>
-
-
-                                        <?php if(!$row->pay_checklist==1){ ?>
-                                        <script>
-                                        setTimeout(function() {
-                                            var url =
-                                                "{{route('payroll.temp_payroll_info',['pdate'=>base64_encode($row->payroll_date)])}}"
-                                            window.location.href = url;
-                                        }, 1000)
-                                        </script>
-                                        <?php  }?>
-
-                                        <?php } else { ?>
-                                        <span class="badge bg-success bg-opacity-20 text-success">APPROVED</span>
-                                        <br>
-                                        <?php  } ?>
-                                    </td>
-                                    {{-- <td>
-                                        <?php if($row->email_status==0){ ?>
-                                        <span class="badge bg-warning bg-opacity-10 bg-pending">NOT SENT</span>
-                                        <br>
-                                        <?php } else { ?>
-                                        <span class="badge bg-success bg-opacity-20 text-success">SENT</span>
-
-                                        <?php  } ?>
-                                    </td> --}}
-
-                                    <td class="options-width">
-                                        <?php if($row->state==1 || $row->state==2){ ?>
-                                        <div class="d-flex">
-                                            {{-- start of cancel payroll button --}}
-                                            @can('cancel-payroll')
-                                            <span style="margin-right: 4px">
-                                                <a href="javascript:void(0)" onclick="cancelPayroll()" title="Cancel Payroll" class="icon-2 info-tooltip">
-                                                    <button type="button" class="btn bg-danger bg-opacity-20 text-danger btn-xs">
-                                                        <i class="ph-x"></i>
-                                                    </button>
-                                                </a>
-                                            </span>
-                                            @endcan
-                                            {{-- / --}}
-
-                                            {{-- start of resend payslip button --}}
-                                            @can('mail-payroll')
-                                            <span style="margin-right: 4px">
-                                                <a href="{{route('payroll.temp_payroll_info',['pdate'=>base64_encode($row->payroll_date)])}}<?php //echo base_url('index.php/payroll/temp_payroll_info/?pdate='.base64_encode($row->payroll_date));?>"
-                                                    onclick="cancelPayroll()" title="Resend Pay Slip as Email"
-                                                    class="icon-2 info-tooltip">
-                                                    <button type="button"
-                                                        class="btn  bg-warning bg-opacity-20 text-warning btn-xs">
-                                                        <i class="ph-repeat"></i>
-                                                        <i class="ph-envelope"></i>
-                                                    </button>
-                                                </a>
-                                            </span>
-                                            @endcan
-                                            {{-- / --}}
-                                        </div>
-
-                                        <?php } else {  ?>
-
-                                        {{-- start of view email detail button --}}
-                                        <a href="{{route('payroll.payroll_info',['pdate'=>base64_encode($row->payroll_date)])}}<?php //echo base_url('index.php/payroll/payroll_info/?pdate='.base64_encode($row->payroll_date));?>"
-                                            title="Info and Details" class="icon-2 info-tooltip"><button type="button"
-                                                class="btn btn-main btn-xs"><i class="ph-info"></i></button>
-                                        </a>
-                                        {{-- / --}}
-                                        <?php if($row->state==0){ ?>
-                                        <?php if($row->pay_checklist==1){ ?>
-
-                                        {{-- start of print report button --}}
-                                        <a href="{{route('reports.payroll_report',['pdate'=>base64_encode($row->payroll_date)])}}<?php //echo base_url(); ?>index.php/reports/payroll_report/?pdate=<?php echo base64_encode($row->payroll_date); ?>"
-                                            target="blank" title="Print Report" class="icon-2 info-tooltip">
-                                            <button type="button" class="btn btn-main btn-xs">
-                                                <i class="ph-printer"></i>
+                            <td class="options-width">
+                                <?php if($row->state==1 || $row->state==2){ ?>
+                                <div class="d-flex">
+                                    {{-- start of cancel payroll button --}}
+                                    @can('cancel-payroll')
+                                    <span style="margin-right: 4px">
+                                        <a href="javascript:void(0)" onclick="cancelPayroll()" title="Cancel Payroll" class="icon-2 info-tooltip">
+                                            <button type="button" class="btn bg-danger bg-opacity-20 text-danger btn-xs">
+                                                <i class="ph-x"></i>
                                             </button>
                                         </a>
-                                        {{-- / --}}
-                                        <?php } else {  ?>
-                                        <a title="Checklist Report Not Ready" class="icon-2 info-tooltip">
-                                            <button type="button" class="btn btn-warning btn-xs"><i
-                                                    class="ph-file"></i></button> </a>
-                                        <?php } ?>
+                                    </span>
+                                    @endcan
+                                    {{-- / --}}
 
-                                        <?php if($row->email_status==0){ ?>
-
-                                        {{-- start of send payslip mail button --}}
-                                        @can('mail-payroll')
-                                        {{-- <a href="javascript:void(0)"
-                                            onclick="sendEmail('<?php echo $row->payroll_date; ?>')"
-                                            title="Send Pay Slip as Email" class="icon-2 info-tooltip"><button type="button"
-                                                class="btn btn-success btn-xs"><i class="ph-envelope"></i></button>
-                                        </a> --}}
-                                        @endcan
-                                        {{-- / --}}
-
-                                        <?php } else { ?>
-
-                                        {{-- start of re-send payslip mail button  --}}
-                                        @can('mail-payroll')
-                                        <a href="javascript:void(0)"
-                                            onclick="sendEmail('<?php echo $row->payroll_date; ?>')"
-                                            title="Resend Pay Slip as Email" class="icon-2 info-tooltip">
-                                            <button type="button" class="btn btn-warning btn-xs">
-                                                <i class="ph-repeat"></i>&nbsp;&nbsp;
+                                    {{-- start of resend payslip button --}}
+                                    @can('mail-payroll')
+                                    <span style="margin-right: 4px">
+                                        <a href="{{route('payroll.temp_payroll_info',['pdate'=>base64_encode($row->payroll_date)])}}<?php //echo base_url('index.php/payroll/temp_payroll_info/?pdate='.base64_encode($row->payroll_date));?>"
+                                            onclick="cancelPayroll()" title="Resend Pay Slip as Email"
+                                            class="icon-2 info-tooltip">
+                                            <button type="button"
+                                                class="btn  bg-warning bg-opacity-20 text-warning btn-xs">
+                                                <i class="ph-repeat"></i>
                                                 <i class="ph-envelope"></i>
                                             </button>
                                         </a>
-                                        @endcan
-                                        {{-- / --}}
+                                    </span>
+                                    @endcan
+                                    {{-- / --}}
+                                </div>
 
-                                        <?php } } ?>
-                                        <?php } ?>
+                                <?php } else {  ?>
 
-                                    </td>
-                                    <td></td>
-                                </tr>
-                                <?php }  ?>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-                <!-- /basic layout -->
+                                {{-- start of view email detail button --}}
+                                <a href="{{route('payroll.payroll_info',['pdate'=>base64_encode($row->payroll_date)])}}<?php //echo base_url('index.php/payroll/payroll_info/?pdate='.base64_encode($row->payroll_date));?>"
+                                    title="Info and Details" class="icon-2 info-tooltip"><button type="button"
+                                        class="btn btn-main btn-xs"><i class="ph-info"></i></button>
+                                </a>
+                                {{-- / --}}
+                                <?php if($row->state==0){ ?>
+                                <?php if($row->pay_checklist==1){ ?>
+
+                                {{-- start of print report button --}}
+                                <a href="{{route('reports.payroll_report',['pdate'=>base64_encode($row->payroll_date)])}}<?php //echo base_url(); ?>index.php/reports/payroll_report/?pdate=<?php echo base64_encode($row->payroll_date); ?>"
+                                    target="blank" title="Print Report" class="icon-2 info-tooltip">
+                                    <button type="button" class="btn btn-main btn-xs">
+                                        <i class="ph-printer"></i>
+                                    </button>
+                                </a>
+                                {{-- / --}}
+                                <?php } else {  ?>
+                                <a title="Checklist Report Not Ready" class="icon-2 info-tooltip">
+                                    <button type="button" class="btn btn-warning btn-xs"><i
+                                            class="ph-file"></i></button> </a>
+                                <?php } ?>
+
+                                <?php if($row->email_status==0){ ?>
+
+                                {{-- start of send payslip mail button --}}
+                                @can('mail-payroll')
+                                {{-- <a href="javascript:void(0)"
+                                    onclick="sendEmail('<?php echo $row->payroll_date; ?>')"
+                                    title="Send Pay Slip as Email" class="icon-2 info-tooltip"><button type="button"
+                                        class="btn btn-success btn-xs"><i class="ph-envelope"></i></button>
+                                </a> --}}
+                                @endcan
+                                {{-- / --}}
+
+                                <?php } else { ?>
+
+                                {{-- start of re-send payslip mail button  --}}
+                                @can('mail-payroll')
+                                <a href="javascript:void(0)"
+                                    onclick="sendEmail('<?php echo $row->payroll_date; ?>')"
+                                    title="Resend Pay Slip as Email" class="icon-2 info-tooltip">
+                                    <button type="button" class="btn btn-warning btn-xs">
+                                        <i class="ph-repeat"></i>&nbsp;&nbsp;
+                                        <i class="ph-envelope"></i>
+                                    </button>
+                                </a>
+                                @endcan
+                                {{-- / --}}
+
+                                <?php } } ?>
+                                <?php } ?>
+
+                            </td>
+                            <td></td>
+                        </tr>
+                        <?php }  ?>
+                    </tbody>
+                </table>
             </div>
-            {{-- @endcan --}}
-            {{-- / --}}
-
+        </div>
+        <!-- /basic layout -->
+    </div>
 @endsection
 
 @push('footer-script')
@@ -251,12 +236,6 @@
                 contentType: false,
                 cache: false,
                 async: true,
-                beforeSend: function () {
-                    $('.request__spinner').show() },
-                    complete: function(){
-
-                    }
-
             }).done(function(data) {
                 $('#payrollFeedback').fadeOut('fast', function() {
                     $('#payrollFeedback').fadeIn('fast').html(data);
