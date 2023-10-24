@@ -209,7 +209,7 @@
                 <th>Nature</th>
                 <th>Reason</th>
                 <th>Status</th>
-                <th>Remaining</th>
+                <th>Accrued Days </th>
                 <th>Action</th>
             </tr>
         </thead>
@@ -350,7 +350,7 @@
                 <th>Nature</th>
                 <th>Reason</th>
                 <th>Status</th>
-                <th>Remaining</th>
+                <th>Accrued Days</th>
                 <th>Action</th>
             </tr>
         </thead>

@@ -407,14 +407,14 @@ class AttendanceModel extends Model
 
         $last_month_date = date('Y-m-t', strtotime($prev_month));
 
-        $query = "SELECT  
+        $query = "SELECT
                 IF(
-                    (SELECT COUNT(id) FROM leaves WHERE nature = '" . $nature . "' AND empID = '" . $empID . "') = 0, 
-                    0, 
-                    (SELECT SUM(days) FROM leaves WHERE nature = '" . $nature . "' AND empID = '" . $empID . "' AND start <= '" . $today . "' AND leave_address != 'auto' AND start BETWEEN '" . $hireDate . "' AND '" . $today . "' GROUP BY nature)
-                ) as days_spent, 
+                    (SELECT COUNT(id) FROM leaves WHERE nature = '" . $nature . "' AND empID = '" . $empID . "') = 0,
+                    0,
+                    (SELECT SUM(days) FROM leaves WHERE nature = '" . $nature . "' AND state = 0 AND empID = '" . $empID . "' AND start <= '" . $today . "' AND leave_address != 'auto' AND start BETWEEN '" . $hireDate . "' AND '" . $today . "' GROUP BY nature)
+                ) as days_spent,
                 DATEDIFF('" . $today . "','" . $hireDate . "') as days_accrued";
-                
+
 
         $row = DB::select(DB::raw($query));
 

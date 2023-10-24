@@ -326,7 +326,6 @@ $data['leave_types'] = LeaveType::all();
             $employeeHireYear = $employeeHiredate[0];
             $employeeDate =  '';
 
-       
             if($employeeHireYear == $year  ){
                 $employeeDate = Auth::user()->hire_date;
 
@@ -335,7 +334,7 @@ $data['leave_types'] = LeaveType::all();
             }
 
             // dd($employeeDate);
-           
+            $data['leaveDates'] = $this->checkDate(Auth::user()->emp_id);
 
             $data['leaveBalance'] = $this->attendance_model->getLeaveBalance(Auth::user()->emp_id,$employeeDate, date('Y-m-d'));
             $data['sickLeaveBalance'] = $this->getRemainingDaysForLeave(Auth::user()->emp_id, 2);
@@ -349,7 +348,6 @@ $data['leave_types'] = LeaveType::all();
             $data['parent'] = 'My Services';
             $data['child'] = 'Leaves';
             // dd($data);
-            
          return view('my-services/leaves', $data);
      }
 
@@ -505,7 +503,29 @@ $data['leave_types'] = LeaveType::all();
    }
 
 
-// start of save leave Function
+    public function checkDate($empID) {
+        // Get the current year
+        $currentYear = Carbon::now()->year;
+
+        // Get the leaves for the specified employee within the current year
+        $leaves = Leaves::where('empID', $empID)
+            ->whereYear('start', $currentYear)
+            ->get();
+
+        // Initialize an array to store the start and end dates for each leave
+        $userLeaves = [];
+
+        foreach ($leaves as $leave) {
+            $userLeaves[] = [
+                'start' => $leave->start,
+                'end' => $leave->end,
+            ];
+        }
+
+        // Return the array of start and end dates for the employee's leaves within the current year
+        return $userLeaves;
+    }
+
 
 
 public function saveLeave(Request $request) {
@@ -595,7 +615,6 @@ public function saveLeave(Request $request) {
         // For  Requested days
          if($nature == 1){
         $holidays=SysHelpers::countHolidays($start,$end);
-        dd($holidays);
         $different_days = SysHelpers::countWorkingDays($start,$end)-$holidays;
 
          }
@@ -2042,7 +2061,7 @@ public function saveLeave(Request $request) {
         // For Leave Nature days
         $type=LeaveType::where('id',$nature)->first();
         $max_leave_days= $type->max_days;
-         
+
         //$max_leave_days = 10000;
         $employeeHiredate = explode('-',$employee->hire_date);
         $employeeHireYear = $employeeHiredate[0];
@@ -2616,7 +2635,7 @@ public function saveLeave(Request $request) {
                   return $url->with('msg', $msg);
                   }
 
-                  
+
 
 
             }

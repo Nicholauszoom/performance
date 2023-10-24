@@ -197,6 +197,7 @@
         <tbody>
           <?php
           // if ($leave->num_rows() > 0){
+            $counter = 1;
             foreach ($myleave as $row) {
                 if($row->position != "Default Apllication"){
             //   if($row->status==2){ continue; }
@@ -207,7 +208,7 @@
               $final2 = $diff->format("%a");
              ?>
             <tr id="record<?php echo $row->id; ?>">
-              <td width="1px"><?php echo $row->SNo; ?></td>
+              <td width="1px"> {{ $counter }}</td>
 
 
 
@@ -269,7 +270,10 @@
 
               </tr>
 
-            <?php }} //} ?>
+            <?php
+                    $counter++; // Increment the counter for the next row
+
+         }} //} ?>
         </tbody>
       </table>
 </div>
@@ -615,6 +619,42 @@ Swal.fire({
       });
     });
     </script>
+
+        @php
+        // Assuming $userLeaves contains the array of leave dates
+        $leaveDates = json_encode($leaveDates);
+        // dd($leaveDates);
+        @endphp
+
+<script>
+    var leaveDates = @json($leaveDates);
+
+    // Get the start date input element
+    var startDateInput = document.getElementById("start-date").value;
+    console.log(startDateInput);
+
+    // Add an event listener to the start date input
+    startDateInput.addEventListener('input', function() {
+        var selectedDate = new Date(startDateInput.value);
+
+        // Convert the selected date to a string in 'yyyy-mm-dd' format
+        var selectedDateString = selectedDate.toISOString().split('T')[0];
+
+        // Iterate through the leaveDates array and check if the selected date falls within any leave period
+        var disableDate = false;
+        for (var i = 0; i < leaveDates.length; i++) {
+            if (selectedDateString >= leaveDates[i].start && selectedDateString <= leaveDates[i].end) {
+                disableDate = true;
+                break;
+            }
+        }
+
+        if (disableDate) {
+            alert('Leave date selected. Please choose another date.');
+            startDateInput.value = ''; // Clear the input if it matches a leave date
+        }
+    });
+</script>
 
 {{-- <script>
     var date = new Date();
