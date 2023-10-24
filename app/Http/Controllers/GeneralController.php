@@ -562,6 +562,7 @@ class GeneralController extends Controller
     {
 
         $this->authenticateUser('view-setting');
+
         if ($request->method() == "POST") {
 
             $data = array(
@@ -572,7 +573,9 @@ class GeneralController extends Controller
                 'code' => "0",
                 'country' => $request->input('country'),
             );
+
             $result = $this->flexperformance_model->addCompanyInfo($data);
+
             if ($result == true) {
                 return redirect()->route('flex.companyInfo');
                 echo "<p class='alert alert-success text-center'>Branch Added Successifully!</p>";
@@ -580,6 +583,7 @@ class GeneralController extends Controller
                 echo "<p class='alert alert-danger text-center'>FAILED, Compay Info Not Added. Please Try Again</p>";
             }
         } else {
+
             $data['data'] = $this->flexperformance_model->getCompanyInfo();
 
             return view('app.company_info', $data);
@@ -5434,9 +5438,9 @@ class GeneralController extends Controller
         $data['pending_payroll'] = 0;
 
         if ($date) {
-            
+
             $date = $date->format('m/d/Y');
-    
+
             $date = date("Y-m-d", strtotime($date));
 
             $this->addPrevMonthSalaryArrears($date);
