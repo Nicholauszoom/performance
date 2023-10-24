@@ -887,8 +887,10 @@ class AttendanceModel extends Model
             $leaves = Leaves::where('empID', $empID)
                 ->where('nature', $nature)->where('status', 3) // Include status = 3
                 ->where('state', 0) // Include state = 0
+                ->whereNot('leave_address','auto')
                 ->whereRaw('YEAR(start) = ? AND YEAR(end) = ?', [$currentYear, $currentYear])
                 ->get();
+
 
                 $totalDays = 0;
 

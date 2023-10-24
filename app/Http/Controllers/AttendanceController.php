@@ -595,7 +595,6 @@ public function saveLeave(Request $request) {
         // For  Requested days
          if($nature == 1){
         $holidays=SysHelpers::countHolidays($start,$end);
-        dd($holidays);
         $different_days = SysHelpers::countWorkingDays($start,$end)-$holidays;
 
          }
