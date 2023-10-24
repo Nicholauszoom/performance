@@ -212,10 +212,8 @@ class FlexPerformanceModel extends Model
      */
     public function getCompanyInfo()
     {
-        $query = "SELECT * from company_info limit 1";
-        $row = DB::select(DB::raw($query));
-
-        return $row[0];
+        $query = DB::table('company_info')->first();
+        return $query;
     }
 
     public function updateCompanyInfo($data, $id)
