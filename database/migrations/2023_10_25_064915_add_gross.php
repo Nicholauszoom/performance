@@ -4,8 +4,13 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddGrossToTempPayrollLogs extends Migration
+return new class extends Migration
 {
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
     public function up()
     {
 
@@ -28,4 +33,4 @@ class AddGrossToTempPayrollLogs extends Migration
             $table->dropColumn('gross');
         });
     }
-}
+};
