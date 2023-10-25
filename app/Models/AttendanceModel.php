@@ -1262,7 +1262,7 @@ class AttendanceModel extends Model
                     ->where('leaves.status',3)
                     ->where('employee.department', $department)
                      ->where('start', '>=', $firstDayOfMonth)
-                    ->where('start', '<=', $lastDayOfMonth)
+                    ->where('end', '<=', $lastDayOfMonth)
                     ->where('nature', $nature)
                     ->get();
             } elseif ($department != 'All' && $position == 'All') {
@@ -1275,7 +1275,7 @@ class AttendanceModel extends Model
                     ->select('leaves.*', 'employee.*', 'department.name as department_name', 'position.name as  position_name')->where('employee.state', 1)
                     ->where('employee.department', $department)
                     ->where('start', '>=', $firstDayOfMonth)
-                    ->where('start', '<=', $lastDayOfMonth)
+                    ->where('end', '<=', $lastDayOfMonth)
                     ->where('nature', $nature)
                     ->get();
             } elseif ($department == 'All') {
@@ -1288,7 +1288,7 @@ class AttendanceModel extends Model
                     ->where('leaves.status',3)
                     ->select('leaves.*', 'employee.*', 'department.name as department_name', 'position.name as  position_name')->where('employee.state', 1)
                     ->where('start', '>=', $firstDayOfMonth)
-                    ->where('start', '<=', $lastDayOfMonth)
+                    ->where('end', '<=', $lastDayOfMonth)
                     ->where('nature', $nature)
                     ->get();
             }
@@ -1301,7 +1301,7 @@ class AttendanceModel extends Model
                 ->where('leaves.status',3)
                 ->select('leaves.*', 'employee.*', 'department.name as department_name', 'position.name as  position_name')->where('start', '>=', $last_month_date)
                 ->where('start', '>=', $firstDayOfMonth)
-                ->where('start', '<=', $lastDayOfMonth)
+                ->where('end', '<=', $lastDayOfMonth)
                 ->where('nature', $nature)
                 ->where('employee.emp_id', $empID)
                 ->get();
@@ -1571,6 +1571,7 @@ function getMonthlyLeave22($empID, $today, $nature2, $department, $position)
 
 
 
+        // dd($monthlyleave);
         return $monthlyleave;
     }
 

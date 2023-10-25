@@ -2289,7 +2289,7 @@ class ReportController extends Controller
         foreach ($total_allowances as $row) {
 
             if ($row->allowance == "N-Overtime") {
-                
+
 
                 $allowance = $this->reports_model->total_terminated_allowance($current_payroll_month, $previous_payroll_month, 'N-Overtime');
 
@@ -3550,16 +3550,16 @@ public function processOneEmployee($employee, $request, $nature){
                 if ($request->leave_employee == Null || $request->leave_employee == "All") {
                     if ($department != 'All' && $position != 'All') {
                         $_employees = Employee::where('state', '=', 1)->where('department', $department)->where('position', $position)->get();
-                        
+
                     } elseif ($department != 'All' && $position == 'All') {
                         $_employees = Employee::where('state', '=', 1)->where('department', $department)->get();
-                       
+
                     } elseif ($department == 'All') {
                         $_employees = Employee::where('state', '=', 1)->get();
                     }
                     foreach ($_employees  as $employee) {
                         $employees[] =  $this->gettingEmployeeAnnualLeavesReport($employee, $request, $_nature->id);
-                      
+
                     }
                 } else {
                     $_employees = Employee::where('emp_id', $request->leave_employee)->where('state', '=', 1)->get();
@@ -3567,34 +3567,34 @@ public function processOneEmployee($employee, $request, $nature){
                     //$employees = $this->flexperformance_model->userprofile($request->leave_employee);
                     foreach ($_employees  as $employee) {
                         $employees[] =  $this->gettingEmployeeAnnualLeavesReport($employee, $request, $_nature->id);
-                     
+
                     }
                 }
             }
             //  dd( $employees);
 
         } else {
-           
+
             if ($request->leave_employee == Null || $request->leave_employee == "All") {
-                
+
                 if ($department != 'All' && $position != 'All') {
                     $employees = Employee::where('state', '=', 1)->where('department', $department)->where('position', $position)->get();
                 } elseif ($department != 'All' && $position == 'All') {
                     $employees = Employee::where('state', '=', 1)->where('department', $department)->get();
                 } elseif ($department == 'All') {
                     $employees = Employee::where('state', '=', 1)->get();
-                 
-                
+
+
                 }
 
                 foreach ($employees  as $employee) {
                     $this->gettingEmployeeAnnualLeavesReport($employee, $request, $nature);
-                   
+
                 }
             } else {
                 $employees = Employee::where('emp_id', $request->leave_employee)->where('state', '=', 1)->get();
                 //$employees = $this->flexperformance_model->userprofile($request->leave_employee);
-                
+
                 foreach ($employees  as $employee) {
                     $this->gettingEmployeeAnnualLeavesReport($employee, $request, $nature);
                 }
@@ -3610,7 +3610,7 @@ public function processOneEmployee($employee, $request, $nature){
         }
 
         $data['employees'] =  $employees;
-        
+
         $data['nature'] =  $nature;
         $data['leave_name'] = $leave_name;
         $data['date'] = $request->duration;
@@ -3642,25 +3642,25 @@ public function processOneEmployee($employee, $request, $nature){
     public function gettingEmployeeAnnualLeavesReport($employee, $request, $nature)
     {
         $d1 = new \DateTime(date($employee->hire_date));
- 
+
         $d2 = new \DateTime("now");
         $diff = $d1->diff($d2);
-       
+
 
         $years = $diff->y;
         $months = $diff->m;
         $days = $diff->d;
 
         $diff = 0;
-        
+
         $calender = explode('-', $request->duration);
-        
+
         $december = ($calender[0] - 1) . '-12-31';
          $first_day_this_year=($calender[0]) . '-01-01';
         $december_last_year = new DateTime($december);
         $hire_date = new DateTime($employee->hire_date);
         $today = new DateTime($request->duration);
-        
+
         if ($december_last_year > $hire_date) {
 
             $diff = $today->diff($december_last_year);
@@ -3669,15 +3669,15 @@ public function processOneEmployee($employee, $request, $nature){
             $diff = $hire_date->diff($today);
         }
 
-    
+
         $days_this_year = $diff->days;
 
         $days_this_month = intval(date('t', strtotime($request->duration)));
 
         $employee->accrual_amount = $employee->salary / 30;
-           
+
         $employee->maximum_days = $this->attendance_model->getLeaveTaken2($employee->emp_id, $employee->hire_date, $request->duration, $nature);
-       
+
 
         $accrual_days = $days_this_year * $employee->leave_days_entitled / 365;
 
@@ -3689,11 +3689,11 @@ public function processOneEmployee($employee, $request, $nature){
 
 
         $employee->days_spent = $this->attendance_model->days_spent3($employee->emp_id, $employee->hire_date, $request->duration, $nature);
- 
+
         $employee->opening_balance = $this->attendance_model->getLeaveBalance($employee->emp_id, $first_day_this_year,$first_day_this_year);
-        
+
         $employee->current_balance = $this->attendance_model->getLeaveBalance($employee->emp_id, $first_day_this_year, $request->duration);
-      
+
         return $employee;
     }
 
