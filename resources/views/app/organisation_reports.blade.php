@@ -1024,16 +1024,17 @@
                             <div class="">
                                 <div class="d-inline-flex align-items-center me-3">
                                     <input type="radio" name="type" value="1" id="p9" required>
-                                    <label class="ms-2" for="p9">PDF</label>
+                                    <label class="ms-2" for="p9" onclick="event.preventDefault();">PDF</label>
                                 </div>
 
                                 <div class="d-inline-flex align-items-center">
                                     <input type="radio" name="type" value="2" id="p9a" required>
-                                    <label class="ms-2" for="p9a">Excel</label>
+                                    <label class="ms-2" for="p9a" onclick="event.preventDefault();">Excel</label>
                                 </div>
                                 <button type="submit" class="btn btn-main"><i class="ph-printer me-2"></i>
                                     Print</button>
                             </div>
+
                         </div>
                     </div>
                 </form>

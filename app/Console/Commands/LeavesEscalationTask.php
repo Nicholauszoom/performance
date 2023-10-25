@@ -54,20 +54,20 @@ class LeavesEscalationTask extends Command
 
         // Start of Escallation
         $leaves = Leaves::where('state', 1)->get();
-    
+
 
         if ($leaves) {
             $approval_person = null; // Initialize before the loop
-          
+
             foreach ($leaves as $item) {
                 $today = new DateTime();
                 $applied = $item->updated_at;
                 $diff = $today->diff($applied);
                 $range = $diff->days;
                 $approval = LeaveApproval::where('empID', $item->empID)->first();
-               
+
                 if ($approval) {
-                    if ($range > $approval->escallation_time || 1) {
+                    if ($range >= $approval->escallation_time) {
                         $leave = Leaves::where('id', $item->id)->first();
                         $status = $leave->status;
                         // dd($leave->status);
@@ -113,7 +113,7 @@ class LeavesEscalationTask extends Command
 
 
                         $employee = EMPL::where("emp_id", $item->empID)->first();
-                  
+
                         $approval_person = EMPL::where("emp_id", $approval_person)->first();
 
                         if ($approval_person) {
@@ -125,7 +125,7 @@ class LeavesEscalationTask extends Command
                                 'employee_name' => $employee->full_name,
                                 'next' => parse_url(route('attendance.leave'), PHP_URL_PATH)
                             );
-                        
+
                             try {
                                 Notification::route('mail',  $approval_person->email)->notify(new EmailRequests($email_data));
                             } catch (Exception $exception) {
@@ -134,7 +134,7 @@ class LeavesEscalationTask extends Command
                         } else {
                             // Handle the case where $approval_person is null
                         }
-                        
+
                     }
                 }
             }

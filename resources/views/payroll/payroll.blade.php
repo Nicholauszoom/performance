@@ -86,10 +86,11 @@
 
                     <tbody>
                         <?php
+                        $index = 1;
                             foreach ($payrollList as $row) { ?>
 
                         <tr id="domain<?php echo $row->id;?>">
-                            <td width="1px"><?php echo $row->SNo; ?></td>
+                            <td width="1px"> {{$index}}</td>
                             <td><?php echo date('F, Y', strtotime($row->payroll_date));; ?>
                             </td>
                             <td>
@@ -211,6 +212,7 @@
 
                             </td>
                             <td></td>
+                            
                         </tr>
                         <?php }  ?>
                     </tbody>

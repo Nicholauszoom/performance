@@ -238,8 +238,77 @@
               </td>
               <td><?php echo $row->reason; ?></td>
             <td><div>
-                @if($row->position == null) <span class="label label-default badge bg-pending text-white">NOT  APROVED</span> @endif
-                <span class="label label-default badge bg-info text-white">{{ $row->position }}</span>
+                <?php
+
+           if ($row->status == 1) {
+                $levelID = App\Models\LeaveApproval::where('empID', Auth::user()->emp_id)->value('level1');
+                // dd( $levelID );
+
+
+                if ($row->position == null) {
+                    $employeePosition = App\Models\Employee::where('emp_id', $levelID)->value('position');
+
+                    // Make sure $employeePosition is not null or empty before querying for $position
+                    if ($employeePosition) {
+                        $position = App\Models\Position::where('id', $employeePosition)->value('name');
+                        echo '<span class="label label-default badge bg-info text-white">Pending by ' . $position . '</span>';
+                    } else {
+                        // Handle the case where $employeePosition is null or empty
+                        echo $levelID;
+                    }
+                } else {
+                    echo '<span class="label label-default badge bg-info text-white">' . $row->position . '</span>';
+                }
+            }
+           elseif ($row->status == 2) {
+                $levelID = App\Models\LeaveApproval::where('empID', Auth::user()->emp_id)->value('level2');
+
+                if ($row->position == null) {
+                    $employeePosition = App\Models\Employee::where('emp_id', $levelID)->value('position');
+
+                    // Make sure $employeePosition is not null or empty before querying for $position
+                    if ($employeePosition) {
+                        $position = App\Models\Position::where('id', $employeePosition)->value('name');
+                        echo '<span class="label label-default badge bg-info text-white">Escalated</span>';
+                        echo '<br>';
+                        echo '<span class="label label-default badge bg-info text-white">' ."Pending to " . $position . '</span>';
+
+                    } else {
+                        // Handle the case where $employeePosition is null or empty
+                        echo  '';
+                    }
+                } else {
+                    echo '<span class="label label-default badge bg-info text-white">' . $row->position . '</span>';
+                }
+            }
+           else{
+                $levelID = App\Models\LeaveApproval::where('empID', Auth::user()->emp_id)->value('level3');
+
+
+                if ($row->position == null) {
+                    $employeePosition = App\Models\Employee::where('emp_id', $levelID)->value('position');
+
+                    // Make sure $employeePosition is not null or empty before querying for $position
+                    if ($employeePosition) {
+                        $position = App\Models\Position::where('id', $employeePosition)->value('name');
+                        echo '<span class="label label-default badge bg-info text-white">Escalated</span>';
+                        echo '<br>';
+
+                        echo '<span class="label label-default badge bg-info text-white">' ."Pending by ". $position . '</span>';
+                    } else {
+                        // Handle the case where $employeePosition is null or empty
+                        echo '';
+                    }
+                } else {
+                    echo '<span class="label label-default badge bg-info text-white">' . $row->position . '</span>';
+                }
+            }
+            ?>
+
+
+
+                @if($row->status == 0) <span class="label label-default badge bg-pending text-white">NOT  APROVED</span> @endif
+                {{-- <span class="label label-default badge bg-info text-white">{{ $row->position }}</span> --}}
             </div></td>
               <td>
                 <div >

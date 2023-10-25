@@ -661,6 +661,7 @@ public function saveLeave(Request $request) {
                   $leaves=new Leaves();
                   $empID=Auth::user()->emp_id;
                   $leaves->empID = $empID;
+                  $leaves->status = 1;
                   $leaves->start = $request->start;
                   $leaves->end=$request->end;
                   $leaves->leave_address=$request->address;
@@ -752,6 +753,7 @@ public function saveLeave(Request $request) {
                 $leaves->start = $request->start;
                 $leaves->end=$request->end;
                 $leaves->leave_address=$request->address;
+                $leaves->status=1;
                 $leaves->mobile = $request->mobile;
                 $leaves->nature = $request->nature;
                 $leaves->deligated=$request->deligate;
@@ -976,6 +978,7 @@ public function saveLeave(Request $request) {
             $leaves->empID = $empID;
             $leaves->start = $request->start;
             $leaves->end=$request->end;
+            $leaves->status = 1;
             $leaves->leave_address=$request->address;
             $leaves->mobile = $request->mobile;
             $leaves->nature = $request->nature;
@@ -1228,7 +1231,7 @@ public function saveLeave(Request $request) {
 
 
 
-            $leave->status=3;
+            $leave->status=2;
             $leave->state=0;
             $leave->level1=Auth()->user()->emp_id;
             $leave->position='Approved by '. $position->name;
@@ -2127,6 +2130,7 @@ public function saveLeave(Request $request) {
                   $leaves=new Leaves();
                   $leaves->empID = $request->empID;
                   $leaves->start = $request->start;
+                  $leaves->status = 1;
                   $leaves->end=$request->end;
                   $leaves->leave_address=$request->address;
                   $leaves->mobile = $request->mobile;
@@ -2215,6 +2219,7 @@ public function saveLeave(Request $request) {
                 $leaves=new Leaves();
                 $leaves->empID = $empID;
                 $leaves->start = $request->start;
+                $leaves->status = 1;
                 $leaves->end=$request->end;
                 $leaves->leave_address=$request->address;
                 $leaves->mobile = $request->mobile;
@@ -2453,6 +2458,7 @@ public function saveLeave(Request $request) {
                    $leaves->mobile = $request->mobile;
                    $leaves->nature = $request->nature;
                    $leaves->deligated=$request->deligate;
+                  $leaves->status = 1;
 
                    $leaves->days = $different_days;
 
@@ -2551,6 +2557,7 @@ public function saveLeave(Request $request) {
                    $leaves->empID = $empID;
                    $leaves->start = $request->start;
                    $leaves->end=$request->end;
+                  $leaves->status = 1;
                    $leaves->leave_address=$request->address;
                    $leaves->mobile = $request->mobile;
                    $leaves->nature = $request->nature;
@@ -2651,6 +2658,7 @@ public function saveLeave(Request $request) {
             $leaves->start = $request->start;
             $leaves->end=$request->end;
             $leaves->leave_address=$request->address;
+            $leaves->status = 1;
             $leaves->mobile = $request->mobile;
             $leaves->nature = $request->nature;
             $leaves->deligated=$request->deligate;
