@@ -1240,7 +1240,7 @@ class AttendanceModel extends Model
         return $monthlyleave;
     }
 
-    function getMonthlyLeave1($empID, $today, $nature, $department, $position)
+    function getApprovedMonthlyLeave($empID, $today, $nature, $department, $position)
     {
 
         $prev_month = date("Y-m-d", strtotime('-1 month', strtotime($today)));
@@ -1248,7 +1248,6 @@ class AttendanceModel extends Model
         $givenDate = Carbon::parse($today);
         $firstDayOfMonth = $givenDate->firstOfMonth()->toDateString();
         $lastDayOfMonth = $givenDate->endOfMonth()->toDateString();
-
         if ($empID == 'All') {
             if ($department != 'All' && $position != 'All') {
                 $monthlyleave = DB::table('leaves')
@@ -1261,8 +1260,16 @@ class AttendanceModel extends Model
                     ->where('employee.state', 1)
                     ->where('leaves.status',3)
                     ->where('employee.department', $department)
-                     ->where('start', '>=', $firstDayOfMonth)
-                    ->where('end', '<=', $lastDayOfMonth)
+                    ->where(function ($query) use ($firstDayOfMonth, $lastDayOfMonth) {
+                        $query->where(function ($query) use ($firstDayOfMonth, $lastDayOfMonth) {
+                            $query->where('start', '>=', $firstDayOfMonth)
+                                ->where('start', '>=', $lastDayOfMonth);
+                        })
+                        ->orWhere(function ($query) use ($firstDayOfMonth, $lastDayOfMonth) {
+                            $query->where('end', '>=', $firstDayOfMonth)
+                                ->where('end', '<=', $lastDayOfMonth);
+                        });
+                    })
                     ->where('nature', $nature)
                     ->get();
             } elseif ($department != 'All' && $position == 'All') {
@@ -1274,23 +1281,52 @@ class AttendanceModel extends Model
                     ->where('leaves.status',3)
                     ->select('leaves.*', 'employee.*', 'department.name as department_name', 'position.name as  position_name')->where('employee.state', 1)
                     ->where('employee.department', $department)
-                    ->where('start', '>=', $firstDayOfMonth)
-                    ->where('end', '<=', $lastDayOfMonth)
+                    ->where(function ($query) use ($firstDayOfMonth, $lastDayOfMonth) {
+                        $query->where(function ($query) use ($firstDayOfMonth, $lastDayOfMonth) {
+                            $query->where('start', '>=', $firstDayOfMonth)
+                                ->where('start', '>=', $lastDayOfMonth);
+                        })
+                        ->orWhere(function ($query) use ($firstDayOfMonth, $lastDayOfMonth) {
+                            $query->where('end', '>=', $firstDayOfMonth)
+                                ->where('end', '<=', $lastDayOfMonth);
+                        });
+                    })
                     ->where('nature', $nature)
                     ->get();
             } elseif ($department == 'All') {
                 $employees = Employee::where('state', '=', 1)->get();
 
+                // $monthlyleave = DB::table('leaves')
+                //     ->join('employee', 'leaves.empID', '=', 'employee.emp_id')
+                //     ->join('department', 'department.id', '=', 'employee.department')
+                //     ->join('position', 'position.id', '=', 'employee.position')
+                //     ->where('leaves.status',3)
+                //     ->select('leaves.*', 'employee.*', 'department.name as department_name', 'position.name as  position_name')->where('employee.state', 1)
+                //     ->where('start', '>=', $firstDayOfMonth)
+                //     ->where('start', '<=', $lastDayOfMonth)
+                //     ->where('end', '>=', $firstDayOfMonth)
+                //     ->where('end', '<=', $lastDayOfMonth)
+                //     ->where('nature', $nature)
+                //     ->toSql();
                 $monthlyleave = DB::table('leaves')
-                    ->join('employee', 'leaves.empID', '=', 'employee.emp_id')
-                    ->join('department', 'department.id', '=', 'employee.department')
-                    ->join('position', 'position.id', '=', 'employee.position')
-                    ->where('leaves.status',3)
-                    ->select('leaves.*', 'employee.*', 'department.name as department_name', 'position.name as  position_name')->where('employee.state', 1)
-                    ->where('start', '>=', $firstDayOfMonth)
-                    ->where('end', '<=', $lastDayOfMonth)
-                    ->where('nature', $nature)
-                    ->get();
+                ->select('leaves.*', 'employee.*', 'department.name as department_name', 'position.name as position_name')
+                ->join('employee', 'leaves.empID', '=', 'employee.emp_id')
+                ->join('department', 'department.id', '=', 'employee.department')
+                ->join('position', 'position.id', '=', 'employee.position')
+                ->where('leaves.status', 3)
+                ->where('employee.state', 1)
+                ->where('nature', $nature)
+                ->where(function ($query) use ($firstDayOfMonth, $lastDayOfMonth) {
+                    $query->where(function ($query) use ($firstDayOfMonth, $lastDayOfMonth) {
+                        $query->where('start', '>=', $firstDayOfMonth)
+                            ->where('start', '>=', $lastDayOfMonth);
+                    })
+                    ->orWhere(function ($query) use ($firstDayOfMonth, $lastDayOfMonth) {
+                        $query->where('end', '>=', $firstDayOfMonth)
+                            ->where('end', '<=', $lastDayOfMonth);
+                    });
+                })
+                ->get();
             }
         } else {
 
@@ -1300,8 +1336,16 @@ class AttendanceModel extends Model
                 ->join('position', 'position.id', '=', 'employee.position')
                 ->where('leaves.status',3)
                 ->select('leaves.*', 'employee.*', 'department.name as department_name', 'position.name as  position_name')->where('start', '>=', $last_month_date)
-                ->where('start', '>=', $firstDayOfMonth)
-                ->where('end', '<=', $lastDayOfMonth)
+                ->where(function ($query) use ($firstDayOfMonth, $lastDayOfMonth) {
+                    $query->where(function ($query) use ($firstDayOfMonth, $lastDayOfMonth) {
+                        $query->where('start', '>=', $firstDayOfMonth)
+                            ->where('start', '>=', $lastDayOfMonth);
+                    })
+                    ->orWhere(function ($query) use ($firstDayOfMonth, $lastDayOfMonth) {
+                        $query->where('end', '>=', $firstDayOfMonth)
+                            ->where('end', '<=', $lastDayOfMonth);
+                    });
+                })
                 ->where('nature', $nature)
                 ->where('employee.emp_id', $empID)
                 ->get();
@@ -1499,7 +1543,7 @@ function getMonthlyLeave22($empID, $today, $nature2, $department, $position)
     }
 
 
-    function getpendingLeave($empID, $today, $nature, $department, $position)
+    function getMonthlyPendingLeaves($empID, $today, $nature, $department, $position)
     {
 
         $prev_month = date("Y-m-d", strtotime('-1 month', strtotime($today)));
@@ -1517,11 +1561,18 @@ function getMonthlyLeave22($empID, $today, $nature2, $department, $position)
                     ->join('leave_approvals', 'leave_approvals.empID', '=', 'leaves.empID')
                     ->select('leaves.*','leave_approvals.level1', 'employee.*', 'department.name as department_name', 'position.name as  position_name')                    ->where('start', '<=', $today)
                     ->where('employee.position', $position)
-                    ->where('leaves.status','!=',3)
                     ->where('employee.state', 1)
                     ->where('employee.department', $department)
-                    ->where('start', '>=', $firstDayOfMonth)
-                    ->where('end', '<=', $lastDayOfMonth)
+                    ->where(function ($query) use ($firstDayOfMonth, $lastDayOfMonth) {
+                        $query->where(function ($query) use ($firstDayOfMonth, $lastDayOfMonth) {
+                            $query->where('start', '>=', $firstDayOfMonth)
+                                ->where('start', '>=', $lastDayOfMonth);
+                        })
+                        ->orWhere(function ($query) use ($firstDayOfMonth, $lastDayOfMonth) {
+                            $query->where('end', '>=', $firstDayOfMonth)
+                                ->where('end', '<=', $lastDayOfMonth);
+                        });
+                    })
                     ->where('nature', $nature)
                     ->get();
             } elseif ($department != 'All' && $position == 'All') {
@@ -1532,9 +1583,16 @@ function getMonthlyLeave22($empID, $today, $nature2, $department, $position)
                     ->join('position', 'position.id', '=', 'employee.position')
                     ->join('leave_approvals', 'leave_approvals.empID', '=', 'leaves.empID')
                     ->select('leaves.*','leave_approvals.level1', 'employee.*', 'department.name as department_name', 'position.name as  position_name')                    ->where('employee.department', $department)
-                    ->where('leaves.status','!=',3)
-                    ->where('start', '>=', $firstDayOfMonth)
-                    ->where('end', '<=', $lastDayOfMonth)
+                    ->where(function ($query) use ($firstDayOfMonth, $lastDayOfMonth) {
+                        $query->where(function ($query) use ($firstDayOfMonth, $lastDayOfMonth) {
+                            $query->where('start', '>=', $firstDayOfMonth)
+                                ->where('start', '>=', $lastDayOfMonth);
+                        })
+                        ->orWhere(function ($query) use ($firstDayOfMonth, $lastDayOfMonth) {
+                            $query->where('end', '>=', $firstDayOfMonth)
+                                ->where('end', '<=', $lastDayOfMonth);
+                        });
+                    })
                     ->where('nature', $nature)
                     ->get();
             } elseif ($department == 'All') {
@@ -1547,9 +1605,16 @@ function getMonthlyLeave22($empID, $today, $nature2, $department, $position)
                     ->join('leave_approvals', 'leave_approvals.empID', '=', 'leaves.empID')
                     ->select('leaves.*','leave_approvals.level1', 'employee.*', 'department.name as department_name', 'position.name as  position_name')                    ->where('start', '>=', $last_month_date)
                     ->where('nature', $nature)
-                    ->where('start', '>=', $firstDayOfMonth)
-                    ->where('end', '<=', $lastDayOfMonth)
-                    ->where('leaves.status','!=',3)
+                    ->where(function ($query) use ($firstDayOfMonth, $lastDayOfMonth) {
+                        $query->where(function ($query) use ($firstDayOfMonth, $lastDayOfMonth) {
+                            $query->where('start', '>=', $firstDayOfMonth)
+                                ->where('start', '>=', $lastDayOfMonth);
+                        })
+                        ->orWhere(function ($query) use ($firstDayOfMonth, $lastDayOfMonth) {
+                            $query->where('end', '>=', $firstDayOfMonth)
+                                ->where('end', '<=', $lastDayOfMonth);
+                        });
+                    })
                     ->get();
             }
         } else {
@@ -1559,10 +1624,17 @@ function getMonthlyLeave22($empID, $today, $nature2, $department, $position)
                 ->join('department', 'department.id', '=', 'employee.department')
                 ->join('leave_approvals', 'leave_approvals.empID', '=', 'leaves.empID')
                 ->join('position', 'position.id', '=', 'employee.position')
-                ->where('leaves.status','!=',3)
                 ->select('leaves.*', 'employee.*', 'department.name as department_name', 'position.name as  position_name')
-                ->where('start', '>=', $firstDayOfMonth)
-                ->where('end', '<=', $lastDayOfMonth)
+                ->where(function ($query) use ($firstDayOfMonth, $lastDayOfMonth) {
+                    $query->where(function ($query) use ($firstDayOfMonth, $lastDayOfMonth) {
+                        $query->where('start', '>=', $firstDayOfMonth)
+                            ->where('start', '>=', $lastDayOfMonth);
+                    })
+                    ->orWhere(function ($query) use ($firstDayOfMonth, $lastDayOfMonth) {
+                        $query->where('end', '>=', $firstDayOfMonth)
+                            ->where('end', '<=', $lastDayOfMonth);
+                    });
+                })
                 ->where('nature', $nature)
                 ->where('employee.emp_id', $empID)
                 ->get();

@@ -299,7 +299,7 @@
                     </a>
                     @endif
                     @if ($approval)
-                    @if ($item->status == 0 && $item->state == 1)
+                    @if ($item->state == 1)
                     <?php if (Auth()->user()->emp_id == $approval->level1  || Auth()->user()->emp_id == $approval->level2  || Auth()->user()->emp_id == $approval->level3) { ?>
                         {{-- @if (Auth()->user()->emp_id == $approval->level1) --}}
                         <div class="col-md-12 text-center mt-1">
@@ -444,7 +444,7 @@
                     </a>
                     @endif
                     @if ($approval)
-                    @if ($item->status == 0 && $item->state == 1)
+                    @if ($item->state == 1)
                     <?php if (Auth()->user()->emp_id == $approval->level1  || Auth()->user()->emp_id == $approval->level2  || Auth()->user()->emp_id == $approval->level3) { ?>
                         {{-- @if (Auth()->user()->emp_id == $approval->level1) --}}
                         <div class="col-md-12 text-center mt-1">
