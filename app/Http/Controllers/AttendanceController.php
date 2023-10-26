@@ -3087,7 +3087,7 @@ public function saveLeave(Request $request) {
        if($request->sub_cat > 0)
        {
         $leaves->sub_category = $request->sub_cat;
-        $sub=LeaveSubType::where('id',$sub_cat)->first();
+        // $sub=LeaveSubType::where('id',$sub_cat)->first();
        }
 
 
