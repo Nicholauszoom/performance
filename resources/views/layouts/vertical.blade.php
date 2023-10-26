@@ -12,7 +12,7 @@
         <style>
             .request__spinner {
                 /* background: red; */
-                position: absolute;
+                /* position: absolute;
                 z-index: 99999;
                 left: 50%;
                 top: 50%;
@@ -28,7 +28,7 @@
                 -moz-border-radius: 50%;
                 -o-border-radius: 50%;
                 -ms-border-radius: 50%;
-                border-radius: 50%;
+                border-radius: 50%; */
             }
 
             @keyframes request__spinner {
@@ -53,6 +53,63 @@
             .card {
                 background-color: transparent !important;
             }
+
+            .jumping-dots-loader {
+                width: 100px;
+                height: 100px;
+                border-radius: 100%;
+                position: relative;
+                margin: 0 auto;
+            }
+
+            .jumping-dots-loader span {
+                display: inline-block;
+                width: 20px;
+                height: 20px;
+                border-radius: 100%;
+                margin: 35px 5px;
+                border: 1px solid #fff;
+                background-color: #a49324;
+            }
+
+            .jumping-dots-loader span:nth-child(1) {
+                animation: bounce 1s ease-in-out infinite;
+            }
+
+            .jumping-dots-loader span:nth-child(2) {
+                animation: bounce 1s ease-in-out 0.33s infinite;
+            }
+
+            .jumping-dots-loader span:nth-child(3) {
+                animation: bounce 1s ease-in-out 0.66s infinite;
+            }
+
+            @keyframes bounce {
+                0%,
+                75%,
+                100% {
+                    -webkit-transform: translateY(0);
+                    -ms-transform: translateY(0);
+                    -o-transform: translateY(0);
+                    transform: translateY(0);
+                }
+
+                25% {
+                    -webkit-transform: translateY(-20px);
+                    -ms-transform: translateY(-20px);
+                    -o-transform: translateY(-20px);
+                    transform: translateY(-20px);
+                }
+            }
+
+            .modal-backdrop {
+                background-color: rgba(0, 16, 38, 0.983); /* Adjust the alpha (0.5) to change opacity */
+                /* You can also use rgba to set both background color and opacity */
+            }
+
+
+
+
         </style>
     </head>
 
@@ -66,11 +123,12 @@
 
             <div id="loadingOverlay" class="loading-overlay">
                 <div class="modal-backdrop fade show d-flex align-items-center justify-content-center">
-                    <div class="spinner-container">
-                        <div class="spinner-border text-light" role="status">
-                            <span class="sr-only"></span>
-                        </div>
+                    <div class="jumping-dots-loader">
+                        <span></span>
+                        <span></span>
+                        <span></span>
                     </div>
+                    <div class="moving-gradient"></div>
                 </div>
             </div>
 

@@ -91,7 +91,7 @@
           <td>{{ $item->employee->fname }} {{ $item->employee->mname }} {{ $item->employee->lname }}</td>
           <td>
             {{ $item->days }} Days
-            <br>From <b>{{ $item->start }}</b><br>To <b>{{ $item->end }}</b>
+            <br>From <b>{{ \Carbon\Carbon::parse($item->start)->format('d-m-Y') }}</b><br>To <b>{{ \Carbon\Carbon::parse($item->end)->format('d-m-Y') }}</b>
           </td>
           <td>
             Nature: <b>{{ $item->type->type}}</b>

@@ -3698,7 +3698,7 @@ public function processOneEmployee($employee, $request, $nature){
     }
 
 
-    public function annualLeaveData(Request $request)
+    public function approvedMonthly(Request $request)
     {
         # code...
 
@@ -3716,7 +3716,7 @@ public function processOneEmployee($employee, $request, $nature){
         // $dur = date('Y-m', strtotime($month));
         // dd($dur);
         if ($nature != 'All') {
-            $data['leave_data'] = $this->attendance_model->getMonthlyLeave1($empID, $today, $nature, $department, $position);
+            $data['leave_data'] = $this->attendance_model->getApprovedMonthlyLeave($empID, $today, $nature, $department, $position);
             $data['nature'] = $this->attendance_model->leave_name($nature);
             $leave_name = $this->attendance_model->leave_name($nature);
 
@@ -3728,7 +3728,7 @@ public function processOneEmployee($employee, $request, $nature){
             $leave_name = 'All Approved';
             $allLeaveData = [];
             foreach ($natures as $_nature) {
-                $allLeaveData = array_merge($allLeaveData, $this->attendance_model->getMonthlyLeave1($empID, $today, $_nature->id, $department, $position)->toArray());
+                $allLeaveData = array_merge($allLeaveData, $this->attendance_model->getApprovedMonthlyLeave($empID, $today, $_nature->id, $department, $position)->toArray());
             }
             $data['leave_data'] = $allLeaveData;
             $data['is_all'] = true;
@@ -3869,13 +3869,13 @@ public function processOneEmployee($employee, $request, $nature){
 
             $allLeaveData = [];
             foreach ($natures as $_nature) {
-                $allLeaveData = array_merge($allLeaveData, $this->attendance_model->getpendingLeave($empID, $today, $_nature->id, $department, $position)->toArray());
+                $allLeaveData = array_merge($allLeaveData, $this->attendance_model->getMonthlyPendingLeaves($empID, $today, $_nature->id, $department, $position)->toArray());
             }
             $data['leave_data'] = $allLeaveData;
 
        }
         else{
-            $data['leave_data'] = $this->attendance_model->getpendingLeave($empID, $today, $nature, $department, $position);
+            $data['leave_data'] = $this->attendance_model->getMonthlyPendingLeaves($empID, $today, $nature, $department, $position);
             $data['nature'] = $this->attendance_model->leave_name($nature);
             $leave_name = $this->attendance_model->leave_name($nature);
         }

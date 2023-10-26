@@ -14,16 +14,16 @@
         <!-- page content -->
         <div class="right_col" role="main">
           <div class="">
-         
+
 
             <div class="row">
                 <!--ALL PROJECTS -->
-          
-                
-              
-              
+
+
+
+
               <div class="col-md-12 col-sm-12 col-xs-12">
-            
+
                 <div class="card border-top  border-top-width-3 border-top-main rounded-0">
                   <div class="card-head px-3 py-1">
                     <h2>Adhoc Tasks
@@ -42,7 +42,7 @@
                   </div>
                   <div class="">
                       <div id="resultfeed"></div>
-                      <div id="resultfeedCancel"></div> 
+                      <div id="resultfeedCancel"></div>
                     <table id="datatable" class="table table-striped table-bordered datatable-basic">
                       <thead>
                         <tr>
@@ -62,8 +62,8 @@
                         <?php $i=1; ?>
                         @foreach($project as $item)
                             <tr>
-                             
-                                <td>{{ $i++; }}</td>
+
+                                <td>{{ $loop->iteration }}</td>
                                 <td>{{ $item->name }}</td>
                                 <td>{{ $item->employee->fname }} {{ $item->employee->mname }} {{ $item->employee->lname }}</td>
                                 <td>{{  date('d-m-Y', strtotime($item->start_date)) }}</td>
@@ -74,7 +74,7 @@
                                 <span class="badge {{ $item->status == '1' ? 'bg-secondary':'bg-pending' }} disabled">
                                     {{ $item->status == '1' ? 'Completed':'Pending' }}
                                 </span>
-                                
+
                                 </td>
                                 <td>
                              {{-- for completion initiation --}}
@@ -91,21 +91,21 @@
                              </a> --}}
                              <a href="{{ url('flex/delete-task/'.$item->id); }}" class="btn btn-sm btn-danger">
                                  <i class="ph-trash"></i>
-                             </a> 
+                             </a>
                            {{-- @endif --}}
-                  
+
                              {{-- For Task Assessment --}}
                              @if ($item->status==1)
                                {{-- @if ($item->employee->line_manager == Auth()->user()->emp_id) --}}
-                               <hr>   
+                               <hr>
                                <a href="{{ url('flex/assess-adhoctask/'.$item->id); }}" class="btn btn-sm bg-main">
                                  Task Assessment
-                               </a> 
+                               </a>
                                {{-- @endif --}}
                              @endif
                              {{-- , --}}
-                        
-                         
+
+
                                 </td>
                             </tr>
                         @endforeach
@@ -114,9 +114,9 @@
                   </div>
                 </div>
               </div>
-              
-              
-            
+
+
+
             </div>
           </div>
 
@@ -127,9 +127,9 @@
 <script>
 
 jQuery(document).ready(function($){
-  
+
     $('#advance_type').change(function () {
-        
+
     $("#advance_type option:selected").each(function () {
         var value = $(this).val();
         if(value == "1") {
@@ -137,7 +137,7 @@ jQuery(document).ready(function($){
             $("#amount_midf").removeAttr("disabled");
             $('#monthly_deduction').hide();
             $("#monthly_deductionf").attr("disabled", "disabled");
-           
+
         } else if(value == "2") {
             $('#amount').show();
             $('#monthly_deduction').show();
@@ -145,15 +145,15 @@ jQuery(document).ready(function($){
             $("#monthly_deductionf").removeAttr("disabled");
             $('#amount_mid').hide();
             $("#amount_midf").attr("disabled", "disabled");
-           
+
         }
 
     });
-  }); 
+  });
 
-  
+
     $('#type').change(function () {
-        
+
     $("#type option:selected").each(function () {
         var value = $(this).val();
         if(value == "1") {
@@ -161,17 +161,17 @@ jQuery(document).ready(function($){
             $('#index_no').hide();
             $("#index_nof").attr("disabled", "disabled");
             $("#deductionf").removeAttr("disabled");
-           
+
         } else if(value == "2") {
             $('#index_no').show();
             $('#deduction').hide();
             $("#deductionf").attr("disabled", "disabled");
             $("#index_nof").removeAttr("disabled");
-           
+
         }
 
     });
-  }); 
+  });
 
 
 });

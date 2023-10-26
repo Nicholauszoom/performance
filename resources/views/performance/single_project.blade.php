@@ -14,23 +14,23 @@
         <!-- page content -->
         <div class="right_col" role="main">
           <div class="">
-         
+
 
             <div class="row">
                 <!--ALL PROJECTS -->
-          
-                
-              
-              
+
+
+
+
               <div class="col-md-12 col-sm-12 col-xs-12">
-            
+
                 <div class="card border-top  border-top-width-3 border-top-main rounded-0">
                   <div class="card-head px-3 py-1">
                     <h2>Project: {{ $project->name }}       </h2>
                         <small>Start Date: {{ $project->start_date}}</small>
                         <br>
                         <small>End Date: {{ $project->end_date}}</small>
-                       
+
                       <a href="{{ route('flex.projects') }}" class="btn btn-perfrom float-end mx-1">
                           <i class="ph-list me-2"></i> All Projects
                       </a>
@@ -48,7 +48,7 @@
                   </div>
                   <div class="">
                       <div id="resultfeed"></div>
-                      <div id="resultfeedCancel"></div> 
+                      <div id="resultfeedCancel"></div>
                     <table id="datatable" class="table table-striped table-bordered datatable-basic">
                       <thead>
                         <tr>
@@ -82,12 +82,12 @@
                                 </span>
                             </td>
                             <td>
-                         
-                            
+
+
                               {{-- for completion initiation --}}
                               @if ($item->status==0)
 
-                                <a href="{{ url('flex/completed_task/'.$item->id); }}" class="btn btn-sm bg-success text-light">
+                                <a href="{{ url('flex/completed_task/'.$item->id) }}" class="btn btn-sm bg-success text-light">
                                   <i class="ph-check"></i>
                               </a>
                               @endif
@@ -96,23 +96,23 @@
                                 {{-- <a href="{{ url('flex/edit-project-task/'.$item->id); }}" class="btn btn-sm bg-main">
                                     <i class="ph-pen"></i>
                                 </a> --}}
-                                <a href="{{ url('flex/delete-project-task/'.$item->id); }}" class="btn btn-sm btn-danger">
+                                <a href="{{ url('flex/delete-project-task/'.$item->id) }}" class="btn btn-sm btn-danger">
                                     <i class="ph-trash"></i>
-                                </a> 
+                                </a>
                               @endif
-                     
+
                                 {{-- For Task Assessment --}}
                                 @if ($item->status==1)
                                   @if ($item->employee->line_manager == Auth()->user()->emp_id)
-                                  <hr>   
-                                  <a href="{{ url('flex/assess-task/'.$item->id); }}" class="btn btn-sm bg-main">
+                                  <hr>
+                                  <a href="{{ url('flex/assess-task/'.$item->id) }}" class="btn btn-sm bg-main">
                                     Assessment
-                                  </a> 
+                                  </a>
                                   @endif
                                 @endif
                                 {{-- , --}}
-                           
-                            
+
+
                             </td>
                           </tr>
 
@@ -122,9 +122,9 @@
                   </div>
                 </div>
               </div>
-              
-              
-            
+
+
+
             </div>
           </div>
 
@@ -135,9 +135,9 @@
 <script>
 
 jQuery(document).ready(function($){
-  
+
     $('#advance_type').change(function () {
-        
+
     $("#advance_type option:selected").each(function () {
         var value = $(this).val();
         if(value == "1") {
@@ -145,7 +145,7 @@ jQuery(document).ready(function($){
             $("#amount_midf").removeAttr("disabled");
             $('#monthly_deduction').hide();
             $("#monthly_deductionf").attr("disabled", "disabled");
-           
+
         } else if(value == "2") {
             $('#amount').show();
             $('#monthly_deduction').show();
@@ -153,15 +153,15 @@ jQuery(document).ready(function($){
             $("#monthly_deductionf").removeAttr("disabled");
             $('#amount_mid').hide();
             $("#amount_midf").attr("disabled", "disabled");
-           
+
         }
 
     });
-  }); 
+  });
 
-  
+
     $('#type').change(function () {
-        
+
     $("#type option:selected").each(function () {
         var value = $(this).val();
         if(value == "1") {
@@ -169,17 +169,17 @@ jQuery(document).ready(function($){
             $('#index_no').hide();
             $("#index_nof").attr("disabled", "disabled");
             $("#deductionf").removeAttr("disabled");
-           
+
         } else if(value == "2") {
             $('#index_no').show();
             $('#deduction').hide();
             $("#deductionf").attr("disabled", "disabled");
             $("#index_nof").removeAttr("disabled");
-           
+
         }
 
     });
-  }); 
+  });
 
 
 });
