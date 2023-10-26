@@ -348,6 +348,11 @@
                                         class="nav-link {{ request()->routeIs('attendance.leavereport') ? 'active' : null }}"
                                         href="{{ route('attendance.leavereport') }}">Leave History</a></li>
                             @endcan
+                            @can('view-report')
+                                <li class="nav-item"><a
+                                        class="nav-link {{ request()->routeIs('attendance.leaveforfeiting') ? 'active' : null }}"
+                                        href="{{ route('attendance.leaveforfeiting') }}">Leave Forfeiting</a></li>
+                            @endcan
                         </ul>
                     </li>
                 @endcan

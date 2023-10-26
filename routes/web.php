@@ -497,6 +497,7 @@ Route::middleware('auth')->middleware([Setting::class])->group(function(){
 
         Route::any('/attendance' ,'attendance')->name('attendance.attendance');
         Route::any('/attendees' ,'attendees')->name('attendance.attendees');
+        Route::any('/leaveforfeiting' ,'leaveforfeiting')->name('attendance.leaveforfeiting');
 
         // for my leaves routes
 

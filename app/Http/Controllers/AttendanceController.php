@@ -8,6 +8,7 @@ use DateTime;
 use Exception;
 use Carbon\Carbon;
 use App\Models\EMPL;
+use App\Models\Employee;
 use App\Models\Leaves;
 use App\Models\Level1;
 use App\Models\level2;
@@ -41,7 +42,9 @@ use App\Models\Payroll\FlexPerformanceModel;
 use Illuminate\Support\Facades\Notification;
 use App\Imports\ExcelImport; // Create this import
 use App\Http\Controllers\API\PushNotificationController;
+// use App\Http\Middleware\Employee;
 use App\Imports\ClearLeavesImport;
+use App\Models\LeaveForfeiting;
 
 class AttendanceController extends Controller
 {
@@ -163,6 +166,49 @@ class AttendanceController extends Controller
       else{
         echo 'No Attendees In This Date';
     }
+
+   }
+
+   public function leaveforfeiting (){
+
+    $empID = session('emp_id');
+    $leaveforfeitings = LeaveForfeiting::all();
+    $data['leaveForfeiting'] =LeaveForfeiting::all();
+
+    $today = date('Y-m-d');
+    $arryear = explode('-',$today);
+    $year = $arryear[0];
+
+
+    $employeeDate = $year.('-01-01');
+
+
+
+
+    $this->authenticateUser('view-unpaid-leaves');
+    // $data['my_leave'] =  $this->attendance_model->my_leavereport($empID);
+    $data['leaves'] =Leaves::where('state',0)->latest()->get();
+
+    foreach($leaveforfeitings as $key => $leaveforfeit){
+     $data['leaveForfeiting'][$key]['leaveBalance'] = $this->attendance_model->getLeaveBalance($leaveforfeit->empID,$employeeDate, date('Y-m-d'));
+    }
+
+    // dd($data['leaveForfeiting']);
+
+
+
+
+
+    if(session('conf_leave')!='' && session('line')!='' ){
+    $data['other_leave'] =  $this->attendance_model->leavereport_hr();
+    }elseif(session('line')!=''){
+    $data['other_leave'] =  $this->attendance_model->leavereport_line($empID);
+    }elseif(session('conf_leave')!=''){
+    $data['other_leave'] =  $this->attendance_model->leavereport_hr();
+    }
+    $data['title']="Leaves";
+    $data['today'] = date('Y-m-d');
+    return view('app.leave_forfeiting_report', $data);
 
    }
 
@@ -308,6 +354,8 @@ $data['leave_types'] = LeaveType::all();
             $data['deligate']= $level1 + $level2 + $level3;
             $data['leave_types'] =LeaveType::all();
             $data['employees'] =EMPL::where('emp_id','!=',Auth::user()->emp_id)->whereNot('state',4)->get();
+            $data['leave_days_entitled'] =Employee::where('emp_id','!=',Auth::user())->value('leave_days_entitled');
+            $data['balance_brought_foward'] =LeaveForfeiting::where('empID','!=',Auth::user())->value('opening_balance');
             $data['leaves'] =Leaves::get();
 
 
@@ -333,15 +381,16 @@ $data['leave_types'] = LeaveType::all();
                 $employeeDate = $year.('-01-01');
             }
 
-            // dd($employeeDate);
+            // dd($emp loyeeDate);
             $data['leaveDates'] = $this->checkDate(Auth::user()->emp_id);
 
             $data['leaveBalance'] = $this->attendance_model->getLeaveBalance(Auth::user()->emp_id,$employeeDate, date('Y-m-d'));
-            $data['sickLeaveBalance'] = $this->getRemainingDaysForLeave(Auth::user()->emp_id, 2);
-            $data['compassionateLeaveBalance'] = $this->getRemainingDaysForLeave(Auth::user()->emp_id, 3);
-            $data['maternityLeaveBalance'] = $this->getRemainingDaysForLeave(Auth::user()->emp_id, 4);
-            $data['paternityLeaveBalance'] =$this->getRemainingDaysForLeave(Auth::user()->emp_id, 5);
-            $data['studyLeaveBalance'] = $this->getRemainingDaysForLeave(Auth::user()->emp_id, 6);
+            $data['outstandingLeaveBalance'] = $this->attendance_model->getAnnualOutstandingBalance(Auth::user()->emp_id,$employeeDate, date('Y-m-d'));
+            $data['annualLeaveBalance'] = $this->getRemainingDaysForLeave(Auth::user()->emp_id, 1);
+            // $data['compassionateLeaveBalance'] = $this->getRemainingDaysForLeave(Auth::user()->emp_id, 3);
+            // $data['maternityLeaveBalance'] = $this->getRemainingDaysForLeave(Auth::user()->emp_id, 4);
+            // $data['paternityLeaveBalance'] =$this->getRemainingDaysForLeave(Auth::user()->emp_id, 5);
+            // $data['studyLeaveBalance'] = $this->getRemainingDaysForLeave(Auth::user()->emp_id, 6);
             $data['leave_type'] = $this->attendance_model->leave_type();
 
 
@@ -445,7 +494,7 @@ $data['leave_types'] = LeaveType::all();
 
 
    public function getRemainingDaysForLeave($employeeId, $natureId) {
-        $maxDays = LeaveType::where('id', $natureId)->value('max_days');
+        $natureId = 1;
         $currentYear = date('Y');
         $startDate = $currentYear . '-01-01'; // Start of the current year
         $endDate = date('Y-m-d'); // Current date
@@ -456,7 +505,7 @@ $data['leave_types'] = LeaveType::all();
             ->where('state',0)
             ->sum('days');
 
-        return $maxDays - $daysSpent;
+        return $daysSpent;
     }
 
 

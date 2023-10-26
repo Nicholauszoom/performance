@@ -17,6 +17,7 @@
 
 
 <?php $totalAccrued = number_format($leaveBalance,2); ?>
+<?php $totalOutstanding = number_format($outstandingLeaveBalance,2); ?>
 
 
 {{-- start of leave application --}}
@@ -33,7 +34,7 @@
 
         <div class="card-body">
             <div class="row">
-                <div class="col-md-6">
+                <div class="col-md-8">
                     <form autocomplete="off" action="{{ url('flex/attendance/save_leave') }}" method="post" enctype="multipart/form-data">
                         @csrf
                         <div class="row">
@@ -127,35 +128,32 @@
                         </div>
                     </form>
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-4">
                     <div class="card-container">
                         <div class="card specific-card">
                             <div class="card-body">
-                                <p><b>Sick Leave Days Remaining: <code class="text-success">{{ $sickLeaveBalance .' Days' }}</b></code></p>
+                                <p><b>Days Entitled: <code class="text-success">{{ $leave_days_entitled .' Days' }}</b></code></p>
                             </div>
                         </div>
-                        @php
-                        $gender = Auth::user()->gender == 'Male' ? 1 : 2;
-                        @endphp
-
                         <div class="card specific-card">
                             <div class="card-body">
-                                @if ($gender == 1)
-                                    <p><b>Paternity Leave Days Remaining: <code class="text-success">{{ $paternityLeaveBalance .' Days' }}</b></code></p>
-                                @else
-                                    <p><b>Maternity Leave Days Remaining: <code class="text-success">{{ $maternityLeaveBalance .' Days' }}</b></code></p>
-                                @endif
+                                <p><b>Balance Brought Foward: <code class="text-success">{{ $balance_brought_foward ?? 0 .' Days' }}</b></code></p>
                             </div>
                         </div>
 
                         <div class="card specific-card">
                             <div class="card-body">
-                                <p><b>Compassionate Leave Days Remaining: <code class="text-success">{{ $compassionateLeaveBalance .' Days' }}</b></code></p>
+                                <p><b>Annual Leave Days Accrued: <code class="text-success">{{ $totalAccrued .' Days' }}</b></code></p>
                             </div>
                         </div>
                         <div class="card specific-card">
                             <div class="card-body">
-                                <p><b>Study Leave Days Remaining: <code class="text-success">{{ $studyLeaveBalance .' Days' }}</b></code></p>
+                                <p><b>Days Spent: <code class="text-success">{{ $annualLeaveBalance .' Days' }}</b></code></p>
+                            </div>
+                        </div>
+                        <div class="card specific-card">
+                            <div class="card-body">
+                                <p><b>Outstanding Leave Balance: <code class="text-success">{{ $totalOutstanding ?? 0 .' Days' }}</b></code></p>
                             </div>
                         </div>
                     </div>
@@ -171,13 +169,6 @@
 <div class="card border-top  border-top-width-3 border-top-main rounded-0" >
     <div class="card-header">
         <h6 class="text-warning">My Leaves</h6>
-    </div>
-
-    <div class="card-body">
-        <p><b>Annual Leave Days Accrued: <code class="text-success"> {{ $totalAccrued .' Days' }}</b></code></p>
-
-
-        @if(Session::has('note'))      {{ session('note') }}  @endif
     </div>
 
     <table class="table table-striped table-bordered datatable-basic">
