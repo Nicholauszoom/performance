@@ -245,8 +245,8 @@
                 </td>
                 <td>
                     {{ $item->days }} Days
-                    <br>From <b>{{ $item->start }}</b>
-                    <br>To <b>{{ $item->end }}</b>
+                    <br>From <b>{{ \Carbon\Carbon::parse($item->start)->format('d-m-Y') }}</b>
+                    <br>To <b>{{ \Carbon\Carbon::parse($item->end)->format('d-m-Y') }}</b>
 
                     @if (!empty($item->appliedBy))
                         <br>Applied By <b>{{ $item->appliedBy }}</b>
@@ -390,8 +390,8 @@
                 </td> --}}
                 <td>
                     {{ $item->days }} Days
-                    <br>From <b>{{ $item->start }}</b>
-                    <br>To <b>{{ $item->end }}</b>
+                    <br>From <b>{{ \Carbon\Carbon::parse($item->start)->format('d-m-Y') }}</b>
+                    <br>To <b>{{ \Carbon\Carbon::parse($item->end)->format('d-m-Y') }}</b>
 
                     @if (!empty($item->appliedBy))
                         <br>Applied By <b>{{ $item->appliedBy }}</b>
