@@ -21,7 +21,7 @@
         <div class="d-flex justify-content-between">
             <h5 class="mb-0 text-warning">Add Adhoc Task</h5>
 
-                <a href="{{ url('flex/tasks'); }}" class="btn btn-perfrom">
+                <a href="{{ url('flex/tasks') }}" class="btn btn-perfrom">
                     <i class="ph-list me-2"></i> All Adhoc Tasks
                 </a>
         </div>
@@ -47,7 +47,7 @@
 
                             <div class="modal-body">
                                 <div class="row mb-3">
-                          
+
 
                                     <input type="hidden" name="oldSalary"  class="form-control"  id="oldsalary">
                                     <div class="col-md-6 col-lg-6">
@@ -68,12 +68,12 @@
                                             </select>
                                         </div>
                                     </div>
-                                    
+
                                     <div class="col-md-6 col-lg-6">
 
                                             <div class="mb-3">
-                                                <label class="form-label">Start Date:</label>    
-                                            <input type="date" required name="start_date" class="form-control"> 
+                                                <label class="form-label">Start Date:</label>
+                                            <input type="date" required name="start_date" class="form-control">
                                             </div>
                                     </div>
 
@@ -84,23 +84,23 @@
 
                                 <div class="col-md-6 col-lg-6 mb-3">
                                     <div class="mb-3">
-                                        <label class="form-label">End Date:</label>    
+                                        <label class="form-label">End Date:</label>
                                     <input type="date"
-                                     name="end_date" class="form-control"> 
+                                     name="end_date" class="form-control">
                                     </div>
                                 </div>
 
                                 <div class="col-md-6 col-lg-6 mb-3">
                                     <div class="mb-3">
-                                        <label class="form-label">Target:</label>    
+                                        <label class="form-label">Target:</label>
                                     <input type="text"
-                                     name="target" class="form-control" placeholder="Enter Target"> 
+                                     name="target" class="form-control" placeholder="Enter Target">
                                     </div>
                                 </div>
-                                
+
                                 <div class="col-md-6 col-lg-6 mb-3">
                                     <div class="mb-3">
-                                        <label class="form-label">Target Type:</label>    
+                                        <label class="form-label">Target Type:</label>
                                         <select name="target_type" class="form-control">
                                             <option value="1">Money</option>
                                             <option value="2">Quality</option>

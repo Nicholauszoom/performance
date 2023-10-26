@@ -21,7 +21,7 @@
         <div class="d-flex justify-content-between">
             <h5 class="mb-0 text-warning">Asses Adhoc Task</h5>
 
-                <a href="{{ url('flex/tasks'); }}" class="btn btn-perfrom">
+                <a href="{{ url('flex/tasks') }}" class="btn btn-perfrom">
                     <i class="ph-list me-2"></i> All Adhoc Tasks
                 </a>
         </div>
@@ -35,7 +35,7 @@
         <h6 style="font-size: 14px !important">End Date: <span class="float-end text-muted">{{ $task->end_date}}</span></h6>
     </div>
 
-     
+
     <hr>
             <div id="save_termination" class="" tabindex="-1">
                 <div class="modal-dialog modal-lg">
@@ -55,9 +55,9 @@
 
                             <div class="modal-body">
                                 <div class="row mb-3">
-                          
-                                 
-                                
+
+
+
                                     <input type="hidden" name="oldRate"  class="form-control"  id="oldRate">
 
                                     <input type="hidden" name="oldSalary"  class="form-control"  id="oldsalary">
