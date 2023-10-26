@@ -622,7 +622,8 @@ public function saveLeave(Request $request) {
 
            // $holidays=SysHelpers::countHolidays($start,$end);
            // $different_days = SysHelpers::countWorkingDays($start,$end)-$holidays;
-        $different_days = SysHelpers::countWorkingDaysForOtherLeaves($start,$end);
+           $holidays=SysHelpers::countHolidays($start,$end);
+           $different_days = SysHelpers::countWorkingDays($start,$end)-$holidays;
 
         // $startDate = Carbon::parse($start);
         // $endDate = Carbon::parse($end);
@@ -2090,8 +2091,9 @@ public function saveLeave(Request $request) {
             // }
            // $holidays=SysHelpers::countHolidays($start,$end);
            // $different_days = SysHelpers::countWorkingDays($start,$end)-$holidays;
-        $different_days = SysHelpers::countWorkingDaysForOtherLeaves($start,$end);
-
+           $holidays=SysHelpers::countHolidays($start,$end);
+           $different_days = SysHelpers::countWorkingDays($start,$end)-$holidays;
+      
         // $startDate = Carbon::parse($start);
         // $endDate = Carbon::parse($end);
         // $different_days = $endDate->diffInDays($startDate);
@@ -2435,7 +2437,7 @@ public function saveLeave(Request $request) {
         // For Employee with more than 12 Month
         else
         {
-
+  
           $total_leave_days=$leaves+$different_days;
           $leave_type=LeaveType::where('id',$nature)->first();
 
@@ -2456,7 +2458,7 @@ public function saveLeave(Request $request) {
                    $leaves->leave_address=$request->address;
                    $leaves->mobile = $request->mobile;
                    $leaves->nature = $request->nature;
-                   $leaves->deligated=$request->deligate;
+                   $leaves->deligated=$request->deligate; 
                   $leaves->status = 1;
 
                    $leaves->days = $different_days;
