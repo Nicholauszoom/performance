@@ -28,12 +28,66 @@
     </div>
     @endif
     <div class="card border-top border-top-width-3 border-top-main border-bottom-main rounded-0 col-lg-12">
+
         <div class="card-header">
             <h5 class="text-warning">Apply Leave</h5>
         </div>
-
         <div class="card-body">
             <div class="row">
+                    <div class="col-md-4">
+                        <div class="card-container">
+                            <div class="mb-3">
+                                <label class="form-label">Annual Leave Summary per Year</label>
+                                <select id="employee_exited_list"  class="form-control select" tabindex="-1">
+                                    <option value="">-- Select Year --</option>
+                                    <option value="2021">2021</option>
+                                    <option value="2022">2022</option>
+                                    <option value="2023">2023</option>
+                                    <option value="2024">2024</option>
+                                    <option value="2025">2025</option>
+                                    <option value="2026">2026</option>
+                                    <option value="2027">2027</option>
+                                    <option value="2028">2028</option>
+                                    <option value="2029">2029</option>
+                                </select>
+                            </div>
+                            <div id="balance-table-placeholder">
+                                <table class="table table-striped table-bordered datatable-basic">
+                                    <thead>
+                                        <tr>
+                                            <th>Field</th>
+                                            <th>Value</th>
+                                        </tr>
+                                    </thead>
+                                    <tr>
+                                        <td>Days Entitled</td>
+                                        <td>Loading...</td> <!-- Display a loading message -->
+                                    </tr>
+                                    <tr>
+                                        <td>Opening Balance</td>
+                                        <td>Loading...</td> <!-- Display a loading message -->
+                                    </tr>
+                                    <tr>
+                                        <td>Days Forfeit Balance</td>
+                                        <td>Loading...</td> <!-- Display a loading message -->
+                                    </tr>
+                                    <tr>
+                                        <td>Annual Leave Days Accrued</td>
+                                        <td>Loading...</td> <!-- Display a loading message -->
+                                    </tr>
+                                    <tr>
+                                        <td>Days Spent</td>
+                                        <td>Loading...</td> <!-- Display a loading message -->
+                                    </tr>
+                                    <tr>
+                                        <td>Outstanding Leave Balance</td>
+                                        <td>Loading...</td> <!-- Display a loading message -->
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
                 <div class="col-md-8">
                     <form autocomplete="off" action="{{ url('flex/attendance/save_leave') }}" method="post" enctype="multipart/form-data">
                         @csrf
@@ -81,7 +135,7 @@
 
                             <div class="form-group col-md-6" style="display:none" id="attachment">
                                 <label for="image">Attachment <span class="text-danger">*</span></label>
-                                <input class="form-control" type="file" name="image">
+                                <input class="form-control" type="file" name="image" required>
                             </div>
 
                             <div class="form-group col-12 mb-2">
@@ -128,36 +182,7 @@
                         </div>
                     </form>
                 </div>
-                <div class="col-md-4">
-                    <div class="card-container">
-                        <div class="card specific-card">
-                            <div class="card-body">
-                                <p><b>Days Entitled: <code class="text-success">{{ $leave_days_entitled .' Days' }}</b></code></p>
-                            </div>
-                        </div>
-                        <div class="card specific-card">
-                            <div class="card-body">
-                                <p><b>Balance Brought Foward: <code class="text-success">{{ $balance_brought_foward ?? 0 .' Days' }}</b></code></p>
-                            </div>
-                        </div>
 
-                        <div class="card specific-card">
-                            <div class="card-body">
-                                <p><b>Annual Leave Days Accrued: <code class="text-success">{{ $totalAccrued .' Days' }}</b></code></p>
-                            </div>
-                        </div>
-                        <div class="card specific-card">
-                            <div class="card-body">
-                                <p><b>Days Spent: <code class="text-success">{{ $annualLeaveBalance .' Days' }}</b></code></p>
-                            </div>
-                        </div>
-                        <div class="card specific-card">
-                            <div class="card-body">
-                                <p><b>Outstanding Leave Balance: <code class="text-success">{{ $totalOutstanding ?? 0 .' Days' }}</b></code></p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
             </div>
         </div>
     </div>
@@ -716,20 +741,53 @@ Swal.fire({
     });
 </script>
 
-{{-- <script>
-    var date = new Date();
-    var tdate = date.getDate();
-    var month = date.getMonth() + 1;
-    if(tdate<10){
-        month =  '0' + month;
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> <!-- Include jQuery -->
+
+
+
+<script>
+   $(document).ready(function () {
+    // Bind an event handler to the select element
+    $("#employee_exited_list").change(function () {
+        var selectedYear = $(this).val();
+
+        // Construct the URL with the selected year parameter
+        var url = '/flex/attendance/annualleavebalance/' + selectedYear;
+
+        // Make an AJAX request to fetch the data
+        $.ajax({
+            url: url,
+            method: "GET",
+            dataType: "json", // Ensure that the response is parsed as JSON
+            success: function (data) {
+                console.log(data); // Log the data only for success
+                updateTable(data); // Pass the retrieved data to the updateTable function
+            },
+            error: function (err) {
+                console.log(err.responseText());
+                console.log('error in fetching');
+            }
+        });
+    });
+
+    function updateTable(data) {
+        var table = $("#balance-table-placeholder table tbody"); // Select the table body
+
+        // Clear existing rows
+        table.empty();
+
+        // Populate the table with the new data
+        $.each(data, function (key, value) {
+            var row = $("<tr>");
+            row.append($("<td>").text(key));
+            row.append($("<td>").text(value));
+            table.append(row);
+        });
     }
-    if(month < 10){
-        month = '0' + month;
-    }
-    var year  = date.getFullYear();
-    var minDate = year + "-" + month + "-" + tdate;
-    document.getElementById("start-date").setAttribute('min', minDate)
-    document.getElementById("end-date").setAttribute('min', minDate)
-    console.log(date);
-</script> --}}
+});
+
+</script>
+
+
+
 @endpush
