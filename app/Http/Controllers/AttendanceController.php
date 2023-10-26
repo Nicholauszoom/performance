@@ -45,6 +45,8 @@ use App\Http\Controllers\API\PushNotificationController;
 // use App\Http\Middleware\Employee;
 use App\Imports\ClearLeavesImport;
 use App\Models\LeaveForfeiting;
+use Illuminate\Support\Facades\Log;
+
 
 class AttendanceController extends Controller
 {
@@ -386,7 +388,7 @@ $data['leave_types'] = LeaveType::all();
 
             $data['leaveBalance'] = $this->attendance_model->getLeaveBalance(Auth::user()->emp_id,$employeeDate, date('Y-m-d'));
             $data['outstandingLeaveBalance'] = $this->attendance_model->getAnnualOutstandingBalance(Auth::user()->emp_id,$employeeDate, date('Y-m-d'));
-            $data['annualLeaveBalance'] = $this->getRemainingDaysForLeave(Auth::user()->emp_id, 1);
+            $data['annualLeaveBalance'] = $this->getspentDays(Auth::user()->emp_id, 1);
             $data['checking'] = $this->annuaLeaveSummary($year);
             // $data['compassionateLeaveBalance'] = $this->getRemainingDaysForLeave(Auth::user()->emp_id, 3);
             // $data['maternityLeaveBalance'] = $this->getRemainingDaysForLeave(Auth::user()->emp_id, 4);
@@ -403,10 +405,9 @@ $data['leave_types'] = LeaveType::all();
 
      public function annuaLeaveSummary($year) {
         $data = [];
-
-        $data['Day Entitled'] = Employee::where('emp_id', '!=', Auth::user()->emp_id)->value('leave_days_entitled');
-        $openingBalance =  LeaveForfeiting::where('empID', '!=', Auth::user()->emp_id)->value('opening_balance');
-        $forfeitDays =  LeaveForfeiting::where('empID', '!=', Auth::user()->emp_id)->value('days');
+        $data['Day Entitled'] = Employee::where('emp_id', Auth::user()->emp_id)->value('leave_days_entitled');
+        $openingBalance =  LeaveForfeiting::where('empID', Auth::user()->emp_id)->value('opening_balance');
+        $forfeitDays =  LeaveForfeiting::where('empID', Auth::user()->emp_id)->value('days');
         $data['Opening Balance'] = $openingBalance ?? 0;
         $data['Days Forfeited'] = $forfeitDays ?? 0;
 
@@ -414,28 +415,36 @@ $data['leave_types'] = LeaveType::all();
         $employeeHireYear = $employeeHiredate[0];
         $employeeDate = '';
 
-        if ($employeeHireYear == $year) {
-            $employeeDate = Auth::user()->hire_date;
-        } else {
-            $employeeDate = $year . '-01-01';
+        if($year > date('Y')){
+            $daysAccrued = 0;
+        }
+        elseif($year < date('Y')){
+            if ($employeeHireYear == $year) {
+                $employeeDate = Auth::user()->hire_date;
+            } else {
+                $employeeDate = $year . '-01-01';
+            }
+            $endDate = $year . '-12-31';
+            $daysAccrued = $this->attendance_model->getLeaveBalance(Auth::user()->emp_id, $employeeDate, $endDate);
+
+        }else {
+            if ($employeeHireYear == $year) {
+                $employeeDate = Auth::user()->hire_date;
+            } else {
+                $employeeDate = $year . '-01-01';
+            }
+            $daysAccrued = $this->attendance_model->getLeaveBalance(Auth::user()->emp_id, $employeeDate, date('Y-m-d'));
+
         }
 
-        $daysAccrued = $this->attendance_model->getLeaveBalance(Auth::user()->emp_id, $employeeDate, date('Y-m-d'));
-        $outstandingLeaveBalance = $this->attendance_model->getAnnualOutstandingBalance(Auth::user()->emp_id, $employeeDate, date('Y-m-d'));
-
+        $outstandingLeaveBalance = $daysAccrued ;
         $data['Days Accrued'] = number_format($daysAccrued ?? 0, 2) ;
-        $data['Days Spent	'] = $this->getRemainingDaysForLeave(Auth::user()->emp_id);
+        $data['Days Spent	'] = $this->getspentDays(Auth::user()->emp_id, $year);
         $data['Outstanding Leave Balance'] = number_format($outstandingLeaveBalance ?? 0, 2);
-
-        // dd(response()->json($data));
-
-
-        // Return the data in JSON format
         return response()->json($data);
     }
 
 
-   //  for fetching sub categories of leave
       public function getDetails($uid = 0)
       {
 
@@ -528,18 +537,22 @@ $data['leave_types'] = LeaveType::all();
       }
 
 
-   public function getRemainingDaysForLeave($employeeId) {
+   public function getspentDays($employeeId, $year) {
         $natureId = 1;
-        $currentYear = date('Y');
-        $startDate = $currentYear . '-01-01'; // Start of the current year
-        $endDate = date('Y-m-d'); // Current date
+        if($year != date('Y')){
+            $startDate = $year . '-01-01'; // Start of the current year
+            $endDate = $year . '-12-31';
+        }
+        else {
+        $startDate = $year . '-01-01'; // Start of the current year
+        $endDate = date('Y-m-d');// Current date
+        }
 
         $daysSpent = Leaves::where('empId', $employeeId)
             ->where('nature', $natureId)
             ->whereBetween('created_at', [$startDate, $endDate])
             ->where('state',0)
             ->sum('days');
-
         return $daysSpent;
     }
 
@@ -3014,7 +3027,7 @@ public function saveLeave(Request $request) {
         }
 
         $leaves=Leaves::where('empID',$empID)->where('nature',$nature)->where('sub_category',$request->sub_cat)->whereNot('reason','Automatic applied!')->whereYear('created_at',date('Y'))->sum('days');
-         
+
         $leave_balance=$leaves;
         $type=LeaveType::where('id',$nature)->first();
         $max_leave_days= $type->max_days;
@@ -3030,7 +3043,7 @@ public function saveLeave(Request $request) {
             $employeeDate = $year.'-01-01';
         }
       }
-      
+
       $annualleaveBalance = $this->attendance_model->getLeaveBalance($empID, $employeeDate, date('Y-m-d'));
       $holidays=SysHelpers::countHolidays($start,$end);
       $different_days = SysHelpers::countWorkingDays($start,$end)-$holidays;
@@ -3040,22 +3053,22 @@ public function saveLeave(Request $request) {
          $max_leave_days = $annualleaveBalance;
       }
       $extradays = $total_leave_days - $max_leave_days;
- 
-     
+
+
       if ($total_leave_days >= $max_leave_days) {
-       
-      
+
+
         if($type->type == "Annual"){
           $remaining=$max_leave_days+$extradays -($leave_balance+$different_days);
-          
+
         }else{
           $remaining=$annualleaveBalance+$extradays-$different_days;
         }
-       
+
         if($remaining < 0){
           $remaining==0;
         }
- 
+
         $leaves=new Leaves();
         // $empID=Auth::user()->emp_id;
         $leaves->empID = $empID;
@@ -3077,10 +3090,10 @@ public function saveLeave(Request $request) {
         $sub=LeaveSubType::where('id',$sub_cat)->first();
        }
 
-      
+
        $leaves->application_date = date('Y-m-d');
        if ($request->hasfile('image')) {
-    
+
         $request->validate([
             'image' => 'mimes:jpg,png,jpeg,pdf|max:2048',
         ]);
@@ -3133,13 +3146,13 @@ public function saveLeave(Request $request) {
 
       }else{
         $extradays =0;
-    
+
         if($type->type != "Annual"){
           $remaining=$max_leave_days+$extradays -($leave_balance+$different_days);
         }else{
           $remaining=$annualleaveBalance+$extradays-$different_days;
         }
-    
+
         $leaves=new Leaves();
         // $empID=Auth::user()->emp_id;
         $leaves->empID = $empID;
@@ -3161,10 +3174,10 @@ public function saveLeave(Request $request) {
         $sub=LeaveSubType::where('id',$sub_cat)->first();
        }
 
-      
+
        $leaves->application_date = date('Y-m-d');
        if ($request->hasfile('image')) {
-    
+
         $request->validate([
             'image' => 'mimes:jpg,png,jpeg,pdf|max:2048',
         ]);
@@ -3219,7 +3232,7 @@ public function saveLeave(Request $request) {
       }
 
       }
-  
+
 
   }
 

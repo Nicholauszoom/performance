@@ -38,8 +38,11 @@
                         <div class="card-container">
                             <div class="mb-3">
                                 <label class="form-label">Annual Leave Summary per Year</label>
+                                {{-- <input type="number" id="selected_year" class="form-control" min="2000" max="2100" step="1"> --}}
+
                                 <select id="employee_exited_list"  class="form-control select" tabindex="-1">
                                     <option value="">-- Select Year --</option>
+                                    <option value="2008">2008</option>
                                     <option value="2021">2021</option>
                                     <option value="2022">2022</option>
                                     <option value="2023">2023</option>
