@@ -2011,7 +2011,6 @@ public function saveLeave(Request $request) {
         ]);
         $start = $request->start;
         $end = $request->end;
-
         // For Redirection Url
         $url = redirect('flex/attendance/leave');
 
