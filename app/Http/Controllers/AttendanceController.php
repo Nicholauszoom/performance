@@ -3012,7 +3012,7 @@ public function saveLeave(Request $request) {
       if ($total_leave_days >= $max_leave_days) {
        
       
-        if($type->type == "Annual"){
+        if($type->type != "Annual"){
           $remaining=$max_leave_days+$extradays -($leave_balance+$different_days);
           
         }else{
@@ -3041,7 +3041,7 @@ public function saveLeave(Request $request) {
        if($request->sub_cat > 0)
        {
         $leaves->sub_category = $request->sub_cat;
-        $sub=LeaveSubType::where('id',$sub_cat)->first();
+        // $sub=LeaveSubType::where('id',$sub_cat)->first();
        }
 
       
