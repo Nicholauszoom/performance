@@ -54,9 +54,9 @@
             <td>{{ $row->NAME }}</td>
 
 
-             <td>{{ $row->start_date}}</td>
+             <td>{{ \Carbon\Carbon::parse($row->start_date)->format('d-m-Y')}}</td>
              <td>
-                {{ $row->end_date}}
+                {{  \Carbon\Carbon::parse($row->end_date)->format('d-m-Y')}}
             </td>
              <td>
                 {{ $row->reason }}

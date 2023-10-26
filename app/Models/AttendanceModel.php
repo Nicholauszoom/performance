@@ -458,6 +458,66 @@ class AttendanceModel extends Model
     }
 
 
+    function getAnnualOutstandingBalance($empID, $hireDate, $today)
+    {
+
+        $nature = 1;
+
+        $today = date("Y-m-d", strtotime($today));
+
+
+        $prev_month = date("Y-m-d", strtotime('-1 month', strtotime($today)));
+
+        $last_month_date = date('Y-m-t', strtotime($prev_month));
+
+        $query = "SELECT
+                IF(
+                    (SELECT COUNT(id) FROM leaves WHERE nature = '" . $nature . "' AND empID = '" . $empID . "') = 0,
+                    0,
+                    (SELECT SUM(days) FROM leaves WHERE nature = '" . $nature . "' AND state = 0 AND empID = '" . $empID . "' AND start <= '" . $today . "' AND leave_address != 'auto' AND start BETWEEN '" . $hireDate . "' AND '" . $today . "' GROUP BY nature)
+                ) as days_spent,
+                DATEDIFF('" . $today . "','" . $hireDate . "') as days_accrued";
+
+
+        $row = DB::select(DB::raw($query));
+
+        $employee = DB::table('employee')->where('emp_id', $empID)->first();
+
+        $remain = DB::table('leaves')->where('empID', $empID)   ->latest('created_at')->first();
+
+        $d1 = new DateTime($hireDate);
+
+        $d2 = new DateTime($today);
+
+        $diff = $d1->diff($d2);
+
+        $years = $diff->y;
+        $months = $diff->m;
+        $days = $diff->d;
+
+        $days_this_month = intval(date('t', strtotime($last_month_date)));
+
+        $forfeitDays = LeaveForfeiting::where('empID', $empID)->value('days') ?? 0;
+        $broughtFowardDays = LeaveForfeiting::where('empID', $empID)->value('opening_balance') ?? 0;
+
+        $accrual_days = (($days * $employee->accrual_rate) / 30) + $months * $employee->accrual_rate + $years * 12 * $employee->accrual_rate;
+
+        $interval = $d1->diff($d2);
+
+        $diffInMonths  = $interval->m;
+
+        $spent = $row[0]->days_spent;
+
+
+        $accrual = 0;
+
+        $maximum_days = $broughtFowardDays + $accrual_days - $spent + floatval($forfeitDays);
+        return $maximum_days;
+    }
+
+
+
+
     function getLeaveBalance_report($empID, $hireDate, $today, $nature)
     {
 

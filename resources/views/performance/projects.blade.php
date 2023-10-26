@@ -14,16 +14,16 @@
         <!-- page content -->
         <div class="right_col" role="main">
           <div class="">
-         
+
 
             <div class="row">
                 <!--ALL PROJECTS -->
-          
-                
-              
-              
+
+
+
+
               <div class="col-md-12 col-sm-12 col-xs-12">
-            
+
                 <div class="card border-top  border-top-width-3 border-top-main rounded-0">
                   <div class="card-head px-3 py-1">
                     <h2>All Projects
@@ -53,7 +53,7 @@
                           <th>Tasks</th>
                           <th>Status</th>
                           <th>Option</th>
-                        
+
                         </tr>
                       </thead>
 
@@ -77,23 +77,23 @@
                                 <span class="badge {{ $item->status == '1' ? 'bg-secondary':'bg-pending' }} disabled">
                                     {{ $item->status == '1' ? 'Completed':'Pending' }}
                                 </span>
-                                
+
                                 </td>
                                 <td>
-                                    <a href="{{ url('flex/view-project/'.$item->id); }}" class="btn btn-sm bg-main">
+                                    <a href="{{ url('flex/view-project/'.$item->id) }}" class="btn btn-sm bg-main">
                                         <i class="ph-info"></i>
                                     </a>
                                     @if ($item->status==0)
 
-                                
 
-                                    <a href="{{ url('flex/edit-acceleration/'.$item->id); }}" class="btn btn-sm bg-main">
+
+                                    <a href="{{ url('flex/edit-acceleration/'.$item->id) }}" class="btn btn-sm bg-main">
                                         <i class="ph-pen"></i>
                                     </a>
-                                    <a href="{{ url('flex/delete-acceleration/'.$item->id); }}" class="btn btn-sm btn-danger">
+                                    <a href="{{ url('flex/delete-acceleration/'.$item->id) }}" class="btn btn-sm btn-danger">
                                         <i class="ph-trash"></i>
                                     </a>
-                                    <a href="{{ url('flex/completed-project/'.$item->id); }}" class="btn btn-sm bg-success text-light">
+                                    <a href="{{ url('flex/completed-project/'.$item->id) }}" class="btn btn-sm bg-success text-light">
                                         <i class="ph-check"></i>
                                     </a>
                                     @endif
@@ -106,9 +106,9 @@
                   {{-- </div> --}}
                 </div>
               </div>
-              
-              
-            
+
+
+
             </div>
           </div>
 
@@ -119,9 +119,9 @@
 <script>
 
 jQuery(document).ready(function($){
-  
+
     $('#advance_type').change(function () {
-        
+
     $("#advance_type option:selected").each(function () {
         var value = $(this).val();
         if(value == "1") {
@@ -129,7 +129,7 @@ jQuery(document).ready(function($){
             $("#amount_midf").removeAttr("disabled");
             $('#monthly_deduction').hide();
             $("#monthly_deductionf").attr("disabled", "disabled");
-           
+
         } else if(value == "2") {
             $('#amount').show();
             $('#monthly_deduction').show();
@@ -137,15 +137,15 @@ jQuery(document).ready(function($){
             $("#monthly_deductionf").removeAttr("disabled");
             $('#amount_mid').hide();
             $("#amount_midf").attr("disabled", "disabled");
-           
+
         }
 
     });
-  }); 
+  });
 
-  
+
     $('#type').change(function () {
-        
+
     $("#type option:selected").each(function () {
         var value = $(this).val();
         if(value == "1") {
@@ -153,17 +153,17 @@ jQuery(document).ready(function($){
             $('#index_no').hide();
             $("#index_nof").attr("disabled", "disabled");
             $("#deductionf").removeAttr("disabled");
-           
+
         } else if(value == "2") {
             $('#index_no').show();
             $('#deduction').hide();
             $("#deductionf").attr("disabled", "disabled");
             $("#index_nof").removeAttr("disabled");
-           
+
         }
 
     });
-  }); 
+  });
 
 
 });

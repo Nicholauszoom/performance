@@ -9,7 +9,9 @@ function showLoading() {
 
 // function  to hide the loading spinner
 function hideLoading() {
-    $("#loadingOverlay").hide();
+    setTimeout(function () {
+        $("#loadingOverlay").hide();
+    }, 1000);
     clearTimeout(loadingTimeout);
 }
 

@@ -70,14 +70,14 @@
                             <a href="" class="btn btn-sm bg-main">
                                 <i class="ph-pen"></i>
                             </a>
-                            <a href="{{ url('flex/delete-target-ratio/'.$item->id); }}" class="btn btn-sm btn-danger">
+                            <a href="{{ url('flex/delete-target-ratio/'.$item->id) }}" class="btn btn-sm btn-danger">
                                 <i class="ph-trash"></i>
                             </a>
                         </td>
                     </tr>
 
                     @endforeach
-      
+
                 </tbody>
             </table>
 
@@ -114,7 +114,7 @@
                             <a href="" class="btn btn-sm bg-main">
                                 <i class="ph-pen"></i>
                             </a>
-                            <a href="{{ url('flex/delete-behaviour-ratio/'.$item->id); }}" class="btn btn-sm btn-danger">
+                            <a href="{{ url('flex/delete-behaviour-ratio/'.$item->id) }}" class="btn btn-sm btn-danger">
                                 <i class="ph-trash"></i>
                             </a>
                         </td>
@@ -206,7 +206,7 @@
                                 <label class="col-form-label col-sm-3"> Minimum Value</label>
                                     <input type="number" name="min_value" placeholder="Minimum Value"   value="{{ old('escallation_time') }}" class="form-control @error('escallation_time') is-invalid @enderror">
 
-                            
+
                             </div>
                             <div class="form-group">
                                 <label class="col-form-label col-sm-3"> Maximum Value</label>
@@ -233,24 +233,24 @@
                         <div class="modal-header">
                             <h5 class="modal-title">Add Behaviour Ranges Form</h5>
                             <button type="button" class="btn-close " data-bs-dismiss="modal">
-    
+
                             </button>
                         </div>
-    
+
                         <form
                             action="{{ route('flex.save_behaviour_ratio') }}"
                             method="POST"
                             class="form-horizontal"
                         >
                             @csrf
-    
+
                             <div class="modal-body">
                                 <div class="row mb-3">
-    
+
                                 <div class="form-group">
                                     <label class="col-form-label col-sm-3">Range Name: </label>
                                         <input type="text"  name="name"  value="{{ old('process_name') }}" placeholder="Enter Range Name" class="form-control @error('process_name') is-invalid @enderror">
-    
+
                                         @error('process_name')
                                             <p class="text-danger mt-1"> Field Process Name has an error </p>
                                         @enderror
@@ -258,17 +258,17 @@
                                 <div class="form-group">
                                     <label class="col-form-label col-sm-3"> Minimum Value</label>
                                         <input type="number" name="min_value" placeholder="Minimum Value"   value="{{ old('escallation_time') }}" class="form-control @error('escallation_time') is-invalid @enderror">
-    
-                                
+
+
                                 </div>
                                 <div class="form-group">
                                     <label class="col-form-label col-sm-3"> Maximum Value</label>
                                         <input type="number" name="max_value"  placeholder="Maximum Value"  value="{{ old('escallation_time') }}" class="form-control @error('escallation_time') is-invalid @enderror">
-    
+
                                 </div>
                                 </div>
                             </div>
-    
+
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-link" data-bs-dismiss="modal">Close</button>
                                 <button type="submit" class="btn btn-perfrom">Save Target Ranges</button>
@@ -286,24 +286,24 @@
                         <div class="modal-header">
                             <h5 class="modal-title">Add Time Ranges Form</h5>
                             <button type="button" class="btn-close " data-bs-dismiss="modal">
-    
+
                             </button>
                         </div>
-    
+
                         <form
                             action="{{ route('flex.save_time_ratio') }}"
                             method="POST"
                             class="form-horizontal"
                         >
                             @csrf
-    
+
                             <div class="modal-body">
                                 <div class="row mb-3">
-    
+
                                 <div class="form-group">
                                     <label class="col-form-label col-sm-3">Range Name: </label>
                                         <input type="text"  name="name"  value="{{ old('process_name') }}" placeholder="Enter Range Name" class="form-control @error('process_name') is-invalid @enderror">
-    
+
                                         @error('process_name')
                                             <p class="text-danger mt-1"> Field Process Name has an error </p>
                                         @enderror
@@ -311,17 +311,17 @@
                                 <div class="form-group">
                                     <label class="col-form-label col-sm-3"> Minimum Value</label>
                                         <input type="number" name="min_value" placeholder="Minimum Value"   value="{{ old('escallation_time') }}" class="form-control @error('escallation_time') is-invalid @enderror">
-    
-                                
+
+
                                 </div>
                                 <div class="form-group">
                                     <label class="col-form-label col-sm-3"> Maximum Value</label>
                                         <input type="number" name="max_value"  placeholder="Maximum Value"  value="{{ old('escallation_time') }}" class="form-control @error('escallation_time') is-invalid @enderror">
-    
+
                                 </div>
                                 </div>
                             </div>
-    
+
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-link" data-bs-dismiss="modal">Close</button>
                                 <button type="submit" class="btn btn-perfrom">Save Target Ratio</button>
@@ -334,9 +334,9 @@
 <script>
 
 jQuery(document).ready(function($){
-  
+
     $('#advance_type').change(function () {
-        
+
     $("#advance_type option:selected").each(function () {
         var value = $(this).val();
         if(value == "1") {
@@ -344,7 +344,7 @@ jQuery(document).ready(function($){
             $("#amount_midf").removeAttr("disabled");
             $('#monthly_deduction').hide();
             $("#monthly_deductionf").attr("disabled", "disabled");
-           
+
         } else if(value == "2") {
             $('#amount').show();
             $('#monthly_deduction').show();
@@ -352,15 +352,15 @@ jQuery(document).ready(function($){
             $("#monthly_deductionf").removeAttr("disabled");
             $('#amount_mid').hide();
             $("#amount_midf").attr("disabled", "disabled");
-           
+
         }
 
     });
-  }); 
+  });
 
-  
+
     $('#type').change(function () {
-        
+
     $("#type option:selected").each(function () {
         var value = $(this).val();
         if(value == "1") {
@@ -368,17 +368,17 @@ jQuery(document).ready(function($){
             $('#index_no').hide();
             $("#index_nof").attr("disabled", "disabled");
             $("#deductionf").removeAttr("disabled");
-           
+
         } else if(value == "2") {
             $('#index_no').show();
             $('#deduction').hide();
             $("#deductionf").attr("disabled", "disabled");
             $("#index_nof").removeAttr("disabled");
-           
+
         }
 
     });
-  }); 
+  });
 
 
 });
