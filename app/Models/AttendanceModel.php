@@ -423,9 +423,9 @@ class AttendanceModel extends Model
         $remain = DB::table('leaves')->where('empID', $empID)   ->latest('created_at')->first();
 
         $d1 = new DateTime($hireDate);
-
+       
         $d2 = new DateTime($today);
-
+ 
         $diff = $d1->diff($d2);
 
         $years = $diff->y;
@@ -435,7 +435,7 @@ class AttendanceModel extends Model
         $days_this_month = intval(date('t', strtotime($last_month_date)));
 
         $remaining_after_forfeitDays = LeaveForfeiting::where('empID', $empID)->value('days') ?? 0;
-
+       
         $accrual_days = (($days * $employee->accrual_rate) / 30) + $months * $employee->accrual_rate + $years * 12 * $employee->accrual_rate;
 
         $interval = $d1->diff($d2);
@@ -445,6 +445,7 @@ class AttendanceModel extends Model
         $spent = $row[0]->days_spent;
 
         $accrual = 0;
+        
         if ($nature == 1) {
             $maximum_days = $accrual_days - $spent + floatval($remaining_after_forfeitDays);
         } else {
@@ -452,7 +453,7 @@ class AttendanceModel extends Model
 
             $maximum_days = $days_entitled - $spent;
         }
-
+ 
         return $maximum_days;
     }
 
@@ -945,7 +946,6 @@ class AttendanceModel extends Model
 
 
             $leaves = Leaves::where('empID', $empID)
-                ->where('nature', $nature)->where('status', 3) // Include status = 3
                 ->where('state', 0) // Include state = 0
                 ->whereNot('leave_address','auto')
                 ->whereRaw('YEAR(start) = ? AND YEAR(end) = ?', [$currentYear, $currentYear])

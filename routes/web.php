@@ -414,7 +414,7 @@ Route::middleware('auth')->middleware([Setting::class])->group(function(){
     Route::any('/annualleavebalance/{year}' ,'annuaLeaveSummary')->name('attendance.annualleavebalance');
     Route::any('/clear-leaves' ,'clear_leaves')->name('attendance.clear-leaves');
 
-    Route::post('/saveLeaveOnBehalf' ,'saveLeaveOnBehalf')->name('attendance.saveLeaveOnBehalf'); //atendance controller
+    Route::post('/saveLeaveOnBehalf' ,'saveLeaveOnBehalf2')->name('attendance.saveLeaveOnBehalf'); //atendance controller
 
     Route::any('/approveLeave/{id}' ,'approveLeave')->name('attendance.approveLeave');
     });

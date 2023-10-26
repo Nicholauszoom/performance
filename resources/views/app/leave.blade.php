@@ -250,7 +250,7 @@
 
                     @if (!empty($item->appliedBy))
                         <br>Applied By <b>{{ $item->appliedBy }}</b>
-                        <br>with <b> {{$item->forfeit_days}} <br> extra days
+                        <br>with <b> {{number_format($item->forfeit_days,2)}} <br> extra days
                     @endif
                 </td>
 
@@ -279,7 +279,7 @@
                 </td>
                 <td>
                     @if ($item->type->type == 'Annual')
-                    {{number_format(($item->remaining + $item->days ), 2)}} Days
+                    {{number_format(($item->remaining + $item->days -$item->forfeit_days ), 2)}} Days
                     @else
                         {{ $item->remaining +$item->days }} Days
                     @endif
@@ -299,7 +299,7 @@
                     </a>
                     @endif
                     @if ($approval)
-                    @if ($item->state == 1)
+                    @if ($item->status == 0 && $item->state == 1)
                     <?php if (Auth()->user()->emp_id == $approval->level1  || Auth()->user()->emp_id == $approval->level2  || Auth()->user()->emp_id == $approval->level3) { ?>
                         {{-- @if (Auth()->user()->emp_id == $approval->level1) --}}
                         <div class="col-md-12 text-center mt-1">
@@ -395,7 +395,7 @@
 
                     @if (!empty($item->appliedBy))
                         <br>Applied By <b>{{ $item->appliedBy }}</b>
-                         <br>with <b> {{$item->forfeit_days}} <br> extra days
+                         <br>with <b> {{number_format($item->forfeit_days,2)}} <br> extra days
                     @endif
                 </td>
                 <td>
@@ -444,7 +444,7 @@
                     </a>
                     @endif
                     @if ($approval)
-                    @if ($item->state == 1)
+                    @if ($item->status == 0 && $item->state == 1)
                     <?php if (Auth()->user()->emp_id == $approval->level1  || Auth()->user()->emp_id == $approval->level2  || Auth()->user()->emp_id == $approval->level3) { ?>
                         {{-- @if (Auth()->user()->emp_id == $approval->level1) --}}
                         <div class="col-md-12 text-center mt-1">
