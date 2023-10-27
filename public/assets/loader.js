@@ -10,8 +10,13 @@ function showLoading() {
 // function  to hide the loading spinner
 function hideLoading() {
     setTimeout(function () {
-        $("#loadingOverlay").hide();
+        const $elementToRemove = $("#element-to-remove");
+
+        $elementToRemove.addClass("removed");
+
+        // $("#loadingOverlay").hide();
     }, 1000);
+
     clearTimeout(loadingTimeout);
 }
 
