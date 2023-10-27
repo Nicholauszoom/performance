@@ -14,7 +14,9 @@ function hideLoading() {
 
         $elementToRemove.addClass("removed");
 
-        $("#loadingOverlay").hide();
+        setTimeout(function () {
+            $("#loadingOverlay").hide();
+        }, 500);
     }, 1000);
 
     clearTimeout(loadingTimeout);
