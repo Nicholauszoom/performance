@@ -73,6 +73,12 @@
     <div class="card border-top border-top-width-3 border-top-main rounded-0 p-2">
         <div class="card-header">
             <h5 class="text-warning">Holidays from excel</h5>
+
+
+
+<a  href="{{ asset('uploads/templates/holidays_templates.xlsx') }}" >
+    Click here to download holiday excel template
+</a>
         </div>
         <div class="card-body">
             <form id="demo-form2" enctype="multipart/form-data" method="post" action="{{ route('flex.addHolidayFromExcel')}}" data-parsley-validate class="form-horizontal form-label-left">
