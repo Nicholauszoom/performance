@@ -407,7 +407,19 @@ $data['leave_types'] = LeaveType::all();
         $data = [];
         $data['Day Entitled'] = Employee::where('emp_id', Auth::user()->emp_id)->value('leave_days_entitled');
         $openingBalance =  LeaveForfeiting::where('empID', Auth::user()->emp_id)->value('opening_balance');
-        $forfeitDays =  LeaveForfeiting::where('empID', Auth::user()->emp_id)->value('days');
+        if($year > date('Y')){
+            $forfeitDays = 0;
+        }
+        elseif($year < date('Y')){
+            $forfeitDays =  LeaveForfeiting::where('empID', Auth::user()->emp_id)
+                          ->where('forfeiting_year', $year)
+                        ->value('days');        }
+        else{
+            $forfeitDays =  LeaveForfeiting::where('empID', Auth::user()->emp_id)
+                        ->value('days');
+
+        }
+
         $data['Opening Balance'] = $openingBalance ?? 0;
         $data['Days Forfeited'] = $forfeitDays ?? 0;
 
@@ -551,6 +563,7 @@ $data['leave_types'] = LeaveType::all();
         $daysSpent = Leaves::where('empId', $employeeId)
             ->where('nature', $natureId)
             ->whereBetween('created_at', [$startDate, $endDate])
+            ->whereNot('reason', 'Automatic applied!')
             ->where('state',0)
             ->sum('days');
         return $daysSpent;

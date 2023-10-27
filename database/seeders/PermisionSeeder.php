@@ -55,7 +55,7 @@ class PermisionSeeder extends Seeder
                 [37, 'add-grivance', 1],
                 [38, 'edit-grivance', 1],
                 [39, 'delete-grivance', 1],
-            
+
                 // Module 2: Payroll Management
                 [40, 'view-payroll-management', 2],
                 [41, 'view-payroll', 2],
@@ -81,7 +81,7 @@ class PermisionSeeder extends Seeder
                 [61, 'view-payroll-info', 2],
                 [62, 'view-gross', 2],
                 [63, 'view-net', 2],
-            
+
                 // Module 3: Leave Management
                 [64, 'view-leave-management', 3],
                 [65, 'view-leave', 3],
@@ -90,7 +90,7 @@ class PermisionSeeder extends Seeder
                 [68, 'edit-unpaid-leaves', 3],
                 [69, 'end-unpaid-leaves', 3],
                 [70, 'delete-unpaid-leaves', 3],
-            
+
                 // Module 4: Loan Management
                 [71, 'view-loan', 4],
                 [72, 'edit-loan', 4],
@@ -98,18 +98,18 @@ class PermisionSeeder extends Seeder
                 [74, 'delete-loan', 4],
                 [75, 'approve-loan', 4],
                 [76, 'view-bank-loan', 4],
-            
+
                 // Module 5: Organization
                 [77, 'view-organization', 5],
                 [78, 'edit-organization', 5],
                 [79, 'add-organization', 5],
                 [80, 'delete-organization', 5],
-            
+
                 // Module 6: Reports
                 [81, 'view-report', 6],
                 [82, 'view-statutory-report', 6],
                 [83, 'edit-organization-report', 6],
-            
+
                 // Module 7: Settings
                 [84, 'view-setting', 7],
                 [85, 'view-financial-setting', 7],
@@ -121,27 +121,29 @@ class PermisionSeeder extends Seeder
                 [108, 'delete-logs', 7],
                 [109, 'view-password-reset', 7],
                 [110, 'view-endpoints', 7],
-            
+
                 // Module 8: Dashboard
                 [91, 'view-dashboard', 8],
-            
+
                 // Module 9: Performance Management
                 [98, 'view-Performance', 9],
                 [99, 'add-Performance', 9],
                 [100, 'edit-Performance', 9],
                 [101, 'delete-Performance', 9],
                 [102, 'view-Performance-matrix', 9],
-            
+
                 // Module 10: Talent Management
                 [103, 'view-Talent', 10],
                 [104, 'add-Talent', 10],
                 [105, 'edit-Talent', 10],
                 [106, 'delete-Talent', 10],
                 [107, 'view-Talent-matrix', 10],
-            
-                
-        
-            
+                [111, 'view-forfeitings', 3],
+
+
+
+
+
 
         ];
 

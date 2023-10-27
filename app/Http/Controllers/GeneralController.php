@@ -21,6 +21,7 @@ use App\Models\EmailNotification;
 use App\Models\EmergencyContact;
 use App\Models\EMPL;
 use App\Models\Employee;
+use App\Models\Leaves;
 use App\Models\EmployeeComplain;
 use App\Models\EmployeeDependant;
 use App\Models\EmployeeDetail;
@@ -34,6 +35,7 @@ use App\Models\Grievance;
 use App\Models\Holiday;
 use App\Models\InputSubmission;
 use App\Models\LeaveApproval;
+use App\Models\LeaveForfeiting;
 //use PHPClamAV\Scanner;
 use App\Models\Payroll\FlexPerformanceModel;
 use App\Models\Payroll\ImprestModel;
@@ -10080,6 +10082,25 @@ class GeneralController extends Controller
         $msg = "Holiday has been save Successfully !";
         return redirect('flex/holidays')->with('msg', $msg);
     }
+    public function updateLeaveForfeitings(Request $request)
+    {
+        request()->validate(
+            [
+                'name' => 'required',
+                'date' => 'required',
+            ]
+        );
+
+        $id = $request->id;
+        $holiday = Holiday::find($id);
+        $holiday->name = $request->name;
+        $holiday->date = $request->date;
+        $holiday->recurring = $request->recurring == true ? '1' : '0';
+        $holiday->update();
+
+        $msg = "Holiday has been save Successfully !";
+        return redirect('flex/edit-leave-forfeitings')->with('msg', $msg);
+    }
     // end of update holiday function
 
     // For Updating Holiday Year
@@ -10390,6 +10411,28 @@ class GeneralController extends Controller
         // dd( $data['approval']);
         $data['child'] = 'Edit Leave Approval';
         return view('setting.edit-leave-approval', $data);
+    }
+    public function editLeaveForfeitings(Request $request, $id)
+    {
+
+        // dd($id);
+        $data['leaveForfeitings'] = LeaveForfeiting::with('employee')->where('empID', $id)->first();
+        $data['employees'] = Employee::get();
+        $data['parent'] = 'Settings';
+        $data['child'] = 'Edit Leave Forfeiting';
+
+        $natureId = 1;
+        $currentYear = date('Y');
+        $startDate = $currentYear . '-01-01';
+        $endDate = date('Y-m-d');
+        $daysSpent = Leaves::where('empId', $id)
+            ->where('nature', $natureId)
+            ->whereBetween('created_at', [$startDate, $endDate])
+            ->where('state', 0)
+            ->sum('days');
+
+        $data['daysSpent'] = $daysSpent;
+        return view('app.edit-leave-forfeitings', $data);
     }
 
     // For Deleting Leave Approval

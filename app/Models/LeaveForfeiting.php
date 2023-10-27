@@ -9,4 +9,9 @@ class LeaveForfeiting extends Model
 {
     use HasFactory;
     protected $fillable = ['empID','nature','days'];
+
+    public function employee()
+{
+    return $this->belongsTo(Employee::class, 'empID', 'emp_id');
+}
 }
