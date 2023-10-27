@@ -70,6 +70,39 @@
         </div>
     </div>
 
+    <div class="card border-top border-top-width-3 border-top-main rounded-0 p-2">
+        <div class="card-header">
+            <h5 class="text-warning">Holidays from excel</h5>
+        </div>
+        <div class="card-body">
+            <form id="demo-form2" enctype="multipart/form-data" method="post" action="{{ route('flex.addHolidayFromExcel')}}" data-parsley-validate class="form-horizontal form-label-left">
+                @csrf
+                <div class="mb-3">
+                    <div class="form-group row align-items-center">
+                        <div class="col-md-12 col-lg-12 col-xs-12 d-flex justify-content-between ">
+                            <div class="col-8 d-flex justify-content-start">
+                                <label for="attachment" class="control-label col-md-2">Attachment <span class="text-danger">*</span></label>
+                                <div class="col-9"> <!-- Reduce the column width and adjust the margin to the right -->
+                                    <input class="form-control col-md-12 col-xs-12" type="file" name="file" requiredes accept=".xls, .xlsx">
+                                </div>
+                            </div>
+
+                            <div class="col-1 d-flex justify-content-end"> <!-- Adjust the column width, no need to adjust the margin -->
+                                <button type="submit" class="btn btn-main w-75">Upload</button>
+                            </div>
+                        </div>
+                    </div>
+                    <span class="text-danger"><?php // echo form_error("mname"); ?></span>
+                </div>
+                <p>
+                    <small>
+                        <i>Note:</i> Please note that this action of uploading bulk remaining leaves for balancing and clearing is performed only once in the system, especially at the end of the year, right before entering another new year.
+                    </small>
+                </p>
+            </form>
+        </div>
+    </div>
+
     <div class="row ">
         <div class="col-12">
             <div class="card border-top  border-top-width-3 border-top-main rounded-0">
@@ -79,7 +112,7 @@
 
                         <a href="{{ route('flex.updateHolidayYear') }}" class="btn btn-main btn-sm float-end">Update All Holidays</a>
             <br>
-            
+
                     </div>
                 <hr>
                 </div>
@@ -124,7 +157,7 @@
         </div>
 
 
-     
+
     </div>
 
 
@@ -230,7 +263,7 @@
 
 
 
- 
+
 
 @endpush
 

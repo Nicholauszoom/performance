@@ -742,6 +742,7 @@ Route::middleware('auth')->middleware([Setting::class])->group(function(){
           Route::any('/edit-holiday/{id}','editHoliday')->name('flex.editholiday');
           Route::any('/delete-holiday/{id}','deleteHoliday')->name('flex.deleteholiday');
           Route::any('/update-all-holidays','updateHolidayYear')->name('flex.updateHolidayYear');
+          Route::post('/add-holiday-from-file','addHolidayFromExcel')->name('flex.addHolidayFromExcel');
           // end of holidays routes
 
 
