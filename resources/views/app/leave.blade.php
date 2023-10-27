@@ -250,7 +250,7 @@
 
                     @if (!empty($item->appliedBy))
                         <br>Applied By <b>{{ $item->appliedBy }}</b>
-                        <br>with <b> {{$item->forfeit_days}} <br> extra days
+                        <br>with <b> {{number_format($item->forfeit_days,2)}} <br> extra days
                     @endif
                 </td>
 
@@ -279,9 +279,9 @@
                 </td>
                 <td>
                     @if ($item->type->type == 'Annual')
-                    {{number_format(($item->remaining + $item->days ), 2)}} Days
+                    {{number_format(($item->remaining + $item->days -$item->forfeit_days ), 2)}} Days
                     @else
-                        {{ $item->remaining +$item->days }} Days
+                    {{number_format(($item->remaining + $item->days -$item->forfeit_days ), 2)}} Days
                     @endif
 
 
@@ -299,7 +299,7 @@
                     </a>
                     @endif
                     @if ($approval)
-                    @if ($item->state == 1)
+                    @if ( $item->state == 1)
                     <?php if (Auth()->user()->emp_id == $approval->level1  || Auth()->user()->emp_id == $approval->level2  || Auth()->user()->emp_id == $approval->level3) { ?>
                         {{-- @if (Auth()->user()->emp_id == $approval->level1) --}}
                         <div class="col-md-12 text-center mt-1">
@@ -395,7 +395,7 @@
 
                     @if (!empty($item->appliedBy))
                         <br>Applied By <b>{{ $item->appliedBy }}</b>
-                         <br>with <b> {{$item->forfeit_days}} <br> extra days
+                         <br>with <b> {{number_format($item->forfeit_days,2)}} <br> extra days
                     @endif
                 </td>
                 <td>
@@ -444,7 +444,7 @@
                     </a>
                     @endif
                     @if ($approval)
-                    @if ($item->state == 1)
+                    @if ($item->status == 0 && $item->state == 1)
                     <?php if (Auth()->user()->emp_id == $approval->level1  || Auth()->user()->emp_id == $approval->level2  || Auth()->user()->emp_id == $approval->level3) { ?>
                         {{-- @if (Auth()->user()->emp_id == $approval->level1) --}}
                         <div class="col-md-12 text-center mt-1">
@@ -478,35 +478,35 @@
   </div>
 @endif
 
-<div class="modal fade bd-example-modal-sm" data-backdrop="static" data-keyboard="false" id="delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-    <div class="modal-dialog modal-dialog-centered modal-sm" role="document">
-        <div class="modal-content py-3">
-            <div class="modal-body">
-                <div id="message"></div>
-                <div class="row py-2">
-                    <div class="col-sm-12 col-lg-12 px-5">
-                        <label>Enter Your Comment Here!</label>
-                        <textarea id="comment" required></textarea>
+    <div class="modal fade bd-example-modal-sm" data-backdrop="static" data-keyboard="false" id="delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog modal-dialog-centered modal-sm" role="document">
+            <div class="modal-content py-3">
+                <div class="modal-body">
+                    <div id="message"></div>
+                    <div class="row py-2">
+                        <div class="col-sm-12 col-lg-12 px-5">
+                            <label>Enter Your Comment Here!</label>
+                            <textarea id="comment" required></textarea>
+                        </div>
                     </div>
                 </div>
+
+                <div class="row">
+                    <div class="col-sm-4">
+
+                    </div>
+                    <div class="col-sm-6">
+                        <button type="button" class="btn btn-default btn-sm" onclick="hidemodel()" data-dismiss="modal">No</button>
+                        <button type="button" id="yes_delete" class="btn btn-main btn-sm" onclick="hidemodel()"  data-dismiss="modal">Yes</button>
+                    </div>
+                    <div class="col-sm-2">
+
+                    </div>
+                </div>
+
             </div>
-
-            <div class="row">
-                <div class="col-sm-4">
-
-                </div>
-                <div class="col-sm-6">
-                    <button type="button" class="btn btn-default btn-sm" onclick="hidemodel()" data-dismiss="modal">No</button>
-                    <button type="button" id="yes_delete" class="btn btn-main btn-sm">Yes</button>
-                </div>
-                <div class="col-sm-2">
-
-                </div>
-            </div>
-
         </div>
     </div>
-</div>
 @endsection
 
 
@@ -517,6 +517,11 @@
 {{-- @include("app.includes.overtime_operations") --}}
 
 <script>
+     function hidemodel() {
+
+$('#delete').hide();
+location.reload();
+}
     function cancelLeave(id) {
 
         const message = "Are You Sure That You Want to Reject This Leave Request?";

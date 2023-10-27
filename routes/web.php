@@ -411,9 +411,10 @@ Route::middleware('auth')->middleware([Setting::class])->group(function(){
     Route::any('/cancelLeave/{id}' ,'cancelLeave')->name('attendance.cancelLeave');
     //for manager
     Route::any('/leave' ,'leave')->name('attendance.leave');
+    Route::any('/annualleavebalance/{year}' ,'annuaLeaveSummary')->name('attendance.annualleavebalance');
     Route::any('/clear-leaves' ,'clear_leaves')->name('attendance.clear-leaves');
 
-    Route::post('/saveLeaveOnBehalf' ,'saveLeaveOnBehalf')->name('attendance.saveLeaveOnBehalf'); //atendance controller
+    Route::post('/saveLeaveOnBehalf' ,'saveLeaveOnBehalf2')->name('attendance.saveLeaveOnBehalf'); //atendance controller
 
     Route::any('/approveLeave/{id}' ,'approveLeave')->name('attendance.approveLeave');
     });
@@ -497,6 +498,7 @@ Route::middleware('auth')->middleware([Setting::class])->group(function(){
 
         Route::any('/attendance' ,'attendance')->name('attendance.attendance');
         Route::any('/attendees' ,'attendees')->name('attendance.attendees');
+        Route::any('/leaveforfeiting' ,'leaveforfeiting')->name('attendance.leaveforfeiting');
 
         // for my leaves routes
 

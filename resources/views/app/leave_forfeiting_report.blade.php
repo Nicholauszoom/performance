@@ -14,13 +14,53 @@
 
 
 @section('content')
+
+<div class="row">
+    <div class="col-md-7">
+        <div class="card border-top border-top-width-3 border-top-main rounded-0 p-2">
+            <div class="card-header">
+                <h5 class="text-warning">Annual Leave Forfeting</h5>
+            </div>
+            <div class="card-body">
+                <form id="demo-form2" enctype="multipart/form-data" method="post" action="{{ route('attendance.clear-leaves')}}" data-parsley-validate class="form-horizontal form-label-left">
+                    @csrf
+                    <div class="mb-3">
+                        <div class="form-group row align-items-center">
+                            <div class="col-md-12 col-lg-12 col-xs-12 d-flex gap-5">
+                                <div class="col-8 d-flex ">
+                                    <label for="attachment" class="control-label col-md-3">Attachment <span class="text-danger">*</span></label>
+                                    <div class="col-9"> <!-- Reduce the column width and adjust the margin to the right -->
+                                        <input class="form-control col-md-12 col-xs-12" type="file" name="file" requiredes accept=".xls, .xlsx">
+                                    </div>
+                                </div>
+
+                                <div class="col-4"> <!-- Adjust the column width, no need to adjust the margin -->
+                                    <button type="submit" class="btn btn-main w-75">Upload</button>
+                                </div>
+                            </div>
+                        </div>
+                        <span class="text-danger"><?php // echo form_error("mname"); ?></span>
+                    </div>
+                    <p>
+                        <small>
+                            <i>Note:</i> Please note that this action of uploading bulk remaining leaves for balancing and clearing is performed only once in the system, especially at the end of the year, right before entering another new year.
+                        </small>
+                    </p>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
 <div class="card border-top  border-top-width-3 border-top-main rounded-0">
     <div class="card-header">
-        <h5 class="text-main">Leaves History </h5>
-    </div>
-
-    <div class="card-body">
-
+        <h5 class="text-main">Annual Leaves Forfeitings </h5>
     </div>
 
     <table  class="table table-striped table-bordered datatable-basic">
@@ -28,108 +68,63 @@
         <tr>
           <th>Payroll No</th>
           <th>Name</th>
-          <th>Duration</th>
-          <th>Nature</th>
-          <th>Reason</th>
-          <th>Status</th>
-          <th>Remaining</th>
+          <th>Leave Entitled</th>
+          <th>Opening Balance</th>
+          <th>Days Spent</th>
+          <th>Fortfeit Days</th>
+          <th>Current Balance</th>
           <th>Action</th>
         </tr>
       </thead>
 
 
       <tbody>
-        @foreach($leaves as $item)
-
-
-        {{-- @if ( $item->employee->line_manager  ==  Auth::user()->emp_id) --}}
+        @foreach($leaveForfeiting as $item)
         <tr>
           <td>{{ $item->empID }}</td>
-          <td>{{ $item->employee->fname }} {{ $item->employee->mname }} {{ $item->employee->lname }}</td>
+          <td><?php  $fname = App\Models\Employee::where('emp_id', $item->empID)->value('fname');
+          $mname = App\Models\Employee::where('emp_id', $item->empID)->value('mname');
+          $lname = App\Models\Employee::where('emp_id', $item->empID)->value('lname');
+            echo ($fname.'  '.$mname. '  '.$lname)?> </td>
           <td>
-            {{ $item->days }} Days
-            <br>From <b>{{ \Carbon\Carbon::parse($item->start)->format('d-m-Y') }}</b><br>To <b>{{ \Carbon\Carbon::parse($item->end)->format('d-m-Y') }}</b>
+            <?php  $leaveEntitled = App\Models\Employee::where('emp_id', $item->empID)->value('leave_days_entitled');
+              echo ($leaveEntitled ." Days")?>
           </td>
           <td>
-            Nature: <b>{{ $item->type->type}}</b>
+            {{$item->opening_balance ?? 0 ." Days"}}
           </td>
           <td>
-            <p>
-              {{ $item->reason }}
-            </p>
+           <?php  $natureId = 1;
+           $currentYear = date('Y');
+           $startDate = $currentYear . '-01-01'; // Start of the current year
+           $endDate = date('Y-m-d'); // Current date
+
+           $daysSpent = App\Models\Leaves::where('empId', $item->empID)
+               ->where('nature', $natureId)
+               ->whereBetween('created_at', [$startDate, $endDate])
+               ->where('state',0)
+               ->sum('days');
+
+            echo ($daysSpent ." Days");
+
+            ?>
           </td>
           <td>
-            <div >
-
-              <?php if ($item->state==1){ ?>
-              <div class="col-md-12">
-              <span class="label label-default badge bg-pending text-white">PENDING</span></div><?php }
-              elseif($item->state==0){?>
-              <div class="col-md-12">
-              <span class="label badge bg-info text-whites label-info">APPROVED</span></div><?php }
-              elseif($item->state==3){?>
-              <div class="col-md-12">
-              <span class="label badge bg-danger text-white">DENIED</span></div><?php } ?>
-        </div>
+            {{$item->days ." Days"}}
           </td>
           <td>
-            {{ $item->remaining}} Days
+            <?php
+ $leaveBalance = number_format($item->leaveBalance,2);
+
+ echo ($leaveBalance." Days");
+?>
+
+
           </td>
-          <td class="text-center">
-
-            @php
-              $approval=App\Models\LeaveApproval::where('empID',$item->empID)->first();
-            @endphp
-            <a href="{{asset('storage/leaves/' . $item->attachment) }}" download="attachment" class="btn bg-main btn-sm" title="Download Attachment">
-              <i class="ph ph-download"></i> &nbsp;
-              Attachment
-            </a>
-            @if($approval)
-            <?php if ($item->status==0 && $item->state==1 ){ ?>
-              @if ( Auth()->user()->emp_id == $approval->level1)
-              <div class="col-md-12 text-center mt-1">
-                <a href="{{ url('flex/attendance/approveLeave/'.$item->id) }}" title="Recommend">
-                  <button  class="btn btn-success btn-sm" ><i class="ph-check"></i></button>
-                </a>
-
-              <a href="javascript:void(0)" onclick="holdLeave(<?php echo $item->id;?>)" title="Hold">
-                  <button  class="btn btn-warning btn-sm"><i class="ph-x"></i></button></a>
-              </div>
-
-              @endif
-
-              <?php }
-              elseif($item->status==1 && $item->state==1){?>
-              @if ( Auth()->user()->emp_id == $approval->level2)
-              <div class="col-md-12 text-center mt-1">
-                <a href="{{ url('flex/attendance/approveLeave/'.$item->id) }}" title="Recommend">
-                  <button  class="btn btn-success btn-sm" ><i class="ph-check"></i></button>
-                </a>
-
-                <a href="javascript:void(0)" onclick="holdLeave(<?php echo $item->id;?>)" title="Hold">
-                    <button  class="btn btn-warning btn-sm"><i class="ph-x"></i></button>
-                </a>
-              </div>
-              @endif
-              <?php }
-              elseif($item->status==2){  ?>
-                @if ( Auth()->user()->emp_id == $approval->level3)
-                <div class="col-md-12 text-center mt-1">
-                  <a href="{{ url('flex/attendance/approveLeave/'.$item->id) }}" title="Recommend">
-                    <button  class="btn btn-success btn-sm" ><i class="ph-check"></i></button>
-                  </a>
-
-                  <a href="javascript:void(0)" onclick="holdLeave(<?php echo $item->id;?>)" title="Hold">
-                      <button  class="btn btn-warning btn-sm"><i class="ph-x"></i></button>
-                  </a>
-                </div>
-                @endif
-              <?php }
-              elseif ($item->status==4) {?>
-              <div class="col-md-12 mt-1">
-              <span class="label bg-danger text-white">Denied</span></div>
-              <?php } ?>
-              @endif
+        <td class="text-center">
+            <button type="button" class="btn btn-main btn-sm edit_role_btn mr-1" data-bs-toggle="modal" data-id="1" data-name="Human Capital Officer" data-slug="Human Capital Officer">
+                <i class="ph-note-pencil"></i>
+            </button>
             </td>
 
         </tr>
