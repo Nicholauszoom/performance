@@ -54,62 +54,118 @@
                 background-color: transparent !important;
             }
 
-            .jumping-dots-loader {
-                width: 100px;
-                height: 100px;
-                border-radius: 100%;
-                position: relative;
-                margin: 0 auto;
+
+            .loader {
+                height: 100vh;
+                width: 100vw;
+                position: absolute;
+                top: 0;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                margin: auto;
+                background: #ffffff;
+                z-index: 99;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                opacity: 1;
+                transition: opacity 1000ms ease;
             }
 
-            .jumping-dots-loader span {
-                display: inline-block;
-                width: 20px;
+            .removed{
+                opacity: 0;
+            }
+
+            .loader--dot {
+                animation-name: loader;
+                animation-timing-function: ease-in-out;
+                animation-duration: 3s;
+                animation-iteration-count: infinite;
                 height: 20px;
+                width: 20px;
                 border-radius: 100%;
-                margin: 35px 5px;
-                border: 1px solid #fff;
-                background-color: #a49324;
+                background-color: black;
+                position: absolute;
+                border: 2px solid white;
             }
 
-            .jumping-dots-loader span:nth-child(1) {
-                animation: bounce 1s ease-in-out infinite;
+            .loader--dot:first-child {
+                background-color: #8cc759;
+                animation-delay: 0.5s;
             }
 
-            .jumping-dots-loader span:nth-child(2) {
-                animation: bounce 1s ease-in-out 0.33s infinite;
+            .loader--dot:nth-child(2) {
+                background-color: #8c6daf;
+                animation-delay: 0.4s;
             }
 
-            .jumping-dots-loader span:nth-child(3) {
-                animation: bounce 1s ease-in-out 0.66s infinite;
+            .loader--dot:nth-child(3) {
+                background-color: #ef5d74;
+                animation-delay: 0.3s;
             }
 
-            @keyframes bounce {
-                0%,
-                75%,
-                100% {
-                    -webkit-transform: translateY(0);
-                    -ms-transform: translateY(0);
-                    -o-transform: translateY(0);
-                    transform: translateY(0);
+            .loader--dot:nth-child(4) {
+                background-color: #f9a74b;
+                animation-delay: 0.2s;
+            }
+
+            .loader--dot:nth-child(5) {
+                background-color: #60beeb;
+                animation-delay: 0.1s;
+            }
+
+            .loader--dot:nth-child(6) {
+                background-color: #fbef5a;
+                animation-delay: 0s;
+            }
+
+            .loader--text {
+                position: absolute;
+                top: 200%;
+                left: 0;
+                right: 0;
+                width: 10rem;
+                margin: auto;
+            }
+
+            .loader--text:after {
+                content: "Loading ...";
+                font-weight: bold;
+                animation-name: loading-text;
+                animation-duration: 3s;
+                animation-iteration-count: infinite;
+            }
+
+            @keyframes loader {
+                15% {
+                    transform: translateX(0);
                 }
+                45% {
+                    transform: translateX(230px);
+                }
+                65% {
+                    transform: translateX(230px);
+                }
+                95% {
+                    transform: translateX(0);
+                }
+            }
 
+            @keyframes loading-text {
+                0% {
+                    content: "Loading";
+                }
                 25% {
-                    -webkit-transform: translateY(-20px);
-                    -ms-transform: translateY(-20px);
-                    -o-transform: translateY(-20px);
-                    transform: translateY(-20px);
+                    content: "Loading .";
+                }
+                50% {
+                    content: "Loading  ..";
+                }
+                75% {
+                    content: "Loading  ...";
                 }
             }
-
-            .modal-backdrop {
-                background-color: rgba(0, 16, 38, 0.983); /* Adjust the alpha (0.5) to change opacity */
-                /* You can also use rgba to set both background color and opacity */
-            }
-
-
-
-
         </style>
     </head>
 
@@ -121,16 +177,19 @@
        {{-- Page content --}}
         <div class="page-content">
 
+            {{-- Page loader --}}
             <div id="loadingOverlay" class="loading-overlay">
-                <div class="modal-backdrop fade show d-flex align-items-center justify-content-center">
-                    <div class="jumping-dots-loader">
-                        <span></span>
-                        <span></span>
-                        <span></span>
+                <div class='loader' id="element-to-remove">
+                        <div class='loader--dot'></div>
+                        <div class='loader--dot'></div>
+                        <div class='loader--dot'></div>
+                        <div class='loader--dot'></div>
+                        <div class='loader--dot'></div>
+                        <div class='loader--dot'></div>
+                        <div class='loader--text'></div>
                     </div>
-                    <div class="moving-gradient"></div>
-                </div>
             </div>
+            {{-- / Page loader --}}
 
             @include('layouts.shared.left-sidebar')
 
