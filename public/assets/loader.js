@@ -16,7 +16,7 @@ function hideLoading() {
 
         setTimeout(function () {
             $("#loadingOverlay").hide();
-        }, 500);
+        }, 1000);
     }, 1000);
 
     clearTimeout(loadingTimeout);
