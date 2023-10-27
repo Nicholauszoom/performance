@@ -746,6 +746,30 @@ Swal.fire({
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> <!-- Include jQuery -->
 
+{{-- <script>
+    $(document).ready(function() {
+    const customDateInput = $("#start-date");
+
+    // Initialize the date input with today's date in ISO format
+    const today = new Date();
+    customDateInput.val(today.toISOString().slice(0, 10));
+
+    // Add a custom date picker using jQuery UI Datepicker
+    customDateInput.datepicker({
+        dateFormat: "d-m-y",
+        altFormat: "yy-mm-dd",
+        altField: "#start-date"
+    });
+
+    // Add an event listener to update the value as the user selects a date
+    customDateInput.change(function() {
+        const selectedDate = customDateInput.val();
+        console.log(selectedDate); // ISO format
+        // You can format and display the selected date in the "d-m-y" format as needed
+    });
+});
+</script> --}}
+
 
 
 <script>

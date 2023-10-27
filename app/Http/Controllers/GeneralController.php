@@ -10163,7 +10163,7 @@ class GeneralController extends Controller
             $leave_forfeit->save();
         }
 
-        return redirect('flex/leaveforfeiting/')->with('msg', 'Opening Balance was Updated successfully!');
+        return redirect('flex/attendance/leaveforfeiting/')->with('msg', 'Opening Balance was Updated successfully!');
     }
 
 
