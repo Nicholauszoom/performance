@@ -10133,6 +10133,37 @@ class GeneralController extends Controller
         return redirect('flex/holidays/')->with('msg', 'Holiday was Updated successfully !');
     }
 
+    public function updateOpeningBalance()
+    {
+
+
+        $employees = Employee::get();
+
+        $today = date('Y-m-d');
+            $arryear = explode('-',$today);
+            $year = $arryear[0];
+
+            $employeeHiredate = explode('-', Auth::user()->hire_date);
+            $employeeHireYear = $employeeHiredate[0];
+            $employeeDate =  '';
+
+            if($employeeHireYear == $year  ){
+                $employeeDate = Auth::user()->hire_date;
+
+            }else{
+                $employeeDate = $year.('-01-01');
+            }
+
+        foreach ($employees as $value) {
+          $opening_balance =   $this->attendance_model->getLeaveBalance($value->emp_id, $employeeDate, $year.('-12-31'));
+          $leave_forfeit = LeaveForfeiting::where('empID', $value->emp_id );
+          $leave_forfeit->opening_balance = $opening_balance;
+          $leave_forfeit->update();
+        }
+
+        return redirect('flex/leaveforfeitings/')->with('msg', 'Opening Balance was Updated successfully !');
+    }
+
     // start of delete holiday function
     public function deleteHoliday($id)
     {
