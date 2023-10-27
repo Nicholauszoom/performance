@@ -10135,34 +10135,38 @@ class GeneralController extends Controller
 
     public function updateOpeningBalance()
     {
-
-
         $employees = Employee::get();
 
         $today = date('Y-m-d');
-            $arryear = explode('-',$today);
-            $year = $arryear[0];
+        $year = date('Y');
+        $employeeHiredate = explode('-', Auth::user()->hire_date);
+        $employeeHireYear = $employeeHiredate[0];
+        $employeeDate = '';
 
-            $employeeHiredate = explode('-', Auth::user()->hire_date);
-            $employeeHireYear = $employeeHiredate[0];
-            $employeeDate =  '';
-
-            if($employeeHireYear == $year  ){
-                $employeeDate = Auth::user()->hire_date;
-
-            }else{
-                $employeeDate = $year.('-01-01');
-            }
-
-        foreach ($employees as $value) {
-          $opening_balance =   $this->attendance_model->getLeaveBalance($value->emp_id, $employeeDate, $year.('-12-31'));
-          $leave_forfeit = LeaveForfeiting::where('empID', $value->emp_id );
-          $leave_forfeit->opening_balance = $opening_balance;
-          $leave_forfeit->update();
+        if ($employeeHireYear == $year) {
+            $employeeDate = Auth::user()->hire_date;
+        } else {
+            $employeeDate = $year . '-01-01';
         }
 
-        return redirect('flex/leaveforfeitings/')->with('msg', 'Opening Balance was Updated successfully !');
+        foreach ($employees as $value) {
+            $opening_balance = $this->attendance_model->getLeaveBalance($value->emp_id, $employeeDate, $year . '-12-31');
+
+            // Find the LeaveForfeiting model for the employee or create a new one if it doesn't exist
+            $leave_forfeit = LeaveForfeiting::firstOrNew(['empID' => $value->emp_id]);
+            $leave_forfeit->opening_balance = $opening_balance;
+            // Set other attributes to 0
+            $leave_forfeit->nature = 1; // Replace attribute1 with your actual attribute names
+            $leave_forfeit->days = 0;
+            // ...
+
+            $leave_forfeit->save();
+        }
+
+        return redirect('flex/leaveforfeiting/')->with('msg', 'Opening Balance was Updated successfully!');
     }
+
+
 
     // start of delete holiday function
     public function deleteHoliday($id)

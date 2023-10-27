@@ -15,6 +15,7 @@ return new class extends Migration
     {
         Schema::table('leave_forfeitings', function (Blueprint $table) {
             $table->string('forfeiting_year')->nullable(); // Add 'nature' column
+            $table->string('opening-balance-year')->nullable(); // Add 'nature' column
         });
     }
 
