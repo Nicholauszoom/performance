@@ -69,12 +69,11 @@
                 display: flex;
                 align-items: center;
                 justify-content: center;
-                opacity: 1;
-                transition: opacity 1000ms ease;
             }
 
             .removed{
                 opacity: 0;
+                transition: opacity 0.5s ease;
             }
 
             .loader--dot {
