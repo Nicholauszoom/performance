@@ -7,6 +7,7 @@ namespace App\Http\Controllers;
 use App\Charts\EmployeeLineChart;
 use App\Helpers\SysHelpers;
 use App\Http\Controllers\Controller;
+use App\Imports\HolidayDataImport;
 use App\Imports\ImportSalaryIncrement;
 use App\Models\AccessControll\Departments;
 use App\Models\AdhocTask;
@@ -10045,6 +10046,20 @@ class GeneralController extends Controller
         return redirect('flex/holidays')->with('msg', $msg);
     }
     // end of saving new holiday function
+
+    // add holidays from excel
+    public function addHolidayFromExcel(Request $request){
+            // Validate the uploaded file
+            $request->validate([
+                'file' => 'required|mimes:xlsx,xls',
+            ]);
+            // Handle the file upload and data extraction
+            $file = $request->file('file');
+            $import = new HolidayDataImport;
+            Excel::import($import, $file);
+
+            return redirect()->back()->with('success', 'File uploaded and data extracted successfully.');
+    }
 
     // start of edit disciplinary action
     public function editHoliday(Request $request, $id)
