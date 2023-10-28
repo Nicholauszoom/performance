@@ -1,4 +1,3 @@
-
 @extends('layouts.vertical', ['title' => 'Leave'])
 
 
@@ -16,83 +15,88 @@
 
 
 
-<?php $totalAccrued = number_format($leaveBalance,2); ?>
-<?php $totalOutstanding = number_format($outstandingLeaveBalance,2); ?>
+    <?php $totalAccrued = number_format($leaveBalance, 2); ?>
+    <?php $totalOutstanding = number_format($outstandingLeaveBalance, 2); ?>
 
 
-{{-- start of leave application --}}
+    {{-- start of leave application --}}
 
-@if (session('msg'))
-    <div class="alert alert-success col-md-8 mx-auto mt-4" role="alert">
-    {{ session('msg') }}
-    </div>
+    @if (session('msg'))
+        <div class="alert alert-success col-md-8 mx-auto mt-4" role="alert">
+            {{ session('msg') }}
+        </div>
     @endif
-    <div class="card border-top border-top-width-3 border-top-main border-bottom-main rounded-0 col-lg-12">
+    <div class="card border-top border-top-width-3 border-top-main border-bottom-main rounded-0">
 
         <div class="card-header">
             <h5 class="text-warning">Apply Leave</h5>
         </div>
-        <div class="card-body">
-            <div class="row">
-                    <div class="col-md-4">
-                        <div class="card-container">
-                            <div class="mb-3">
-                                <label class="form-label">Annual Leave Summary per Year</label>
-                                {{-- <input type="number" id="selected_year" class="form-control" min="2000" max="2100" step="1"> --}}
-
-                                <select id="employee_exited_list"  class="form-control select" tabindex="-1">
-                                    <option value="">-- Select Year --</option>
-                                    <option value="2008">2008</option>
-                                    <option value="2021">2021</option>
-                                    <option value="2022">2022</option>
-                                    <option value="2023">2023</option>
-                                    <option value="2024">2024</option>
-                                    <option value="2025">2025</option>
-                                    <option value="2026">2026</option>
-                                    <option value="2027">2027</option>
-                                    <option value="2028">2028</option>
-                                    <option value="2029">2029</option>
-                                </select>
-                            </div>
-                            <div id="balance-table-placeholder">
-                                <table class="table table-striped table-bordered datatable-basic">
-                                    <thead>
-                                        <tr>
-                                            <th>Field</th>
-                                            <th>Value</th>
-                                        </tr>
-                                    </thead>
-                                    <tr>
-                                        <td>Days Entitled</td>
-                                        <td>Loading...</td> <!-- Display a loading message -->
-                                    </tr>
-                                    <tr>
-                                        <td>Opening Balance</td>
-                                        <td>Loading...</td> <!-- Display a loading message -->
-                                    </tr>
-                                    <tr>
-                                        <td>Days Forfeit Balance</td>
-                                        <td>Loading...</td> <!-- Display a loading message -->
-                                    </tr>
-                                    <tr>
-                                        <td>Annual Leave Days Accrued</td>
-                                        <td>Loading...</td> <!-- Display a loading message -->
-                                    </tr>
-                                    <tr>
-                                        <td>Days Spent</td>
-                                        <td>Loading...</td> <!-- Display a loading message -->
-                                    </tr>
-                                    <tr>
-                                        <td>Outstanding Leave Balance</td>
-                                        <td>Loading...</td> <!-- Display a loading message -->
-                                    </tr>
-                                </table>
-                            </div>
-                        </div>
+        <div class="row">
+            <div class="col-md-4">
+                <div class="card-body">
+                    <div class="card-header">
+                        <h5 class="card-title">Annual Leave Summary per Year</h5>
                     </div>
+                    <div class="mb-3">
+                        <form>
+                            <select id="employee_exited_list" class="form-select" tabindex="-1">
+                                <option value="">-- Select Year --</option>
+                                <option value="2008">2008</option>
+                                <option value="2021">2021</option>
+                                <option value="2022">2022</option>
+                                <option value="2023">2023</option>
+                                <option value="2024">2024</option>
+                                <option value="2025">2025</option>
+                                <option value="2026">2026</option>
+                                <option value="2027">2027</option>
+                                <option value="2028">2028</option>
+                                <option value="2029">2029</option>
+                            </select>
+                    </div>
+                    <div id="balance-table-placeholder">
+                        <table class="table table-striped table-bordered datatable-basic">
+                            <thead>
+                                <tr>
+                                    <th>Description</th>
+                                    <th>Days</th>
+                                </tr>
+                            </thead>
+                            <tr>
+                                <td>Days Entitled</td>
+                                <td>Loading...</td> <!-- Display a loading message -->
+                            </tr>
+                            <tr>
+                                <td>Opening Balance</td>
+                                <td>Loading...</td> <!-- Display a loading message -->
+                            </tr>
+                            <tr>
+                                <td>Days Forfeit Balance</td>
+                                <td>Loading...</td> <!-- Display a loading message -->
+                            </tr>
+                            <tr>
+                                <td>Annual Leave Days Accrued</td>
+                                <td>Loading...</td> <!-- Display a loading message -->
+                            </tr>
+                            <tr>
+                                <td>Days Spent</td>
+                                <td>Loading...</td> <!-- Display a loading message -->
+                            </tr>
+                            <tr>
+                                <td>Outstanding Leave Balance</td>
+                                <td>Loading...</td> <!-- Display a loading message -->
+                            </tr>
+                        </table>
+                    </div>
+                    </form>
+                </div>
+            </div>
 
-                <div class="col-md-8">
-                    <form autocomplete="off" action="{{ url('flex/attendance/save_leave') }}" method="post" enctype="multipart/form-data">
+            <div class="col-md-1" style="border-left: 2px solid rgba(0, 0, 0, 0.13); height: 550px; width: 2px"></div>
+
+            <div class=" col-md-7">
+                <div class="card-body">
+                    <form autocomplete="off" action="{{ url('flex/attendance/save_leave') }}" method="post"
+                        enctype="multipart/form-data">
                         @csrf
                         <div class="row">
                             <div class="form-group col-md-6">
@@ -111,11 +115,12 @@
                                 <select class="form-control" required id="docNo" name="nature">
                                     <option value="">Select Nature</option>
                                     @php
-                                    $gender = Auth::user()->gender == 'Male' ? 1 : 2;
+                                        $gender = Auth::user()->gender == 'Male' ? 1 : 2;
                                     @endphp
-                                    @foreach($leave_type as $key)
+                                    @foreach ($leave_type as $key)
                                         @if ($key->gender <= 0 || $key->gender == $gender)
-                                            <option value="{{ $key->id }}">{{ $key->type }} Leave</option>
+                                            <option value="{{ $key->id }}">{{ $key->type }} Leave
+                                            </option>
                                         @endif
                                     @endforeach
                                 </select>
@@ -128,12 +133,14 @@
 
                             <div class="form-group col-md-6">
                                 <label for="address">Leave Address <span class="text-danger">*</span></label>
-                                <input required="required" type="text" id="address" name="address" class="form-control">
+                                <input required="required" type="text" id="address" name="address"
+                                    class="form-control">
                             </div>
 
                             <div class="form-group col-md-6">
                                 <label for="mobile">Mobile <span class="text-danger">*</span></label>
-                                <input required="required" class="form-control" type="tel" maxlength="10" name="mobile">
+                                <input required="required" class="form-control" type="tel" maxlength="10"
+                                    name="mobile">
                             </div>
 
                             <div class="form-group col-md-6" style="display:none" id="attachment">
@@ -143,25 +150,29 @@
 
                             <div class="form-group col-12 mb-2">
                                 <label for="reason">Reason For Leave <span class="text-danger">*</span></label>
-                                <textarea maxlength="256" class="form-control" name="reason" placeholder="Reason" required="required" rows="3"></textarea>
+                                <textarea maxlength="256" class="form-control" name="reason" placeholder="Reason" required="required"
+                                    rows="3"></textarea>
                             </div>
 
-                            @if($deligate > 0)
-                            <div class="form-group col-md-6">
-                                <label for="deligate">Deligate Position To <span class="text-danger">*</span></label>
-                                <select name="deligate" @if($deligate > 0) required @endif class="form-control" id="deligate">
-                                    <option value="">Select Deligate</option>
-                                    @foreach($employees as $item)
-                                    <option value="{{ $item->emp_id }}">{{ $item->fname }} {{ $item->mname }} {{ $item->lname }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
+                            @if ($deligate > 0)
+                                <div class="form-group col-md-6">
+                                    <label for="deligate">Deligate Position To <span class="text-danger">*</span></label>
+                                    <select name="deligate" @if ($deligate > 0) required @endif
+                                        class="form-control" id="deligate">
+                                        <option value="">Select Deligate</option>
+                                        @foreach ($employees as $item)
+                                            <option value="{{ $item->emp_id }}">{{ $item->fname }}
+                                                {{ $item->mname }} {{ $item->lname }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
                             @endif
 
                         </div>
 
                         <div class="form-group py-2">
-                            <button class="float-end btn btn-main" type="button" data-bs-toggle="modal" data-bs-target="#approval">Submit</button>
+                            <button class="float-end btn btn-main" type="button" data-bs-toggle="modal"
+                                data-bs-target="#approval">Apply</button>
                         </div>
 
                         <div id="approval" class="modal fade" tabindex="-1">
@@ -175,7 +186,8 @@
                                         <div class="row">
                                             <div class="col-4 mx-auto">
                                                 <button type="submit" class="btn bg-main btn-sm px-4">Yes</button>
-                                                <button type="button" class="btn bg-danger btn-sm px-4 text-light" data-bs-dismiss="modal">No</button>
+                                                <button type="button" class="btn bg-danger btn-sm px-4 text-light"
+                                                    data-bs-dismiss="modal">No</button>
                                             </div>
                                         </div>
                                     </div>
@@ -187,34 +199,33 @@
                 </div>
 
             </div>
+
         </div>
     </div>
 
+
     <!-- Add approval modal -->
+    <div class="card border-top  border-top-width-3 border-top-main rounded-0">
+        <div class="card-header">
+            <h6 class="text-warning">My Leaves</h6>
+        </div>
+
+        <table class="table table-striped table-bordered datatable-basic">
+            <thead>
+                <tr>
+                    <th>S/N</th>
+                    <th>Duration</th>
+                    <th>Nature</th>
+                    <th>Reason</th>
+                    <th>Approval State</th>
+                    <th>Status</th>
+                    <th>Option</th>
+                </tr>
+            </thead>
 
 
-{{-- / --}}
-<div class="card border-top  border-top-width-3 border-top-main rounded-0" >
-    <div class="card-header">
-        <h6 class="text-warning">My Leaves</h6>
-    </div>
-
-    <table class="table table-striped table-bordered datatable-basic">
-        <thead>
-          <tr>
-            <th>S/N</th>
-            <th>Duration</th>
-            <th>Nature</th>
-            <th>Reason</th>
-            <th>Approval State</th>
-            <th>Status</th>
-            <th>Option</th>
-          </tr>
-        </thead>
-
-
-        <tbody>
-          <?php
+            <tbody>
+                <?php
           // if ($leave->num_rows() > 0){
             $counter = 1;
             foreach ($myleave as $row) {
@@ -226,145 +237,156 @@
               $final = $diff->format("%a Days");
               $final2 = $diff->format("%a");
              ?>
-            <tr id="record<?php echo $row->id; ?>">
-              <td width="1px"> {{ $counter }}</td>
+                <tr id="record<?php echo $row->id; ?>">
+                    <td width="1px"> {{ $counter }}</td>
 
 
 
-              <td><?php
-              // // DATE MANIPULATION
-                $start = $row->start;
-                $end =$row->end;
-                $datewells = explode("-",$start);
-                $datewelle = explode("-",$end);
-                $mms = $datewells[1];
-                $dds = $datewells[2];
-                $yyyys = $datewells[0];
-                $dates = $dds."-".$mms."-".$yyyys;
+                    <td><?php
+                    // // DATE MANIPULATION
+                    $start = $row->start;
+                    $end = $row->end;
+                    $datewells = explode('-', $start);
+                    $datewelle = explode('-', $end);
+                    $mms = $datewells[1];
+                    $dds = $datewells[2];
+                    $yyyys = $datewells[0];
+                    $dates = $dds . '-' . $mms . '-' . $yyyys;
 
-                $mme = $datewelle[1];
-                $dde = $datewelle[2];
-                $yyyye = $datewelle[0];
-                $datee = $dde."-".$mme."-".$yyyye;
-              //
-              echo $row->days .' Days'."<br>From <b>".$dates."</b><br>To <b>".$datee."</b>";?></td>
+                    $mme = $datewelle[1];
+                    $dde = $datewelle[2];
+                    $yyyye = $datewelle[0];
+                    $datee = $dde . '-' . $mme . '-' . $yyyye;
 
-              <td>
-                <p>Nature :<b> <?php echo $row->type->type; ?> Leave</b><br>
-                @if($row->sub_category> 0)  Sub Category :<b> <?php echo $row->sub_type->name; ?></b>
-                @endif
-              </p>
-              </td>
-              <td><?php echo $row->reason; ?></td>
-            <td><div>
-                <?php
+                    $days_taken = $row->days;
 
-           if ($row->status == 1) {
-                $levelID = App\Models\LeaveApproval::where('empID', Auth::user()->emp_id)->value('level1');
-                // dd( $levelID );
+                    if( $days_taken > 1){
+                        $days_word = "Days";
+                    }else{
+                        $days_word = "Day";
 
-
-                if ($row->position == null) {
-                    $employeePosition = App\Models\Employee::where('emp_id', $levelID)->value('position');
-
-                    // Make sure $employeePosition is not null or empty before querying for $position
-                    if ($employeePosition) {
-                        $position = App\Models\Position::where('id', $employeePosition)->value('name');
-                        echo '<span class="label label-default badge bg-info text-white">Pending by ' . $position . '</span>';
-                    } else {
-                        // Handle the case where $employeePosition is null or empty
-                        echo $levelID;
                     }
-                } else {
-                    echo '<span class="label label-default badge bg-info text-white">' . $row->position . '</span>';
-                }
-            }
-           elseif ($row->status == 2) {
-                $levelID = App\Models\LeaveApproval::where('empID', Auth::user()->emp_id)->value('level2');
+                    echo $days_taken . ' '. $days_word . '<br>From <b>' . $dates . '</b><br>To <b>' . $datee . '</b>'; ?></td>
+                    <td>
+                        <p>Nature :<b> <?php echo $row->type->type; ?> Leave</b><br>
+                            @if ($row->sub_category > 0)
+                                Sub Category :<b> <?php echo $row->sub_type->name; ?></b>
+                            @endif
+                        </p>
+                    </td>
+                    <td><?php echo $row->reason; ?></td>
+                    <td>
+                        <div>
+                            <?php
 
-                if ($row->position == null) {
-                    $employeePosition = App\Models\Employee::where('emp_id', $levelID)->value('position');
+                            if ($row->status == 1) {
+                                $levelID = App\Models\LeaveApproval::where('empID', Auth::user()->emp_id)->value('level1');
+                                // dd( $levelID );
 
-                    // Make sure $employeePosition is not null or empty before querying for $position
-                    if ($employeePosition) {
-                        $position = App\Models\Position::where('id', $employeePosition)->value('name');
-                        echo '<span class="label label-default badge bg-info text-white">Escalated</span>';
-                        echo '<br>';
-                        echo '<span class="label label-default badge bg-info text-white">' ."Pending to " . $position . '</span>';
+                                if ($row->position == null) {
+                                    $employeePosition = App\Models\Employee::where('emp_id', $levelID)->value('position');
 
-                    } else {
-                        // Handle the case where $employeePosition is null or empty
-                        echo  '';
-                    }
-                } else {
-                    echo '<span class="label label-default badge bg-info text-white">' . $row->position . '</span>';
-                }
-            }
-           else{
-                $levelID = App\Models\LeaveApproval::where('empID', Auth::user()->emp_id)->value('level3');
+                                    // Make sure $employeePosition is not null or empty before querying for $position
+                                    if ($employeePosition) {
+                                        $position = App\Models\Position::where('id', $employeePosition)->value('name');
+                                        echo '<span class="label label-default badge bg-info text-white">Pending by ' . $position . '</span>';
+                                    } else {
+                                        // Handle the case where $employeePosition is null or empty
+                                        echo $levelID;
+                                    }
+                                } else {
+                                    echo '<span class="label label-default badge bg-info text-white">' . $row->position . '</span>';
+                                }
+                            } elseif ($row->status == 2) {
+                                $levelID = App\Models\LeaveApproval::where('empID', Auth::user()->emp_id)->value('level2');
+
+                                if ($row->position == null) {
+                                    $employeePosition = App\Models\Employee::where('emp_id', $levelID)->value('position');
+
+                                    // Make sure $employeePosition is not null or empty before querying for $position
+                                    if ($employeePosition) {
+                                        $position = App\Models\Position::where('id', $employeePosition)->value('name');
+                                        echo '<span class="label label-default badge bg-info text-white">Escalated</span>';
+                                        echo '<br>';
+                                        echo '<span class="label label-default badge bg-info text-white">' . 'Pending to ' . $position . '</span>';
+                                    } else {
+                                        // Handle the case where $employeePosition is null or empty
+                                        echo '';
+                                    }
+                                } else {
+                                    echo '<span class="label label-default badge bg-info text-white">' . $row->position . '</span>';
+                                }
+                            } else {
+                                $levelID = App\Models\LeaveApproval::where('empID', Auth::user()->emp_id)->value('level3');
+
+                                if ($row->position == null) {
+                                    $employeePosition = App\Models\Employee::where('emp_id', $levelID)->value('position');
+
+                                    // Make sure $employeePosition is not null or empty before querying for $position
+                                    if ($employeePosition) {
+                                        $position = App\Models\Position::where('id', $employeePosition)->value('name');
+                                        echo '<span class="label label-default badge bg-info text-white">Escalated</span>';
+                                        echo '<br>';
+
+                                        echo '<span class="label label-default badge bg-info text-white">' . 'Pending by ' . $position . '</span>';
+                                    } else {
+                                        // Handle the case where $employeePosition is null or empty
+                                        echo '';
+                                    }
+                                } else {
+                                    echo '<span class="label label-default badge bg-info text-white">' . $row->position . '</span>';
+                                }
+                            }
+                            ?>
 
 
-                if ($row->position == null) {
-                    $employeePosition = App\Models\Employee::where('emp_id', $levelID)->value('position');
 
-                    // Make sure $employeePosition is not null or empty before querying for $position
-                    if ($employeePosition) {
-                        $position = App\Models\Position::where('id', $employeePosition)->value('name');
-                        echo '<span class="label label-default badge bg-info text-white">Escalated</span>';
-                        echo '<br>';
+                            @if ($row->status == 0)
+                                <span class="label label-default badge bg-pending text-white">NOT
+                                    APROVED</span>
+                            @endif
+                            {{-- <span class="label label-default badge bg-info text-white">{{ $row->position }}</span> --}}
+                        </div>
+                    </td>
+                    <td>
+                        <div>
 
-                        echo '<span class="label label-default badge bg-info text-white">' ."Pending by ". $position . '</span>';
-                    } else {
-                        // Handle the case where $employeePosition is null or empty
-                        echo '';
-                    }
-                } else {
-                    echo '<span class="label label-default badge bg-info text-white">' . $row->position . '</span>';
-                }
-            }
-            ?>
-
-
-
-                @if($row->status == 0) <span class="label label-default badge bg-pending text-white">NOT  APROVED</span> @endif
-                {{-- <span class="label label-default badge bg-info text-white">{{ $row->position }}</span> --}}
-            </div></td>
-              <td>
-                <div >
-
-                      <?php if ($row->state==1){ ?>
-                      <div class="col-md-12">
-                      <span class="label label-default badge bg-pending text-white">PENDING</span></div><?php }
+                            <?php if ($row->state==1){ ?>
+                            <div class="col-md-12">
+                                <span class="label label-default badge bg-pending text-white">PENDING</span>
+                            </div><?php }
                       elseif($row->state==0){?>
-                      <div class="col-md-12">
-                      <span class="label badge bg-info text-whites label-info">APPROVED</span></div><?php }
+                            <div class="col-md-12">
+                                <span class="label badge bg-info text-whites label-info">APPROVED</span>
+                            </div><?php }
                       elseif($row->state==3){?>
-                      <div class="col-md-12">
-                      <span class="label badge bg-danger text-white">DENIED</span></div><?php } ?>
-                </div>
+                            <div class="col-md-12">
+                                <span class="label badge bg-danger text-white">DENIED</span>
+                            </div><?php } ?>
+                        </div>
 
-              </td>
-              <td class="options-width d-flex">
-                {{-- start of cancel leave button --}}
-              <?php if($row->status==0 ){ ?>
-                <a href="javascript:void(0)" title="Cancel" class="icon-2 info-tooltip disabled"
-                onclick="cancelRequest(<?php echo $row->id; ?>)">
-                  <button  class="btn btn-danger btn-sm" ><i class="ph-x"></i></button></a>
-              <?php } else{ ?>
-              {{-- / --}}
-              <button  class="btn btn-danger btn-sm"  disabled><i class="ph-x"></i></button></a>
-              <?php }  ?>
-              </td>
+                    </td>
+                    <td class="options-width d-flex">
+                        {{-- start of cancel leave button --}}
+                        <?php if($row->status==0 ){ ?>
+                        <a href="javascript:void(0)" title="Cancel" class="icon-2 info-tooltip disabled"
+                            onclick="cancelRequest(<?php echo $row->id; ?>)">
+                            <button class="btn btn-danger btn-sm"><i class="ph-x"></i></button></a>
+                        <?php } else{ ?>
+                        {{-- / --}}
+                        <button class="btn btn-danger btn-sm" disabled><i class="ph-x"></i></button></a>
+                        <?php }  ?>
+                    </td>
 
-              </tr>
+                </tr>
 
-            <?php
+                <?php
                     $counter++; // Increment the counter for the next row
 
          }} //} ?>
-        </tbody>
-      </table>
-</div>
+            </tbody>
+        </table>
+    </div>
 
 
 
@@ -378,114 +400,114 @@
     {{-- @include("app.includes.overtime_operations") --}}
 
     <script>
-function confirmSubmit() {
+        function confirmSubmit() {
 
-Swal.fire({
-    title: 'Are You Sure That You Want to Submit This Leave Request ?',
-    // text: "You won't be able to revert this!",
-    icon: 'warning',
-    showCancelButton: true,
-    confirmButtonColor: '#3085d6',
-    cancelButtonColor: '#d33',
-    confirmButtonText: 'Yes, Approve it!'
-}).then((result) => {
-    if (result.isConfirmed) {
-        var terminationid = id;
+            Swal.fire({
+                title: 'Are You Sure That You Want to Submit This Leave Request ?',
+                // text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, Approve it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    var terminationid = id;
 
-        $.ajax({
-            url: "{{ url('flex/attendance/approveLeave') }}/" + terminationid
-        })
-        .done(function(data) {
-            $('#resultfeedOvertime').fadeOut('fast', function() {
-                $('#resultfeedOvertime').fadeIn('fast').html(data);
+                    $.ajax({
+                            url: "{{ url('flex/attendance/approveLeave') }}/" + terminationid
+                        })
+                        .done(function(data) {
+                            $('#resultfeedOvertime').fadeOut('fast', function() {
+                                $('#resultfeedOvertime').fadeIn('fast').html(data);
+                            });
+
+                            $('#status' + id).fadeOut('fast', function() {
+                                $('#status' + id).fadeIn('fast').html(
+                                    '<div class="col-md-12"><span class="label label-warning">Approved</span></div>'
+                                );
+                            });
+
+                            // alert('Request Cancelled Successifully!! ...');
+
+                            Swal.fire(
+                                'Cancelled!',
+                                'Leave Request Approved Successifully!!.',
+                                'success'
+                            )
+
+                            setTimeout(function() {
+                                location.reload();
+                            }, 1000);
+                        })
+                        .fail(function() {
+                            Swal.fire(
+                                'Failed!',
+                                'Leave Request Cancellation Failed!! ....',
+                                'success'
+                            )
+
+                            alert('Leave Request Cancellation Failed!! ...');
+                        });
+                }
             });
 
-            $('#status' + id).fadeOut('fast', function() {
-                $('#status' + id).fadeIn('fast').html(
-                    '<div class="col-md-12"><span class="label label-warning">Approved</span></div>'
-                    );
+        }
+
+
+        function approveRequest(id) {
+
+            Swal.fire({
+                title: 'Are You Sure That You Want to Approve This Leave Request ?',
+                // text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, Approve it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    var terminationid = id;
+
+                    $.ajax({
+                            url: "{{ url('flex/attendance/approveLeave') }}/" + terminationid
+                        })
+                        .done(function(data) {
+                            $('#resultfeedOvertime').fadeOut('fast', function() {
+                                $('#resultfeedOvertime').fadeIn('fast').html(data);
+                            });
+
+                            $('#status' + id).fadeOut('fast', function() {
+                                $('#status' + id).fadeIn('fast').html(
+                                    '<div class="col-md-12"><span class="label label-warning">Approved</span></div>'
+                                );
+                            });
+
+                            // alert('Request Cancelled Successifully!! ...');
+
+                            Swal.fire(
+                                'Cancelled!',
+                                'Leave Request Approved Successifully!!.',
+                                'success'
+                            )
+
+                            setTimeout(function() {
+                                location.reload();
+                            }, 1000);
+                        })
+                        .fail(function() {
+                            Swal.fire(
+                                'Failed!',
+                                'Leave Request Cancellation Failed!! ....',
+                                'success'
+                            )
+
+                            alert('Leave Request Cancellation Failed!! ...');
+                        });
+                }
             });
 
-            // alert('Request Cancelled Successifully!! ...');
-
-            Swal.fire(
-                'Cancelled!',
-                'Leave Request Approved Successifully!!.',
-                'success'
-            )
-
-            setTimeout(function() {
-                location.reload();
-            }, 1000);
-        })
-        .fail(function() {
-            Swal.fire(
-                'Failed!',
-                'Leave Request Cancellation Failed!! ....',
-                'success'
-            )
-
-            alert('Leave Request Cancellation Failed!! ...');
-        });
-    }
-});
-
-}
-
-
-function approveRequest(id) {
-
-Swal.fire({
-    title: 'Are You Sure That You Want to Approve This Leave Request ?',
-    // text: "You won't be able to revert this!",
-    icon: 'warning',
-    showCancelButton: true,
-    confirmButtonColor: '#3085d6',
-    cancelButtonColor: '#d33',
-    confirmButtonText: 'Yes, Approve it!'
-}).then((result) => {
-    if (result.isConfirmed) {
-        var terminationid = id;
-
-        $.ajax({
-            url: "{{ url('flex/attendance/approveLeave') }}/" + terminationid
-        })
-        .done(function(data) {
-            $('#resultfeedOvertime').fadeOut('fast', function() {
-                $('#resultfeedOvertime').fadeIn('fast').html(data);
-            });
-
-            $('#status' + id).fadeOut('fast', function() {
-                $('#status' + id).fadeIn('fast').html(
-                    '<div class="col-md-12"><span class="label label-warning">Approved</span></div>'
-                    );
-            });
-
-            // alert('Request Cancelled Successifully!! ...');
-
-            Swal.fire(
-                'Cancelled!',
-                'Leave Request Approved Successifully!!.',
-                'success'
-            )
-
-            setTimeout(function() {
-                location.reload();
-            }, 1000);
-        })
-        .fail(function() {
-            Swal.fire(
-                'Failed!',
-                'Leave Request Cancellation Failed!! ....',
-                'success'
-            )
-
-            alert('Leave Request Cancellation Failed!! ...');
-        });
-    }
-});
-
-}
+        }
 
 
         function cancelRequest(id) {
@@ -503,71 +525,42 @@ Swal.fire({
                     var terminationid = id;
 
                     $.ajax({
-                        url: "{{ url('flex/attendance/cancelLeave') }}/" + terminationid
-                    })
-                    .done(function(data) {
-                        $('#resultfeedOvertime').fadeOut('fast', function() {
-                            $('#resultfeedOvertime').fadeIn('fast').html(data);
-                        });
+                            url: "{{ url('flex/attendance/cancelLeave') }}/" + terminationid
+                        })
+                        .done(function(data) {
+                            $('#resultfeedOvertime').fadeOut('fast', function() {
+                                $('#resultfeedOvertime').fadeIn('fast').html(data);
+                            });
 
-                        $('#status' + id).fadeOut('fast', function() {
-                            $('#status' + id).fadeIn('fast').html(
-                                '<div class="col-md-12"><span class="label label-warning">CANCELLED</span></div>'
+                            $('#status' + id).fadeOut('fast', function() {
+                                $('#status' + id).fadeIn('fast').html(
+                                    '<div class="col-md-12"><span class="label label-warning">CANCELLED</span></div>'
                                 );
+                            });
+
+                            // alert('Request Cancelled Successifully!! ...');
+
+                            Swal.fire(
+                                'Cancelled!',
+                                'Leave Request Cancelled Successifully!!.',
+                                'success'
+                            )
+
+                            setTimeout(function() {
+                                location.reload();
+                            }, 1000);
+                        })
+                        .fail(function() {
+                            Swal.fire(
+                                'Failed!',
+                                'Leave Request Cancellation Failed!! ....',
+                                'success'
+                            )
+
+                            alert('Leave Request Cancellation Failed!! ...');
                         });
-
-                        // alert('Request Cancelled Successifully!! ...');
-
-                        Swal.fire(
-                            'Cancelled!',
-                            'Leave Request Cancelled Successifully!!.',
-                            'success'
-                        )
-
-                        setTimeout(function() {
-                            location.reload();
-                        }, 1000);
-                    })
-                    .fail(function() {
-                        Swal.fire(
-                            'Failed!',
-                            'Leave Request Cancellation Failed!! ....',
-                            'success'
-                        )
-
-                        alert('Leave Request Cancellation Failed!! ...');
-                    });
                 }
             });
-
-            // if (confirm("Are You Sure You Want to Cancel This Overtime Request") == true) {
-
-            //     var overtimeid = id;
-
-            //     $.ajax({
-            //             url: "{{ url('flex/cancelOvertime') }}/" + overtimeid
-            //         })
-            //         .done(function(data) {
-            //             $('#resultfeedOvertime').fadeOut('fast', function() {
-            //                 $('#resultfeedOvertime').fadeIn('fast').html(data);
-            //             });
-
-            //             $('#status' + id).fadeOut('fast', function() {
-            //                 $('#status' + id).fadeIn('fast').html(
-            //                     '<div class="col-md-12"><span class="label label-warning">CANCELLED</span></div>'
-            //                     );
-            //             });
-
-            //             alert('Request Cancelled Successifully!! ...');
-
-            //             setTimeout(function() {
-            //                 location.reload();
-            //             }, 1000);
-            //         })
-            //         .fail(function() {
-            //             alert('Overtime Cancellation Failed!! ...');
-            //         });
-            // }
         }
     </script>
 
@@ -576,177 +569,174 @@ Swal.fire({
 
 
 
-@include('app.includes.leave_operations')
+    @include('app.includes.leave_operations')
 
-<script>
+    <script>
+        $('#docNo').change(function() {
+            var id = $(this).val();
+            const start = document.getElementById("start-date").value;
+            const end = document.getElementById("end-date").value;
+            var par = id + '|' + start + '|' + end;
+            var url = '{{ route('getSubs', ':id') }}';
+            url = url.replace(':id', par);
 
-  $('#docNo').change(function(){
-      var id = $(this).val();
-      const start = document.getElementById("start-date").value;
-      const end = document.getElementById("end-date").value;
-    var par= id+'|'+start+'|'+end;
-      var url = '{{ route("getSubs", ":id") }}';
-      url = url.replace(':id', par);
-
-      if (id==1) {
-        $("#attachment").hide();
-      } else {
-        $("#attachment").show();
-      }
-
-      $('#subs_cat').find('option').not(':first').remove();
-
-      $.ajax({
-          url: url,
-          type: 'get',
-          dataType: 'json',
-
-          success: function(response){
-
-            let days=response.days;
-             let subs=response.data;
-            var status ="<span>"+response.days+" Days</span>"
-            $("#remaining").empty(status);
-             $("#remaining").append(status);
-             $("#remaining").show()
-             $("#sub").hide();
-
-
-            for (var i = 0; i < response.data.length; i++) {
-
-              var id=subs[i].id;
-              var name=subs[i].name;
-              var option = "<option value='"+id+"'>"+name+"</option>";
-
-
-              $("#subs_cat").append(option);
-
-              $("#sub").show();
-
+            if (id == 1) {
+                $("#attachment").hide();
+            } else {
+                $("#attachment").show();
             }
 
+            $('#subs_cat').find('option').not(':first').remove();
 
-          }
-      });
-  });
+            $.ajax({
+                url: url,
+                type: 'get',
+                dataType: 'json',
+
+                success: function(response) {
+
+                    let days = response.days;
+                    let subs = response.data;
+                    var status = "<span>" + response.days + " Days</span>"
+                    $("#remaining").empty(status);
+                    $("#remaining").append(status);
+                    $("#remaining").show()
+                    $("#sub").hide();
 
 
-  </script>
+                    for (var i = 0; i < response.data.length; i++) {
 
-<script>
-    $(function() {
-      var today = new Date();
-      var dd = today.getDate();
-      var mm = today.getMonth() + 1; //January is 0!
+                        var id = subs[i].id;
+                        var name = subs[i].name;
+                        var option = "<option value='" + id + "'>" + name + "</option>";
 
-      var yyyy = today.getFullYear();
-      if (dd < 10) {
-        dd = '0' + dd;
-      }
-      if (mm < 10) {
-        mm = '0' + mm;
-      }
-      var dateToday = dd + '/' + mm + '/' + yyyy;
-      $('#leave_startDate').daterangepicker({
-        drops: 'down',
-        singleDatePicker: true,
-        autoUpdateInput: false,
-        startDate:dateToday,
-        minDate:dateToday,
-        locale: {
-          format: 'DD/MM/YYYY'
-        },
-        singleClasses: "picker_1"
-      }, function(start, end, label) {
-        // var years = moment().diff(start, 'years');
-        // alert("The Employee is " + years+ " Years Old!");
 
-      });
-        $('#leave_startDate').on('apply.daterangepicker', function(ev, picker) {
-          $(this).val(picker.startDate.format('DD/MM/YYYY'));
-      });
-        $('#leave_startDate').on('cancel.daterangepicker', function(ev, picker) {
-          $(this).val('');
-      });
-    });
+                        $("#subs_cat").append(option);
+
+                        $("#sub").show();
+
+                    }
+
+
+                }
+            });
+        });
+    </script>
+
+    <script>
+        $(function() {
+            var today = new Date();
+            var dd = today.getDate();
+            var mm = today.getMonth() + 1; //January is 0!
+
+            var yyyy = today.getFullYear();
+            if (dd < 10) {
+                dd = '0' + dd;
+            }
+            if (mm < 10) {
+                mm = '0' + mm;
+            }
+            var dateToday = dd + '/' + mm + '/' + yyyy;
+            $('#leave_startDate').daterangepicker({
+                drops: 'down',
+                singleDatePicker: true,
+                autoUpdateInput: false,
+                startDate: dateToday,
+                minDate: dateToday,
+                locale: {
+                    format: 'DD/MM/YYYY'
+                },
+                singleClasses: "picker_1"
+            }, function(start, end, label) {
+                // var years = moment().diff(start, 'years');
+                // alert("The Employee is " + years+ " Years Old!");
+
+            });
+            $('#leave_startDate').on('apply.daterangepicker', function(ev, picker) {
+                $(this).val(picker.startDate.format('DD/MM/YYYY'));
+            });
+            $('#leave_startDate').on('cancel.daterangepicker', function(ev, picker) {
+                $(this).val('');
+            });
+        });
     </script>
     <script>
-    $(function() {
-      var today = new Date();
-      var dd = today.getDate();
-      var mm = today.getMonth() + 1; //January is 0!
+        $(function() {
+            var today = new Date();
+            var dd = today.getDate();
+            var mm = today.getMonth() + 1; //January is 0!
 
-      var yyyy = today.getFullYear();
-      if (dd < 10) {
-        dd = '0' + dd;
-      }
-      if (mm < 10) {
-        mm = '0' + mm;
-      }
-      var dateToday = dd + '/' + mm + '/' + yyyy;
-      $('#leave_endDate').daterangepicker({
-        drops: 'down',
-        singleDatePicker: true,
-        autoUpdateInput: false,
-        startDate:dateToday,
-        minDate:dateToday,
-        locale: {
-          format: 'DD/MM/YYYY'
-        },
-        singleClasses: "picker_1"
-      }, function(start, end, label) {
-        // var years = moment().diff(start, 'years');
-        // alert("The Employee is " + years+ " Years Old!");
+            var yyyy = today.getFullYear();
+            if (dd < 10) {
+                dd = '0' + dd;
+            }
+            if (mm < 10) {
+                mm = '0' + mm;
+            }
+            var dateToday = dd + '/' + mm + '/' + yyyy;
+            $('#leave_endDate').daterangepicker({
+                drops: 'down',
+                singleDatePicker: true,
+                autoUpdateInput: false,
+                startDate: dateToday,
+                minDate: dateToday,
+                locale: {
+                    format: 'DD/MM/YYYY'
+                },
+                singleClasses: "picker_1"
+            }, function(start, end, label) {
+                // var years = moment().diff(start, 'years');
+                // alert("The Employee is " + years+ " Years Old!");
 
-      });
-        $('#leave_endDate').on('apply.daterangepicker', function(ev, picker) {
-          $(this).val(picker.startDate.format('DD/MM/YYYY'));
-      });
-        $('#leave_endDate').on('cancel.daterangepicker', function(ev, picker) {
-          $(this).val('');
-      });
-    });
+            });
+            $('#leave_endDate').on('apply.daterangepicker', function(ev, picker) {
+                $(this).val(picker.startDate.format('DD/MM/YYYY'));
+            });
+            $('#leave_endDate').on('cancel.daterangepicker', function(ev, picker) {
+                $(this).val('');
+            });
+        });
     </script>
 
-        @php
+    @php
         // Assuming $userLeaves contains the array of leave dates
         $leaveDates = json_encode($leaveDates);
         // dd($leaveDates);
-        @endphp
+    @endphp
 
-<script>
-    var leaveDates = @json($leaveDates);
+    <script>
+        var leaveDates = @json($leaveDates);
 
-    // Get the start date input element
-    var startDateInput = document.getElementById("start-date").value;
-    console.log(startDateInput);
+        // Get the start date input element
+        var startDateInput = document.getElementById("start-date").value;
+        console.log(startDateInput);
 
-    // Add an event listener to the start date input
-    startDateInput.addEventListener('input', function() {
-        var selectedDate = new Date(startDateInput.value);
+        // Add an event listener to the start date input
+        startDateInput.addEventListener('input', function() {
+            var selectedDate = new Date(startDateInput.value);
 
-        // Convert the selected date to a string in 'yyyy-mm-dd' format
-        var selectedDateString = selectedDate.toISOString().split('T')[0];
+            // Convert the selected date to a string in 'yyyy-mm-dd' format
+            var selectedDateString = selectedDate.toISOString().split('T')[0];
 
-        // Iterate through the leaveDates array and check if the selected date falls within any leave period
-        var disableDate = false;
-        for (var i = 0; i < leaveDates.length; i++) {
-            if (selectedDateString >= leaveDates[i].start && selectedDateString <= leaveDates[i].end) {
-                disableDate = true;
-                break;
+            // Iterate through the leaveDates array and check if the selected date falls within any leave period
+            var disableDate = false;
+            for (var i = 0; i < leaveDates.length; i++) {
+                if (selectedDateString >= leaveDates[i].start && selectedDateString <= leaveDates[i].end) {
+                    disableDate = true;
+                    break;
+                }
             }
-        }
 
-        if (disableDate) {
-            alert('Leave date selected. Please choose another date.');
-            startDateInput.value = ''; // Clear the input if it matches a leave date
-        }
-    });
-</script>
+            if (disableDate) {
+                alert('Leave date selected. Please choose another date.');
+                startDateInput.value = ''; // Clear the input if it matches a leave date
+            }
+        });
+    </script>
 
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> <!-- Include jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> <!-- Include jQuery -->
 
-{{-- <script>
+    {{-- <script>
     $(document).ready(function() {
     const customDateInput = $("#start-date");
 
@@ -772,49 +762,46 @@ Swal.fire({
 
 
 
-<script>
-   $(document).ready(function () {
-    // Bind an event handler to the select element
-    $("#employee_exited_list").change(function () {
-        var selectedYear = $(this).val();
+    <script>
+        $(document).ready(function() {
+            // Bind an event handler to the select element
+            $("#employee_exited_list").change(function() {
+                var selectedYear = $(this).val();
 
-        // Construct the URL with the selected year parameter
-        var url = '/flex/attendance/annualleavebalance/' + selectedYear;
+                // Construct the URL with the selected year parameter
+                var url = '/flex/attendance/annualleavebalance/' + selectedYear;
 
-        // Make an AJAX request to fetch the data
-        $.ajax({
-            url: url,
-            method: "GET",
-            dataType: "json", // Ensure that the response is parsed as JSON
-            success: function (data) {
-                console.log(data); // Log the data only for success
-                updateTable(data); // Pass the retrieved data to the updateTable function
-            },
-            error: function (err) {
-                console.log(err.responseText());
-                console.log('error in fetching');
+                // Make an AJAX request to fetch the data
+                $.ajax({
+                    url: url,
+                    method: "GET",
+                    dataType: "json", // Ensure that the response is parsed as JSON
+                    success: function(data) {
+                        console.log(data); // Log the data only for success
+                        updateTable(
+                            data); // Pass the retrieved data to the updateTable function
+                    },
+                    error: function(err) {
+                        console.log(err.responseText());
+                        console.log('error in fetching');
+                    }
+                });
+            });
+
+            function updateTable(data) {
+                var table = $("#balance-table-placeholder table tbody"); // Select the table body
+
+                // Clear existing rows
+                table.empty();
+
+                // Populate the table with the new data
+                $.each(data, function(key, value) {
+                    var row = $("<tr>");
+                    row.append($("<td>").text(key));
+                    row.append($("<td>").text(value));
+                    table.append(row);
+                });
             }
         });
-    });
-
-    function updateTable(data) {
-        var table = $("#balance-table-placeholder table tbody"); // Select the table body
-
-        // Clear existing rows
-        table.empty();
-
-        // Populate the table with the new data
-        $.each(data, function (key, value) {
-            var row = $("<tr>");
-            row.append($("<td>").text(key));
-            row.append($("<td>").text(value));
-            table.append(row);
-        });
-    }
-});
-
-</script>
-
-
-
+    </script>
 @endpush

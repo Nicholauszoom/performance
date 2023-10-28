@@ -405,7 +405,7 @@ $data['leave_types'] = LeaveType::all();
 
      public function annuaLeaveSummary($year) {
         $data = [];
-        $data['Day Entitled'] = Employee::where('emp_id', Auth::user()->emp_id)->value('leave_days_entitled');
+        $data['Days Entitled'] = Employee::where('emp_id', Auth::user()->emp_id)->value('leave_days_entitled');
         $openingBalance =  LeaveForfeiting::where('empID', Auth::user()->emp_id)->value('opening_balance');
         if($year > date('Y')){
             $forfeitDays = 0;
@@ -442,16 +442,18 @@ $data['leave_types'] = LeaveType::all();
         }else {
             if ($employeeHireYear == $year) {
                 $employeeDate = Auth::user()->hire_date;
+                $endDate = $year . '-12-31';
             } else {
                 $employeeDate = $year . '-01-01';
+                $endDate = $year . '-12-31';
             }
-            $daysAccrued = $this->attendance_model->getLeaveBalance(Auth::user()->emp_id, $employeeDate, date('Y-m-d'));
+            $daysAccrued = $this->attendance_model->getLeaveBalance(Auth::user()->emp_id, $employeeDate, $endDate);
 
         }
 
         $outstandingLeaveBalance = $daysAccrued ;
         $data['Days Accrued'] = number_format($daysAccrued ?? 0, 2) ;
-        $data['Days Spent	'] = $this->getspentDays(Auth::user()->emp_id, $year);
+        $data['Days Taken	'] = $this->getspentDays(Auth::user()->emp_id, $year);
         $data['Outstanding Leave Balance'] = number_format($outstandingLeaveBalance ?? 0, 2);
         return response()->json($data);
     }
