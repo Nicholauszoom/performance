@@ -17,7 +17,7 @@ return new class extends Migration
         $columnName = 'gross';
         $tableName = 'temp_payroll_logs';
 
-        if (Schema::hasColumn($tableName, $columnName)) {
+        if (!Schema::hasColumn($tableName, $columnName)) {
             // The column exists in the table.
 
         Schema::table('temp_payroll_logs', function (Blueprint $table) {
