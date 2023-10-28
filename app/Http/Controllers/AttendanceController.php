@@ -184,30 +184,12 @@ class AttendanceController extends Controller
 
     $employeeDate = $year.('-01-01');
 
-
-
-
-    $this->authenticateUser('view-unpaid-leaves');
-    // $data['my_leave'] =  $this->attendance_model->my_leavereport($empID);
     $data['leaves'] =Leaves::where('state',0)->latest()->get();
 
     foreach($leaveforfeitings as $key => $leaveforfeit){
      $data['leaveForfeiting'][$key]['leaveBalance'] = $this->attendance_model->getLeaveBalance($leaveforfeit->empID,$employeeDate, date('Y-m-d'));
     }
 
-    // dd($data['leaveForfeiting']);
-
-
-
-
-
-    if(session('conf_leave')!='' && session('line')!='' ){
-    $data['other_leave'] =  $this->attendance_model->leavereport_hr();
-    }elseif(session('line')!=''){
-    $data['other_leave'] =  $this->attendance_model->leavereport_line($empID);
-    }elseif(session('conf_leave')!=''){
-    $data['other_leave'] =  $this->attendance_model->leavereport_hr();
-    }
     $data['title']="Leaves";
     $data['today'] = date('Y-m-d');
     return view('app.leave_forfeiting_report', $data);
@@ -358,7 +340,7 @@ $data['leave_types'] = LeaveType::all();
             $data['employees'] =EMPL::where('emp_id','!=',Auth::user()->emp_id)->whereNot('state',4)->get();
             $data['leave_days_entitled'] =Employee::where('emp_id','!=',Auth::user())->value('leave_days_entitled');
             $data['balance_brought_foward'] =LeaveForfeiting::where('empID','!=',Auth::user())->value('opening_balance');
-            $data['leaves'] =Leaves::get();
+            // $data['leaves'] =Leaves::get();
 
 
             // For Working days
@@ -390,15 +372,12 @@ $data['leave_types'] = LeaveType::all();
             $data['outstandingLeaveBalance'] = $this->attendance_model->getAnnualOutstandingBalance(Auth::user()->emp_id,$employeeDate, date('Y-m-d'));
             $data['annualLeaveBalance'] = $this->getspentDays(Auth::user()->emp_id, 1);
             $data['checking'] = $this->annuaLeaveSummary($year);
-            // $data['compassionateLeaveBalance'] = $this->getRemainingDaysForLeave(Auth::user()->emp_id, 3);
-            // $data['maternityLeaveBalance'] = $this->getRemainingDaysForLeave(Auth::user()->emp_id, 4);
-            // $data['paternityLeaveBalance'] =$this->getRemainingDaysForLeave(Auth::user()->emp_id, 5);
-            // $data['studyLeaveBalance'] = $this->getRemainingDaysForLeave(Auth::user()->emp_id, 6);
             $data['leave_type'] = $this->attendance_model->leave_type();
 
 
             $data['parent'] = 'My Services';
             $data['child'] = 'Leaves';
+            // dd($data['myleave']);
             // dd($data);
          return view('my-services/leaves', $data);
      }
@@ -409,18 +388,26 @@ $data['leave_types'] = LeaveType::all();
         $openingBalance =  LeaveForfeiting::where('empID', Auth::user()->emp_id)->value('opening_balance');
         if($year > date('Y')){
             $forfeitDays = 0;
+            $data['Opening Balance'] = 0;
         }
         elseif($year < date('Y')){
             $forfeitDays =  LeaveForfeiting::where('empID', Auth::user()->emp_id)
                           ->where('forfeiting_year', $year)
-                        ->value('days');        }
+                        ->value('days');
+        $openingBalance = LeaveForfeiting::where('empID', Auth::user()->emp_id)->where('opening_balance_year', $year)->value('opening_balance');
+
+        $data['Opening Balance'] = $openingBalance ?? 0;
+
+                    }
         else{
             $forfeitDays =  LeaveForfeiting::where('empID', Auth::user()->emp_id)
                         ->value('days');
+                        $openingBalance = LeaveForfeiting::where('empID', Auth::user()->emp_id)->value('opening_balance');
 
+             $data['Opening Balance'] = $openingBalance ?? 0;
         }
 
-        $data['Opening Balance'] = $openingBalance ?? 0;
+        // $data['Opening Balance'] = $openingBalance ?? 0;
         $data['Days Forfeited'] = $forfeitDays ?? 0;
 
         $employeeHiredate = explode('-', Auth::user()->hire_date);
@@ -442,12 +429,10 @@ $data['leave_types'] = LeaveType::all();
         }else {
             if ($employeeHireYear == $year) {
                 $employeeDate = Auth::user()->hire_date;
-                $endDate = $year . '-12-31';
             } else {
                 $employeeDate = $year . '-01-01';
-                $endDate = $year . '-12-31';
             }
-            $daysAccrued = $this->attendance_model->getLeaveBalance(Auth::user()->emp_id, $employeeDate, $endDate);
+            $daysAccrued = $this->attendance_model->getLeaveBalance(Auth::user()->emp_id, $employeeDate, date('Y-m-d'));
 
         }
 
@@ -553,21 +538,32 @@ $data['leave_types'] = LeaveType::all();
 
    public function getspentDays($employeeId, $year) {
         $natureId = 1;
+        $currentYear = date('Y');
+
         if($year != date('Y')){
             $startDate = $year . '-01-01'; // Start of the current year
             $endDate = $year . '-12-31';
-        }
-        else {
-        $startDate = $year . '-01-01'; // Start of the current year
-        $endDate = date('Y-m-d');// Current date
-        }
 
-        $daysSpent = Leaves::where('empId', $employeeId)
+            $daysSpent = Leaves::where('empId', $employeeId)
             ->where('nature', $natureId)
             ->whereBetween('created_at', [$startDate, $endDate])
             ->whereNot('reason', 'Automatic applied!')
             ->where('state',0)
             ->sum('days');
+        }
+        else {
+        $startDate = $year . '-01-01'; // Start of the current year
+        $endDate = $currentYear . '-12-31';// Current date
+
+        $daysSpent = Leaves::where('empId', $employeeId)
+        ->where('nature', $natureId)
+        ->whereBetween('created_at', [$startDate, $endDate])
+        ->whereNot('reason', 'Automatic applied!')
+        ->where('state',0)
+        ->sum('days');
+        }
+
+
         return $daysSpent;
     }
 
@@ -1855,40 +1851,12 @@ public function saveLeave(Request $request) {
                 'file' => 'required|mimes:xlsx,xls',
             ]);
             // Handle the file upload and data extraction
+            $year = $request->forfeit_year;
             $file = $request->file('file');
-            $import = new ClearLeavesImport;
-            Excel::import($import, $file);
-
+            Excel::import(new ClearLeavesImport($year), $file);
 
             return redirect()->back()->with('success', 'File uploaded and data extracted successfully.');
         }
-
-    // // Handle the file upload and data extraction
-    // $file = $request->file('file');
-    //     $employees=EMPL::get();
-    //     foreach ($employees as $employee) {
-    //             $date=date('Y').'-'.'01-01';
-    //             $leave_balance = $this->attendance_model->getLeaveBalance($employee->emp_id,$employee->hire_date, $date);
-    //             $leaves=new Leaves();
-    //             $emp=$employee->emp_id;
-    //             $leaves->empID = $emp;
-    //             $leaves->start =Date('Y-m-d') ;
-    //             $leaves->end=Date('Y-m-d') ;
-    //             $leaves->leave_address="auto";
-    //             $leaves->mobile = $employee->mobile;
-    //             $leaves->nature = 1;
-    //             $leaves->remaining=5;
-    //             $leaves->days=$leave_balance ;
-    //             $leaves->reason="Automatic applied!";
-    //             $leaves->position="Default Apllication";
-    //             $leaves->status=3;
-    //             $leaves->state=0;
-    //             $leaves->save();
-    // }
-
-    // return back();
-    // }
-
 
 
     public function leave_remarks($id)

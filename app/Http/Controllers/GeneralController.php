@@ -10101,20 +10101,18 @@ class GeneralController extends Controller
     {
         request()->validate(
             [
-                'name' => 'required',
-                'date' => 'required',
-            ]
+                'emp_id' => 'required'            ]
         );
 
-        $id = $request->id;
-        $holiday = Holiday::find($id);
-        $holiday->name = $request->name;
-        $holiday->date = $request->date;
-        $holiday->recurring = $request->recurring == true ? '1' : '0';
-        $holiday->update();
+        $emp_id = $request->emp_id;
+        $leaveForfeiting = LeaveForfeiting::where('empID', $emp_id)->first();
+        $leaveForfeiting->opening_balance = $request->opening_balance;
+        $leaveForfeiting->days = $request->days;
+        $leaveForfeiting->update();
 
-        $msg = "Holiday has been save Successfully !";
-        return redirect('flex/edit-leave-forfeitings')->with('msg', $msg);
+        $msg = "Employee Leave Forfeiting has been save Successfully !";
+        return back()->with('msg',$msg);
+
     }
     // end of update holiday function
 
@@ -10155,11 +10153,8 @@ class GeneralController extends Controller
             // Find the LeaveForfeiting model for the employee or create a new one if it doesn't exist
             $leave_forfeit = LeaveForfeiting::firstOrNew(['empID' => $value->emp_id]);
             $leave_forfeit->opening_balance = $opening_balance;
-            // Set other attributes to 0
             $leave_forfeit->nature = 1; // Replace attribute1 with your actual attribute names
-            $leave_forfeit->days = 0;
-            // ...
-
+            $leave_forfeit->opening_balance_year =  $year;
             $leave_forfeit->save();
         }
 
@@ -10464,17 +10459,23 @@ class GeneralController extends Controller
     }
     public function editLeaveForfeitings(Request $request, $id)
     {
-
         // dd($id);
         $data['leaveForfeitings'] = LeaveForfeiting::with('employee')->where('empID', $id)->first();
         $data['employees'] = Employee::get();
         $data['parent'] = 'Settings';
         $data['child'] = 'Edit Leave Forfeiting';
+        $today = date('Y-m-d');
+        $arryear = explode('-',$today);
+        $year = $arryear[0];
+        $employeeDate = $year.('-01-01');
+
+        $data['leaveBalance'] = $this->attendance_model->getLeaveBalance($id, $employeeDate, date('Y-m-d'));
+
 
         $natureId = 1;
         $currentYear = date('Y');
         $startDate = $currentYear . '-01-01';
-        $endDate = date('Y-m-d');
+        $endDate = $currentYear . '-12-31'; // Current date
         $daysSpent = Leaves::where('empId', $id)
             ->where('nature', $natureId)
             ->whereBetween('created_at', [$startDate, $endDate])

@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class LeaveForfeiting extends Model
 {
     use HasFactory;
-    protected $fillable = ['empID','nature','days'];
+    protected $fillable = ['empID','nature','days', 'forfeiting_year', 'opening-balance-year', 'opening_balance', 'adjusted_days'];
 
     public function employee()
 {

@@ -27,7 +27,7 @@
             </div>
 
             <form
-                action="#"
+                action="{{ url('flex/update-leave-forfeitings')}}"
                 method="POST"
                 class="form-horizontal"
             >
@@ -36,11 +36,11 @@
                 <div class="modal-body">
                     <div class="row mb-3">
 
-
                         <div class="form-group col-6">
                             <label class="form-label">Employee Name:</label>
                             <div class="form-control-feedback form-control-feedback-start">
-                                <input type="text" name="emp_id" value="{{ $leaveForfeitings->employee->fname ?? '' }} {{ $leaveForfeitings->employee->mname ?? '' }} {{ $leaveForfeitings->employee->lname ?? '' }}" class="form-control" />
+                                <input type="text"  value="{{ $leaveForfeitings->employee->fname ?? '' }} {{ $leaveForfeitings->employee->mname ?? '' }} {{ $leaveForfeitings->employee->lname ?? '' }}" class="form-control" disabled />
+                                <input type="text" name="emp_id" value="{{ $leaveForfeitings->employee->emp_id }}" class="form-control" hidden />
                             </div>
                         </div>
 
@@ -48,7 +48,7 @@
                     <div class="form-group col-6">
                         <label class="form-label">Leave Entitled:</label>
                         <div class="form-control-feedback form-control-feedback-start">
-                            <input type="text" name="leave_days_entitled" value="{{ $leaveForfeitings->employee->leave_days_entitled }}" class="form-control" />
+                            <input type="text" name="leave_days_entitled" value="{{ $leaveForfeitings->employee->leave_days_entitled }}" class="form-control" disabled />
                         </div>
                     </div>
                     <div class="form-group col-6">
@@ -61,21 +61,21 @@
                     <div class="form-group col-6">
                         <label class="form-label">Days Spent:</label>
                         <div class="form-control-feedback form-control-feedback-start">
-                            <input type="text" name="days_spent" value="{{ $daysSpent }}" class="form-control" />
+                            <input type="text" name="days_spent" value="{{ $daysSpent }}" class="form-control" disabled />
                         </div>
                     </div>
 
                     <div class="form-group col-6">
                         <label class="form-label">Fortfeit Days:</label>
                         <div class="form-control-feedback form-control-feedback-start">
-                            <input type="text" name="days" @isset($leaveForfeitings->days) value = "{{ $leaveForfeitings->days }}" @endisset class="form-control" />
+                            <input type="text" name="days" @isset($leaveForfeitings->days) value = "{{ $leaveForfeitings->days }}" @endisset class="form-control"/>
                                 {{-- <div class="form-control-feedback-icon"><i class="ph-user-circle text-muted"></i></div> --}}
                         </div>
                     </div>
                     <div class="form-group col-6">
                         <label class="form-label">Current Balance Days:</label>
                         <div class="form-control-feedback form-control-feedback-start">
-                            <input type="text" name="days" @isset($leaveForfeitings->days) value = "{{ $leaveForfeitings->days }}" @endisset class="form-control" />
+                            <input type="text" name="days" @isset($leaveBalance) value = "{{$leaveBalance = number_format($leaveBalance,2)}}" @endisset class="form-control"  disabled />
                                 {{-- <div class="form-control-feedback-icon"><i class="ph-user-circle text-muted"></i></div> --}}
                         </div>
                     </div>

@@ -38,7 +38,6 @@
                         <h5 class="card-title">Annual Leave Summary per Year</h5>
                     </div>
                     <div class="mb-3">
-                        <form>
                             <select id="employee_exited_list" class="form-select" tabindex="-1">
                                 <option value="">-- Select Year --</option>
                                 <option value="2008">2008</option>
@@ -57,7 +56,7 @@
                         <table class="table table-striped table-bordered datatable-basic">
                             <thead>
                                 <tr>
-                                    <th>Description</th>
+                                    <th>Details</th>
                                     <th>Days</th>
                                 </tr>
                             </thead>
@@ -87,7 +86,6 @@
                             </tr>
                         </table>
                     </div>
-                    </form>
                 </div>
             </div>
 
@@ -178,20 +176,25 @@
                         <div id="approval" class="modal fade" tabindex="-1">
                             <div class="modal-dialog modal-dialog-centered modal-md">
                                 <div class="modal-content">
+
                                     <div class="modal-header">
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                    <button type="button" class="btn-close " data-bs-dismiss="modal">
+
+                                    </button>
+                                </div>
+                                <modal-body class="p-4">
+                                    <h6 class="text-center">Are you Sure ?</h6>
+                                    <div class="row ">
+                                    <div class="col-4 mx-auto">
+                                        <button  type="submit" class="btn bg-main btn-sm px-4 " >Yes</button>
+
+                                        <button type="button" class="btn bg-danger btn-sm  px-4 text-light" data-bs-dismiss="modal">
+                                        No
+                                    </button>
                                     </div>
-                                    <div class="modal-body p-4">
-                                        <h6 class="text-center">Are you Sure?</h6>
-                                        <div class="row">
-                                            <div class="col-4 mx-auto">
-                                                <button type="submit" class="btn bg-main btn-sm px-4">Yes</button>
-                                                <button type="button" class="btn bg-danger btn-sm px-4 text-light"
-                                                    data-bs-dismiss="modal">No</button>
-                                            </div>
-                                        </div>
                                     </div>
-                                    <div class="modal-footer"></div>
+                                </modal-body>
+
                                 </div>
                             </div>
                         </div>
@@ -368,14 +371,19 @@
                     </td>
                     <td class="options-width d-flex">
                         {{-- start of cancel leave button --}}
-                        <?php if($row->status==0 ){ ?>
-                        <a href="javascript:void(0)" title="Cancel" class="icon-2 info-tooltip disabled"
-                            onclick="cancelRequest(<?php echo $row->id; ?>)">
-                            <button class="btn btn-danger btn-sm"><i class="ph-x"></i></button></a>
-                        <?php } else{ ?>
-                        {{-- / --}}
-                        <button class="btn btn-danger btn-sm" disabled><i class="ph-x"></i></button></a>
-                        <?php }  ?>
+                        <?php if ($row->state == 1) { ?>
+                            <a href="javascript:void(0)" title="Cancel Leave" class="icon-2 info-tooltip disabled"
+                               onclick="cancelRequest(<?php echo $row->id; ?>)">
+                                <button class="btn btn-danger btn-sm"><i class="ph-x"></i></button>
+                            </a>
+                        <?php } else if ($row->state == 0) { ?>
+                            <a href="javascript:void(0)" title="Revoke Approved Leave" class="icon-2 info-tooltip disabled"
+                               onclick="revokeLeave(<?php echo $row->id; ?>)">
+                                <button class="btn btn-primary btn-sm"><i class="ph-prohibit"></i>
+                                </button>
+                            </a>
+                        <?php } ?>
+
                     </td>
 
                 </tr>
