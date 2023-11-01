@@ -273,7 +273,7 @@
                                 <span class="label badge bg-info text-whites label-info">APPROVED</span>
                             </div><?php } elseif ($item->state == 3) { ?>
                             <div class="col-md-12">
-                                <span class="label badge bg-danger text-white">DENIED</span>
+                                <span class="label badge bg-danger text-white">REVOKED</span>
                             </div><?php } ?>
                     </div>
                 </td>
@@ -304,11 +304,11 @@
                         {{-- @if (Auth()->user()->emp_id == $approval->level1) --}}
                         <div class="col-md-12 text-center mt-1">
                             <a href="{{ url('flex/attendance/approveLeave/' . $item->id) }}" title="Approve">
-                                <button class="btn btn-success btn-sm"><i class="ph-check"></i></button>
+                                <button class="btn btn-success btn-sm">Approve Request<i class="ph-check"></i></button>
                             </a>
 
                             <a href="javascript:void(0)" onclick="cancelLeave(<?php echo $item->id; ?>)" title="Reject">
-                                <button class="btn btn-warning btn-sm"><i class="ph-x"></i></button></a>
+                                <button class="btn btn-warning btn-sm">Cancel Request<i class="ph-x"></i></button></a>
                         </div>
 
                         {{-- @endif --}}
@@ -417,7 +417,7 @@
                                 <span class="label badge bg-info text-whites label-info">APPROVED</span>
                             </div><?php } elseif ($item->state == 3) { ?>
                             <div class="col-md-12">
-                                <span class="label badge bg-danger text-white">DENIED</span>
+                                <span class="label badge bg-danger text-white">REVOKED</span>
                             </div><?php } ?>
                     </div>
                 </td>
@@ -434,38 +434,19 @@
                 </td>
                 <td class="text-center">
 
-                    @php
-                    $approval = App\Models\LeaveApproval::where('empID', $item->empID)->first();
-                    @endphp
-                    @if ($item->attachment != null)
-                    <a href="{{ asset('storage/leaves/' . $item->attachment) }}" download="{{ asset('storage/leaves/' . $item->attachment) }}" class="btn bg-main btn-sm" title="Download Attachment">
-                        <i class="ph ph-download"></i> &nbsp;
-                        Attachment
-                    </a>
-                    @endif
-                    @if ($approval)
-                    @if ($item->status == 0 && $item->state == 1)
-                    <?php if (Auth()->user()->emp_id == $approval->level1  || Auth()->user()->emp_id == $approval->level2  || Auth()->user()->emp_id == $approval->level3) { ?>
-                        {{-- @if (Auth()->user()->emp_id == $approval->level1) --}}
-                        <div class="col-md-12 text-center mt-1">
-                            <a href="{{ url('flex/attendance/approveLeave/' . $item->id) }}" title="Approve">
-                                <button class="btn btn-success btn-sm"><i class="ph-check"></i></button>
-                            </a>
-
-                            <a href="javascript:void(0)" onclick="cancelLeave(<?php echo $item->id; ?>)" title="Reject">
-                                <button class="btn btn-warning btn-sm"><i class="ph-x"></i></button></a>
-                        </div>
-
-                        {{-- @endif --}}
+                    @if(Auth()->user()->emp_id == $approval->level2 || Auth()->user()->emp_id == $approval->level3)
+                    <div class="col-md-12 text-center mt-1">
+                        <a href="{{ url('flex/attendance/revokeLeave/' . $item->id) }}" title="Revoke Approved Leave" class="icon-2 info-tooltip disabled">
+                            <button class="btn btn-primary btn-sm">Revoke Approved Leave<i class="ph-prohibit"></i></button>
+                        </a>
+                    </div>
+                @else
+                <p></p>
+                @endif
 
 
-                    <?php } elseif ($item->status == 4) { ?>
-                        <div class="col-md-12 mt-1">
-                            <span class="label bg-danger text-white">Denied</span>
-                        </div>
-                    <?php } ?>
-                    @endif
-                    @endif
+
+
                 </td>
 
             </tr>

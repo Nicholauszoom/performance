@@ -1606,6 +1606,93 @@ public function saveLeave(Request $request) {
       }
    }
 
+   public function revokeLeave($id){
+    $particularLeave = Leaves::where('id', $id)->first();
+    $data['startDate'] = $particularLeave->start;
+    $data['id'] = $particularLeave->id;
+    $data['endDate'] = $particularLeave->end;
+    $data['days'] = $particularLeave->days;
+    $data['nature'] = LeaveType::where('id', $particularLeave->nature)->value('type');
+    $data['leaveReason'] = $particularLeave->reason;
+    $data['mobile'] = $particularLeave->mobile;
+    $data['leaveAddress'] = $particularLeave->leave_address;
+    if($particularLeave->sub_category > 0){
+        $data['sub_category'] = LeaveSubType::where('id', $particularLeave->sub_category)->value('name');
+    }else{
+        $data['sub_category'] = 0;
+
+    }
+    $data['approvedBy'] = $particularLeave->position;
+
+    return view('my-services/revokeLeave', $data);
+   }
+
+
+   public function revokeApprovedLeave($id, $message) {
+    $particularLeave = Leaves::where('id', $id)->first();
+    $emp_id = Leaves::where('emp_id', $particularLeave->emp_id);
+
+    if ($particularLeave) {
+        $particularLeave->state = 3;
+        $particularLeave->revoke_reason = $message;
+        $particularLeave->revoke_status = 0;
+        $particularLeave->revoke_created_at = now();
+        $particularLeave->save();
+
+
+       return true;
+    }
+
+    return response()->json(['status' => 'NOT OK']);
+}
+   public function revokeApprovedLeaveAdmin($id, $message) {
+    $particularLeave = Leaves::where('id', $id)->first();
+    $emp_id = Leaves::where('emp_id', $particularLeave->emp_id);
+
+    if ($particularLeave) {
+        $particularLeave->state = 3;
+        $particularLeave->revoke_reason = $message;
+        $particularLeave->revoke_status = 1;
+        $particularLeave->revoke_created_at = now();
+        $particularLeave->save();
+
+        dd("imeenda");
+
+
+        $emp_data = SysHelpers::employeeData($emp_id);
+        $email_data = array(
+            'subject' => 'Employee Leave Revoke Approval',
+            'view' => 'emails.linemanager.approved_revoke_leave',
+            'email' => $emp_data->email,
+            'full_name' => $emp_data->fname,' '.$emp_data->mname.' '.$emp_data->lname,
+        );
+
+        try {
+          PushNotificationController::bulksend("Leave Revoke",
+        "Your Revoke Leave request is successful granted",
+      "",$emp_id);
+
+            Notification::route('mail', $emp_data->email)->notify(new EmailRequests($email_data));
+            dd("imeenda");
+
+        } catch (Exception $exception) {
+            dd("haijaenda");
+
+        $msg = " Revoke Leave Request Has been Approved Successfully But Email is not sent(SMPT problem) !";
+        // return redirect('flex/view-action/'.$emp,$data)->with('msg', $msg);
+        return redirect('flex/attendance/leave')->with('msg', $msg);
+        }
+
+
+
+       return true;
+    }
+
+    return response()->json(['status' => 'NOT OK']);
+}
+
+
+
     public function recommendLeave($id)
       {
 

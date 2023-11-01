@@ -38,19 +38,19 @@
                         <h5 class="card-title">Annual Leave Summary per Year</h5>
                     </div>
                     <div class="mb-3">
-                            <select id="employee_exited_list" class="form-select" tabindex="-1">
-                                <option value="">-- Select Year --</option>
-                                <option value="2008">2008</option>
-                                <option value="2021">2021</option>
-                                <option value="2022">2022</option>
-                                <option value="2023">2023</option>
-                                <option value="2024">2024</option>
-                                <option value="2025">2025</option>
-                                <option value="2026">2026</option>
-                                <option value="2027">2027</option>
-                                <option value="2028">2028</option>
-                                <option value="2029">2029</option>
-                            </select>
+                        <select id="employee_exited_list" class="form-select" tabindex="-1">
+                            <option value="">-- Select Year --</option>
+                            <option value="2008">2008</option>
+                            <option value="2021">2021</option>
+                            <option value="2022">2022</option>
+                            <option value="2023">2023</option>
+                            <option value="2024">2024</option>
+                            <option value="2025">2025</option>
+                            <option value="2026">2026</option>
+                            <option value="2027">2027</option>
+                            <option value="2028">2028</option>
+                            <option value="2029">2029</option>
+                        </select>
                     </div>
                     <div id="balance-table-placeholder">
                         <table class="table table-striped table-bordered datatable-basic">
@@ -178,22 +178,23 @@
                                 <div class="modal-content">
 
                                     <div class="modal-header">
-                                    <button type="button" class="btn-close " data-bs-dismiss="modal">
+                                        <button type="button" class="btn-close " data-bs-dismiss="modal">
 
-                                    </button>
-                                </div>
-                                <modal-body class="p-4">
-                                    <h6 class="text-center">Are you Sure ?</h6>
-                                    <div class="row ">
-                                    <div class="col-4 mx-auto">
-                                        <button  type="submit" class="btn bg-main btn-sm px-4 " >Yes</button>
+                                        </button>
+                                    </div>
+                                    <modal-body class="p-4">
+                                        <h6 class="text-center">Are you Sure ?</h6>
+                                        <div class="row ">
+                                            <div class="col-4 mx-auto">
+                                                <button type="submit" class="btn bg-main btn-sm px-4 ">Yes</button>
 
-                                        <button type="button" class="btn bg-danger btn-sm  px-4 text-light" data-bs-dismiss="modal">
-                                        No
-                                    </button>
-                                    </div>
-                                    </div>
-                                </modal-body>
+                                                <button type="button" class="btn bg-danger btn-sm  px-4 text-light"
+                                                    data-bs-dismiss="modal">
+                                                    No
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </modal-body>
 
                                 </div>
                             </div>
@@ -263,13 +264,12 @@
 
                     $days_taken = $row->days;
 
-                    if( $days_taken > 1){
-                        $days_word = "Days";
-                    }else{
-                        $days_word = "Day";
-
+                    if ($days_taken > 1) {
+                        $days_word = 'Days';
+                    } else {
+                        $days_word = 'Day';
                     }
-                    echo $days_taken . ' '. $days_word . '<br>From <b>' . $dates . '</b><br>To <b>' . $datee . '</b>'; ?></td>
+                    echo $days_taken . ' ' . $days_word . '<br>From <b>' . $dates . '</b><br>To <b>' . $datee . '</b>'; ?></td>
                     <td>
                         <p>Nature :<b> <?php echo $row->type->type; ?> Leave</b><br>
                             @if ($row->sub_category > 0)
@@ -362,7 +362,15 @@
                             <div class="col-md-12">
                                 <span class="label badge bg-info text-whites label-info">APPROVED</span>
                             </div><?php }
+                      elseif($row->state==2){?>
+                            <div class="col-md-12">
+                                <span class="label badge bg-warning text-whites label-info">PENDING REVOKE </span>
+                            </div><?php }
                       elseif($row->state==3){?>
+                            <div class="col-md-12">
+                                <span class="label badge bg-success text-whites label-info">APPROVED REVOKE </span>
+                            </div><?php }
+                      elseif($row->state==4){?>
                             <div class="col-md-12">
                                 <span class="label badge bg-danger text-white">DENIED</span>
                             </div><?php } ?>
@@ -372,18 +380,16 @@
                     <td class="options-width d-flex">
                         {{-- start of cancel leave button --}}
                         <?php if ($row->state == 1) { ?>
-                            <a href="javascript:void(0)" title="Cancel Leave" class="icon-2 info-tooltip disabled"
-                               onclick="cancelRequest(<?php echo $row->id; ?>)">
-                                <button class="btn btn-danger btn-sm"><i class="ph-x"></i></button>
-                            </a>
+                        <a href="javascript:void(0)" title="Cancel Leave" class="icon-2 info-tooltip disabled"
+                            onclick="cancelRequest(<?php echo $row->id; ?>)">
+                            <button class="btn btn-danger btn-sm">Cancel Leave Request <i class="ph-x"></i></button>
+                        </a>
                         <?php } else if ($row->state == 0) { ?>
-                            <a href="javascript:void(0)" title="Revoke Approved Leave" class="icon-2 info-tooltip disabled"
-                               onclick="revokeLeave(<?php echo $row->id; ?>)">
-                                <button class="btn btn-primary btn-sm"><i class="ph-prohibit"></i>
-                                </button>
-                            </a>
+                            <a href="{{ url('flex/attendance/revokeLeave/' . $row->id) }}" title="Revoke Approved Leave" class="icon-2 info-tooltip disabled">
+                                <button class="btn btn-primary btn-sm">Revoke Approved Leave<i class="ph-prohibit"></i>
+                            </button>
+                        </a>
                         <?php } ?>
-
                     </td>
 
                 </tr>
@@ -566,6 +572,57 @@
                             )
 
                             alert('Leave Request Cancellation Failed!! ...');
+                        });
+                }
+            });
+        }
+
+        function revokeRequest(id) {
+
+            Swal.fire({
+                title: 'Are You Sure You Want to Revoke This approved Leave Request ?',
+                // text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, Revoke it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    var terminationid = id;
+
+                    $.ajax({
+                            url: "{{ url('flex/attendance/revokeLeave') }}/" + terminationid
+                        })
+                        .done(function(data) {
+                            $('#resultfeedOvertime').fadeOut('fast', function() {
+                                $('#resultfeedOvertime').fadeIn('fast').html(data);
+                            });
+
+                            $('#status' + id).fadeOut('fast', function() {
+                                $('#status' + id).fadeIn('fast').html(
+                                    '<div class="col-md-12"><span class="label label-warning">CANCELLED</span></div>'
+                                );
+                            });
+
+                            Swal.fire(
+                                'Cancelled!',
+                                'Approved Leave Request Revoked Successifully!!.',
+                                'success'
+                            )
+
+                            setTimeout(function() {
+                                location.reload();
+                            }, 1000);
+                        })
+                        .fail(function() {
+                            Swal.fire(
+                                'Failed!',
+                                'Approved Leave Request Revoked Failed!! ....',
+                                'success'
+                            )
+
+                            alert('Approved Leave Request Revoked Failed!! ...');
                         });
                 }
             });
