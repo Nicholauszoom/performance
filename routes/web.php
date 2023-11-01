@@ -410,8 +410,8 @@ Route::middleware('auth')->middleware([Setting::class])->group(function(){
     Route::post('/save_leave' ,'saveLeave')->name('attendance.saveLeave'); //atendance controller
     Route::any('/cancelLeave/{id}' ,'cancelLeave')->name('attendance.cancelLeave');
     Route::any('/revokeLeave/{id}' ,'revokeLeave')->name('attendance.revokeLeave');
-    Route::any('/revokeApprovedLeave/{id}/{message}', 'revokeApprovedLeave')->name('attendance.revokeApprovedLeave');
-    Route::any('/revokeApprovedLeaveAdmin/{id}/{message}', 'revokeApprovedLeave')->name('attendance.revokeApprovedLeaveAdmin');
+    Route::post('/revokeApprovedLeave', 'revokeApprovedLeave')->name('attendance.revokeApprovedLeave');
+    Route::any('/revokeApprovedLeaveAdmin/{id}', 'revokeApprovedLeaveAdmin')->name('attendance.revokeApprovedLeaveAdmin');
     //for manager
     Route::any('/leave' ,'leave')->name('attendance.leave');
     Route::any('/annualleavebalance/{year}' ,'annuaLeaveSummary')->name('attendance.annualleavebalance');

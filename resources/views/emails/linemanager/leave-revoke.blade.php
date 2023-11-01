@@ -90,9 +90,9 @@
             <!--      Intro Section -->
             <tr>
               <td style="padding:30px;background-color:#ffffff;">
-                <h1 style="margin-top:0;margin-bottom:1.38em;font-size:1.953em;line-height:1.3;font-weight:bold;letter-spacing:-0.02em;">Leave Revoke</h1>
+                <h1 style="margin-top:0;margin-bottom:1.38em;font-size:1.953em;line-height:1.3;font-weight:bold;letter-spacing:-0.02em;">Leave Revoke Request</h1>
                 <p style="margin:0;">Dear, {{$full_name}}</p>
-                <p>This is to notify you that there is Leave request from {{ $employee_name }} to be revoke,</p>
+                <p>This is to notify you that there is Leave request from {{ $employee_name }} to be revoked!!</p>
                 <p>Please login to the system so that you can revoke.</p>
                 <p>Regards,</p>
                 <p>HC HUB</p>

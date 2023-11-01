@@ -319,7 +319,56 @@
                                 } else {
                                     echo '<span class="label label-default badge bg-info text-white">' . $row->position . '</span>';
                                 }
-                            } else {
+                            }
+                            elseif ($row->status == 4) {
+                                $levelID = App\Models\LeaveApproval::where('empID', Auth::user()->emp_id)->value('level2');
+                                $levelID3 = App\Models\LeaveApproval::where('empID', Auth::user()->emp_id)->value('level2');
+
+                                if ($row->position == null) {
+                                    $employeePosition = App\Models\Employee::where('emp_id', $levelID)->value('position');
+                                    $employeePosition3 = App\Models\Employee::where('emp_id', $levelID3)->value('position');
+
+                                    // Make sure $employeePosition is not null or empty before querying for $position
+                                    if ($employeePosition) {
+                                        $position = App\Models\Position::where('id', $employeePosition)->value('name');
+                                        $position3 = App\Models\Position::where('id', $employeePosition)->value('name');
+                                        $theposition = $position || $position3;
+                                        echo '<span class="label label-default badge bg-info text-white">Escalated</span>';
+                                        echo '<br>';
+                                        echo '<span class="label label-default badge bg-info text-white">' . 'Pending to ' . $theposition . '</span>';
+                                    } else {
+                                        // Handle the case where $employeePosition is null or empty
+                                        echo '';
+                                    }
+                                } else {
+                                    echo '<span class="label label-default badge bg-info text-white">' . $row->position . '</span>';
+                                }
+                            }
+                            elseif ($row->status == 5) {
+                                $levelID = App\Models\LeaveApproval::where('empID', Auth::user()->emp_id)->value('level2');
+                                $levelID3 = App\Models\LeaveApproval::where('empID', Auth::user()->emp_id)->value('level2');
+
+                                if ($row->position == null) {
+                                    $employeePosition = App\Models\Employee::where('emp_id', $levelID)->value('position');
+                                    $employeePosition3 = App\Models\Employee::where('emp_id', $levelID3)->value('position');
+
+                                    // Make sure $employeePosition is not null or empty before querying for $position
+                                    if ($employeePosition) {
+                                        $position = App\Models\Position::where('id', $employeePosition)->value('name');
+                                        $position3 = App\Models\Position::where('id', $employeePosition)->value('name');
+                                        $theposition = $position || $position3;
+                                        echo '<span class="label label-default badge bg-info text-white">Escalated</span>';
+                                        echo '<br>';
+                                        echo '<span class="label label-default badge bg-info text-white">' . 'Approved by ' . $theposition . '</span>';
+                                    } else {
+                                        // Handle the case where $employeePosition is null or empty
+                                        echo '';
+                                    }
+                                } else {
+                                    echo '<span class="label label-default badge bg-info text-white">' . $row->position . '</span>';
+                                }
+                            }
+                             else {
                                 $levelID = App\Models\LeaveApproval::where('empID', Auth::user()->emp_id)->value('level3');
 
                                 if ($row->position == null) {
@@ -355,29 +404,24 @@
                         <div>
 
                             <?php if ($row->state==1){ ?>
-                            <div class="col-md-12">
-                                <span class="label label-default badge bg-pending text-white">PENDING</span>
-                            </div><?php }
+                                <span class="label label-default badge bg-pending text-white">PENDING REQUEST</span>
+                            <?php }
                       elseif($row->state==0){?>
-                            <div class="col-md-12">
                                 <span class="label badge bg-info text-whites label-info">APPROVED</span>
-                            </div><?php }
+                            <?php }
                       elseif($row->state==2){?>
-                            <div class="col-md-12">
-                                <span class="label badge bg-warning text-whites label-info">PENDING REVOKE </span>
-                            </div><?php }
+                                <span class="label badge bg-warning text-whites label-info">PENDING APPROVAL OF LEAVE REVOKE</span>
+                            <?php }
                       elseif($row->state==3){?>
-                            <div class="col-md-12">
-                                <span class="label badge bg-success text-whites label-info">APPROVED REVOKE </span>
-                            </div><?php }
+                                <span class="label badge bg-success text-whites label-info">APPROVED LEAVE REVOKE </span>
+                            <?php }
                       elseif($row->state==4){?>
-                            <div class="col-md-12">
                                 <span class="label badge bg-danger text-white">DENIED</span>
-                            </div><?php } ?>
+                            <?php } ?>
                         </div>
 
                     </td>
-                    <td class="options-width d-flex">
+                    <td>
                         {{-- start of cancel leave button --}}
                         <?php if ($row->state == 1) { ?>
                         <a href="javascript:void(0)" title="Cancel Leave" class="icon-2 info-tooltip disabled"
