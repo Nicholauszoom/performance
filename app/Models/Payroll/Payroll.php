@@ -2885,6 +2885,8 @@ FROM temp_loan_logs tlg, loan l WHERE l.id = tlg.loanID and payment_date = '" . 
     }
     public function employeePayrollList($date, $table_allowance_logs, $table_deduction_logs, $table_loan_logs, $table_payroll_logs)
     {
+
+        
         $query = "SELECT @s:=@s+1 AS SNo, pl.empID,  CONCAT(e.fname,' ', IF(e.mname != null,e.mname,' '),' ', e.lname) AS empName,
 		IF((SELECT SUM(al.amount) FROM " . $table_allowance_logs . " al WHERE al.empID = e.emp_id AND al.payment_date = '" . $date . "' GROUP BY al.empID)>0, (SELECT SUM(al.amount) FROM " . $table_allowance_logs . " al WHERE al.empID = e.emp_id AND al.payment_date = '" . $date . "' GROUP BY al.empID), 0) AS allowances, p.name as position, d.name as department,
 		pl.salary, pl.meals, pl.pension_employee AS pension, pl.taxdue,
