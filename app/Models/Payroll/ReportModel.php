@@ -199,6 +199,10 @@ FROM employee e, department dpt, position p, branch br, contract ct, pension_fun
     function sum_take_home($date)
     {
 
+        if ($date === null) {
+            return 0;
+        }
+
         $query = "SELECT SUM(salary + allowances-pension-loans-deductions-meals-taxdue) as takehome, SUM(less_takehome) as takehome_less FROM (SELECT  pl.empID,  CONCAT(e.fname,' ', IF(e.mname != null,e.mname,' '),' ', e.lname) AS name,
 	IF((SELECT SUM(al.amount) FROM allowance_logs al WHERE al.empID = e.emp_id AND al.payment_date = '" . $date . "' GROUP BY al.empID)>0, (SELECT SUM(al.amount) FROM allowance_logs al WHERE al.empID = e.emp_id AND al.payment_date = '" . $date . "' GROUP BY al.empID), 0) AS allowances,
 	pl.less_takehome,
@@ -213,6 +217,10 @@ FROM employee e, department dpt, position p, branch br, contract ct, pension_fun
 
     function temp_sum_take_home($date)
     {
+
+        if ($date === null) {
+            return 0;
+        }
 
         $query = "SELECT SUM(salary + allowances-pension-loans-deductions-meals-taxdue) as takehome, SUM(less_takehome) as takehome_less FROM (SELECT  pl.empID,  CONCAT(e.fname,' ', IF(e.mname != null,e.mname,' '),' ', e.lname) AS name,
         IF((SELECT SUM(al.amount) FROM temp_allowance_logs al WHERE al.empID = e.emp_id AND al.payment_date = '" . $date . "' GROUP BY al.empID)>0, (SELECT SUM(al.amount) FROM temp_allowance_logs al WHERE al.empID = e.emp_id AND al.payment_date = '" . $date . "' GROUP BY al.empID), 0) AS allowances,
@@ -2909,6 +2917,9 @@ IF((SELECT SUM(amount)  FROM allowance_logs WHERE allowance_logs.description = a
     {
         // $query =  "DELETE FROM financial_logs where Date(created_at) Like '2023-02-19%'";
         // DB::insert(DB::raw($query));
+        if ($payroll_date === null) {
+            return 0;
+        }
         $calendar = explode('-', $payroll_date);
         $date = !empty($payroll_date)?$calendar[0] . '-' . $calendar[1]:null;
 

@@ -7,6 +7,7 @@ namespace App\Http\Controllers;
 use App\Charts\EmployeeLineChart;
 use App\Helpers\SysHelpers;
 use App\Http\Controllers\Controller;
+use App\Imports\HolidayDataImport;
 use App\Imports\ImportSalaryIncrement;
 use App\Models\AccessControll\Departments;
 use App\Models\AdhocTask;
@@ -21,6 +22,7 @@ use App\Models\EmailNotification;
 use App\Models\EmergencyContact;
 use App\Models\EMPL;
 use App\Models\Employee;
+use App\Models\Leaves;
 use App\Models\EmployeeComplain;
 use App\Models\EmployeeDependant;
 use App\Models\EmployeeDetail;
@@ -34,6 +36,7 @@ use App\Models\Grievance;
 use App\Models\Holiday;
 use App\Models\InputSubmission;
 use App\Models\LeaveApproval;
+use App\Models\LeaveForfeiting;
 //use PHPClamAV\Scanner;
 use App\Models\Payroll\FlexPerformanceModel;
 use App\Models\Payroll\ImprestModel;
@@ -10046,6 +10049,20 @@ class GeneralController extends Controller
     }
     // end of saving new holiday function
 
+    // add holidays from excel
+    public function addHolidayFromExcel(Request $request){
+            // Validate the uploaded file
+            $request->validate([
+                'file' => 'required|mimes:xlsx,xls',
+            ]);
+            // Handle the file upload and data extraction
+            $file = $request->file('file');
+            $import = new HolidayDataImport;
+            Excel::import($import, $file);
+
+            return redirect()->back()->with('success', 'File uploaded and data extracted successfully.');
+    }
+
     // start of edit disciplinary action
     public function editHoliday(Request $request, $id)
     {
@@ -10080,6 +10097,23 @@ class GeneralController extends Controller
         $msg = "Holiday has been save Successfully !";
         return redirect('flex/holidays')->with('msg', $msg);
     }
+    public function updateLeaveForfeitings(Request $request)
+    {
+        request()->validate(
+            [
+                'emp_id' => 'required'            ]
+        );
+
+        $emp_id = $request->emp_id;
+        $leaveForfeiting = LeaveForfeiting::where('empID', $emp_id)->first();
+        $leaveForfeiting->opening_balance = $request->opening_balance;
+        $leaveForfeiting->days = $request->days;
+        $leaveForfeiting->update();
+
+        $msg = "Employee Leave Forfeiting has been save Successfully !";
+        return back()->with('msg',$msg);
+
+    }
     // end of update holiday function
 
     // For Updating Holiday Year
@@ -10096,6 +10130,38 @@ class GeneralController extends Controller
         }
         return redirect('flex/holidays/')->with('msg', 'Holiday was Updated successfully !');
     }
+
+    public function updateOpeningBalance()
+    {
+        $employees = Employee::get();
+
+        $today = date('Y-m-d');
+        $year = date('Y');
+        $employeeHiredate = explode('-', Auth::user()->hire_date);
+        $employeeHireYear = $employeeHiredate[0];
+        $employeeDate = '';
+
+        if ($employeeHireYear == $year) {
+            $employeeDate = Auth::user()->hire_date;
+        } else {
+            $employeeDate = $year . '-01-01';
+        }
+
+        foreach ($employees as $value) {
+            $opening_balance = $this->attendance_model->getLeaveBalance($value->emp_id, $employeeDate, $year . '-12-31');
+
+            // Find the LeaveForfeiting model for the employee or create a new one if it doesn't exist
+            $leave_forfeit = LeaveForfeiting::firstOrNew(['empID' => $value->emp_id]);
+            $leave_forfeit->opening_balance = $opening_balance;
+            $leave_forfeit->nature = 1; // Replace attribute1 with your actual attribute names
+            $leave_forfeit->opening_balance_year =  $year;
+            $leave_forfeit->save();
+        }
+
+        return redirect('flex/attendance/leaveforfeiting/')->with('msg', 'Opening Balance was Updated successfully!');
+    }
+
+
 
     // start of delete holiday function
     public function deleteHoliday($id)
@@ -10390,6 +10456,34 @@ class GeneralController extends Controller
         // dd( $data['approval']);
         $data['child'] = 'Edit Leave Approval';
         return view('setting.edit-leave-approval', $data);
+    }
+    public function editLeaveForfeitings(Request $request, $id)
+    {
+        // dd($id);
+        $data['leaveForfeitings'] = LeaveForfeiting::with('employee')->where('empID', $id)->first();
+        $data['employees'] = Employee::get();
+        $data['parent'] = 'Settings';
+        $data['child'] = 'Edit Leave Forfeiting';
+        $today = date('Y-m-d');
+        $arryear = explode('-',$today);
+        $year = $arryear[0];
+        $employeeDate = $year.('-01-01');
+
+        $data['leaveBalance'] = $this->attendance_model->getLeaveBalance($id, $employeeDate, date('Y-m-d'));
+
+
+        $natureId = 1;
+        $currentYear = date('Y');
+        $startDate = $currentYear . '-01-01';
+        $endDate = $currentYear . '-12-31'; // Current date
+        $daysSpent = Leaves::where('empId', $id)
+            ->where('nature', $natureId)
+            ->whereBetween('created_at', [$startDate, $endDate])
+            ->where('state', 0)
+            ->sum('days');
+
+        $data['daysSpent'] = $daysSpent;
+        return view('app.edit-leave-forfeitings', $data);
     }
 
     // For Deleting Leave Approval

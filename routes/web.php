@@ -409,6 +409,9 @@ Route::middleware('auth')->middleware([Setting::class])->group(function(){
     Route::any('/my-leaves','myLeaves')->name('flex.my-leaves'); //atendance controller
     Route::post('/save_leave' ,'saveLeave')->name('attendance.saveLeave'); //atendance controller
     Route::any('/cancelLeave/{id}' ,'cancelLeave')->name('attendance.cancelLeave');
+    Route::any('/revokeLeave/{id}' ,'revokeLeave')->name('attendance.revokeLeave');
+    Route::post('/revokeApprovedLeave', 'revokeApprovedLeave')->name('attendance.revokeApprovedLeave');
+    Route::any('/revokeApprovedLeaveAdmin/{id}', 'revokeApprovedLeaveAdmin')->name('attendance.revokeApprovedLeaveAdmin');
     //for manager
     Route::any('/leave' ,'leave')->name('attendance.leave');
     Route::any('/annualleavebalance/{year}' ,'annuaLeaveSummary')->name('attendance.annualleavebalance');
@@ -739,9 +742,12 @@ Route::middleware('auth')->middleware([Setting::class])->group(function(){
           Route::any('/holidays','holidays')->name('flex.holidays');
           Route::any('/add-holiday','addHoliday')->name('flex.saveHoliday');
           Route::put('/update-holiday','updateHoliday')->name('flex.updateHoliday');
+          Route::put('/update-leave-forfeitings','updateLeaveForfeitings')->name('flex.updateLeaveForfeitings');
           Route::any('/edit-holiday/{id}','editHoliday')->name('flex.editholiday');
           Route::any('/delete-holiday/{id}','deleteHoliday')->name('flex.deleteholiday');
           Route::any('/update-all-holidays','updateHolidayYear')->name('flex.updateHolidayYear');
+          Route::any('/update-all-opening-balance','updateOpeningBalance')->name('flex.updateOpeningBalance');
+          Route::post('/add-holiday-from-file','addHolidayFromExcel')->name('flex.addHolidayFromExcel');
           // end of holidays routes
 
 
@@ -773,6 +779,7 @@ Route::middleware('auth')->middleware([Setting::class])->group(function(){
          Route::any('/leave-approvals','LeaveApprovals')->name('flex.leave-approval');
          Route::post('/save-leave-approval','saveLeaveApproval')->name('flex.save-leave-approval');
          Route::any('/edit-leave-approval/{id}','editLeaveApproval')->name('flex.editLeaveApproval');
+         Route::any('/edit-leave-forfeitings/{id}','editLeaveForfeitings')->name('flex.editLeaveForfeitings');
          Route::put('/update-leave-approval','updateLeaveApproval')->name('flex.update-leave-approval');
          Route::any('/delete-leave-approval/{id}','deleteLeaveApproval')->name('flex.delete-leave-approval');
 

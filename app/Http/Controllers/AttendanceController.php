@@ -184,30 +184,12 @@ class AttendanceController extends Controller
 
     $employeeDate = $year.('-01-01');
 
-
-
-
-    $this->authenticateUser('view-unpaid-leaves');
-    // $data['my_leave'] =  $this->attendance_model->my_leavereport($empID);
     $data['leaves'] =Leaves::where('state',0)->latest()->get();
 
     foreach($leaveforfeitings as $key => $leaveforfeit){
      $data['leaveForfeiting'][$key]['leaveBalance'] = $this->attendance_model->getLeaveBalance($leaveforfeit->empID,$employeeDate, date('Y-m-d'));
     }
 
-    // dd($data['leaveForfeiting']);
-
-
-
-
-
-    if(session('conf_leave')!='' && session('line')!='' ){
-    $data['other_leave'] =  $this->attendance_model->leavereport_hr();
-    }elseif(session('line')!=''){
-    $data['other_leave'] =  $this->attendance_model->leavereport_line($empID);
-    }elseif(session('conf_leave')!=''){
-    $data['other_leave'] =  $this->attendance_model->leavereport_hr();
-    }
     $data['title']="Leaves";
     $data['today'] = date('Y-m-d');
     return view('app.leave_forfeiting_report', $data);
@@ -235,10 +217,14 @@ class AttendanceController extends Controller
       $data['leave_types'] = LeaveType::all();
 
 
-      $data['leaves'] =Leaves::whereNot('state',0)->orderBy('id','DESC')->get();
+      $data['leaves'] =Leaves::where('state',1)->orderBy('id','DESC')->get();
 
 
-      $data['approved_leaves'] =Leaves::where('state',0)->orderBy('id','DESC')->get();
+      $data['approved_leaves'] =Leaves::where('state', 0)
+                                ->orderBy('id','DESC')->get();
+      $data['revoked_leaves'] =Leaves::where('revoke_status', 0)
+                                 ->orWhere('revoke_status', 1)
+                                ->orderBy('id','DESC')->get();
       $full_names = []; // Initialize an array to store full names
       $appliedBy=[];
     //  dd($data['leaves']);
@@ -359,7 +345,7 @@ $data['leave_types'] = LeaveType::all();
             $data['employees'] =EMPL::where('emp_id','!=',Auth::user()->emp_id)->whereNot('state',4)->get();
             $data['leave_days_entitled'] =Employee::where('emp_id','!=',Auth::user())->value('leave_days_entitled');
             $data['balance_brought_foward'] =LeaveForfeiting::where('empID','!=',Auth::user())->value('opening_balance');
-            $data['leaves'] =Leaves::get();
+            // $data['leaves'] =Leaves::get();
 
 
             // For Working days
@@ -391,10 +377,6 @@ $data['leave_types'] = LeaveType::all();
             $data['outstandingLeaveBalance'] = $this->attendance_model->getAnnualOutstandingBalance(Auth::user()->emp_id,$employeeDate, date('Y-m-d'));
             $data['annualLeaveBalance'] = $this->getspentDays(Auth::user()->emp_id, 1);
             $data['checking'] = $this->annuaLeaveSummary($year);
-            // $data['compassionateLeaveBalance'] = $this->getRemainingDaysForLeave(Auth::user()->emp_id, 3);
-            // $data['maternityLeaveBalance'] = $this->getRemainingDaysForLeave(Auth::user()->emp_id, 4);
-            // $data['paternityLeaveBalance'] =$this->getRemainingDaysForLeave(Auth::user()->emp_id, 5);
-            // $data['studyLeaveBalance'] = $this->getRemainingDaysForLeave(Auth::user()->emp_id, 6);
             $data['leave_type'] = $this->attendance_model->leave_type();
 
 
@@ -407,11 +389,30 @@ $data['leave_types'] = LeaveType::all();
      public function annuaLeaveSummary($year) {
      
         $data = [];
-        
-        $data['Day Entitled'] = Employee::where('emp_id', Auth::user()->emp_id)->value('leave_days_entitled');
+        $data['Days Entitled'] = Employee::where('emp_id', Auth::user()->emp_id)->value('leave_days_entitled');
         $openingBalance =  LeaveForfeiting::where('empID', Auth::user()->emp_id)->value('opening_balance');
-        $forfeitDays =  LeaveForfeiting::where('empID', Auth::user()->emp_id)->value('days');
+        if($year > date('Y')){
+            $forfeitDays = 0;
+            $data['Opening Balance'] = 0;
+        }
+        elseif($year < date('Y')){
+            $forfeitDays =  LeaveForfeiting::where('empID', Auth::user()->emp_id)
+                          ->where('forfeiting_year', $year)
+                        ->value('days');
+        $openingBalance = LeaveForfeiting::where('empID', Auth::user()->emp_id)->where('opening_balance_year', $year)->value('opening_balance');
+
         $data['Opening Balance'] = $openingBalance ?? 0;
+
+                    }
+        else{
+            $forfeitDays =  LeaveForfeiting::where('empID', Auth::user()->emp_id)
+                        ->value('days');
+                        $openingBalance = LeaveForfeiting::where('empID', Auth::user()->emp_id)->value('opening_balance');
+
+             $data['Opening Balance'] = $openingBalance ?? 0;
+        }
+
+        // $data['Opening Balance'] = $openingBalance ?? 0;
         $data['Days Forfeited'] = $forfeitDays ?? 0;
 
         $employeeHiredate = explode('-', Auth::user()->hire_date);
@@ -442,7 +443,7 @@ $data['leave_types'] = LeaveType::all();
 
         $outstandingLeaveBalance = $daysAccrued ;
         $data['Days Accrued'] = number_format($daysAccrued ?? 0, 2) ;
-        $data['Days Spent	'] = $this->getspentDays(Auth::user()->emp_id, $year);
+        $data['Days Taken	'] = $this->getspentDays(Auth::user()->emp_id, $year);
         $data['Outstanding Leave Balance'] = number_format($outstandingLeaveBalance ?? 0, 2);
         return response()->json($data);
     }
@@ -542,21 +543,32 @@ $data['leave_types'] = LeaveType::all();
 
    public function getspentDays($employeeId, $year) {
         $natureId = 1;
+        $currentYear = date('Y');
+
         if($year != date('Y')){
             $startDate = $year . '-01-01'; // Start of the current year
             $endDate = $year . '-12-31';
+
+            $daysSpent = Leaves::where('empId', $employeeId)
+            ->where('nature', $natureId)
+            ->whereBetween('created_at', [$startDate, $endDate])
+            ->whereNot('reason', 'Automatic applied!')
+            ->where('state',0)
+            ->sum('days');
         }
         else {
         $startDate = $year . '-01-01'; // Start of the current year
-        $endDate = date('Y-m-d');// Current date
-        }
+        $endDate = $currentYear . '-12-31';// Current date
 
         $daysSpent = Leaves::where('empId', $employeeId)
-            ->where('nature', $natureId)
-            ->whereBetween('created_at', [$startDate, $endDate])
-            ->where('state',0)
-            ->whereNot('reason','Automatic applied!')
-            ->sum('days');
+        ->where('nature', $natureId)
+        ->whereBetween('created_at', [$startDate, $endDate])
+        ->whereNot('reason', 'Automatic applied!')
+        ->where('state',0)
+        ->sum('days');
+        }
+
+
         return $daysSpent;
     }
 
@@ -1599,6 +1611,130 @@ public function saveLeave(Request $request) {
       }
    }
 
+   public function revokeLeave($id){
+    $particularLeave = Leaves::where('id', $id)->first();
+    $data['startDate'] = $particularLeave->start;
+    $data['id'] = $particularLeave->id;
+    $data['endDate'] = $particularLeave->end;
+    $data['days'] = $particularLeave->days;
+    $data['nature'] = LeaveType::where('id', $particularLeave->nature)->value('type');
+    $data['leaveReason'] = $particularLeave->reason;
+    $data['mobile'] = $particularLeave->mobile;
+    $data['expectedDate'] = $particularLeave->enddate_revoke;
+    $data['revoke_status'] = $particularLeave->revoke_status;
+    $data['leaveAddress'] = $particularLeave->leave_address;
+    $login = Auth()->user()->empid;
+    if($particularLeave->level2 == $login || $particularLeave->level3 == $login){
+        $data['revoke_reason'] = $particularLeave->revoke_reason;
+    }else{
+        $data['revoke_reason'] == null;
+    }
+    if($particularLeave->sub_category > 0){
+        $data['sub_category'] = LeaveSubType::where('id', $particularLeave->sub_category)->value('name');
+    }else{
+        $data['sub_category'] = 0;
+
+    }
+    $data['approvedBy'] = $particularLeave->position;
+
+    return view('my-services/revokeLeave', $data);
+   }
+
+
+        public function revokeApprovedLeave(Request $request) {
+            $id = $request->input('terminationid');
+            $message = $request->input('comment');
+            $expectedDate = $request->input('expectedDate');
+
+            $particularLeave = Leaves::where('id', $id)->first();
+
+            if ($particularLeave) {
+                $particularLeave->state = 2;
+                $particularLeave->revoke_reason = $message;
+                $particularLeave->enddate_revoke = $expectedDate;
+                $particularLeave->revoke_status = 0;
+                $particularLeave->status = 4;
+                $particularLeave->revoke_created_at = now();
+                $particularLeave->save();
+            }
+
+            $leave_type=LeaveType::where('id',$particularLeave->nature)->first();
+            $type_name=$leave_type->type;
+
+             //fetch Line manager data from employee table and send email
+             $linemanager =  LeaveApproval::where('empID',$particularLeave->empID)->first();
+             $linemanager_data = SysHelpers::employeeData($linemanager->level2);
+             $employee_data = SysHelpers::employeeData($particularLeave->empID);
+             $fullname = $linemanager_data['full_name'];
+             $email_data = array(
+                 'subject' => 'Employee Leave Revoke',
+                 'view' => 'emails.linemanager.leave-revoke',
+                 'email' => $linemanager_data['email'],
+                 'full_name' => $fullname,
+                 'employee_name'=>$employee_data['full_name'],
+                 'next' => parse_url(route('attendance.leave'), PHP_URL_PATH)
+             );
+
+             try {
+
+              Notification::route('mail', $linemanager_data['email'])->notify(new EmailRequests($email_data));
+
+                } catch (Exception $exception) {
+                    $msg=$type_name." Leave Revoke Request  Has been Requested But Email is not sent(SMTP Problem)!";
+                        return  redirect('flex/attendance/leave')->with('msg', $msg);
+
+                }
+                $msg=$type_name." Leave Request  Has been Requested Successfully!";
+                return  redirect('flex/attendance/leave')->with('msg', $msg);
+
+        }
+
+
+   public function revokeApprovedLeaveAdmin($id) {
+    $particularLeave = Leaves::where('id', $id)->first();
+
+    if ($particularLeave) {
+        $particularLeave->state = 3;
+        $particularLeave->revoke_status = 1;
+        $particularLeave->status = 5;
+        if($particularLeave->enddate_revoke){
+            $particularLeave->end = $particularLeave->enddate_revoke;
+        }
+        $position = Position::where('id', Employee::where('emp_id', Auth()->user()->emp_id)->value('position'))->value('name');
+        $particularLeave->position = 'Leave Revoke Approved by '. $position;
+        $particularLeave->level3 = Auth()->user()->emp_id;
+        $particularLeave->revoke_created_at = now();
+        $particularLeave->save();
+
+
+        $emp_data = SysHelpers::employeeData($particularLeave->empID);
+
+        $email_data = array(
+            'subject' => 'Employee Leave Revoke Approval',
+            'view' => 'emails.linemanager.approved_revoke_leave',
+            'email' => $emp_data->email,
+            'full_name' => $emp_data->fname,' '.$emp_data->mname.' '.$emp_data->lname,
+        );
+
+        try {
+
+            Notification::route('mail', $emp_data->email)->notify(new EmailRequests($email_data));
+
+            PushNotificationController::bulksend("Leave Revoke",
+            "Your Revoke Leave request is successful granted",
+          "",$particularLeave->empID);
+        } catch (Exception $exception) {
+        $msg = " Revoke Leave Request Has been Approved Successfully But Email is not sent(SMPT problem) !";
+        // return redirect('flex/view-action/'.$emp,$data)->with('msg', $msg);
+        return redirect('flex/attendance/leave')->with('msg', $msg);
+        }
+    }
+
+    return response()->json(['status' => 'NOT OK']);
+}
+
+
+
     public function recommendLeave($id)
       {
 
@@ -1844,40 +1980,12 @@ public function saveLeave(Request $request) {
                 'file' => 'required|mimes:xlsx,xls',
             ]);
             // Handle the file upload and data extraction
+            $year = $request->forfeit_year;
             $file = $request->file('file');
-            $import = new ClearLeavesImport;
-            Excel::import($import, $file);
-
+            Excel::import(new ClearLeavesImport($year), $file);
 
             return redirect()->back()->with('success', 'File uploaded and data extracted successfully.');
         }
-
-    // // Handle the file upload and data extraction
-    // $file = $request->file('file');
-    //     $employees=EMPL::get();
-    //     foreach ($employees as $employee) {
-    //             $date=date('Y').'-'.'01-01';
-    //             $leave_balance = $this->attendance_model->getLeaveBalance($employee->emp_id,$employee->hire_date, $date);
-    //             $leaves=new Leaves();
-    //             $emp=$employee->emp_id;
-    //             $leaves->empID = $emp;
-    //             $leaves->start =Date('Y-m-d') ;
-    //             $leaves->end=Date('Y-m-d') ;
-    //             $leaves->leave_address="auto";
-    //             $leaves->mobile = $employee->mobile;
-    //             $leaves->nature = 1;
-    //             $leaves->remaining=5;
-    //             $leaves->days=$leave_balance ;
-    //             $leaves->reason="Automatic applied!";
-    //             $leaves->position="Default Apllication";
-    //             $leaves->status=3;
-    //             $leaves->state=0;
-    //             $leaves->save();
-    // }
-
-    // return back();
-    // }
-
 
 
     public function leave_remarks($id)
