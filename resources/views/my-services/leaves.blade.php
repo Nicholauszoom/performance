@@ -32,7 +32,7 @@
             <h5 class="text-warning">Apply Leave</h5>
         </div>
         <div class="row">
-            <div class="col-md-4">
+            <div class="col-md-3">
                 <div class="card-body">
                     <div class="card-header">
                         <h5 class="card-title">Annual Leave Summary per Year</h5>
@@ -91,7 +91,7 @@
 
             <div class="col-md-1" style="border-left: 2px solid rgba(0, 0, 0, 0.13); height: 550px; width: 2px"></div>
 
-            <div class=" col-md-7">
+            <div class=" col-md-8">
                 <div class="card-body">
                     <form autocomplete="off" action="{{ url('flex/attendance/save_leave') }}" method="post"
                         enctype="multipart/form-data">
