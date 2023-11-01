@@ -2704,9 +2704,7 @@ as gross,
     public function payrollTotals($table, $payrollMonth)
     {
 
-        if ($payrollMonth === null) {
-            return 0;
-        }
+        
         $query = "SELECT SUM(less_takehome) as takehome_less, SUM(salary) as salary, SUM(pension_employee) as pension_employee, SUM(pension_employer) as pension_employer,  SUM(medical_employer) as medical_employer, SUM(medical_employee) as medical_employee, SUM(allowances) as allowances, SUM(taxdue) as taxdue, SUM(meals) as meals, SUM(sdl) as sdl, SUM(wcf) as wcf FROM " . $table . " WHERE payroll_date = '" . $payrollMonth . "'";
 
         return DB::select(DB::raw($query));
@@ -2714,9 +2712,7 @@ as gross,
     public function staffPayrollTotals($table, $payrollMonth)
     {
 
-        if ($payrollMonth === null) {
-            return 0;
-        }
+        
         $query = "SELECT SUM(pl.less_takehome) as takehome_less, SUM(pl.salary) as salary, SUM(pl.pension_employee) as pension_employee, SUM(pl.pension_employer) as pension_employer,  SUM(pl.medical_employer) as medical_employer, SUM(pl.medical_employee) as medical_employee, SUM(pl.allowances) as allowances, SUM(pl.taxdue) as taxdue, SUM(pl.meals) as meals, SUM(pl.sdl) as sdl, SUM(pl.wcf) as wcf
         FROM " . $table . " as pl, employee e where e.emp_id = pl.empID and e.contract_type != 2 and payroll_date = '" . $payrollMonth . "'";
         return DB::select(DB::raw($query));
@@ -2724,9 +2720,7 @@ as gross,
     public function temporaryPayrollTotals($table, $payrollMonth)
     {
 
-        if ($payrollMonth === null) {
-            return 0;
-        }
+        
         $query = "SELECT SUM(pl.less_takehome) as takehome_less, SUM(pl.salary) as salary, SUM(pl.pension_employee) as pension_employee, SUM(pl.pension_employer) as pension_employer,  SUM(pl.medical_employer) as medical_employer, SUM(pl.medical_employee) as medical_employee, SUM(pl.allowances) as allowances, SUM(pl.taxdue) as taxdue, SUM(pl.meals) as meals, SUM(pl.sdl) as sdl, SUM(pl.wcf) as wcf
         FROM " . $table . " as pl, employee e where e.emp_id = pl.empID and e.contract_type = 2 and payroll_date = '" . $payrollMonth . "'";
         return DB::select(DB::raw($query));
@@ -2734,18 +2728,14 @@ as gross,
     public function temp_payrollTotals($table, $payrollMonth)
     {
 
-        if ($payrollMonth === null) {
-            return 0;
-        }
+        
         $query = "SELECT SUM(salary) as salary, SUM(pension_employee) as pension_employee, SUM(pension_employer) as pension_employer,  SUM(medical_employer) as medical_employer, SUM(medical_employee) as medical_employee, SUM(allowances) as allowances, SUM(taxdue) as taxdue, SUM(meals) as meals, SUM(sdl) as sdl, SUM(wcf) as wcf FROM " . $table . " WHERE payroll_date = '" . $payrollMonth . "'";
         return DB::select(DB::raw($query));
     }
     public function total_allowances($table, $payrollMonth)
     {
 
-        if ($payrollMonth === null) {
-            return 0;
-        }
+        
         $query = "SUM(amount) as amount";
         $row = DB::table($table)->where("payment_date", $payrollMonth)->select(DB::raw($query))->first();
         return $row->amount;
@@ -2753,36 +2743,28 @@ as gross,
     public function total_loans($table, $payrollMonth)
     {
 
-        if ($payrollMonth === null) {
-            return 0;
-        }
+        
         $query = "SELECT SUM(paid) as paid, SUM(remained) as remained FROM  " . $table . " WHERE payment_date = '" . $payrollMonth . "'";
         return DB::select(DB::raw($query));
     }
     public function total_loans_separate($table, $payrollMonth)
     {
 
-        if ($payrollMonth === null) {
-            return 0;
-        }
+        
         $query = "SELECT sum(tlg.paid) as paid, sum(tlg.remained) as remained, l.description
 FROM temp_loan_logs tlg, loan l WHERE l.id = tlg.loanID and payment_date = '" . $payrollMonth . "' group by l.description";
         return DB::select(DB::raw($query));
     }
     public function total_heslb($table, $payrollMonth)
     {
-        if ($payrollMonth === null) {
-            return 0;
-        }
+        
         $query = "SELECT SUM(ll.paid) as paid FROM  " . $table . " ll, loan lo WHERE ll.payment_date = '" . $payrollMonth . "' AND ll.loanID = lo.id AND lo.type = 3";
         $row = DB::select(DB::raw($query));
         return $row[0]->paid;
     }
     public function total_deductions($table, $payrollMonth)
     {
-        if ($payrollMonth === null) {
-            return 0;
-        }
+        
         $query = "SUM(paid) as paid";
         $row = DB::table($table)->where('payment_date', $payrollMonth)->select(DB::raw($query))->first();
         return $row->paid;
@@ -2790,9 +2772,7 @@ FROM temp_loan_logs tlg, loan l WHERE l.id = tlg.loanID and payment_date = '" . 
     public function total_bonuses($payrollMonth)
     {
 
-        if ($payrollMonth === null) {
-            return 0;
-        }
+        
         $query = "SUM(amount) as amount";
         $row = DB::table('bonus_logs')->where('payment_date', $payrollMonth)->select(DB::raw($query))->first();
         return $row->amount;
@@ -2800,9 +2780,7 @@ FROM temp_loan_logs tlg, loan l WHERE l.id = tlg.loanID and payment_date = '" . 
     public function total_overtimes($payrollMonth)
     {
 
-        if ($payrollMonth === null) {
-            return 0;
-        }
+        
         $query = "SUM(amount) as amount";
         $row = DB::table('overtime_logs')->where('payment_date', $payrollMonth)->select(DB::raw($query))->first();
         return $row->amount;
@@ -2810,54 +2788,42 @@ FROM temp_loan_logs tlg, loan l WHERE l.id = tlg.loanID and payment_date = '" . 
     public function payroll_month_info($payrollMonth)
     {
 
-        if ($payrollMonth === null) {
-            return 0;
-        }
+        
         $query = "SELECT * FROM payroll_months WHERE payroll_date = '" . $payrollMonth . "'";
         return DB::select(DB::raw($query));
     }
     public function payroll_review($empID, $table, $payrollMonth)
     {
 
-        if ($payrollMonth === null) {
-            return 0;
-        }
+        
         $query = "SELECT CONCAT(e.fname,' ', IF(e.mname != null,e.mname,' '),' ', e.lname) AS empName, b.name as bank, bb.name as branch, cbr.name as company_branch, bb.swiftcode, pf.name as pensionFundName, pf.*,  tpl.* FROM employee e, " . $table . " tpl,  bank_branch bb, bank b, pension_fund pf, branch cbr WHERE tpl.empID = e.emp_id and e.state = 1 AND bb.id= tpl.bank_branch AND b.id = tpl.bank AND tpl.pension_fund = pf.id  AND cbr.id = tpl.branch AND tpl.empID = '" . $empID . "' AND tpl.payroll_date = '" . $payrollMonth . "'";
         return DB::select(DB::raw($query));
     }
     public function allowances_review($empID, $table, $payrollMonth)
     {
 
-        if ($payrollMonth === null) {
-            return 0;
-        }
+        
         $query = "SELECT @s:=@s+1 AS SNo,  tal.* FROM " . $table . " tal,(SELECT @s:=0) AS s WHERE tal.empID = '" . $empID . "' AND tal.payment_date = '" . $payrollMonth . "' ";
         return DB::select(DB::raw($query));
     }
     public function deductions_review($empID, $table, $payrollMonth)
     {
 
-        if ($payrollMonth === null) {
-            return 0;
-        }
+        
         $query = "SELECT @s:=@s+1 AS SNo,  tdl.* FROM " . $table . " tdl,(SELECT @s:=0) AS s WHERE tdl.empID = '" . $empID . "' AND tdl.payment_date = '" . $payrollMonth . "'";
         return DB::select(DB::raw($query));
     }
     public function loans_review($empID, $table, $payrollMonth)
     {
 
-        if ($payrollMonth === null) {
-            return 0;
-        }
+        
         $query = "SELECT @s:=@s+1 AS SNo, tll.paid as pre_paid,  tll.*, l.* FROM " . $table . " tll, loan l,(SELECT @s:=0) AS s WHERE tll.loanID = l.id AND l.empID = '" . $empID . "' AND tll.payment_date = '" . $payrollMonth . "'";
         return DB::select(DB::raw($query));
     }
     public function total_allowances_review($empID, $table, $payrollMonth)
     {
 
-        if ($payrollMonth === null) {
-            return 0;
-        }
+        
         $query = "SUM(tal.amount) as total_al  WHERE tal.empID = '" . $empID . "' AND tal.payment_date = '" . $payrollMonth . "'";
         $table2 = $table . "as tal";
         $row = DB::table($table2)->select(DB::raw($query))->first();
@@ -2866,9 +2832,7 @@ FROM temp_loan_logs tlg, loan l WHERE l.id = tlg.loanID and payment_date = '" . 
     public function total_deductions_review($empID, $table, $payrollMonth)
     {
 
-        if ($payrollMonth === null) {
-            return 0;
-        }
+        
         $query = "SUM(tdl.paid) as total_de WHERE tdl.empID = '" . $empID . "' AND tdl.payment_date = '" . $payrollMonth . "'";
         $table2 = $table . "as tdl";
         $row = DB::table($table2)->select(DB::raw($query))->first();
@@ -2877,9 +2841,7 @@ FROM temp_loan_logs tlg, loan l WHERE l.id = tlg.loanID and payment_date = '" . 
     public function total_loans_review($empID, $table, $payrollMonth)
     {
 
-        if ($payrollMonth === null) {
-            return 0;
-        }
+        
         $query = "SELECT SUM(amount_last_paid) as total_last_paid, SUM(pre_paid) as total_paid_currently, SUM(amount) as total_loans, SUM(remained) as total_remained FROM (SELECT tll.paid as pre_paid,  tll.remained, l.amount, l.amount_last_paid  FROM " . $table . " tll, loan l WHERE tll.loanID = l.id AND l.empID = '" . $empID . "'  AND tll.payment_date = '" . $payrollMonth . "') AS parent_query ";
         return DB::select(DB::raw($query));
     }
@@ -3109,9 +3071,7 @@ FROM temp_loan_logs tlg, loan l WHERE l.id = tlg.loanID and payment_date = '" . 
     public function arrearsMonth($payrollMonth)
     {
 
-        if ($payrollMonth === null) {
-            return 0;
-        }
+        
         $query = "SELECT sum(amount) as arrear_payment from arrears where payroll_date = '" . $payrollMonth . "'";
         $row = DB::select(DB::raw($query));
         if ($row[0]) {
