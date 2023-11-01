@@ -220,6 +220,7 @@ class AttendanceController extends Controller
       //$this->authenticateUser('view-leave');
       $data['myleave'] = Leaves::where('empID', Auth::user()->emp_id)->get();
 
+
       if (session('appr_leave')) {
           $data['otherleave'] = $this->attendance_model->leave_line(session('emp_id'));
       } else {
@@ -399,12 +400,14 @@ $data['leave_types'] = LeaveType::all();
 
             $data['parent'] = 'My Services';
             $data['child'] = 'Leaves';
-            // dd($data);
+           
          return view('my-services/leaves', $data);
      }
 
      public function annuaLeaveSummary($year) {
+     
         $data = [];
+        
         $data['Day Entitled'] = Employee::where('emp_id', Auth::user()->emp_id)->value('leave_days_entitled');
         $openingBalance =  LeaveForfeiting::where('empID', Auth::user()->emp_id)->value('opening_balance');
         $forfeitDays =  LeaveForfeiting::where('empID', Auth::user()->emp_id)->value('days');
@@ -426,7 +429,7 @@ $data['leave_types'] = LeaveType::all();
             }
             $endDate = $year . '-12-31';
             $daysAccrued = $this->attendance_model->getLeaveBalance(Auth::user()->emp_id, $employeeDate, $endDate);
-
+            
         }else {
             if ($employeeHireYear == $year) {
                 $employeeDate = Auth::user()->hire_date;
@@ -552,6 +555,7 @@ $data['leave_types'] = LeaveType::all();
             ->where('nature', $natureId)
             ->whereBetween('created_at', [$startDate, $endDate])
             ->where('state',0)
+            ->whereNot('reason','Automatic applied!')
             ->sum('days');
         return $daysSpent;
     }

@@ -54,21 +54,38 @@ class LeaveController extends Controller
     
 
     $id=auth()->user()->emp_id;
+    $today = date('Y-m-d');
+    $arryear = explode('-',$today);
+    $year = $arryear[0];
+
+    $employeeHiredate = explode('-', Auth::user()->hire_date);
+    $employeeHireYear = $employeeHiredate[0];
+    $employeeDate =  '';
+
+    if($employeeHireYear == $year  ){
+        $employeeDate = Auth::user()->hire_date;
+
+    }else{
+        $employeeDate = $year.('-01-01');
+    }
    
+
     $annualleaveBalance = $this->attendance_model->getLeaveBalance(auth()->user()->emp_id,auth()->user()->hire_date, date('Y-m-d'));
-    $active_leaves=Leaves::where('empID',auth()->user()->emp_id)->with('type:id,type,max_days')->get();
+    $active_leaves=Leaves::where('empID',auth()->user()->emp_id)->with('type:id,type,max_days')->whereNot('reason','Automatic applied!')->get();
  
   //   $data['otherleave'] = $this->attendance_model->other_leaves($id);
   //   $data['otherleaves'] = $this->attendance_model->leave_line($id);
   //  //dd($data);
     $data = json_decode($active_leaves, true); // Decode the JSON data into an array
     $data= array_reverse($data); 
+    $annualleaveBalance2 = $this->attendance_model->getLeaveBalance(Auth::user()->emp_id,$employeeDate, date('Y-m-d'));
+   
     // Loop through each object in the array
     foreach ($data as &$object) {
         // Add the accrued days data to the current object
     
         
-        $object['accrued_days'] = $annualleaveBalance;
+        $object['accrued_days'] = $annualleaveBalance2;
     }
     
     // Encode the modified array as JSON and return it as the API response
@@ -650,10 +667,10 @@ class LeaveController extends Controller
 
 
 
-            $leave->status=3;
+            $leave->status=2;
             $leave->state=0;
             $leave->level1=Auth()->user()->emp_id;
-            $leave->position='Recommended by '. $position->name;
+            $leave->position='Approved by '. $position->name;
             $leave->updated_at= new DateTime();
             $leave->update();
 
@@ -678,7 +695,7 @@ class LeaveController extends Controller
             $leave->status=3;
             $leave->state=0;
             $leave->level2=Auth()->user()->emp_id;
-            $leave->position='Recommended by '. $position->name;
+            $leave->position='Approved by '. $position->name;
             $leave->updated_at= new DateTime();
             $leave->update();
           }
@@ -715,6 +732,27 @@ class LeaveController extends Controller
            return response(['msg'=>$msg,
           'status'=>'error'
           ],400);
+        }
+        $emp_data = SysHelpers::employeeData($empID);
+        $email_data = array(
+            'subject' => 'Employee Overtime Approval',
+            'view' => 'emails.linemanager.approved_leave',
+            'email' => $emp_data->email,
+            'full_name' => $emp_data->fname,' '.$emp_data->mname.' '.$emp_data->lname,
+        );
+
+        try {
+          PushNotificationController::bulksend("Leave Approval",
+        "Your Leave request is successful granted",
+      "",$empID);
+
+            Notification::route('mail', $emp_data->email)->notify(new EmailRequests($email_data));
+
+        } catch (Exception $exception) {
+
+        $msg = "Leave Request Has been Approved Successfully But Email is not sent(SMPT problem) !";
+        // return redirect('flex/view-action/'.$emp,$data)->with('msg', $msg);
+        return redirect('flex/attendance/leave')->with('msg', $msg);
         }
 
 
@@ -1046,6 +1084,28 @@ return response(['msg'=>$msg],400);
                     $type_name=$leave_type->type;
     
                     $msg=$type_name." Leave Request  Has been Requested Successfully!";
+                    $linemanager =  LeaveApproval::where('empID',$empID)->first();
+                    $linemanager_data = SysHelpers::employeeData($linemanager->level1);
+                    $employee_data = SysHelpers::employeeData($empID);
+                    $fullname = $linemanager_data['full_name'];
+                    $email_data = array(
+                        'subject' => 'Employee Leave Approval',
+                        'view' => 'emails.linemanager.leave-approval',
+                        'email' => $linemanager_data['email'],
+                        'full_name' => $fullname,
+                        'employee_name'=>$employee_data['full_name'],
+                        'next' => parse_url(route('attendance.leave'), PHP_URL_PATH)
+                    );
+     
+                    try {
+     
+                     Notification::route('mail', $linemanager_data['email'])->notify(new EmailRequests($email_data));
+     
+                 } catch (Exception $exception) {
+                     $msg=$type_name." Leave Request  Has been Requested But Email is not sent(SMTP Problem)!";
+                       return $url->with('msg', $msg);
+     
+                 }
 
                     return response( [ 'msg'=>$msg ],202 );
                   }
@@ -1239,6 +1299,28 @@ return response(['msg'=>$msg],400);
                      
               
                     $leaves->save();
+                    $linemanager =  LeaveApproval::where('empID',$empID)->first();
+                    $linemanager_data = SysHelpers::employeeData($linemanager->level1);
+                    $employee_data = SysHelpers::employeeData($empID);
+                    $fullname = $linemanager_data['full_name'];
+                    $email_data = array(
+                        'subject' => 'Employee Leave Approval',
+                        'view' => 'emails.linemanager.leave-approval',
+                        'email' => $linemanager_data['email'],
+                        'full_name' => $fullname,
+                        'employee_name'=>$employee_data['full_name'],
+                        'next' => parse_url(route('attendance.leave'), PHP_URL_PATH)
+                    );
+     
+                    try {
+     
+                     Notification::route('mail', $linemanager_data['email'])->notify(new EmailRequests($email_data));
+     
+                 } catch (Exception $exception) {
+                     $msg=$type_name." Leave Request  Has been Requested But Email is not sent(SMTP Problem)!";
+                       return $url->with('msg', $msg);
+     
+                 }
                      
                   $leave_type=LeaveType::where('id',$nature)->first();
                   $type_name=$leave_type->type;
@@ -1395,6 +1477,28 @@ return response(['msg'=>$msg],400);
                        
                 $leave_type=LeaveType::where('id',$nature)->first();
                 $type_name=$leave_type->type;
+                $linemanager =  LeaveApproval::where('empID',$empID)->first();
+                $linemanager_data = SysHelpers::employeeData($linemanager->level1);
+                $employee_data = SysHelpers::employeeData($empID);
+                $fullname = $linemanager_data['full_name'];
+                $email_data = array(
+                    'subject' => 'Employee Leave Approval',
+                    'view' => 'emails.linemanager.leave-approval',
+                    'email' => $linemanager_data['email'],
+                    'full_name' => $fullname,
+                    'employee_name'=>$employee_data['full_name'],
+                    'next' => parse_url(route('attendance.leave'), PHP_URL_PATH)
+                );
+ 
+                try {
+ 
+                 Notification::route('mail', $linemanager_data['email'])->notify(new EmailRequests($email_data));
+ 
+             } catch (Exception $exception) {
+                 $msg=$type_name." Leave Request  Has been Requested But Email is not sent(SMTP Problem)!";
+                   return $url->with('msg', $msg);
+ 
+             }
     
               $msg=$type_name." Leave Request is submitted successfully!";
               return response( [ 'msg'=>$msg ],202 );
@@ -1502,5 +1606,23 @@ return response(['msg'=>$msg],400);
       $data['leave_type'] = $this->attendance_model->leave_type();
       return view('app.leave', $data);
 
+
+      
    }
+
+    public function annualLeaveSummary ($year){
+  
+      $annualleavesummary = app('App\Http\Controllers\AttendanceController')->annuaLeaveSummary($year);
+    
+
+      return response(
+        [
+ 
+            'summary'=>$annualleavesummary->original
+           
+           
+        ],200 );
+    }
+
+
 }
