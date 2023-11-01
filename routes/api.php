@@ -9,6 +9,7 @@ use App\Http\Controllers\API\ReportController;
 use App\Http\Controllers\API\GeneralController;
 use App\Http\Controllers\API\PasswordController;
 use App\Http\Controllers\API\PushNotificationController;
+use App\Http\Controllers\AttendanceController;
 
 
 
@@ -111,6 +112,8 @@ Route::middleware('auth:sanctum')->group( function () {
 
        // Push Notification routes
 
+       //get annual Leave Summary
+       Route::get('/getAnnualLeaveSummary/{year}',[LeaveController::class,'annualLeaveSummary']);
    
 
 
