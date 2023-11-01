@@ -29,7 +29,7 @@ class UserSeeder extends Seeder
                 'shift' => '1',
                 'organization' => 'CITS',
                 'line_manager' => 'EMP001',
-                'contract_type' => 'Permanent',
+                'contract_type' => 1,
                 'contract_renewal_date' => '2024-05-10',
                 'salary' => 60000.00,
                 'postal_address' => '123 Main St',
