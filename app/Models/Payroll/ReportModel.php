@@ -2917,6 +2917,9 @@ IF((SELECT SUM(amount)  FROM allowance_logs WHERE allowance_logs.description = a
     {
         // $query =  "DELETE FROM financial_logs where Date(created_at) Like '2023-02-19%'";
         // DB::insert(DB::raw($query));
+        if ($payroll_date === null) {
+            return 0;
+        }
         $calendar = explode('-', $payroll_date);
         $date = !empty($payroll_date)?$calendar[0] . '-' . $calendar[1]:null;
 
