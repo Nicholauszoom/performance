@@ -54,6 +54,7 @@ class UserSeeder extends Seeder
                 'retired' => false, // 1 for retired, 0 for active
                 'contract_end' => '2025-05-10',
                 'tin' => '123456789',
+                'accrual_rate' => 2.08,
                 'national_id' => 'ID1234567',
                 'created_at' => now(),
                 'updated_at' => now(),
