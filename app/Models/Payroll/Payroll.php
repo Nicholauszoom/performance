@@ -3108,6 +3108,10 @@ FROM temp_loan_logs tlg, loan l WHERE l.id = tlg.loanID and payment_date = '" . 
     }
     public function arrearsMonth($payrollMonth)
     {
+
+        if ($payrollMonth === null) {
+            return 0;
+        }
         $query = "SELECT sum(amount) as arrear_payment from arrears where payroll_date = '" . $payrollMonth . "'";
         $row = DB::select(DB::raw($query));
         if ($row[0]) {
