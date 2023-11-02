@@ -40,7 +40,7 @@
                             <!-- <option value="2008">2008</option>
                             <option value="2021">2021</option>
                             <option value="2022">2022</option> -->
-                            <option value="2023">2023</option>
+                            <option value="2023" selected>2023</option>
                             <!-- <option value="2024">2024</option>
                             <option value="2025">2025</option>
                             <option value="2026">2026</option>
@@ -869,9 +869,16 @@
 
     <script>
         $(document).ready(function() {
+
+            get_leave_statement($("#employee_exited_list").val())
             // Bind an event handler to the select element
             $("#employee_exited_list").change(function() {
                 var selectedYear = $(this).val();
+                get_leave_statement(selectedYear);
+
+            });
+
+            function get_leave_statement(selectedYear) {
 
                 // Construct the URL with the selected year parameter
                 var url = '{{url('')}}/flex/attendance/annualleavebalance/' + selectedYear;
@@ -891,7 +898,9 @@
                         console.log('error in fetching');
                     }
                 });
-            });
+
+            }
+            
 
             function updateTable(data) {
                 var table = $("#balance-table-placeholder table tbody"); // Select the table body
