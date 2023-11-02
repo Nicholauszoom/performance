@@ -15,7 +15,7 @@
         $totalAccrued = number_format($leaveBalance, 2);
     @endphp
 
-    @if (session('mng_emp') || session('appr_leave'))
+    @if (session('mng_emp') || session('appr_leave') || 1)
         @if (session('msg'))
             <div class="alert alert-success col-md-8 mx-auto mt-4" role="alert">
                     {{ session('msg') }}
@@ -252,7 +252,7 @@
                         Attachment
                     </a>
                     @endif
-                    @if ($approval)
+                    @if (isset($approval))
                     @if ( $item->state == 1)
                     <?php if (Auth()->user()->emp_id == $approval->level1  || Auth()->user()->emp_id == $approval->level2  || Auth()->user()->emp_id == $approval->level3) { ?>
                         {{-- @if (Auth()->user()->emp_id == $approval->level1) --}}
