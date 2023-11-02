@@ -373,6 +373,7 @@ class AttendanceController extends Controller
 
         } else {
             $forfeitDays = LeaveForfeiting::where('empID', Auth::user()->emp_id)
+            ->where('forfeiting_year', $year)
                 ->value('days');
             $openingBalance = LeaveForfeiting::where('empID', Auth::user()->emp_id)->value('opening_balance');
 
