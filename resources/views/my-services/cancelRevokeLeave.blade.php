@@ -22,7 +22,7 @@
     <div class="card border-top border-top-width-3 border-top-main border-bottom-main rounded-0">
 
         <div class="card-header">
-            <h5 class="text-warning">Revoke Leave</h5>
+            <h5 class="text-warning">Cancel Revoke Leave</h5>
         </div>
         <div class="row">
             <div class=" col-md-10">
@@ -93,7 +93,7 @@
                                 @endif
                                 <div class="form-group py-2">
                                     <button class="float-end btn btn-main" type="button" data-bs-toggle="modal"
-                                    data-bs-target="#approval">Revoke Approved Leave</button>
+                                    data-bs-target="#approval">Cancel Revoke Leave</button>
 
                                 </div>
 
@@ -103,11 +103,11 @@
                             <div class="modal-dialog modal-dialog-centered modal-md">
                                 <div class="modal-content">
                                     <div class="modal-header">
-                                        <h5 class="modal-title" id="customModalLabel">Are you sure to approve this Leave Revoke </h5>
+                                        <h5 class="modal-title" id="customModalLabel">Are you sure to cancel this Leave Revoke </h5>
                                         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                                     </div>
                                         <div class="modal-footer">
-                                            <button type="button" class="btn bg-main btn-sm px-4" onclick="approveLeaveRevoke(<?php echo $id; ?>)">Submit</button>
+                                            <button type="button" class="btn bg-main btn-sm px-4" onclick="cancelLeaveRevoke(<?php echo $id; ?>)">Submit</button>
                                             <button type="button" class="btn bg-danger btn-sm px-4 text-light" data-bs-dismiss="modal">Cancel</button>
                                         </div>
                                 </div>
@@ -124,7 +124,7 @@
                                     <div class="modal-body p-4">
                                         <label for="end-date">State Reason of Leave Revoking<span class="text-danger">*</span></label>
                                         <textarea id="commentInput" class="form-control" placeholder="Enter your reason here" required></textarea>
-                                        @if ($startDate <= date('Y-m-d'))
+                                        @if ($startDate >= date('Y-m-d'))
                                         <div class="form-group col-md-6">
                                             <label for="end-date">Date of Return <span class="text-danger">*</span></label>
                                             <input type="date"  id="end-date" value="{{ $endDate }}" name="end" class="form-control" required>
@@ -190,10 +190,10 @@
     </script>
 
 <script>
-        function approveLeaveRevoke(id, comment) {
+        function cancelLeaveRevoke(id, comment) {
                 const terminationid = id;
                 var data = terminationid + "|" + comment;
-                var url = '/flex/attendance/revokeApprovedLeaveAdmin/' + terminationid;
+                var url = '/flex/attendance/revokeCancelLeaveAdmin/' + terminationid;
                 $.ajax({
                     url: url,
                     type: 'put', // Use 'POST' if you are sending a POST request
