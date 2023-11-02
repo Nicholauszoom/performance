@@ -1438,6 +1438,7 @@ class AttendanceController extends Controller
     public function revokeLeave($id)
     {
         $particularLeave = Leaves::where('id', $id)->first();
+        $data['particularLeave'] = $particularLeave;
         $data['startDate'] = $particularLeave->start;
         $data['id'] = $particularLeave->id;
         $data['endDate'] = $particularLeave->end;
@@ -1553,6 +1554,10 @@ class AttendanceController extends Controller
             $particularLeave->revoke_status = 1;
             $particularLeave->status = 5;
             if ($particularLeave->enddate_revoke) {
+                  $days = SysHelpers::countWorkingDays($$particularLeave->start, $particularLeave->enddate_revoke);
+
+                  $particularLeave->remaining = $particularLeave->remaining + $days;
+
                 $particularLeave->end = $particularLeave->enddate_revoke;
             }
             $position = Position::where('id', Employee::where('emp_id', Auth()->user()->emp_id)->value('position'))->value('name');

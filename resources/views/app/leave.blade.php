@@ -185,9 +185,9 @@
             $level3 = App\Models\LeaveApproval::where('empID', $item->empID)
             ->where('level3', $line_manager)
             ->first();
-            
+
             $approval = App\Models\LeaveApproval::where('empID', $item->empID)->first();
-                    
+
 
             // $level2=$approve->level2;
             // $level3=$approve->level3;
@@ -246,7 +246,7 @@
                 </td>
                 <td class="text-center">
 
-                   
+
                     @if ($item->attachment != null)
                     <a href="{{ asset('storage/leaves/' . $item->attachment) }}" download="{{ asset('storage/leaves/' . $item->attachment) }}" class="btn bg-main btn-sm" title="Download Attachment">
                         <i class="ph ph-download"></i> &nbsp;
@@ -256,7 +256,7 @@
                     @if (isset($approval))
                     @if ( $item->state == 1)
                     @if ( (Auth()->user()->emp_id == $approval->level1 && $item->status == 1) ||(Auth()->user()->emp_id == $approval->level2 && $item->status == 2) || (Auth()->user()->emp_id == $approval->level3 && $item->status == 3))
-                    
+
                         <div class="col-md-12 text-center mt-1">
                             <a href="{{ url('flex/attendance/approveLeave/' . $item->id) }}" title="Approve">
                                 <button class="btn btn-success btn-sm">Approve Request<i class="ph-check"></i></button>
