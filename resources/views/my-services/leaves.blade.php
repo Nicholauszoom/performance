@@ -874,7 +874,7 @@
                 var selectedYear = $(this).val();
 
                 // Construct the URL with the selected year parameter
-                var url = '/flex/attendance/annualleavebalance/' + selectedYear;
+                var url = '{{url('')}}/flex/attendance/annualleavebalance/' + selectedYear;
 
                 // Make an AJAX request to fetch the data
                 $.ajax({
