@@ -270,7 +270,7 @@
 
                     <div class="col-md-4 col-lg-4">
                         <div class="mb-3">
-                            <label class="form-label" id="bank_branch">Bank Branch <span class="text-danger">*<span></label>
+                            <label class="form-label" for="bank_branch">Bank Branch <span class="text-danger">*<span></label>
                             <select class="form-control select_bank_branch select" id="bank_branch" name="bank_branch" required></select>
                         </div>
                     </div>
@@ -413,8 +413,8 @@
             $('#accountNo').show();
             $('#bank').on('change', function() {
                 var bankID = $(this).val();
-                if (bankID) {
 
+                if (bankID) {
                     $.ajax({
                         type: 'GET',
                         url: '{{ url("/flex/bankBranchFetcher/") }}',
@@ -653,9 +653,11 @@
 
             var startYear = today.getFullYear() - 18;
             var endYear = today.getFullYear() - 60;
+
             if (dd < 10) {
                 dd = '0' + dd;
             }
+
             if (mm < 10) {
                 mm = '0' + mm;
             }
@@ -684,6 +686,7 @@
                 });
 
             });
+
             $('#birthdate').on('apply.daterangepicker', function(ev, picker) {
                 $(this).val(picker.startDate.format('DD/MM/YYYY'));
             });
