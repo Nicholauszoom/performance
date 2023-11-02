@@ -165,7 +165,7 @@
                 };
 
                 $.ajax({
-                    url: '/flex/attendance/revokeApprovedLeave',
+                    url: '{{url('')}}/flex/attendance/revokeApprovedLeave',
                     type: 'POST',
                     data: JSON.stringify(data),
                     contentType: 'application/json',
