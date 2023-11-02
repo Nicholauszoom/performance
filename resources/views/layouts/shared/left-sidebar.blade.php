@@ -316,7 +316,7 @@
                 {{-- start of leave management dropdown --}}
                 @can('view-leave')
                     <li
-                        class="nav-item nav-item-submenu {{ request()->routeIs('flex.add_unpaid_leave') || request()->routeIs('attendance.leave') || request()->routeIs('flex.end_unpaid_leave') || request()->routeIs('flex.save_unpaid_leave') || request()->routeIs('flex.add_unpaid_leave') || request()->routeIs('flex.unpaid_leave') || request()->routeIs('attendance.leavereport') ? 'nav-item-expand nav-item-open' : null }}">
+                        class="nav-item nav-item-submenu {{ request()->routeIs('flex.add_unpaid_leave') || request()->routeIs('attendance.leaveforfeiting') || request()->routeIs('attendance.leave') || request()->routeIs('flex.end_unpaid_leave') || request()->routeIs('flex.save_unpaid_leave') || request()->routeIs('flex.add_unpaid_leave') || request()->routeIs('flex.unpaid_leave') || request()->routeIs('attendance.leavereport') ? 'nav-item-expand nav-item-open' : null }}">
 
                         <a href="#" class="nav-link">
                             <i class="ph-calendar-check"></i>
@@ -324,7 +324,7 @@
                         </a>
 
                         <ul
-                            class="nav-group-sub collapse {{ request()->routeIs('flex.add_unpaid_leave') || request()->routeIs('attendance.leave') || request()->routeIs('flex.unpaid_leave') || request()->routeIs('attendance.leavereport') ? 'show' : null }}">
+                            class="nav-group-sub collapse {{ request()->routeIs('flex.add_unpaid_leave') || request()->routeIs('attendance.leaveforfeiting') || request()->routeIs('attendance.leave') || request()->routeIs('flex.unpaid_leave') || request()->routeIs('attendance.leavereport') ? 'show' : null }}">
                             @if (session('mng_attend'))
                                 {{-- <li class="nav-item"><a class="nav-link" href="{{ url('/flex/attendance/attendees') }}">Attendance</a></li> --}}
                             @endif

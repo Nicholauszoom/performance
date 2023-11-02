@@ -14,18 +14,19 @@
 
 @section('content')
     <div class="row">
-        <div class="col-md-7">
+        <div class="col-md-12">
             <div class="card border-top border-top-width-3 border-top-main rounded-0 p-2">
                 <div class="card-header">
                     <h5 class="text-warning">Annual Leave Forfeting</h5>
                 </div>
+
                 <div class="card-body">
-                    <form id="demo-form2" enctype="multipart/form-data" method="post" action="{{ route('attendance.clear-leaves') }}"
-                        data-parsley-validate class="form-horizontal form-label-left">
+                    <form id="demo-form2" enctype="multipart/form-data" method="post" action="{{ route('attendance.clear-leaves') }}" data-parsley-validate class="form-horizontal form-label-left">
                         @csrf
+
                         <div class="mb-3 row align-items-center">
                             <div class="col-md-4 col-lg-4 col-xs-12">
-                                <label for="years" class="control-label col-md-4">Year of Forfeiting <span class="text-danger">*</span></label>
+                                <label for="years" class="form-label col-md-4">Year of Forfeiting <span class="text-danger">*</span></label>
                                 <select name="forfeit_year" id="forfeit_year" class="form-select col-md-8" tabindex="-1">
                                     <option value="">-- Select Year --</option>
                                     <option value="2008">2008</option>
@@ -40,18 +41,15 @@
                                     <option value="2029">2029</option>
                                 </select>
                             </div>
-                            <div class="col-md-8 col-lg-8 col-xs-12">
-                                <div class="d-flex gap-3">
-                                    <div class="col-8 d-flex">
-                                        <label for="attachment" class="control-label col-md-5">Attachment <span class="text-danger">*</span></label>
-                                        <div class="col-7">
-                                            <input class="form-control" type="file" name="file" required accept=".xls, .xlsx">
-                                        </div>
-                                    </div>
-                                    <div class="col-4">
-                                        <button type="submit" class="btn btn-main w-100">Forfeit</button>
-                                    </div>
-                                </div>
+
+                            <div class="col-md-6">
+                                <label for="attachment" class="form-label col-md-5">Attachment <span class="text-danger">*</span></label>
+                                <input class="form-control" type="file" name="file" required accept=".xls, .xlsx">
+                            </div>
+
+                            <div class="col-md-2 pt-4">
+
+                                <button type="submit" class="btn btn-main w-100">Forfeit</button>
                             </div>
                         </div>
 
@@ -66,11 +64,6 @@
             </div>
         </div>
     </div>
-
-
-
-
-
 
 
     <div class="card border-top  border-top-width-3 border-top-main rounded-0">

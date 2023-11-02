@@ -62,7 +62,9 @@
                 <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">Start Date <span  class="text-danger">*</span></label>
                 <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12">
                     <div class="has-feedback">
-                        <input type="date" name="start" id="start-date" class="form-control col-xs-12 " placeholder="Start Date"  required=""  >
+                        {{-- <input type="date" name="start" id="start-date" class="form-control col-xs-12 " placeholder="Start Date"  required=""  > --}}
+                        <input type="date" name="start" id="start-date" class="form-control col-xs-12 " value="{{ old('start') ? \Carbon\Carbon::parse(old('start'))->format('d/m/Y') : '' }}">
+
                         <span class="fa fa-calendar-o form-control-feedback right" aria-hidden="true"></span>
                         </div>
                 <span class="text-danger"><?php// echo form_error("fname");?></span>
@@ -77,7 +79,10 @@
                 </label>
                 <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12">
                     <div class="has-feedback">
-                    <input type="date" required="" id="end-date" placeholder="End Date" name="end" class="form-control col-xs-12 " >
+                    {{-- <input type="date" required="" id="end-date" placeholder="End Date" name="end" class="form-control col-xs-12 " > --}}
+
+                    <input type="date" name="end" id="end-date" class="form-control col-xs-12 " value="{{ old('start') ? \Carbon\Carbon::parse(old('start'))->format('d/m/Y') : '' }}">
+
                     <span class="fa fa-calendar-o form-control-feedback right" aria-hidden="true"></span>
                 </div>
                     <span class="text-danger"><?php// echo form_error("fname");?></span>

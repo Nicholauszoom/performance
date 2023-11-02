@@ -12,27 +12,24 @@
 @endpush
 
 @section('content')
-
-
-
-    <?php $totalAccrued = number_format($leaveBalance, 2); ?>
-    <?php $totalOutstanding = number_format($outstandingLeaveBalance, 2); ?>
-
-
-    {{-- start of leave application --}}
+    @php
+        $totalAccrued = number_format($leaveBalance, 2);
+        $totalOutstanding = number_format($outstandingLeaveBalance, 2);
+    @endphp
 
     @if (session('msg'))
         <div class="alert alert-success col-md-8 mx-auto mt-4" role="alert">
             {{ session('msg') }}
         </div>
     @endif
-    <div class="card border-top border-top-width-3 border-top-main border-bottom-main rounded-0">
 
+    <div class="card border-top border-top-width-3 border-top-main border-bottom-main rounded-0">
         <div class="card-header">
             <h5 class="text-warning">Apply Leave</h5>
         </div>
+
         <div class="row">
-            <div class="col-md-3">
+            <div class="col-md-4">
                 <div class="card-body">
                     <div class="card-header">
                         <h5 class="card-title">Annual Leave Summary per Year</h5>
@@ -89,12 +86,9 @@
                 </div>
             </div>
 
-            <div class="col-md-1" style="border-left: 2px solid rgba(0, 0, 0, 0.13); height: 550px; width: 2px"></div>
-
-            <div class=" col-md-8">
+            <div class=" col-md-8 border-left" style="border-left: 2px solid #000 !important;">
                 <div class="card-body">
-                    <form autocomplete="off" action="{{ url('flex/attendance/save_leave') }}" method="post"
-                        enctype="multipart/form-data">
+                    <form autocomplete="off" action="{{ url('flex/attendance/save_leave') }}" method="post" enctype="multipart/form-data">
                         @csrf
                         <div class="row">
                             <div class="form-group col-md-6">
@@ -143,7 +137,7 @@
 
                             <div class="form-group col-md-6" style="display:none" id="attachment">
                                 <label for="image">Attachment <span class="text-danger">*</span></label>
-                                <input class="form-control" type="file" name="image" required>
+                                <input class="form-control" type="file" name="image" id="attach">
                             </div>
 
                             <div class="form-group col-12 mb-2">
@@ -691,8 +685,10 @@
 
             if (id == 1) {
                 $("#attachment").hide();
+                $("#attach").prop('required', false);
             } else {
                 $("#attachment").show();
+                $("#attach").prop('required', true);
             }
 
             $('#subs_cat').find('option').not(':first').remove();
