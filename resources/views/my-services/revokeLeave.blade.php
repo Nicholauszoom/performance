@@ -97,23 +97,41 @@
 
                                 </div>
 
-
-                        @if($revoke_reason !== null)
-                        <div id="approval" class="modal fade" tabindex="-1">
-                            <div class="modal-dialog modal-dialog-centered modal-md">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title" id="customModalLabel">Are you sure to approve this Leave Revoke </h5>
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                                    </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn bg-main btn-sm px-4" onclick="approveLeaveRevoke(<?php echo $id; ?>)">Submit</button>
-                                            <button type="button" class="btn bg-danger btn-sm px-4 text-light" data-bs-dismiss="modal">Cancel</button>
+                                @if ($particularLeave->level2)
+                                @if ($particularLeave->level3)
+                                    @if (Auth()->user()->emp_id == $particularLeave->level3)
+                                        <div id="approval" class="modal fade" tabindex="-1">
+                                            <div class="modal-dialog modal-dialog-centered modal-md">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="customModalLabel">Are you sure to approve this Leave Revoke</h5>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn bg-main btn-sm px-4" onclick="approveLeaveRevoke(<?php echo $id; ?>)">Submit</button>
+                                                        <button type="button" class="btn bg-danger btn-sm px-4 text-light" data-bs-dismiss="modal">Cancel</button>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
-                                </div>
-                            </div>
-                        </div>
-                        @else
+                                    @endif
+                                @elseif (Auth()->user()->emp_id == $particularLeave->level2)
+                                    <div id="approval" class="modal fade" tabindex="-1">
+                                        <div class="modal-dialog modal-dialog-centered modal-md">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="customModalLabel">Are you sure to approve this Leave Revoke</h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn bg-main btn-sm px-4" onclick="approveLeaveRevoke(<?php echo $id; ?>)">Submit</button>
+                                                    <button type="button" class="btn bg-danger btn-sm px-4 text-light" data-bs-dismiss="modal">Cancel</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                @endif
+                            @else
                         <div id="approval" class="modal fade" tabindex="-1">
                             <div class="modal-dialog modal-dialog-centered modal-md">
                                 <div class="modal-content">
