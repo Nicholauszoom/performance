@@ -185,6 +185,9 @@
             $level3 = App\Models\LeaveApproval::where('empID', $item->empID)
             ->where('level3', $line_manager)
             ->first();
+            
+            $approval = App\Models\LeaveApproval::where('empID', $item->empID)->first();
+                    
 
             // $level2=$approve->level2;
             // $level3=$approve->level3;
@@ -243,9 +246,7 @@
                 </td>
                 <td class="text-center">
 
-                    @php
-                    $approval = App\Models\LeaveApproval::where('empID', $item->empID)->first();
-                    @endphp
+                   
                     @if ($item->attachment != null)
                     <a href="{{ asset('storage/leaves/' . $item->attachment) }}" download="{{ asset('storage/leaves/' . $item->attachment) }}" class="btn bg-main btn-sm" title="Download Attachment">
                         <i class="ph ph-download"></i> &nbsp;
@@ -327,6 +328,9 @@
             ->where('level3', $line_manager)
             ->first();
 
+            $approval = App\Models\LeaveApproval::where('empID', $item->empID)->first();
+
+
             // $level2=$approve->level2;
             // $level3=$approve->level3;
 
@@ -393,7 +397,7 @@
                 </td>
                 <td class="text-center">
 
-                    @if(Auth()->user()->emp_id == $approval->level3  & $item->state == 2 || $item->state == 0)
+                    @if(Auth()->user()->emp_id == $approval->level3  & ($item->state == 2 || $item->state == 0))
                     <div class="col-md-12 text-center mt-1">
                         <a href="{{ url('flex/attendance/revokeLeave/' . $item->id) }}" title="Revoke Approved Leave" class="icon-2 info-tooltip disabled">
                             <button class="btn btn-secondary btn-sm">Revoke Approved Leave<i class="ph-prohibit"></i></button>
