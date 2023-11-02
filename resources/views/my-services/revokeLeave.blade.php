@@ -124,7 +124,7 @@
                                     <div class="modal-body p-4">
                                         <label for="end-date">State Reason of Leave Revoking<span class="text-danger">*</span></label>
                                         <textarea id="commentInput" class="form-control" placeholder="Enter your reason here" required></textarea>
-                                        @if ($startDate >= date('Y-m-d'))
+                                        @if ($startDate <= date('Y-m-d'))
                                         <div class="form-group col-md-6">
                                             <label for="end-date">Date of Return <span class="text-danger">*</span></label>
                                             <input type="date"  id="end-date" value="{{ $endDate }}" name="end" class="form-control" required>
