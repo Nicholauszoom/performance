@@ -1185,7 +1185,9 @@ class AttendanceController extends Controller
             }
 
             $leave->status = 2;
-            $leave->state = 0;
+            if($approval->level2){
+                $leave->state = 0;
+                }
             $leave->level1 = Auth()->user()->emp_id;
             $leave->position = 'Approved by ' . $position->name;
             $leave->updated_at = new DateTime();
@@ -1205,7 +1207,10 @@ class AttendanceController extends Controller
 
             }
             $leave->status = 3;
+
+            if($approval->level3){
             $leave->state = 0;
+            }
             $leave->level2 = Auth()->user()->emp_id;
             $leave->position = 'Approved by ' . $position->name;
             $leave->updated_at = new DateTime();
