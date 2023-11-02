@@ -1185,7 +1185,7 @@ class AttendanceController extends Controller
             }
 
             $leave->status = 2;
-            if($approval->level2){
+            if(!$approval->level2){
                 $leave->state = 0;
                 }
             $leave->level1 = Auth()->user()->emp_id;
@@ -1208,7 +1208,7 @@ class AttendanceController extends Controller
             }
             $leave->status = 3;
 
-            if($approval->level3){
+            if(!$approval->level3){
             $leave->state = 0;
             }
             $leave->level2 = Auth()->user()->emp_id;
