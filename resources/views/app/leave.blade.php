@@ -523,7 +523,7 @@
                         <a href="{{ url('flex/attendance/revokeLeave/' . $item->id) }}" title="Revoke Approved Leave" class="icon-2 info-tooltip disabled">
                             <button class="btn btn-secondary btn-sm">Revoke requested approved Leave<i class="ph-prohibit"></i></button>
                         </a>
-                        <a href="{{ url('flex/attendance/revokeLeave/' . $item->id) }}" title="Cance Revoke Request" class="icon-2 info-tooltip disabled">
+                        <a href="{{ url('flex/attendance/cancelRevokeLeave/' . $item->id) }}" title="Cance Revoke Request" class="icon-2 info-tooltip disabled">
                             <button class="btn btn-warning btn-sm">Cancel Leave Revoke<i class="ph-x"></i></button>
                         </a>
                     </div>
