@@ -255,8 +255,8 @@
                     @endif
                     @if (isset($approval))
                     @if ( $item->state == 1)
-                    <?php if (Auth()->user()->emp_id == $approval->level1  || Auth()->user()->emp_id == $approval->level2  || Auth()->user()->emp_id == $approval->level3) { ?>
-                        {{-- @if (Auth()->user()->emp_id == $approval->level1) --}}
+                    @if ( (Auth()->user()->emp_id == $approval->level1 && $item->status == 1) ||(Auth()->user()->emp_id == $approval->level2 && $item->status == 2) || (Auth()->user()->emp_id == $approval->level3 && $item->status == 3))
+                    
                         <div class="col-md-12 text-center mt-1">
                             <a href="{{ url('flex/attendance/approveLeave/' . $item->id) }}" title="Approve">
                                 <button class="btn btn-success btn-sm">Approve Request<i class="ph-check"></i></button>
@@ -266,14 +266,12 @@
                                 <button class="btn btn-warning btn-sm">Cancel Request<i class="ph-x"></i></button></a>
                         </div>
 
-                        {{-- @endif --}}
 
-
-                    <?php } elseif ($item->status == 4) { ?>
+                    @elseif ($item->status == 4)
                         <div class="col-md-12 mt-1">
                             <span class="label bg-danger text-white">Denied</span>
                         </div>
-                    <?php } ?>
+                    @endif
                     @endif
                     @endif
                 </td>
