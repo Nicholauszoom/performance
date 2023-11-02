@@ -1452,7 +1452,7 @@ class AttendanceController extends Controller
         if ($particularLeave->level2 == $login || $particularLeave->level3 == $login) {
             $data['revoke_reason'] = $particularLeave->revoke_reason;
         } else {
-            $data['revoke_reason'] == null;
+            $data['revoke_reason'] = null;
         }
         if ($particularLeave->sub_category > 0) {
             $data['sub_category'] = LeaveSubType::where('id', $particularLeave->sub_category)->value('name');

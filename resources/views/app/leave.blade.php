@@ -194,7 +194,7 @@
 
             @endphp
 
-            @if ($level1 != null || $level2 != null || $level3 != null)
+            @if ( (Auth()->user()->emp_id == $approval->level1 && $item->status == 1) ||(Auth()->user()->emp_id == $approval->level2 && $item->status == 2) || (Auth()->user()->emp_id == $approval->level3 && $item->status == 3))
             <tr>
                 <td>{{ $item->empID }}</td>
                 <td>{{ $item->employee->fname }} {{ $item->employee->mname }}
