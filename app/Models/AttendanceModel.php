@@ -86,10 +86,13 @@ class AttendanceModel extends Model
     function myLeaves($empId)
     {
         $query = "SELECT l.*, la.level1, la.level2, la.level3
-              FROM leaves AS l
-              JOIN leave_approvals AS la ON l.empID = la.empID
-              WHERE :empId IN (la.level1, la.level2, la.level3)
-              ORDER BY l.id DESC";
+          FROM leaves AS l
+          JOIN leave_approvals AS la ON l.empID = la.empID
+          WHERE l.reason != 'Automatic applied!'
+          AND :empId IN (la.level1, la.level2, la.level3)
+          ORDER BY l.id DESC";
+
+
 
         $bindings = ['empId' => $empId];
         $results = DB::select(DB::raw($query), $bindings);
