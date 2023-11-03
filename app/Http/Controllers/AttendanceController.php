@@ -407,11 +407,12 @@ class AttendanceController extends Controller
             $daysAccrued = $this->attendance_model->getLeaveBalance(Auth::user()->emp_id, $employeeDate, date('Y-m-d'));
 
         }
-
-        $outstandingLeaveBalance = $daysAccrued;
-        $data['Accrued Days'] = number_format($daysAccrued ?? 0, 2);
         $data['Days Taken	'] = $this->getspentDays(Auth::user()->emp_id, $year);
-        $data['Outstanding Leave Balance'] = ($daysAccrued -  $data['Days Taken	'])??0 ;
+
+
+        $outstandingLeaveBalance = ($daysAccrued -  $data['Days Taken	'])??0;
+        $data['Accrued Days'] = number_format($daysAccrued ?? 0, 2);
+        $data['Outstanding Leave Balance'] = number_format($outstandingLeaveBalance , 2) ;
         return response()->json($data);
     }
 
