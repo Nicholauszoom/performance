@@ -86,11 +86,16 @@ class AttendanceModel extends Model
     function myLeaves($empId)
     {
         $query = "SELECT l.*, la.level1, la.level2, la.level3
-          FROM leaves AS l
-          JOIN leave_approvals AS la ON l.empID = la.empID
-          WHERE l.reason != 'Automatic applied!'
-          AND :empId IN (la.level1, la.level2, la.level3)
-          ORDER BY l.id DESC";
+        FROM leaves AS l
+        JOIN leave_approvals AS la ON l.empID = la.empID
+        WHERE l.reason != 'Automatic applied!'
+        AND (
+          (l.status = 1 AND :empId = la.level1) OR
+          (l.status = 2 AND (:empId = la.level1 OR :empId = la.level2)) OR
+          (l.status = 3 AND (:empId = la.level1 OR :empId = la.level2 OR :empId = la.level3))
+        )
+        ORDER BY l.id DESC;
+        ";
 
 
 
