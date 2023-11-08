@@ -732,7 +732,7 @@ class AttendanceController extends Controller
                                 'image' => 'mimes:jpg,png,jpeg,pdf|max:2048',
                             ]);
                             $newImageName = $request->image->hashName();
-                            $request->image->move(public_path('storage\leaves'), $newImageName);
+                            $request->image->move(public_path('storage/leaves'), $newImageName);
                             $leaves->attachment = $newImageName;
 
                         }
