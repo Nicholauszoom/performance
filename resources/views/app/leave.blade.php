@@ -194,7 +194,7 @@
 
             @endphp
 
-            @if ( (Auth()->user()->emp_id == $approval->level1 && $item->status == 1) ||(Auth()->user()->emp_id == $approval->level2 && $item->status == 2) || (Auth()->user()->emp_id == $approval->level3 && $item->status == 3))
+            @if ( (Auth()->user()->emp_id == $approval->level1 ) ||(Auth()->user()->emp_id == $approval->level2 && $item->status == 2) || (Auth()->user()->emp_id == $approval->level3 && $item->status == 3))
             <tr>
                 <td>{{ $item->empID }}</td>
                 <td>{{ $item->employee->fname }} {{ $item->employee->mname }}
@@ -255,7 +255,7 @@
                     @endif
                     @if (isset($approval))
                     @if ( $item->state == 1)
-                    @if ( (Auth()->user()->emp_id == $approval->level1 && $item->status == 1) ||(Auth()->user()->emp_id == $approval->level2 && $item->status == 2) || (Auth()->user()->emp_id == $approval->level3 && $item->status == 3))
+                    @if ( (Auth()->user()->emp_id == $approval->level1 ) ||(Auth()->user()->emp_id == $approval->level2 && $item->status == 2) || (Auth()->user()->emp_id == $approval->level3 && $item->status == 3))
 
                         <div class="col-md-12 text-center mt-1">
                             <a href="{{ url('flex/attendance/approveLeave/' . $item->id) }}" title="Approve">
