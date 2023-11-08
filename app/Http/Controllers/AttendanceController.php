@@ -1194,7 +1194,7 @@ class AttendanceController extends Controller
             //     }
             $position = Position::where('id', Auth()->user()->emp_id)->first();
             $leave->level1 = Auth()->user()->emp_id;
-            $leave->position = 'Approved by ' . $position->name;
+            $leave->position = 'Approved by Line Manager' ;
             $leave->updated_at = new DateTime();
             $leave->update();
 
@@ -1221,7 +1221,7 @@ class AttendanceController extends Controller
             $position = Position::where('id', Auth()->user()->emp_id)->first();
 
             $leave->level2 = Auth()->user()->emp_id;
-            $leave->position = 'Approved by ' . $position->name;
+            $leave->position = 'Approved by Line Manager' ;
             $leave->updated_at = new DateTime();
             $leave->update();
         } elseif ($approval->level3 == $approver) {
@@ -1241,7 +1241,7 @@ class AttendanceController extends Controller
             $leave->state = 0;
             $position = Position::where('id', Auth()->user()->emp_id)->first();
             $leave->level3 = Auth()->user()->emp_id;
-            $leave->position = $position->name;
+            $leave->position = 'Approved by Line Manager' ;
             $leave->updated_at = new DateTime();
             $leave->update();
         } else {
