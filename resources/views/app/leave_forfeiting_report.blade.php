@@ -57,7 +57,10 @@
                             <small>
                                 <i>Note:</i> Please note that this action of forfeiting leave days is performed only once in a year.
                             </small>
-                        </p>
+                        </p><br>
+                        <a  href="{{ asset('uploads/templates/leaveforfeiting_template.xlsx') }}" >
+                            Click here to download leave forfeitings excel template
+                        </a>
                     </form>
                 </div>
 
