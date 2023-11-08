@@ -3982,7 +3982,7 @@ public function processOneEmployee($employee, $request, $nature){
         if ($request->type == 1) {
 
             $pdf = Pdf::loadView('reports.leave_application', $data)->setPaper('a4', 'landscape');
-            return $pdf->download('Leave_apprication_report' . $request->duration . '.pdf');
+            return $pdf->download('Leave_application_report' . $request->duration . '.pdf');
         } else {
 
             return view('reports.leave_application_datatable', $data);
