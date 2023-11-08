@@ -211,7 +211,7 @@
         function approveLeaveRevoke(id, comment) {
                 const terminationid = id;
                 var data = terminationid + "|" + comment;
-                var url = '/flex/attendance/revokeApprovedLeaveAdmin/' + terminationid;
+                var url = '{{url('')}}/flex/attendance/revokeApprovedLeaveAdmin/' + terminationid;
                 $.ajax({
                     url: url,
                     type: 'put', // Use 'POST' if you are sending a POST request

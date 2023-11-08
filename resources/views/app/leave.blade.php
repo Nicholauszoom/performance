@@ -454,6 +454,9 @@
             ->where('level3', $line_manager)
             ->first();
 
+            $approval = App\Models\LeaveApproval::where('empID', $item->empID)->first();
+
+
             // $level2=$approve->level2;
             // $level3=$approve->level3;
 
@@ -523,7 +526,7 @@
                     @if(Auth()->user()->emp_id == $approval->level3  & $item->state == 2 || $item->state == 0)
                     <div class="col-md-12 text-center mt-1">
                         <a href="{{ url('flex/attendance/revokeLeave/' . $item->id) }}" title="Revoke Approved Leave" class="icon-2 info-tooltip disabled">
-                            <button class="btn btn-secondary btn-sm">Revoke requested approved Leave<i class="ph-prohibit"></i></button>
+                            <button class="btn btn-secondary btn-sm">Approve Leave Revoke<i class="ph-prohibit"></i></button>
                         </a>
                         <a href="{{ url('flex/attendance/cancelRevokeLeave/' . $item->id) }}" title="Cance Revoke Request" class="icon-2 info-tooltip disabled">
                             <button class="btn btn-warning btn-sm">Cancel Leave Revoke<i class="ph-x"></i></button>
