@@ -9,6 +9,28 @@
 
 @push('head-scriptTwo')
     <script src="{{ asset('assets/js/pages/datatables_basic.js') }}"></script>
+    <script>
+         function populateYearSelect() {
+            var select = $('#forfeit_year');
+            var currentYear = new Date().getFullYear();
+
+            // Add the previous year, current year, and next year as options
+            for (var i = currentYear - 1; i <= currentYear + 1; i++) {
+                var option = $("<option></option>");
+                option.attr("value", i);
+                option.text(i);
+                select.append(option);
+            }
+
+            // Set the default selection to the current year
+            select.val(currentYear);
+        }
+
+        // Call the function to populate the select element
+       $(document).ready(function(){
+        populateYearSelect();
+       })
+        </script>
 @endpush
 
 
@@ -29,7 +51,7 @@
                                 <label for="years" class="form-label col-md-4">Year of Forfeiting <span class="text-danger">*</span></label>
                                 <select name="forfeit_year" id="forfeit_year" class="form-select col-md-8" tabindex="-1">
                                     <option value="">-- Select Year --</option>
-                                    <option value="2008">2008</option>
+                                    {{-- <option value="2008">2008</option>
                                     <option value="2021">2021</option>
                                     <option value="2022">2022</option>
                                     <option value="2023">2023</option>
@@ -38,7 +60,7 @@
                                     <option value="2026">2026</option>
                                     <option value="2027">2027</option>
                                     <option value="2028">2028</option>
-                                    <option value="2029">2029</option>
+                                    <option value="2029">2029</option> --}}
                                 </select>
                             </div>
 
