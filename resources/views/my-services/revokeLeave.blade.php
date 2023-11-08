@@ -136,7 +136,6 @@
                                         </div>
                                     </div>
                                 </div>
-                                @endif 
                         @else
                             <div id="approval" class="modal fade" tabindex="-1">
                                 <div class="modal-dialog modal-dialog-centered modal-md">
