@@ -1460,7 +1460,7 @@ class AttendanceController extends Controller
         $data['revoke_status'] = $particularLeave->revoke_status;
         $data['leaveAddress'] = $particularLeave->leave_address;
         $login = Auth()->user()->empid;
-        if ($particularLeave->level2 == $login || $particularLeave->level3 == $login) {
+        if ($particularLeave->level1 == $login || $particularLeave->level2 == $login) {
             $data['revoke_reason'] = $particularLeave->revoke_reason;
         } else {
             $data['revoke_reason'] = null;
