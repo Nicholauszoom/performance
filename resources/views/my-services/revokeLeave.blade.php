@@ -97,8 +97,7 @@
                                 data-bs-target="#approval">Revoke Approved Leave    </button>
 
                         </div>
-                            @if ($particularLeave->level3 && $particularLeave->level2)
-                                @if (Auth()->user()->emp_id == $particularLeave->level3)
+                            @if($revoke_status = 0)
                                     <div id="approval" class="modal fade" tabindex="-1">
                                         <div class="modal-dialog modal-dialog-centered modal-md">
                                             <div class="modal-content">
@@ -117,8 +116,8 @@
                                             </div>
                                         </div>
                                     </div>
-                                @endif
-                            @elseif (Auth()->user()->emp_id == $particularLeave->level2)
+
+                            {{-- @elseif (Auth()->user()->emp_id == $particularLeave->level2)
                                 <div id="approval" class="modal fade" tabindex="-1">
                                     <div class="modal-dialog modal-dialog-centered modal-md">
                                         <div class="modal-content">
@@ -137,7 +136,7 @@
                                         </div>
                                     </div>
                                 </div>
-
+                                @endif --}}
                         @else
                             <div id="approval" class="modal fade" tabindex="-1">
                                 <div class="modal-dialog modal-dialog-centered modal-md">
