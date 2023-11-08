@@ -1169,7 +1169,7 @@ class AttendanceController extends Controller
         $approver = Auth()->user()->emp_id;
         $employee = Auth()->user()->position;
 
-        $position = Position::where('id', $employee)->first();
+        
 
         // chacking level 1
         if ($approval->level1 == $approver) {
@@ -1187,11 +1187,14 @@ class AttendanceController extends Controller
             }
 
             $leave->status = 2;
-            if(!$approval->level2){
-                $leave->state = 0;
-                }
+            $leave->state = 0;
+
+            // if(!$approval->level2){
+            //     $leave->state = 0;
+            //     }
+            $position = Position::where('id', Auth()->user()->emp_id)->first();
             $leave->level1 = Auth()->user()->emp_id;
-            $leave->position = 'Approved by ' . $position->name;
+            $leave->position = 'Approved by Line Manager' ;
             $leave->updated_at = new DateTime();
             $leave->update();
 
@@ -1210,11 +1213,15 @@ class AttendanceController extends Controller
             }
             $leave->status = 3;
 
-            if(!$approval->level3){
+            // if(!$approval->level3){
+            // $leave->state = 0;
+            // }
             $leave->state = 0;
-            }
+
+            $position = Position::where('id', Auth()->user()->emp_id)->first();
+
             $leave->level2 = Auth()->user()->emp_id;
-            $leave->position = 'Approved by ' . $position->name;
+            $leave->position = 'Approved by Line Manager' ;
             $leave->updated_at = new DateTime();
             $leave->update();
         } elseif ($approval->level3 == $approver) {
@@ -1232,8 +1239,9 @@ class AttendanceController extends Controller
             }
             $leave->status = 3;
             $leave->state = 0;
+            $position = Position::where('id', Auth()->user()->emp_id)->first();
             $leave->level3 = Auth()->user()->emp_id;
-            $leave->position = $position->name;
+            $leave->position = 'Approved by Line Manager' ;
             $leave->updated_at = new DateTime();
             $leave->update();
         } else {
