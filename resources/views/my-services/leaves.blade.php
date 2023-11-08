@@ -424,7 +424,7 @@
                         </a>
                         <?php } else if ($row->state == 0) { ?>
                             <a href="{{ url('flex/attendance/revokeLeave/' . $row->id) }}" title="Revoke Approved Leave" class="icon-2 info-tooltip disabled">
-                                <button class="btn btn-primary btn-sm">Revoke Approved Leave<i class="ph-prohibit"></i>
+                                <button class="btn btn-main btn-sm">Initiate Revoke Request<i class="ph-prohibit"></i>
                             </button>
                         </a>
                         <?php } ?>

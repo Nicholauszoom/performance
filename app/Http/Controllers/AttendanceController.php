@@ -1464,7 +1464,6 @@ class AttendanceController extends Controller
 
         }
         $data['approvedBy'] = $particularLeave->position;
-
         return view('my-services/revokeLeave', $data);
     }
 
