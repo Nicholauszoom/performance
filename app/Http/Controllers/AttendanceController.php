@@ -1433,12 +1433,21 @@ class AttendanceController extends Controller
             $id = $data;
             $info = '';
         }
+        // dd($result);
 
         if ($id != '') {
             $leaveID = $id;
-
             $leave = Leaves::where('id', $leaveID)->first();
-            $leave->state = 4;
+            if($info){
+                $leave->position = 'Denied by '. SysHelpers::getUserPosition(Auth::user()->position);
+                $leave->state = 5;
+                $leave->level1 = Auth::user()->id;
+                $leave->revoke_reason = $info;
+            }else{
+
+                $leave->state = 4;
+                $leave->position = 'Cancelled by you';
+            }
 
             if ($info != '') {
                 //sending email specify the reason
@@ -1455,7 +1464,7 @@ class AttendanceController extends Controller
                 //dd($employee_data['email']);
                 try {
 
-                    Notification::route('mail', $employee_data['email'])->notify(new EmailRequests($email_data));
+                    // Notification::route('mail', $employee_data['email'])->notify(new EmailRequests($email_data));
 
                 } catch (Exception $exception) {
 
@@ -1466,8 +1475,8 @@ class AttendanceController extends Controller
 
             $msg = "Leave  Canceled Successfully !";
 
-            echo "<p class='alert alert-primary text-center'>Leave Was Canceled Successfully</p>";
-
+            // echo "<p class='alert alert-primary text-center'>Leave Was Canceled Successfully</p>";
+            return json_encode(['status' => 'OK']);
             //  return redirect('flex/attendance/my-leaves')->with('msg', $msg);
         }
     }
