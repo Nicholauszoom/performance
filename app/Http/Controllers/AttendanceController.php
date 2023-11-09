@@ -398,7 +398,7 @@ class AttendanceController extends Controller
                 $employeeDate = $year . '-01-01';
             }
             $endDate = $year . '-12-31';
-            $daysAccrued = $this->attendance_model->getLeaveBalance(Auth::user()->emp_id, $employeeDate, $endDate);
+            $daysAccrued = $this->attendance_model->getAccruedBalance(Auth::user()->emp_id, $employeeDate, $endDate);
 
         } else {
             if ($employeeHireYear == $year) {
@@ -406,13 +406,13 @@ class AttendanceController extends Controller
             } else {
                 $employeeDate = $year . '-01-01';
             }
-            $daysAccrued = $this->attendance_model->getLeaveBalance(Auth::user()->emp_id, $employeeDate, date('Y-m-d'));
-
+            $daysAccrued = $this->attendance_model->getAccruedBalance(Auth::user()->emp_id, $employeeDate, date('Y-m-d'));
+                // dd($daysAccrued);
         }
         $data['Days Taken	'] = $this->getspentDays(Auth::user()->emp_id, $year);
 
 
-        $outstandingLeaveBalance = ($daysAccrued -  $data['Days Taken	'])??0;
+        $outstandingLeaveBalance = $this->attendance_model->getLeaveBalance(Auth::user()->emp_id, $employeeDate, date('Y-m-d'));
         $data['Accrued Days'] = number_format($daysAccrued ?? 0, 2);
         $data['Outstanding Leave Balance'] = number_format($outstandingLeaveBalance , 2) ;
         return response()->json($data);
@@ -1280,7 +1280,7 @@ class AttendanceController extends Controller
 
         $emp_data = SysHelpers::employeeData($empID);
         $email_data = array(
-            'subject' => 'Employee Overtime Approval',
+            'subject' => 'Employee leave Approval',
             'view' => 'emails.linemanager.approved_leave',
             'email' => $emp_data->email,
             'full_name' => $emp_data->fname, ' ' . $emp_data->mname . ' ' . $emp_data->lname,
@@ -1433,12 +1433,21 @@ class AttendanceController extends Controller
             $id = $data;
             $info = '';
         }
+        // dd($result);
 
         if ($id != '') {
             $leaveID = $id;
-
             $leave = Leaves::where('id', $leaveID)->first();
-            $leave->state = 4;
+            if($info){
+                $leave->position = 'Denied by '. SysHelpers::getUserPosition(Auth::user()->position);
+                $leave->state = 5;
+                $leave->level1 = Auth::user()->id;
+                $leave->revoke_reason = $info;
+            }else{
+
+                $leave->state = 4;
+                $leave->position = 'Cancelled by you';
+            }
 
             if ($info != '') {
                 //sending email specify the reason
@@ -1455,7 +1464,7 @@ class AttendanceController extends Controller
                 //dd($employee_data['email']);
                 try {
 
-                    Notification::route('mail', $employee_data['email'])->notify(new EmailRequests($email_data));
+                    // Notification::route('mail', $employee_data['email'])->notify(new EmailRequests($email_data));
 
                 } catch (Exception $exception) {
 
@@ -1466,8 +1475,8 @@ class AttendanceController extends Controller
 
             $msg = "Leave  Canceled Successfully !";
 
-            echo "<p class='alert alert-primary text-center'>Leave Was Canceled Successfully</p>";
-
+            // echo "<p class='alert alert-primary text-center'>Leave Was Canceled Successfully</p>";
+            return json_encode(['status' => 'OK']);
             //  return redirect('flex/attendance/my-leaves')->with('msg', $msg);
         }
     }

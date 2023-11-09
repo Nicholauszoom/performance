@@ -86,6 +86,11 @@ class SysHelpers
         $details = EMPL::where('job_title', $pos)->first();
         return $details;
     }
+
+    public static function getUserPosition($id){
+        // Takes in position ID returns name
+        return Position::where('id',$id)->get()->pluck('name')[0];
+    }
     public static function approvalEmp($position1, $position2)
     {
         // $first = DB::table('employees')

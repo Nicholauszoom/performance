@@ -459,6 +459,32 @@ class AttendanceModel extends Model
         return $maximum_days;
     }
 
+    function getAccruedBalance($empID, $hireDate, $today)
+    {
+
+        $nature = 1;
+
+        $today = date("Y-m-d", strtotime($today));
+
+        $employee = DB::table('employee')->where('emp_id', $empID)->first();
+
+
+        $d1 = new DateTime($hireDate);
+
+        $d2 = new DateTime($today);
+
+        $diff = $d1->diff($d2);
+
+        $years = $diff->y;
+        $months = $diff->m;
+        $days = $diff->d;
+
+        $accrual_days = (($days * $employee->accrual_rate) / 30) + $months * $employee->accrual_rate + $years * 12 * $employee->accrual_rate;
+
+
+        return $accrual_days;
+    }
+
 
     function getAnnualOutstandingBalance($empID, $hireDate, $today)
     {
