@@ -1,13 +1,32 @@
-## Fléx Performance
+# Flex Performance
 
-About fléx performance
+1. Get started by cloning the repository.
 
-Installation guide
+```bash
+git clone performance_url
+```
 
-States
-0 - Deactivated
-1 - Active
-2 - Loan activity
-3 - Request transfer
-4 - Exited
-5 - Registered
+-   Navigate to project folder and update the <code>.env</code> file with the database credentials.
+-   Install the composer packages by running the below command in the terminal.
+
+```bash
+composer update
+```
+
+-   Run the migration in the terminal.
+
+```bash
+php artisan migrate
+```
+
+-   Run the seed command in the terminal with.
+
+```bash
+php artisan db:seed
+```
+
+-   Run the application.
+
+```bash
+php artisan serve
+```
