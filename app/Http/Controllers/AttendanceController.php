@@ -1274,7 +1274,7 @@ class AttendanceController extends Controller
 
         $emp_data = SysHelpers::employeeData($empID);
         $email_data = array(
-            'subject' => 'Employee Overtime Approval',
+            'subject' => 'Employee leave Approval',
             'view' => 'emails.linemanager.approved_leave',
             'email' => $emp_data->email,
             'full_name' => $emp_data->fname, ' ' . $emp_data->mname . ' ' . $emp_data->lname,
