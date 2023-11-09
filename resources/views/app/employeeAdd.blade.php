@@ -131,9 +131,19 @@
                     <div class="col-md-4 col-lg-4">
                         <div class="mb-3">
                             <label class="form-label" for="pos">Position <span class="text-danger">*<span></label>
-                            <select class="form-control select1_single select" id="pos" name="position" required>
+                            {{-- <select class="form-control select1_single select" id="pos" name="position" required>
                                 <option value=""> Select Position </option>
-                            </select>
+                            </select> --}}
+
+                            <div class="mb-3 form-control-feedback" id="position-loader">
+                                {{-- <select class="form-control select_bank_branch select" id="bank_branch" name="bank_branch" required style="padding-left: 20px !important"></select> --}}
+                                <select class="form-control select1_single select" id="pos" name="position" required>
+                                    <option value=""> Select Position </option>
+                                </select>
+                                <div class="form-control-feedback-icon d-flex align-items-center justify-content-end text-end px-3 d-none" id="pos-loader" style="width: 100% !important; background: transparent">
+                                    <i class="ph-spinner spinner me-2"></i>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
@@ -269,9 +279,12 @@
                     </div>
 
                     <div class="col-md-4 col-lg-4">
-                        <div class="mb-3">
-                            <label class="form-label" for="bank_branch">Bank Branch <span class="text-danger">*<span></label>
-                            <select class="form-control select_bank_branch select" id="bank_branch" name="bank_branch" required></select>
+                        <label class="form-label" for="bank_branch">Bank Branch <span class="text-danger">*<span></label>
+                        <div class="mb-3 form-control-feedback" id="br-loader">
+                            <select class="form-control select_bank_branch select" id="bank_branch" name="bank_branch" required style="padding-left: 20px !important"></select>
+                            <div class="form-control-feedback-icon d-flex align-items-center justify-content-end text-end d-none px-3" id="select-loader" style="width: 100% !important; background: transparent">
+                                <i class="ph-spinner spinner me-2"></i>
+                            </div>
                         </div>
                     </div>
 
@@ -414,13 +427,29 @@
             $('#bank').on('change', function() {
                 var bankID = $(this).val();
 
+                var $bselect = $('.select_bank_branch');
+                var $bloader = $('#br-loader');
+
                 if (bankID) {
                     $.ajax({
                         type: 'GET',
                         url: '{{ url("/flex/bankBranchFetcher/") }}',
                         data: 'bank=' + bankID,
+                        beforeSend: function(){
+                            $bselect.attr('disabled', 'disabled');
+                            $bloader.find('#select-loader').removeClass('d-none'); // Remove the 'd-none' class to display the spinner
+                            // $myButton.html('<i class="ph-circle-notch spinner me-2"></i>Loading...'); // Update button text
+                        },
                         success: function(html) {
                             $('#bank_branch').html(html);
+                        },
+                        complete: function() {
+                            setTimeout(function() {
+                            // Your code here
+                            $bselect.removeAttr('disabled');
+                            $bloader.find('#select-loader').addClass('d-none'); // Add the 'd-none' class to hide the spinner
+                            // $myButton.html('<i class="ph-circle-notch spinner me-2 d-none"></i>Submit'); // Restore button text
+                            }, 1000); // 1000 milliseconds (1 second) delay
                         }
                     });
 
@@ -444,10 +473,12 @@
             $('#pos').on('change', function() {
                 var positionID = $(this).val();
                 if (positionID) {
+
                     $.ajax({
                         type: 'GET',
                         url: '{{ url("/flex/getPositionSalaryRange/") }}',
                         data: 'positionID=' + positionID,
+
                         success: function(response) {
                             var response = JSON.parse(response);
 
@@ -470,18 +501,23 @@
             $('#department').on('change', function() {
                 var stateID = $(this).val();
 
-                console.log(stateID);
-
                 if (stateID) {
+
+                    var $bselect = $('#pos');
+                    var $bloader = $('#position-loader');
+
                     $.ajax({
                         type: 'GET',
                         url: '{{ url("/flex/positionFetcher") }}',
                         data: 'dept_id=' + stateID,
+                        beforeSend: function(){
+                            $bselect.attr('disabled', 'disabled');
+                            $bloader.find('#pos-loader').removeClass('d-none'); // Remove the 'd-none' class to display the spinner
+                            // $myButton.html('<i class="ph-circle-notch spinner me-2"></i>Loading...'); // Update button text
+                        },
                         success: function(html) {
                             let jq_json_obj = $.parseJSON(html);
                             let jq_obj = eval(jq_json_obj);
-
-                            console.log(jq_obj);
 
                             //populate position
                             $("#pos option").remove();
@@ -546,6 +582,14 @@
                                 }));
                             });
 
+                        },
+                        complete: function() {
+                            setTimeout(function() {
+                            // Your code here
+                            $bselect.removeAttr('disabled');
+                            $bloader.find('#pos-loader').addClass('d-none'); // Add the 'd-none' class to hide the spinner
+                            // $myButton.html('<i class="ph-circle-notch spinner me-2 d-none"></i>Submit'); // Restore button text
+                            }, 1000); // 1000 milliseconds (1 second) delay
                         }
                     });
                 } else {

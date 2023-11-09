@@ -305,6 +305,8 @@ class AttendanceController extends Controller
     {
         $data['myleave'] = Leaves::where('empID', Auth::user()->emp_id)->orderBy('id', 'desc')->get();
         $id = Auth::user()->emp_id;
+        $employeee = Employee::where('emp_id', $id)->first();
+
 
         $level1 = DB::table('leave_approvals')->Where('level1', $id)->count();
         $level2 = DB::table('leave_approvals')->Where('level2', $id)->count();
@@ -396,7 +398,7 @@ class AttendanceController extends Controller
                 $employeeDate = $year . '-01-01';
             }
             $endDate = $year . '-12-31';
-            $daysAccrued = $this->attendance_model->getLeaveBalance(Auth::user()->emp_id, $employeeDate, $endDate);
+            $daysAccrued = $this->attendance_model->getAccruedBalance(Auth::user()->emp_id, $employeeDate, $endDate);
 
         } else {
             if ($employeeHireYear == $year) {
@@ -404,13 +406,13 @@ class AttendanceController extends Controller
             } else {
                 $employeeDate = $year . '-01-01';
             }
-            $daysAccrued = $this->attendance_model->getLeaveBalance(Auth::user()->emp_id, $employeeDate, date('Y-m-d'));
-
+            $daysAccrued = $this->attendance_model->getAccruedBalance(Auth::user()->emp_id, $employeeDate, date('Y-m-d'));
+                // dd($daysAccrued);
         }
         $data['Days Taken	'] = $this->getspentDays(Auth::user()->emp_id, $year);
 
 
-        $outstandingLeaveBalance = ($daysAccrued -  $data['Days Taken	'])??0;
+        $outstandingLeaveBalance = $this->attendance_model->getLeaveBalance(Auth::user()->emp_id, $employeeDate, date('Y-m-d'));
         $data['Accrued Days'] = number_format($daysAccrued ?? 0, 2);
         $data['Outstanding Leave Balance'] = number_format($outstandingLeaveBalance , 2) ;
         return response()->json($data);
@@ -555,6 +557,12 @@ class AttendanceController extends Controller
         return json_encode($year);
     }
 
+
+
+    public function validateSickLeaveDate(Request $request,$date) {
+        return json_encode([ 'status' => SysHelpers::isDateNextToWeekendOrHoliday($date)]);
+    }
+
     public function checkDate($empID)
     {
         // Get the current year
@@ -598,6 +606,19 @@ class AttendanceController extends Controller
         // For Redirection Url
         $url = redirect('flex/attendance/my-leaves');
 
+        $employeee = Employee::where('emp_id', Auth::user()->emp_id)->first();
+
+        $linemanager = $employeee->line_manager;
+        $leaveApproval = new LeaveApproval();
+        $leaveApproval = $leaveApproval::where('empID', Auth::user()->emp_id)->first();
+
+        if(!$leaveApproval){
+           $leaveApproval =  new LeaveApproval();
+           $leaveApproval->empID = Auth::user()->emp_id;
+           $leaveApproval->level1 = $linemanager;
+           $leaveApproval->save();
+        }
+
         if ($start <= $end) {
 
             //For Gender
@@ -611,16 +632,22 @@ class AttendanceController extends Controller
             $empID = Auth::user()->emp_id;
 
             // Check if there is a pending leave in the given number of days (start,end)
+            // $pendingLeave = Leaves::where('empId', $empID)
+            //     ->where('state', 1)
+            //     ->whereDate('end', '>=', $start)
+            //     ->first();
             $pendingLeave = Leaves::where('empId', $empID)
-                ->where('state', 1)
-                ->whereDate('end', '>=', $start)
-                ->first();
+            ->where('state', 1)
+            ->whereDate('start', '<=', $start)
+            ->whereDate('end', '>=', $start)
+            ->first();
 
             $approvedLeave = Leaves::where('empId', $empID)
-                ->where('state', 0)
-                ->whereDate('end', '>=', $start)
-                ->whereDate('end', '>=', $start)
-                ->first();
+            ->where('state', 0)
+            ->whereDate('start', '<=', $start)
+            ->whereDate('end', '>=', $start)
+            ->first();
+
 
             if ($pendingLeave || $approvedLeave) {
                 $message = 'You have a ';
@@ -917,7 +944,7 @@ class AttendanceController extends Controller
                             ]);
 
                             $newImageName = $request->image->hashName();
-                            $request->image->move(public_path('storage\leaves'), $newImageName);
+                            $request->image->move(public_path('storage/leaves'), $newImageName);
                             $leaves->attachment = $newImageName;
 
                         }
@@ -1169,7 +1196,7 @@ class AttendanceController extends Controller
         $approver = Auth()->user()->emp_id;
         $employee = Auth()->user()->position;
 
-        
+
 
         // chacking level 1
         if ($approval->level1 == $approver) {
@@ -1253,7 +1280,7 @@ class AttendanceController extends Controller
 
         $emp_data = SysHelpers::employeeData($empID);
         $email_data = array(
-            'subject' => 'Employee Overtime Approval',
+            'subject' => 'Employee leave Approval',
             'view' => 'emails.linemanager.approved_leave',
             'email' => $emp_data->email,
             'full_name' => $emp_data->fname, ' ' . $emp_data->mname . ' ' . $emp_data->lname,
@@ -1398,7 +1425,6 @@ class AttendanceController extends Controller
     ################## START LEAVE OPERATIONS ###########################
     public function cancelLeave($data)
     {
-        //dd($id);
         $result = explode('|', $data);
         if (count($result) > 1) {
             $id = $result[0];
@@ -1407,11 +1433,21 @@ class AttendanceController extends Controller
             $id = $data;
             $info = '';
         }
+        // dd($result);
 
         if ($id != '') {
             $leaveID = $id;
-
             $leave = Leaves::where('id', $leaveID)->first();
+            if($info){
+                $leave->position = 'Denied by '. SysHelpers::getUserPosition(Auth::user()->position);
+                $leave->state = 5;
+                $leave->level1 = Auth::user()->id;
+                $leave->revoke_reason = $info;
+            }else{
+
+                $leave->state = 4;
+                $leave->position = 'Cancelled by you';
+            }
 
             if ($info != '') {
                 //sending email specify the reason
@@ -1428,19 +1464,19 @@ class AttendanceController extends Controller
                 //dd($employee_data['email']);
                 try {
 
-                    Notification::route('mail', $employee_data['email'])->notify(new EmailRequests($email_data));
+                    // Notification::route('mail', $employee_data['email'])->notify(new EmailRequests($email_data));
 
                 } catch (Exception $exception) {
 
                     echo "<p class='alert alert-primary text-center'>Email Not sent</p>";
                 }
             }
-            $leave->delete();
+            $leave->save();
 
-            $msg = "Leave  Deleted Successfully !";
+            $msg = "Leave  Canceled Successfully !";
 
-            echo "<p class='alert alert-primary text-center'>Leave Was Rejected Successfully</p>";
-
+            // echo "<p class='alert alert-primary text-center'>Leave Was Canceled Successfully</p>";
+            return json_encode(['status' => 'OK']);
             //  return redirect('flex/attendance/my-leaves')->with('msg', $msg);
         }
     }
@@ -1512,6 +1548,11 @@ class AttendanceController extends Controller
         $expectedDate = $request->input('expectedDate');
 
         $particularLeave = Leaves::where('id', $id)->first();
+        $linemanager = LeaveApproval::where('empID', $particularLeave->empID)->first();
+        $linemanager_position = Employee::where('emp_id',$linemanager->level1)->value('position');
+        $position = Position::where('id', $linemanager_position)->first();
+        $positionName = $position->name;
+
 
         if ($particularLeave) {
             $particularLeave->state = 2;
@@ -1519,6 +1560,8 @@ class AttendanceController extends Controller
             $particularLeave->enddate_revoke = $expectedDate;
             $particularLeave->revoke_status = 0;
             $particularLeave->status = 4;
+            $particularLeave->revok_escalation_status = 1;
+            $particularLeave->position = 'Pending Approve Revoke by '. $positionName;
             $particularLeave->revoke_created_at = now();
             $particularLeave->save();
         }
@@ -1527,16 +1570,15 @@ class AttendanceController extends Controller
         $type_name = $leave_type->type;
 
         //fetch Line manager data from employee table and send email
-        $linemanager = LeaveApproval::where('empID', $particularLeave->empID)->first();
-        $linemanager_data = SysHelpers::employeeData($linemanager->level2);
-        $employee_data = SysHelpers::employeeData($particularLeave->empID);
-        $fullname = $linemanager_data['full_name'];
+        $linemanager_data = Employee::where('emp_id',$linemanager->level1)->first();
+        $employee_data =  Employee::where('emp_id',$particularLeave->empID)->first();
+        $fullname = $linemanager_data['fname'];
         $email_data = array(
             'subject' => 'Employee Leave Revoke',
             'view' => 'emails.linemanager.leave-revoke',
             'email' => $linemanager_data['email'],
             'full_name' => $fullname,
-            'employee_name' => $employee_data['full_name'],
+            'employee_name' => $employee_data['fname'],
             'next' => parse_url(route('attendance.leave'), PHP_URL_PATH),
         );
 
@@ -2140,12 +2182,14 @@ class AttendanceController extends Controller
             // Check if there is a pending leave in the given number of days (start,end)
             $pendingLeave = Leaves::where('empId', $empID)
                 ->where('state', 1)
+                ->whereDate('start', '<=', $start)
                 ->whereDate('end', '>=', $start)
                 ->first();
 
             $approvedLeave = Leaves::where('empId', $empID)
                 ->where('state', 0)
-                ->whereDate('end', '>=', $start)
+                ->whereDate('start', '<=', $start)
+            ->whereDate('end', '>=', $start)
                 ->first();
 
             if ($pendingLeave || $approvedLeave) {
@@ -2257,7 +2301,7 @@ class AttendanceController extends Controller
                                 'image' => 'mimes:jpg,png,jpeg,pdf|max:2048',
                             ]);
                             $newImageName = $request->image->hashName();
-                            $request->image->move(public_path('storage\leaves'), $newImageName);
+                            $request->image->move(public_path('storage/leaves'), $newImageName);
                             $leaves->attachment = $newImageName;
 
                         }
@@ -2442,7 +2486,7 @@ class AttendanceController extends Controller
                             ]);
 
                             $newImageName = $request->image->hashName();
-                            $request->image->move(public_path('storage\leaves'), $newImageName);
+                            $request->image->move(public_path('storage/leaves'), $newImageName);
                             $leaves->attachment = $newImageName;
 
                         }
@@ -2901,11 +2945,13 @@ class AttendanceController extends Controller
             // Check if there is a pending leave in the given number of days (start,end)
             $pendingLeave = Leaves::where('empId', $empID)
                 ->where('state', 1)
+                ->whereDate('start', '<=', $start)
                 ->whereDate('end', '>=', $start)
                 ->first();
 
             $approvedLeave = Leaves::where('empId', $empID)
                 ->where('state', 0)
+                ->whereDate('start', '<=', $start)
                 ->whereDate('end', '>=', $start)
                 ->first();
 

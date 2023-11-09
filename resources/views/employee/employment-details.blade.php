@@ -25,28 +25,28 @@
 
                         <div class="row mb-2">
 
-                            <div class="form-group col-6">
-                                <label for="">First Name</label>
+                            <div class="mb-3 col-md-6">
+                                <label class="form-label" for="">First Name</label>
                                 <input type="text" name="em_fname" @if($emergency) value="{{ $emergency->em_fname}}" @endif class="form-control">
                             </div>
-                            <div class="form-group col-6">
-                                <label for="">Middle Name</label>
+                            <div class="mb-3 col-md-6">
+                                <label class="form-label" for="">Middle Name</label>
                                 <input type="text" name="em_mname" @if($emergency) value="{{ $emergency->em_mname}}" @endif class="form-control">
                             </div>
-                            <div class="form-group col-6">
-                                <label for="">Surname</label>
+                            <div class="mb-3 col-md-6">
+                                <label class="form-label" for="">Surname</label>
                                 <input type="text" name="em_lname" @if($emergency) value="{{ $emergency->em_sname}}" @endif class="form-control">
                             </div>
-                            <div class="form-group col-6">
-                                <label for="">Relationship</label>
+                            <div class="mb-3 col-md-6">
+                                <label class="form-label" for="">Relationship</label>
                                 <input type="text" name="em_relationship" @if($emergency) value="{{ $emergency->em_relationship}}" @endif id="" class="form-control">
                             </div>
-                            <div class="form-group col-6">
-                                <label for="">Occupation</label>
+                            <div class="mb-3 col-md-6">
+                                <label class="form-label" for="">Occupation</label>
                                 <input type="text" name="em_occupation" @if($emergency) value="{{ $emergency->em_occupation}}" @endif id="" class="form-control">
                             </div>
-                            <div class="form-group col-6">
-                                <label for="">Cellphone Number</label>
+                            <div class="mb-3 col-md-6">
+                                <label class="form-label" for="">Cellphone Number</label>
                                 <input type="text" name="em_phone" @if($emergency) value="{{ $emergency->em_phone}}" @endif id="" class="form-control">
                             </div>
 
@@ -66,35 +66,32 @@
 
                     <form action="{{ route('flex.saveDetailsEmployment') }}" method="post" enctype="multipart/form-data">
                         @csrf
+
                         <input type="hidden" name="employeeID"  value="<?php echo $empID; ?>" id="">
 
-
-
                         <div class="row mb-2">
+                            <div class="col-6 mb-2">
+                                <label class="form-label" for="">Date of Employment</label>
+                                <input type="date" name="employment_date" value="<?php echo $hire_date; ?>" class="form-control">
+                            </div>
 
                             <div class="form-group col-6 mb-2">
-                                <label for="">Date of Employment</label>
-                                <input type="text" name="employment_date" value="<?php echo $hire_date; ?>" class="form-control">
-                            </div>
-                            <div class="form-group col-6 mb-2">
-                                <label for="">First Job Title</label>
+                                <label class="form-label" for="">First Job Title</label>
                                 <input type="text" name="former_title" @if($details) value="{{ $details->former_title}}" @endif class="form-control">
                             </div>
-                            <div class="form-group col-6 mb-2">
-                                {{-- {{dd($title);}} --}}
-                                <p></p>
-                                <label for="">Current Job Title: <?php echo $title; ?></label>
-                                <br>
-                                <label for="">Department : <?php echo $department; ?></label>
-                                <br>
-                                <label for="">Branch : <?php echo $branch; ?></label>
+
+                            <div class="form-group col-6 mt-3">
+                                <h5 class="form-label" for="">Current Job Title: <?php echo $title; ?></h5>
+
+                                <p><b>Department</b>: <span><?php echo $department; ?></span></p>
+                                <p><b>Branch</b>: <span><?php echo $branch; ?></span></p>
 
                             </div>
 
 
 
                             <div class="form-group col-12 mb-2">
-                                <label for="">Line Manager</label>
+                                <label class="form-label" for="">Line Manager</label>
                                 <br>
                                 <p>
                                     Current:
@@ -109,7 +106,7 @@
                                     @endif
                                 </p>
 
-                                <label for="">Update Line Manager</label>
+                                <label class="form-label" for="">Update Line Manager</label>
                                 <select class="form-control select @error('line_manager') is-invalid @enderror" name="line_manager">
                                     <option value="<?php echo $line_managerID; ?>"> Select New Line Manager </option>
                                     @foreach ($employees as $depart)
@@ -120,7 +117,7 @@
                             </div>
 
                             {{-- <div class="form-group col-12 mb-2">
-                                <label for="">Head Of Department</label>
+                                <label class="form-label" for="">Head Of Department</label>
                                 <input type="text" name="hod" value="" class="form-control">
                             </div> --}}
 
