@@ -32,13 +32,13 @@
 
 
                 {{-- include  apply for behalf leave form --}}
-                @include('app.aply_leave_behalf')
+                @include('app.apply_leave_behalf')
 
                 {{-- include  new leave applications table  --}}
                 @include('app.newleave_applications')
 
                 {{-- include  approved leave applications table  --}}
-                @include('app.aprovedleave_applications')
+                @include('app.approvedleave_applications')
 
                 {{-- include  revoked leave applications table  --}}
                 @include('app.revokedleave_applications')
