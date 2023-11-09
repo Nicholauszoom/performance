@@ -89,13 +89,13 @@
            function hidemodel() {
 
             $('#delete').hide();
-            location.reload();
+            // location.reload();
         }
 
-        function cancelLeave(id) {
-            $('#delete').hide();
-            location.reload();
-        }
+        // function cancelLeave(id) {
+        //     $('#delete').hide();
+        //     location.reload();
+        // }
 
         function cancelLeave(id) {
 
@@ -130,15 +130,16 @@
 
                         // },
                         success: function(data) {
-                            alert(data);
+
                             var data = JSON.parse(data);
+                            console.log(data)
                             if (data.status == 'OK') {
                                 $('#delete').modal('hide');
                                 new Noty({
                                     text: 'Leave Approved  successfully!',
                                     type: 'success'
                                 }).show();
-                                location.reload();
+                                setTimeout(function(){location.reload();},3000);
                             } else {
                                 $('#delete').modal('hide');
                                 new Noty({
@@ -149,6 +150,13 @@
 
                             }
 
+                        },
+                        error: function(){
+                            $('#delete').modal('hide');
+                            new Noty({
+                        text: 'Failed to cancel',
+                        type: 'error'
+                    }).show();
                         }
 
                     });

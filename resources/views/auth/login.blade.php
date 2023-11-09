@@ -104,7 +104,7 @@
                                                             placeholder="username" autocomplete="off">
 
                                                         <div class="form-control-feedback-icon">
-                                                            <i class="ph-user-circle text-muted"></i>
+                                                            <i toggle="#password-field" class="ph-user-circle text-muted"></i>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -118,8 +118,8 @@
                                                             placeholder="password" name="password" required
                                                             autocomplete="off">
 
-                                                        <div class="form-control-feedback-icon">
-                                                            <i class="ph-lock text-muted"></i>
+                                                        <div class="form-control-feedback-icon" id="showPass">
+                                                            <i class="ph-eye-closed text-muted toggle-password"></i>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -158,6 +158,28 @@
             style="height:3.5em;width:100%;float-left;opacity:100%" alt="logo">
 
     </div> -->
+
+    <script>
+       document.addEventListener("DOMContentLoaded", function() {
+            var togglePasswords = document.querySelectorAll(".toggle-password");
+
+            togglePasswords.forEach(function(togglePassword) {
+                togglePassword.addEventListener("click", function() {
+                    togglePassword.classList.toggle("ph-eye");
+                    togglePassword.classList.toggle("ph-eye-closed");
+
+                    var input = document.getElementById("password");
+                    // var input = document.querySelector(targetInputId);
+
+                    if (input.getAttribute("type") === "password") {
+                        input.setAttribute("type", "text");
+                    } else {
+                        input.setAttribute("type", "password");
+                    }
+                });
+            });
+        });
+    </script>
 
 </body>
 
