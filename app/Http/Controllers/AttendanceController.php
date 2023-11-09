@@ -1404,7 +1404,6 @@ class AttendanceController extends Controller
     ################## START LEAVE OPERATIONS ###########################
     public function cancelLeave($data)
     {
-        //dd($id);
         $result = explode('|', $data);
         if (count($result) > 1) {
             $id = $result[0];
@@ -1418,6 +1417,7 @@ class AttendanceController extends Controller
             $leaveID = $id;
 
             $leave = Leaves::where('id', $leaveID)->first();
+            $leave->state = 4;
 
             if ($info != '') {
                 //sending email specify the reason
@@ -1441,11 +1441,11 @@ class AttendanceController extends Controller
                     echo "<p class='alert alert-primary text-center'>Email Not sent</p>";
                 }
             }
-            $leave->delete();
+            $leave->save();
 
-            $msg = "Leave  Deleted Successfully !";
+            $msg = "Leave  Canceled Successfully !";
 
-            echo "<p class='alert alert-primary text-center'>Leave Was Rejected Successfully</p>";
+            echo "<p class='alert alert-primary text-center'>Leave Was Canceled Successfully</p>";
 
             //  return redirect('flex/attendance/my-leaves')->with('msg', $msg);
         }
