@@ -555,6 +555,12 @@ class AttendanceController extends Controller
         return json_encode($year);
     }
 
+
+
+    public function validateSickLeaveDate(Request $request,$date) {
+        return json_encode([ 'status' => SysHelpers::isDateNextToWeekendOrHoliday($date)]);
+    }
+
     public function checkDate($empID)
     {
         // Get the current year

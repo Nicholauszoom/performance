@@ -38,15 +38,15 @@
                         <select id="employee_exited_list" class="form-select" tabindex="-1">
                             <option value="">-- Select Year --</option>
                             <!-- <option value="2008">2008</option>
-                            <option value="2021">2021</option>
-                            <option value="2022">2022</option> -->
+                                <option value="2021">2021</option>
+                                <option value="2022">2022</option> -->
                             {{-- <option value="2023" selected>2023</option> --}}
                             <!-- <option value="2024">2024</option>
-                            <option value="2025">2025</option>
-                            <option value="2026">2026</option>
-                            <option value="2027">2027</option>
-                            <option value="2028">2028</option>
-                            <option value="2029">2029</option> -->
+                                <option value="2025">2025</option>
+                                <option value="2026">2026</option>
+                                <option value="2027">2027</option>
+                                <option value="2028">2028</option>
+                                <option value="2029">2029</option> -->
                         </select>
                     </div>
                     <div id="balance-table-placeholder">
@@ -93,7 +93,8 @@
                             <span id="remain" class="text-success"></span>
                         </code>
                     </div>
-                    <form autocomplete="off" action="{{ url('flex/attendance/save_leave') }}" method="post" enctype="multipart/form-data">
+                    <form autocomplete="off" action="{{ url('flex/attendance/save_leave') }}" method="post"
+                        enctype="multipart/form-data">
                         @csrf
                         <div class="row">
                             <div class="form-group col-md-6">
@@ -318,8 +319,7 @@
                                 } else {
                                     echo '<span class="label label-default badge bg-info text-white">' . $row->position . '</span>';
                                 }
-                            }
-                            elseif ($row->status == 4) {
+                            } elseif ($row->status == 4) {
                                 $levelID = App\Models\LeaveApproval::where('empID', Auth::user()->emp_id)->value('level2');
                                 $levelID3 = App\Models\LeaveApproval::where('empID', Auth::user()->emp_id)->value('level2');
 
@@ -342,8 +342,7 @@
                                 } else {
                                     echo '<span class="label label-default badge bg-info text-white">' . $row->position . '</span>';
                                 }
-                            }
-                            elseif ($row->status == 5) {
+                            } elseif ($row->status == 5) {
                                 $levelID = App\Models\LeaveApproval::where('empID', Auth::user()->emp_id)->value('level2');
                                 $levelID3 = App\Models\LeaveApproval::where('empID', Auth::user()->emp_id)->value('level2');
 
@@ -366,8 +365,7 @@
                                 } else {
                                     echo '<span class="label label-default badge bg-info text-white">' . $row->position . '</span>';
                                 }
-                            }
-                             else {
+                            } else {
                                 $levelID = App\Models\LeaveApproval::where('empID', Auth::user()->emp_id)->value('level3');
 
                                 if ($row->position == null) {
@@ -403,19 +401,20 @@
                         <div>
 
                             <?php if ($row->state==1){ ?>
-                                <span class="label label-default badge bg-pending text-white">PENDING REQUEST</span>
+                            <span class="label label-default badge bg-pending text-white">PENDING REQUEST</span>
                             <?php }
                       elseif($row->state==0){?>
-                                <span class="label badge bg-info text-whites label-info">APPROVED</span>
+                            <span class="label badge bg-info text-whites label-info">APPROVED</span>
                             <?php }
                       elseif($row->state==2){?>
-                                <span class="label badge bg-warning text-whites label-info">PENDING APPROVAL OF LEAVE REVOKE</span>
+                            <span class="label badge bg-warning text-whites label-info">PENDING APPROVAL OF LEAVE
+                                REVOKE</span>
                             <?php }
                       elseif($row->state==3){?>
-                                <span class="label badge bg-success text-whites label-info">APPROVED LEAVE REVOKE </span>
+                            <span class="label badge bg-success text-whites label-info">APPROVED LEAVE REVOKE </span>
                             <?php }
                       elseif($row->state==4){?>
-                                <span class="label badge bg-danger text-white">DENIED</span>
+                            <span class="label badge bg-danger text-white">DENIED</span>
                             <?php } ?>
                         </div>
 
@@ -428,8 +427,9 @@
                             <button class="btn btn-danger btn-sm">Cancel Leave Request <i class="ph-x"></i></button>
                         </a>
                         <?php } else if ($row->state == 0) { ?>
-                            <a href="{{ url('flex/attendance/revokeLeave/' . $row->id) }}" title="Revoke Approved Leave" class="icon-2 info-tooltip disabled">
-                                <button class="btn btn-main btn-sm">Initiate Revoke Request<i class="ph-prohibit"></i>
+                        <a href="{{ url('flex/attendance/revokeLeave/' . $row->id) }}" title="Revoke Approved Leave"
+                            class="icon-2 info-tooltip disabled">
+                            <button class="btn btn-main btn-sm">Initiate Revoke Request<i class="ph-prohibit"></i>
                             </button>
                         </a>
                         <?php } ?>
@@ -688,15 +688,16 @@
             var url = '{{ route('getSubs', ':id') }}';
             url = url.replace(':id', par);
 
-            if (id == 1) {
-                $("#attachment").hide();
-                $("#attach").prop('required', false);
-            } else {
-                $("#attachment").show();
-                $("#attach").prop('required', true);
-            }
+            // if (id == 1) {
+            //     $("#attachment").hide();
+            //     $("#attach").prop('required', false);
+            // } else {
+            //     $("#attachment").show();
+            //     $("#attach").prop('required', true);
+            // }
 
-            $('#subs_cat').find('option').not(':first').remove();
+            $('#subs_cat').find('option').remove();
+            // $('#subs_cat').find('option').not(':first').remove();
 
             $.ajax({
                 url: url,
@@ -726,9 +727,40 @@
 
                     }
 
-
+                    processAttachmentDisplay(days)
                 }
             });
+
+            function processAttachmentDisplay(_days) {
+
+                if (id == 1) {
+                    $("#attachment").hide();
+                } else if (id == 2) {
+                    if (_days == 1) {
+
+                        var validateUrl = '{{ route('attendance.validateSickLeave', ':date') }}'
+                        validateUrl = validateUrl.replace(':date', start)
+                        $.ajax({
+                            url: validateUrl,
+                            type: 'get',
+                            dataType: 'json',
+                            success: function(response) {
+                                if (response.status) {
+                                    $('#attachment').show()
+                                } else {
+                                    $('#attachment').hide()
+                                }
+                            }
+                        })
+                    } else {
+                        $('#attachment').hide()
+
+                    }
+
+                } else {
+                    $("#attachment").show();
+                }
+            }
         });
     </script>
 
@@ -873,23 +905,24 @@
 
     <script>
         $(document).ready(function() {
-             // Call the function to populate the select element
+            // Call the function to populate the select element
             populateYearSelect();
+
             function populateYearSelect() {
-            var select = $('#employee_exited_list');
-            var currentYear = new Date().getFullYear();
+                var select = $('#employee_exited_list');
+                var currentYear = new Date().getFullYear();
 
-            // Add the previous year, current year, and next year as options
-            for (var i = currentYear - 1; i <= currentYear + 1; i++) {
-                var option = $("<option></option>");
-                option.attr("value", i);
-                option.text(i);
-                select.append(option);
+                // Add the previous year, current year, and next year as options
+                for (var i = currentYear - 1; i <= currentYear + 1; i++) {
+                    var option = $("<option></option>");
+                    option.attr("value", i);
+                    option.text(i);
+                    select.append(option);
+                }
+
+                // Set the default selection to the current year
+                select.val(currentYear);
             }
-
-            // Set the default selection to the current year
-            select.val(currentYear);
-        }
 
 
             get_leave_statement($("#employee_exited_list").val())
@@ -903,7 +936,7 @@
             function get_leave_statement(selectedYear) {
 
                 // Construct the URL with the selected year parameter
-                var url = '{{url('')}}/flex/attendance/annualleavebalance/' + selectedYear;
+                var url = '{{ url('') }}/flex/attendance/annualleavebalance/' + selectedYear;
 
                 // Make an AJAX request to fetch the data
                 $.ajax({
