@@ -398,7 +398,7 @@ class AttendanceController extends Controller
                 $employeeDate = $year . '-01-01';
             }
             $endDate = $year . '-12-31';
-            $daysAccrued = $this->attendance_model->getLeaveBalance(Auth::user()->emp_id, $employeeDate, $endDate);
+            $daysAccrued = $this->attendance_model->getAccruedBalance(Auth::user()->emp_id, $employeeDate, $endDate);
 
         } else {
             if ($employeeHireYear == $year) {
@@ -406,13 +406,13 @@ class AttendanceController extends Controller
             } else {
                 $employeeDate = $year . '-01-01';
             }
-            $daysAccrued = $this->attendance_model->getLeaveBalance(Auth::user()->emp_id, $employeeDate, date('Y-m-d'));
-
+            $daysAccrued = $this->attendance_model->getAccruedBalance(Auth::user()->emp_id, $employeeDate, date('Y-m-d'));
+                // dd($daysAccrued);
         }
         $data['Days Taken	'] = $this->getspentDays(Auth::user()->emp_id, $year);
 
 
-        $outstandingLeaveBalance = ($daysAccrued -  $data['Days Taken	'])??0;
+        $outstandingLeaveBalance = $this->attendance_model->getLeaveBalance(Auth::user()->emp_id, $employeeDate, date('Y-m-d'));
         $data['Accrued Days'] = number_format($daysAccrued ?? 0, 2);
         $data['Outstanding Leave Balance'] = number_format($outstandingLeaveBalance , 2) ;
         return response()->json($data);
