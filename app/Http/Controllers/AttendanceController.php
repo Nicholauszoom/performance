@@ -2146,12 +2146,14 @@ class AttendanceController extends Controller
             // Check if there is a pending leave in the given number of days (start,end)
             $pendingLeave = Leaves::where('empId', $empID)
                 ->where('state', 1)
+                ->whereDate('start', '<=', $start)
                 ->whereDate('end', '>=', $start)
                 ->first();
 
             $approvedLeave = Leaves::where('empId', $empID)
                 ->where('state', 0)
-                ->whereDate('end', '>=', $start)
+                ->whereDate('start', '<=', $start)
+            ->whereDate('end', '>=', $start)
                 ->first();
 
             if ($pendingLeave || $approvedLeave) {
@@ -2907,11 +2909,13 @@ class AttendanceController extends Controller
             // Check if there is a pending leave in the given number of days (start,end)
             $pendingLeave = Leaves::where('empId', $empID)
                 ->where('state', 1)
+                ->whereDate('start', '<=', $start)
                 ->whereDate('end', '>=', $start)
                 ->first();
 
             $approvedLeave = Leaves::where('empId', $empID)
                 ->where('state', 0)
+                ->whereDate('start', '<=', $start)
                 ->whereDate('end', '>=', $start)
                 ->first();
 
