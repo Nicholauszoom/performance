@@ -628,7 +628,7 @@ class AttendanceController extends Controller
             ->get();
 
 
-            if ($pendingLeave || $approvedLeave) {
+            if (!$pendingLeave->isEmpty() || !$approvedLeave->isEmpty()) {
                 $message = 'You have a ';
 
                 if ($pendingLeave) {
