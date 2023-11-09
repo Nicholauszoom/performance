@@ -513,6 +513,7 @@ Route::middleware('auth')->middleware([Setting::class])->group(function(){
         Route::get('get/details/{id}', 'getDetails')->name('getSubs');
         Route::get('get/detailsSub/{id}', 'getDetailsSub')->name('getLeaveSubs');
         Route::any('/check_leave_balance' ,'check_leave_balance')->name('attendance.check_leave_balance');
+        Route::any('/validate_sick_leave/{date}' ,'validateSickLeaveDate')->name('attendance.validateSickLeave');
 
 
 
