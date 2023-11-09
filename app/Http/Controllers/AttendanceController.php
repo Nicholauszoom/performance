@@ -305,6 +305,8 @@ class AttendanceController extends Controller
     {
         $data['myleave'] = Leaves::where('empID', Auth::user()->emp_id)->orderBy('id', 'desc')->get();
         $id = Auth::user()->emp_id;
+        $employeee = Employee::where('emp_id', $id)->first();
+
 
         $level1 = DB::table('leave_approvals')->Where('level1', $id)->count();
         $level2 = DB::table('leave_approvals')->Where('level2', $id)->count();
@@ -604,6 +606,19 @@ class AttendanceController extends Controller
         // For Redirection Url
         $url = redirect('flex/attendance/my-leaves');
 
+        $employeee = Employee::where('emp_id', Auth::user()->emp_id)->first();
+
+        $linemanager = $employeee->line_manager;
+        $leaveApproval = new LeaveApproval();
+        $leaveApproval = $leaveApproval::where('empID', Auth::user()->emp_id)->first();
+
+        if(!$leaveApproval){
+           $leaveApproval =  new LeaveApproval();
+           $leaveApproval->empID = Auth::user()->emp_id;
+           $leaveApproval->level1 = $linemanager;
+           $leaveApproval->save();
+        }
+
         if ($start <= $end) {
 
             //For Gender
@@ -625,13 +640,13 @@ class AttendanceController extends Controller
             ->where('state', 1)
             ->whereDate('start', '<=', $start)
             ->whereDate('end', '>=', $start)
-            ->get();
+            ->first();
 
             $approvedLeave = Leaves::where('empId', $empID)
             ->where('state', 0)
             ->whereDate('start', '<=', $start)
             ->whereDate('end', '>=', $start)
-            ->get();
+            ->first();
 
 
             if ($pendingLeave || $approvedLeave) {
@@ -1410,7 +1425,6 @@ class AttendanceController extends Controller
     ################## START LEAVE OPERATIONS ###########################
     public function cancelLeave($data)
     {
-        //dd($id);
         $result = explode('|', $data);
         if (count($result) > 1) {
             $id = $result[0];
@@ -1424,6 +1438,7 @@ class AttendanceController extends Controller
             $leaveID = $id;
 
             $leave = Leaves::where('id', $leaveID)->first();
+            $leave->state = 4;
 
             if ($info != '') {
                 //sending email specify the reason
@@ -1447,11 +1462,11 @@ class AttendanceController extends Controller
                     echo "<p class='alert alert-primary text-center'>Email Not sent</p>";
                 }
             }
-            $leave->delete();
+            $leave->save();
 
-            $msg = "Leave  Deleted Successfully !";
+            $msg = "Leave  Canceled Successfully !";
 
-            echo "<p class='alert alert-primary text-center'>Leave Was Rejected Successfully</p>";
+            echo "<p class='alert alert-primary text-center'>Leave Was Canceled Successfully</p>";
 
             //  return redirect('flex/attendance/my-leaves')->with('msg', $msg);
         }
