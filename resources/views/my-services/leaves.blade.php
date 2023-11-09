@@ -40,7 +40,7 @@
                             <!-- <option value="2008">2008</option>
                             <option value="2021">2021</option>
                             <option value="2022">2022</option> -->
-                            <option value="2023" selected>2023</option>
+                            {{-- <option value="2023" selected>2023</option> --}}
                             <!-- <option value="2024">2024</option>
                             <option value="2025">2025</option>
                             <option value="2026">2026</option>
@@ -88,6 +88,11 @@
 
             <div class=" col-md-8 border-left" style="border-left: 2px solid #000 !important;">
                 <div class="card-body">
+                    <div class="col-6 tex-mdt-sucess text-secondary" id="remaining" style="display:none">
+                        <code class="text-success">
+                            <span id="remain" class="text-success"></span>
+                        </code>
+                    </div>
                     <form autocomplete="off" action="{{ url('flex/attendance/save_leave') }}" method="post" enctype="multipart/form-data">
                         @csrf
                         <div class="row">
@@ -424,7 +429,7 @@
                         </a>
                         <?php } else if ($row->state == 0) { ?>
                             <a href="{{ url('flex/attendance/revokeLeave/' . $row->id) }}" title="Revoke Approved Leave" class="icon-2 info-tooltip disabled">
-                                <button class="btn btn-primary btn-sm">Revoke Approved Leave<i class="ph-prohibit"></i>
+                                <button class="btn btn-main btn-sm">Initiate Revoke Request<i class="ph-prohibit"></i>
                             </button>
                         </a>
                         <?php } ?>
@@ -699,7 +704,6 @@
                 dataType: 'json',
 
                 success: function(response) {
-
                     let days = response.days;
                     let subs = response.data;
                     var status = "<span>" + response.days + " Days</span>"
@@ -869,6 +873,24 @@
 
     <script>
         $(document).ready(function() {
+             // Call the function to populate the select element
+            populateYearSelect();
+            function populateYearSelect() {
+            var select = $('#employee_exited_list');
+            var currentYear = new Date().getFullYear();
+
+            // Add the previous year, current year, and next year as options
+            for (var i = currentYear - 1; i <= currentYear + 1; i++) {
+                var option = $("<option></option>");
+                option.attr("value", i);
+                option.text(i);
+                select.append(option);
+            }
+
+            // Set the default selection to the current year
+            select.val(currentYear);
+        }
+
 
             get_leave_statement($("#employee_exited_list").val())
             // Bind an event handler to the select element
@@ -900,7 +922,7 @@
                 });
 
             }
-            
+
 
             function updateTable(data) {
                 var table = $("#balance-table-placeholder table tbody"); // Select the table body

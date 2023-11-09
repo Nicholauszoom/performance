@@ -194,7 +194,7 @@
 
             @endphp
 
-            @if ( (Auth()->user()->emp_id == $approval->level1 && $item->status == 1) ||(Auth()->user()->emp_id == $approval->level2 && $item->status == 2) || (Auth()->user()->emp_id == $approval->level3 && $item->status == 3))
+            @if ( (Auth()->user()->emp_id == $approval->level1 ) ||(Auth()->user()->emp_id == $approval->level2 && $item->status == 2) || (Auth()->user()->emp_id == $approval->level3 && $item->status == 3))
             <tr>
                 <td>{{ $item->empID }}</td>
                 <td>{{ $item->employee->fname }} {{ $item->employee->mname }}
@@ -255,7 +255,7 @@
                     @endif
                     @if (isset($approval))
                     @if ( $item->state == 1)
-                    @if ( (Auth()->user()->emp_id == $approval->level1 && $item->status == 1) ||(Auth()->user()->emp_id == $approval->level2 && $item->status == 2) || (Auth()->user()->emp_id == $approval->level3 && $item->status == 3))
+                    @if ( (Auth()->user()->emp_id == $approval->level1 ) ||(Auth()->user()->emp_id == $approval->level2 && $item->status == 2) || (Auth()->user()->emp_id == $approval->level3 && $item->status == 3))
 
                         <div class="col-md-12 text-center mt-1">
                             <a href="{{ url('flex/attendance/approveLeave/' . $item->id) }}" title="Approve">
@@ -395,7 +395,7 @@
                 </td>
                 <td class="text-center">
 
-                    @if(Auth()->user()->emp_id == $approval->level3  & ($item->state == 2 || $item->state == 0))
+                    @if(Auth()->user()->emp_id == $approval->level1  & ($item->state == 2 || $item->state == 0))
                     <div class="col-md-12 text-center mt-1">
                         <a href="{{ url('flex/attendance/revokeLeave/' . $item->id) }}" title="Revoke Approved Leave" class="icon-2 info-tooltip disabled">
                             <button class="btn btn-secondary btn-sm">Revoke Approved Leave<i class="ph-prohibit"></i></button>
@@ -453,6 +453,9 @@
             $level3 = App\Models\LeaveApproval::where('empID', $item->empID)
             ->where('level3', $line_manager)
             ->first();
+
+            $approval = App\Models\LeaveApproval::where('empID', $item->empID)->first();
+
 
             // $level2=$approve->level2;
             // $level3=$approve->level3;
@@ -520,10 +523,10 @@
                 </td>
                 <td class="text-center">
 
-                    @if(Auth()->user()->emp_id == $approval->level3  & $item->state == 2 || $item->state == 0)
+                    @if(Auth()->user()->emp_id == $approval->level1  & $item->state == 2 || $item->state == 0)
                     <div class="col-md-12 text-center mt-1">
                         <a href="{{ url('flex/attendance/revokeLeave/' . $item->id) }}" title="Revoke Approved Leave" class="icon-2 info-tooltip disabled">
-                            <button class="btn btn-secondary btn-sm">Revoke requested approved Leave<i class="ph-prohibit"></i></button>
+                            <button class="btn btn-secondary btn-sm">Approve Leave Revoke<i class="ph-prohibit"></i></button>
                         </a>
                         <a href="{{ url('flex/attendance/cancelRevokeLeave/' . $item->id) }}" title="Cance Revoke Request" class="icon-2 info-tooltip disabled">
                             <button class="btn btn-warning btn-sm">Cancel Leave Revoke<i class="ph-x"></i></button>

@@ -407,11 +407,12 @@ class AttendanceController extends Controller
             $daysAccrued = $this->attendance_model->getLeaveBalance(Auth::user()->emp_id, $employeeDate, date('Y-m-d'));
 
         }
-
-        $outstandingLeaveBalance = $daysAccrued;
-        $data['Accrued Days'] = number_format($daysAccrued ?? 0, 2);
         $data['Days Taken	'] = $this->getspentDays(Auth::user()->emp_id, $year);
-        $data['Outstanding Leave Balance'] = ($daysAccrued -  $data['Days Taken	'])??0 ;
+
+
+        $outstandingLeaveBalance = ($daysAccrued -  $data['Days Taken	'])??0;
+        $data['Accrued Days'] = number_format($daysAccrued ?? 0, 2);
+        $data['Outstanding Leave Balance'] = number_format($outstandingLeaveBalance , 2) ;
         return response()->json($data);
     }
 
@@ -610,16 +611,22 @@ class AttendanceController extends Controller
             $empID = Auth::user()->emp_id;
 
             // Check if there is a pending leave in the given number of days (start,end)
+            // $pendingLeave = Leaves::where('empId', $empID)
+            //     ->where('state', 1)
+            //     ->whereDate('end', '>=', $start)
+            //     ->first();
             $pendingLeave = Leaves::where('empId', $empID)
-                ->where('state', 1)
-                ->whereDate('end', '>=', $start)
-                ->first();
+            ->where('state', 1)
+            ->whereDate('start', '<=', $start)
+            ->whereDate('end', '>=', $start)
+            ->get();
 
             $approvedLeave = Leaves::where('empId', $empID)
-                ->where('state', 0)
-                ->whereDate('end', '>=', $start)
-                ->whereDate('end', '>=', $start)
-                ->first();
+            ->where('state', 0)
+            ->whereDate('start', '<=', $start)
+            ->whereDate('end', '>=', $start)
+            ->get();
+
 
             if ($pendingLeave || $approvedLeave) {
                 $message = 'You have a ';
@@ -731,7 +738,7 @@ class AttendanceController extends Controller
                                 'image' => 'mimes:jpg,png,jpeg,pdf|max:2048',
                             ]);
                             $newImageName = $request->image->hashName();
-                            $request->image->move(public_path('storage\leaves'), $newImageName);
+                            $request->image->move(public_path('storage/leaves'), $newImageName);
                             $leaves->attachment = $newImageName;
 
                         }
@@ -916,7 +923,7 @@ class AttendanceController extends Controller
                             ]);
 
                             $newImageName = $request->image->hashName();
-                            $request->image->move(public_path('storage\leaves'), $newImageName);
+                            $request->image->move(public_path('storage/leaves'), $newImageName);
                             $leaves->attachment = $newImageName;
 
                         }
@@ -1168,7 +1175,7 @@ class AttendanceController extends Controller
         $approver = Auth()->user()->emp_id;
         $employee = Auth()->user()->position;
 
-        $position = Position::where('id', $employee)->first();
+
 
         // chacking level 1
         if ($approval->level1 == $approver) {
@@ -1186,11 +1193,14 @@ class AttendanceController extends Controller
             }
 
             $leave->status = 2;
-            if(!$approval->level2){
-                $leave->state = 0;
-                }
+            $leave->state = 0;
+
+            // if(!$approval->level2){
+            //     $leave->state = 0;
+            //     }
+            $position = Position::where('id', Auth()->user()->emp_id)->first();
             $leave->level1 = Auth()->user()->emp_id;
-            $leave->position = 'Approved by ' . $position->name;
+            $leave->position = 'Approved by Line Manager' ;
             $leave->updated_at = new DateTime();
             $leave->update();
 
@@ -1209,11 +1219,15 @@ class AttendanceController extends Controller
             }
             $leave->status = 3;
 
-            if(!$approval->level3){
+            // if(!$approval->level3){
+            // $leave->state = 0;
+            // }
             $leave->state = 0;
-            }
+
+            $position = Position::where('id', Auth()->user()->emp_id)->first();
+
             $leave->level2 = Auth()->user()->emp_id;
-            $leave->position = 'Approved by ' . $position->name;
+            $leave->position = 'Approved by Line Manager' ;
             $leave->updated_at = new DateTime();
             $leave->update();
         } elseif ($approval->level3 == $approver) {
@@ -1231,8 +1245,9 @@ class AttendanceController extends Controller
             }
             $leave->status = 3;
             $leave->state = 0;
+            $position = Position::where('id', Auth()->user()->emp_id)->first();
             $leave->level3 = Auth()->user()->emp_id;
-            $leave->position = $position->name;
+            $leave->position = 'Approved by Line Manager' ;
             $leave->updated_at = new DateTime();
             $leave->update();
         } else {
@@ -1451,7 +1466,7 @@ class AttendanceController extends Controller
         $data['revoke_status'] = $particularLeave->revoke_status;
         $data['leaveAddress'] = $particularLeave->leave_address;
         $login = Auth()->user()->empid;
-        if ($particularLeave->level2 == $login || $particularLeave->level3 == $login) {
+        if ($particularLeave->level1 == $login || $particularLeave->level2 == $login) {
             $data['revoke_reason'] = $particularLeave->revoke_reason;
         } else {
             $data['revoke_reason'] = null;
@@ -1463,7 +1478,6 @@ class AttendanceController extends Controller
 
         }
         $data['approvedBy'] = $particularLeave->position;
-
         return view('my-services/revokeLeave', $data);
     }
 
@@ -2132,12 +2146,14 @@ class AttendanceController extends Controller
             // Check if there is a pending leave in the given number of days (start,end)
             $pendingLeave = Leaves::where('empId', $empID)
                 ->where('state', 1)
+                ->whereDate('start', '<=', $start)
                 ->whereDate('end', '>=', $start)
                 ->first();
 
             $approvedLeave = Leaves::where('empId', $empID)
                 ->where('state', 0)
-                ->whereDate('end', '>=', $start)
+                ->whereDate('start', '<=', $start)
+            ->whereDate('end', '>=', $start)
                 ->first();
 
             if ($pendingLeave || $approvedLeave) {
@@ -2249,7 +2265,7 @@ class AttendanceController extends Controller
                                 'image' => 'mimes:jpg,png,jpeg,pdf|max:2048',
                             ]);
                             $newImageName = $request->image->hashName();
-                            $request->image->move(public_path('storage\leaves'), $newImageName);
+                            $request->image->move(public_path('storage/leaves'), $newImageName);
                             $leaves->attachment = $newImageName;
 
                         }
@@ -2434,7 +2450,7 @@ class AttendanceController extends Controller
                             ]);
 
                             $newImageName = $request->image->hashName();
-                            $request->image->move(public_path('storage\leaves'), $newImageName);
+                            $request->image->move(public_path('storage/leaves'), $newImageName);
                             $leaves->attachment = $newImageName;
 
                         }
@@ -2893,11 +2909,13 @@ class AttendanceController extends Controller
             // Check if there is a pending leave in the given number of days (start,end)
             $pendingLeave = Leaves::where('empId', $empID)
                 ->where('state', 1)
+                ->whereDate('start', '<=', $start)
                 ->whereDate('end', '>=', $start)
                 ->first();
 
             $approvedLeave = Leaves::where('empId', $empID)
                 ->where('state', 0)
+                ->whereDate('start', '<=', $start)
                 ->whereDate('end', '>=', $start)
                 ->first();
 
