@@ -87,7 +87,7 @@
                                     </div><?php } elseif ($item->state == 0) { ?>
                                     <div class="col-md-12">
                                         <span class="label badge bg-info text-whites label-info">APPROVED
-                                            LEAVE REQUEST </span>
+                                            LEAVE</span>
                                     </div>
                                     <?php } elseif ($item->state == 2) { ?>
                                     <div class="col-md-12">
