@@ -611,16 +611,22 @@ class AttendanceController extends Controller
             $empID = Auth::user()->emp_id;
 
             // Check if there is a pending leave in the given number of days (start,end)
+            // $pendingLeave = Leaves::where('empId', $empID)
+            //     ->where('state', 1)
+            //     ->whereDate('end', '>=', $start)
+            //     ->first();
             $pendingLeave = Leaves::where('empId', $empID)
-                ->where('state', 1)
-                ->whereDate('end', '>=', $start)
-                ->first();
+            ->where('state', 1)
+            ->whereDate('start', '<=', $start)
+            ->whereDate('end', '>=', $start)
+            ->get();
 
             $approvedLeave = Leaves::where('empId', $empID)
-                ->where('state', 0)
-                ->whereDate('end', '>=', $start)
-                ->whereDate('end', '>=', $start)
-                ->first();
+            ->where('state', 0)
+            ->whereDate('start', '<=', $start)
+            ->whereDate('end', '>=', $start)
+            ->get();
+
 
             if ($pendingLeave || $approvedLeave) {
                 $message = 'You have a ';
@@ -917,7 +923,7 @@ class AttendanceController extends Controller
                             ]);
 
                             $newImageName = $request->image->hashName();
-                            $request->image->move(public_path('storage\leaves'), $newImageName);
+                            $request->image->move(public_path('storage/leaves'), $newImageName);
                             $leaves->attachment = $newImageName;
 
                         }
@@ -1169,7 +1175,7 @@ class AttendanceController extends Controller
         $approver = Auth()->user()->emp_id;
         $employee = Auth()->user()->position;
 
-        
+
 
         // chacking level 1
         if ($approval->level1 == $approver) {
@@ -2257,7 +2263,7 @@ class AttendanceController extends Controller
                                 'image' => 'mimes:jpg,png,jpeg,pdf|max:2048',
                             ]);
                             $newImageName = $request->image->hashName();
-                            $request->image->move(public_path('storage\leaves'), $newImageName);
+                            $request->image->move(public_path('storage/leaves'), $newImageName);
                             $leaves->attachment = $newImageName;
 
                         }
@@ -2442,7 +2448,7 @@ class AttendanceController extends Controller
                             ]);
 
                             $newImageName = $request->image->hashName();
-                            $request->image->move(public_path('storage\leaves'), $newImageName);
+                            $request->image->move(public_path('storage/leaves'), $newImageName);
                             $leaves->attachment = $newImageName;
 
                         }
