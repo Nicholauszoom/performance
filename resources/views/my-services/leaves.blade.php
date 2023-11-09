@@ -83,7 +83,8 @@
                             <span id="remain" class="text-success"></span>
                         </code>
                     </div>
-                    <form autocomplete="off" action="{{ url('flex/attendance/save_leave') }}" method="post" enctype="multipart/form-data">
+                    <form autocomplete="off" action="{{ url('flex/attendance/save_leave') }}" method="post"
+                        enctype="multipart/form-data">
                         @csrf
                         <div class="row">
                             <div class="form-group col-md-6">
@@ -443,15 +444,17 @@
             var par = id + '|' + start + '|' + end;
             var url = '{{ route('getSubs', ':id') }}';
             url = url.replace(':id', par);
-            if (id == 1 || id == 3 || id == 5) {
-                $("#attachment").hide();
-                $("#attach").prop('required', false);
-            } else {
-                $("#attachment").show();
-                $("#attach").prop('required', true);
-            }
 
-            $('#subs_cat').find('option').not(':first').remove();
+            // if (id == 1) {
+            //     $("#attachment").hide();
+            //     $("#attach").prop('required', false);
+            // } else {
+            //     $("#attachment").show();
+            //     $("#attach").prop('required', true);
+            // }
+
+            $('#subs_cat').find('option').remove();
+            // $('#subs_cat').find('option').not(':first').remove();
 
             $.ajax({
                 url: url,
@@ -481,9 +484,40 @@
 
                     }
 
-
+                    processAttachmentDisplay(days)
                 }
             });
+
+            function processAttachmentDisplay(_days) {
+
+                if (id == 1) {
+                    $("#attachment").hide();
+                } else if (id == 2) {
+                    if (_days == 1) {
+
+                        var validateUrl = '{{ route('attendance.validateSickLeave', ':date') }}'
+                        validateUrl = validateUrl.replace(':date', start)
+                        $.ajax({
+                            url: validateUrl,
+                            type: 'get',
+                            dataType: 'json',
+                            success: function(response) {
+                                if (response.status) {
+                                    $('#attachment').show()
+                                } else {
+                                    $('#attachment').hide()
+                                }
+                            }
+                        })
+                    } else {
+                        $('#attachment').hide()
+
+                    }
+
+                } else {
+                    $("#attachment").show();
+                }
+            }
         });
     </script>
 

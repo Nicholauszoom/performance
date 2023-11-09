@@ -269,4 +269,23 @@ class SysHelpers
 
         return $workingDays;
     }
+
+    public static function isDateNextToWeekendOrHoliday($dateString) {
+        $parsedDate = Carbon::parse($dateString);
+
+        // Check if the date is next to weekends (Friday or Monday)
+        if ($parsedDate->isFriday() || $parsedDate->isMonday()) {
+            return true; // It's next to a weekend
+        }
+
+        // Check if the date is a holiday or the day before/after a holiday
+        $holidays = Holiday::pluck('date')->toArray();
+        if (in_array($parsedDate->toDateString(), $holidays) ||
+            in_array($parsedDate->copy()->addDay()->toDateString(), $holidays) ||
+            in_array($parsedDate->copy()->subDay()->toDateString(), $holidays)) {
+            return true; // It's next to a holiday
+        }
+
+        return false; // It's not next to a weekend or holiday
+    }
 }
