@@ -386,6 +386,8 @@
 				<div class="d-flex align-items-start mb-3">
 					<a href="#" class="status-indicator-container me-3">
 						<img src="../../../assets/images/demo/users/face4.jpg" class="w-40px h-40px rounded-pill" alt="">
+
+
 						<span class="status-indicator bg-danger"></span>
 					</a>
 					<div class="flex-fill">

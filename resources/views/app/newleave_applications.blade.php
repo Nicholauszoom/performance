@@ -22,9 +22,12 @@
             </tr>
         </thead>
 
-
+{{-- {{ dd($leaves) }} --}}
         <tbody>
+
             @foreach ($leaves as $item)
+            {{-- {{ dd(Auth()->user()->emp_id, $item->deligated, $item->status )}} --}}
+
                 @if ($item->position != 'Default Apllication')
                     @php
 
@@ -49,7 +52,9 @@
 
                     @if (Auth()->user()->emp_id == $approval->level1 ||
                             (Auth()->user()->emp_id == $approval->level2 && $item->status == 2) ||
-                            (Auth()->user()->emp_id == $approval->level3 && $item->status == 3))
+                            (Auth()->user()->emp_id == $approval->level3 && $item->status == 3) ||
+                            (Auth()->user()->emp_id == $item->deligated && $item->status == 3)
+                            )
                         <tr>
                             <td>{{ $item->empID }}</td>
                             <td>{{ $item->employee->fname }} {{ $item->employee->mname }}
@@ -118,7 +123,7 @@
                                     @if ($item->state == 1)
                                         @if (Auth()->user()->emp_id == $approval->level1 ||
                                                 (Auth()->user()->emp_id == $approval->level2 && $item->status == 2) ||
-                                                (Auth()->user()->emp_id == $approval->level3 && $item->status == 3))
+                                                (Auth()->user()->emp_id == $approval->level3 && $item->status == 3) || (Auth()->user()->emp_id == $item->deligated && $item->status == 3))
                                             <div class="col-md-12 text-center mt-1">
                                                 <a href="{{ url('flex/attendance/approveLeave/' . $item->id) }}"
                                                     title="Approve">
