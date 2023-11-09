@@ -306,8 +306,7 @@ class AttendanceController extends Controller
         $data['myleave'] = Leaves::where('empID', Auth::user()->emp_id)->orderBy('id', 'desc')->get();
         $id = Auth::user()->emp_id;
         $employeee = Employee::where('emp_id', $id)->first();
-        $leavel = $employeee->leavel;
-        // dd($leavel);
+
 
         $level1 = DB::table('leave_approvals')->Where('level1', $id)->count();
         $level2 = DB::table('leave_approvals')->Where('level2', $id)->count();
@@ -600,6 +599,19 @@ class AttendanceController extends Controller
 
         // For Redirection Url
         $url = redirect('flex/attendance/my-leaves');
+
+        $employeee = Employee::where('emp_id', Auth::user()->emp_id)->first();
+
+        $linemanager = $employeee->line_manager;
+        $leaveApproval = new LeaveApproval();
+        $leaveApproval = $leaveApproval::where('empID', Auth::user()->emp_id)->first();
+
+        if(!$leaveApproval){
+           $leaveApproval =  new LeaveApproval();
+           $leaveApproval->empID = Auth::user()->emp_id;
+           $leaveApproval->level1 = $linemanager;
+           $leaveApproval->save();
+        }
 
         if ($start <= $end) {
 
