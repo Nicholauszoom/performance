@@ -305,6 +305,9 @@ class AttendanceController extends Controller
     {
         $data['myleave'] = Leaves::where('empID', Auth::user()->emp_id)->orderBy('id', 'desc')->get();
         $id = Auth::user()->emp_id;
+        $employeee = Employee::where('emp_id', $id)->first();
+        $leavel = $employeee->leavel;
+        // dd($leavel);
 
         $level1 = DB::table('leave_approvals')->Where('level1', $id)->count();
         $level2 = DB::table('leave_approvals')->Where('level2', $id)->count();
@@ -619,16 +622,16 @@ class AttendanceController extends Controller
             ->where('state', 1)
             ->whereDate('start', '<=', $start)
             ->whereDate('end', '>=', $start)
-            ->get();
+            ->first();
 
             $approvedLeave = Leaves::where('empId', $empID)
             ->where('state', 0)
             ->whereDate('start', '<=', $start)
             ->whereDate('end', '>=', $start)
-            ->get();
+            ->first();
 
 
-            if (!$pendingLeave->isEmpty() || !$approvedLeave->isEmpty()) {
+            if ($pendingLeave || $approvedLeave) {
                 $message = 'You have a ';
 
                 if ($pendingLeave) {
