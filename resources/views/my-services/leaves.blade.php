@@ -78,8 +78,12 @@
 
             <div class=" col-md-8 border-left" style="border-left: 2px solid #000 !important;">
                 <div class="card-body">
-                    <form autocomplete="off" action="{{ url('flex/attendance/save_leave') }}" method="post"
-                        enctype="multipart/form-data">
+                    <div class="col-6 tex-mdt-sucess text-secondary" id="remaining" style="display:none">
+                        <code class="text-success">
+                            <span id="remain" class="text-success"></span>
+                        </code>
+                    </div>
+                    <form autocomplete="off" action="{{ url('flex/attendance/save_leave') }}" method="post" enctype="multipart/form-data">
                         @csrf
                         <div class="row">
                             <div class="form-group col-md-6">
@@ -455,7 +459,6 @@
                 dataType: 'json',
 
                 success: function(response) {
-
                     let days = response.days;
                     let subs = response.data;
                     var status = "<span>" + response.days + " Days</span>"
