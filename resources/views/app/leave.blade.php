@@ -1,13 +1,13 @@
 @extends('layouts.vertical', ['title' => 'Leave'])
 
 @push('head-script')
-    <script src="{{ asset('assets/js/components/tables/datatables/datatables.min.js') }}"></script>
-    <script src="{{ asset('assets/js/components/forms/selects/select2.min.js') }}"></script>
+        <script src="{{ asset('assets/js/components/tables/datatables/datatables.min.js') }}"></script>
+        <script src="{{ asset('assets/js/components/forms/selects/select2.min.js') }}"></script>
 @endpush
 
 @push('head-scriptTwo')
-    <script src="{{ asset('assets/js/pages/datatables_basic.js') }}"></script>
-    <script src="{{ asset('assets/js/pages/form_select2.js') }}"></script>
+        <script src="{{ asset('assets/js/pages/datatables_basic.js') }}"></script>
+        <script src="{{ asset('assets/js/pages/form_select2.js') }}"></script>
 @endpush
 
 @section('content')
@@ -85,9 +85,14 @@
 @push('footer-script')
     {{-- @include("app.includes.overtime_operations") --}}
 
-    <script>
-        function hidemodel() {
+        <script>
+           function hidemodel() {
 
+            $('#delete').hide();
+            location.reload();
+        }
+
+        function cancelLeave(id) {
             $('#delete').hide();
             location.reload();
         }
@@ -418,29 +423,24 @@
             var url = '{{ route('getLeaveSubs', ':id') }}';
             url = url.replace(':id', par);
 
-            if (id == 1) {
-                $("#attachment").hide();
-            } else {
-                $("#attachment").show();
-            }
 
-            $('#subs_cat').find('option').not(':first').remove();
-
-            $.ajax({
-                url: url,
-                type: 'get',
-                dataType: 'json',
+                $('#subs_cat').find('option').remove();
+            // $('#subs_cat').find('option').not(':first').remove();
+            let days = 0;
+                $.ajax({
+                    url: url,
+                    type: 'get',
+                    dataType: 'json',
 
                 success: function(response) {
 
-                    let days = response.days;
+                    days = response.days;
                     let subs = response.data;
                     var status = "<span>" + response.days + " Days</span>"
                     $("#remaining").empty(status);
                     $("#remaining").append(status);
                     $("#remaining").show()
                     $("#sub").hide();
-
 
                     for (var i = 0; i < response.data.length; i++) {
 
@@ -456,8 +456,42 @@
                     }
 
 
+                    processAttachmentDisplay(days)
+
                 }
             });
+
+            function processAttachmentDisplay(_days) {
+
+                if (id == 1) {
+                    $("#attachment").hide();
+                } else if (id == 2) {
+                    if (_days == 1) {
+
+                        var validateUrl = '{{ route('attendance.validateSickLeave', ':date') }}'
+                        validateUrl = validateUrl.replace(':date', start)
+                        $.ajax({
+                            url: validateUrl,
+                            type: 'get',
+                            dataType: 'json',
+                            success: function(response) {
+                                if (response.status) {
+                                    $('#attachment').show()
+                                } else {
+                                    $('#attachment').hide()
+                                }
+                            }
+                        })
+                    } else {
+                        $('#attachment').hide()
+
+                    }
+
+                } else {
+                    $("#attachment").show();
+                }
+            }
+
         });
     </script>
 

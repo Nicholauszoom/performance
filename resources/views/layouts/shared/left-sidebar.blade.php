@@ -1,35 +1,15 @@
 <div class="sidebar sidebar-dark sidebar-main sidebar-expand-lg bg-main-nav">
-
-    <div class="sidebar-content">
-
-        <div class="sidebar-section">
-            <div class="p-2 my-2">
-                <img src="{{ asset('img/logo.png') }}" class="img-fluid" widht="270px" alt="BancABC atlasmara">
-            </div>
-            {{-- <div class="sidebar-section-body d-flex justify-content-center">
-                <h5 class="sidebar-resize-hide flex-grow-1 my-auto text-muted"></h5>
-
-                <div>
-                    <button type="button"
-                        class="btn btn-flat-white btn-icon btn-sm rounded-pill border-transparent sidebar-control sidebar-main-resize d-none d-lg-inline-flex">
-                        <i class="ph-arrows-left-right"></i>
-                    </button>
-
-                    <button type="button"
-                        class="btn btn-flat-white btn-icon btn-sm rounded-pill border-transparent sidebar-mobile-main-toggle d-lg-none">
-                        <i class="ph-x"></i>
-                    </button>
-                </div>
-            </div> --}}
+    <div class="sidebar-section">
+        <div class="sidebar-logo d-flex justify-content-center align-items-center">
+            <a href="index.html" class="d-inline-flex align-items-center py-2">
+                <img src="{{ asset('img/logo.png') }}" class="image-fluid" width="240px"  alt="BancABC atlasmara">
+            </a>
         </div>
+    </div>
 
-        {{-- {{ request()->routeIs('dashboard.index') ? 'active' : null }} --}}
-
+    <div class="sidebar-content pb-2">
         <div class="sidebar-section">
-
-
             <ul class="nav nav-sidebar main-link" data-nav-type="accordion">
-                {{-- @can('view-dashboard')/ --}}
                 <li class="nav-item">
                     <a href="{{ route('dashboard.index') }}"
                         class="nav-link {{ request()->routeIs('dashboard.index') ? 'active' : null }}">

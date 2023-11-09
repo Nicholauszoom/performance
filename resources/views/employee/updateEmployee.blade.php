@@ -5,8 +5,8 @@
 @push('head-script')
     <script src="{{ asset('assets/js/components/forms/selects/select2.min.js') }}"></script>
     <script src="{{ asset('assets/js/components/ui/moment/moment.min.js') }}"></script>
-    <script src="{{ asset('assets/js/components/pickers/daterangepicker.js') }}"></script>
-    <script src="{{ asset('assets/js/components/pickers/datepicker.min.js') }}"></script>
+    {{-- <script src="{{ asset('assets/js/components/pickers/daterangepicker.js') }}"></script> --}}
+    {{-- <script src="{{ asset('assets/js/components/pickers/datepicker.min.js') }}"></script> --}}
 @endpush
 
 @push('head-scriptTwo')
@@ -269,7 +269,7 @@
 
                         <div class="input-group">
                             <span class="input-group-text"><i class="ph-calendar"></i></span>
-                            <input type="text" required name="contract_start" value="<?php echo $hire_date?>" placeholder="Contract Start Date" class="form-control daterange-single" id="contract_start">
+                            <input type="date" required name="contract_start" value="<?php echo $hire_date?>" placeholder="Contract Start Date" class="form-control daterange-single" id="contract_start">
                             <button class="btn btn-main">UPDATE</button>
                         </div>
 
@@ -286,7 +286,7 @@
 
                         <div class="input-group">
                             <span class="input-group-text"><i class="ph-calendar"></i></span>
-                            <input type="text" required name="contract_end" value="<?php echo $contract_end?>" placeholder="Contract End Date" class="form-control" id="contract_end">
+                            <input type="date" required name="contract_end" value="<?php echo $contract_end?>" placeholder="Contract End Date" class="form-control" id="contract_end">
                             <button class="btn btn-main">UPDATE</button>
                         </div>
 
@@ -572,7 +572,7 @@
                         <div id="feedBackDob"></div>
                         <label for="stream" class="form-label">Date of birth</label>
                         <div class="input-group">
-                            <input type="text" name="dob" value="<?php echo $birthdate; ?>" class="form-control">
+                            <input type="date" name="dob" value="<?php echo $birthdate; ?>" class="form-control">
                             <button class="btn btn-main">UPDATE</button>
                         </div>
                         <input hidden name="empID" value="<?php echo $empID; ?>">
