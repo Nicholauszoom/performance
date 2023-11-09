@@ -2,7 +2,7 @@
     <div class="sidebar-section">
         <div class="sidebar-logo d-flex justify-content-center align-items-center">
             <a href="index.html" class="d-inline-flex align-items-center py-2">
-                <img src="{{ asset('img/logo.png') }}" class="image-fluid" width="240px"  alt="BancABC atlasmara">
+                <img src="{{ asset('img/logo.png') }}" class="image-fluid" width="200px"  alt="BancABC atlasmara">
             </a>
         </div>
     </div>
