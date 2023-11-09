@@ -64,8 +64,8 @@
                 class="card rounded-0 border-top border-bottom border-bottom-width-3 border-top-width-3 border-top-main border-bottom-main rounded-0border-0 shadow-none pb-4">
                 <div class="sidebar-section-body text-center">
                     <div class="card-img-actions d-inline-block my-3">
-                        {{-- rounded-circle --}}
-                            <img class="img" src="{{ ($photo == 'user.png') ? 'https://ui-avatars.com/api/?name='.$name.'&background=00204e&color=fff' : asset('storage/profile/' . $photo) }}" width="150" height="150" alt="">
+
+                            <img class="img" src="{{ auth()->user()->photo ? asset('assets/images/profile-default.jpg') : asset('storage/profile/' . $photo) }}" width="150" height="150" alt="">
 
                     </div>
 
