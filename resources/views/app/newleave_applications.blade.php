@@ -65,40 +65,51 @@
                                 <br>From <b>{{ \Carbon\Carbon::parse($item->start)->format('d-m-Y') }}</b>
                                 <br>To <b>{{ \Carbon\Carbon::parse($item->end)->format('d-m-Y') }}</b>
 
-                        if (!empty($item->appliedBy)) {
-                            echo '<br>Applied By <b>' . $item->appliedBy . '</b><br>with <b>' . number_format($item->forfeit_days, 2) . '</b> extra days';
-                        }
+                                @if (!empty($item->appliedBy))
+                                    <br>Applied By <b>{{ $item->appliedBy }}</b>
+                                    <br>with <b> {{ number_format($item->forfeit_days, 2) }} <br> extra days
+                                @endif
+                            </td>
 
-                        echo '</td>';
-                        echo '<td>Nature: <b>' . $item->type->type . '</b></td>';
-                        echo '<td><p>' . $item->reason . '</p></td>';
-                        echo '<td>';
+                            <td>
+                                Nature: <b>{{ $item->type->type }}</b>
+                            </td>
+                            <td>
+                                <p>
+                                    {{ $item->reason }}
+                                </p>
+                            </td>
+                            <td>
+                                <div>
 
-                        if ($item->state == 1) {
-                            echo '<div class="col-md-12">';
-                            echo '<span class="label label-default badge bg-pending text-white">PENDING</span>';
-                            echo '</div>';
-                        } elseif ($item->state == 0) {
-                            echo '<div class="col-md-12">';
-                            echo '<span class="label badge bg-info text-whites label-info">APPROVED</span>';
-                            echo '</div>';
-                        } elseif ($item->state == 3) {
-                            echo '<div class="col-md-12">';
-                            echo '<span class="label badge bg-danger text-white">REVOKED</span>';
-                            echo '</div>';
-                        }
+                                    <?php if ($item->state == 1) { ?>
+                                    <div class="col-md-12">
+                                        <span
+                                            class="label label-default badge bg-pending text-white">PENDING</span>
+                                    </div><?php } elseif ($item->state == 0) { ?>
+                                    <div class="col-md-12">
+                                        <span
+                                            class="label badge bg-info text-whites label-info">APPROVED</span>
+                                    </div><?php } elseif ($item->state == 3) { ?>
+                                    <div class="col-md-12">
+                                        <span class="label badge bg-danger text-white">REVOKED</span>
+                                    </div><?php } ?>
+                                </div>
+                            </td>
+                            <td>
+                                @if ($item->type->type == 'Annual')
+                                    {{ number_format($item->remaining + $item->days - $item->forfeit_days, 2) }}
+                                    Days
+                                @else
+                                    {{ number_format($item->remaining + $item->days - $item->forfeit_days, 2) }}
+                                    Days
+                                @endif
 
-                        echo '</td>';
-                        echo '<td>';
 
-                        if ($item->type->type == 'Annual') {
-                            echo number_format($item->remaining + $item->days - $item->forfeit_days, 2) . ' Days';
-                        } else {
-                            echo number_format($item->remaining + $item->days - $item->forfeit_days, 2) . ' Days';
-                        }
 
-                        echo '</td>';
-                        echo '<td class="text-center">';
+                            </td>
+                            <td class="text-center">
+
 
                                 @if ($item->attachment != null)
                                     <a href="{{ asset('storage/leaves/' . $item->attachment) }}"
