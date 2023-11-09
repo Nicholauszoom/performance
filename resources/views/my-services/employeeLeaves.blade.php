@@ -205,7 +205,10 @@
                             <span class="label badge bg-success text-whites label-info">APPROVED LEAVE REVOKE </span>
                         <?php }
                   elseif($row->state==4){?>
-                            <span class="label badge bg-danger text-white">CANCELED</span>
+                            <span class="label badge bg-secondary text-white">CANCELED</span>
+                        <?php }
+                  elseif($row->state==5){?>
+                            <span class="label badge bg-danger text-white">DENIED</span>
                         <?php } ?>
                     </div>
 
