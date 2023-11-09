@@ -37,16 +37,16 @@
                     <div class="mb-3">
                         <select id="employee_exited_list" class="form-select" tabindex="-1">
                             <option value="">-- Select Year --</option>
-                            <option value="2008">2008</option>
+                            <!-- <option value="2008">2008</option>
                             <option value="2021">2021</option>
-                            <option value="2022">2022</option>
-                            <option value="2023">2023</option>
-                            <option value="2024">2024</option>
+                            <option value="2022">2022</option> -->
+                            {{-- <option value="2023" selected>2023</option> --}}
+                            <!-- <option value="2024">2024</option>
                             <option value="2025">2025</option>
                             <option value="2026">2026</option>
                             <option value="2027">2027</option>
                             <option value="2028">2028</option>
-                            <option value="2029">2029</option>
+                            <option value="2029">2029</option> -->
                         </select>
                     </div>
                     <div id="balance-table-placeholder">
@@ -424,7 +424,7 @@
                         </a>
                         <?php } else if ($row->state == 0) { ?>
                             <a href="{{ url('flex/attendance/revokeLeave/' . $row->id) }}" title="Revoke Approved Leave" class="icon-2 info-tooltip disabled">
-                                <button class="btn btn-primary btn-sm">Revoke Approved Leave<i class="ph-prohibit"></i>
+                                <button class="btn btn-main btn-sm">Initiate Revoke Request<i class="ph-prohibit"></i>
                             </button>
                         </a>
                         <?php } ?>
@@ -869,12 +869,37 @@
 
     <script>
         $(document).ready(function() {
+             // Call the function to populate the select element
+            populateYearSelect();
+            function populateYearSelect() {
+            var select = $('#employee_exited_list');
+            var currentYear = new Date().getFullYear();
+
+            // Add the previous year, current year, and next year as options
+            for (var i = currentYear - 1; i <= currentYear + 1; i++) {
+                var option = $("<option></option>");
+                option.attr("value", i);
+                option.text(i);
+                select.append(option);
+            }
+
+            // Set the default selection to the current year
+            select.val(currentYear);
+        }
+
+
+            get_leave_statement($("#employee_exited_list").val())
             // Bind an event handler to the select element
             $("#employee_exited_list").change(function() {
                 var selectedYear = $(this).val();
+                get_leave_statement(selectedYear);
+
+            });
+
+            function get_leave_statement(selectedYear) {
 
                 // Construct the URL with the selected year parameter
-                var url = '/flex/attendance/annualleavebalance/' + selectedYear;
+                var url = '{{url('')}}/flex/attendance/annualleavebalance/' + selectedYear;
 
                 // Make an AJAX request to fetch the data
                 $.ajax({
@@ -891,7 +916,9 @@
                         console.log('error in fetching');
                     }
                 });
-            });
+
+            }
+
 
             function updateTable(data) {
                 var table = $("#balance-table-placeholder table tbody"); // Select the table body

@@ -38,6 +38,7 @@ class TrustProxies extends Middleware
            $sameSite = 'lax';
 
             $response = $next($request);
+            $response->header('Content-Security-Policy', 'https://hc-uat.bancabc.co.tz');
             $response->header('Content-Security-Policy', 'https://hc-hub.bancabc.co.tz');
             $response->header('Content-Security-Policy', 'https://int.cits.co.tz');
             $response->header('X-Frame-Options', 'DENY');

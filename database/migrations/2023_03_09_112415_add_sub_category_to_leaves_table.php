@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::table('leaves', function (Blueprint $table) {
             //
-            $table->string('sub_category');
+            $table->string('sub_category')->nullable();
         });
     }
 

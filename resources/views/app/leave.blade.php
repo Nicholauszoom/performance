@@ -2,9 +2,6 @@
 
 @push('head-script')
 <script src="{{ asset('assets/js/components/tables/datatables/datatables.min.js') }}"></script>
-{{-- <script src="{{ asset('assets/js/components/ui/moment/moment.min.js') }}"></script> --}}
-{{-- <script src="{{ asset('assets/js/components/pickers/daterangepicker.js') }}"></script> --}}
-{{-- <script src="{{ asset('assets/js/components/pickers/datepicker.min.js') }}"></script> --}}
 <script src="{{ asset('assets/js/components/forms/selects/select2.min.js') }}"></script>
 @endpush
 
@@ -18,7 +15,7 @@
         $totalAccrued = number_format($leaveBalance, 2);
     @endphp
 
-    @if (session('mng_emp') || session('appr_leave'))
+    @if (session('mng_emp') || session('appr_leave') || 1)
         @if (session('msg'))
             <div class="alert alert-success col-md-8 mx-auto mt-4" role="alert">
                     {{ session('msg') }}
@@ -27,7 +24,7 @@
 
         <div class="card border-top  border-top-width-3 border-top-main border-bottom-main rounded-0 col-lg-12 ">
             <div class="card-body">
-                <div class="col-6 form-group text-sucess text-secondary" id="remaining" style="display:none">
+                <div class="col-6 tex-mdt-sucess text-secondary" id="remaining" style="display:none">
                     <code class="text-success">
                         <span id="remain" class="text-success"></span>
                     </code>
@@ -64,110 +61,89 @@
 
                         <div class="col-md-6 mb-3">
                             <label class="form-label"  for="nature">Nature of Leave <span  class="text-danger">*</span></label>
-                            <select class="form-control form-select   select @error('emp_ID') is-invalid @enderror"  id="docNo" name="nature" required>
+                            <select class="form-control form-select select @error('emp_ID') is-invalid @enderror"  id="docNo" name="nature" required>
                                 <option value="" class="text-center"> -- select Leave Type Here -- </option>
-                            @foreach($leave_type as $key)
-                            <option value="{{ $key->id }}" class="text-center"> {{ $key->type }} </option>
-                            @endforeach
+                                @foreach($leave_type as $key)
+                                <option value="{{ $key->id }}" class="text-center"> {{ $key->type }} </option>
+                                @endforeach
                             </select>
+                        </div>
+
+                        {{-- @if($days<336) --}}
+                        <div class="col-md-6 mb-3" id="sub" style="display:none">
+                            <label class="control-label ">Sub Category <span  class="text-danger">*</span></label>
+                            <select name="sub_cat" class="form-control select custom-select" id="subs_cat">
+                            </select>
+                        </div>
+                        {{-- @endif --}}
+
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label" for="last-name">Leave Address <span  class="text-danger">*</span></label>
+                            <input required="required" type="text" id="address" name="address" class="form-control">
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label for="middle-name" class="form-label">Mobile <span  class="text-danger">*</span></label>
+                            <input required="required" class="form-control" type="tel" maxlength="10" name="mobile">
+                        </div>
+
+                        {{-- start of attachment --}}
+
+                        <div class="col-md-6 mb-3" style="display:none" id="attachment">
+                            <label for="leave-attachment" class="form-label">Attachment<span  class="text-danger">*</span></label></label>
+                            <input class="form-control"  type="file" name="image" id="leave-attachment">
+                        </div>
+
+                        <div class="col-md-12 mb-3">
+                            <label class="control-label" for="reason">Reason For Leave <span  class="text-danger">*</span></label>
+                            <textarea maxlength="256" id="reason" class="form-control" name="reason" placeholder="Reason" required="required" rows="3"></textarea>
+                        </div>
+
+                        @if($deligate > 0)
+                        <div class="col-md-6">
+                            <label for="deligate" class="form-label">Deligate Position To <span class="text-danger">*</span></label>
+                            <select name="deligate" @if($deligate > 0) required @endif class="form-control" id="deligate">
+                                <option value="">Select Deligate</option>
+                                @foreach($employees as $item)
+                                <option value="{{ $item->emp_id }}">{{ $item->fname }} {{ $item->mname }} {{ $item->lname }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        @endif
+
+                        <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12 col-md-offset-3 mb-3">
+                            <button class="float-end btn btn-main" type="button" data-bs-toggle="modal" data-bs-target="#approval"> Submit </button>
+                        </div>
                     </div>
-                    {{-- @if($days<336) --}}
-                    <div class="col-6 form-group" id="sub" style="display:none">
-                    <label class="control-label col-md-3 col-sm-3 col-xs-12 ">Sub Category <span  class="text-danger">*</span></label>
-                    <select name="sub_cat" class="form-control select custom-select" id="subs_cat">
-                    </select>
+
+                    <div id="approval" class="modal fade" tabindex="-1">
+                        <div class="modal-dialog modal-dialog-centered modal-md">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="btn-close " data-bs-dismiss="modal"></button>
+                                </div>
+
+                                <modal-body class="p-4">
+                                    <h6 class="text-center">Are you Sure ?</h6>
+                                    <div class="row ">
+                                    <div class="col-4 mx-auto">
+                                        <button  type="submit" class="btn bg-main btn-sm px-4 " >Yes</button>
+
+                                        <button type="button" class="btn bg-danger btn-sm  px-4 text-light" data-bs-dismiss="modal">
+                                        No
+                                    </button>
+                                    </div>
+
+
+                                    </div>
+                                </modal-body>
+
+                                <modal-footer></modal-footer>
+                            </div>
+                        </div>
                     </div>
-                    {{-- @endif --}}
+                </form>
 
-        <div class="form-group col-6">
-          <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">Leave Address <span  class="text-danger">*</span>
-          </label>
-          <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12">
-            <input required="required" type="text" id="address" name="address" class="form-control col-md-7 col-xs-12">
-            <span class="text-danger"><?php// echo form_error("lname");?></span>
-          </div>
-        </div>
-        <div class="form-group col-6">
-          <label for="middle-name" class="control-label col-md-3 col-sm-3 col-xs-12">Mobile <span  class="text-danger">*</span></label>
-          <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12">
-            <input required="required" class="form-control col-md-7 col-xs-12" type="tel" maxlength="10" name="mobile">
-            <span class="text-danger"><?php// echo form_error("mname");?></span>
-          </div>
-        </div>
-          {{-- start of attachment --}}
-
-          <div class="form-group col-6" style="display:none" id="attachment">
-            <label for="middle-name" class="control-label col-md-3 col-sm-3 col-xs-12">Attachment<span  class="text-danger">*</span></label></label>
-            <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12">
-              <input class="form-control col-md-7 col-xs-12"  type="file" name="image">
-              <span class="text-danger"><?php// echo form_error("mname");?></span>
-            </div>
-          </div>
-        <div class="form-group col-12 mb-2">
-          <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">Reason For Leave <span  class="text-danger">*</span>
-          </label>
-          <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12">
-            <textarea maxlength="256" class="form-control col-md-7 col-xs-12" name="reason" placeholder="Reason" required="required" rows="3"></textarea>
-            <span class="text-danger"><?php// echo form_error("lname");?></span>
-          </div>
-        </div>
-        @if($deligate > 0)
-        <div class="form-group col-md-6">
-            <label for="deligate">Deligate Position To <span class="text-danger">*</span></label>
-            <select name="deligate" @if($deligate > 0) required @endif class="form-control" id="deligate">
-                <option value="">Select Deligate</option>
-                @foreach($employees as $item)
-                <option value="{{ $item->emp_id }}">{{ $item->fname }} {{ $item->mname }} {{ $item->lname }}</option>
-                @endforeach
-            </select>
-        </div>
-        @endif
-
-
-            <!-- END -->
-            <div class="form-group py-2">
-              <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12 col-md-offset-3">
-                <button class="float-end btn btn-main" type="button" data-bs-toggle="modal" data-bs-target="#approval"> Submit </button>
-
-              </div>
-            </div>
-
-          </div>
-
-          {{-- start of add approval modal --}}
-
-    <div id="approval" class="modal fade" tabindex="-1">
-    <div class="modal-dialog modal-dialog-centered modal-md">
-        <div class="modal-content">
-
-            <div class="modal-header">
-            <button type="button" class="btn-close " data-bs-dismiss="modal">
-
-            </button>
-        </div>
-        <modal-body class="p-4">
-            <h6 class="text-center">Are you Sure ?</h6>
-            <div class="row ">
-            <div class="col-4 mx-auto">
-                <button  type="submit" class="btn bg-main btn-sm px-4 " >Yes</button>
-
-                <button type="button" class="btn bg-danger btn-sm  px-4 text-light" data-bs-dismiss="modal">
-                No
-            </button>
-            </div>
-
-
-            </div>
-        </modal-body>
-        <modal-footer>
-
-        </modal-footer>
-
-
-        </div>
-    </div>
-    </div>
-    </form>
   <div class="card border-top  border-top-width-3 border-top-main rounded-0">
     <div class="card-body">
         <h5 class="text-warning">New Leave Applications</h5>
@@ -210,12 +186,15 @@
             ->where('level3', $line_manager)
             ->first();
 
+            $approval = App\Models\LeaveApproval::where('empID', $item->empID)->first();
+
+
             // $level2=$approve->level2;
             // $level3=$approve->level3;
 
             @endphp
 
-            @if ($level1 != null || $level2 != null || $level3 != null)
+            @if ( (Auth()->user()->emp_id == $approval->level1 ) ||(Auth()->user()->emp_id == $approval->level2 && $item->status == 2) || (Auth()->user()->emp_id == $approval->level3 && $item->status == 3))
             <tr>
                 <td>{{ $item->empID }}</td>
                 <td>{{ $item->employee->fname }} {{ $item->employee->mname }}
@@ -267,19 +246,17 @@
                 </td>
                 <td class="text-center">
 
-                    @php
-                    $approval = App\Models\LeaveApproval::where('empID', $item->empID)->first();
-                    @endphp
+
                     @if ($item->attachment != null)
                     <a href="{{ asset('storage/leaves/' . $item->attachment) }}" download="{{ asset('storage/leaves/' . $item->attachment) }}" class="btn bg-main btn-sm" title="Download Attachment">
                         <i class="ph ph-download"></i> &nbsp;
                         Attachment
                     </a>
                     @endif
-                    @if ($approval)
+                    @if (isset($approval))
                     @if ( $item->state == 1)
-                    <?php if (Auth()->user()->emp_id == $approval->level1  || Auth()->user()->emp_id == $approval->level2  || Auth()->user()->emp_id == $approval->level3) { ?>
-                        {{-- @if (Auth()->user()->emp_id == $approval->level1) --}}
+                    @if ( (Auth()->user()->emp_id == $approval->level1 ) ||(Auth()->user()->emp_id == $approval->level2 && $item->status == 2) || (Auth()->user()->emp_id == $approval->level3 && $item->status == 3))
+
                         <div class="col-md-12 text-center mt-1">
                             <a href="{{ url('flex/attendance/approveLeave/' . $item->id) }}" title="Approve">
                                 <button class="btn btn-success btn-sm">Approve Request<i class="ph-check"></i></button>
@@ -289,14 +266,12 @@
                                 <button class="btn btn-warning btn-sm">Cancel Request<i class="ph-x"></i></button></a>
                         </div>
 
-                        {{-- @endif --}}
 
-
-                    <?php } elseif ($item->status == 4) { ?>
+                    @elseif ($item->status == 4)
                         <div class="col-md-12 mt-1">
                             <span class="label bg-danger text-white">Denied</span>
                         </div>
-                    <?php } ?>
+                    @endif
                     @endif
                     @endif
                 </td>
@@ -350,6 +325,9 @@
             $level3 = App\Models\LeaveApproval::where('empID', $item->empID)
             ->where('level3', $line_manager)
             ->first();
+
+            $approval = App\Models\LeaveApproval::where('empID', $item->empID)->first();
+
 
             // $level2=$approve->level2;
             // $level3=$approve->level3;
@@ -417,7 +395,7 @@
                 </td>
                 <td class="text-center">
 
-                    @if(Auth()->user()->emp_id == $approval->level2 || Auth()->user()->emp_id == $approval->level3  & $item->state == 2 || $item->state == 0)
+                    @if(Auth()->user()->emp_id == $approval->level1  & ($item->state == 2 || $item->state == 0))
                     <div class="col-md-12 text-center mt-1">
                         <a href="{{ url('flex/attendance/revokeLeave/' . $item->id) }}" title="Revoke Approved Leave" class="icon-2 info-tooltip disabled">
                             <button class="btn btn-secondary btn-sm">Revoke Approved Leave<i class="ph-prohibit"></i></button>
@@ -476,6 +454,9 @@
             ->where('level3', $line_manager)
             ->first();
 
+            $approval = App\Models\LeaveApproval::where('empID', $item->empID)->first();
+
+
             // $level2=$approve->level2;
             // $level3=$approve->level3;
 
@@ -542,12 +523,12 @@
                 </td>
                 <td class="text-center">
 
-                    @if(Auth()->user()->emp_id == $approval->level3  & $item->state == 2 || $item->state == 0)
+                    @if(Auth()->user()->emp_id == $approval->level1  & $item->state == 2 || $item->state == 0)
                     <div class="col-md-12 text-center mt-1">
                         <a href="{{ url('flex/attendance/revokeLeave/' . $item->id) }}" title="Revoke Approved Leave" class="icon-2 info-tooltip disabled">
-                            <button class="btn btn-secondary btn-sm">Revoke requested approved Leave<i class="ph-prohibit"></i></button>
+                            <button class="btn btn-secondary btn-sm">Approve Leave Revoke<i class="ph-prohibit"></i></button>
                         </a>
-                        <a href="{{ url('flex/attendance/revokeLeave/' . $item->id) }}" title="Cance Revoke Request" class="icon-2 info-tooltip disabled">
+                        <a href="{{ url('flex/attendance/cancelRevokeLeave/' . $item->id) }}" title="Cance Revoke Request" class="icon-2 info-tooltip disabled">
                             <button class="btn btn-warning btn-sm">Cancel Leave Revoke<i class="ph-x"></i></button>
                         </a>
                     </div>

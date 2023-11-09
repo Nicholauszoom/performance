@@ -270,7 +270,7 @@
 
                     <div class="col-md-4 col-lg-4">
                         <div class="mb-3">
-                            <label class="form-label" id="bank_branch">Bank Branch <span class="text-danger">*<span></label>
+                            <label class="form-label" for="bank_branch">Bank Branch <span class="text-danger">*<span></label>
                             <select class="form-control select_bank_branch select" id="bank_branch" name="bank_branch" required></select>
                         </div>
                     </div>
@@ -413,13 +413,13 @@
             $('#accountNo').show();
             $('#bank').on('change', function() {
                 var bankID = $(this).val();
-                if (bankID) {
 
+                if (bankID) {
                     $.ajax({
-                        type 'GET',
-                        url '{{ url('/flex/bankBranchFetcher/') }}',
-                        data 'bank=' + bankID,
-                        success function(html) {
+                        type: 'GET',
+                        url: '{{ url("/flex/bankBranchFetcher/") }}',
+                        data: 'bank=' + bankID,
+                        success: function(html) {
                             $('#bank_branch').html(html);
                         }
                     });
@@ -445,10 +445,10 @@
                 var positionID = $(this).val();
                 if (positionID) {
                     $.ajax({
-                        type 'GET',
-                        url '{{ url('/flex/getPositionSalaryRange/') }}',
-                        data 'positionID=' + positionID,
-                        success function(response) {
+                        type: 'GET',
+                        url: '{{ url("/flex/getPositionSalaryRange/") }}',
+                        data: 'positionID=' + positionID,
+                        success: function(response) {
                             var response = JSON.parse(response);
 
                             $('#salaryField').fadeOut('fast', function() {
@@ -474,10 +474,10 @@
 
                 if (stateID) {
                     $.ajax({
-                        type 'GET',
-                        url '{{ url('/flex/positionFetcher') }}',
-                        data 'dept_id=' + stateID,
-                        success function(html) {
+                        type: 'GET',
+                        url: '{{ url("/flex/positionFetcher") }}',
+                        data: 'dept_id=' + stateID,
+                        success: function(html) {
                             let jq_json_obj = $.parseJSON(html);
                             let jq_obj = eval(jq_json_obj);
 
@@ -487,16 +487,16 @@
                             $("#pos option").remove();
 
                             $('#pos').append($('<option>', {
-                                value '',
-                                text 'Select Position',
-                                selected true,
-                                disabled true
+                                value: '',
+                                text: 'Select Position',
+                                selected: true,
+                                disabled: true
                             }));
 
                             $.each(jq_obj.position, function(detail, name) {
                                 $('#pos').append($('<option>', {
-                                    value name.id,
-                                    text name.name
+                                    value: name.id,
+                                    text: name.name
                                 }));
                             });
 
@@ -507,7 +507,7 @@
                                 y.name = name.NAME;
                                 y.id = name.empID;
                                 x.push(y);
-                                // $('#linemanager').append($('<option>', {value name.empID, text name.NAME}));
+                                // $('#linemanager').append($('<option>', {value: name.empID, text: name.NAME}));
                             });
 
                             $.each(jq_obj.director, function(detail, name) {
@@ -516,7 +516,7 @@
                                 y.id = name.empID;
                                 x.push(y);
 
-                                // $('#linemanager').append($('<option>', {value name.empID, text name.NAME}));
+                                // $('#linemanager').append($('<option>', {value: name.empID, text: name.NAME}));
                             });
 
                             var flags = [];
@@ -533,16 +533,16 @@
                             //populate linemanager
                             // $("#linemanager option").remove();
                             // $('#linemanager').append($('<option>', {
-                            //     value '',
-                            //     text 'Select Line Manager',
-                            //     selected true,
-                            //     disabled true
+                            //     value: '',
+                            //     text: 'Select Line Manager',
+                            //     selected: true,
+                            //     disabled: true
                             // }));
 
                             $.each(output, function(detail, name) {
                                 $('#linemanager').append($('<option>', {
-                                    value name.id,
-                                    text name.name
+                                    value: name.id,
+                                    text: name.name
                                 }));
                             });
 
@@ -558,37 +558,34 @@
 
     <script type="text/javascript">
         $('#addEmployee').submit(function(e) {
-
-            e.preventDefault(); // Prevent Default Submission
-
-            // alert(document.getElementById("name"));
+            e.preventDefault();
 
             $.ajax({
-                    url '{{ url('/flex/registerEmployee') }}',
-                    headers {
-                        'X-CSRF-TOKEN' $('meta[name="csrf-token"]').attr('content')
+                    url: '{{ url("/flex/registerEmployee") }}',
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     },
-                    type 'POST',
-                    data $(this).serialize(), // it will serialize the form data
-                    dataType 'json'
+                    type: 'POST',
+                    data: $(this).serialize(), // it will serialize the form data
+                    dataType: 'json'
                 })
                 .done(function(data) {
                     if(data.status == 400){
                         const item = data.errors;
-                    const listItems = Object.keys(item).map(key => `<p>${item[key]}</p>`);
-                    new Noty({
-                        layout 'top',
-                        text listItems,
-                        type 'error'
-                    }).show();
+                        const listItems = Object.keys(item).map(key => `<p>${item[key]}</p>`);
+                        new Noty({
+                            layout: 'top',
+                            text: listItems,
+                            type: 'error'
+                        }).show();
 
                     }else{
                         new Noty({
-                        layout 'top',
-                        text data.errors + ', and We have sent an email to ' + document.getElementById(
-                            "email").value,
-                        type 'success'
-                    }).show();
+                            layout: 'top',
+                            text: data.errors + ', and We have sent an email to ' + document.getElementById(
+                                "email").value,
+                            type: 'success'
+                        }).show();
                     }
 
 
@@ -622,27 +619,27 @@
             event.preventDefault();
             $.ajax({
                 //url '{{ url('/flex/import') }}',
-                url '{{ route('import.employee') }}',
-                headers {
-                    'X-CSRF-TOKEN' $('meta[name="csrf-token"]').attr('content')
+                url: '{{ route("import.employee") }}',
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
-                method "POST",
-                data new FormData(this),
-                contentType false,
-                cache false,
-                processData false,
-                beforeSend function () {
-                    $('.request__spinner').show() },
-                    complete function(){
-
-                    },
-                success function(data) {
+                method: "POST",
+                data: new FormData(this),
+                contentType: false,
+                cache: false,
+                processData: false,
+                beforeSend: function () {
+                    $('.request__spinner').show()
+                },
+                complete: function(){},
+                success: function(data) {
                     $('#file').val('');
                     //load_data();
                     alert(' Employees Succefully Imported');
-                    setTimeout(function() { // wait for 2 secs(2)
-                                    location.reload(); // then reload the div to clear the success notification
-                                }, 1500);
+                    setTimeout(function() {
+                        // wait for 2 secs(2)
+                        location.reload(); // then reload the div to clear the success notification
+                    }, 1500);
                 }
             })
         });
@@ -656,9 +653,11 @@
 
             var startYear = today.getFullYear() - 18;
             var endYear = today.getFullYear() - 60;
+
             if (dd < 10) {
                 dd = '0' + dd;
             }
+
             if (mm < 10) {
                 mm = '0' + mm;
             }
@@ -666,18 +665,19 @@
 
             var dateStart = dd + '/' + mm + '/' + startYear;
             var dateEnd = dd + '/' + mm + '/' + endYear;
+
             $('#birthdate').daterangepicker({
-                drops 'up',
-                singleDatePicker true,
-                autoUpdateInput false,
-                showDropdowns true,
-                maxDate dateStart,
-                minDate dateEnd,
-                startDate dateStart,
-                locale {
+                drops: 'up',
+                singleDatePicker: true,
+                autoUpdateInput: false,
+                showDropdowns: true,
+                maxDate: dateStart,
+                minDate: dateEnd,
+                startDate: dateStart,
+                locale: {
                     format 'DD/MM/YYYY'
                 },
-                singleClasses "picker_2"
+                singleClasses: "picker_2"
             }, function(start, end, label) {
                 var years = moment().diff(start, 'years');
                 var message = "The Employee is " + years + " Years Old!";
@@ -686,6 +686,7 @@
                 });
 
             });
+
             $('#birthdate').on('apply.daterangepicker', function(ev, picker) {
                 $(this).val(picker.startDate.format('DD/MM/YYYY'));
             });
@@ -714,17 +715,17 @@
             var dateStart = dd + '/' + mm + '/' + startYear;
             var dateEnd = dd + '/' + mm + '/' + endYear;
             $('#contract_end').daterangepicker({
-                drops 'up',
-                singleDatePicker true,
-                autoUpdateInput false,
-                showDropdowns true,
-                maxYear parseInt(moment().format('YYYY'), 100),
-                minDate dateEnd,
-                startDate moment(),
-                locale {
+                drops: 'up',
+                singleDatePicker: true,
+                autoUpdateInput: false,
+                showDropdowns: true,
+                maxYear: parseInt(moment().format('YYYY'), 100),
+                minDate: dateEnd,
+                startDate: moment(),
+                locale: {
                     format 'DD/MM/YYYY'
                 },
-                singleClasses "picker_2"
+                singleClasses: "picker_2"
             }, function(start, end, label) {
 
             });
@@ -754,17 +755,17 @@
             var dateStart = dd + '/' + mm + '/' + startYear;
             var dateEnd = dd + '/' + mm + '/' + endYear;
             $('#contract_start').daterangepicker({
-                drops 'up',
-                singleDatePicker true,
-                autoUpdateInput false,
-                showDropdowns true,
-                maxYear parseInt(moment().format('YYYY'), 100),
-                minDate dateEnd,
-                startDate moment(),
-                locale {
+                drops: 'up',
+                singleDatePicker: true,
+                autoUpdateInput: false,
+                showDropdowns: true,
+                maxYear: parseInt(moment().format('YYYY'), 100),
+                minDate: dateEnd,
+                startDate: moment(),
+                locale: {
                     format 'DD/MM/YYYY'
                 },
-                singleClasses "picker_2"
+                singleClasses: "picker_2"
             }, function(start, end, label) {
 
             });
