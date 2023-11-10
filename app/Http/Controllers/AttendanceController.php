@@ -3110,7 +3110,7 @@ class AttendanceController extends Controller
             $leaves->remaining = $remaining;
             if ($request->sub_cat > 0) {
                 $leaves->sub_category = $request->sub_cat;
-                $sub = LeaveSubType::where('id', $sub_cat)->first();
+                // $sub = LeaveSubType::where('id', $sub_cat)->first();
             }
 
             $leaves->application_date = date('Y-m-d');

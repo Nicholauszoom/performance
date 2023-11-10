@@ -442,7 +442,7 @@
             const start = document.getElementById("start-date").value;
             const end = document.getElementById("end-date").value;
             var par = id + '|' + start + '|' + end;
-            var url = '{{ route('getSubs', ':id') }}';
+            var url = '{{ route('getLeaveSubs', ':id') }}';
             url = url.replace(':id', par);
 
             // if (id == 1) {
