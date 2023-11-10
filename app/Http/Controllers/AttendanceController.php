@@ -1464,7 +1464,7 @@ class AttendanceController extends Controller
                 //dd($employee_data['email']);
                 try {
 
-                    // Notification::route('mail', $employee_data['email'])->notify(new EmailRequests($email_data));
+                    Notification::route('mail', $employee_data['email'])->notify(new EmailRequests($email_data));
 
                 } catch (Exception $exception) {
 
