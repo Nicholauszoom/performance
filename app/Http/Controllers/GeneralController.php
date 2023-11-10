@@ -10377,7 +10377,7 @@ class GeneralController extends Controller
         $data['child'] = 'Leave Approval';
 
         if ($request->isMethod('post')) {
-            $export = new LeaveApprovalsExport($data['approvals']);
+            $export = new LeaveApprovalsExport(LeaveApproval::orderBy('created_at', 'asc')->get());
             $fileName = 'leave_approvals.xlsx';
             return Excel::download($export, $fileName);
         }
