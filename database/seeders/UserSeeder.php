@@ -14,7 +14,7 @@ class UserSeeder extends Seeder
             [
                 'emp_id' => 'EMP001',
                 'old_emp_id' => 'OLD001',
-                'password_set' => true, // 1 for true, 0 for false
+                'password_set' => false, // 1 for true, 0 for false
                 'fname' => 'HR',
                 'mname' => ' ',
                 'lname' => ' ',
@@ -37,7 +37,7 @@ class UserSeeder extends Seeder
                 'postal_city' => 'New York',
                 'physical_address' => '456 Elm St',
                 'mobile' => '+1 (123) 456-7890',
-                'email' => 'john@example.com',
+                'email' => 'laison.marko@flex.co.tz',
                 'photo' => 'user.jpg',
                 'is_expatriate' => true, // 1 for true, 0 for false
                 'home' => 'Home Address',
@@ -46,7 +46,7 @@ class UserSeeder extends Seeder
                 'account_no' => '123456789',
                 'pension_fund' => 'Pension Fund Name',
                 'pf_membership_no' => 'PF12345',
-                'username' => 'johnsmith',
+                'username' => 'EMP001',
                 'password' => Hash::make('password'),
                 'state' => '1',
                 'login_user' => 1, // 1 for user who can log in, 0 for normal users
@@ -65,7 +65,7 @@ class UserSeeder extends Seeder
             [
                 'emp_id' => 'EMP002',
                 'old_emp_id' => 'OLD002',
-                'password_set' => true, // 1 for true, 0 for false
+                'password_set' => false, // 1 for true, 0 for false
                 'fname' => 'HOD',
                 'mname' => ' ',
                 'lname' => ' ',
@@ -88,7 +88,7 @@ class UserSeeder extends Seeder
                 'postal_city' => 'New York',
                 'physical_address' => '456 Elm St',
                 'mobile' => '+1 (123) 456-7890',
-                'email' => 'john@example.com',
+                'email' => 'laison.marko@flex.co.tz',
                 'photo' => 'user.jpg',
                 'is_expatriate' => true, // 1 for true, 0 for false
                 'home' => 'Home Address',
@@ -97,7 +97,7 @@ class UserSeeder extends Seeder
                 'account_no' => '123456789',
                 'pension_fund' => 'Pension Fund Name',
                 'pf_membership_no' => 'PF12345',
-                'username' => 'johnsmith',
+                'username' => 'EMP002',
                 'password' => Hash::make('password'),
                 'state' => '1',
                 'login_user' => 1, // 1 for user who can log in, 0 for normal users
@@ -116,7 +116,7 @@ class UserSeeder extends Seeder
             [
                 'emp_id' => 'EMP003',
                 'old_emp_id' => 'OLD003',
-                'password_set' => true, // 1 for true, 0 for false
+                'password_set' => false, // 1 for true, 0 for false
                 'fname' => 'Line',
                 'mname' => 'Manager',
                 'lname' => ' ',
@@ -139,7 +139,7 @@ class UserSeeder extends Seeder
                 'postal_city' => 'New York',
                 'physical_address' => '456 Elm St',
                 'mobile' => '+1 (123) 456-7890',
-                'email' => 'john@example.com',
+                'email' => 'laison.marko@flex.co.tz',
                 'photo' => 'user.jpg',
                 'is_expatriate' => true, // 1 for true, 0 for false
                 'home' => 'Home Address',
@@ -148,7 +148,7 @@ class UserSeeder extends Seeder
                 'account_no' => '123456789',
                 'pension_fund' => 'Pension Fund Name',
                 'pf_membership_no' => 'PF12345',
-                'username' => 'johnsmith',
+                'username' => 'EMP003',
                 'password' => Hash::make('password'),
                 'state' => '1',
                 'login_user' => 1, // 1 for user who can log in, 0 for normal users
@@ -167,7 +167,7 @@ class UserSeeder extends Seeder
             [
                 'emp_id' => 'EMP004',
                 'old_emp_id' => 'OLD004',
-                'password_set' => true, // 1 for true, 0 for false
+                'password_set' => false, // 1 for true, 0 for false
                 'fname' => 'Test',
                 'mname' => 'Employee1',
                 'lname' => ' ',
@@ -190,7 +190,7 @@ class UserSeeder extends Seeder
                 'postal_city' => 'New York',
                 'physical_address' => '456 Elm St',
                 'mobile' => '+1 (123) 456-7890',
-                'email' => 'john@example.com',
+                'email' => 'laison.marko@flex.co.tz',
                 'photo' => 'user.jpg',
                 'is_expatriate' => true, // 1 for true, 0 for false
                 'home' => 'Home Address',
@@ -199,7 +199,7 @@ class UserSeeder extends Seeder
                 'account_no' => '123456789',
                 'pension_fund' => 'Pension Fund Name',
                 'pf_membership_no' => 'PF12345',
-                'username' => 'johnsmith',
+                'username' => 'EMP004',
                 'password' => Hash::make('password'),
                 'state' => '1',
                 'login_user' => 1, // 1 for user who can log in, 0 for normal users
@@ -218,7 +218,7 @@ class UserSeeder extends Seeder
             [
                 'emp_id' => 'EMP005',
                 'old_emp_id' => 'OLD005',
-                'password_set' => true, // 1 for true, 0 for false
+                'password_set' => false, // 1 for true, 0 for false
                 'fname' => 'Test',
                 'mname' => 'Employee2',
                 'lname' => ' ',
@@ -241,7 +241,7 @@ class UserSeeder extends Seeder
                 'postal_city' => 'New York',
                 'physical_address' => '456 Elm St',
                 'mobile' => '+1 (123) 456-7890',
-                'email' => 'john@example.com',
+                'email' => 'laison.marko@flex.co.tz',
                 'photo' => 'user.jpg',
                 'is_expatriate' => true, // 1 for true, 0 for false
                 'home' => 'Home Address',
@@ -250,7 +250,7 @@ class UserSeeder extends Seeder
                 'account_no' => '123456789',
                 'pension_fund' => 'Pension Fund Name',
                 'pf_membership_no' => 'PF12345',
-                'username' => 'johnsmith',
+                'username' => 'EMP005',
                 'password' => Hash::make('password'),
                 'state' => '1',
                 'login_user' => 1, // 1 for user who can log in, 0 for normal users

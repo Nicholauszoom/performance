@@ -10783,8 +10783,8 @@ class GeneralController extends Controller
 
                 // start of name information validation
 
-                'title' => 'nullable|alpha',
-                'description' => 'required|alpha',
+                'title' => 'required',
+                'description' => 'required',
 
             ]
         );
@@ -10793,9 +10793,9 @@ class GeneralController extends Controller
         $grievance->description = $request->description;
         $grievance->empID = Auth::user()->emp_id;
         if ($request->hasfile('attachment')) {
-            $request->validate([
-                'attachment' => 'required|clamav',
-            ]);
+            // $request->validate([
+            //     'attachment' => 'required|clamav',
+            // ]);
             $request->validate([
                 'attachment' => 'mimes:jpg,png,jpeg,pdf|max:2048',
             ]);
