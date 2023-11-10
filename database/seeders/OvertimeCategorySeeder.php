@@ -28,13 +28,13 @@ class OvertimeCategorySeeder extends Seeder
                 'day_percent' => 2.0,
                 'night_percent' => 2.0,
                 'state' => 1,
-            ]
+            ],
             [
                 'name' => 'Sunday Overtime',
                 'day_percent' => 2.0,
                 'night_percent' => 2.0,
                 'state' => 1,
-            ],
+            ]
         ];
 
 

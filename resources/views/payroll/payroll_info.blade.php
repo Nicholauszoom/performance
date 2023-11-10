@@ -124,15 +124,21 @@ $payrollState = $payroll_state;
                 if (result.isConfirmed) {
 
                     $('#hideList').hide();
+                    var $myButton = $('#percal');
 
                     $.ajax({
                         url: "{{ route('payroll.generate_checklist', ['pdate' => base64_encode($payroll_date)]) }}",
                         async: true,
-                beforeSend: function () {
-                    $('.request__spinner').show() },
-                    complete: function(){
-
-                    },
+                        beforeSend: function(){
+                            $myButton.attr('disabled', 'disabled');
+                            $myButton.find('.spinner').removeClass('d-none'); // Remove the 'd-none' class to display the spinner
+                            $myButton.html('<i class="ph-circle-notch spinner me-2"></i>Loading...'); // Update button text
+                        },
+                        complete: function(){
+                            $myButton.removeAttr('disabled');
+                            $myButton.find('.spinner').addClass('d-none'); // Add the 'd-none' class to hide the spinner
+                            $myButton.html('<i class="ph-circle-notch spinner me-2 d-none"></i>Submit'); // Restore button text
+                        },
                         success: function(data) {
                             if (data.status == 1) {
 

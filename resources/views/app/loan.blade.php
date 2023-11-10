@@ -34,7 +34,7 @@
 
             <div class="row">
 
-                <?php if(session('appr_loan')!=''){ ?>
+                <?php if(true){ ?>
 
                 <div class="col-md-12 col-sm-12 col-xs-12">
                     <div class="card border-top  border-top-width-3 border-top-main rounded-0">

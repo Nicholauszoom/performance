@@ -4,6 +4,8 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
+
 
 class SecureHeaders
 {
@@ -24,6 +26,9 @@ class SecureHeaders
         //return $next($request);
         $response = $next($request);
 
+        if (!($response instanceof BinaryFileResponse)) {
+
+
         $response->header('Strict-Transport-Security', 'max-age=31536000; includeSubDomains');
         $response->header('X-Content-Type-Options', 'nosniff');
         $response->header('X-Frame-Options', 'SAMEORIGIN');
@@ -32,7 +37,7 @@ class SecureHeaders
         $response->header('Content-Security-Policy', 'https://hc-hub.bancabc.co.tz');
         $response->header('Content-Security-Policy', 'https://int.cits.co.tz');
         $response->cookie('__Host-sess', $cookieValue, 0, $path, null, $secure, $httpOnly, $sameSite);
-
+        }
 
         return $response;
     }
