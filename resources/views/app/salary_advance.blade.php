@@ -124,7 +124,7 @@
               {{-- start of other loans application --}}
 
               @can('add-loan')
-              <?php if(session('recom_paym') || session('appr_paym')){ ?>
+              <?php if(session('recom_paym') || 1 ||  session('appr_paym')){ ?>
               <div class="col-md-12 col-sm-12 col-xs-12">
                 <div class="card border-top  border-top-width-3 border-top-main rounded-0">
                   <div class="card-head px-2">
@@ -215,7 +215,7 @@
 
                             <?php  //}  ?>
 
-                            <?php if(session('appr_paym') && $row->status==1 && $pendingPayroll==0){ ?>
+                            <?php if( $row->status==1 && $pendingPayroll==0){ ?>
 
                             <a href="javascript:void(0)" onclick="approveLoan(<?php echo $row->id;?>)">
                             <button  class="btn btn-main"><i class="ph-check"></i></button></a>
@@ -247,7 +247,7 @@
 
 
                 <!--INSERT DIRECT LOAN-->
-                <?php if(session('mng_emp')){ ?>
+            <?php if(session('mng_emp') || 1){ ?>
                <div id="insertDirectForm"  class="col-md-12 col-sm-12 col-xs-12 mx-auto">
 
                     <div class="card border-top  border-top-width-3 border-top-main rounded-0">

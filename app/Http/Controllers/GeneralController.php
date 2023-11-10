@@ -3686,9 +3686,9 @@ class GeneralController extends Controller
         $this->authenticateUser('view-loan');
 
         $data['my_loans'] = $this->flexperformance_model->my_confirmedloan($empID);
-        if (session('appr_loan') != '') {
-            $data['other_loans'] = $this->flexperformance_model->all_confirmedloan();
-        }
+        
+        $data['other_loans'] = $this->flexperformance_model->all_confirmedloan();
+    
         $data['title'] = "Loan";
         return view('app.loan', $data);
     }
