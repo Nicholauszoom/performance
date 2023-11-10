@@ -83,19 +83,52 @@ class AttendanceModel extends Model
         return DB::select(DB::raw($query));
     }
 
-    function myLeaves($empId)
-    {
-        $query = "SELECT l.*, la.level1, la.level2, la.level3
-              FROM leaves AS l
-              JOIN leave_approvals AS la ON l.empID = la.empID
-              WHERE :empId IN (la.level1, la.level2, la.level3)
-              ORDER BY l.id DESC";
+    
+        function myLeaves($empId)
+        {
+            $query = "SELECT l.*, la.level1, la.level2, la.level3
+                  FROM leaves AS l
+                  JOIN leave_approvals AS la ON l.empID = la.empID
+                  WHERE :empId IN (la.level1, la.level2, la.level3)
+                  ORDER BY l.id DESC";
+    
+            $bindings = ['empId' => $empId];
+            $results = DB::select(DB::raw($query), $bindings);
+            return $results;
+        }
+        public function getFilteredLeaves($emp_id)
+{
+    $leaveApprovals = LeaveApproval::where('empID', $emp_id)->first();
 
-        $bindings = ['empId' => $empId];
-        $results = DB::select(DB::raw($query), $bindings);
-        return $results;
-    }
+    $leaves = Leaves::where(function ($query) use ($emp_id, $leaveApprovals) {
+        $query->where(function ($q) use ($emp_id, $leaveApprovals) {
+            $q->where('status', 1)->where('empID', $emp_id)->where('empID', $leaveApprovals->level1);
+        })->orWhere(function ($q) use ($emp_id, $leaveApprovals) {
+            $q->where('status', 2)
+                ->where(function ($q) use ($emp_id, $leaveApprovals) {
+                    $q->where('empID', $emp_id)
+                        ->where('empID', $leaveApprovals->level2)
+                        ->orWhere('empID', $leaveApprovals->level1);
+                });
+        })->orWhere(function ($q) use ($emp_id, $leaveApprovals) {
+            $q->where('status', 3)
+                ->where(function ($q) use ($emp_id, $leaveApprovals) {
+                    $q->where('empID', $emp_id)
+                        ->where('empID', $leaveApprovals->level3)
+                        ->orWhere('empID', $leaveApprovals->level2)
+                        ->orWhere('empID', $leaveApprovals->level1);
+                });
+        });
+    })->orWhere(function ($query) use ($emp_id) {
+        $query->where('status', 3)->where('empID', $emp_id)->where('deligated', $emp_id);
+    })->orderBy('id', 'desc')->get();
 
+    return $leaves;
+}
+
+    
+    
+    
 
 
 

@@ -33,7 +33,10 @@
         </a>
         @if ($payrollState == 2)
             <a href="javascript:void(0)" onclick="generate_checklist()" class="ms-3">
-                <button type="button" class="btn btn-main btn-sm">Perform Calculation </button>
+                <button type="button" class="btn btn-main btn-sm" id="percal">
+                    <i class="ph-circle-notch spinner me-2 d-none"></i>
+                    Perform Calculation
+                </button>
             </a>
             <a href="{{ route('payroll.cancelpayroll', 'none') }}" class="ms-3">
                 <button type="button" class="btn btn-warning btn-sm">Cancel Payroll </button>

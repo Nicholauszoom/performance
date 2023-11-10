@@ -788,6 +788,7 @@ class LeaveController extends Controller
         $leave=Leaves::find($leaveID);
      
         // if($this->uri->segment(3)!=''){
+          
           if($leave->state==1){
       
         $leave=Leaves::find($leaveID);
@@ -816,14 +817,17 @@ class LeaveController extends Controller
     $leave=Leaves::where('id',$leaveID)->first();
     if($leave != null) {
    
-if($id!=''  && $leave -> state == 1){
+    if($id!=''  && $leave -> state == 1){
   
+      $leave->state = 4;
+      $leave->position = 'Cancelled by you';
+      $leave->save();
+
+      $msg = "Leave  Canceled Successfully !";
+       
+
+
  
-
-  $leave->delete();
-
-
-  $msg="Leave is Deleted Successfully !";
 
  return response(['msg'=>$msg],200);
 }else{
@@ -1013,6 +1017,33 @@ return response(['msg'=>$msg],400);
             // For  Requested days
             $start = $request->start;
             $end = $request->end;
+
+            $pendingLeave = Leaves::where('empId', $empID)
+            ->where('state', 1)
+            ->whereDate('end', '>=', $start)
+            ->first();
+
+        $approvedLeave = Leaves::where('empId', $empID)
+            ->where('state', 0)
+            ->whereDate('end', '>=', $start)
+            ->whereDate('end', '>=', $start)
+            ->first();
+
+        if ($pendingLeave || $approvedLeave) {
+            $message = 'You have a ';
+
+            if ($pendingLeave) {
+                $message .= 'pending ' . $pendingLeave->type->type . ' application ';
+            }
+
+            if ($approvedLeave) {
+                $message .= ($pendingLeave ? 'and ' : '') . 'approved ' . $approvedLeave->type->type . ' application ';
+            }
+
+            $message .= 'within the requested leave time';
+
+            return response($message,202);
+        }
             
     
             $date1=date('d-m-Y', strtotime($start));

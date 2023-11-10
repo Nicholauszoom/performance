@@ -110,7 +110,6 @@
                             </td>
                             <td class="text-center">
 
-
                                 @if ($item->attachment != null)
                                     <a href="{{ asset('storage/leaves/' . $item->attachment) }}"
                                         download="{{ asset('storage/leaves/' . $item->attachment) }}"

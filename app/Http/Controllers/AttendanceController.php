@@ -1464,7 +1464,7 @@ class AttendanceController extends Controller
                 //dd($employee_data['email']);
                 try {
 
-                    // Notification::route('mail', $employee_data['email'])->notify(new EmailRequests($email_data));
+                    Notification::route('mail', $employee_data['email'])->notify(new EmailRequests($email_data));
 
                 } catch (Exception $exception) {
 
@@ -3110,7 +3110,7 @@ class AttendanceController extends Controller
             $leaves->remaining = $remaining;
             if ($request->sub_cat > 0) {
                 $leaves->sub_category = $request->sub_cat;
-                $sub = LeaveSubType::where('id', $sub_cat)->first();
+                // $sub = LeaveSubType::where('id', $sub_cat)->first();
             }
 
             $leaves->application_date = date('Y-m-d');

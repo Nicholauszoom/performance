@@ -104,7 +104,7 @@
                         @foreach ($leave_data as $row)
                             <tr>
                             <td>{{ $row->emp_id }}</td>
-                            <td>{{ $row->full_name }}</td>
+                            <td>{{ $row->fname }} {{$row->mname}}</td>
                             <td>{{ $row->department_name }}</td>
                             <td>{{ $row->position_name }}</td>
                             @if(isset($employee))

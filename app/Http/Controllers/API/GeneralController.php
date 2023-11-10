@@ -415,7 +415,7 @@ class GeneralController extends Controller
 
 
     //  start of employee leaves function
-    public function myLeaves(Request $request)
+    public function myLeave1s(Request $request)
     {
      //  $data['leaves'] =Leaves::orderBy('id','desc')->get();
       
@@ -436,6 +436,50 @@ class GeneralController extends Controller
 
     return response( [ 'data'=>$data  ],200 );
     }
+    public function myLeaves(Request $request)
+    {
+     
+        $data['leaves'] = Leaves::whereNot('reason', 'Automatic applied!')->orderBy('id', 'asc')->get();
+        $line_manager = auth()->user()->emp_id;
+        $filteredLeaves = [];
+        
+        foreach ($data['leaves'] as $leave) {
+            $level1 = LeaveApproval::where('empID', $leave->empID)
+                ->where('level1', $line_manager)
+                ->first();
+           
+            $level2 = LeaveApproval::where('empID', $leave->empID)
+                ->where('level2', $line_manager)
+                ->first();
+        
+            $level3 = LeaveApproval::where('empID', $leave->empID)
+                ->where('level3', $line_manager)
+                ->first();
+        
+            $approval = LeaveApproval::where('empID', $leave->empID)->first();
+        
+            if (
+                auth()->user()->emp_id == $approval->level1 ||
+                (auth()->user()->emp_id == $approval->level2 && $leave->status == 2) ||
+                (auth()->user()->emp_id == $approval->level3 && $leave->status == 3) ||
+                (auth()->user()->emp_id == $leave->deligated && $leave->status == 3)
+            ) {
+                $filteredLeaves[] = $leave;
+            }
+        }
+        
+       
+        
+       
+
+
+        $numberOfLeaves = count($filteredLeaves);
+        $data['leaves']=$filteredLeaves;
+        return response( [ 'data'=>$data ],200);
+
+    }
+    
+    
     //  end of employee leaves function
 
 
@@ -858,15 +902,15 @@ class GeneralController extends Controller
     }
     public function dashboardData(){
         $id=auth()->user()->emp_id;
-        $active_leaves=Leaves::where('empID',auth()->user()->emp_id)->with('type:id,type,max_days')->get();
+        $active_leaves=Leaves::where('empID',auth()->user()->emp_id)->with('type:id,type,max_days')->whereNot('reason', 'Automatic applied!')->get();
         $data=$active_leaves;
     //   foreach ($active_leaves as &object){
     //         if($active_leaves->state==0){
 
     //         }
     //   }
-    $pending_leaves=Leaves::where('empID',auth()->user()->emp_id)->with('type:id,type,max_days')->where('state','1')->get();
-    $approved_leaves=Leaves::where('empID',auth()->user()->emp_id)->with('type:id,type,max_days')->where('state','0')->get();
+    $pending_leaves=Leaves::where('empID',auth()->user()->emp_id)->with('type:id,type,max_days')->where('state','1')->whereNot('reason', 'Automatic applied!')->get();
+    $approved_leaves=Leaves::where('empID',auth()->user()->emp_id)->with('type:id,type,max_days')->where('state','0')->whereNot('reason', 'Automatic applied!')->get();
     // $data['total leaves applied']=$data;
 
     $overtimes= $this->flexperformance_model->my_overtimes($id);
