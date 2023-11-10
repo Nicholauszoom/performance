@@ -23,9 +23,9 @@
         <table class="table datatable-button-html5-columns">
             <thead>
                 <tr>
-                    <th><b>Pay No</b></th>
+                    <th class="text-end"><b>Pay No</b></th>
 
-                    <th class="text-center"><b>Name</b><br>
+                    <th class="text-end"><b>Name</b><br>
                     </th>
                     <th class="text-end"><b>Bank</b></th>
                     <th class="text-end"><b>BranchCode</b></th>
@@ -81,7 +81,7 @@
 
                     <td class="text-end">{{ $row->emp_id }}</td>
 
-                    <td style="margin-right: 0px">
+                    <td style="margin-right: 0px " class="text-end">
                         {{ $row->fname }} {{ $row->mname }} {{ $row->lname }}
                     </td>
 
