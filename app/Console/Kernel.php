@@ -19,6 +19,9 @@ class Kernel extends ConsoleKernel
     $schedule->command('leaves:escalation-task')
              ->hourly(); // Adjust the time as needed
 
+    $schedule->command('leaves:leave_revok_escalation')
+             ->everyMinute(); // Adjust the time as needed
+
     }
 
     /**
@@ -29,13 +32,15 @@ class Kernel extends ConsoleKernel
     protected function commands()
     {
         $this->load(__DIR__.'/Commands');
-        
+
         require base_path('routes/console.php');
     }
 
     protected $commands = [
         // Other commands...
         Commands\LeavesEscalationTask::class,
+        Commands\LeaveRevokEsalationTask::class,
+
     ];
 
 }

@@ -1013,6 +1013,33 @@ return response(['msg'=>$msg],400);
             // For  Requested days
             $start = $request->start;
             $end = $request->end;
+
+            $pendingLeave = Leaves::where('empId', $empID)
+            ->where('state', 1)
+            ->whereDate('end', '>=', $start)
+            ->first();
+
+        $approvedLeave = Leaves::where('empId', $empID)
+            ->where('state', 0)
+            ->whereDate('end', '>=', $start)
+            ->whereDate('end', '>=', $start)
+            ->first();
+
+        if ($pendingLeave || $approvedLeave) {
+            $message = 'You have a ';
+
+            if ($pendingLeave) {
+                $message .= 'pending ' . $pendingLeave->type->type . ' application ';
+            }
+
+            if ($approvedLeave) {
+                $message .= ($pendingLeave ? 'and ' : '') . 'approved ' . $approvedLeave->type->type . ' application ';
+            }
+
+            $message .= 'within the requested leave time';
+
+            return response($message,202);
+        }
             
     
             $date1=date('d-m-Y', strtotime($start));

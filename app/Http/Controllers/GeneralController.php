@@ -7,6 +7,7 @@ namespace App\Http\Controllers;
 use App\Charts\EmployeeLineChart;
 use App\Helpers\SysHelpers;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\EmployeeRequest;
 use App\Imports\HolidayDataImport;
 use App\Imports\ImportSalaryIncrement;
 use App\Models\AccessControll\Departments;
@@ -22,7 +23,6 @@ use App\Models\EmailNotification;
 use App\Models\EmergencyContact;
 use App\Models\EMPL;
 use App\Models\Employee;
-use App\Models\Leaves;
 use App\Models\EmployeeComplain;
 use App\Models\EmployeeDependant;
 use App\Models\EmployeeDetail;
@@ -38,6 +38,7 @@ use App\Models\InputSubmission;
 use App\Models\LeaveApproval;
 use App\Models\LeaveForfeiting;
 //use PHPClamAV\Scanner;
+use App\Models\Leaves;
 use App\Models\Payroll\FlexPerformanceModel;
 use App\Models\Payroll\ImprestModel;
 use App\Models\Payroll\Payroll;
@@ -73,8 +74,8 @@ use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Storage;
 use Maatwebsite\Excel\Concerns\Importable;
-use Maatwebsite\Excel\Facades\Excel;
 // use Barryvdh\DomPDF\Facade\Pdf;
+use Maatwebsite\Excel\Facades\Excel;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xls;
 
@@ -6995,299 +6996,271 @@ class GeneralController extends Controller
      * Register emmployee
      *
      */
-    public function registerEmployee(Request $request)
+    public function registerEmployee(EmployeeRequest $request)
     {
 
-        if ($request->method() == "POST") {
+        $validator = $request->validated($request->all());
 
-            // $validator = Validator::make($request->all(), [
-            //     'fname' => 'required',
-            //     'mname' => 'required',
-            //     'currency' => 'required',
-            //     'emp_level' => 'required',
-            //     'cost_center' => 'required',
-            //     'leave_days_entitled' => 'required',
-            //     'lname' => 'required',
-            //     'emp_id' => 'required|unique:employee',
-            //     'salary' => 'required',
-            //     'gender' => 'required',
-            //     'email' => 'required',
-            //     'nationality' => 'required',
-            //     'merital_status' => 'required',
-            //     'position' => 'required',
-            //     'contract_type' => 'required',
-            //     'mobile' => 'required',
-            //     'account_no' => 'required',
-            //     'bank' => 'required',
-            //     'bank_branch' => 'required',
-            //     'pension_fund' => 'required',
-            //     'pf_membership_no' => 'required',
-            //     'line_manager' => 'required',
-            //     'department' => 'required',
-            //     'branch' => 'required',
-            // ]);
+        $calendar = str_replace('/', '-', $request->input('birthdate'));
+        $contract_end = str_replace('/', '-', $request->input('contract_end'));
+        $contract_start = str_replace('/', '-', $request->input('contract_start'));
 
-            //     if ($validator->fails()) {
-            //         return response()->json([
-            //             'status' => 400,
-            //             'errors' => $validator->messages(),
-            //         ]);
-            // //     }
+        $birthdate = date('Y-m-d', strtotime($calendar));
 
-            // DATE MANIPULATION
-            $calendar = str_replace('/', '-', $request->input('birthdate'));
-            $contract_end = str_replace('/', '-', $request->input('contract_end'));
-            $contract_start = str_replace('/', '-', $request->input('contract_start'));
+        $date1 = date_create($birthdate);
+        $date2 = date_create(date('Y-m-d'));
 
-            $birthdate = date('Y-m-d', strtotime($calendar));
+        $diff = date_diff($date1, $date2);
+        $required = $diff->format("%R%a");
 
-            $date1 = date_create($birthdate);
-            $date2 = date_create(date('Y-m-d'));
+        $currency = $request->currency;
+        $rate = $this->flexperformance_model->get_rate($currency);
 
-            $diff = date_diff($date1, $date2);
-            $required = $diff->format("%R%a");
+        if (($required / 365) > 16) {
 
-            $currency = $request->input("currency");
-            $rate = $this->flexperformance_model->get_rate($currency);
+            $countryCode = $request->nationality;
 
-            if (($required / 365) > 16) {
+            // $randomPassword = $this->password_generator(8);
 
-                $countryCode = $request->input("nationality");
+            $password = "ABC1234";
 
-                // $randomPassword = $this->password_generator(8);
+            $emp_id = $request->emp_id;
 
-                $password = "ABC1234";
-
-                $emp_id = $request->emp_id;
-
-                $employee = array(
-                    'fname' => $request->input("fname"),
-                    'mname' => $request->input("mname"),
-
-                    'rate' => $rate,
-                    'currency' => $currency,
-                    //'emp_code' => $request->input("emp_code"),
-                    'emp_level' => $request->input("emp_level"),
-                    'cost_center' => $request->input("cost_center"),
-                    'leave_days_entitled' => $request->input("leave_day"),
-
-                    'accrual_rate' => $request->input("leave_day") / 12,
-                    'lname' => $request->input("lname"),
-                    // 'lname' => $randomPassword,
-                    'salary' => $request->input("salary"),
-                    'company' => 1,
-                    'gender' => $request->input("gender"),
-                    'email' => $request->input("email"),
-                    'nationality' => $request->input("nationality"),
-                    'merital_status' => $request->input("status"),
-                    'birthdate' => $birthdate,
-                    'position' => $request->input("position"),
-                    'contract_type' => $request->input("ctype"),
-                    'postal_address' => $request->input("postaddress"),
-                    'physical_address' => $request->input('haddress'),
-                    'mobile' => $request->input('mobile'),
-                    'account_no' => $request->input("accno"),
-                    'bank' => $request->input("bank"),
-                    'bank_branch' => 1,
-                    'pension_fund' => $request->input("pension_fund"),
-                    'pf_membership_no' => $request->input("pf_membership_no"),
-                    'home' => $request->input("haddress"),
-                    'postal_city' => $request->input("postalcity"),
-                    'photo' => "user.png",
-                    'password_set' => "1",
-                    'line_manager' => $request->input("linemanager"),
-                    'department' => $request->input("department"),
-                    'branch' => $request->input("branch"),
-                    'hire_date' => date('Y-m-d', strtotime($contract_start)),
-                    'contract_renewal_date' => date('Y-m-d'),
-                    'emp_id' => $emp_id,
-                    'username' => $request->input("emp_id"),
-                    // 'password' => password_hash($randomPassword, PASSWORD_BCRYPT),
-                    'password' => Hash::make($password),
-                    'contract_end' => date('Y-m-d', strtotime($contract_end)),
-                    'state' => 5,
-                    'national_id' => $request->input("nationalid"),
-                    'tin' => $request->input("tin"),
-
-                );
-
-                $newEmp = array(
-                    'emp_id' => $emp_id,
-                    'account' => 1,
-                );
-
+            if (!empty($request->mname)) {
                 $empName = $request->input("fname") . ' ' . $request->input("mname") . ' ' . $request->input("lname");
+            } else {
+                $empName = $request->input("fname") . ' ' . $request->input("lname");
+            }
 
-                $recordID = $this->flexperformance_model->employeeAdd($employee, $newEmp);
+            $employee = array(
+                'fname' => $request->input("fname"),
+                'mname' => $request->input("mname"),
+                'full_name' => $empName,
+                'rate' => $rate,
+                'currency' => $currency,
+                //'emp_code' => $request->input("emp_code"),
+                'emp_level' => $request->input("emp_level"),
+                'cost_center' => $request->input("cost_center"),
+                'leave_days_entitled' => $request->input("leave_day"),
 
-                $id = $emp_id;
-                if ($recordID > 0) {
-                    $emp_data = Employee::where('emp_id', $emp_id)->first();
-                    $user = User::find($emp_data->id);
-                    $user->roles()->attach(6);
+                'accrual_rate' => $request->input("leave_day") / 12,
+                'lname' => $request->input("lname"),
+                // 'lname' => $randomPassword,
+                'salary' => $request->input("salary"),
+                'company' => 1,
+                'gender' => $request->input("gender"),
+                'email' => $request->input("email"),
+                'nationality' => $request->input("nationality"),
+                'merital_status' => $request->input("status"),
+                'birthdate' => $birthdate,
+                'position' => $request->input("position"),
+                'contract_type' => $request->input("ctype"),
+                'postal_address' => $request->input("postaddress"),
+                'physical_address' => $request->input('haddress'),
+                'mobile' => $request->input('mobile'),
+                'account_no' => $request->input("accno"),
+                'bank' => $request->input("bank"),
+                'bank_branch' => 1,
+                'pension_fund' => $request->input("pension_fund"),
+                'pf_membership_no' => $request->input("pf_membership_no"),
+                'home' => $request->input("haddress"),
+                'postal_city' => $request->input("postalcity"),
+                'photo' => "user.png",
+                'password_set' => "1",
+                'line_manager' => $request->input("linemanager"),
+                'department' => $request->input("department"),
+                'branch' => $request->input("branch"),
+                'hire_date' => date('Y-m-d', strtotime($contract_start)),
+                'contract_renewal_date' => date('Y-m-d'),
+                'emp_id' => $emp_id,
+                'username' => $request->input("emp_id"),
+                // 'password' => password_hash($randomPassword, PASSWORD_BCRYPT),
+                'password' => Hash::make($password),
+                'contract_end' => date('Y-m-d', strtotime($contract_end)),
+                'state' => 5,
+                'national_id' => $request->input("nationalid"),
+                'tin' => $request->input("tin"),
 
-                    $user->roles()->attach($request['role']);
+            );
 
-                    SysHelpers::FinancialLogs($id, 'Add Employee', '', '', 'Employee Registration');
+            $newEmp = array(
+                'emp_id' => $emp_id,
+                'account' => 1,
+            );
 
-                    SysHelpers::FinancialLogs($id, 'Salary', '0.00', number_format($request->input("salary"), 2), 'Employee Registration');
+            $recordID = $this->flexperformance_model->employeeAdd($employee, $newEmp);
 
-                    //register employee to leave approve maping
+            $id = $emp_id;
 
-                    $approval = new LeaveApproval();
-                    $approval->empID = $emp_id;
-                    $approval->level1 = $request->input("linemanager");
-                    //$approval->level2 = $request->level_2;
-                    // $approval->level3 = $request->level_3;
-                    $approval->escallation_time = 2;
-                    $approval->save();
+            if ($recordID > 0) {
 
-                    //end leave approve mapping
+                $emp_data = Employee::where('emp_id', $emp_id)->first();
 
-                    /*give 100 allocation*/
-                    $data = array(
+                $user = User::find($emp_data->id);
+
+                $user->roles()->attach(6);
+
+                $user->roles()->attach($request['role']);
+
+                SysHelpers::FinancialLogs($id, 'Add Employee', '', '', 'Employee Registration');
+
+                SysHelpers::FinancialLogs($id, 'Salary', '0.00', number_format($request->input("salary"), 2), 'Employee Registration');
+
+                //register employee to leave approve maping
+
+                $approval = new LeaveApproval();
+                $approval->empID = $emp_id;
+                $approval->level1 = $request->input("linemanager");
+                //$approval->level2 = $request->level_2;
+                // $approval->level3 = $request->level_3;
+                $approval->escallation_time = 2;
+                $approval->save();
+
+                //end leave approve mapping
+
+                /*give 100 allocation*/
+                $data = array(
+                    'empID' => $emp_id,
+                    'activity_code' => 'AC0018',
+                    'grant_code' => 'VSO',
+                    'percent' => 100.00,
+                );
+
+                $this->project_model->allocateActivity($data);
+
+                // $empID = sprintf("%03d", $countryCode).sprintf("%04d", $recordID);
+
+                $empID = $emp_id;
+
+                $property = array(
+                    'prop_type' => "Employee Package",
+                    'prop_name' => "Employee ID, Health Insuarance Card, Email Address and System Access",
+                    'serial_no' => $empID,
+                    'given_by' => auth()->user()->emp_id,
+                    'given_to' => $empID,
+                );
+                $datagroup = array(
+                    'empID' => $empID,
+                    'group_name' => 1,
+                );
+
+                $result = $this->flexperformance_model->updateEmployeeID($recordID, $empID, $property, $datagroup);
+
+                if ($result == true) {
+
+                    $email_data = array(
+                        'email' => $request->email,
+                        'fname' => $request->fname,
+                        'lname' => $request->lname,
+                        'username' => $emp_id,
+                        'password' => $password,
+                    );
+
+                    $user = User::first();
+                    //$user->notify(new RegisteredUser($email_data));
+                    // Notification::route('mail', $email_data['email'])->notify(new RegisteredUser($email_data));
+                    //});
+                    //$senderInfo = $this->payroll_model->senderInfo();
+
+                    //         /* EMAIL*/
+                    //     foreach ($senderInfo as $keyInfo) {
+                    //       $host = $keyInfo->host;
+                    //       $username = $keyInfo->username;
+                    //       $password = $keyInfo->password;
+                    //       $smtpsecure = $keyInfo->secure;
+                    //       $port = $keyInfo->port;
+                    //       $senderEmail = $keyInfo->email;
+                    //       $senderName = $keyInfo->name;
+                    //     }
+                    //   // PHPMailer object
+                    //     $mail = $this->phpmailer_lib->load();// PHPMailer object
+                    //     // SMTP configuration
+                    //     $mail->isSMTP();
+                    //     $mail->Host     = $host;
+                    //     $mail->SMTPAuth = true;
+                    //     $mail->Username = $username;
+                    //     $mail->Password = $password;
+
+                    //     $mail->SMTPSecure = $smtpsecure;
+                    //     $mail->Port     = $port;
+
+                    //     $mail->setFrom($senderEmail, $senderName);
+
+                    //     // Add a recipient
+                    //     $mail->addAddress($request->input("email"));
+
+                    //     // Email subject
+                    //     $mail->Subject = "VSO User Credentials";
+
+                    //9     // Set email format to HTML
+                    //     $mail->isHTML(true);
+
+                    //     // Email body content
+                    //     $mailContent = "<p>Dear <b>".$empName."</b>,</p>
+                    //                 <p>Your Flex Performance Account login credential are  password: <b>".$randomPassword."</b>.
+                    //                 Please use your employee ID as your username.</p>
+                    //                 <p>You are advised not to share your password with anyone. If you dont know this activity or you received this email by accident, please report
+                    //                     this incident to the system administrator.<br><br>
+                    //                     Thank you,<br>
+                    //                     Flex Performance Software Self Service.</p>";
+                    //     $mail->Body = $mailContent;
+
+                    //     if(!$mail->send()){
+
+                    //         session("note", "<p><font color='green'>Email was not sent</font></p>");
+                    //         }else{
+                    //         session("note","<p><font color='green'>Email sent!</font></p>");
+                    //       }
+
+                    /*add in transfer with status = 5 (registered, waiting for approval)*/
+
+                    $data_transfer = array(
                         'empID' => $emp_id,
-                        'activity_code' => 'AC0018',
-                        'grant_code' => 'VSO',
-                        'percent' => 100.00,
+                        'parameter' => 'New Employee',
+                        'parameterID' => 5,
+                        'old' => 0,
+                        'new' => $request->input("salary"),
+                        'old_department' => 0,
+                        'new_department' => $request->input("department"),
+                        'old_position' => 0,
+                        'new_position' => $request->input("position"),
+                        'status' => 5, //new employee
+                        'recommended_by' => auth()->user()->emp_id,
+                        'approved_by' => '',
+                        'date_recommended' => date('Y-m-d'),
+                        'date_approved' => '',
                     );
 
-                    $this->project_model->allocateActivity($data);
+                    $this->flexperformance_model->employeeTransfer($data_transfer);
 
-                    // $empID = sprintf("%03d", $countryCode).sprintf("%04d", $recordID);
+                    // dd("I am here");
 
-                    $empID = $emp_id;
-
-                    $property = array(
-                        'prop_type' => "Employee Package",
-                        'prop_name' => "Employee ID, Health Insuarance Card, Email Address and System Access",
-                        'serial_no' => $empID,
-                        'given_by' => auth()->user()->emp_id,
-                        'given_to' => $empID,
-                    );
-                    $datagroup = array(
-                        'empID' => $empID,
-                        'group_name' => 1,
-                    );
-
-                    $result = $this->flexperformance_model->updateEmployeeID($recordID, $empID, $property, $datagroup);
-
-                    if ($result == true) {
-
-                        $email_data = array(
-                            'email' => $request->email,
-                            'fname' => $request->fname,
-                            'lname' => $request->lname,
-                            'username' => $emp_id,
-                            'password' => $password,
-                        );
-
-                        $user = User::first();
-                        //$user->notify(new RegisteredUser($email_data));
-                        // Notification::route('mail', $email_data['email'])->notify(new RegisteredUser($email_data));
-                        //});
-                        //$senderInfo = $this->payroll_model->senderInfo();
-
-                        //         /* EMAIL*/
-                        //     foreach ($senderInfo as $keyInfo) {
-                        //       $host = $keyInfo->host;
-                        //       $username = $keyInfo->username;
-                        //       $password = $keyInfo->password;
-                        //       $smtpsecure = $keyInfo->secure;
-                        //       $port = $keyInfo->port;
-                        //       $senderEmail = $keyInfo->email;
-                        //       $senderName = $keyInfo->name;
-                        //     }
-                        //   // PHPMailer object
-                        //     $mail = $this->phpmailer_lib->load();// PHPMailer object
-                        //     // SMTP configuration
-                        //     $mail->isSMTP();
-                        //     $mail->Host     = $host;
-                        //     $mail->SMTPAuth = true;
-                        //     $mail->Username = $username;
-                        //     $mail->Password = $password;
-
-                        //     $mail->SMTPSecure = $smtpsecure;
-                        //     $mail->Port     = $port;
-
-                        //     $mail->setFrom($senderEmail, $senderName);
-
-                        //     // Add a recipient
-                        //     $mail->addAddress($request->input("email"));
-
-                        //     // Email subject
-                        //     $mail->Subject = "VSO User Credentials";
-
-                        //9     // Set email format to HTML
-                        //     $mail->isHTML(true);
-
-                        //     // Email body content
-                        //     $mailContent = "<p>Dear <b>".$empName."</b>,</p>
-                        //                 <p>Your Flex Performance Account login credential are  password: <b>".$randomPassword."</b>.
-                        //                 Please use your employee ID as your username.</p>
-                        //                 <p>You are advised not to share your password with anyone. If you dont know this activity or you received this email by accident, please report
-                        //                     this incident to the system administrator.<br><br>
-                        //                     Thank you,<br>
-                        //                     Flex Performance Software Self Service.</p>";
-                        //     $mail->Body = $mailContent;
-
-                        //     if(!$mail->send()){
-
-                        //         session("note", "<p><font color='green'>Email was not sent</font></p>");
-                        //         }else{
-                        //         session("note","<p><font color='green'>Email sent!</font></p>");
-                        //       }
-
-                        /*add in transfer with status = 5 (registered, waiting for approval)*/
-
-                        $data_transfer = array(
-                            'empID' => $emp_id,
-                            'parameter' => 'New Employee',
-                            'parameterID' => 5,
-                            'old' => 0,
-                            'new' => $request->input("salary"),
-                            'old_department' => 0,
-                            'new_department' => $request->input("department"),
-                            'old_position' => 0,
-                            'new_position' => $request->input("position"),
-                            'status' => 5, //new employee
-                            'recommended_by' => auth()->user()->emp_id,
-                            'approved_by' => '',
-                            'date_recommended' => date('Y-m-d'),
-                            'date_approved' => '',
-                        );
-
-                        $this->flexperformance_model->employeeTransfer($data_transfer);
-
-                        // dd("I am here");
-
-                        $response_array['empID'] = $empID;
-                        $response_array['status'] = "OK";
-                        $response_array['title'] = "Registered Successfully";
-                        $response_array['message'] = "<div class='alert alert-success alert-dismissible fade in' role='alert'>
+                    $response_array['empID'] = $empID;
+                    $response_array['status'] = "OK";
+                    $response_array['title'] = "Registered Successfully";
+                    $response_array['message'] = "<div class='alert alert-success alert-dismissible fade in' role='alert'>
                         <button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>x</span> </button>Employee Added Successifully
                         </div>";
-                        header('Content-type: application/json');
-                        $response_array['credentials'] = "username ni " . $emp_id . "password:" . $password;
-                        echo json_encode($response_array);
-                    } else {
-                        $response_array['status'] = "ERR";
-                        $response_array['title'] = "FAILED";
-                        $response_array['message'] = '<div class="alert alert-danger alert-dismissible fade in" role="alert">
-                      <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">x</span> </button>FAILED: Employee Not Added Please try again
-                        </div>';
-                        header('Content-type: application/json');
-                        echo json_encode($response_array);
-                    }
+                    header('Content-type: application/json');
+                    $response_array['credentials'] = "username ni " . $emp_id . "password:" . $password;
+                    echo json_encode($response_array);
                 } else {
                     $response_array['status'] = "ERR";
                     $response_array['title'] = "FAILED";
                     $response_array['message'] = '<div class="alert alert-danger alert-dismissible fade in" role="alert">
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">x</span> </button>Registration Failed, Employee`s Age is Less Than 16
-                    </div>';
+                      <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">x</span> </button>FAILED: Employee Not Added Please try again
+                        </div>';
                     header('Content-type: application/json');
                     echo json_encode($response_array);
                 }
+            } else {
+                $response_array['status'] = "ERR";
+                $response_array['title'] = "FAILED";
+                $response_array['message'] = '<div class="alert alert-danger alert-dismissible fade in" role="alert">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">x</span> </button>Registration Failed, Employee`s Age is Less Than 16
+                    </div>';
+                header('Content-type: application/json');
+                echo json_encode($response_array);
             }
         }
     }
@@ -10050,17 +10023,18 @@ class GeneralController extends Controller
     // end of saving new holiday function
 
     // add holidays from excel
-    public function addHolidayFromExcel(Request $request){
-            // Validate the uploaded file
-            $request->validate([
-                'file' => 'required|mimes:xlsx,xls',
-            ]);
-            // Handle the file upload and data extraction
-            $file = $request->file('file');
-            $import = new HolidayDataImport;
-            Excel::import($import, $file);
+    public function addHolidayFromExcel(Request $request)
+    {
+        // Validate the uploaded file
+        $request->validate([
+            'file' => 'required|mimes:xlsx,xls',
+        ]);
+        // Handle the file upload and data extraction
+        $file = $request->file('file');
+        $import = new HolidayDataImport;
+        Excel::import($import, $file);
 
-            return redirect()->back()->with('success', 'File uploaded and data extracted successfully.');
+        return redirect()->back()->with('success', 'File uploaded and data extracted successfully.');
     }
 
     // start of edit disciplinary action
@@ -10101,7 +10075,7 @@ class GeneralController extends Controller
     {
         request()->validate(
             [
-                'emp_id' => 'required'            ]
+                'emp_id' => 'required']
         );
 
         $emp_id = $request->emp_id;
@@ -10111,7 +10085,7 @@ class GeneralController extends Controller
         $leaveForfeiting->update();
 
         $msg = "Employee Leave Forfeiting has been save Successfully !";
-        return back()->with('msg',$msg);
+        return back()->with('msg', $msg);
 
     }
     // end of update holiday function
@@ -10154,14 +10128,12 @@ class GeneralController extends Controller
             $leave_forfeit = LeaveForfeiting::firstOrNew(['empID' => $value->emp_id]);
             $leave_forfeit->opening_balance = $opening_balance;
             $leave_forfeit->nature = 1; // Replace attribute1 with your actual attribute names
-            $leave_forfeit->opening_balance_year =  $year;
+            $leave_forfeit->opening_balance_year = $year;
             $leave_forfeit->save();
         }
 
         return redirect('flex/attendance/leaveforfeiting/')->with('msg', 'Opening Balance was Updated successfully!');
     }
-
-
 
     // start of delete holiday function
     public function deleteHoliday($id)
@@ -10465,12 +10437,11 @@ class GeneralController extends Controller
         $data['parent'] = 'Settings';
         $data['child'] = 'Edit Leave Forfeiting';
         $today = date('Y-m-d');
-        $arryear = explode('-',$today);
+        $arryear = explode('-', $today);
         $year = $arryear[0];
-        $employeeDate = $year.('-01-01');
+        $employeeDate = $year . ('-01-01');
 
         $data['leaveBalance'] = $this->attendance_model->getLeaveBalance($id, $employeeDate, date('Y-m-d'));
-
 
         $natureId = 1;
         $currentYear = date('Y');
