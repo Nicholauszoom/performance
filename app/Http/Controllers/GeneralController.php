@@ -3897,11 +3897,11 @@ class GeneralController extends Controller
         return view('app.loan_application_remarks', $data);
 
         if (isset($_POST['add'])) {
-            if (session('recomloan') != 0) {
+            if (session('recomloan') != 0 || 1) {
                 $data2 = array(
                     'reason_hr' => $request->input("remarks"),
                 );
-            } elseif (session('appr_loan') != 0) {
+            } elseif (session('appr_loan') != 0 || 1) {
                 $data2 = array(
                     'reason_finance' => $request->input("remarks"),
                 );
