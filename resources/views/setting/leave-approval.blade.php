@@ -106,8 +106,14 @@
 {{-- end of add approval modal --}}
 <div class="card border-top  border-top-width-3 border-top-main rounded-0 p-2">
     <div class="card-header border-0">
-        <div class="">
+        <div class="d-flex justify-content-between">
             <h6 class="mb-0 text-warning">Leave Approvals</h6>
+
+            <form action="" method="post">
+                @csrf
+
+            <button type="submit" class="btn btn-secondary">Download Excel</button>
+        </form>
 
         </div>
 
