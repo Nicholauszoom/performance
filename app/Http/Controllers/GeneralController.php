@@ -1964,13 +1964,10 @@ class GeneralController extends Controller
 
     public function applyOvertime(Request $request)
     {
+
         request()->validate(
             [
-
-                // start of name information validation
-
                 'reason' => 'required|alpha',
-
             ]
         );
 
@@ -1982,30 +1979,17 @@ class GeneralController extends Controller
 
         $empID = auth()->user()->emp_id;
 
-        $split_start = explode("  at  ", $start);
-        $split_finish = explode("  at  ", $finish);
+        $split_start = Carbon::createFromFormat('Y-m-d\TH:i', $start);
+        $split_finish = Carbon::createFromFormat('Y-m-d\TH:i', $finish);
 
-        $start_date = $split_start[0];
-        $start_time = $split_start[1];
+        // Extract date and time components
+        $start_date = $split_start->toDateString();
+        $start_time = $split_start->toTimeString();
 
-        $finish_date = $split_finish[0];
-        $finish_time = $split_finish[1];
+        $finish_date = $split_finish->toDateString();
+        $finish_time = $split_finish->toTimeString();
 
-        $start_calendar = str_replace('/', '-', $start_date);
-        $finish_calendar = str_replace('/', '-', $finish_date);
-
-        $start_final = date('Y-m-d', strtotime($start_calendar));
-        $finish_final = date('Y-m-d ', strtotime($finish_calendar));
-
-        $maxRange = ((strtotime($finish_final) - strtotime($start_final)) / 3600);
-
-        // dd('Email Sent Successfully');
-        //$linemanager = $this->flexperformance_model->get_linemanagerID($empID);
-
-        // foreach ($line as $row) {
-        //     $linemanager = $row->line_manager;
-        // }
-        //Overtime Should range between 24 Hrs;
+        $maxRange = $split_start->diffInHours($split_finish);
 
         if ($maxRange > 24) {
 
@@ -2027,8 +2011,8 @@ class GeneralController extends Controller
                         $type = 1; // echo " CORRECT:  NIGHT OVERTIME";
 
                         $data = array(
-                            'time_start' => $start_final . " " . $start_time,
-                            'time_end' => $finish_final . " " . $finish_time,
+                            'time_start' => $start_date . " " . $start_time,
+                            'time_end' => $finish_date . " " . $finish_time,
                             'overtime_type' => $type,
                             'overtime_category' => $category,
                             'reason' => $reason,
@@ -2051,8 +2035,8 @@ class GeneralController extends Controller
                         $type = 0; // echo "DAY OVERTIME";
 
                         $data = array(
-                            'time_start' => $start_final . " " . $start_time,
-                            'time_end' => $finish_final . " " . $finish_time,
+                            'time_start' => $start_date . " " . $start_time,
+                            'time_end' => $finish_date . " " . $finish_time,
                             'overtime_type' => $type,
                             'overtime_category' => $category,
                             'reason' => $reason,
@@ -2075,8 +2059,8 @@ class GeneralController extends Controller
                         $type = 0; // echo "DAY OVERTIME";
 
                         $data = array(
-                            'time_start' => $start_final . " " . $start_time,
-                            'time_end' => $finish_final . " " . $finish_time,
+                            'time_start' => $start_date . " " . $start_time,
+                            'time_end' => $finish_date . " " . $finish_time,
                             'overtime_type' => $type,
                             'overtime_category' => $category,
                             'reason' => $reason,
@@ -2105,8 +2089,8 @@ class GeneralController extends Controller
                 if (strtotime($start_time) >= strtotime($start_night_shift) && strtotime($finish_time) <= strtotime($end_night_shift)) {
                     $type = 1; // echo "NIGHT OVERTIME CROSS DATE ";
                     $data = array(
-                        'time_start' => $start_final . " " . $start_time,
-                        'time_end' => $finish_final . " " . $finish_time,
+                        'time_start' => $start_date . " " . $start_time,
+                        'time_end' => $finish_date . " " . $finish_time,
                         'overtime_type' => $type,
                         'overtime_category' => $category,
                         'reason' => $reason,
@@ -2125,8 +2109,8 @@ class GeneralController extends Controller
                 } else {
                     $type = 0; // echo "DAY OVERTIME";
                     $data = array(
-                        'time_start' => $start_final . " " . $start_time,
-                        'time_end' => $finish_final . " " . $finish_time,
+                        'time_start' => $start_date . " " . $start_time,
+                        'time_end' => $finish_date . " " . $finish_time,
                         'overtime_type' => $type,
                         'overtime_category' => $category,
                         'reason' => $reason,

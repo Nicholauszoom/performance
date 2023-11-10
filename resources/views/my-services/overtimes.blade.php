@@ -70,7 +70,7 @@
                                     <div class="col-sm-12">
                                         <div class="input-group">
                                             <span class="input-group-text"><i class="ph-calendar"></i></span>
-                                            <input type="date" required placeholder="Start Time" name="time_start"
+                                            <input type="datetime-local" required placeholder="Start Time" name="time_start"
                                                 id="time_start" class="form-control daterange-single">
                                         </div>
                                     </div>
@@ -81,7 +81,7 @@
                                     <div class="col-sm-12">
                                         <div class="input-group">
                                             <span class="input-group-text"><i class="ph-calendar"></i></span>
-                                            <input type="date" required placeholder="Finish Time" name="time_finish" id="time_end" class="form-control daterange-single">
+                                            <input type="datetime-local" required placeholder="Finish Time" name="time_finish" id="time_end" class="form-control daterange-single">
                                         </div>
                                     </div>
                                 </div>
