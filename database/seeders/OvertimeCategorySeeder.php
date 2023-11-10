@@ -19,23 +19,24 @@ class OvertimeCategorySeeder extends Seeder
         $data = [
             [
                 'name' => 'Normal Overtime',
-                'rate_multiplier' => 1.5,
-                'rate_addition' => 1.5,
-                'status' => 1,
+                'day_percent' => 1.5,
+                'night_percent' => 1.5,
+                'state' => 1,
             ],
             [
                 'name' => 'Holiday Overtime',
-                'rate_multiplier' => 2.0,
-                'rate_addition' => 2.0,
-                'status' => 1,
-            ],
+                'day_percent' => 2.0,
+                'night_percent' => 2.0,
+                'state' => 1,
+            ]
             [
                 'name' => 'Sunday Overtime',
-                'rate_multiplier' => 2.0,
-                'rate_addition' => 2.0,
-                'status' => 1,
+                'day_percent' => 2.0,
+                'night_percent' => 2.0,
+                'state' => 1,
             ],
         ];
+
 
         DB::table("overtime_category")->insert($data);
     }
