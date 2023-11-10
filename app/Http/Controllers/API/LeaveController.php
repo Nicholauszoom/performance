@@ -788,6 +788,7 @@ class LeaveController extends Controller
         $leave=Leaves::find($leaveID);
      
         // if($this->uri->segment(3)!=''){
+          
           if($leave->state==1){
       
         $leave=Leaves::find($leaveID);
@@ -816,14 +817,17 @@ class LeaveController extends Controller
     $leave=Leaves::where('id',$leaveID)->first();
     if($leave != null) {
    
-if($id!=''  && $leave -> state == 1){
+    if($id!=''  && $leave -> state == 1){
   
+      $leave->state = 4;
+      $leave->position = 'Cancelled by you';
+      $leave->save();
+
+      $msg = "Leave  Canceled Successfully !";
+       
+
+
  
-
-  $leave->delete();
-
-
-  $msg="Leave is Deleted Successfully !";
 
  return response(['msg'=>$msg],200);
 }else{

@@ -86,20 +86,28 @@ class AttendanceModel extends Model
     function myLeaves($empId)
     {
         $results = DB::table('leaves AS l')
-            ->join('leave_approvals AS la', 'l.empID', '=', 'la.empID')
-            ->select('l.*', 'la.level1', 'la.level2', 'la.level3')
-            ->where('l.reason', '!=', 'Automatic applied!')
-            ->where(function ($query) use ($empId) {
-                $query->where(function ($q) use ($empId) {
-                    $q->where('l.status', 1)->where('la.level1', $empId);
-                })->orWhere(function ($q) use ($empId) {
-                    $q->where('l.status', 2)->whereIn('la.level1', [$empId, 'la.level2']);
-                })->orWhere(function ($q) use ($empId) {
-                    $q->where('l.status', 3)->whereIn('la.level1', [$empId, 'la.level2', 'la.level3']);
-                });
+    ->join('leave_approvals AS la', 'l.empID', '=', 'la.empID')
+    ->select('l.*', 'la.level1', 'la.level2', 'la.level3')
+    ->where('l.reason', '!=', 'Automatic applied!')
+    ->where(function ($query) use ($empId) {
+        $query->where('l.status', 1)->where('la.level1', $empId)
+            ->orWhere(function ($q) use ($empId) {
+                $q->where('l.status', 2)
+                    ->where('la.level2', $empId);
             })
-            ->orderBy('l.id', 'DESC')
-            ->get();
+            ->orWhere(function ($q) use ($empId) {
+                $q->where('l.status', 3)
+                    ->where('la.level3', $empId);
+            })
+            ->orWhere(function ($q) use ($empId) {
+                $q->where('l.status', 3)
+                    ->where('l.delegated', $empId);
+            });
+    })
+    ->orderBy('l.id', 'DESC')
+    ->get();
+
+    
     
         return $results;
     }
