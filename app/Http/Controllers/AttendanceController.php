@@ -1548,6 +1548,11 @@ class AttendanceController extends Controller
         $expectedDate = $request->input('expectedDate');
 
         $particularLeave = Leaves::where('id', $id)->first();
+        $linemanager = LeaveApproval::where('empID', $particularLeave->empID)->first();
+        $linemanager_position = Employee::where('emp_id',$linemanager->level1)->value('position');
+        $position = Position::where('id', $linemanager_position)->first();
+        $positionName = $position->name;
+
 
         if ($particularLeave) {
             $particularLeave->state = 2;
@@ -1555,6 +1560,8 @@ class AttendanceController extends Controller
             $particularLeave->enddate_revoke = $expectedDate;
             $particularLeave->revoke_status = 0;
             $particularLeave->status = 4;
+            $particularLeave->revok_escalation_status = 1;
+            $particularLeave->position = 'Pending Approve Revoke by '. $positionName;
             $particularLeave->revoke_created_at = now();
             $particularLeave->save();
         }
@@ -1563,16 +1570,15 @@ class AttendanceController extends Controller
         $type_name = $leave_type->type;
 
         //fetch Line manager data from employee table and send email
-        $linemanager = LeaveApproval::where('empID', $particularLeave->empID)->first();
-        $linemanager_data = SysHelpers::employeeData($linemanager->level2);
-        $employee_data = SysHelpers::employeeData($particularLeave->empID);
-        $fullname = $linemanager_data['full_name'];
+        $linemanager_data = Employee::where('emp_id',$linemanager->level1)->first();
+        $employee_data =  Employee::where('emp_id',$particularLeave->empID)->first();
+        $fullname = $linemanager_data['fname'];
         $email_data = array(
             'subject' => 'Employee Leave Revoke',
             'view' => 'emails.linemanager.leave-revoke',
             'email' => $linemanager_data['email'],
             'full_name' => $fullname,
-            'employee_name' => $employee_data['full_name'],
+            'employee_name' => $employee_data['fname'],
             'next' => parse_url(route('attendance.leave'), PHP_URL_PATH),
         );
 

@@ -87,7 +87,7 @@
                     <thead>
                         <tr>
                             <th>Payroll No</th>
-                            <th>Employee Name</th>
+                            <th>dddd Name</th>
                             <th>Department</th>
                             <th>Position</th>
                             @if(isset($employee))
@@ -104,7 +104,7 @@
                         @foreach ($leave_data as $row)
                             <tr>
                             <td>{{ $row->emp_id }}</td>
-                            <td>{{ $row->full_name }}</td>
+                            <td>{{ $row->fname }} {{$row->mname}}</td>
                             <td>{{ $row->department_name }}</td>
                             <td>{{ $row->position_name }}</td>
                             @if(isset($employee))

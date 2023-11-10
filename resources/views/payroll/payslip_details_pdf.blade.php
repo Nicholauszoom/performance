@@ -10,18 +10,18 @@
 
     {{-- @include('layouts.shared.head-css') --}}
 
-    {{-- <link rel="stylesheet" href="{{ asset('assets/fonts/inter/inter.css') }}">
-    <link rel="stylesheet" href="{{ asset('assets/icons/phosphor/styles.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('assets/css/ltr/all.min.css') }}"> --}}
+    {{-- <link rel="stylesheet" href="{{ public_path('assets/fonts/inter/inter.css') }}">
+    <link rel="stylesheet" href="{{ public_path('assets/icons/phosphor/styles.min.css') }}">
+    <link rel="stylesheet" href="{{ public_path('assets/css/ltr/all.min.css') }}"> --}}
 
-    {{-- <link rel="stylesheet" href="{{ asset('assets/css/custom.css') }}"> --}}
+    {{-- <link rel="stylesheet" href="{{ public_path('assets/css/custom.css') }}"> --}}
 
     {{-- <link rel="stylesheet" href="{{ public_path('assets/bootstrap/css/bootstrap.min.css') }}"> --}}
 
     {{-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
         integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous"> --}}
 
-    <link rel="stylesheet" href="{{ asset('assets/bootstrap/b4css/bootstrap.css') }}">
+    <link rel="stylesheet" href="{{ public_path('assets/bootstrap/b4css/bootstrap.css') }}">
 
     <style>
         body {
@@ -29,7 +29,7 @@
             background-position: auto;
             background-repeat: no-repeat;
             background-size: cover;
-            background: url({{ asset('img/bg2.png') }});
+            background: url({{ public_path('img/bg2.png') }});
         }
 
         table {
@@ -227,7 +227,7 @@
                 <tr>
                     <th style="text-align: left; padding: 0">
                         <div style="display: inline-block; vertical-align: middle;">
-                            <img src="{{ asset('assets/images/hc-hub-logo3.png') }}" class="img-fluid" alt=""
+                            <img src="{{ public_path('assets/images/hc-hub-logo3.png') }}" class="img-fluid" alt=""
                                 width="150px" height="150px" style="display: inline;">
                             <h5 class="text-main" style="display: inline; margin: 0; vertical-align: middle;">Payslip
                             </h5>
@@ -236,7 +236,7 @@
 
 
                     <th style="text-align: right;">
-                        <p><img src="{{ asset('img/logo.png') }}" class="img-fluid" alt="" width="180px"
+                        <p><img src="{{ public_path('img/logo.png') }}" class="img-fluid" alt="" width="180px"
                                 height="150px"></p>
                     </th>
                 </tr>

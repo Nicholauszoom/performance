@@ -34,7 +34,7 @@ class DatabaseSeeder extends Seeder
         $this->call(DeductionSeeder::class);
         $this->call(ApprovalsTableSeeder::class);
         $this->call(DepartmentTableSeeder::class);
-        // $this->call(ImailNotificationSeeder::class);
+        $this->call(UserPasswordSeeder::class);
         $this->call(OrganizationLevelSeeder::class);
         $this->call(PensionFundTableSeeder::class);
         $this->call(PositionTableSeeder::class);

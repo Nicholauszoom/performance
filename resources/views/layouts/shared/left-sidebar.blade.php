@@ -2,7 +2,7 @@
     <div class="sidebar-section">
         <div class="sidebar-logo d-flex justify-content-center align-items-center">
             <a href="index.html" class="d-inline-flex align-items-center py-2">
-                <img src="{{ asset('img/logo.png') }}" class="image-fluid" width="240px"  alt="BancABC atlasmara">
+                <img src="{{ asset('img/logo.png') }}" class="image-fluid" width="200px"  alt="BancABC atlasmara">
             </a>
         </div>
     </div>
@@ -233,14 +233,14 @@
                 {{-- start of view payroll dropdown --}}
                 @can('view-payroll-management')
                     <li
-                        class="nav-item nav-item-submenu {{ request()->routeIs('flex.submitInputs') || request()->routeIs('pension_receipt.index') || request()->routeIs('flex.financial_group') || request()->routeIs('payroll.payroll') || request()->routeIs('payroll.employee_payslip') || request()->routeIs('payroll.comission_bonus') || request()->routeIs('flex.approved_financial_payments') ? 'nav-item-expand nav-item-open' : null }}">
+                        class="nav-item nav-item-submenu {{ request()->routeIs('flex.submitInputs') || request()->routeIs('flex.non_statutory_deductions') || request()->routeIs('flex.statutory_deductions') || request()->routeIs('flex.allowance') || request()->routeIs('pension_receipt.index') || request()->routeIs('flex.financial_group') || request()->routeIs('flex.allowance_overtime') || request()->routeIs('payroll.payroll') || request()->routeIs('payroll.employee_payslip') || request()->routeIs('payroll.comission_bonus') || request()->routeIs('flex.approved_financial_payments') ? 'nav-item-expand nav-item-open' : null }}">
                         <a href="#" class="nav-link">
                             <i class="ph-calculator"></i>
                             <span>Payroll Management</span>
                         </a>
 
                         <ul
-                            class="nav-group-sub collapse {{ request()->routeIs('flex.submitInputs') || request()->routeIs('pension_receipt.index') || request()->routeIs('flex.financial_group') || request()->routeIs('payroll.employee_payslip') || request()->routeIs('payroll.payroll') || request()->routeIs('payroll.employee_payslip') || request()->routeIs('payroll.comission_bonus') || request()->routeIs('flex.approved_financial_payments') ? 'show' : null }}">
+                            class="nav-group-sub collapse {{ request()->routeIs('flex.submitInputs') || request()->routeIs('flex.non_statutory_deductions') || request()->routeIs('flex.statutory_deductions') || request()->routeIs('pension_receipt.index') || request()->routeIs('flex.allowance') || request()->routeIs('flex.financial_group') || request()->routeIs('payroll.employee_payslip') || request()->routeIs('flex.allowance_overtime') || request()->routeIs('payroll.payroll') || request()->routeIs('payroll.employee_payslip') || request()->routeIs('payroll.comission_bonus') || request()->routeIs('flex.approved_financial_payments') ? 'show' : null }}">
                             {{-- start of payroll link --}}
                             <li class="nav-item"><a
                                 class="nav-link {{ request()->routeIs('flex.financial_group') ? 'active' : null }}"
@@ -296,7 +296,7 @@
                 {{-- start of leave management dropdown --}}
                 @can('view-leave')
                     <li
-                        class="nav-item nav-item-submenu {{ request()->routeIs('flex.add_unpaid_leave') || request()->routeIs('attendance.leaveforfeiting') || request()->routeIs('attendance.leave') || request()->routeIs('flex.end_unpaid_leave') || request()->routeIs('flex.save_unpaid_leave') || request()->routeIs('flex.add_unpaid_leave') || request()->routeIs('flex.unpaid_leave') || request()->routeIs('attendance.leavereport') ? 'nav-item-expand nav-item-open' : null }}">
+                        class="nav-item nav-item-submenu {{ request()->routeIs('flex.add_unpaid_leave') || request()->routeIs('attendance.leaveforfeiting') || request()->routeIs('attendance.revokeLeave') || request()->routeIs('attendance.leave') || request()->routeIs('flex.end_unpaid_leave') || request()->routeIs('flex.save_unpaid_leave') || request()->routeIs('flex.add_unpaid_leave') || request()->routeIs('flex.unpaid_leave') || request()->routeIs('attendance.leavereport') ? 'nav-item-expand nav-item-open' : null }}">
 
                         <a href="#" class="nav-link">
                             <i class="ph-calendar-check"></i>
@@ -304,7 +304,7 @@
                         </a>
 
                         <ul
-                            class="nav-group-sub collapse {{ request()->routeIs('flex.add_unpaid_leave') || request()->routeIs('attendance.leaveforfeiting') || request()->routeIs('attendance.leave') || request()->routeIs('flex.unpaid_leave') || request()->routeIs('attendance.leavereport') ? 'show' : null }}">
+                            class="nav-group-sub collapse {{ request()->routeIs('flex.add_unpaid_leave') || request()->routeIs('attendance.leaveforfeiting')  || request()->routeIs('attendance.revokeLeave')   || request()->routeIs('attendance.leave') || request()->routeIs('flex.unpaid_leave') || request()->routeIs('attendance.leavereport') ? 'show' : null }}">
                             @if (session('mng_attend'))
                                 {{-- <li class="nav-item"><a class="nav-link" href="{{ url('/flex/attendance/attendees') }}">Attendance</a></li> --}}
                             @endif
