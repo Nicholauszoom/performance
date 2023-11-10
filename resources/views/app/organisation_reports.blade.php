@@ -48,7 +48,7 @@
                                     <input type="radio" name="type" value="1" id="p9" required>
                                     <label class="ms-2" for="p9">PDF</label>
                                 </div>
-                                <div class="d-inline-flex align-items-center">
+                                <div class="d-inline-flex align-items-center d-none">
                                     <input type="radio" name="type" value="2" id="p9a" required>
                                     <label class="ms-2" for="p9a">Excel</label>
                                 </div>
@@ -88,7 +88,7 @@
                                     <input type="radio" name="type" value="1" id="p9" required>
                                     <label class="ms-2" for="p9">PDF</label>
                                 </div>
-                                <div class="d-inline-flex align-items-center">
+                                <div  class="d-inline-flex align-items-center d-none">
                                     <input type="radio" name="type" value="2" id="p9a" required>
                                     <label class="ms-2" for="p9a">Excel</label>
                                 </div>
@@ -383,7 +383,7 @@
                 </form>
             </div>
         </div>
-        <div class="col-md-6">
+        <div class="col-md-6 d-none">
             <div class="card border-top  border-top-width-3 border-top-main rounded-0 p-2">
                 <div class="card-header">
                     <h5 class="text-warning">Pension History</h5>
