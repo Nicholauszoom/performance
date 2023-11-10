@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::table('groups', function (Blueprint $table) {
-            $table->integer('brouped_by')->unsigned()->nullable()->after('name')->comment = "1.by emproyee adn 2.by role";;
+            $table->integer('grouped_by')->unsigned()->nullable()->after('name')->comment = "1.by employee and 2.by role";;
 
         });
     }
