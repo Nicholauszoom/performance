@@ -119,15 +119,26 @@ class LeavesEscalationTask extends Command
                         if ($approval_person) {
                             $email_data = array(
                                 'subject' => 'Employee Leave Approval(Escalated)',
+                                'view' => 'emails.linemanager.leave_escalation_approval',
+                                'email' => $approval_person->email,
+                                'full_name' => $approval_person->fname,
+                                'employee_name' => $employee->fname,
+                                'next' => parse_url(route('attendance.leave'), PHP_URL_PATH)
+                            );
+
+
+                            $email_data_employee = array(
+                                'subject' => 'Employee Leave Approval(Escalated)',
                                 'view' => 'emails.linemanager.leave-approval',
                                 'email' => $approval_person->email,
-                                'full_name' => $approval_person->full_name,
-                                'employee_name' => $employee->full_name,
+                                'full_name' => $approval_person->fname,
+                                'employee_name' => $employee->fname,
                                 'next' => parse_url(route('attendance.leave'), PHP_URL_PATH)
                             );
 
                             try {
                                 Notification::route('mail',  $approval_person->email)->notify(new EmailRequests($email_data));
+                                Notification::route('mail',  $employee->email)->notify(new EmailRequests($email_data_employee));
                             } catch (Exception $exception) {
                                 return "failed to escalate leave";
                             }
