@@ -858,15 +858,15 @@ class GeneralController extends Controller
     }
     public function dashboardData(){
         $id=auth()->user()->emp_id;
-        $active_leaves=Leaves::where('empID',auth()->user()->emp_id)->with('type:id,type,max_days')->get();
+        $active_leaves=Leaves::where('empID',auth()->user()->emp_id)->with('type:id,type,max_days')->whereNot('reason', 'Automatic applied!')->get();
         $data=$active_leaves;
     //   foreach ($active_leaves as &object){
     //         if($active_leaves->state==0){
 
     //         }
     //   }
-    $pending_leaves=Leaves::where('empID',auth()->user()->emp_id)->with('type:id,type,max_days')->where('state','1')->get();
-    $approved_leaves=Leaves::where('empID',auth()->user()->emp_id)->with('type:id,type,max_days')->where('state','0')->get();
+    $pending_leaves=Leaves::where('empID',auth()->user()->emp_id)->with('type:id,type,max_days')->where('state','1')->whereNot('reason', 'Automatic applied!')->get();
+    $approved_leaves=Leaves::where('empID',auth()->user()->emp_id)->with('type:id,type,max_days')->where('state','0')->whereNot('reason', 'Automatic applied!')->get();
     // $data['total leaves applied']=$data;
 
     $overtimes= $this->flexperformance_model->my_overtimes($id);
