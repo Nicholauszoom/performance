@@ -657,6 +657,7 @@
                     setTimeout(function() {
                         $('#addEmployee :input').val('');
                         $('#addEmployee select').prop('selectedIndex', 0);
+                        $('.error-message').empty();
                     }, 1000);
 
 
@@ -666,10 +667,7 @@
 
                     if (responseJson.errors) {
                         var errors = responseJson.errors;
-
                         $('.error-message').empty();
-
-                        // Display validation errors below input fields
                         $.each(errors, function (field, errorMessage) {
                             $('#' + field + '-error').html(errorMessage);
                         });
