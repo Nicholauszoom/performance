@@ -2,6 +2,7 @@
 
 namespace App\Exports;
 
+use App\Models\Employee;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Illuminate\Support\Collection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
@@ -17,7 +18,20 @@ class LeaveApprovalsExport implements FromCollection, WithHeadings{
 
     public function collection()
     {
-        return $this->approvals;
+        return $this->approvals->map(function ($approval) {
+            // dd(Employee::where('emp_id', $approval->empID)->first()->fname ?? null);
+            return [
+                'ID' => $approval->id,
+
+                'Employee Name' => Employee::where('emp_id', $approval->empID)->first()->fname ?? null,
+                'Level 1' =>  Employee::where('emp_id', $approval->level1)->first()->fname ?? null,
+                'Level 2' => Employee::where('emp_id', $approval->level2)->first()->fname ?? null,
+                'Level 3' => Employee::where('emp_id', $approval->level3)->first()->fname ?? null,
+                'Escallation Time' => $approval->escallation_time,
+                'Created At' => $approval->created_at,
+                'Updated At' => $approval->updated_at,
+            ];
+        });
     }
 
     public function headings(): array
