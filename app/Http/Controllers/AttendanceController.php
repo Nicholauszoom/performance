@@ -1605,7 +1605,7 @@ class AttendanceController extends Controller
             $particularLeave->revoke_status = 1;
             $particularLeave->status = 5;
             if ($particularLeave->enddate_revoke) {
-                  $days = SysHelpers::countWorkingDays($$particularLeave->start, $particularLeave->enddate_revoke);
+                  $days = SysHelpers::countWorkingDays($particularLeave->start, $particularLeave->enddate_revoke);
 
                   $particularLeave->remaining = $particularLeave->remaining + $days;
 

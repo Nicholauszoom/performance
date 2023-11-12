@@ -87,7 +87,7 @@
                     <thead>
                         <tr>
                             <th>Payroll No</th>
-                            <th>dddd Name</th>
+                            <th>Employee Name</th>
                             <th>Department</th>
                             <th>Position</th>
                             @if(isset($employee))

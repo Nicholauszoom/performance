@@ -24,6 +24,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 use App\Models\Payroll\FlexPerformanceModel;
 
+use Illuminate\Support\Facades\Notification;
+
 class LeaveController extends Controller
 {
 
@@ -1042,7 +1044,7 @@ return response(['msg'=>$msg],400);
 
             $message .= 'within the requested leave time';
 
-            return response($message,202);
+            return response([ 'msg'=>$message ],202);
         }
             
     
