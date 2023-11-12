@@ -5195,7 +5195,9 @@ class GeneralController extends Controller
         $data['pension'] = $this->flexperformance_model->pension_fund();
         $data['meals'] = $this->flexperformance_model->meals_deduction();
         $data['pendingPayroll'] = $this->payroll_model->pendingPayrollCheck();
+
         $data['title'] = "Non-Statutory Deductions";
+
         return view('app.non_statutory_deductions', $data);
 
     }
@@ -5267,8 +5269,11 @@ class GeneralController extends Controller
         //$state = $request->input('state');
         $state = 1;
         $rate = $this->flexperformance_model->get_rate($request->currency);
-        $data = array(
 
+        // FIXME I have commented column currency and rate but it need confirmation if it should available
+        // FIXME data from code is missing for it to be able to save in the database
+
+        $data = array(
             'name' => $name,
             'code' => $code,
             'amount' => $amount * $rate,
@@ -5276,13 +5281,14 @@ class GeneralController extends Controller
             'apply_to' => $apply_to,
             'mode' => $mode,
             'state' => $state,
-            'currency' => $request->currency,
-            'rate' => $rate,
-
+            // 'currency' => $request->currency,
+            // 'rate' => $rate,
         );
 
         DB::table('deductions')->insert($data);
+
         echo "Record inserted successfully.<br/>";
+
         return redirect('flex/non_statutory_deductions');
     }
     //     public function addDeduction(Request $request)   {
