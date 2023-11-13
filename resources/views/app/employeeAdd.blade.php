@@ -5,7 +5,8 @@
 @endpush
 
 @push('head-scriptTwo')
-    <script src="{{ asset('assets/js/pages/form_select2.js') }}"></script>
+<script src="{{ asset('assets/js/pages/form_select2.js') }}"></script>
+<script src="{{ asset('assets/js/pages/form_validation_styles.js') }}"></script>
 @endpush
 
 @section('content')
@@ -26,24 +27,24 @@
                 <div class="row">
                     <div class="col-md-4 col-lg-4">
                         <div class="mb-3">
-                            <label class="form-label" for="firstName">First name  <span class="text-danger">*<span></label>
-                            <input type="text" id="firstName" pattern="[a-zA-Z]+" maxlength="15" title="Only enter letters" name="fname" id="name" value="{{ old('fname') }}" class="form-control" placeholder="First Name" required>
+                            <label class="form-label" for="fname">First name  <span class="text-danger">*<span></label>
+                            <input type="text" id="fname" pattern="[a-zA-Z]+" maxlength="15" title="Only enter letters" name="fname" id="name" value="{{ old('fname') }}" class="form-control" placeholder="First Name" required>
                             <span id="fname-error" class="text-danger error-message"></span>
                         </div>
                     </div>
 
                     <div class="col-md-4 col-lg-4">
                         <div class="mb-3">
-                            <label class="form-label" for="middleName">Middle name</label>
-                            <input type="text" id="middleName" name="mname" value="{{ old('mname') }}" class="form-control" maxlength="15" pattern="[a-zA-Z]+" title="Only enter letters" placeholder="Middle Name">
+                            <label class="form-label" for="mname">Middle name</label>
+                            <input type="text" id="mname" name="mname" value="{{ old('mname') }}" class="form-control" maxlength="15" pattern="[a-zA-Z]+" title="Only enter letters" placeholder="Middle Name">
                             <span id="mname-error" class="text-danger error-message"></span>
                         </div>
                     </div>
 
                     <div class="col-md-4 col-lg-4">
                         <div class="mb-3">
-                            <label class="form-label" for="lastName">Last name <span class="text-danger">*<span> </label>
-                            <input type="text" id="lastName" name="lname" value="{{ old('lname') }}" class="form-control" maxlength="15" pattern="[a-zA-Z]+" title="Only enter letters" placeholder="Last Name" required>
+                            <label class="form-label" for="lname">Last name <span class="text-danger">*<span> </label>
+                            <input type="text" id="lname" name="lname" value="{{ old('lname') }}" class="form-control" maxlength="15" pattern="[a-zA-Z]+" title="Only enter letters" placeholder="Last Name" required>
                             <span id="lname-error" class="text-danger error-message"></span>
                         </div>
                     </div>
@@ -89,8 +90,8 @@
 
                     <div class="col-md-4 col-lg-4">
                         <div class="mb-3">
-                            <label class="form-label" for="matitial_status">Maritial Status <span class="text-danger">*<span></label>
-                            <select class="form-control" name="status" id="matitial_status" required>
+                            <label class="form-label" for="status">Maritial Status <span class="text-danger">*<span></label>
+                            <select class="form-control" name="status" id="status" required>
                                 <option value="Single">Single</option>
                                 <option value="Married">Married</option>
                                 <option value="Widowed">Widowed</option>
@@ -101,8 +102,8 @@
 
                     <div class="col-md-4 col-lg-4">
                         <div class="mb-3">
-                            <label class="form-label" for="birthdate">Birthdate <span class="text-danger">*<span></label>
-                            <input type="date" placeholder="Date of Birth" class="form-control" name="bithdate" value="{{ old('birthdate') }}" id="birthdate" required>
+                            <label class="form-label" for="bithdate">Birthdate <span class="text-danger">*<span></label>
+                            <input type="date" placeholder="Date of Birth" class="form-control" name="bithdate" value="{{ old('bithdate') }}" id="bithdate" required>
                             <span id="age" class="text-danger"></span>
                             <span id="bithdate-error" class="text-danger error-message"></span>
                         </div>
@@ -135,9 +136,9 @@
 
                     <div class="col-md-4 col-lg-4">
                         <div class="mb-3">
-                            <label class="form-label" for="pos">Position <span class="text-danger">*<span></label>
+                            <label class="form-label" for="position">Position <span class="text-danger">*<span></label>
                             <div class="mb-3 form-control-feedback" id="position-loader">
-                                <select class="form-control select1_single select" id="pos" name="position" required>
+                                <select class="form-control select1_single select" id="position" name="position" required>
                                     <option value=""> Select Position </option>
                                 </select>
                                 <div class="form-control-feedback-icon d-flex align-items-center justify-content-end text-end px-3 d-none" id="pos-loader" style="width: 100% !important; background: transparent">
@@ -163,8 +164,8 @@
 
                     <div class="col-md-4 col-lg-4">
                         <div class="mb-3">
-                            <label class="form-label" for="company_branch">Company Branch <span class="text-danger">*<span></label>
-                            <select class="form-control select_branch select" name="branch" required id="company_branch">
+                            <label class="form-label" for="branch">Company Branch <span class="text-danger">*<span></label>
+                            <select class="form-control select_branch select" name="branch" required id="branch">
                                 <option value=""> Select </option>
                                 @foreach ($branch as $row)
                                 <option value="{{ $row->code }}">{{ $row->name }}</option>
@@ -176,8 +177,8 @@
 
                     <div class="col-md-4 col-lg-4">
                         <div class="mb-3">
-                            <label class="form-label" for="contrct_type">Contract Type <span class="text-danger">*<span></label>
-                            <select class="form-control select" name="ctype" id="contract_type" required>
+                            <label class="form-label" for="ctype">Contract Type <span class="text-danger">*<span></label>
+                            <select class="form-select select" name="ctype" id="ctype" required>
                                 <option value="" selected disabled>Select type</option>
                                 @foreach ($contract as $row)
                                 <option value="{{ $row->id }}">{{ $row->name }}</option>
@@ -189,7 +190,7 @@
 
                     <div class="col-md-4 col-lg-4">
                         <div class="mb-3">
-                            <label class="form-label">Basic Salary <span class="text-danger">*<span></label>
+                            <label class="form-label" for="salary">Basic Salary <span class="text-danger">*<span></label>
                             <div id="salaryField"></div>
                             <span id="salary-error" class="text-danger error-message"></span>
                         </div>
@@ -242,16 +243,16 @@
 
                     <div class="col-md-4 col-lg-4">
                         <div class="mb-3">
-                            <label class="form-label" for="leave_days">Leave Days Etitled <span class="text-danger">*<span></label>
-                            <input type="number" class="form-control daterange-single" name="leave_day" id="leave_days">
+                            <label class="form-label" for="leave_day">Leave Days Etitled <span class="text-danger">*<span></label>
+                            <input type="number" class="form-control daterange-single" name="leave_day" id="leave_day">
                             <span id="leave_day-error" class="text-danger error-message"></span>
                         </div>
                     </div>
 
                     <div class="col-md-4 col-lg-4">
                         <div class="mb-3">
-                            <label class="form-label">Pension Fund</label>
-                            <select class="form-control select_pension select" name="pension_fund">
+                            <label class="form-label" id="pension_fund">Pension Fund</label>
+                            <select class="form-select select_pension select" name="pension_fund" id="pension_fund">
                                 <option value="">Select Pension Fund</option>
                                 @foreach ($pensiondrop as $row)
                                 <option value="{{ $row->id }}">{{ $row->name }}</option>
@@ -263,8 +264,8 @@
 
                     <div class="col-md-4 col-lg-4">
                         <div class="mb-3">
-                            <label class="form-label">Membership No</label>
-                            <input type="text" maxlength="30" name="pf_membership_no" id="pf_membership_no" value="{{ old('pf_membership_no') }}" class="form-control" placeholder="Membership No">
+                            <label class="form-label" for="pf_membership_no">Membership No</label>
+                            <input type="text" maxlength="30" name="pf_membership_no" id="pf_membership_no" id="pf_membership_no" value="{{ old('pf_membership_no') }}" class="form-control" placeholder="Membership No">
                             <span id="pf_membership_no-error" class="text-danger error-message"></span>
                         </div>
                     </div>
@@ -272,7 +273,7 @@
                     <div class="col-md-4 col-lg-4">
                         <div class="mb-3">
                             <label class="form-label" for="emp_id">Payroll Number <span class="text-danger">*<span></label>
-                            <input type="text" name="emp_id" class="form-control" placeholder="Payroll number" required />
+                            <input type="text" id="emp_id" name="emp_id" class="form-control" placeholder="Payroll number" required />
                             <span id="emp_id-error" class="text-danger error-message"></span>
                         </div>
                     </div>
@@ -314,31 +315,31 @@
                     <div class="col-md-4 col-lg-4">
                         <div class="mb-3">
                             <label class="form-label" for="mobile">Employee Mobile</label>
-                            <input type="number" name="mobile" value="{{ old('mobile') }}" class="form-control" maxlength="14">
+                            <input type="number" id="mobile" name="mobile" value="{{ old('mobile') }}" class="form-control" maxlength="14" />
                             <span id="mobile-error" class="text-danger error-message"></span>
                         </div>
                     </div>
 
                     <div class="col-md-4 col-lg-4">
                         <div class="mb-3">
-                            <label class="form-label" for="postal_address">Postal Address</label>
-                            <input type="text" name="postaddress" value="{{ old('postal_address') }}" class="form-control" maxlength="15">
+                            <label class="form-label" for="postaddress">Postal Address</label>
+                            <input type="text" name="postaddress" value="{{ old('postaddress') }}" class="form-control" maxlength="15" id="postaddress" />
                             <span id="postaddress-error" class="text-danger error-message"></span>
                         </div>
                     </div>
 
                     <div class="col-md-4 col-lg-4">
                         <div class="mb-3">
-                            <label class="form-label" for="postal_city">Postal City</label>
-                            <input type="text" name="postalcity" value="{{ old('postal_city') }}" class="form-control" maxlength="15">
+                            <label class="form-label" for="postalcity">Postal City</label>
+                            <input type="text" name="postalcity" value="{{ old('postalcity') }}" class="form-control" maxlength="15" id="postalcity" />
                             <span id="postalcity-error" class="text-danger error-message"></span>
                         </div>
                     </div>
 
                     <div class="col-md-4 col-lg-4">
                         <div class="mb-3">
-                            <label class="form-label" for="physcical_address">Physical Address</label>
-                            <input type="text" name="phyaddress" value="{{ old('physical_address') }}" class="form-control" maxlength="25">
+                            <label class="form-label" for="phyaddress">Physical Address</label>
+                            <input type="text" name="phyaddress" value="{{ old('phyaddress') }}" class="form-control" id="phyaddress" maxlength="25">
                             <span id="phyaddress-error" class="text-danger error-message"></span>
                         </div>
                     </div>
@@ -354,7 +355,7 @@
                     <div class="col-md-4 col-lg-4">
                         <div class="mb-3">
                             <label class="form-label" for="nationalid">National ID <span class="text-danger">*<span></label>
-                            <input type="text" name="nationalid" value="{{ old('nationalid') }}" class="form-control" maxlength="150" required>
+                            <input type="text" id="nationalid" name="nationalid" value="{{ old('nationalid') }}" class="form-control" maxlength="150" required>
                             <span id="nationalid-error" class="text-danger error-message"></span>
                         </div>
                     </div>
@@ -410,7 +411,10 @@
                 </div>
 
                 <div class="card-footer bg-white">
-                    <button class="btn btn-sm btn-main" type="submit">Register Employee</button>
+                    <button type="submit" class="btn btn-main" id="save-loader">
+                        <i class="ph-circle-notch spinner me-2 d-none"></i>
+                        Register Employee
+                    </button>
                 </div>
             </div>
             {{-- /Work details section --}}
@@ -495,7 +499,7 @@
     {{-- getting salaries according to the position selected --}}
     <script>
         $(document).ready(function() {
-            $('#pos').on('change', function() {
+            $('#position').on('change', function() {
                 var positionID = $(this).val();
                 if (positionID) {
 
@@ -528,7 +532,7 @@
 
                 if (stateID) {
 
-                    var $bselect = $('#pos');
+                    var $bselect = $('#position');
                     var $bloader = $('#position-loader');
 
                     $.ajax({
@@ -545,9 +549,9 @@
                             let jq_obj = eval(jq_json_obj);
 
                             //populate position
-                            $("#pos option").remove();
+                            $("#position option").remove();
 
-                            $('#pos').append($('<option>', {
+                            $('#position').append($('<option>', {
                                 value: '',
                                 text: 'Select Position',
                                 selected: true,
@@ -555,7 +559,7 @@
                             }));
 
                             $.each(jq_obj.position, function(detail, name) {
-                                $('#pos').append($('<option>', {
+                                $('#position').append($('<option>', {
                                     value: name.id,
                                     text: name.name
                                 }));
@@ -627,6 +631,8 @@
         $('#addEmployee').submit(function(e) {
             e.preventDefault();
 
+            var $myButton = $('#save-loader');
+
             $.ajax({
                 url: '{{ url("/flex/registerEmployee") }}',
                 headers: {
@@ -635,6 +641,11 @@
                 type: 'POST',
                 data: $(this).serialize(), // it will serialize the form data
                 dataType: 'json',
+                beforeSend: function(){
+                    $myButton.attr('disabled', 'disabled');
+                    $myButton.find('.spinner').removeClass('d-none'); // Remove the 'd-none' class to display the spinner
+                    $myButton.html('<i class="ph-circle-notch spinner me-2"></i>Loading...'); // Update button text
+                },
                 success: function(data) {
                     if(data.status == 400){
                         const item = data.errors;
@@ -648,29 +659,36 @@
                     }else{
                         new Noty({
                             layout: 'top',
-                            text: data.errors + ', and We have sent an email to ' + document.getElementById(
-                                "email").value,
+                            text: 'We have sent an email to ' + document.getElementById("email").value,
                             type: 'success'
                         }).show();
                     }
 
                     setTimeout(function() {
-                        $('#addEmployee :input').val('');
-                        $('#addEmployee select').prop('selectedIndex', 0);
-                        $('.error-message').empty();
+                        location.reload();
                     }, 1000);
-
 
                 },
                 error: function (xhr, status, error) {
+                    $myButton.removeAttr('disabled');
+                    $myButton.find('.spinner').addClass('d-none'); // Add the 'd-none' class to hide the spinner
+                    $myButton.html('<i class="ph-circle-notch spinner me-2 d-none"></i>Register Employee'); // Restore button text
+
                     var responseJson = JSON.parse(xhr.responseText);
 
                     if (responseJson.errors) {
                         var errors = responseJson.errors;
+
                         $('.error-message').empty();
+
                         $.each(errors, function (field, errorMessage) {
                             $('#' + field + '-error').html(errorMessage);
+                            $('#' + field).addClass('is-invalid');
                         });
+
+                        var firstErrorField = Object.keys(errors)[0];
+
+                        $('#' + firstErrorField).focus();
                     }
                 }
             })
