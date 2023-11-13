@@ -428,7 +428,7 @@
             const end = document.getElementById("end-date").value;
             const empID = document.getElementById("empID").value;
             var par = id + '|' + start + '|' + end + '|' + empID;
-            var url = '{{ route('getLeaveSubs', ':id') }}';
+            var url = '{{ route('getSubs', ':id') }}';
             url = url.replace(':id', par);
 
 
@@ -471,7 +471,7 @@
 
             function processAttachmentDisplay(_days) {
 
-                if (id == 1) {
+                if (id == 1 || id == 3 || id == 5 ) {
                     $("#attachment").hide();
                 } else if (id == 2) {
                     if (_days == 1) {
