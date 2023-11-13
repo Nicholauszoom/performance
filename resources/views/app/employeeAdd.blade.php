@@ -679,7 +679,6 @@
                     var responseJson = xhr.responseJSON;
                     if (responseJson.errors) {
                         var errors = responseJson.errors;
-                        console.log(errors)
                         $('.error-message').empty();
 
                         $.each(errors, function (field, errorMessage) {
