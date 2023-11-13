@@ -39,7 +39,7 @@ class DatabaseSeeder extends Seeder
         $this->call(PensionFundTableSeeder::class);
         $this->call(PositionTableSeeder::class);
         $this->call(OvertimeCategorySeeder::class);
-        // $this->call(CountrySeeder::class);
+        $this->call(LoanTypeSeeder::class);
         // $this->call(RegionSeeder::class);
         // $this->call(DistrictSeeder::class);
     }
