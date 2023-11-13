@@ -5130,6 +5130,7 @@ class GeneralController extends Controller
         $data['pendingPayroll'] = $this->payroll_model->pendingPayrollCheck();
         $data['parent'] = "Settings";
         $data['child'] = "Allowances";
+        $data['title'] = "Allowances";
 
         return view('allowance.allowance', $data);
         // } else {
@@ -5144,7 +5145,6 @@ class GeneralController extends Controller
 
         $this->authenticateUser('add-payroll');
 
-        $data['overtimes'] = $this->flexperformance_model->overtime_allowances();
         $data['overtimess'] = $this->flexperformance_model->overtime_allowances();
         $data['meals'] = $this->flexperformance_model->meals_deduction();
         $data['pendingPayroll'] = $this->payroll_model->pendingPayrollCheck();
@@ -5182,6 +5182,19 @@ class GeneralController extends Controller
         // } else {
         //     echo "Unauthorized Access";
         // }
+    }
+    public function allowance_category(Request $request)
+    {
+
+        $this->authenticateUser('add-payroll');
+        $data['allowanceCategory'] = $this->flexperformance_model->allowance_category();
+        $data['meals'] = $this->flexperformance_model->meals_deduction();
+        $data['pendingPayroll'] = $this->payroll_model->pendingPayrollCheck();
+        $data['parent'] = "Settings";
+        $data['child'] = "Allowance Category";
+        $data['title'] = "Allowance Category";
+
+        return view('allowance.allowance_category', $data);
     }
 
     public function non_statutory_deductions(Request $request)

@@ -1628,6 +1628,17 @@ class FlexPerformanceModel extends Model
         return DB::select(DB::raw($query));
     }
 
+    public function allowance_category()
+    {
+        $result = DB::table('allowance_categories as a')
+            ->select(DB::raw('@s:=@s+1 as SNo'), 'a.*')
+            ->crossJoin(DB::raw('(SELECT @s:=0) as counter'))
+            ->get();
+
+        return $result;
+    }
+
+
     public function addToBonus($data)
     {
         $result = DB::table("bonus")->insert($data);
