@@ -5244,8 +5244,8 @@ class GeneralController extends Controller
         if ($request->method() == "POST") {
             $data = array(
                 'name' => $request->input('name'),
-                'day_percent' => ($request->input('day_percent') / 100),
-                'night_percent' => ($request->input('night_percent') / 100),
+                'day_percent' => ($request->input('day_percent') ),
+                'night_percent' => ($request->input('night_percent') ),
             );
             $result = $this->flexperformance_model->addOvertimeCategory($data);
             if ($result == true) {
@@ -6321,9 +6321,8 @@ class GeneralController extends Controller
         $method = $request->method();
 
         if ($method == "POST") {
-
-            $arr = explode(',', $request->input('option'));
-
+            // $arr = explode(',', $request->input('option'));
+            $arr = $request->option1;
             $groupID = $request->input('groupID');
             $group_roles = $this->flexperformance_model->get_group_roles($groupID);
             $group_allowances = $this->flexperformance_model->get_group_allowances($groupID);
@@ -6335,7 +6334,6 @@ class GeneralController extends Controller
 
                 foreach ($arr as $value) {
                     $empID = $value;
-
                     if (!empty($group_allowances)) {
                         foreach ($group_allowances as $key) {
                             $allowance = $key->allowance;
