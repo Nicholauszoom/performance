@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::create('overtimes', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->id();
             $table->integer('overtimeID');
             $table->string('empID', 10);
             $table->dateTime('time_start')->useCurrent();

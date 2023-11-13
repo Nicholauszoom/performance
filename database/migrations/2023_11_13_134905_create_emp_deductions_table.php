@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::create('emp_deductions', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->id();
             $table->string('empID', 50);
             $table->integer('deduction');
             $table->integer('group_name')->default(0)->comment('0- For individual');

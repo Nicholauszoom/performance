@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::create('arrears_logs', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->id();
             $table->bigInteger('arrear_id');
             $table->decimal('amount_paid', 15);
             $table->string('init_by', 10);

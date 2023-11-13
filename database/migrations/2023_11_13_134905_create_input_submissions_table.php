@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::create('input_submissions', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->id();
             $table->string('empID');
             $table->date('date');
             $table->timestamps();

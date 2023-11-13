@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::create('professional_certifications', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->id();
             $table->unsignedBigInteger('employeeID');
             $table->string('cert_name');
             $table->string('cert_start');

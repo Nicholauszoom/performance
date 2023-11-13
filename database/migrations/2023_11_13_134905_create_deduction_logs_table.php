@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::create('deduction_logs', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->id();
             $table->string('empID', 10);
             $table->string('description', 50)->default('Unclassified');
             $table->string('policy', 50)->default('Fixed Amount');

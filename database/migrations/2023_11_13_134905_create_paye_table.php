@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::create('paye', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->id();
             $table->decimal('minimum', 15)->nullable();
             $table->decimal('maximum', 15)->nullable();
             $table->double('rate', 4, 4)->nullable();

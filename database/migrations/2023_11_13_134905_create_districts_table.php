@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::create('districts', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->id();
             $table->unsignedBigInteger('region_id')->index('districts_region_id_foreign');
             $table->string('name');
             $table->softDeletes();

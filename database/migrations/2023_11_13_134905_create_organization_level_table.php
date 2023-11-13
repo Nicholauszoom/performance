@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::create('organization_level', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->id();
             $table->string('name', 200);
             $table->decimal('minSalary', 15);
             $table->decimal('maxSalary', 15);

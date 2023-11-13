@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::create('training_application_form', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->id();
             $table->string('fname', 10);
             $table->string('mname,20');
             $table->string('lname', 10);

@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::create('deductions', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->id();
             $table->string('name', 50);
             $table->integer('code');
             $table->decimal('amount', 15)->default(0);

@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::create('financial_logs', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->id();
             $table->string('payrollno');
             $table->string('changed_by');
             $table->string('field_name');

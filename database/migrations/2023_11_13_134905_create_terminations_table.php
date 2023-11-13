@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::create('terminations', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->id();
             $table->unsignedBigInteger('employeeID');
             $table->date('terminationDate');
             $table->string('reason');

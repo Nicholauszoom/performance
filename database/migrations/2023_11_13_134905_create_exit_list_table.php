@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::create('exit_list', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->id();
             $table->string('empID', 10);
             $table->string('initiator', 50);
             $table->string('reason', 500);

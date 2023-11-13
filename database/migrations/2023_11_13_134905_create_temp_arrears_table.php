@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::create('temp_arrears', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->id();
             $table->string('empID', 10);
             $table->decimal('amount', 15);
             $table->decimal('paid', 15)->default(0);

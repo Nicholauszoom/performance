@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::create('leave_forfeitings', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->id();
             $table->string('empID', 10);
             $table->string('nature', 10);
             $table->string('days', 10);

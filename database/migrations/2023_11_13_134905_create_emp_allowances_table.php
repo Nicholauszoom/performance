@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::create('emp_allowances', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->id();
             $table->string('empID', 10);
             $table->integer('allowance')->index('package');
             $table->string('mode', 10)->comment('1-fixed value 2-percent');

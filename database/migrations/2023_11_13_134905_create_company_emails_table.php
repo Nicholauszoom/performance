@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::create('company_emails', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->id();
             $table->string('host', 100);
             $table->string('username', 50);
             $table->string('password', 50);

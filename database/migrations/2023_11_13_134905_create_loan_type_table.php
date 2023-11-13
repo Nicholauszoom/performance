@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::create('loan_type', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->id();
             $table->string('name', 50);
             $table->integer('code');
             $table->timestamps();

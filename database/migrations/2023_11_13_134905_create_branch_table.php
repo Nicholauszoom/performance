@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::create('branch', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->id();
             $table->string('name', 50);
             $table->string('code', 4)->default('0');
             $table->string('street', 50)->nullable();

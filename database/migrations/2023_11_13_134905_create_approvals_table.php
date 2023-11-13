@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::create('approvals', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->id();
             $table->string('process_name');
             $table->integer('levels')->default(0);
             $table->boolean('escallation');

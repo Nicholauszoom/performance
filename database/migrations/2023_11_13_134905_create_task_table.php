@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::create('task', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->id();
             $table->string('description', 1000);
             $table->string('title', 200)->default('N/A');
             $table->decimal('initial_quantity', 15)->default(1);

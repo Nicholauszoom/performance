@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::create('confirmed_imprest', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->id();
             $table->string('empID', 10);
             $table->integer('imprestID');
             $table->decimal('initial', 15);

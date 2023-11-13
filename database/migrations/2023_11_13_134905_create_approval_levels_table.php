@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::create('approval_levels', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->id();
             $table->unsignedBigInteger('approval_id')->index('approval_levels_approval_id_foreign');
             $table->unsignedBigInteger('role_id');
             $table->string('level_name');

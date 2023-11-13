@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::create('complain_feedbacks', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->id();
             $table->unsignedBigInteger('complainID');
             $table->mediumText('description');
             $table->unsignedBigInteger('created_by');

@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::create('promotions', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->id();
             $table->integer('employeeID');
             $table->double('oldSalary')->nullable();
             $table->double('newSalary');

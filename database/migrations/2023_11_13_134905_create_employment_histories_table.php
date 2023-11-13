@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::create('employment_histories', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->id();
             $table->unsignedBigInteger('employeeID');
             $table->string('hist_start')->nullable();
             $table->string('hist_end')->nullable();

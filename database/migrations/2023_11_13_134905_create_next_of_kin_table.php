@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::create('next_of_kin', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->id();
             $table->string('fname', 100)->nullable();
             $table->string('mname', 100)->nullable();
             $table->string('lname', 100)->nullable();

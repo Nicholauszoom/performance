@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::create('funder', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->id();
             $table->string('name', 100);
             $table->string('email', 50);
             $table->string('phone', 15);

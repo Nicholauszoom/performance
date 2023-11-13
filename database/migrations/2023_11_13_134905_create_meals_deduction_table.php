@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::create('meals_deduction', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->id();
             $table->string('name', 50);
             $table->double('minimum_gross');
             $table->double('maximum_payment');

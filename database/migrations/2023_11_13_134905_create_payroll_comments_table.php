@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::create('payroll_comments', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->id();
             $table->string('payroll_date', 110)->nullable();
             $table->string('emp_id', 110)->nullable();
             $table->string('message', 110)->nullable();

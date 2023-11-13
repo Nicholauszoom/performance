@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::create('leaves_subcategories', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->id();
             $table->integer('category_id');
             $table->string('name');
             $table->integer('working_days');

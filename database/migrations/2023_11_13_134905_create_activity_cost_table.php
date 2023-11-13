@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::create('activity_cost', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->id();
             $table->string('emp_id', 45)->nullable();
             $table->string('project', 45);
             $table->string('activity', 45);

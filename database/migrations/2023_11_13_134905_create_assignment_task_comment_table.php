@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::create('assignment_task_comment', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->id();
             $table->string('task_id', 45);
             $table->string('remarks', 200);
             $table->string('remark_by', 45);

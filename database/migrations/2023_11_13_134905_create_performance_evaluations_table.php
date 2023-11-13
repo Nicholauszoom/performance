@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::create('performance_evaluations', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->id();
             $table->unsignedBigInteger('evaluation_id');
             $table->unsignedBigInteger('pillar_id');
             $table->double('target');

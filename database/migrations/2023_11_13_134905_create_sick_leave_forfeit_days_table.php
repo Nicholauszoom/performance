@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::create('sick_leave_forfeit_days', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->id();
             $table->string('emp_id');
             $table->double('forfeit_days');
             $table->timestamps();

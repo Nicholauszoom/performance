@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::create('performance_pillars', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->id();
             $table->string('name');
             $table->boolean('status')->default(false);
             $table->string('type')->nullable();

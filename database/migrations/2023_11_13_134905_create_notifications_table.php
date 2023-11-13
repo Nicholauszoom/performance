@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('message', 110);
             $table->integer('for');
             $table->string('recom_by', 110)->nullable();
-            $table->bigIncrements('id');
+            $table->id();
             $table->timestamps();
 
             $table->unique(['type', 'for'], 'unique_index');

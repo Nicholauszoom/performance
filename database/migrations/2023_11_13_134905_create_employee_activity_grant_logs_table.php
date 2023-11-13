@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::create('employee_activity_grant_logs', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->id();
             $table->string('empID', 45)->nullable();
             $table->string('activity_code', 45)->nullable();
             $table->string('grant_code', 45)->nullable();

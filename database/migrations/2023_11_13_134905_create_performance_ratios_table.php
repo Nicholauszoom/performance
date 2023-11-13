@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::create('performance_ratios', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->id();
             $table->double('target');
             $table->double('time');
             $table->double('behaviour');

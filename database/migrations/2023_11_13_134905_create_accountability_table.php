@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::create('accountability', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->id();
             $table->string('name', 150);
             $table->string('remarks', 300)->nullable();
             $table->integer('position_ref');

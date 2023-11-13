@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::create('push_notifications', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->id();
             $table->text('body');
             $table->string('image')->nullable();
             $table->string('title');

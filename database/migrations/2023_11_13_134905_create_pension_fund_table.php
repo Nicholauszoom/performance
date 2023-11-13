@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::create('pension_fund', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->id();
             $table->string('name', 50);
             $table->double('amount_employee')->comment('Employee Amount in percent');
             $table->double('amount_employer')->comment('Employer Amount in percent');

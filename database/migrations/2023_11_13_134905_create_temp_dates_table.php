@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::create('temp_dates', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->id();
             $table->date('date');
             $table->timestamps();
         });

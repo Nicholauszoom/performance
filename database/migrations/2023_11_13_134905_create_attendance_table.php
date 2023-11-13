@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::create('attendance', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->id();
             $table->string('empID', 10);
             $table->dateTime('due_in');
             $table->timestamp('due_out')->nullable();

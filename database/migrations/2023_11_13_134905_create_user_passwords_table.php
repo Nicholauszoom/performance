@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::create('user_passwords', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->id();
             $table->string('empID', 110);
             $table->string('password', 110);
             $table->string('time', 110);

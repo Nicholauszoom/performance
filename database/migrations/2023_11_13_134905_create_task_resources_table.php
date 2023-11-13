@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::create('task_resources', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->id();
             $table->string('name', 300);
             $table->decimal('cost', 15);
             $table->integer('taskID');

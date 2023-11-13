@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::create('training_application', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->id();
             $table->integer('skillsID');
             $table->string('empID', 10);
             $table->integer('status')->default(0)->comment('0-requested, 1-recommended, 2-approved by HR, 3-Confirmed By Finance, 4-Held by Line Manager, 5-Dissaproved, 6-Unconfirmed, 7-Cancelled Employee');

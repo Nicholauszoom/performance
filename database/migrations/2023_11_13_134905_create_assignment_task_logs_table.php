@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::create('assignment_task_logs', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->id();
             $table->integer('assignment_employee_id');
             $table->string('emp_id', 200);
             $table->string('task_name', 200);

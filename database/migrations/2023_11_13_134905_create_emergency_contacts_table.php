@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::create('emergency_contacts', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->id();
             $table->unsignedBigInteger('employeeID');
             $table->string('em_fname')->nullable();
             $table->string('em_mname')->nullable();

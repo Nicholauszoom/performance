@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::create('accelerations', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->id();
             $table->string('name', 100);
             $table->date('start_date');
             $table->date('end_date');

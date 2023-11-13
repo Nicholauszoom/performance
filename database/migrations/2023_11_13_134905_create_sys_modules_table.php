@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::create('sys_modules', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->id();
             $table->string('slug');
             $table->timestamps();
             $table->softDeletes();

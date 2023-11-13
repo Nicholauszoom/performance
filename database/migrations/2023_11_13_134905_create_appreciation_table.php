@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::create('appreciation', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->id();
             $table->string('empID', 12);
             $table->string('description')->nullable();
             $table->date('date_apprd');

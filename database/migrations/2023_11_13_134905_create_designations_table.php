@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::create('designations', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->id();
             $table->string('name');
             $table->integer('department_id');
             $table->timestamps();

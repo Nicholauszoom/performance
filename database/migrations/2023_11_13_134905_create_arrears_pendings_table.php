@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::create('arrears_pendings', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->id();
             $table->bigInteger('arrear_id');
             $table->decimal('amount', 15);
             $table->integer('status')->default(0)->comment('1-Confirmed, 0-Not Confirmed');

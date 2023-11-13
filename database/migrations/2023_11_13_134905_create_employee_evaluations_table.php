@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::create('employee_evaluations', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->id();
             $table->integer('empID');
             $table->boolean('status')->default(false);
             $table->timestamps();

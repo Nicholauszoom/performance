@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::create('partial_payment', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->id();
             $table->string('empID', 10)->nullable();
             $table->date('start_date')->nullable();
             $table->date('end_date')->nullable();

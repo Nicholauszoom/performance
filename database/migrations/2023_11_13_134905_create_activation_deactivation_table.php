@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::create('activation_deactivation', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->id();
             $table->string('empID', 10);
             $table->integer('state')->comment('0-Deactivated, 1-Activated, 2-Request for Activation, 3-Request for Deactivation');
             $table->integer('current_state')->default(0)->comment('0-active, 1-committed');

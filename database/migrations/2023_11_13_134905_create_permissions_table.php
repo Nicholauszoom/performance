@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::create('permissions', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->id();
             $table->string('slug');
             $table->unsignedBigInteger('sys_module_id')->index('permissions_sys_module_id_foreign');
             $table->timestamps();

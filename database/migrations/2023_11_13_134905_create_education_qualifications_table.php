@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::create('education_qualifications', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->id();
             $table->unsignedBigInteger('employeeID');
             $table->string('institute');
             $table->string('level');

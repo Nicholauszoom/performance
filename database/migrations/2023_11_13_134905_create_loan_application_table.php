@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::create('loan_application', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->id();
             $table->string('empID', 10)->nullable();
             $table->string('type', 100)->nullable()->comment('1-Salary Advance, 2-Forced Payments, 3-HESLB');
             $table->string('form_four_index_no', 20)->default('0');

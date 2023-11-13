@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::create('training_budget', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->id();
             $table->string('description', 100);
             $table->decimal('amount', 15);
             $table->date('start')->default('2019-07-27');

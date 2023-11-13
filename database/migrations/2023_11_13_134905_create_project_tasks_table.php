@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::create('project_tasks', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->id();
             $table->string('name');
             $table->dateTime('start_date');
             $table->dateTime('end_date');

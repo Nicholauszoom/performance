@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::create('terminated_allowance_logs', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->id();
             $table->string('empID', 10);
             $table->integer('allowanceID')->default(6);
             $table->string('description', 50)->default('Unclassified');
