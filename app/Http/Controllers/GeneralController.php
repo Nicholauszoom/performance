@@ -5244,8 +5244,8 @@ class GeneralController extends Controller
         if ($request->method() == "POST") {
             $data = array(
                 'name' => $request->input('name'),
-                'day_percent' => ($request->input('day_percent') / 100),
-                'night_percent' => ($request->input('night_percent') / 100),
+                'day_percent' => ($request->input('day_percent') ),
+                'night_percent' => ($request->input('night_percent') ),
             );
             $result = $this->flexperformance_model->addOvertimeCategory($data);
             if ($result == true) {
