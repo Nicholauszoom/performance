@@ -70,7 +70,10 @@
                                         <th>S/N</th>
                                         <th>Name</th>
                                         <th>Amount</th>
+                                        @if ($pendingPayroll == 0)
+
                                         <th>Option</th>
+                                        @endif
                                     </tr>
                                 </thead>
 
@@ -86,11 +89,14 @@
                                             <span class="label label-success">Salary dependent</span><br>
                                             <?php echo 100*($row->percent)."%"; } ?>
                                         </td>
+                                        @if ($pendingPayroll == 0)
+
                                         <td class="options-width">
                                             <?php  $par = $row->id."|2"; ?>
                                             <a  href="{{ route('flex.deduction_info',$par) }}" title="Info and Details" class="icon-2 info-tooltip"><button type="button" class="btn btn-main btn-xs"><i class="ph-info"></i></button> </a>
                                             <a href="javascript:void(0)" onclick="deletededuction(<?php echo $row->id; ?>)" title="Delete Deduction" class="icon-2 info-tooltip"><button type="button" class="btn btn-danger btn-xs"><i class="ph-trash"></i></button> </a>
                                         </td>
+                                        @endif
                                     </tr>
                                     <?php } //} ?>
                                 </tbody>

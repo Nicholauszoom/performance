@@ -29,14 +29,14 @@
             </a>
         </li>
         <li class="nav-item" role="presentation">
-            <a href="{{ url('/flex/allowance')}}" class="nav-link" 
+            <a href="{{ url('/flex/allowance')}}" class="nav-link"
                 aria-selected="false" role="tab" tabindex="-1">
                 <i class="ph-list me-2"></i>
                 Allowance
             </a>
         </li>
-    
-      
+
+
         <li class="nav-item" role="presentation">
             <a href="{{ url('/flex/statutory_deductions')}}" class="nav-link active show"
                 aria-selected="false" role="tab" tabindex="-1">
@@ -51,7 +51,7 @@
               Non Statutory Deductions
           </a>
       </li>
-     
+
     </ul>
     <div class="card-header">
         <div class="d-flex justify-content-between">
@@ -66,7 +66,9 @@
                 <th>Employee Amount</th>
                 <th>Employer Amount</th>
                 <th>Deduction From</th>
+                @if ($pendingPayroll == 0)
                 <th>Action</th>
+                @endif
             </tr>
         </thead>
         <tbody>
@@ -85,12 +87,15 @@
                         @endif
                     </td>
 
+                    @if ($pendingPayroll == 0)
+
                     <td>
                         <?php $par = $row->id. "|1" ?>
                         <a href="{{ route('flex.deduction_info', $par) }}" title="Info and Details" class="icon-2 info-tooltip">
                             <button type="button" class="btn btn-main btn-xs"><i class="ph-info"></i></button>
                         </a>
                     </td>
+                    @endif
 
                 </tr>
             @endforeach
