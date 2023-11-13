@@ -1,4 +1,4 @@
-@extends('layouts.vertical', ['title' => 'Overtime'])
+    @extends('layouts.vertical', ['title' => 'Overtime'])
 
 @push('head-script')
     <script src="{{ asset('assets/js/components/tables/datatables/datatables.min.js') }}"></script>
@@ -22,7 +22,7 @@
         <div class="card border-top  border-top-width-3 border-top-main rounded-0">
             <div class="card-header">
                 <h4 class="text-warning">Overtime Requests</h4>
-               
+
                 <?php session('note'); ?>
                 <div id="myResultfeedOvertime"></div>
             </div>
@@ -49,7 +49,7 @@
                         <td width="1px"><?php echo $row->SNo; ?></td>
                         <td><?php echo $row->name; ?></td>
                         <td><?php echo '<b>Department: </b>' . $row->DEPARTMENT . '<br><b>Position: </b>' . $row->POSITION; ?></td>
-                        <td><?php echo '<b>On: </b>' . date('d-m-Y', strtotime($row->applicationDATE)) . '<br><b>Duration: </b>' . $row->totoalHOURS . ' Hrs.<br><b>From: </b>' . $row->time_in . ' <b> To </b>' . $row->time_out; ?> </td>
+                        <td><?php echo '<b>On: </b>' . date('d-m-Y', strtotime($row->applicationDATE)) . '<br><b>Duration: </b>' . number_format($row->totoalHOURS,1) . ' Hrs.<br><b>From: </b>' . date('H:i', strtotime($row->time_in)) . ' <b> To </b>' . date('H:i', strtotime($row->time_out)); ?> </td>
                         <td><?php echo $row->reason; ?></td>
 
                         <td>
