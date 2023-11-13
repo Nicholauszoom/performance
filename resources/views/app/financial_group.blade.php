@@ -16,7 +16,7 @@
 
   <div class="col-md-12 col-lg-12 col-sm-6">
 
-    <div class="card border-top  border-top-width-3 border-top-main rounded-0 p-2">
+    <div class="card border-toadd-financp  border-top-width-3 border-top-main rounded-0 p-2">
         <ul class="nav nav-tabs nav-tabs-underline nav-justified mb-3" id="tabs-target-right" role="tablist">
             <li class="nav-item" role="presentation">
                 <a href="{{ url('/flex/financial_group')}}" class="nav-link active show" aria-selected="false" role="tab" tabindex="-1">

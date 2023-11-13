@@ -331,7 +331,6 @@
                             selectedUsers.push(checkbox.val()); // add its value to the array
                         }
                     });
-                    //console.log(selectedUsers);
                     var option =selectedUsers;
                     document.getElementById('option').value = option;
                     e.preventDefault();
@@ -346,13 +345,15 @@
                             async: false
                         })
                         .done(function(data) {
+                    console.log(data);
+
                             $('#feedBackAdd').fadeOut('fast', function() {
                                 $('#feedBackAdd').fadeIn('fast').html(data);
                             });
 
                             setTimeout(function() { // wait for 5 secs(2)
                                 location.reload(); // then reload the page.(3)
-                            }, 2000);
+                            }, 3000);
                         })
                         .fail(function() {
                             new Noty({
