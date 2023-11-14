@@ -1968,7 +1968,7 @@ class GeneralController extends Controller
 
         request()->validate(
             [
-                'reason' => 'required|alpha',
+                'reason' => 'required',
             ]
         );
 
@@ -2022,6 +2022,8 @@ class GeneralController extends Controller
                             'time_recommended_line' => date('Y-m-d h:i:s'),
                             'time_approved_hr' => date('Y-m-d'),
                             'time_confirmed_line' => date('Y-m-d h:i:s'),
+                            'application_time'=> new DateTime(),
+
                         );
 
                         $result = $this->flexperformance_model->apply_overtime($data);
@@ -2046,6 +2048,7 @@ class GeneralController extends Controller
                             'time_recommended_line' => date('Y-m-d h:i:s'),
                             'time_approved_hr' => date('Y-m-d'),
                             'time_confirmed_line' => date('Y-m-d h:i:s'),
+                            'application_time'=> new DateTime(),
                         );
 
                         $result = $this->flexperformance_model->apply_overtime($data);
@@ -2070,6 +2073,8 @@ class GeneralController extends Controller
                             'time_recommended_line' => date('Y-m-d h:i:s'),
                             'time_approved_hr' => date('Y-m-d'),
                             'time_confirmed_line' => date('Y-m-d h:i:s'),
+                            'application_time'=> new DateTime(),
+
                         );
 
                         $result = $this->flexperformance_model->apply_overtime($data);
@@ -2100,6 +2105,8 @@ class GeneralController extends Controller
                         'time_recommended_line' => date('Y-m-d h:i:s'),
                         'time_approved_hr' => date('Y-m-d'),
                         'time_confirmed_line' => date('Y-m-d h:i:s'),
+                        'application_time'=> new DateTime(),
+
                     );
                     $result = $this->flexperformance_model->apply_overtime($data);
                     if ($result == true) {
@@ -2120,6 +2127,8 @@ class GeneralController extends Controller
                         'time_recommended_line' => date('Y-m-d h:i:s'),
                         'time_approved_hr' => date('Y-m-d'),
                         'time_confirmed_line' => date('Y-m-d h:i:s'),
+                        'application_time'=> new DateTime(),
+
                     );
                     $result = $this->flexperformance_model->apply_overtime($data);
                     if ($result == true) {
@@ -3555,6 +3564,7 @@ class GeneralController extends Controller
 
         // if(session('mng_paym') ||session('recom_paym') ||session('appr_paym')){
         $data['myloan'] = $this->flexperformance_model->mysalary_advance(auth()->user()->emp_id);
+        // dd($data);
 
         // if(session('recom_loan')!='' &&session('appr_loan')){
 
@@ -6902,7 +6912,7 @@ class GeneralController extends Controller
 
     public function import(Request $request)
     {
-        dd($request->all());
+        // dd($request->all());
 
         if (isset($_FILES["file"]["name"])) {
 
@@ -7016,8 +7026,20 @@ class GeneralController extends Controller
      */
     public function registerEmployee(EmployeeRequest $request)
     {
+        // $validatedFields = $request->validate([
+        //     'tin' => [
+        //         'required',
+        //         'regex:/^[0-9]{9}$/',
+        //     ],
+        //     'nationalid' => [
+        //         'required',
+        //         'regex:/^[A-Za-z0-9]{8}$/',
+        //     ],
+        // ]);
 
         $validator = $request->validated($request->all());
+
+
 
         $calendar = str_replace('/', '-', $request->input('birthdate'));
         $contract_end = str_replace('/', '-', $request->input('contract_end'));
@@ -10751,6 +10773,7 @@ class GeneralController extends Controller
 
         $empID = auth()->user()->emp_id;
         $data['myloan'] = $this->flexperformance_model->mysalary_advance($empID);
+        // dd($data);
 
         $data['my_loans'] = $this->flexperformance_model->my_confirmedloan($empID);
 

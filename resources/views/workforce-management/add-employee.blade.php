@@ -513,6 +513,7 @@
         .fail(function () {
             alert('Registration Failed');
         });
+
     });
 </script>
 
