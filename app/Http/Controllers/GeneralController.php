@@ -3564,6 +3564,7 @@ class GeneralController extends Controller
 
         // if(session('mng_paym') ||session('recom_paym') ||session('appr_paym')){
         $data['myloan'] = $this->flexperformance_model->mysalary_advance(auth()->user()->emp_id);
+        // dd($data);
 
         // if(session('recom_loan')!='' &&session('appr_loan')){
 
@@ -10746,6 +10747,7 @@ class GeneralController extends Controller
 
         $empID = auth()->user()->emp_id;
         $data['myloan'] = $this->flexperformance_model->mysalary_advance($empID);
+        // dd($data);
 
         $data['my_loans'] = $this->flexperformance_model->my_confirmedloan($empID);
 
