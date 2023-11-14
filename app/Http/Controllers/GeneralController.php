@@ -5199,7 +5199,6 @@ class GeneralController extends Controller
         $data['meals'] = $this->flexperformance_model->meals_deduction();
         $data['pendingPayroll'] = $this->payroll_model->pendingPayrollCheck();
         $data['parent'] = "Settings";
-        $data['child'] = "Allowance Category";
         $data['title'] = "Allowance Category";
 
         return view('allowance.allowance_category', $data);

@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::table('allowances', function (Blueprint $table) {
-            $table->var('allowance_category_id')->nullable();
+            $table->integer('allowance_category_id')->nullable();
         });
     }
 
@@ -25,7 +25,7 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::table('allowance', function (Blueprint $table) {
+        Schema::table('allowances', function (Blueprint $table) {
             //
         });
     }

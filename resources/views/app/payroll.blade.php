@@ -74,10 +74,11 @@
 
                         <tbody>
                         <?php
+                        $serialNumber = 1;
                         foreach ($payrollList as $row) { ?>
 
                             <tr id="domain<?php echo $row->id;?>">
-                                <td width="1px"><?php echo $row->SNo; ?></td>
+                                <td width="1px"><?php echo $serialNumber ?></td>
                                 <td><?php //echo $row->payroll_date; ?><?php echo date('F, Y', strtotime($row->payroll_date));; ?></td>
                                 <td>
                                     <?php if($row->state==1 || $row->state==2 ){   ?>
@@ -130,7 +131,10 @@
 
                                 </td>
                             </tr>
-                        <?php }  ?>
+                        <?php
+                            $serialNumber++;
+
+                     }  ?>
                         </tbody>
                     </table>
                 </div>
