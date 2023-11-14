@@ -620,6 +620,11 @@
                             </li>
 
                             <li class="nav-item"><a
+                                    class="nav-link {{ request()->routeIs('flex.loanTypes') ? 'active' : null }}"
+                                    href="{{ route('flex.approvals') }}">Loan Types</a>
+                            </li>
+
+                            <li class="nav-item"><a
                                     class="nav-link {{ request()->routeIs('flex.leave-approval') ? 'active' : null }}"
                                     href="{{ route('flex.leave-approval') }}">Leave Approvals</a>
                             </li>

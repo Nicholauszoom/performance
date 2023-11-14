@@ -36,22 +36,22 @@
 
                         <tbody>
                             <?php foreach ($allowanceCategory as $row) { ?>
-                            <tr <?php if($row->state ==0){ ?> bgcolor="#FADBD8" <?php  } ?> id="record<?php echo $row->id; ?>">
+                            <tr  id=" {{ 'domain'.  $row->id }}">
                                 <td width="1px"><?php echo $row->SNo; ?></td>
                                 <td><?php echo $row->name; ?></td>
 
 
                                 <?php if($pendingPayroll == 0){ ?>
                                 <td class="options-width">
-                                    <a href="{{ route('flex.allowance_info', base64_encode($row->id)) }}"
+                                    <a href="{{ route('flex.allowance_category_info', base64_encode($row->id)) }}"
                                         title="Info and Details" class="icon-2 info-tooltip">
                                         <button type="button" class="btn btn-main btn-xs"><i
                                                 class="ph-info"></i></button>
                                     </a>
 
                                     <?php if($row->state ==1){ ?>
-                                    <a href="javascript:void(0)" onclick="deleteAllowance(<?php echo $row->id; ?>)"
-                                        title="Delete Allowance" class="icon-2 info-tooltip">
+                                    <a href="javascript:void(0)" onclick="deleteAllowanceCategory(<?php echo $row->id; ?>)"
+                                        title="Delete Allowance Category" class="icon-2 info-tooltip">
                                         <button type="button" class="btn btn-danger btn-xs"><i
                                                 class="ph-trash"></i></button>
                                     </a>
@@ -79,7 +79,7 @@
                         <h4 class="text-main">Add Allowance Category</h4>
 
                         <div id="resultSubmission"></div>
-                        <form id="addAllowance" method="post" autocomplete="off" class="form-horizontal form-label-left">
+                        <form id="addAllowanceCategory" method="post" autocomplete="off" class="form-horizontal form-label-left">
                                 <div class=" mb-3">
                                     <label class="form-label">Allowance Category Name:</label>
                                     <input type="text"  name="name" class="form-control" required>
@@ -154,12 +154,52 @@
 
         });
     </script>
+    <script type="text/javascript">
+
+    function deleteAllowanceCategory(id)
+    {
+        Swal.fire({
+            title: 'Are You Sure You Want To Delete This Allowance?',
+            // text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, cancel it!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                var id = id;
+
+                $.ajax({
+                    url:"<?php echo url('flex/deleteAllowance');?>/"+id,
+                    success:function(data)
+                    {
+                        var data  = JSON.parse(data);
+                        if(data.status == 'OK'){
+                            alert("Allowance Deactivated Successifully!");
+                            $("#allowanceList").load(" #allowanceList");
+                            // $('#record'+id).hide();
+                        } else{
+                            alert("Allowance Not Deactivated, Some Error Occured In Deleting");
+                        }
+                        $('#deleteFeedback').fadeOut('fast', function(){
+                            $('#deleteFeedback').fadeIn('fast').html(data.message);
+                        });
+                    }
+                });
+            }
+        });
+    }
+
+    </scrip>
+
+
 
     <script>
-        $('#addAllowance').submit(function(e) {
+        $('#addAllowanceCategory').submit(function(e) {
             e.preventDefault();
             $.ajax({
-                    url: '{{ url('/flex/addAllowance') }}',
+                    url: '{{ url('/flex/addAllowanceCategory') }}',
                     type: "post",
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -173,7 +213,7 @@
                 .done(function(data) {
 
                     new Noty({
-                                    text: 'Alloance Added successfully!',
+                                    text: 'Alloance Category Added successfully!',
                                     type: 'success'
                                 }).show();
 

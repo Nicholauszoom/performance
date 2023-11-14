@@ -742,6 +742,12 @@ class FlexPerformanceModel extends Model
         DB::table('employee_overtime')->where('id', $id)->delete();
         return true;
     }
+    public function deleteAllowanceCategory($id)
+    {
+
+        DB::table('allowance_categories')->where('id', $id)->delete();
+        return true;
+    }
 
     public function deleteApprovedOvertime($id)
     {
@@ -1630,12 +1636,9 @@ class FlexPerformanceModel extends Model
 
     public function allowance_category()
     {
-        $result = DB::table('allowance_categories as a')
-            ->select(DB::raw('@s:=@s+1 as SNo'), 'a.*')
-            ->crossJoin(DB::raw('(SELECT @s:=0) as counter'))
-            ->get();
+        $query = 'SELECT @s:=@s+1 SNo, a.* FROM allowance_categories a , (SELECT @s:=0) as s ';
 
-        return $result;
+        return DB::select(DB::raw($query));
     }
 
 
@@ -1949,6 +1952,11 @@ IF(
     public function addAllowance($data)
     {
         DB::table('allowances')->insert($data);
+        return true;
+    }
+    public function addAllowanceCategory($data)
+    {
+        DB::table('allowance_categories')->insert($data);
         return true;
     }
 

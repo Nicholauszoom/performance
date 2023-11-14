@@ -5126,16 +5126,14 @@ class GeneralController extends Controller
         $this->authenticateUser('add-payroll');
 
         $data['allowance'] = $this->flexperformance_model->allowance();
+        $data['allowanceCategories'] = $this->flexperformance_model->allowance_category();
         $data['meals'] = $this->flexperformance_model->meals_deduction();
         $data['pendingPayroll'] = $this->payroll_model->pendingPayrollCheck();
         $data['parent'] = "Settings";
-        $data['child'] = "Allowances";
-        $data['title'] = "Allowances";
+        $data['child'] = "Allowance";
+        $data['title'] = "Allowance";
 
         return view('allowance.allowance', $data);
-        // } else {
-        //     echo "Unauthorized Access";
-        // }
     }
 
     public function allowance_overtime(Request $request)
@@ -5247,6 +5245,23 @@ class GeneralController extends Controller
             // echo "<p class='alert alert-success text-center'>Allowance Registered Successifully</p>";
         } else {
             echo "<p class='alert alert-warning text-center'>Allowance Registration FAILED, Please Try Again</p>";
+        }
+        return back()->with('success', 'Saved');
+    }
+    public function addAllowanceCategory(Request $request)
+    {
+            $data = array(
+            'name' => $request->name,
+        );
+
+        $result = $this->flexperformance_model->addAllowanceCategory($data);
+
+        if ($result == true) {
+            // $this->flexperformance_model->audit_log("Created New Allowance ");
+            return back()->with('success', 'Saved');
+            // echo "<p class='alert alert-success text-center'>Allowance Registered Successifully</p>";
+        } else {
+            echo "<p class='alert alert-warning text-center'>Allowance Category Registration FAILED, Please Try Again</p>";
         }
         return back()->with('success', 'Saved');
     }
@@ -5633,6 +5648,17 @@ class GeneralController extends Controller
             }
             header("Content-type: application/json");
             echo json_encode($json_array);
+        }
+    }
+
+    public function deleteAllowanceCategory($id, Request $request)
+    {
+        $result = $this->flexperformance_model->deleteAllowanceCategory($id);
+
+        if ($result == true) {
+            echo "<p class='alert alert-warning text-center'>Allowance Category DELETED Successifully</p>";
+        } else {
+            echo "<p class='alert alert-danger text-center'>FAILED to DELETE, Please Try Again!</p>";
         }
     }
 

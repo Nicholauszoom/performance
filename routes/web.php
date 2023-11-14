@@ -988,6 +988,7 @@ Route::middleware('auth')->middleware([Setting::class])->group(function(){
         Route::any('/allowance_category','allowance_category')->name('flex.allowance_category');
         Route::any('/non_statutory_deductions','non_statutory_deductions')->name('flex.non_statutory_deductions');
         Route::any('/addAllowance','addAllowance')->name('flex.addAllowance');
+        Route::any('/addAllowanceCategory','addAllowanceCategory')->name('flex.addAllowanceCategory');
         Route::any('/addOvertimeCategory','addOvertimeCategory')->name('flex.addOvertimeCategory');
         Route::any('/overtimeCategoryDelete/{id}','overtimeCategoryDelete')->name('flex.overtimeCategoryDelete');
         Route::any('/addDeduction','addDeduction')->name('flex.addDeduction');
@@ -997,6 +998,7 @@ Route::middleware('auth')->middleware([Setting::class])->group(function(){
         Route::any('/remove_group_from_allowance','remove_group_from_allowance')->name('flex.remove_group_from_allowance');
 
         Route::any('/deleteAllowance/{id}','deleteAllowance')->name('flex.deleteAllowance');
+        Route::any('/deleteAllowanceCategory/{id}','deleteAllowanceCategory')->name('flex.deleteAllowanceCategory');
         Route::any('/activateAllowance/{id}','activateAllowance')->name('flex.activateAllowance');
         Route::any('/updateAllowanceName','updateAllowanceName')->name('flex.updateAllowanceName');
         Route::any('/updateAllowanceTaxable','updateAllowanceTaxable')->name('flex.updateAllowanceTaxable');

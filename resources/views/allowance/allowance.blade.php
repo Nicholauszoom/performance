@@ -27,22 +27,24 @@
 
                         <form id="addAllowance" method="post" autocomplete="off" class="form-horizontal form-label-left">
                             <div class="form-group row">
-                                <div class=" col-md-6 mb-6">
+                                <div class=" col-md-4 mb-4">
                                     <label class="form-label">Allowance Name:</label>
                                     <input type="text"  name="name" class="form-control">
                                 </div>
 
 
 
-                                {{-- <div class=" col-md-3 mb-3">
-                                    <label class="form-label">Payment Policy:</label>
-                                    <select class="form-control select_type select" name="policy" id="policy">
-                                        <option selected disabled> Select </option>
-                                        <option value=1>Fixed Amount</option>
-                                        <option value=2>Percent From Basic Salary</option>
+                                <div class=" col-md-4 mb-4">
+                                    <label class="form-label">Allowance Category:</label>
+                                    <select class="form-control select_type select" name="allowanceCategory" id="allowanceCategory">
+                                        <option selected disabled>Select</option>
+                                        @foreach ($allowanceCategories as $row)
+                                        <option value="{{$row->id}}">{{$row->name}}</option>
+                                    @endforeach
+
                                     </select>
-                                </div> --}}
-                                <div class=" col-md-6 mb-6">
+                                </div>
+                                <div class=" col-md-4 mb-4">
                                     <label class="form-label">Taxable</label>
                                     <select class="form-control select_type select" name="taxable" id="policy">
                                         <option selected disabled> Select </option>
