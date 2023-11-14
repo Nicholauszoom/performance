@@ -212,9 +212,9 @@
 
                             </td>
                             <td></td>
-                            
+
                         </tr>
-                        <?php }  ?>
+                        <?php  $index++; }  ?>
                     </tbody>
                 </table>
             </div>
