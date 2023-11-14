@@ -5139,6 +5139,7 @@ class GeneralController extends Controller
         $data['pendingPayroll'] = $this->payroll_model->pendingPayrollCheck();
         $data['parent'] = "Settings";
         $data['child'] = "Allowances";
+        $data['title'] = "Allowances";
 
         return view('allowance.allowance', $data);
         // } else {
@@ -5153,7 +5154,6 @@ class GeneralController extends Controller
 
         $this->authenticateUser('add-payroll');
 
-        $data['overtimes'] = $this->flexperformance_model->overtime_allowances();
         $data['overtimess'] = $this->flexperformance_model->overtime_allowances();
         $data['meals'] = $this->flexperformance_model->meals_deduction();
         $data['pendingPayroll'] = $this->payroll_model->pendingPayrollCheck();
@@ -5191,6 +5191,19 @@ class GeneralController extends Controller
         // } else {
         //     echo "Unauthorized Access";
         // }
+    }
+    public function allowance_category(Request $request)
+    {
+
+        $this->authenticateUser('add-payroll');
+        $data['allowanceCategory'] = $this->flexperformance_model->allowance_category();
+        $data['meals'] = $this->flexperformance_model->meals_deduction();
+        $data['pendingPayroll'] = $this->payroll_model->pendingPayrollCheck();
+        $data['parent'] = "Settings";
+        $data['child'] = "Allowance Category";
+        $data['title'] = "Allowance Category";
+
+        return view('allowance.allowance_category', $data);
     }
 
     public function non_statutory_deductions(Request $request)
@@ -5253,8 +5266,8 @@ class GeneralController extends Controller
         if ($request->method() == "POST") {
             $data = array(
                 'name' => $request->input('name'),
-                'day_percent' => ($request->input('day_percent') / 100),
-                'night_percent' => ($request->input('night_percent') / 100),
+                'day_percent' => ($request->input('day_percent') ),
+                'night_percent' => ($request->input('night_percent') ),
             );
             $result = $this->flexperformance_model->addOvertimeCategory($data);
             if ($result == true) {
@@ -6330,9 +6343,8 @@ class GeneralController extends Controller
         $method = $request->method();
 
         if ($method == "POST") {
-
-            $arr = explode(',', $request->input('option'));
-
+            // $arr = explode(',', $request->input('option'));
+            $arr = $request->option1;
             $groupID = $request->input('groupID');
             $group_roles = $this->flexperformance_model->get_group_roles($groupID);
             $group_allowances = $this->flexperformance_model->get_group_allowances($groupID);
@@ -6344,7 +6356,6 @@ class GeneralController extends Controller
 
                 foreach ($arr as $value) {
                     $empID = $value;
-
                     if (!empty($group_allowances)) {
                         foreach ($group_allowances as $key) {
                             $allowance = $key->allowance;

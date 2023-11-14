@@ -647,6 +647,7 @@
                     $myButton.html('<i class="ph-circle-notch spinner me-2"></i>Loading...'); // Update button text
                 },
                 success: function(data) {
+                    console.log(data)
                     if(data.status == 400){
                         const item = data.errors;
                         const listItems = Object.keys(item).map(key => `<p>${item[key]}</p>`);
@@ -670,20 +671,24 @@
 
                 },
                 error: function (xhr, status, error) {
+
                     $myButton.removeAttr('disabled');
                     $myButton.find('.spinner').addClass('d-none'); // Add the 'd-none' class to hide the spinner
                     $myButton.html('<i class="ph-circle-notch spinner me-2 d-none"></i>Register Employee'); // Restore button text
 
-                    var responseJson = JSON.parse(xhr.responseText);
-
+                    var responseJson = xhr.responseJSON;
                     if (responseJson.errors) {
                         var errors = responseJson.errors;
-
                         $('.error-message').empty();
 
                         $.each(errors, function (field, errorMessage) {
                             $('#' + field + '-error').html(errorMessage);
                             $('#' + field).addClass('is-invalid');
+                            new Noty({
+                            layout: 'topRight',
+                            text: errorMessage,
+                            type: 'error'
+                        }).show();
                         });
 
                         var firstErrorField = Object.keys(errors)[0];

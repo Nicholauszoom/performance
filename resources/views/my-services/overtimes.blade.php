@@ -157,7 +157,7 @@
                         @endforeach
                     </td>
                     <td>
-                        <?php echo '<b>Duration: </b>' . $row->totoalHOURS . ' Hrs.<br><b>From: </b>' . $row->time_in . ' <b> To </b>' . $row->time_out; ?>
+                        <?php echo '<b>Duration: </b>' . number_format($row->totoalHOURS,1) . ' Hrs.<br><b>From: </b>' . date('H:i', strtotime($row->time_in)) . ' <b> To </b>' . date('H:i', strtotime($row->time_out)); ?>
                     </td>
                     <td><?php echo $row->reason; ?></td>
                     <td>

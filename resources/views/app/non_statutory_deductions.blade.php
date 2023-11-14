@@ -12,38 +12,8 @@
 
     <div class="right_col" role="main">
         <div class="card border-top  border-top-width-3 border-top-main rounded-0 p-2">
-            <ul class="nav nav-tabs nav-tabs-underline nav-justified mb-3" id="tabs-target-right" role="tablist">
-                <li class="nav-item" role="presentation">
-                    <a href="{{ url('/flex/financial_group')}}" class="nav-link" aria-selected="false" role="tab" tabindex="-1">
-                        <i class="ph-list me-2"></i>
-                        Packages
-                    </a>
-                </li>
-                <li class="nav-item" role="presentation">
-                    <a href="{{ url('/flex/allowance_overtime')}}" class="nav-link " aria-selected="false" role="tab" tabindex="-1">
-                        <i class="ph-list me-2"></i>
-                        Overtime
-                    </a>
-                </li>
-                <li class="nav-item" role="presentation">
-                    <a href="{{ url('/flex/allowance')}}" class="nav-link" aria-selected="false" role="tab" tabindex="-1">
-                        <i class="ph-list me-2"></i>
-                        Allowance
-                    </a>
-                </li>
-                <li class="nav-item" role="presentation">
-                    <a href="{{ url('/flex/statutory_deductions')}}" class="nav-link" aria-selected="false" role="tab" tabindex="-1">
-                        <i class="ph-list me-2"></i>
-                        Statutory Deductions
-                    </a>
-                </li>
-                <li class="nav-item" role="presentation">
-                    <a href="{{ url('/flex/non_statutory_deductions')}}" class="nav-link active show" aria-selected="false" role="tab" tabindex="-1">
-                        <i class="ph-list me-2"></i>
-                        Non Statutory Deductions
-                    </a>
-                </li>
-            </ul>
+            @include('app.headers_payroll_input')
+
 
             <div class="clearfix"></div>
 
@@ -70,7 +40,10 @@
                                         <th>S/N</th>
                                         <th>Name</th>
                                         <th>Amount</th>
+                                        @if ($pendingPayroll == 0)
+
                                         <th>Option</th>
+                                        @endif
                                     </tr>
                                 </thead>
 
@@ -86,11 +59,14 @@
                                             <span class="label label-success">Salary dependent</span><br>
                                             <?php echo 100*($row->percent)."%"; } ?>
                                         </td>
+                                        @if ($pendingPayroll == 0)
+
                                         <td class="options-width">
                                             <?php  $par = $row->id."|2"; ?>
                                             <a  href="{{ route('flex.deduction_info',$par) }}" title="Info and Details" class="icon-2 info-tooltip"><button type="button" class="btn btn-main btn-xs"><i class="ph-info"></i></button> </a>
                                             <a href="javascript:void(0)" onclick="deletededuction(<?php echo $row->id; ?>)" title="Delete Deduction" class="icon-2 info-tooltip"><button type="button" class="btn btn-danger btn-xs"><i class="ph-trash"></i></button> </a>
                                         </td>
+                                        @endif
                                     </tr>
                                     <?php } //} ?>
                                 </tbody>
