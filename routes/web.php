@@ -545,6 +545,7 @@ Route::middleware('auth')->middleware([Setting::class])->group(function(){
         Route::any('/submitInputs','submitInputs')->name('flex.submitInputs');
 
         Route::any('/salary_advance','salary_advance')->name('flex.salary_advance');
+        Route::any('/loan_types','loan_types')->name('flex.loan_types');
         Route::any('/current_loan_progress','current_loan_progress')->name('flex.current_loan_progress');
         Route::any('/apply_salary_advance','apply_salary_advance')->name('flex.apply_salary_advance');
         Route::any('/insert_directLoan','insert_directLoan')->name('flex.insert_directLoan');
@@ -763,6 +764,7 @@ Route::middleware('auth')->middleware([Setting::class])->group(function(){
           // start of approval settings routes
           Route::any('/approvals','viewApprovals')->name('flex.approvals');
           Route::post('/save-approvals','saveApprovals')->name('flex.saveApprovals');
+          Route::post('/save-loan-type','saveLoanType')->name('flex.saveLoanType');
           Route::any('/edit-approval/{id}','editApproval')->name('flex.editApproval');
           Route::put('/update-approval','updateApproval')->name('flex.updateApproval');
           Route::any('/delete-approval/{id}','deleteApproval')->name('flex.deleteApproval');
@@ -985,8 +987,10 @@ Route::middleware('auth')->middleware([Setting::class])->group(function(){
         Route::any('/allowance_info/{id}', 'allowance_info')->name('flex.allowance_info');
         Route::any('/allowance_overtime','allowance_overtime')->name('flex.allowance_overtime');
         Route::any('/statutory_deductions','statutory_deductions')->name('flex.statutory_deductions');
+        Route::any('/allowance_category','allowance_category')->name('flex.allowance_category');
         Route::any('/non_statutory_deductions','non_statutory_deductions')->name('flex.non_statutory_deductions');
         Route::any('/addAllowance','addAllowance')->name('flex.addAllowance');
+        Route::any('/addAllowanceCategory','addAllowanceCategory')->name('flex.addAllowanceCategory');
         Route::any('/addOvertimeCategory','addOvertimeCategory')->name('flex.addOvertimeCategory');
         Route::any('/overtimeCategoryDelete/{id}','overtimeCategoryDelete')->name('flex.overtimeCategoryDelete');
         Route::any('/addDeduction','addDeduction')->name('flex.addDeduction');
@@ -996,6 +1000,7 @@ Route::middleware('auth')->middleware([Setting::class])->group(function(){
         Route::any('/remove_group_from_allowance','remove_group_from_allowance')->name('flex.remove_group_from_allowance');
 
         Route::any('/deleteAllowance/{id}','deleteAllowance')->name('flex.deleteAllowance');
+        Route::any('/deleteAllowanceCategory/{id}','deleteAllowanceCategory')->name('flex.deleteAllowanceCategory');
         Route::any('/activateAllowance/{id}','activateAllowance')->name('flex.activateAllowance');
         Route::any('/updateAllowanceName','updateAllowanceName')->name('flex.updateAllowanceName');
         Route::any('/updateAllowanceTaxable','updateAllowanceTaxable')->name('flex.updateAllowanceTaxable');

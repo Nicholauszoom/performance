@@ -40,6 +40,7 @@ use App\Models\LeaveApproval;
 use App\Models\LeaveForfeiting;
 //use PHPClamAV\Scanner;
 use App\Models\Leaves;
+use App\Models\LoanType;
 use App\Models\Payroll\FlexPerformanceModel;
 use App\Models\Payroll\ImprestModel;
 use App\Models\Payroll\Payroll;
@@ -1968,7 +1969,7 @@ class GeneralController extends Controller
 
         request()->validate(
             [
-                'reason' => 'required|alpha',
+                'reason' => 'required',
             ]
         );
 
@@ -2022,6 +2023,8 @@ class GeneralController extends Controller
                             'time_recommended_line' => date('Y-m-d h:i:s'),
                             'time_approved_hr' => date('Y-m-d'),
                             'time_confirmed_line' => date('Y-m-d h:i:s'),
+                            'application_time'=> new DateTime(),
+
                         );
 
                         $result = $this->flexperformance_model->apply_overtime($data);
@@ -2046,6 +2049,7 @@ class GeneralController extends Controller
                             'time_recommended_line' => date('Y-m-d h:i:s'),
                             'time_approved_hr' => date('Y-m-d'),
                             'time_confirmed_line' => date('Y-m-d h:i:s'),
+                            'application_time'=> new DateTime(),
                         );
 
                         $result = $this->flexperformance_model->apply_overtime($data);
@@ -2070,6 +2074,8 @@ class GeneralController extends Controller
                             'time_recommended_line' => date('Y-m-d h:i:s'),
                             'time_approved_hr' => date('Y-m-d'),
                             'time_confirmed_line' => date('Y-m-d h:i:s'),
+                            'application_time'=> new DateTime(),
+
                         );
 
                         $result = $this->flexperformance_model->apply_overtime($data);
@@ -2100,6 +2106,8 @@ class GeneralController extends Controller
                         'time_recommended_line' => date('Y-m-d h:i:s'),
                         'time_approved_hr' => date('Y-m-d'),
                         'time_confirmed_line' => date('Y-m-d h:i:s'),
+                        'application_time'=> new DateTime(),
+
                     );
                     $result = $this->flexperformance_model->apply_overtime($data);
                     if ($result == true) {
@@ -2120,6 +2128,8 @@ class GeneralController extends Controller
                         'time_recommended_line' => date('Y-m-d h:i:s'),
                         'time_approved_hr' => date('Y-m-d'),
                         'time_confirmed_line' => date('Y-m-d h:i:s'),
+                        'application_time'=> new DateTime(),
+
                     );
                     $result = $this->flexperformance_model->apply_overtime($data);
                     if ($result == true) {
@@ -3555,6 +3565,7 @@ class GeneralController extends Controller
 
         // if(session('mng_paym') ||session('recom_paym') ||session('appr_paym')){
         $data['myloan'] = $this->flexperformance_model->mysalary_advance(auth()->user()->emp_id);
+        // dd($data);
 
         // if(session('recom_loan')!='' &&session('appr_loan')){
 
@@ -5126,15 +5137,14 @@ class GeneralController extends Controller
         $this->authenticateUser('add-payroll');
 
         $data['allowance'] = $this->flexperformance_model->allowance();
+        $data['allowanceCategories'] = $this->flexperformance_model->allowance_category();
         $data['meals'] = $this->flexperformance_model->meals_deduction();
         $data['pendingPayroll'] = $this->payroll_model->pendingPayrollCheck();
         $data['parent'] = "Settings";
-        $data['child'] = "Allowances";
+        $data['child'] = "Allowance";
+        $data['title'] = "Allowance";
 
         return view('allowance.allowance', $data);
-        // } else {
-        //     echo "Unauthorized Access";
-        // }
     }
 
     public function allowance_overtime(Request $request)
@@ -5144,7 +5154,6 @@ class GeneralController extends Controller
 
         $this->authenticateUser('add-payroll');
 
-        $data['overtimes'] = $this->flexperformance_model->overtime_allowances();
         $data['overtimess'] = $this->flexperformance_model->overtime_allowances();
         $data['meals'] = $this->flexperformance_model->meals_deduction();
         $data['pendingPayroll'] = $this->payroll_model->pendingPayrollCheck();
@@ -5182,6 +5191,18 @@ class GeneralController extends Controller
         // } else {
         //     echo "Unauthorized Access";
         // }
+    }
+    public function allowance_category(Request $request)
+    {
+
+        $this->authenticateUser('add-payroll');
+        $data['allowanceCategory'] = $this->flexperformance_model->allowance_category();
+        $data['meals'] = $this->flexperformance_model->meals_deduction();
+        $data['pendingPayroll'] = $this->payroll_model->pendingPayrollCheck();
+        $data['parent'] = "Settings";
+        $data['title'] = "Allowance Category";
+
+        return view('allowance.allowance_category', $data);
     }
 
     public function non_statutory_deductions(Request $request)
@@ -5222,6 +5243,7 @@ class GeneralController extends Controller
             'pensionable' => $request->pensionable,
             'Isrecursive' => $request->Isrecursive,
             'Isbik' => $request->Isbik,
+            'allowance_category_id' => $request->allowanceCategory,
             'state' => 1,
             'percent' => $percent,
         );
@@ -5234,6 +5256,23 @@ class GeneralController extends Controller
             // echo "<p class='alert alert-success text-center'>Allowance Registered Successifully</p>";
         } else {
             echo "<p class='alert alert-warning text-center'>Allowance Registration FAILED, Please Try Again</p>";
+        }
+        return back()->with('success', 'Saved');
+    }
+    public function addAllowanceCategory(Request $request)
+    {
+            $data = array(
+            'name' => $request->name,
+        );
+
+        $result = $this->flexperformance_model->addAllowanceCategory($data);
+
+        if ($result == true) {
+            // $this->flexperformance_model->audit_log("Created New Allowance ");
+            return back()->with('success', 'Saved');
+            // echo "<p class='alert alert-success text-center'>Allowance Registered Successifully</p>";
+        } else {
+            echo "<p class='alert alert-warning text-center'>Allowance Category Registration FAILED, Please Try Again</p>";
         }
         return back()->with('success', 'Saved');
     }
@@ -5620,6 +5659,17 @@ class GeneralController extends Controller
             }
             header("Content-type: application/json");
             echo json_encode($json_array);
+        }
+    }
+
+    public function deleteAllowanceCategory($id, Request $request)
+    {
+        $result = $this->flexperformance_model->deleteAllowanceCategory($id);
+
+        if ($result == true) {
+            echo "<p class='alert alert-warning text-center'>Allowance Category DELETED Successifully</p>";
+        } else {
+            echo "<p class='alert alert-danger text-center'>FAILED to DELETE, Please Try Again!</p>";
         }
     }
 
@@ -6863,7 +6913,7 @@ class GeneralController extends Controller
 
     public function import(Request $request)
     {
-        dd($request->all());
+        // dd($request->all());
 
         if (isset($_FILES["file"]["name"])) {
 
@@ -6977,8 +7027,20 @@ class GeneralController extends Controller
      */
     public function registerEmployee(EmployeeRequest $request)
     {
+        // $validatedFields = $request->validate([
+        //     'tin' => [
+        //         'required',
+        //         'regex:/^[0-9]{9}$/',
+        //     ],
+        //     'nationalid' => [
+        //         'required',
+        //         'regex:/^[A-Za-z0-9]{8}$/',
+        //     ],
+        // ]);
 
         $validator = $request->validated($request->all());
+
+
 
         $calendar = str_replace('/', '-', $request->input('birthdate'));
         $contract_end = str_replace('/', '-', $request->input('contract_end'));
@@ -10712,6 +10774,7 @@ class GeneralController extends Controller
 
         $empID = auth()->user()->emp_id;
         $data['myloan'] = $this->flexperformance_model->mysalary_advance($empID);
+        // dd($data);
 
         $data['my_loans'] = $this->flexperformance_model->my_confirmedloan($empID);
 
@@ -12162,5 +12225,30 @@ class GeneralController extends Controller
         $data['low_performer_potential'] = ($item9 > 0) ? $item9_count : 0;
 
         return view('talent.talent_matrix', $data);
+    }
+
+
+    public function loan_types(){
+        $data['loan_types'] = LoanType::all();
+        // dd($data);
+        return view('loans.loan_types', $data);
+    }
+
+    public function saveLoanType(Request $request)
+    {
+        request()->validate(
+            [
+                'name' => 'required',
+                'code' => 'nullable',
+            ]
+        );
+
+        $loan_types = new LoanType();
+        $loan_types->name = $request->name;
+        $loan_types->code = $request->code;
+        $loan_types->save();
+
+        $msg = "Loan Type has been added Successfully !";
+        return redirect('flex/loan_types')->with('msg', $msg);
     }
 }

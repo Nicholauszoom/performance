@@ -361,6 +361,11 @@
                                         class="nav-link {{ request()->routeIs('flex.confirmed_loans') ? 'active' : null }}"
                                         href="{{ route('flex.confirmed_loans') }}">Approved Loans</a></li>
                             @endcan
+                            @can('view-loan-types')
+                            <li class="nav-item"><a
+                                    class="nav-link {{ request()->routeIs('flex.loan_types') ? 'active' : null }}"
+                                    href="{{ route('flex.loan_types') }}">Loan Types</a></li>
+                        @endcan
                         </ul>
                     </li>
                 @endcan

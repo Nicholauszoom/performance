@@ -5,8 +5,8 @@
 @endpush
 
 @push('head-scriptTwo')
-<script src="{{ asset('assets/js/pages/form_select2.js') }}"></script>
-<script src="{{ asset('assets/js/pages/form_validation_styles.js') }}"></script>
+    <script src="{{ asset('assets/js/pages/form_select2.js') }}"></script>
+    <script src="{{ asset('assets/js/pages/form_validation_styles.js') }}"></script>
 @endpush
 
 @section('content')
@@ -27,8 +27,10 @@
                 <div class="row">
                     <div class="col-md-4 col-lg-4">
                         <div class="mb-3">
-                            <label class="form-label" for="fname">First name  <span class="text-danger">*<span></label>
-                            <input type="text" id="fname" pattern="[a-zA-Z]+" maxlength="15" title="Only enter letters" name="fname" id="name" value="{{ old('fname') }}" class="form-control" placeholder="First Name" required>
+                            <label class="form-label" for="fname">First name <span class="text-danger">*<span></label>
+                            <input type="text" id="fname" pattern="[a-zA-Z]+" maxlength="15"
+                                title="Only enter letters" name="fname" id="name" value="{{ old('fname') }}"
+                                class="form-control" placeholder="First Name" required>
                             <span id="fname-error" class="text-danger error-message"></span>
                         </div>
                     </div>
@@ -36,7 +38,9 @@
                     <div class="col-md-4 col-lg-4">
                         <div class="mb-3">
                             <label class="form-label" for="mname">Middle name</label>
-                            <input type="text" id="mname" name="mname" value="{{ old('mname') }}" class="form-control" maxlength="15" pattern="[a-zA-Z]+" title="Only enter letters" placeholder="Middle Name">
+                            <input type="text" id="mname" name="mname" value="{{ old('mname') }}"
+                                class="form-control" maxlength="15" pattern="[a-zA-Z]+" title="Only enter letters"
+                                placeholder="Middle Name">
                             <span id="mname-error" class="text-danger error-message"></span>
                         </div>
                     </div>
@@ -44,7 +48,9 @@
                     <div class="col-md-4 col-lg-4">
                         <div class="mb-3">
                             <label class="form-label" for="lname">Last name <span class="text-danger">*<span> </label>
-                            <input type="text" id="lname" name="lname" value="{{ old('lname') }}" class="form-control" maxlength="15" pattern="[a-zA-Z]+" title="Only enter letters" placeholder="Last Name" required>
+                            <input type="text" id="lname" name="lname" value="{{ old('lname') }}"
+                                class="form-control" maxlength="15" pattern="[a-zA-Z]+" title="Only enter letters"
+                                placeholder="Last Name" required>
                             <span id="lname-error" class="text-danger error-message"></span>
                         </div>
                     </div>
@@ -70,18 +76,21 @@
                     <div class="col-md-4 col-lg-4">
                         <div class="mb-3">
                             <label for="email" class="form-label">Email <span class="text-danger">*<span></label>
-                            <input id="email" type="email" maxlength="30" class="form-control" name="email" value="{{ old('email') }}" id="email" placeholder="example@email.com" required>
+                            <input id="email" type="email" maxlength="30" class="form-control" name="email"
+                                value="{{ old('email') }}" id="email" placeholder="example@email.com" required>
                             <span id="email-error" class="text-danger error-message"></span>
                         </div>
                     </div>
 
                     <div class="col-md-4 col-lg-4">
                         <div class="mb-3">
-                            <label class="form-label" for="nationality">Nationality <span class="text-danger">*<span></label>
-                            <select class="form-control select_country select" name="nationality" id="nationality" required>
+                            <label class="form-label" for="nationality">Nationality <span
+                                    class="text-danger">*<span></label>
+                            <select class="form-control select_country select" name="nationality" id="nationality"
+                                required>
                                 <option selected disabled> Select </option>
                                 @foreach ($countrydrop as $row)
-                                <option value="{{ $row->code }}">{{ $row->name }}</option>
+                                    <option value="{{ $row->code }}">{{ $row->name }}</option>
                                 @endforeach
                             </select>
                             <span id="nationality-error" class="text-danger error-message"></span>
@@ -90,7 +99,8 @@
 
                     <div class="col-md-4 col-lg-4">
                         <div class="mb-3">
-                            <label class="form-label" for="status">Maritial Status <span class="text-danger">*<span></label>
+                            <label class="form-label" for="status">Maritial Status <span
+                                    class="text-danger">*<span></label>
                             <select class="form-control" name="status" id="status" required>
                                 <option value="Single">Single</option>
                                 <option value="Married">Married</option>
@@ -103,7 +113,8 @@
                     <div class="col-md-4 col-lg-4">
                         <div class="mb-3">
                             <label class="form-label" for="bithdate">Birthdate <span class="text-danger">*<span></label>
-                            <input type="date" placeholder="Date of Birth" class="form-control" name="bithdate" value="{{ old('bithdate') }}" id="bithdate" required>
+                            <input type="date" placeholder="Date of Birth" class="form-control" name="bithdate"
+                                value="{{ old('bithdate') }}" id="bithdate" required>
                             <span id="age" class="text-danger"></span>
                             <span id="bithdate-error" class="text-danger error-message"></span>
                         </div>
@@ -123,11 +134,12 @@
                 <div class="row">
                     <div class="col-md-4 col-lg-4">
                         <div class="mb-3">
-                            <label class="form-label" for="department">Department <span class="text-danger">*<span></label>
+                            <label class="form-label" for="department">Department <span
+                                    class="text-danger">*<span></label>
                             <select class="form-control select" id="department" name="department" required>
                                 <option value=""> Select Department </option>
                                 @foreach ($ddrop as $depart)
-                                <option value="{{ $depart->id }}">{{ $depart->name }}</option>
+                                    <option value="{{ $depart->id }}">{{ $depart->name }}</option>
                                 @endforeach
                             </select>
                             <span id="department-error" class="text-danger error-message"></span>
@@ -138,10 +150,12 @@
                         <div class="mb-3">
                             <label class="form-label" for="position">Position <span class="text-danger">*<span></label>
                             <div class="mb-3 form-control-feedback" id="position-loader">
-                                <select class="form-control select1_single select" id="position" name="position" required>
+                                <select class="form-control select1_single select" id="position" name="position"
+                                    required>
                                     <option value=""> Select Position </option>
                                 </select>
-                                <div class="form-control-feedback-icon d-flex align-items-center justify-content-end text-end px-3 d-none" id="pos-loader" style="width: 100% !important; background: transparent">
+                                <div class="form-control-feedback-icon d-flex align-items-center justify-content-end text-end px-3 d-none"
+                                    id="pos-loader" style="width: 100% !important; background: transparent">
                                     <i class="ph-spinner spinner me-2"></i>
                                 </div>
                             </div>
@@ -151,11 +165,14 @@
 
                     <div class="col-md-4 col-lg-4">
                         <div class="mb-3">
-                            <label class="form-label" for="linemanager">Line Manager <span class="text-danger">*<span></label>
-                            <select name="linemanager" id="linemanager" class="form-control select2_single select" required>
+                            <label class="form-label" for="linemanager">Line Manager <span
+                                    class="text-danger">*<span></label>
+                            <select name="linemanager" id="linemanager" class="form-control select2_single select"
+                                required>
                                 <option selected disabled>Select line Manager</option>
                                 @foreach ($ldrop as $row)
-                                <option value="{{ $row->empID }}"> {{ $row->empID }} - {{ $row->NAME }}</option>
+                                    <option value="{{ $row->empID }}"> {{ $row->empID }} - {{ $row->NAME }}
+                                    </option>
                                 @endforeach
                             </select>
                             <span id="linemanager-error" class="text-danger error-message"></span>
@@ -164,11 +181,12 @@
 
                     <div class="col-md-4 col-lg-4">
                         <div class="mb-3">
-                            <label class="form-label" for="branch">Company Branch <span class="text-danger">*<span></label>
+                            <label class="form-label" for="branch">Company Branch <span
+                                    class="text-danger">*<span></label>
                             <select class="form-control select_branch select" name="branch" required id="branch">
                                 <option value=""> Select </option>
                                 @foreach ($branch as $row)
-                                <option value="{{ $row->code }}">{{ $row->name }}</option>
+                                    <option value="{{ $row->code }}">{{ $row->name }}</option>
                                 @endforeach
                             </select>
                             <span id="branch-error" class="text-danger error-message"></span>
@@ -177,11 +195,12 @@
 
                     <div class="col-md-4 col-lg-4">
                         <div class="mb-3">
-                            <label class="form-label" for="ctype">Contract Type <span class="text-danger">*<span></label>
+                            <label class="form-label" for="ctype">Contract Type <span
+                                    class="text-danger">*<span></label>
                             <select class="form-select select" name="ctype" id="ctype" required>
                                 <option value="" selected disabled>Select type</option>
                                 @foreach ($contract as $row)
-                                <option value="{{ $row->id }}">{{ $row->name }}</option>
+                                    <option value="{{ $row->id }}">{{ $row->name }}</option>
                                 @endforeach
                             </select>
                             <span id="ctype-error" class="text-danger error-message"></span>
@@ -190,7 +209,8 @@
 
                     <div class="col-md-4 col-lg-4">
                         <div class="mb-3">
-                            <label class="form-label" for="salary">Basic Salary <span class="text-danger">*<span></label>
+                            <label class="form-label" for="salary">Basic Salary <span
+                                    class="text-danger">*<span></label>
                             <div id="salaryField"></div>
                             <span id="salary-error" class="text-danger error-message"></span>
                         </div>
@@ -200,10 +220,11 @@
                         <div class="mb-3">
                             <label class="form-label" for="currency">Currency <span class="text-danger">*<span></label>
                             <div class="input-group">
-                                <select required id="currency" name="currency" class="select_group form-control select" data-width="1%">
+                                <select required id="currency" name="currency" class="select_group form-control select"
+                                    data-width="1%">
                                     <option selected disabled>Select Currency</option>
                                     @foreach ($currencies as $row)
-                                    <option value="<?php echo $row->currency; ?>"><?php echo $row->currency; ?></option>
+                                        <option value="<?php echo $row->currency; ?>"><?php echo $row->currency; ?></option>
                                     @endforeach
                                 </select>
                             </div>
@@ -213,9 +234,11 @@
 
                     <div class="col-md-4 col-lg-4">
                         <div class="mb-3">
-                            <label class="form-label" for="cost_center">Cost Center <span class="text-danger">*<span></label>
+                            <label class="form-label" for="cost_center">Cost Center <span
+                                    class="text-danger">*<span></label>
                             <div class="input-group">
-                                <select required name="cost_center" class="select_group form-control select" id="cost_center" data-width="1%">
+                                <select required name="cost_center" class="select_group form-control select"
+                                    id="cost_center" data-width="1%">
                                     <option selected disabled>Select Cost Center</option>
                                     <option value="Management">Management</option>
                                     <option value="Non Management">Non Management</option>
@@ -227,23 +250,28 @@
 
                     <div class="col-md-4 col-lg-4">
                         <div class="mb-3">
-                            <label class="form-label" for="contract_start">Contract start <span class="text-danger">*<span></label>
-                            <input type="date" class="form-control daterange-single" name="contract_start" id="contract_start">
+                            <label class="form-label" for="contract_start">Contract start <span
+                                    class="text-danger">*<span></label>
+                            <input type="date" class="form-control daterange-single" name="contract_start"
+                                id="contract_start">
                             <span id="contract_start-error" class="text-danger error-message"></span>
                         </div>
                     </div>
 
                     <div class="col-md-4 col-lg-4">
                         <div class="mb-3">
-                            <label class="form-label" for="contract_end">Contract End <span class="text-danger">*<span></label>
-                            <input type="date" class="form-control daterange-single" name="contract_end" id="contract_end">
+                            <label class="form-label" for="contract_end">Contract End <span
+                                    class="text-danger">*<span></label>
+                            <input type="date" class="form-control daterange-single" name="contract_end"
+                                id="contract_end">
                             <span id="contract_end-error" class="text-danger error-message"></span>
                         </div>
                     </div>
 
                     <div class="col-md-4 col-lg-4">
                         <div class="mb-3">
-                            <label class="form-label" for="leave_day">Leave Days Etitled <span class="text-danger">*<span></label>
+                            <label class="form-label" for="leave_day">Leave Days Etitled <span
+                                    class="text-danger">*<span></label>
                             <input type="number" class="form-control daterange-single" name="leave_day" id="leave_day">
                             <span id="leave_day-error" class="text-danger error-message"></span>
                         </div>
@@ -255,7 +283,7 @@
                             <select class="form-select select_pension select" name="pension_fund" id="pension_fund">
                                 <option value="">Select Pension Fund</option>
                                 @foreach ($pensiondrop as $row)
-                                <option value="{{ $row->id }}">{{ $row->name }}</option>
+                                    <option value="{{ $row->id }}">{{ $row->name }}</option>
                                 @endforeach
                             </select>
                             <span id="pension_fund-error" class="text-danger error-message"></span>
@@ -265,15 +293,19 @@
                     <div class="col-md-4 col-lg-4">
                         <div class="mb-3">
                             <label class="form-label" for="pf_membership_no">Membership No</label>
-                            <input type="text" maxlength="30" name="pf_membership_no" id="pf_membership_no" id="pf_membership_no" value="{{ old('pf_membership_no') }}" class="form-control" placeholder="Membership No">
+                            <input type="text" maxlength="30" name="pf_membership_no" id="pf_membership_no"
+                                id="pf_membership_no" value="{{ old('pf_membership_no') }}" class="form-control"
+                                placeholder="Membership No">
                             <span id="pf_membership_no-error" class="text-danger error-message"></span>
                         </div>
                     </div>
 
                     <div class="col-md-4 col-lg-4">
                         <div class="mb-3">
-                            <label class="form-label" for="emp_id">Payroll Number <span class="text-danger">*<span></label>
-                            <input type="text" id="emp_id" name="emp_id" class="form-control" placeholder="Payroll number" required />
+                            <label class="form-label" for="emp_id">Payroll Number <span
+                                    class="text-danger">*<span></label>
+                            <input type="text" id="emp_id" name="emp_id" class="form-control"
+                                placeholder="Payroll number" required />
                             <span id="emp_id-error" class="text-danger error-message"></span>
                         </div>
                     </div>
@@ -286,7 +318,7 @@
                             <select class="form-control select_bank select" id='bank' name="bank">
                                 <option value="">Select Employee Bank</option>
                                 @foreach ($bankdrop as $bank)
-                                <option value="{{ $bank->id }}">{{ $bank->name }}</option>
+                                    <option value="{{ $bank->id }}">{{ $bank->name }}</option>
                                 @endforeach
                             </select>
                             <span id="bank-error" class="text-danger error-message"></span>
@@ -296,8 +328,10 @@
                     <div class="col-md-4 col-lg-4">
                         <label class="form-label" for="bank_branch">Bank Branch <span class="text-danger">*<span></label>
                         <div class="mb-3 form-control-feedback" id="br-loader">
-                            <select class="form-control select_bank_branch select" id="bank_branch" name="bank_branch" required style="padding-left: 20px !important"></select>
-                            <div class="form-control-feedback-icon d-flex align-items-center justify-content-end text-end d-none px-3" id="select-loader" style="width: 100% !important; background: transparent">
+                            <select class="form-control select_bank_branch select" id="bank_branch" name="bank_branch"
+                                required style="padding-left: 20px !important"></select>
+                            <div class="form-control-feedback-icon d-flex align-items-center justify-content-end text-end d-none px-3"
+                                id="select-loader" style="width: 100% !important; background: transparent">
                                 <i class="ph-spinner spinner me-2"></i>
                             </div>
                         </div>
@@ -306,8 +340,10 @@
 
                     <div id="accountNo" class="col-md-4 col-lg-4">
                         <div class="mb-3">
-                            <label class="form-label" id="accno">Bank Account No <span class="text-danger">*<span></label>
-                            <input type="text" maxlength="15" name="accno" value="{{ old('accno') }}" class="form-control" id="accno" required />
+                            <label class="form-label" id="accno">Bank Account No <span
+                                    class="text-danger">*<span></label>
+                            <input type="text" maxlength="15" name="accno" value="{{ old('accno') }}"
+                                class="form-control" id="accno" required />
                             <span id="accno-error" class="text-danger error-message"></span>
                         </div>
                     </div>
@@ -315,7 +351,8 @@
                     <div class="col-md-4 col-lg-4">
                         <div class="mb-3">
                             <label class="form-label" for="mobile">Employee Mobile</label>
-                            <input type="number" id="mobile" name="mobile" value="{{ old('mobile') }}" class="form-control" maxlength="14" />
+                            <input type="number" id="mobile" name="mobile" value="{{ old('mobile') }}"
+                                class="form-control" maxlength="14" />
                             <span id="mobile-error" class="text-danger error-message"></span>
                         </div>
                     </div>
@@ -323,7 +360,8 @@
                     <div class="col-md-4 col-lg-4">
                         <div class="mb-3">
                             <label class="form-label" for="postaddress">Postal Address</label>
-                            <input type="text" name="postaddress" value="{{ old('postaddress') }}" class="form-control" maxlength="15" id="postaddress" />
+                            <input type="text" name="postaddress" value="{{ old('postaddress') }}"
+                                class="form-control" maxlength="15" id="postaddress" />
                             <span id="postaddress-error" class="text-danger error-message"></span>
                         </div>
                     </div>
@@ -331,7 +369,8 @@
                     <div class="col-md-4 col-lg-4">
                         <div class="mb-3">
                             <label class="form-label" for="postalcity">Postal City</label>
-                            <input type="text" name="postalcity" value="{{ old('postalcity') }}" class="form-control" maxlength="15" id="postalcity" />
+                            <input type="text" name="postalcity" value="{{ old('postalcity') }}"
+                                class="form-control" maxlength="15" id="postalcity" />
                             <span id="postalcity-error" class="text-danger error-message"></span>
                         </div>
                     </div>
@@ -339,7 +378,8 @@
                     <div class="col-md-4 col-lg-4">
                         <div class="mb-3">
                             <label class="form-label" for="phyaddress">Physical Address</label>
-                            <input type="text" name="phyaddress" value="{{ old('phyaddress') }}" class="form-control" id="phyaddress" maxlength="25">
+                            <input type="text" name="phyaddress" value="{{ old('phyaddress') }}"
+                                class="form-control" id="phyaddress" maxlength="25">
                             <span id="phyaddress-error" class="text-danger error-message"></span>
                         </div>
                     </div>
@@ -347,15 +387,18 @@
                     <div class="col-md-4 col-lg-4">
                         <div class="mb-3">
                             <label class="form-label" for="haddress">Home Address</label>
-                            <input type="text" name="haddress" value="{{ old('haddress') }}" class="form-control" maxlength="25" id="haddress">
+                            <input type="text" name="haddress" value="{{ old('haddress') }}" class="form-control"
+                                maxlength="25" id="haddress">
                             <span id="haddress-error" class="text-danger error-message"></span>
                         </div>
                     </div>
 
                     <div class="col-md-4 col-lg-4">
                         <div class="mb-3">
-                            <label class="form-label" for="nationalid">National ID <span class="text-danger">*<span></label>
-                            <input type="text" id="nationalid" name="nationalid" value="{{ old('nationalid') }}" class="form-control" maxlength="150" required>
+                            <label class="form-label" for="nationalid">National ID <span
+                                    class="text-danger">*<span></label>
+                            <input type="text" id="nationalid" name="nationalid" value="{{ old('nationalid') }}"
+                                class="form-control" maxlength="150" required>
                             <span id="nationalid-error" class="text-danger error-message"></span>
                         </div>
                     </div>
@@ -363,7 +406,8 @@
                     <div class="col-md-4 col-lg-4">
                         <div class="mb-3">
                             <label class="form-label" for="tin">TIN <span class="text-danger">*<span></label>
-                            <input type="text" name="tin" value="{{ old('tin') }}" class="form-control" maxlength="100" id="tin" required>
+                            <input type="text" name="tin" value="{{ old('tin') }}" class="form-control"
+                                maxlength="100" id="tin" required>
                             <span id="tin-error" class="text-danger error-message"></span>
                         </div>
                     </div>
@@ -419,7 +463,7 @@
             </div>
             {{-- /Work details section --}}
 
-        </form>
+    </form>
 
 
     <form id="import_form" class="mt-2" method="post">
@@ -462,11 +506,12 @@
                 if (bankID) {
                     $.ajax({
                         type: 'GET',
-                        url: '{{ url("/flex/bankBranchFetcher/") }}',
+                        url: '{{ url('/flex/bankBranchFetcher/') }}',
                         data: 'bank=' + bankID,
-                        beforeSend: function(){
+                        beforeSend: function() {
                             $bselect.attr('disabled', 'disabled');
-                            $bloader.find('#select-loader').removeClass('d-none'); // Remove the 'd-none' class to display the spinner
+                            $bloader.find('#select-loader').removeClass(
+                            'd-none'); // Remove the 'd-none' class to display the spinner
                             // $myButton.html('<i class="ph-circle-notch spinner me-2"></i>Loading...'); // Update button text
                         },
                         success: function(html) {
@@ -474,10 +519,11 @@
                         },
                         complete: function() {
                             setTimeout(function() {
-                            // Your code here
-                            $bselect.removeAttr('disabled');
-                            $bloader.find('#select-loader').addClass('d-none'); // Add the 'd-none' class to hide the spinner
-                            // $myButton.html('<i class="ph-circle-notch spinner me-2 d-none"></i>Submit'); // Restore button text
+                                // Your code here
+                                $bselect.removeAttr('disabled');
+                                $bloader.find('#select-loader').addClass(
+                                'd-none'); // Add the 'd-none' class to hide the spinner
+                                // $myButton.html('<i class="ph-circle-notch spinner me-2 d-none"></i>Submit'); // Restore button text
                             }, 1000); // 1000 milliseconds (1 second) delay
                         }
                     });
@@ -505,7 +551,7 @@
 
                     $.ajax({
                         type: 'GET',
-                        url: '{{ url("/flex/getPositionSalaryRange/") }}',
+                        url: '{{ url('/flex/getPositionSalaryRange/') }}',
                         data: 'positionID=' + positionID,
 
                         success: function(response) {
@@ -537,11 +583,12 @@
 
                     $.ajax({
                         type: 'GET',
-                        url: '{{ url("/flex/positionFetcher") }}',
+                        url: '{{ url('/flex/positionFetcher') }}',
                         data: 'dept_id=' + stateID,
-                        beforeSend: function(){
+                        beforeSend: function() {
                             $bselect.attr('disabled', 'disabled');
-                            $bloader.find('#pos-loader').removeClass('d-none'); // Remove the 'd-none' class to display the spinner
+                            $bloader.find('#pos-loader').removeClass(
+                            'd-none'); // Remove the 'd-none' class to display the spinner
                             // $myButton.html('<i class="ph-circle-notch spinner me-2"></i>Loading...'); // Update button text
                         },
                         success: function(html) {
@@ -630,25 +677,47 @@
     <script type="text/javascript">
         $('#addEmployee').submit(function(e) {
             e.preventDefault();
-
             var $myButton = $('#save-loader');
 
+            e.preventDefault();
+            var tinValue = $('input[name="tin"]').val();
+            var tinRegex = /^\d{9}$/;
+            if (!tinRegex.test(tinValue)) {
+                $('#tin-error').text('Tin should be a 9-digit number.');
+                $('input[name="tin"]').focus();
+                return false;
+            }
+
+            var nationalIdValue = $('#nationalid').val();
+            var nationalIdRegex = /^\d{20}$/;
+            if (!nationalIdRegex.test(nationalIdValue)) {
+                $('#nationalid-error').text('National ID should be a 20-digit number.');
+                $('#nationalid').focus();
+                return false;
+            } else {
+                $('#nationalid-error').text('');
+            }
+
+
+
             $.ajax({
-                url: '{{ url("/flex/registerEmployee") }}',
+                url: '{{ url('/flex/registerEmployee') }}',
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
                 type: 'POST',
                 data: $(this).serialize(), // it will serialize the form data
                 dataType: 'json',
-                beforeSend: function(){
+                beforeSend: function() {
                     $myButton.attr('disabled', 'disabled');
-                    $myButton.find('.spinner').removeClass('d-none'); // Remove the 'd-none' class to display the spinner
-                    $myButton.html('<i class="ph-circle-notch spinner me-2"></i>Loading...'); // Update button text
+                    $myButton.find('.spinner').removeClass(
+                    'd-none'); // Remove the 'd-none' class to display the spinner
+                    $myButton.html(
+                    '<i class="ph-circle-notch spinner me-2"></i>Loading...'); // Update button text
                 },
                 success: function(data) {
                     console.log(data)
-                    if(data.status == 400){
+                    if (data.status == 400) {
                         const item = data.errors;
                         const listItems = Object.keys(item).map(key => `<p>${item[key]}</p>`);
                         new Noty({
@@ -657,10 +726,11 @@
                             type: 'error'
                         }).show();
 
-                    }else{
+                    } else {
                         new Noty({
                             layout: 'top',
-                            text: 'We have sent an email to ' + document.getElementById("email").value,
+                            text: 'We have sent an email to ' + document.getElementById("email")
+                                .value,
                             type: 'success'
                         }).show();
                     }
@@ -670,25 +740,28 @@
                     }, 1000);
 
                 },
-                error: function (xhr, status, error) {
+                error: function(xhr, status, error) {
 
                     $myButton.removeAttr('disabled');
-                    $myButton.find('.spinner').addClass('d-none'); // Add the 'd-none' class to hide the spinner
-                    $myButton.html('<i class="ph-circle-notch spinner me-2 d-none"></i>Register Employee'); // Restore button text
+                    $myButton.find('.spinner').addClass(
+                    'd-none'); // Add the 'd-none' class to hide the spinner
+                    $myButton.html(
+                        '<i class="ph-circle-notch spinner me-2 d-none"></i>Register Employee'
+                        ); // Restore button text
 
                     var responseJson = xhr.responseJSON;
                     if (responseJson.errors) {
                         var errors = responseJson.errors;
                         $('.error-message').empty();
 
-                        $.each(errors, function (field, errorMessage) {
+                        $.each(errors, function(field, errorMessage) {
                             $('#' + field + '-error').html(errorMessage);
                             $('#' + field).addClass('is-invalid');
                             new Noty({
-                            layout: 'topRight',
-                            text: errorMessage,
-                            type: 'error'
-                        }).show();
+                                layout: 'topRight',
+                                text: errorMessage,
+                                type: 'error'
+                            }).show();
                         });
 
                         var firstErrorField = Object.keys(errors)[0];
@@ -704,7 +777,7 @@
             event.preventDefault();
             $.ajax({
                 //url '{{ url('/flex/import') }}',
-                url: '{{ route("import.employee") }}',
+                url: '{{ route('import.employee') }}',
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
@@ -713,17 +786,18 @@
                 contentType: false,
                 cache: false,
                 processData: false,
-                beforeSend: function () {
+                beforeSend: function() {
                     $('.request__spinner').show()
                 },
-                complete: function(){},
+                complete: function() {},
                 success: function(data) {
                     $('#file').val('');
                     //load_data();
                     alert(' Employees Succefully Imported');
                     setTimeout(function() {
                         // wait for 2 secs(2)
-                        location.reload(); // then reload the div to clear the success notification
+                        location
+                    .reload(); // then reload the div to clear the success notification
                     }, 1500);
                 }
             })
