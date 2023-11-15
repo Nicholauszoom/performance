@@ -361,6 +361,11 @@
                                         class="nav-link {{ request()->routeIs('flex.confirmed_loans') ? 'active' : null }}"
                                         href="{{ route('flex.confirmed_loans') }}">Approved Loans</a></li>
                             @endcan
+                            @can('view-loan-types')
+                            <li class="nav-item"><a
+                                    class="nav-link {{ request()->routeIs('flex.loan_types') ? 'active' : null }}"
+                                    href="{{ route('flex.loan_types') }}">Loan Types</a></li>
+                        @endcan
                         </ul>
                     </li>
                 @endcan
@@ -617,11 +622,6 @@
                             <li class="nav-item"><a
                                     class="nav-link {{ request()->routeIs('flex.approvals') ? 'active' : null }}"
                                     href="{{ route('flex.approvals') }}">Approvals</a>
-                            </li>
-
-                            <li class="nav-item"><a
-                                    class="nav-link {{ request()->routeIs('flex.loanTypes') ? 'active' : null }}"
-                                    href="{{ route('flex.approvals') }}">Loan Types</a>
                             </li>
 
                             <li class="nav-item"><a

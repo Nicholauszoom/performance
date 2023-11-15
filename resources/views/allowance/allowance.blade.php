@@ -266,7 +266,7 @@
                 .done(function(data) {
 
                     new Noty({
-                                    text: 'Alloance Added successfully!',
+                                    text: 'Allowance Added successfully!',
                                     type: 'success'
                                 }).show();
 

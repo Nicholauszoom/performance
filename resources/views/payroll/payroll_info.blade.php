@@ -114,7 +114,7 @@ $payrollState = $payroll_state;
 
             // Advanced initialization
             Swal.fire({
-                title: 'Are you sure? you whant to Perform Calculation',
+                title: 'Are you sure? you want to Perform Calculation',
                 icon: 'warning',
                 showCancelButton: true,
                 confirmButtonColor: '#3085d6',

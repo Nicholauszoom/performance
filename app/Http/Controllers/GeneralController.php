@@ -40,6 +40,7 @@ use App\Models\LeaveApproval;
 use App\Models\LeaveForfeiting;
 //use PHPClamAV\Scanner;
 use App\Models\Leaves;
+use App\Models\LoanType;
 use App\Models\Payroll\FlexPerformanceModel;
 use App\Models\Payroll\ImprestModel;
 use App\Models\Payroll\Payroll;
@@ -5242,6 +5243,7 @@ class GeneralController extends Controller
             'pensionable' => $request->pensionable,
             'Isrecursive' => $request->Isrecursive,
             'Isbik' => $request->Isbik,
+            'allowance_category_id' => $request->allowanceCategory,
             'state' => 1,
             'percent' => $percent,
         );
@@ -12223,5 +12225,30 @@ class GeneralController extends Controller
         $data['low_performer_potential'] = ($item9 > 0) ? $item9_count : 0;
 
         return view('talent.talent_matrix', $data);
+    }
+
+
+    public function loan_types(){
+        $data['loan_types'] = LoanType::all();
+        // dd($data);
+        return view('loans.loan_types', $data);
+    }
+
+    public function saveLoanType(Request $request)
+    {
+        request()->validate(
+            [
+                'name' => 'required',
+                'code' => 'nullable',
+            ]
+        );
+
+        $loan_types = new LoanType();
+        $loan_types->name = $request->name;
+        $loan_types->code = $request->code;
+        $loan_types->save();
+
+        $msg = "Loan Type has been added Successfully !";
+        return redirect('flex/loan_types')->with('msg', $msg);
     }
 }

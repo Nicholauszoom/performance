@@ -545,6 +545,7 @@ Route::middleware('auth')->middleware([Setting::class])->group(function(){
         Route::any('/submitInputs','submitInputs')->name('flex.submitInputs');
 
         Route::any('/salary_advance','salary_advance')->name('flex.salary_advance');
+        Route::any('/loan_types','loan_types')->name('flex.loan_types');
         Route::any('/current_loan_progress','current_loan_progress')->name('flex.current_loan_progress');
         Route::any('/apply_salary_advance','apply_salary_advance')->name('flex.apply_salary_advance');
         Route::any('/insert_directLoan','insert_directLoan')->name('flex.insert_directLoan');
@@ -763,6 +764,7 @@ Route::middleware('auth')->middleware([Setting::class])->group(function(){
           // start of approval settings routes
           Route::any('/approvals','viewApprovals')->name('flex.approvals');
           Route::post('/save-approvals','saveApprovals')->name('flex.saveApprovals');
+          Route::post('/save-loan-type','saveLoanType')->name('flex.saveLoanType');
           Route::any('/edit-approval/{id}','editApproval')->name('flex.editApproval');
           Route::put('/update-approval','updateApproval')->name('flex.updateApproval');
           Route::any('/delete-approval/{id}','deleteApproval')->name('flex.deleteApproval');
