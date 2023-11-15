@@ -83,7 +83,8 @@ class SysHelpers
     }
     public static function position($pos)
     {
-        $details = EMPL::where('job_title', $pos)->first();
+        $position=DB::table('position')->where('name',$pos)->first();
+        $details = EMPL::where('position', $position->id)->first();
         return $details;
     }
 
