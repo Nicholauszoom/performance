@@ -22,7 +22,7 @@ return new class extends Migration
             $table->id();
             $table->timestamps();
 
-            $table->unique(['type', 'for'], 'unique_index');
+            // $table->unique(['type', 'for'], 'unique_index');
         });
     }
 

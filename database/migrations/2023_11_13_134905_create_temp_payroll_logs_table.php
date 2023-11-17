@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('temp_payroll_logs', function (Blueprint $table) {
             $table->id();
-            $table->string('empID', 10)->index('empID');
+            // $table->string('empID', 10)->index('empID');
             $table->double('salary')->nullable();
             $table->double('taxable_amount')->nullable();
             $table->double('excess_added')->nullable();

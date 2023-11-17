@@ -1,4 +1,5 @@
 <?php
+
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
@@ -13,6 +14,7 @@ class UserSeeder extends Seeder
         $users = [
             [
                 'emp_id' => 'EMP001',
+                'full_name' => 'Full Name',
                 'old_emp_id' => 'OLD001',
                 'password_set' => false, // 1 for true, 0 for false
                 'fname' => 'HR',
@@ -28,7 +30,7 @@ class UserSeeder extends Seeder
                 'position' => 1,
                 'branch' => '1',
                 'shift' => '1',
-                'organization' => 'CITS',
+                'organization' => 1,
                 'line_manager' => 'EMP001',
                 'contract_type' => 1,
                 'contract_renewal_date' => '2024-05-10',
@@ -44,7 +46,7 @@ class UserSeeder extends Seeder
                 'bank' => 1,
                 'bank_branch' => '1',
                 'account_no' => '123456789',
-                'pension_fund' => 'Pension Fund Name',
+                'pension_fund' => 1,
                 'pf_membership_no' => 'PF12345',
                 'username' => 'EMP001',
                 'password' => Hash::make('password'),
@@ -64,6 +66,7 @@ class UserSeeder extends Seeder
 
             [
                 'emp_id' => 'EMP002',
+                'full_name' => 'Full Name',
                 'old_emp_id' => 'OLD002',
                 'password_set' => false, // 1 for true, 0 for false
                 'fname' => 'HOD',
@@ -79,7 +82,7 @@ class UserSeeder extends Seeder
                 'position' => 2,
                 'branch' => '1',
                 'shift' => '1',
-                'organization' => 'CITS',
+                'organization' => 1,
                 'line_manager' => 'EMP001',
                 'contract_type' => 1,
                 'contract_renewal_date' => '2024-05-10',
@@ -95,7 +98,7 @@ class UserSeeder extends Seeder
                 'bank' => 1,
                 'bank_branch' => '1',
                 'account_no' => '123456789',
-                'pension_fund' => 'Pension Fund Name',
+                'pension_fund' => 1,
                 'pf_membership_no' => 'PF12345',
                 'username' => 'EMP002',
                 'password' => Hash::make('password'),
@@ -115,6 +118,7 @@ class UserSeeder extends Seeder
 
             [
                 'emp_id' => 'EMP003',
+                'full_name' => 'Full Name',
                 'old_emp_id' => 'OLD003',
                 'password_set' => false, // 1 for true, 0 for false
                 'fname' => 'Line',
@@ -130,7 +134,7 @@ class UserSeeder extends Seeder
                 'position' => 3,
                 'branch' => '1',
                 'shift' => '1',
-                'organization' => 'CITS',
+                'organization' => 1,
                 'line_manager' => 'EMP002',
                 'contract_type' => 1,
                 'contract_renewal_date' => '2024-05-10',
@@ -146,7 +150,7 @@ class UserSeeder extends Seeder
                 'bank' => 1,
                 'bank_branch' => '1',
                 'account_no' => '123456789',
-                'pension_fund' => 'Pension Fund Name',
+                'pension_fund' => 1,
                 'pf_membership_no' => 'PF12345',
                 'username' => 'EMP003',
                 'password' => Hash::make('password'),
@@ -166,6 +170,7 @@ class UserSeeder extends Seeder
 
             [
                 'emp_id' => 'EMP004',
+                'full_name' => 'Full Name',
                 'old_emp_id' => 'OLD004',
                 'password_set' => false, // 1 for true, 0 for false
                 'fname' => 'Test',
@@ -181,7 +186,7 @@ class UserSeeder extends Seeder
                 'position' => 4,
                 'branch' => '1',
                 'shift' => '1',
-                'organization' => 'CITS',
+                'organization' => 1,
                 'line_manager' => 'EMP003',
                 'contract_type' => 1,
                 'contract_renewal_date' => '2024-05-10',
@@ -197,7 +202,7 @@ class UserSeeder extends Seeder
                 'bank' => 1,
                 'bank_branch' => '1',
                 'account_no' => '123456789',
-                'pension_fund' => 'Pension Fund Name',
+                'pension_fund' => 1,
                 'pf_membership_no' => 'PF12345',
                 'username' => 'EMP004',
                 'password' => Hash::make('password'),
@@ -217,6 +222,7 @@ class UserSeeder extends Seeder
 
             [
                 'emp_id' => 'EMP005',
+                'full_name' => 'Full Name',
                 'old_emp_id' => 'OLD005',
                 'password_set' => false, // 1 for true, 0 for false
                 'fname' => 'Test',
@@ -232,7 +238,7 @@ class UserSeeder extends Seeder
                 'position' => 4,
                 'branch' => '1',
                 'shift' => '1',
-                'organization' => 'CITS',
+                'organization' => 1,
                 'line_manager' => 'EMP003',
                 'contract_type' => 1,
                 'contract_renewal_date' => '2024-05-10',
@@ -248,7 +254,7 @@ class UserSeeder extends Seeder
                 'bank' => 1,
                 'bank_branch' => '1',
                 'account_no' => '123456789',
-                'pension_fund' => 'Pension Fund Name',
+                'pension_fund' => 1,
                 'pf_membership_no' => 'PF12345',
                 'username' => 'EMP005',
                 'password' => Hash::make('password'),
@@ -267,6 +273,7 @@ class UserSeeder extends Seeder
         ];
 
         // Insert users into the 'users' table
+
         DB::table('employee')->insert($users);
     }
 }

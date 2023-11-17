@@ -17,8 +17,8 @@ class StrategySeeder extends Seeder
                 'start' => '2023-01-01',
                 'end' => '2023-12-31',
                 'type' => 1, // 1 for strategy
-                'funder' => 'EMP001',
-                'author' => 'EMP001',
+                'funder' => '001',
+                'author' => '001',
                 'status' => '1',
                 'progress' => 50, // Progress percentage
                 'dated' => '2023-06-30',
@@ -27,6 +27,6 @@ class StrategySeeder extends Seeder
         ];
 
         // Insert strategies into the 'strategy' table
-        DB::table('strategy')->insert($strategies);
+        // DB::table('strategy')->insert($strategies);
     }
 }

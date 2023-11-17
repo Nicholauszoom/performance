@@ -13,7 +13,7 @@ class UserRoleSeeder extends Seeder
      * @return void
      */
     public function run()
-    { 
+    {
          // Insert employee role data here
          $employeeRoles = [
             [
@@ -23,7 +23,7 @@ class UserRoleSeeder extends Seeder
         ];
 
         // Insert employee roles into the 'employee_role' pivot table
-        DB::table('users_roles')->insert($employeeRoles);
+        // DB::table('users_roles')->insert($employeeRoles);
 
 
          // Insert employee role data here
@@ -35,7 +35,7 @@ class UserRoleSeeder extends Seeder
         ];
 
         // Insert employee roles into the 'employee_role' pivot table
-        DB::table('emp_role')->insert($employeeRoles);
+        // DB::table('emp_role')->insert($employeeRoles);
 
 
 
