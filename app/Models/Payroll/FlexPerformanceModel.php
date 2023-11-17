@@ -1783,6 +1783,24 @@ class FlexPerformanceModel extends Model
         return $row[0]->total_allowance;
     }
 
+            public function get_allowance_names_for_employee($empID)
+        {
+            $query = "SELECT a.name
+                        FROM emp_allowances ea
+                        JOIN allowances a ON a.id = ea.allowance
+                        WHERE ea.empID = {$empID}";
+
+            $rows = DB::select(DB::raw($query));
+
+            $allowanceNames = [];
+            foreach ($rows as $row) {
+                $allowanceNames[] = $row->name;
+            }
+
+            return $allowanceNames;
+        }
+
+
     public function check_termination_payroll_date($date)
     {
 

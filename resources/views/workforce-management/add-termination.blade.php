@@ -199,11 +199,14 @@
                                     <input type="text" class="form-control" value="0" name="transport_allowance" id="transport_allowance"
                                         >
                                 </div>
-                                <div class="col-md-3 form-group">
-                                    <label for="">Night Shift Allowance </label>
-                                    <input type="text" class="form-control" value="0" name="nightshift_allowance"
-                                        id="">
+                                <div class="col-md-3 form-group" id="allowanceContainer">
                                 </div>
+                                {{-- @foreach($employee_allowance as $allowance)
+                                <div class="col-md-3 form-group" id="empallowance_{{ str_replace(' ', '_', $allowance) }}">
+                                    <label for="">{{ $allowance }}</label>
+                                    <input type="text" class="form-control" value="0" name="empallowance_{{ str_replace(' ', '_', $allowance) }}">
+                                </div>
+                            @endforeach --}}
                             </div>
                             <input type="hidden" class="form-control" value="0" name="employee_actual_salary"
                                 id="employee_actual_salary">
@@ -277,12 +280,45 @@
                 .done(function(data) {
                     var data = JSON.parse(data);
 
-                    //alert(data.leave_allowance);
+                    // alert(data.leave_allowance);
                     var deligate = data.deligate;
+
                     if(deligate > 0){
                         $("#deligation").show();
                     }else{
                         $("#deligation").hide();
+                    }
+
+                    //alert(data.employee_allowance);
+
+                    var emp_allowance =data.employee_allowance;
+                  // Loop through the array of allowances
+                  var allowanceContainer = document.getElementById('allowanceContainer');
+
+                    // Loop through the array of allowances
+                    for (var i = 0; i < emp_allowance.length; i++) {
+                        // Create a div for each allowance
+                        var allowanceDiv = document.createElement('div');
+                        allowanceDiv.className = 'col-md-3 form-group'; // Set the div class
+
+                        // Create label for the allowance
+                        var allowanceLabel = document.createElement('label');
+                        allowanceLabel.textContent = emp_allowance[i]; // Set the label text
+
+                        // Create input field for the allowance
+                        var allowanceInput = document.createElement('input');
+
+                        allowanceInput.type = 'text';
+                        allowanceInput.className = 'form-control';
+                        allowanceInput.value = '0';
+                        allowanceInput.name = 'empallowance_' + emp_allowance[i]; // Set the input name
+
+                        // Append label and input to the div
+                        allowanceDiv.appendChild(allowanceLabel);
+                        allowanceDiv.appendChild(allowanceInput);
+
+                        // Append the created div to the container
+                        allowanceContainer.appendChild(allowanceDiv);
                     }
 
                     document.getElementById("leaveAllowance").value = data.leave_allowance;
@@ -296,9 +332,10 @@
 
 
                 })
-                .fail(function() {
-                    alert('Update Failed!! ...');
-                });
+                .fail(function(jqXHR, textStatus, errorThrown) {
+                console.log("Error:", textStatus, errorThrown);
+                alert('Update Failed!! ...');
+});
 
         });
     </script>

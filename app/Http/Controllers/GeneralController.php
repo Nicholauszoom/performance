@@ -8482,28 +8482,24 @@ class GeneralController extends Controller
         $empID = auth()->user()->emp_id;
         $today = date('Y-m-d');
 
-        //check whether if after payroll or before payroll
+        $employee_allowance = $this->flexperformance_model->get_allowance_names_for_employee($employeeID);
+
+
         $check_termination_date = $this->flexperformance_model->check_termination_payroll_date($termination_month);
         if ($check_termination_date == true) {
-            // dd('yes');
-            //get leave allowance
+
             $leave_allowance = $this->flexperformance_model->get_leave_allowance($employeeID, $termination_date, $january_date);
-            //get salary
             $employee_salary = $this->flexperformance_model->get_employee_salary($employeeID, $termination_date, $dd);
         } else {
 
-            //get leave allowance
             $leave_allowance = $this->flexperformance_model->get_leave_allowance($employeeID, $termination_date, $january_date);
-            //get salary
             $employee_salary = $this->flexperformance_model->get_employee_salary($employeeID, $termination_date, $dd);
-            //get leave balance
-            //$leave_balance = $this->flexperformance_model->get_leave_balance($employeeID,$termination_date);
-            //get leave balance
-            // $leave_pay = $this->flexperformance_model->get_leave_pay($employeeID,$leave_balance);
+
         }
         $employee_actual_salary = $this->flexperformance_model->get_actual_basic_salary($employeeID);
 
         $data['leave_entitled'] = $leave_entitled->leave_days_entitled;
+        $data['employee_allowance'] = $employee_allowance;
         $data['employee_actual_salary'] = $employee_actual_salary;
         $data['leave_allowance'] = $leave_allowance;
         $data['employee_salary'] = ($employee_actual_salary == $employee_salary) ? ($employee_salary * $dd / 30) : $employee_salary;
