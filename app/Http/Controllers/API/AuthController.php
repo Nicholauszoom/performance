@@ -139,6 +139,7 @@ class AuthController extends Controller
                 'status' => true,
                 'message' => 'User Logged In Successfully',
                 'token' => $token->plainTextToken,
+                'tokenData' => $token
                 //'hashed' => Hash::make($token->plainTextToken),
             ], 200);
 
@@ -148,6 +149,22 @@ class AuthController extends Controller
                 'message' => $th->getMessage()
             ], 500);
         }
+    }
+
+    public function logout(){
+      $id = auth()->user();
+      if($id){
+        if($id->tokens){
+               $id->tokens()->delete();
+               $msg ="Logout successful";
+            return response( [ 'msg'=>$msg ],200 );
+
+
+                     }} else{
+                                                           $msg ="User not Found";
+                                                            return response( [ 'msg'=>$msg ],404 );
+                                                         }
+
     }
 
 
@@ -160,6 +177,7 @@ class AuthController extends Controller
                 'user'=>auth()->user()
             ],200);
     }
+
     public function dateDiffCalculate(){
         $from = $this->password_age(Auth::user()->emp_id);
         if($from == '0'){

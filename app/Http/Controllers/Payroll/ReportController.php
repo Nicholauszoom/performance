@@ -582,7 +582,7 @@ class ReportController extends Controller
         if ($reportformat == 1) {
             // include(app_path() . '/reports/pension.php');
             $pdf = Pdf::loadView('reports.pension', $data)->setPaper('a4', 'potrait');
-            return $pdf->download("wcf-report-" . $payroll_month . ".pdf");
+            return $pdf->download("pension_report" . $payroll_month . ".pdf");
         } else
             return view('reports/pension_datatable', $data);
     }
