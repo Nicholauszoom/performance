@@ -911,6 +911,8 @@ class GeneralController extends Controller
     //   }
     $pending_leaves=Leaves::where('empID',auth()->user()->emp_id)->with('type:id,type,max_days')->where('state','1')->whereNot('reason', 'Automatic applied!')->get();
     $approved_leaves=Leaves::where('empID',auth()->user()->emp_id)->with('type:id,type,max_days')->where('state','0')->whereNot('reason', 'Automatic applied!')->get();
+    $denied_leaves=Leaves::where('empID',auth()->user()->emp_id)->with('type:id,type,max_days')->where('state','5')->whereNot('reason', 'Automatic applied!')->get();
+    $cancelled_leaves=Leaves::where('empID',auth()->user()->emp_id)->with('type:id,type,max_days')->where('state','4')->whereNot('reason', 'Automatic applied!')->get();
     // $data['total leaves applied']=$data;
 
     $overtimes= $this->flexperformance_model->my_overtimes($id);
@@ -969,11 +971,13 @@ class GeneralController extends Controller
            'total leaves applied'=>$data->count(),
            'pending leaves'=> $pending_leaves->count(),
            'approved leaves'=>$approved_leaves->count(),
+           'denied leaves'=>$denied_leaves->count(),
+           'cancelled leaves'=>$cancelled_leaves->count(),
            'total overtimes'=>count($overtimes),
            'pending overtimes'=>$pending,
            'recommended overtimes'=>$recommended,
            'approved overtimes'=>$approved,
-              'denied overtimes'=>$denied,
+            'denied overtimes'=>$denied,
            'total loan amount'=>$total,
            'remaining amount'=>$remaining,
            'paid amount'=>$paid,
@@ -1002,13 +1006,14 @@ class GeneralController extends Controller
         return response([
             'total leaves applied'=>$data->count(),
             'pending leaves'=> $pending_leaves->count(),
+            'denied leaves'=>$denied_leaves->count(),
+           'cancelled leaves'=>$cancelled_leaves->count(),
             'approved leaves'=>$approved_leaves->count(),
             'total overtimes'=>count($overtimes),
             'pending overtimes'=>$pending,
             'denied overtimes'=>$denied,
             'approved overtimes'=>$approved,
             'recommended overtimes'=>$recommended,
-            'total loan amount'=>'0.0',
             'remaining amount'=>'0.0',
             'paid amount'=>'0.0',
             'percentage paid' => '0.0',
