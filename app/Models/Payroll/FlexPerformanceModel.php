@@ -1964,10 +1964,22 @@ IF(
             ->update($data);
         return true;
     }
+    public function updateAllowaceCategory($data, $id)
+    {
+        DB::table('allowance_categories')->where('id', $id)
+            ->update($data);
+        return true;
+    }
 
     public function OvertimeCategoryInfo($id)
     {
         $query = "SELECT oc.* FROM overtime_category oc WHERE oc.id =" . $id . "";
+
+        return DB::select(DB::raw($query));
+    }
+    public function AllowanceCategoryInfo($id)
+    {
+        $query = "SELECT ac.* FROM allowance_categories ac WHERE ac.id =" . $id . "";
 
         return DB::select(DB::raw($query));
     }

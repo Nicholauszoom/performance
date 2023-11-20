@@ -528,32 +528,33 @@ FROM payroll_logs pl, employee e WHERE e.emp_id = pl.empID and e.contract_type =
     {
 
         //foreach allowance category then sum allowance under each allowance category  sio kutumia allowance description
+        //loop kwenye kila category then sum allowance zake
+
 
         $query = "SELECT
         pl.*,
-        e.fname,e.mname,e.lname,
-        e.emp_id,e.account_no,e.pf_membership_no,pl.sdl,pl.wcf,e.currency,de.name,e.cost_center as costCenterName,b.name as bank_name,e.branch as branch_code,
-        e.emp_id,e.rate,
-        'al.description' as allowance_id,
-        0 as allowance_amount,
-        (IF((SELECT SUM(al.amount) FROM temp_allowance_logs al WHERE al.empID = e.emp_id AND al.description lIKE '%Overtime%' AND al.payment_date = '" . $date . "' GROUP BY al.empID >0),(SELECT SUM(al.amount) FROM temp_allowance_logs al WHERE al.empID = e.emp_id AND al.description lIKE '%Overtime%' AND al.payment_date = '" . $date . "' GROUP BY al.empID),0)) AS overtime,
-         (IF((SELECT SUM(al.amount) FROM temp_allowance_logs al WHERE al.empID = e.emp_id AND al.description = 'House Rent' AND al.payment_date = '" . $date . "' GROUP BY al.empID >0),(SELECT SUM(al.amount) FROM temp_allowance_logs al WHERE al.empID = e.emp_id AND al.description = 'House Rent' AND al.payment_date = '" . $date . "' GROUP BY al.empID),0)) AS house_rent,
-         (IF((SELECT SUM(al.amount) FROM temp_allowance_logs al WHERE al.empID = e.emp_id AND al.description = 'Arrears' AND al.payment_date = '" . $date . "' GROUP BY al.empID >0),(SELECT SUM(al.amount) FROM temp_allowance_logs al WHERE al.empID = e.emp_id AND al.description = 'Arrears' AND al.payment_date = '" . $date . "' GROUP BY al.empID),0)) AS arrears_allowance,
-         (IF((SELECT SUM(al.amount) FROM temp_allowance_logs al WHERE al.empID = e.emp_id AND al.description = 'Teller Allowance' AND al.payment_date = '" . $date . "' GROUP BY al.empID >0),(SELECT SUM(al.amount) FROM temp_allowance_logs al WHERE al.empID = e.emp_id AND al.description = 'Teller Allowance' AND al.payment_date = '" . $date . "' GROUP BY al.empID),0)) AS teller_allowance,
-
-         (IF((SELECT SUM(al.amount) FROM temp_allowance_logs al WHERE al.empID = e.emp_id AND al.description != 'House Rent' AND al.description != 'Teller Allowance' AND al.description != 'Arrears' AND al.description NOT lIKE '%Overtime%' AND al.payment_date = '" . $date . "' GROUP BY al.empID >0),
-         (SELECT SUM(al.amount) FROM temp_allowance_logs al WHERE al.empID = e.emp_id AND al.description != 'House Rent' AND  al.description NOT lIKE '%Overtime%' AND al.description != 'Teller Allowance' AND al.payment_date = '" . $date . "' GROUP BY al.empID),0)) AS other_payments,
-
-        IF((SELECT SUM(dl.paid) FROM temp_deduction_logs dl WHERE dl.empID = e.emp_id AND dl.payment_date = '" . $date . "' GROUP BY dl.empID)>0,(SELECT SUM(dl.paid) FROM temp_deduction_logs dl WHERE dl.empID = e.emp_id AND dl.payment_date = '" . $date . "' GROUP BY dl.empID),0) AS deductions,
-
-        (SELECT SUM(ll.paid) FROM temp_loan_logs ll,loan l WHERE ll.loanID = l.id AND e.emp_id = l.empID AND  ll.payment_date = '" . $date . "' GROUP BY ll.loanID) AS loans,
-
-        (SELECT SUM(ll.paid) FROM temp_loan_logs ll,loan l WHERE ll.loanID = l.id AND e.emp_id = l.empID AND  ll.payment_date = '" . $date . "' GROUP BY ll.payment_date) AS total_loans
-
-        from temp_payroll_logs pl,employee e,bank b,department de,cost_center cc where b.id = e.bank and e.department = de.id and de.cost_center_id = cc.id and e.emp_id = pl.empID /* and e.state !=4 */  and pl.payroll_date='" . $date . "' ORDER BY e.emp_id ASC
-
-
-        ";
+        e.fname, e.mname, e.lname,
+        e.emp_id, e.account_no, e.pf_membership_no, pl.sdl, pl.wcf, e.currency, de.name, e.cost_center as costCenterName, b.name as bank_name, e.branch as branch_code,
+        e.emp_id, e.rate,
+        ac.allowance_category_id AS allowance_id,
+        SUM(al.amount) AS allowance_amount,
+        IF((SELECT SUM(dl.paid) FROM temp_deduction_logs dl WHERE dl.empID = e.emp_id AND dl.payment_date = '" . $date . "' GROUP BY dl.empID) > 0, (SELECT SUM(dl.paid) FROM temp_deduction_logs dl WHERE dl.empID = e.emp_id AND dl.payment_date = '" . $date . "' GROUP BY dl.empID), 0) AS deductions,
+        (SELECT SUM(ll.paid) FROM temp_loan_logs ll, loan l WHERE ll.loanID = l.id AND e.emp_id = l.empID AND ll.payment_date = '" . $date . "' GROUP BY ll.loanID) AS loans,
+        (SELECT SUM(ll.paid) FROM temp_loan_logs ll, loan l WHERE ll.loanID = l.id AND e.emp_id = l.empID AND ll.payment_date = '" . $date . "' GROUP BY ll.payment_date) AS total_loans
+    FROM
+        temp_payroll_logs pl
+        INNER JOIN employee e ON e.emp_id = pl.empID
+        INNER JOIN allowances al ON al.empID = e.emp_id /* Joining allowances based on employee */
+        INNER JOIN allowance_categories ac ON ac.id = al.allowance_category_id /* Joining allowances with allowance category */
+        INNER JOIN bank b ON b.id = e.bank
+        INNER JOIN department de ON de.id = e.department
+        INNER JOIN cost_center cc ON cc.id = de.cost_center_id
+    WHERE
+        e.emp_id = pl.empID /* and e.state !=4 */ AND pl.payroll_date = '" . $date . "'
+    GROUP BY
+        e.emp_id, ac.allowance_category_id /* Grouping by employee and allowance category */
+    ORDER BY
+        e.emp_id ASC";
 
 
         //$query = "SELECT tl.*, e.* from temp_payroll_logs tl,employee e where e.emp_id = tl.empID and tl.payroll_date='".$date."'";

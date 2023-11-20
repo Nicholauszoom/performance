@@ -985,6 +985,7 @@ Route::middleware('auth')->middleware([Setting::class])->group(function(){
         Route::any('/updateMealsUpperAmount','updateMealsUpperAmount')->name('flex.updateMealsUpperAmount');
         Route::any('/allowance','allowance')->name('flex.allowance');
         Route::any('/allowance_info/{id}', 'allowance_info')->name('flex.allowance_info');
+        Route::any('/allowance_category_info/{id}', 'allowance_category_info')->name('flex.allowance_category_info');
         Route::any('/allowance_overtime','allowance_overtime')->name('flex.allowance_overtime');
         Route::any('/statutory_deductions','statutory_deductions')->name('flex.statutory_deductions');
         Route::any('/allowance_category','allowance_category')->name('flex.allowance_category');
@@ -1008,11 +1009,13 @@ Route::middleware('auth')->middleware([Setting::class])->group(function(){
 
         Route::any('/updateRecursive','updateRecursive')->name('flex.updateRecursive');
         Route::any('/updateBik','updateBik')->name('flex.updateBik');
+        Route::any('/updatecategory','updatecategory')->name('flex.updatecategory');
 
         Route::any('/company_branch_info','company_branch_info')->name('flex.company_branch_info');
 
 
         Route::any('/updateOvertimeName','updateOvertimeName')->name('flex.updateOvertimeName');
+        Route::any('/updateAllowanceCategory','updateAllowanceCategory')->name('flex.updateAllowanceCategory');
         Route::any('/updateOvertimeRateDay','updateOvertimeRateDay')->name('flex.updateOvertimeRateDay');
         Route::any('/updateOvertimeRateNight','updateOvertimeRateNight')->name('flex.updateOvertimeRateNight');
         Route::any('/updateAllowanceAmount','updateAllowanceAmount')->name('flex.updateAllowanceAmount');

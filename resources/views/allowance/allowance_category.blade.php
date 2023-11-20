@@ -48,19 +48,11 @@
                                                     class="ph-info"></i></button>
                                         </a>
 
-                                        <?php if($row->state ==1){ ?>
                                         <a href="javascript:void(0)" onclick="deleteAllowanceCategory(<?php echo $row->id; ?>)"
                                             title="Delete Allowance Category" class="icon-2 info-tooltip">
                                             <button type="button" class="btn btn-danger btn-xs"><i
                                                     class="ph-trash"></i></button>
                                         </a>
-                                        <?php } else{ ?>
-
-                                        <a href="javascript:void(0)" onclick="activateAllowance(<?php echo $row->id; ?>)"
-                                            title="Activate Allowance" class="icon-2 info-tooltip">
-                                            <button type="button" class="btn btn-success btn-xs"><i
-                                                    class="ph-check"></i></button>
-                                        </a><?php } ?>
                                     </td><?php } ?>
                                 </tr>
                                 <?php }  ?>

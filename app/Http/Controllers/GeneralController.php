@@ -5624,6 +5624,7 @@ class GeneralController extends Controller
         $data['membersCount'] = $this->flexperformance_model->allowance_membersCount($id);
         $data['groupin'] = $this->flexperformance_model->get_allowance_group_in($id);
         $data['employee'] = $this->flexperformance_model->employee_allowance($id);
+        $data['allowanceCategories'] = $this->flexperformance_model->allowance_category();
         $data['allowanceID'] = $id;
         $data['title'] = "Allowances";
         $data['parent'] = "Allowance";
@@ -5639,6 +5640,13 @@ class GeneralController extends Controller
         $data['title'] = 'Overtime Category';
         $data['category'] = $this->flexperformance_model->OvertimeCategoryInfo($id);
         return view('app.overtime_category_info', $data);
+    }
+    public function allowance_category_info($id)
+    {
+        $id = base64_decode($id);
+        $data['title'] = 'Allowance Category';
+        $data['category'] = $this->flexperformance_model->AllowanceCategoryInfo($id);
+        return view('allowance.allowance_category_info', $data);
     }
 
     public function deleteAllowance($id, Request $request)
@@ -5778,6 +5786,21 @@ class GeneralController extends Controller
             }
         }
     }
+    public function updatecategory(Request $request)
+    {
+        $ID = $request->input('allowanceID');
+        if ($request->method() == "POST" && $ID != '') {
+            $updates = array(
+                'allowance_category_id' => $request->input('allowance_category_id'),
+            );
+            $result = $this->flexperformance_model->updateAllowance($updates, $ID);
+            if ($result == true) {
+                echo "<p class='alert alert-success text-center'>Updated Successifully!</p>";
+            } else {
+                echo "<p class='alert alert-danger text-center'>Update Failed</p>";
+            }
+        }
+    }
 
     public function updateOvertimeName(Request $request)
     {
@@ -5787,6 +5810,21 @@ class GeneralController extends Controller
                 'name' => $request->input('name'),
             );
             $result = $this->flexperformance_model->updateOvertimeCategory($updates, $ID);
+            if ($result == true) {
+                echo "<p class='alert alert-success text-center'>Updated Successifully!</p>";
+            } else {
+                echo "<p class='alert alert-danger text-center'>Update Failed</p>";
+            }
+        }
+    }
+    public function updateAllowanceCategory(Request $request)
+    {
+        $ID = $request->input('categoryID');
+        if ($request->method() == "POST" && $ID != '') {
+            $updates = array(
+                'name' => $request->input('name'),
+            );
+            $result = $this->flexperformance_model->updateAllowaceCategory($updates, $ID);
             if ($result == true) {
                 echo "<p class='alert alert-success text-center'>Updated Successifully!</p>";
             } else {
