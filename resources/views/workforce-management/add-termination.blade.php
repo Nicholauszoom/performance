@@ -133,16 +133,16 @@
                                     <input type="text" class="form-control" value="0" name="leavePay"
                                         id="leavePay">
                                 </div>
-                                <div class="col-md-3 form-group">
+                                {{-- <div class="col-md-3 form-group">
                                     <label for="">House Allowance</label>
                                     <input type="text" class="form-control" value="0" name="houseAllowance"
                                         id="">
-                                </div>
-                                <div class="col-md-3 form-group">
+                                </div> --}}
+                                {{-- <div class="col-md-3 form-group">
                                     <label for="">Cost of Living</label>
                                     <input type="text" class="form-control" value="0" name="livingCost"
                                         id="">
-                                </div>
+                                </div> --}}
                                 <div class="col-md-3 form-group">
                                     <label for="">Utility Allowance</label>
                                     <input type="text" class="form-control" value="0" name="utilityAllowance"
@@ -153,60 +153,49 @@
                                     <input type="text" class="form-control" value="0" name="leaveAllowance"
                                         id="leaveAllowance">
                                 </div>
-                                <div class="col-md-3 form-group">
+                                {{-- <div class="col-md-3 form-group">
                                     <label for="">Serevance Pay</label>
                                     <input type="text" class="form-control" value="0" name="serevancePay"
                                         id="">
-                                </div>
+                                </div> --}}
                                 <div class="col-md-3 form-group">
                                     <label for="">Leave & O/stand</label>
                                     <input type="text" class="form-control" value="0" name="leaveStand"
                                         id="leaveStand">
                                     <input type="number" name="leave_entitled" id="leave_entitled" hidden>
                                 </div>
-                                <div class="col-md-3 form-group">
+                                {{-- <div class="col-md-3 form-group">
                                     <label for="">Teller Allowance</label>
                                     <input type="text" class="form-control" value="0" name="tellerAllowance"
                                         id="">
-                                </div>
-                                <div class="col-md-3 form-group">
+                                </div> --}}
+                                {{-- <div class="col-md-3 form-group">
                                     <label for="">Arrears</label>
                                     <input type="text" class="form-control" value="0" name="arrears"
                                         id="">
-                                </div>
-                                <div class="col-md-3 form-group">
+                                </div> --}}
+                                {{-- <div class="col-md-3 form-group">
                                     <label for="">Discr Exgracia</label>
                                     <input type="text" class="form-control" value="0" name="exgracia"
                                         id="">
-                                </div>
+                                </div> --}}
                                 <div class="col-md-3 form-group">
                                     <label for="">Bonus</label>
                                     <input type="text" class="form-control" value="0" name="bonus"
                                         id="">
                                 </div>
-                                <div class="col-md-3 form-group">
+                                {{-- <div class="col-md-3 form-group">
                                     <label for="">Long Serving</label>
                                     <input type="text" class="form-control" value="0" name="longServing"
                                         id="">
-                                </div>
-                                <div class="col-md-3 form-group">
+                                </div> --}}
+                                {{-- <div class="col-md-3 form-group">
                                     <label for="">Other Non Taxable Payments </label>
                                     <input type="text" class="form-control" value="0" name="otherPayments"
                                         id="">
-                                </div>
-                                <div class="col-md-3 form-group">
-                                    <label for="">Transport Allowance</label>
-                                    <input type="text" class="form-control" value="0" name="transport_allowance" id="transport_allowance"
-                                        >
-                                </div>
-                                <div class="col-md-3 form-group" id="allowanceContainer">
-                                </div>
-                                {{-- @foreach($employee_allowance as $allowance)
-                                <div class="col-md-3 form-group" id="empallowance_{{ str_replace(' ', '_', $allowance) }}">
-                                    <label for="">{{ $allowance }}</label>
-                                    <input type="text" class="form-control" value="0" name="empallowance_{{ str_replace(' ', '_', $allowance) }}">
-                                </div>
-                            @endforeach --}}
+                                </div> --}}
+                                <section  id="allowanceContainer">
+                                </section>
                             </div>
                             <input type="hidden" class="form-control" value="0" name="employee_actual_salary"
                                 id="employee_actual_salary">
