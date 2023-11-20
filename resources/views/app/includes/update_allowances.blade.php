@@ -393,6 +393,32 @@ function deleteBonus(id)
         });
     });
 
+    $('#updatecategory').submit(function(e){
+        e.preventDefault();
+             $.ajax({
+                 url:"<?php echo  url(''); ?>/flex/updatecategory",
+                 headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+
+                 type:"post",
+                 data:new FormData(this),
+                 processData:false,
+                 contentType:false,
+                 cache:false,
+                 async:false
+             })
+        .done(function(data){
+         $('#feedBackSubmission').fadeOut('fast', function(){
+           //
+              $('#feedBackSubmission').fadeIn('fast').html(data);
+            });
+
+    //   $('#updateName')[0].reset();
+        })
+        .fail(function(){
+     alert('Upload Failed!! ...');
+        });
+    });
+
     $('#updatepensionable').submit(function(e){
         e.preventDefault();
              $.ajax({

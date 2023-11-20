@@ -7,7 +7,7 @@
     </li>
 
     <li class="nav-item" role="presentation">
-        <a href="{{ url('/flex/allowance_overtime')}}" class="nav-link{{ Request::is('flex/allowance_overtime*') ? ' active' : '' }}" aria-selected="false" role="tab"tabindex="-1">
+        <a href="{{ url('/flex/allowance_overtime')}}" class="nav-link{{ Request::is('flex/allowance_overtime*') || Request::is('flex/overtime_category_info*') ? ' active' : '' }}" aria-selected="false" role="tab" tabindex="-1">
             <i class="ph-list me-2"></i>
             Overtime
         </a>

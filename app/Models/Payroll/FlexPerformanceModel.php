@@ -1783,6 +1783,24 @@ class FlexPerformanceModel extends Model
         return $row[0]->total_allowance;
     }
 
+            public function get_allowance_names_for_employee($empID)
+        {
+            $query = "SELECT a.name
+                        FROM emp_allowances ea
+                        JOIN allowances a ON a.id = ea.allowance
+                        WHERE ea.empID = {$empID}";
+
+            $rows = DB::select(DB::raw($query));
+
+            $allowanceNames = [];
+            foreach ($rows as $row) {
+                $allowanceNames[] = $row->name;
+            }
+
+            return $allowanceNames;
+        }
+
+
     public function check_termination_payroll_date($date)
     {
 
@@ -1946,10 +1964,22 @@ IF(
             ->update($data);
         return true;
     }
+    public function updateAllowaceCategory($data, $id)
+    {
+        DB::table('allowance_categories')->where('id', $id)
+            ->update($data);
+        return true;
+    }
 
     public function OvertimeCategoryInfo($id)
     {
         $query = "SELECT oc.* FROM overtime_category oc WHERE oc.id =" . $id . "";
+
+        return DB::select(DB::raw($query));
+    }
+    public function AllowanceCategoryInfo($id)
+    {
+        $query = "SELECT ac.* FROM allowance_categories ac WHERE ac.id =" . $id . "";
 
         return DB::select(DB::raw($query));
     }

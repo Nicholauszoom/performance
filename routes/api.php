@@ -28,6 +28,7 @@ Route::controller(AuthController::class)->group(function(){
     Route::post('login', 'login');
 
 });
+
 Route::get('/getNotification',[PushNotificationController::class,'index']);
 
 
@@ -35,12 +36,13 @@ Route::get('/test', function (Request $request) {
     return $request->header('apikey');
 });
 Route::middleware('auth:sanctum')->group( function () {
+ Route::post('/logout',[AuthController::class,'logout']);
       Route::post('/updateToken',[PushNotificationController::class,'updateDeviceToken']);
       Route::post('/send-bulk-notification',[PushNotificationController::class,'bulksend']);
 
       // For user details
       Route::get('/user',[AuthController::class,'user']);
-      Route::post('/logout',[AuthController::class,'logout']);
+
       //  For Leaves
       Route::get('/leaves',[LeaveController::class,'index']);
      //  For Pensions
@@ -108,13 +110,13 @@ Route::middleware('auth:sanctum')->group( function () {
 
        Route::post('/cancelLeave',[LeaveController::class,'cancelUserLeave']);
 
-       
+
 
        // Push Notification routes
 
        //get annual Leave Summary
        Route::get('/getAnnualLeaveSummary/{year}',[LeaveController::class,'annualLeaveSummary']);
-   
+
 
 
 
