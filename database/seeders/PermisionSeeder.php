@@ -139,6 +139,7 @@ class PermisionSeeder extends Seeder
                 [106, 'delete-Talent', 10],
                 [107, 'view-Talent-matrix', 10],
                 [111, 'view-forfeitings', 3],
+                [112, 'view-loan-types', 4],
 
 
 

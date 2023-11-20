@@ -130,7 +130,7 @@
                         <a href="{{ route('flex.download_payslip') }}" style="text-decoration:none;"
                             title="Click here to view your Loans">
                             <h1 class="text-main"> <i class="ph-money panel-text"></i></h1>
-                            <h4 class="panel-footer">Salary Slip <i class="ph-arrow-circle-right"></i></h4>
+                            <h4 class="panel-footer">Pay Slip <i class="ph-arrow-circle-right"></i></h4>
 
                         </a>
                     </div>
@@ -210,7 +210,7 @@
 
 
 
-              
+
             </section>
         @endcan
 

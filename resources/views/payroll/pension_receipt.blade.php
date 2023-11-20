@@ -11,123 +11,79 @@
 @endpush
 
 @section('content')
-    <div class="card border-top  border-top-width-3 border-top-main rounded-0">
 
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="card">
-                        <div class="card-header border-0 shadow-none">
-                            <div class="d-flex justify-content-between align-itens-center">
-                                {{-- <h5 class="h5 text-warning">All Receipts</h5> --}}
-                            </div>
-                            <div class="row">
-                                <div class="col-md-12">
-                                            {{-- start of upload loans form --}}
-                                            @can('add-loan')
-                                            <form action="{{ route('pension_receipt.import') }}" method="POST" enctype="multipart/form-data">
-                                                @csrf
-                                                <div class="row">
-                                                    <div class="row mb-3">
-                                                        <div class="col-3">
-                                                            <label>Select Payroll Month</label>
-                                                            <div class="input-group">
+    <div class="card border-top border-top-width-3 border-top-main rounded-0">
+        <div class="card-header">
+            <div id="deleteFeedback"></div>
+            <div id="resultSubmission"></div>
 
-                                                                <select required name="payroll_date" class="select_payroll_month form-control select"
-                                                                    data-width="1%">
-                                                                    <option selected disabled>Select Month</option>
-                                                                    <?php foreach ($month_list as $row) { ?>
-                                                                    <option value="<?php echo $row->payroll_date; ?>"> <?php echo date('F, Y', strtotime($row->payroll_date)); ?></option>
-                                                                    <?php } ?>
-                                                                </select>
+            @if (session('error'))
+                <div class="alert alert-danger" role="alert">
+                    {{ session('error') }}
+                </div>
+            @elseif (session('success'))
+                <div class="alert alert-success" role="alert">
+                    {{ session('success') }}
+                </div>
+            @endif
+        </div>
 
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-3">
-                                                            <label>Payment date</label>
-                                                            <input type="date" name="date" required class="form-control">
-                                                        </div>
-                                                        <div class="col-3">
-                                                            <label>Receipt No</label>
-                                                            <input type="text" name="receipt" required class="form-control">
-                                                        </div>
+        <div class="card-body">
 
-                                                        <div class="col-md-3 py-4">
+            @can('add-loan')
+            <form action="{{ route('pension_receipt.import') }}" method="POST" enctype="multipart/form-data">
+                @csrf
+                <div class="row">
+                    <div class="col-md-3 mb-3">
+                        <label class="form-label" for="prl-date">Select Payroll Month</label>
+                        <select name="payroll_date" id="prl-date" class="select form-control select_payroll_month" required>
+                            <option>Select Month</option>
+                            @foreach ($month_list as $row)
+                            <option value="{{ $row->payroll_date }}">{{ date('F, Y', strtotime($row->payroll_date)) }}</option>
+                            @endforeach
+                        </select>
+                    </div>
 
-                                                            <button class="btn btn-sm btn-main ">
-                                                                <i class=""></i>
-                                                                Update
-                                                            </button>
+                    <div class="col-md-3 mb-3">
+                        <label class="form-label" for="pay-date">Payment date</label>
+                        <input type="date" name="date" required class="form-control" id="pay-date">
+                    </div>
 
+                    <div class="col-md-3 mb-3">
+                        <label class="form-label" for="pen-receipt">Receipt No</label>
+                        <input type="text" placeholder="receipt no" name="receipt" required class="form-control" id="pen-receipt">
+                    </div>
 
-
-                                                        </div>
-                                                    </div>
-
-                                                </div>
-
-
-                                            </form>
-                                            @endcan
-                                            {{-- / --}}
-                                            {{-- start of generate loan template --}}
-                                            @can('add-loan')
-                                            <div class="col-md-4">
-                                                {{-- <a href="{{ route('pension_receipt.template') }}" class=""> <span class="badge bg-main"> Get Excel Template</span></a> --}}
-                                            </div>
-                                            @endcan
-                                            {{-- / --}}
-                                </div>
-
-                            </div>
-
-
-                        </div>
-
-                        <div class="card-body">
-                            <div id="deleteFeedback"></div>
-                            <div id="resultSubmission"></div>
-                            @if (session('error'))
-                            <div class="alert alert-danger" role="alert">
-                            {{ session('status') }}
-                            </div>
-                            @endif
-                            @if (session('success'))
-                            <div class="alert alert-success" role="alert">
-                            {{ session('success') }}
-                            </div>
-                            @endif
-                        </div>
-
-
-
+                    <div class="col-md-3 pt-4 mb-3">
+                        <button type="submit" class="btn btn-sm btn-main">Update</button>
                     </div>
                 </div>
+            </form>
+            @endcan
 
-
-
-            </div>
+        </div>
     </div>
 
 @endsection
 
+{{-- Java script files --}}
+
+
+{{-- //TODO Remove the unrelevant javascript files --}}
 @push('footer-script')
-
 <script type="text/javascript">
+    // check if form submitted is for creating or updating
 
+    $("#save-loan-btn").click(function(event ){
+        event.preventDefault();
 
-        /*
-                    check if form submitted is for creating or updating
-                */
-                $("#save-loan-btn").click(function(event ){
-                    event.preventDefault();
-                    if($("#update_id").val() == null || $("#update_id").val() == "")
-                    {
-                        storeLoan();
-                    } else {
-                        updateLoan();
-                    }
-                })
-             
+        if($("#update_id").val() == null || $("#update_id").val() == ""){
+            storeLoan();
+        } else {
+            updateLoan();
+        }
+     })
+
                 /*
                     show modal for creating a record and
                     empty the values of form and remove existing alerts
@@ -142,7 +98,7 @@
                     $("#created_at").val("");
                     $("#form-modal").modal('show');
                 }
-             
+
 
                 /*
                     submit the form and will be stored to the database
@@ -176,7 +132,7 @@
                         },
                         error: function(response) {
                             $("#save-announcement-btn").prop('disabled', false);
-             
+
                             /*
                 show validation error
                             */
@@ -203,7 +159,7 @@
                                 {
                                     fileValidation = '<li>' + errors.image[0] + '</li>';
                                 }
-                 
+
                 let errorHtml = '<div class="alert alert-danger" role="alert">' +
                     '<b>Validation Error!</b>' +
                     '<ul>' + titleValidation + bodyValidation + attachmentValidation + '</ul>' +
@@ -213,7 +169,7 @@
                         }
                     });
                 }
-             
+
 
     </script>
     <script>

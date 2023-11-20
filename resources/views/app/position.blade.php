@@ -41,7 +41,7 @@
 
 
     <div class="col-md-12 col-sm-12 col-xs-12">
-        <?php if(session('mng_org')){ ?>
+        <?php if(session('mng_org')|| 1){ ?>
             <div  class="col-md-12 col-lg-12 col-sm-12 col-xs-12 ">
 
                 <div class="card border-top  border-top-width-3 border-top-main rounded-0 p-2">
@@ -133,7 +133,7 @@
         <div class="card border-top   rounded-0 ">
           <div class="card-head p-2">
             <h2 class="text-warning">List of Positions   </h2> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            <?php if(session('mng_org')){ ?>
+            <?php if(session('mng_org') || 1){ ?>
             {{-- <a  href="#bottom"><button type="button"  class="btn btn-main float-end">ADD POSITION</button></a> --}}
             <?php } ?>
             <div class="clearfix"></div>
@@ -150,7 +150,7 @@
                   <th>Department</th>
                   <th hidden>Created By</th>
                   <th hidden>Date Created</th>
-                  <?php if(session('mng_org')){ ?>
+                  <?php if(session('mng_org') || 1){ ?>
                   <th>Options</th>
                   <?php } ?>
                 </tr>
@@ -171,7 +171,7 @@
                     <td hidden></td>
                     <td><b> <?php echo $row->department; ?></b></td>
 
-                    <?php if(session('mng_org')){ ?>
+                    <?php if(session('mng_org') || 1){ ?>
                     <td class="options-width">
                         <a  href="{{ route('flex.position_info',$row->id) }}" title="Info and Details" class="icon-2 info-tooltip"><button type="button" class="btn btn-main btn-sm"><i class="ph-info"></i></button> </a>
                         <?php if($row->id!=1){ ?>
