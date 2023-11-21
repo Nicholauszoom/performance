@@ -65,9 +65,9 @@
 
                                     <th  class="text-end"><b>Overtime</b></th>
 
-                                    <th  class="text-end"><b>Response Allowance</b></th>
-                                    <th  class="text-end"><b>House Allowance</b></th>
-                                    <th  class="text-end"><b>Arrears</b></th>
+                                    @foreach($allowance_categories as $row)
+                                    <th class="text-end" style="margin-bottom: 30px;"><b>{{ $row->name}}</b></th>
+                                    @endforeach
                                     <th  class="text-end"><b>Other Payment</b></th>
                                     <th  class="text-end"><b>Gross Salary</b></th>
                                     <th  class="text-end"><b>Tax Benefit</b></th>
@@ -101,18 +101,27 @@
                                     $total_taxs = 0;
                                     $total_salary = 0; $total_netpay = 0; $total_allowance = 0; $total_overtime = 0; $total_house_rent = 0; $total_sdl = 0; $total_wcf = 0;
                                     $total_tax = 0; $total_pension = 0; $total_others = 0; $total_deduction = 0;  $taxable_amount = 0;
+
+                                    $categories_total = [];
+
+
+                                    foreach($allowance_categories as $category){
+
+                                        $categories_total["category".$category->id]=0;
+                                        
+                                    }
                                     // dd($summary);
                                 foreach ($summary as $row){
                                     $i++;
                                     $amount = $row->salary + $row->allowances-$row->pension_employer-$row->loans-$row->deductions-$row->meals-$row->taxdue;
                                     $total_netpay =round($total_netpay,2)+  round($amount,2);
-                                    $total_arrears +=round($row->arrears_allowance,2);
+                                    $total_arrears +=round($row->category2,2);
 
                                     $total_gross_salary += round(($row->salary + $row->allowances),2);
                                     $total_salary = round($total_salary + $row->salary,2);
                                     $total_allowance = round($total_allowance + $row->allowances,2) ;
                                     $total_overtime = round($total_overtime +$row->overtime,2);
-                                    $total_house_rent = round($total_house_rent + $row->house_rent,2);
+                                    $total_house_rent = round($total_house_rent + $row->category1,2);
                                     $total_others = round($total_others + $row->other_payments,2) ;
                                     $total_taxs += round($row->taxdue,2);
 
@@ -123,9 +132,15 @@
                                     $total_wcf = round($total_wcf + $row->wcf,2);
                                     $total_taxable_amount += round($row->salary + $row->allowances-$row->pension_employer,2);
                                     $total_loans = round($total_loans + $row->total_loans,2);
-                                    $total_teller_allowance += round($row->teller_allowance,2);
+                                    $total_teller_allowance += round($row->category1,2);
 
                                     $others += round($row->deductions,2);
+
+                                    
+
+                                    
+
+                                    
 
 
                                 ?>
@@ -150,12 +165,24 @@
                                     <td class="text-end">{{ number_format($row->salary, 2) }}</td>
 
                                     <td class="text-end">{{ number_format($row->overtime, 2) }}</td>
+                                    
+                                    @foreach($allowance_categories as $category)
+
+                                    @php
+
+                                    $category_id="category".$category->id;
+
+                                    $categories_total["category".$category->id]+= round($row->$category_id,2);
 
 
-                                    <td class="text-end">{{ number_format($row->teller_allowance, 2) }}</td>
-                                    <td class="text-end">{{ number_format($row->house_rent, 2) }}</td>
+                                    @endphp
+                                     
+                                    <td class="text-end">{{ number_format($row->$category_id, 2) }}</td>
 
-                                    <td class="text-end">{{ number_format($row->arrears_allowance, 2) }}</td>
+                                    @endforeach
+
+                                    
+                                    
 
                                     <td class="text-end">{{ number_format($row->other_payments, 2) }}</td>
 
@@ -261,18 +288,20 @@
                                    {{-- <td></td>
                                     <td></td>
                                     <td></td> --}}
-                                    <td colspan="1">
+                                    <td colspan="6">
                                         <td colspan="1">
                                             <b>
-                                                <center><b>TOTAL<b></center>
+                                                <cener><b>TOTAL<b></center>
                                                 </b></td>
                                     <td class="text-end"><b><b>{{ number_format($total_salary, 2) }}</b></b></td>
                                     <td class="text-end"><b><b>{{ number_format($total_overtime, 2) }}</b></b></td>
-                                    <td class="text-end"><b><b>{{ number_format($total_teller_allowance, 2) }}</b></b>
-                                    </td>
 
-                                    <td class="text-end"><b><b>{{ number_format($total_house_rent, 2) }}</b></b></td>
-                                    <td class="text-end"><b><b>{{ number_format($total_arrears, 2) }}<b></b></td>
+                                    
+                                    @foreach($allowance_categories as $category)
+                                    
+                                    <td class="text-end"><b><b>{{ number_format($categories_total["category".$category->id], 2) }}<b></b></td>
+
+                                    @endforeach
                                     <td class="text-end"><b><b>{{ number_format($total_others, 2) }}</b></b></td>
 
                                     <td class="text-end">

@@ -431,6 +431,8 @@ class ReportController extends Controller
         $date = $request->date;
 
         $data['summary'] = $this->reports_model->get_payroll_temp_summary($date);
+
+        // dd($data['summary']);
         $data['termination'] = $this->reports_model->get_termination($date);
 
         $payrollMonth = $request->date;
@@ -456,6 +458,9 @@ class ReportController extends Controller
         $data['pension_fund'] = $pensionFund;
 
         $data['payrollMonth'] = $request->date;
+        $data['allowance_categories']=$this->flexperformance_model->allowance_category();
+
+        // dd( $data['allowance_categories']);
 
 
         $info = $this->reports_model->company_info();

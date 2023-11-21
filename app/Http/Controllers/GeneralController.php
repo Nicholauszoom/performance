@@ -4037,72 +4037,72 @@ class GeneralController extends Controller
     public function home(Request $request)
     {
 
-        $api = url('/flex/chart-line-ajax');
-        $chart = new EmployeeLineChart;
-        $chart->labels(['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'])->load($api);
-        $data['chart'] = $chart;
+        // $api = url('/flex/chart-line-ajax');
+        // $chart = new EmployeeLineChart;
+        // $chart->labels(['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'])->load($api);
+        // $data['chart'] = $chart;
 
-        $strategyStatistics = $this->performanceModel->strategy_info(1);
+        // $strategyStatistics = $this->performanceModel->strategy_info(1);
 
-        $payrollMonth = $this->payroll_model->recent_payroll_month(date('Y-m-d'));
+        // $payrollMonth = $this->payroll_model->recent_payroll_month(date('Y-m-d'));
 
-        $payrollMonth = $this->payroll_model->recent_payroll_month(date('Y-m-d'));
+        // $payrollMonth = $this->payroll_model->recent_payroll_month(date('Y-m-d'));
 
-        $previous_payroll_month_raw = date('Y-m', strtotime(date('Y-m-d', strtotime($payrollMonth . "-1 month"))));
+        // $previous_payroll_month_raw = date('Y-m', strtotime(date('Y-m-d', strtotime($payrollMonth . "-1 month"))));
 
-        $previous_payroll_month = $this->reports_model->prevPayrollMonth($previous_payroll_month_raw);
+        // $previous_payroll_month = $this->reports_model->prevPayrollMonth($previous_payroll_month_raw);
 
-        foreach ($strategyStatistics as $key) {
-            $strategyID = $key->id;
-            $strategyTitle = $key->title;
-            $start = date_create($key->start);
-        }
+        // foreach ($strategyStatistics as $key) {
+        //     $strategyID = $key->id;
+        //     $strategyTitle = $key->title;
+        //     $start = date_create($key->start);
+        // }
 
-        $strategyProgress = $this->performanceModel->strategyProgress($strategyID);
+        // $strategyProgress = $this->performanceModel->strategyProgress($strategyID);
 
-        $current = date_create(date('Y-m-d'));
-        $diff = date_diff($start, $current);
-        $required = $diff->format("%a");
-        $months = number_format(($required / 30.5), 4);
-        $rate_per_month = number_format(($strategyProgress / $months), 1);
+        // $current = date_create(date('Y-m-d'));
+        // $diff = date_diff($start, $current);
+        // $required = $diff->format("%a");
+        // $months = number_format(($required / 30.5), 4);
+        // $rate_per_month = number_format(($strategyProgress / $months), 1);
 
         $data['appreciated'] = $this->flexperformance_model->appreciated_employee();
         $data['deligate'] = $this->flexperformance_model->get_deligates(auth()->user()->emp_id);
-        // $data['employee_count'] =  $this->flexperformance_model->count_employees();
+        // // $data['employee_count'] =  $this->flexperformance_model->count_employees();
         $data['overview'] = $this->flexperformance_model->employees_info();
-        $data["strategyProgress"] = $strategyProgress;
-        $data["monthly"] = $rate_per_month;
+        // $data["strategyProgress"] = $strategyProgress;
+        // $data["monthly"] = $rate_per_month;
 
-        $data['taskline'] = $this->performanceModel->total_taskline(auth()->user()->emp_id);
-        $data['taskstaff'] = $this->performanceModel->total_taskstaff(auth()->user()->emp_id);
+        // $data['taskline'] = $this->performanceModel->total_taskline(auth()->user()->emp_id);
+        // $data['taskstaff'] = $this->performanceModel->total_taskstaff(auth()->user()->emp_id);
 
-        $data['payroll_totals'] = $this->payroll_model->payrollTotals("payroll_logs", $payrollMonth);
-        $data['total_allowances'] = $this->payroll_model->total_allowances("allowance_logs", $payrollMonth);
-        $data['total_bonuses'] = $this->payroll_model->total_bonuses($payrollMonth);
-        $data['total_loans'] = $this->payroll_model->total_loans("loan_logs", $payrollMonth);
-        $data['total_heslb'] = $this->payroll_model->total_heslb("loan_logs", $payrollMonth);
-        $data['take_home'] = $this->reports_model->sum_take_home($payrollMonth);
-        $data['total_deductions'] = $this->payroll_model->total_deductions("deduction_logs", $payrollMonth);
-        $data['total_overtimes'] = $this->payroll_model->total_overtimes($payrollMonth);
-        $data['payroll_date'] = $payrollMonth;
-        $data['arrears'] = $this->payroll_model->arrearsMonth($payrollMonth);
-        $data['s_gross_c'] = $this->reports_model->s_grossMonthly($payrollMonth);
-        $data['v_gross_c'] = $this->reports_model->v_grossMonthly($payrollMonth);
-        $data['s_gross_p'] = $this->reports_model->s_grossMonthly($previous_payroll_month);
-        $data['v_gross_p'] = $this->reports_model->v_grossMonthly($previous_payroll_month);
-        $data['s_net_c'] = $this->reports_model->staff_sum_take_home($payrollMonth);
-        $data['v_net_c'] = $this->reports_model->temporary_sum_take_home($payrollMonth);
-        $data['s_net_p'] = $this->reports_model->staff_sum_take_home($previous_payroll_month);
-        $data['v_net_p'] = $this->reports_model->temporary_sum_take_home($previous_payroll_month);
-        $data['v_staff'] = $this->reports_model->v_payrollEmployee($payrollMonth, '');
-        $data['s_staff'] = $this->reports_model->s_payrollEmployee($payrollMonth, '');
-        $data['v_staff_p'] = $this->reports_model->v_payrollEmployee($previous_payroll_month, '');
-        $data['s_staff_p'] = $this->reports_model->s_payrollEmployee($previous_payroll_month, '');
-        $data['net_total'] = $this->netTotalSummation($payrollMonth);
+        // $data['payroll_totals'] = $this->payroll_model->payrollTotals("payroll_logs", $payrollMonth);
+        // $data['total_allowances'] = $this->payroll_model->total_allowances("allowance_logs", $payrollMonth);
+        // $data['total_bonuses'] = $this->payroll_model->total_bonuses($payrollMonth);
+        // $data['total_loans'] = $this->payroll_model->total_loans("loan_logs", $payrollMonth);
+        // $data['total_heslb'] = $this->payroll_model->total_heslb("loan_logs", $payrollMonth);
+        // $data['take_home'] = $this->reports_model->sum_take_home($payrollMonth);
+        // $data['total_deductions'] = $this->payroll_model->total_deductions("deduction_logs", $payrollMonth);
+        // $data['total_overtimes'] = $this->payroll_model->total_overtimes($payrollMonth);
+        // $data['payroll_date'] = $payrollMonth;
+        // $data['arrears'] = $this->payroll_model->arrearsMonth($payrollMonth);
+        // $data['s_gross_c'] = $this->reports_model->s_grossMonthly($payrollMonth);
+        // $data['v_gross_c'] = $this->reports_model->v_grossMonthly($payrollMonth);
+        // $data['s_gross_p'] = $this->reports_model->s_grossMonthly($previous_payroll_month);
+        // $data['v_gross_p'] = $this->reports_model->v_grossMonthly($previous_payroll_month);
+        // $data['s_net_c'] = $this->reports_model->staff_sum_take_home($payrollMonth);
+        // $data['v_net_c'] = $this->reports_model->temporary_sum_take_home($payrollMonth);
+        // $data['s_net_p'] = $this->reports_model->staff_sum_take_home($previous_payroll_month);
+        // $data['v_net_p'] = $this->reports_model->temporary_sum_take_home($previous_payroll_month);
+        // $data['v_staff'] = $this->reports_model->v_payrollEmployee($payrollMonth, '');
+        // $data['s_staff'] = $this->reports_model->s_payrollEmployee($payrollMonth, '');
+        // $data['v_staff_p'] = $this->reports_model->v_payrollEmployee($previous_payroll_month, '');
+        // $data['s_staff_p'] = $this->reports_model->s_payrollEmployee($previous_payroll_month, '');
+        // $data['net_total'] = $this->netTotalSummation($payrollMonth);
 
-        // start of overtime
-        $data['my_overtimes'] = $this->flexperformance_model->my_overtimes(auth()->user()->emp_id);
-        $data['overtimeCategory'] = $this->flexperformance_model->overtimeCategory();
+        // // start of overtime
+        // $data['my_overtimes'] = $this->flexperformance_model->my_overtimes(auth()->user()->emp_id);
+        // $data['overtimeCategory'] = $this->flexperformance_model->overtimeCategory();
         $data['employees'] = EMPL::all();
 
         $data['line_overtime'] = $this->flexperformance_model->lineOvertimes(auth()->user()->emp_id);

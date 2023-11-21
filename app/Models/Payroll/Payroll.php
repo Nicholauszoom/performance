@@ -226,7 +226,7 @@ class Payroll extends Model
         ('" . $payroll_date . "', 2, '" . $empID . "', '', '" . $dateToday . "', '" . $payroll_date . "', (SELECT rate_employer from deduction where id=4 ), (SELECT rate_employer from deduction where id=2 ) )";
             DB::insert(DB::raw($query));
             //INSERT ALLOWANCES
-            $query = "INSERT INTO temp_allowance_logs(empID, description, policy, amount, payment_date,benefit_in_kind)
+            $query = "INSERT INTO temp_allowance_logs(empID, description, policy, amount,allowanceID, payment_date,benefit_in_kind)
 
                 SELECT ea.empID AS empID, a.name AS description,
 
@@ -250,6 +250,8 @@ IF((e.unpaid_leave = 0)
       )
 
   ) AS amount,
+
+  ea.allowance,
 
 
 
