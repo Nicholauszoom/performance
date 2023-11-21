@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('payroll_logs', function (Blueprint $table) {
             $table->id();
-            // $table->string('empID', 10)->index('empID');
+            $table->string('empID', 10)->index();
             $table->double('salary')->nullable();
             $table->double('allowances')->default(0);
             $table->double('pension2')->default(0);

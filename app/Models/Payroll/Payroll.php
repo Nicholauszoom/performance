@@ -206,7 +206,7 @@ class Payroll extends Model
     }
     public function initPayroll($dateToday, $payroll_date, $payroll_month, $empID)
     {
-         // Extract the year from the payroll_date
+        // Extract the year from the payroll_date
         $year = date('Y', strtotime($payroll_date));
 
         // Calculate the number of days in the month of the payroll_date
@@ -225,49 +225,15 @@ class Payroll extends Model
             $query = "INSERT INTO payroll_months (payroll_date, state, init_author, appr_author, init_date, appr_date,sdl, wcf) VALUES
         ('" . $payroll_date . "', 2, '" . $empID . "', '', '" . $dateToday . "', '" . $payroll_date . "', (SELECT rate_employer from deduction where id=4 ), (SELECT rate_employer from deduction where id=2 ) )";
             DB::insert(DB::raw($query));
+
             //INSERT ALLOWANCES
-            $query = "INSERT INTO temp_allowance_logs(empID, description, policy, amount, payment_date,benefit_in_kind)
+            $this->insertAllowance($last_date, $payroll_date, $days);
 
-                SELECT ea.empID AS empID, a.name AS description,
-
-
-
-
-IF( (ea.mode = 1), 'Fixed Amount', CONCAT(100*ea.percent,'% ( Basic Salary )') ) AS policy,
-
-IF((e.unpaid_leave = 0)
-,0,IF((ea.mode = 1),
-          ea.amount,
-          IF(a.type = 1,IF(DATEDIFF('" . $last_date . "',e.hire_date) < 365,
-          ((DATEDIFF('" . $last_date . "',e.hire_date)+1)/365)*e.salary,ea.percent*e.salary),
-
-          (ea.percent*
-          IF((month(e.hire_date) = month('" . $payroll_date . "')) AND (year(e.hire_date) = year('" . $payroll_date . "')),
-          ((" . $days . " - (day(e.hire_date)+1))*e.salary/30),e.salary)
-           )
-
-      )
-      )
-
-  ) AS amount,
-
-
-
- '" . $payroll_date . "' AS payment_date,
- a.Isbik as benefit_in_kind
-
-FROM employee e, emp_allowances ea,  allowances a WHERE e.emp_id = ea.empID AND a.id = ea.allowance AND a.state = 1 AND e.state = 1 and e.login_user != 1";
-            DB::insert(DB::raw($query));
             //INSERT BONUS
             $query = " INSERT INTO temp_allowance_logs(empID, description, policy, amount, payment_date)
+            SELECT b.empID AS empID, bt.name AS description,  'Fixed Amount' AS policy,
 
-	    SELECT b.empID AS empID, bt.name AS description,
-
-	    'Fixed Amount' AS policy,
-
-	    IF((e.unpaid_leave = 0),0,SUM(b.amount)) AS amount,
-
-	    '" . $payroll_date . "' AS payment_date
+	    IF((e.unpaid_leave = 0),0,SUM(b.amount)) AS amount, '" . $payroll_date . "' AS payment_date
 
 	    FROM employee e,  bonus b, bonus_tags bt WHERE e.emp_id =  b.empID and bt.id = b.name AND b.state = 1 and e.state = 1 and e.login_user != 1 GROUP BY b.empID, bt.name";
             DB::insert(DB::raw($query));
@@ -286,22 +252,15 @@ FROM employee e, emp_allowances ea,  allowances a WHERE e.emp_id = ea.empID AND 
             DB::insert(DB::raw($query));
             //UPDATE SALARY ADVANCE.
 
+
+
             //INSERT SALARY ADVANCE, FORCED DEDUCTIONS and other LOANS INTO LOAN LOGS
             $query = "INSERT into temp_loan_logs(loanID, policy, paid, remained, payment_date) SELECT id as loanID, IF( (deduction_amount = 0), (SELECT rate_employee FROM deduction where id = 3), deduction_amount ) as policy, IF(((paid+deduction_amount) > amount), amount, deduction_amount) as  paid, (amount - IF(((paid+deduction_amount) >= amount), amount-paid,  ((paid+deduction_amount)))) as remained,  '" . $payroll_date . "' as payment_date FROM loan  WHERE  state = 1 AND NOT type = 3";
             DB::insert(DB::raw($query));
             //INSERT HESLB INTO LOGS
-            $query = "INSERT into temp_loan_logs(loanID, policy, paid, remained, payment_date) SELECT id as loanID, IF( (deduction_amount = 0), (SELECT rate_employee FROM deduction where id = 3), deduction_amount ) as policy, IF(((paid+deduction_amount) > amount), amount, ((SELECT rate_employee FROM deduction where id = 3)*(SELECT salary from employee where emp_id=empID and state != 4 and login_user != 1))) as  paid,
-             (amount - IF(
-                ((paid+deduction_amount) >= amount),
-                 amount-paid,
-                 (
-                    (
-                        paid + ((SELECT rate_employee FROM deduction where id = 3)*(SELECT salary from employee where emp_id=empID and state != 4 and login_user != 1))
-                        ))
+            $this->insertHsblToLogs($payroll_date);
 
-                        )) as remained,
-             '" . $payroll_date . "' as payment_date FROM loan  WHERE  state = 1 AND type = 3";
-            DB::insert(DB::raw($query));
+
             //INSERT DEDUCTION LOGS
             $query = "INSERT INTO temp_deduction_logs(empID, description, policy, paid, payment_date)
 
@@ -376,32 +335,7 @@ FROM employee e, emp_allowances ea,  allowances a WHERE e.emp_id = ea.empID AND 
 	        )
 
             --  SELECT data for insertion
-	    SELECT
-
-
-(".$this->getGrossAmountSql($payroll_date,$days, $last_date)."
-as gross,
-
-        ".$this->getTaxableAmountSql($payroll_date,$days, $last_date)."
-
-         as taxable_amount,
-
-
-         (SELECT minimum FROM paye WHERE maximum > ".$this->getTaxableAmountSql($payroll_date,$days, $last_date)." AND minimum <= ".$this->getTaxableAmountSql($payroll_date,$days, $last_date).")
-
-
-
-              AS
-
-
-            excess_added,
-
-
-
-
-
-
-	    e.emp_id AS empID,
+	    SELECT (" . $this->getGrossAmountSql($payroll_date, $days, $last_date) . "as gross, " . $this->getTaxableAmountSql($payroll_date, $days, $last_date) . "as taxable_amount, (SELECT minimum FROM paye WHERE maximum > " . $this->getTaxableAmountSql($payroll_date, $days, $last_date) . " AND minimum <= " . $this->getTaxableAmountSql($payroll_date, $days, $last_date) . ") AS excess_added, e.emp_id AS empID,
 
         IF((e.unpaid_leave = 0),0, IF((month(e.hire_date) = month('" . $payroll_date . "')) AND (year(e.hire_date) = year('" . $payroll_date . "'))
                   ,((" . $days . "- day(e.hire_date)+1)*e.salary/30),e.salary)) AS salary,
@@ -530,14 +464,14 @@ IF((e.unpaid_leave = 0),0,((SELECT rate_employer from deduction where id=9 )*(IF
                   /*SELECTING EXCESS*/
                   IF((e.unpaid_leave = 0),0,(
                           ( SELECT excess_added FROM paye WHERE maximum >
-                          ".$this->getTaxableAmountSql($payroll_date,$days, $last_date)."  AND minimum <= ".$this->getTaxableAmountSql($payroll_date,$days, $last_date).")
+                          " . $this->getTaxableAmountSql($payroll_date, $days, $last_date) . "  AND minimum <= " . $this->getTaxableAmountSql($payroll_date, $days, $last_date) . ")
 
                            /*END OF EXCESS SELECTION */
                           +
                           /*RATE AMOUNT CALCULATIONS STARTS HERE*/
                           /*SELECTING RATE*/
 
-                          ( (SELECT rate FROM paye WHERE maximum > ".$this->getTaxableAmountSql($payroll_date,$days, $last_date)."  AND minimum <= ".$this->getTaxableAmountSql($payroll_date,$days, $last_date).")
+                          ( (SELECT rate FROM paye WHERE maximum > " . $this->getTaxableAmountSql($payroll_date, $days, $last_date) . "  AND minimum <= " . $this->getTaxableAmountSql($payroll_date, $days, $last_date) . ")
 
                            /*END OF RATE CALCUALTION */
 
@@ -547,10 +481,10 @@ IF((e.unpaid_leave = 0),0,((SELECT rate_employer from deduction where id=9 )*(IF
                            /*SELECTING TAXABLE*/
 
 
-                           (".$this->getTaxableAmountSql($payroll_date,$days, $last_date)."
+                           (" . $this->getTaxableAmountSql($payroll_date, $days, $last_date) . "
 
 
-                           - (SELECT minimum FROM paye WHERE maximum > ".$this->getTaxableAmountSql($payroll_date,$days, $last_date)." AND minimum <= ".$this->getTaxableAmountSql($payroll_date,$days, $last_date).")) )
+                           - (SELECT minimum FROM paye WHERE maximum > " . $this->getTaxableAmountSql($payroll_date, $days, $last_date) . " AND minimum <= " . $this->getTaxableAmountSql($payroll_date, $days, $last_date) . ")) )
 
 
 
@@ -673,13 +607,63 @@ IF(
 
             $query = "update temp_payroll_logs set wcf = gross*(SELECT rate_employer from deduction where id=2)";
             DB::insert(DB::raw($query));
-
         });
         return true;
     }
 
 
-    public function getGrossAmountSql($payroll_date,$days, $last_date){
+
+    //insert allowance
+    public function insertAllowance($last_date, $payroll_date, $days)
+    {
+        $query = "INSERT INTO temp_allowance_logs(empID, description, policy, amount, payment_date,benefit_in_kind)
+            SELECT ea.empID AS empID, a.name AS description,
+IF( (ea.mode = 1), 'Fixed Amount', CONCAT(100*ea.percent,'% ( Basic Salary )') ) AS policy,
+IF((e.unpaid_leave = 0)
+,0,IF((ea.mode = 1),
+          ea.amount,
+          IF(a.type = 1,IF(DATEDIFF('" . $last_date . "',e.hire_date) < 365,
+          ((DATEDIFF('" . $last_date . "',e.hire_date)+1)/365)*e.salary,ea.percent*e.salary),
+
+          (ea.percent*
+          IF((month(e.hire_date) = month('" . $payroll_date . "')) AND (year(e.hire_date) = year('" . $payroll_date . "')),
+          ((" . $days . " - (day(e.hire_date)+1))*e.salary/30),e.salary)
+           )
+      )
+      )
+  ) AS amount,
+
+ '" . $payroll_date . "' AS payment_date,
+ a.Isbik as benefit_in_kind
+
+FROM employee e, emp_allowances ea,  allowances a WHERE e.emp_id = ea.empID AND a.id = ea.allowance AND a.state = 1 AND e.state = 1 and e.login_user != 1";
+        DB::insert(DB::raw($query));
+    }
+
+
+
+
+    public function insertHsblToLogs($payroll_date)
+    {
+        $query = "INSERT into temp_loan_logs(loanID, policy, paid, remained, payment_date) SELECT id as loanID, IF( (deduction_amount = 0), (SELECT rate_employee FROM deduction where id = 3), deduction_amount ) as policy, IF(((paid+deduction_amount) > amount), amount, ((SELECT rate_employee FROM deduction where id = 3)*(SELECT salary from employee where emp_id=empID and state != 4 and login_user != 1))) as  paid,
+        (amount - IF(
+           ((paid+deduction_amount) >= amount),
+            amount-paid,
+            (
+               (
+                   paid + ((SELECT rate_employee FROM deduction where id = 3)*(SELECT salary from employee where emp_id=empID and state != 4 and login_user != 1))
+                   ))
+
+                   )) as remained,
+        '" . $payroll_date . "' as payment_date FROM loan  WHERE  state = 1 AND type = 3";
+        DB::insert(DB::raw($query));
+    }
+
+
+
+
+    public function getGrossAmountSql($payroll_date, $days, $last_date)
+    {
 
         return "SELECT
 
@@ -727,14 +711,12 @@ IF ((SELECT SUM(IF((month(e.hire_date) = month('" . $payroll_date . "')) AND (ye
 
 )/*End Taxable Amount*/)
 ))";
-
-
-
     }
 
 
 
-    public function getTaxableAmountSql($payroll_date,$days, $last_date){
+    public function getTaxableAmountSql($payroll_date, $days, $last_date)
+    {
 
 
         return "         /*TAXABLE AMOUNT  CALCULATIONS STARTS HERE*/
@@ -817,7 +799,7 @@ e.salary),
 
         )/*End Taxable Amount*/)
 ";
-}
+    }
 
     public function run_payroll($payroll_date, $payroll_month, $empID, $todate)
     {
@@ -2008,8 +1990,6 @@ as gross,
             DB::insert(DB::raw($query));
         });
         return true;
-
-
     }
     //START  RUN PAYROLL FOR SCANIA
 
@@ -2071,7 +2051,7 @@ as gross,
     public function checkInputs($date)
     {
 
-       // dd($date);
+        // dd($date);
         // $calender = explode('/', $date);
 
         // $date = $calender[2] . '-' . $calender[1];
@@ -2178,7 +2158,8 @@ as gross,
     {
 
 
-        $query = "SELECT SUM(less_takehome) as takehome_less, SUM(salary) as salary, SUM(pension_employee) as pension_employee, SUM(pension_employer) as pension_employer,  SUM(medical_employer) as medical_employer, SUM(medical_employee) as medical_employee, SUM(allowances) as allowances, SUM(taxdue) as taxdue, SUM(meals) as meals, SUM(sdl) as sdl, SUM(wcf) as wcf FROM " . $table . " WHERE payroll_date = '" . $payrollMonth . "'";
+        $query = "SELECT SUM(less_takehome) as takehome_less, SUM(salary) as salary, SUM(pension_employee) as pension_employee, SUM(pension_employer) as pension_employer,  SUM(medical_employer) as medical_employer, SUM(medical_employee) as medical_employee, SUM(allowances) as allowances, SUM(taxdue) as taxdue, SUM(meals) as meals, SUM(sdl) as sdl, SUM(wcf) as wcf FROM " . $table;
+        // $query = "SELECT SUM(less_takehome) as takehome_less, SUM(salary) as salary, SUM(pension_employee) as pension_employee, SUM(pension_employer) as pension_employer,  SUM(medical_employer) as medical_employer, SUM(medical_employee) as medical_employee, SUM(allowances) as allowances, SUM(taxdue) as taxdue, SUM(meals) as meals, SUM(sdl) as sdl, SUM(wcf) as wcf FROM " . $table . " WHERE payroll_date = '" . $payrollMonth . "'";
 
         return DB::select(DB::raw($query));
     }
@@ -2216,8 +2197,9 @@ as gross,
     public function total_loans($table, $payrollMonth)
     {
 
+        // $query = "SELECT SUM(paid) as paid, SUM(remained) as remained FROM  " . $table . " WHERE payment_date = '" . $payrollMonth . "'";
 
-        $query = "SELECT SUM(paid) as paid, SUM(remained) as remained FROM  " . $table . " WHERE payment_date = '" . $payrollMonth . "'";
+        $query = "SELECT SUM(paid) as paid, SUM(remained) as remained FROM  " . $table;
         return DB::select(DB::raw($query));
     }
     public function total_loans_separate($table, $payrollMonth)
@@ -2230,11 +2212,18 @@ FROM temp_loan_logs tlg, loan l WHERE l.id = tlg.loanID and payment_date = '" . 
     }
     public function total_heslb($table, $payrollMonth)
     {
+        $query = "SELECT SUM(ll.paid) as paid
+              FROM " . $table . " ll
+              JOIN loan lo ON ll.\"loanID\" = lo.id
+              WHERE ll.payment_date = :payrollMonth AND lo.type = 3";
 
-        $query = "SELECT SUM(ll.paid) as paid FROM  " . $table . " ll, loan lo WHERE ll.payment_date = '" . $payrollMonth . "' AND ll.loanID = lo.id AND lo.type = 3";
-        $row = DB::select(DB::raw($query));
+        $row = DB::select(DB::raw($query), ['payrollMonth' => $payrollMonth]);
+
         return $row[0]->paid;
     }
+
+
+
     public function total_deductions($table, $payrollMonth)
     {
 
@@ -2543,16 +2532,13 @@ FROM temp_loan_logs tlg, loan l WHERE l.id = tlg.loanID and payment_date = '" . 
     }
     public function arrearsMonth($payrollMonth)
     {
+        $arrearPayment = DB::table('arrears')
+            ->where('payroll_date', $payrollMonth)
+            ->sum('amount');
 
-
-        $query = "SELECT sum(amount) as arrear_payment from arrears where payroll_date = '" . $payrollMonth . "'";
-        $row = DB::select(DB::raw($query));
-        if ($row[0]) {
-            return $row[0]->arrear_payment;
-        } else {
-            return 0;
-        }
+        return $arrearPayment;
     }
+
     public function arrearsPending()
     {
         $query = "select * from arrears_pendings where status = 1";

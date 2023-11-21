@@ -3683,10 +3683,40 @@ return DB::select(DB::raw($query));
 
     public function appreciated_employee()
     {
-        $query = "SELECT a.empID, CONCAT(e.fname,' ',IF( e.mname != null,e.mname,' '),' ', e.lname) as NAME, p.name as POSITION, d.name as DEPARTMENT, e.photo, a.description, a.date_apprd FROM appreciation a, employee e, department d, position p WHERE a.empID = e.emp_id and p.id = e.position and d.id = e.department ORDER BY a.id DESC LIMIT 1";
+        $query = "SELECT * from appreciation LIMIT 1";
 
         return DB::select(DB::raw($query));
     }
+
+    // public function appreciated_employee()
+    // {
+    //     $query = "SELECT a.empID, CONCAT(e.fname, ' ', COALESCE(NULLIF(e.mname, ''), ' '), ' ', e.lname) as NAME, p.name as POSITION, d.name as DEPARTMENT, e.photo, a.description, a.date_apprd FROM appreciation a, employee e, department d, position p WHERE a.empID = e.emp_id and p.id = e.position and d.id = e.department ORDER BY a.id DESC LIMIT 1";
+
+    //     return DB::select(DB::raw($query));
+    // }
+
+
+
+
+//     public function appreciated_employee()
+// {
+//     $query = "SELECT a.empID,
+//                      CONCAT(e.fname, ' ', COALESCE(NULLIF(e.mname, ''), ' '), ' ', e.lname) as NAME,
+//                      p.name as POSITION,
+//                      d.name as DEPARTMENT,
+//                      e.photo,
+//                      a.description,
+//                      a.date_apprd
+//               FROM appreciation a
+//               JOIN employee e ON a.empID = e.emp_id  -- Adjust this line based on the actual column name
+//               JOIN department d ON d.id = e.department
+//               JOIN position p ON p.id = e.position
+//               ORDER BY a.id DESC
+//               LIMIT 1";
+
+//     return DB::select(DB::raw($query));
+// }
+
 
     public function add_apprec($data)
     {
