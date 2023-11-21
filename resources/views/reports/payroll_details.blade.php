@@ -87,7 +87,7 @@
                             </th>
                             <th class="text-end" style="margin-bottom: 30px;"><b>Basic Salary</b></th>
                             <th class="text-end" style="margin-bottom: 30px;"><b>Overtime</b></th>
-                            <th class="text-end" style="margin-bottom: 30px;"><b>Respons. Allowance</b></th>
+                            <th class="text-end" style="margin-bottom: 30px;"><b>Response Allowance</b></th>
                             <th class="text-end" style="margin-bottom: 30px;"><b>House Allowance</b></th>
                             <th class="text-end" style="margin-bottom: 30px;"><b>Arrears</b></th>
                             <th class="text-end" style="margin-bottom: 30px;"><b>Other Payment</b></th>

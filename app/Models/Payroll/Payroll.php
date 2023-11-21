@@ -227,8 +227,45 @@ class Payroll extends Model
             DB::insert(DB::raw($query));
 
             //INSERT ALLOWANCES
+<<<<<<< HEAD
             $this->insertAllowance($last_date, $payroll_date, $days);
 
+=======
+            $query = "INSERT INTO temp_allowance_logs(empID, description, policy, amount,allowanceID, payment_date,benefit_in_kind)
+
+                SELECT ea.empID AS empID, a.name AS description,
+
+
+
+
+IF( (ea.mode = 1), 'Fixed Amount', CONCAT(100*ea.percent,'% ( Basic Salary )') ) AS policy,
+
+IF((e.unpaid_leave = 0)
+,0,IF((ea.mode = 1),
+          ea.amount,
+          IF(a.type = 1,IF(DATEDIFF('" . $last_date . "',e.hire_date) < 365,
+          ((DATEDIFF('" . $last_date . "',e.hire_date)+1)/365)*e.salary,ea.percent*e.salary),
+
+          (ea.percent*
+          IF((month(e.hire_date) = month('" . $payroll_date . "')) AND (year(e.hire_date) = year('" . $payroll_date . "')),
+          ((" . $days . " - (day(e.hire_date)+1))*e.salary/30),e.salary)
+           )
+
+      )
+      )
+
+  ) AS amount,
+
+  ea.allowance,
+
+
+
+ '" . $payroll_date . "' AS payment_date,
+ a.Isbik as benefit_in_kind
+
+FROM employee e, emp_allowances ea,  allowances a WHERE e.emp_id = ea.empID AND a.id = ea.allowance AND a.state = 1 AND e.state = 1 and e.login_user != 1";
+            DB::insert(DB::raw($query));
+>>>>>>> main_join
             //INSERT BONUS
             $query = " INSERT INTO temp_allowance_logs(empID, description, policy, amount, payment_date)
             SELECT b.empID AS empID, bt.name AS description,  'Fixed Amount' AS policy,

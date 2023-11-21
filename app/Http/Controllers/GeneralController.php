@@ -38,6 +38,8 @@ use App\Models\Holiday;
 use App\Models\InputSubmission;
 use App\Models\LeaveApproval;
 use App\Models\LeaveForfeiting;
+use App\Models\EmployeeTemporaryAllowance;
+
 //use PHPClamAV\Scanner;
 use App\Models\Leaves;
 use App\Models\LoanType;
@@ -4035,72 +4037,72 @@ class GeneralController extends Controller
     public function home(Request $request)
     {
 
-        $api = url('/flex/chart-line-ajax');
-        $chart = new EmployeeLineChart;
-        $chart->labels(['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'])->load($api);
-        $data['chart'] = $chart;
+        // $api = url('/flex/chart-line-ajax');
+        // $chart = new EmployeeLineChart;
+        // $chart->labels(['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'])->load($api);
+        // $data['chart'] = $chart;
 
-        $strategyStatistics = $this->performanceModel->strategy_info(1);
+        // $strategyStatistics = $this->performanceModel->strategy_info(1);
 
-        $payrollMonth = $this->payroll_model->recent_payroll_month(date('Y-m-d'));
+        // $payrollMonth = $this->payroll_model->recent_payroll_month(date('Y-m-d'));
 
-        $payrollMonth = $this->payroll_model->recent_payroll_month(date('Y-m-d'));
+        // $payrollMonth = $this->payroll_model->recent_payroll_month(date('Y-m-d'));
 
-        $previous_payroll_month_raw = date('Y-m', strtotime(date('Y-m-d', strtotime($payrollMonth . "-1 month"))));
+        // $previous_payroll_month_raw = date('Y-m', strtotime(date('Y-m-d', strtotime($payrollMonth . "-1 month"))));
 
-        $previous_payroll_month = $this->reports_model->prevPayrollMonth($previous_payroll_month_raw);
+        // $previous_payroll_month = $this->reports_model->prevPayrollMonth($previous_payroll_month_raw);
 
-        foreach ($strategyStatistics as $key) {
-            $strategyID = $key->id;
-            $strategyTitle = $key->title;
-            $start = date_create($key->start);
-        }
+        // foreach ($strategyStatistics as $key) {
+        //     $strategyID = $key->id;
+        //     $strategyTitle = $key->title;
+        //     $start = date_create($key->start);
+        // }
 
-        $strategyProgress = $this->performanceModel->strategyProgress($strategyID);
+        // $strategyProgress = $this->performanceModel->strategyProgress($strategyID);
 
-        $current = date_create(date('Y-m-d'));
-        $diff = date_diff($start, $current);
-        $required = $diff->format("%a");
-        $months = number_format(($required / 30.5), 4);
-        $rate_per_month = number_format(($strategyProgress / $months), 1);
+        // $current = date_create(date('Y-m-d'));
+        // $diff = date_diff($start, $current);
+        // $required = $diff->format("%a");
+        // $months = number_format(($required / 30.5), 4);
+        // $rate_per_month = number_format(($strategyProgress / $months), 1);
 
         $data['appreciated'] = $this->flexperformance_model->appreciated_employee();
         $data['deligate'] = $this->flexperformance_model->get_deligates(auth()->user()->emp_id);
-        // $data['employee_count'] =  $this->flexperformance_model->count_employees();
+        // // $data['employee_count'] =  $this->flexperformance_model->count_employees();
         $data['overview'] = $this->flexperformance_model->employees_info();
-        $data["strategyProgress"] = $strategyProgress;
-        $data["monthly"] = $rate_per_month;
+        // $data["strategyProgress"] = $strategyProgress;
+        // $data["monthly"] = $rate_per_month;
 
-        $data['taskline'] = $this->performanceModel->total_taskline(auth()->user()->emp_id);
-        $data['taskstaff'] = $this->performanceModel->total_taskstaff(auth()->user()->emp_id);
+        // $data['taskline'] = $this->performanceModel->total_taskline(auth()->user()->emp_id);
+        // $data['taskstaff'] = $this->performanceModel->total_taskstaff(auth()->user()->emp_id);
 
-        $data['payroll_totals'] = $this->payroll_model->payrollTotals("payroll_logs", $payrollMonth);
-        $data['total_allowances'] = $this->payroll_model->total_allowances("allowance_logs", $payrollMonth);
-        $data['total_bonuses'] = $this->payroll_model->total_bonuses($payrollMonth);
-        $data['total_loans'] = $this->payroll_model->total_loans("loan_logs", $payrollMonth);
-        $data['total_heslb'] = $this->payroll_model->total_heslb("loan_logs", $payrollMonth);
-        $data['take_home'] = $this->reports_model->sum_take_home($payrollMonth);
-        $data['total_deductions'] = $this->payroll_model->total_deductions("deduction_logs", $payrollMonth);
-        $data['total_overtimes'] = $this->payroll_model->total_overtimes($payrollMonth);
-        $data['payroll_date'] = $payrollMonth;
-        $data['arrears'] = $this->payroll_model->arrearsMonth($payrollMonth);
-        $data['s_gross_c'] = $this->reports_model->s_grossMonthly($payrollMonth);
-        $data['v_gross_c'] = $this->reports_model->v_grossMonthly($payrollMonth);
-        $data['s_gross_p'] = $this->reports_model->s_grossMonthly($previous_payroll_month);
-        $data['v_gross_p'] = $this->reports_model->v_grossMonthly($previous_payroll_month);
-        $data['s_net_c'] = $this->reports_model->staff_sum_take_home($payrollMonth);
-        $data['v_net_c'] = $this->reports_model->temporary_sum_take_home($payrollMonth);
-        $data['s_net_p'] = $this->reports_model->staff_sum_take_home($previous_payroll_month);
-        $data['v_net_p'] = $this->reports_model->temporary_sum_take_home($previous_payroll_month);
-        $data['v_staff'] = $this->reports_model->v_payrollEmployee($payrollMonth, '');
-        $data['s_staff'] = $this->reports_model->s_payrollEmployee($payrollMonth, '');
-        $data['v_staff_p'] = $this->reports_model->v_payrollEmployee($previous_payroll_month, '');
-        $data['s_staff_p'] = $this->reports_model->s_payrollEmployee($previous_payroll_month, '');
-        $data['net_total'] = $this->netTotalSummation($payrollMonth);
+        // $data['payroll_totals'] = $this->payroll_model->payrollTotals("payroll_logs", $payrollMonth);
+        // $data['total_allowances'] = $this->payroll_model->total_allowances("allowance_logs", $payrollMonth);
+        // $data['total_bonuses'] = $this->payroll_model->total_bonuses($payrollMonth);
+        // $data['total_loans'] = $this->payroll_model->total_loans("loan_logs", $payrollMonth);
+        // $data['total_heslb'] = $this->payroll_model->total_heslb("loan_logs", $payrollMonth);
+        // $data['take_home'] = $this->reports_model->sum_take_home($payrollMonth);
+        // $data['total_deductions'] = $this->payroll_model->total_deductions("deduction_logs", $payrollMonth);
+        // $data['total_overtimes'] = $this->payroll_model->total_overtimes($payrollMonth);
+        // $data['payroll_date'] = $payrollMonth;
+        // $data['arrears'] = $this->payroll_model->arrearsMonth($payrollMonth);
+        // $data['s_gross_c'] = $this->reports_model->s_grossMonthly($payrollMonth);
+        // $data['v_gross_c'] = $this->reports_model->v_grossMonthly($payrollMonth);
+        // $data['s_gross_p'] = $this->reports_model->s_grossMonthly($previous_payroll_month);
+        // $data['v_gross_p'] = $this->reports_model->v_grossMonthly($previous_payroll_month);
+        // $data['s_net_c'] = $this->reports_model->staff_sum_take_home($payrollMonth);
+        // $data['v_net_c'] = $this->reports_model->temporary_sum_take_home($payrollMonth);
+        // $data['s_net_p'] = $this->reports_model->staff_sum_take_home($previous_payroll_month);
+        // $data['v_net_p'] = $this->reports_model->temporary_sum_take_home($previous_payroll_month);
+        // $data['v_staff'] = $this->reports_model->v_payrollEmployee($payrollMonth, '');
+        // $data['s_staff'] = $this->reports_model->s_payrollEmployee($payrollMonth, '');
+        // $data['v_staff_p'] = $this->reports_model->v_payrollEmployee($previous_payroll_month, '');
+        // $data['s_staff_p'] = $this->reports_model->s_payrollEmployee($previous_payroll_month, '');
+        // $data['net_total'] = $this->netTotalSummation($payrollMonth);
 
-        // start of overtime
-        $data['my_overtimes'] = $this->flexperformance_model->my_overtimes(auth()->user()->emp_id);
-        $data['overtimeCategory'] = $this->flexperformance_model->overtimeCategory();
+        // // start of overtime
+        // $data['my_overtimes'] = $this->flexperformance_model->my_overtimes(auth()->user()->emp_id);
+        // $data['overtimeCategory'] = $this->flexperformance_model->overtimeCategory();
         $data['employees'] = EMPL::all();
 
         $data['line_overtime'] = $this->flexperformance_model->lineOvertimes(auth()->user()->emp_id);
@@ -5622,6 +5624,7 @@ class GeneralController extends Controller
         $data['membersCount'] = $this->flexperformance_model->allowance_membersCount($id);
         $data['groupin'] = $this->flexperformance_model->get_allowance_group_in($id);
         $data['employee'] = $this->flexperformance_model->employee_allowance($id);
+        $data['allowanceCategories'] = $this->flexperformance_model->allowance_category();
         $data['allowanceID'] = $id;
         $data['title'] = "Allowances";
         $data['parent'] = "Allowance";
@@ -5637,6 +5640,13 @@ class GeneralController extends Controller
         $data['title'] = 'Overtime Category';
         $data['category'] = $this->flexperformance_model->OvertimeCategoryInfo($id);
         return view('app.overtime_category_info', $data);
+    }
+    public function allowance_category_info($id)
+    {
+        $id = base64_decode($id);
+        $data['title'] = 'Allowance Category';
+        $data['category'] = $this->flexperformance_model->AllowanceCategoryInfo($id);
+        return view('allowance.allowance_category_info', $data);
     }
 
     public function deleteAllowance($id, Request $request)
@@ -5776,6 +5786,21 @@ class GeneralController extends Controller
             }
         }
     }
+    public function updatecategory(Request $request)
+    {
+        $ID = $request->input('allowanceID');
+        if ($request->method() == "POST" && $ID != '') {
+            $updates = array(
+                'allowance_category_id' => $request->input('allowance_category_id'),
+            );
+            $result = $this->flexperformance_model->updateAllowance($updates, $ID);
+            if ($result == true) {
+                echo "<p class='alert alert-success text-center'>Updated Successifully!</p>";
+            } else {
+                echo "<p class='alert alert-danger text-center'>Update Failed</p>";
+            }
+        }
+    }
 
     public function updateOvertimeName(Request $request)
     {
@@ -5785,6 +5810,21 @@ class GeneralController extends Controller
                 'name' => $request->input('name'),
             );
             $result = $this->flexperformance_model->updateOvertimeCategory($updates, $ID);
+            if ($result == true) {
+                echo "<p class='alert alert-success text-center'>Updated Successifully!</p>";
+            } else {
+                echo "<p class='alert alert-danger text-center'>Update Failed</p>";
+            }
+        }
+    }
+    public function updateAllowanceCategory(Request $request)
+    {
+        $ID = $request->input('categoryID');
+        if ($request->method() == "POST" && $ID != '') {
+            $updates = array(
+                'name' => $request->input('name'),
+            );
+            $result = $this->flexperformance_model->updateAllowaceCategory($updates, $ID);
             if ($result == true) {
                 echo "<p class='alert alert-success text-center'>Updated Successifully!</p>";
             } else {
@@ -8112,8 +8152,6 @@ class GeneralController extends Controller
         $data['my_overtimes'] = $this->flexperformance_model->my_overtimes(auth()->user()->emp_id);
         $data['employees'] = $this->flexperformance_model->Employee();
         $data['line_overtime'] = $this->flexperformance_model->lineOvertimes(auth()->user()->emp_id);
-
-        // }
         $data['pendingPayroll'] = $this->payroll_model->pendingPayrollCheck();
         $data['parent'] = 'Workforce';
         $data['child'] = 'AddTermination';
@@ -8125,34 +8163,9 @@ class GeneralController extends Controller
     public function saveTermination(Request $request)
     {
         if ($request->employeeID == $request->deligated) {
-            return redirect()->back()->with(['error' => 'Terminated and deligated should not be the sane person']);
+            return redirect()->back()->with(['error' => 'Terminated and deligated should not be the same person']);
         }
         $this->authenticateUser('add-termination');
-        // request()->validate(
-        //     [
-        //         'employeeID' => 'required',
-        //         'terminationDate' => 'required',
-        //         'reason' => 'required',
-        //         'salaryEnrollment' => 'required',
-        //         'normalDays' => 'required',
-        //         'publicDays' => 'required',
-        //         'noticePay' => 'required',
-        //         'leavePay' => 'required',
-        //         'livingCost' => 'required',
-        //         'houseAllowance' => 'required',
-        //         'utilityAllowance' => 'required',
-        //         'tellerAllowance' => 'required',
-        //         'serevancePay' => 'required',
-        //         'leaveStand' => 'required',
-        //         'arrears' => 'required',
-        //         'exgracia' => 'required',
-        //         'bonus' => 'required',
-        //         'longServing' => 'required',
-        //         'salaryAdvance' => 'required',
-        //         'otherDeductions' => 'nullable',
-        //         'otherPayments' => 'nullable',
-        //     ]
-        // );
         $employeeID = $request->employeeID;
         $terminationDate = $request->terminationDate;
         $reason = $request->reason;
@@ -8180,6 +8193,8 @@ class GeneralController extends Controller
         $nightshift_allowance = $request->nightshift_allowance;
         $transport_allowance = $request->transport_allowance;
 
+
+
         $termination = new Termination();
         $termination->employeeID = $request->employeeID;
         $termination->terminationDate = $request->terminationDate;
@@ -8190,19 +8205,19 @@ class GeneralController extends Controller
         $termination->noticePay = $request->noticePay;
         $termination->leavePay = $request->leavePay;
         $termination->livingCost = $request->livingCost;
-        $termination->houseAllowance = $request->houseAllowance;
-        $termination->utilityAllowance = $request->utilityAllowance;
+$termination->houseAllowance = $request->houseAllowance;
+$termination->utilityAllowance = $request->utilityAllowance;
         $termination->leaveAllowance = $request->leaveAllowance;
-        $termination->tellerAllowance = $request->tellerAllowance;
+$termination->tellerAllowance = $request->tellerAllowance;
         $termination->serevancePay = $request->serevancePay;
         $termination->leaveStand = $request->leaveStand;
         $termination->arrears = $request->arrears;
         $termination->exgracia = $request->exgracia;
-        $termination->transport_allowance = $request->transport_allowance;
+$termination->transport_allowance = $request->transport_allowance;
         $termination->nightshift_allowance = $request->nightshift_allowance;
         $termination->bonus = $request->bonus;
         $termination->actual_salary = $employee_actual_salary;
-        $termination->longServing = $request->longServing;
+$termination->longServing = $request->longServing;
         $termination->salaryAdvance = $request->salaryAdvance;
         $termination->otherDeductions = $request->otherDeductions;
         $termination->otherPayments = $request->otherPayments;
@@ -8293,6 +8308,11 @@ class GeneralController extends Controller
         $termination->take_home = $take_home;
         $termination->total_deductions = $total_deductions;
         $termination->save();
+
+        // $employeeAllowanceLogs = new EmployeeTemporaryAllowance();
+        // $employeeAllowanceLogs->terminnationId = $terminationYenyewe->id;
+
+
         // $pentionable_amount =$salaryEnrollment + $leavePay + $arrears + overtime_amount;
         // } else {
 
@@ -8482,28 +8502,24 @@ class GeneralController extends Controller
         $empID = auth()->user()->emp_id;
         $today = date('Y-m-d');
 
-        //check whether if after payroll or before payroll
+        $employee_allowance = $this->flexperformance_model->get_allowance_names_for_employee($employeeID);
+
+
         $check_termination_date = $this->flexperformance_model->check_termination_payroll_date($termination_month);
         if ($check_termination_date == true) {
-            // dd('yes');
-            //get leave allowance
+
             $leave_allowance = $this->flexperformance_model->get_leave_allowance($employeeID, $termination_date, $january_date);
-            //get salary
             $employee_salary = $this->flexperformance_model->get_employee_salary($employeeID, $termination_date, $dd);
         } else {
 
-            //get leave allowance
             $leave_allowance = $this->flexperformance_model->get_leave_allowance($employeeID, $termination_date, $january_date);
-            //get salary
             $employee_salary = $this->flexperformance_model->get_employee_salary($employeeID, $termination_date, $dd);
-            //get leave balance
-            //$leave_balance = $this->flexperformance_model->get_leave_balance($employeeID,$termination_date);
-            //get leave balance
-            // $leave_pay = $this->flexperformance_model->get_leave_pay($employeeID,$leave_balance);
+
         }
         $employee_actual_salary = $this->flexperformance_model->get_actual_basic_salary($employeeID);
 
         $data['leave_entitled'] = $leave_entitled->leave_days_entitled;
+        $data['employee_allowance'] = $employee_allowance;
         $data['employee_actual_salary'] = $employee_actual_salary;
         $data['leave_allowance'] = $leave_allowance;
         $data['employee_salary'] = ($employee_actual_salary == $employee_salary) ? ($employee_salary * $dd / 30) : $employee_salary;
