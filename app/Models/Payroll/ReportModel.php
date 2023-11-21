@@ -298,31 +298,47 @@ FROM employee e, department dpt, position p, branch br, contract ct, pension_fun
                         pl.\"empID\",
                         CONCAT(e.fname, ' ', COALESCE(NULLIF(e.mname, ''), ' '), ' ', e.lname) AS name,
                         COALESCE(
-    (
-        SELECT SUM(al.amount)
-        FROM allowance_logs al
-        WHERE al.\"empID\" = e.emp_id
-        AND (e.contract_type::integer <> 2 OR e.contract_type IS NULL)
-        AND al.payment_date = :date -- Use parameterized query
-        GROUP BY al.\"empID\"
-    ),
-    0
-) AS allowances,
-
-
+                            (
+                                SELECT SUM(al.amount)
+                                FROM allowance_logs al
+                                WHERE al.\"empID\" = e.emp_id
+                                AND (e.contract_type::integer <> 2 OR e.contract_type IS NULL)
+                                AND al.payment_date = :date -- Use parameterized query
+                                GROUP BY al.\"empID\"
+                            ),
+                            0
+                        ) AS allowances,
                         pl.less_takehome,
                         pl.salary,
                         pl.meals,
                         pl.pension_employee AS pension,
                         pl.taxdue,
+
                         COALESCE(
-                            (SELECT SUM(ll.paid) FROM loan_logs ll JOIN loan l ON e.emp_id = l.\"empID\" AND e.contract_type <> 2 AND ll.loanID = l.id WHERE ll.payment_date = '" . $date . "' GROUP BY l.\"empID\"),
+                            (
+                                SELECT SUM(ll.paid)
+                                FROM loan_logs ll
+                                JOIN loan l ON e.emp_id = l.\"empID\"
+                                WHERE e.contract_type::integer <> 2
+                                  AND ll.\"loanID\" = l.id
+                                  AND ll.payment_date = :date -- Use parameterized query
+                                GROUP BY l.\"empID\"
+                            ),
                             0
                         ) AS loans,
+
                         COALESCE(
-                            (SELECT SUM(dl.paid) FROM deduction_logs dl WHERE dl.\"empID\" = e.emp_id AND e.contract_type::integer <>  2 AND dl.payment_date = '" . $date . "' GROUP BY dl.\"empID\"),
+                            (
+                                SELECT SUM(dl.paid)
+                                FROM deduction_logs dl
+                                WHERE dl.\"empID\" = e.emp_id
+                                  AND e.contract_type::integer <> 2
+                                  AND dl.payment_date = :date -- Use parameterized query
+                                GROUP BY dl.\"empID\"
+                            ),
                             0
                         ) AS deductions,
+
                         b.name as bank,
                         bb.name as branch,
                         bb.swiftcode,
@@ -333,8 +349,8 @@ FROM employee e, department dpt, position p, branch br, contract ct, pension_fun
                         JOIN bank_branch bb ON bb.id = e.bank_branch
                         JOIN bank b ON b.id = e.bank
                     WHERE
-                    e.contract_type::integer <>  2 AND
-                        pl.payroll_date = :date
+                        e.contract_type::integer <> 2 AND
+                        pl.payroll_date = :date -- Use parameterized query
                   ) as parent_query";
 
         return DB::select(DB::raw($query), ['date' => $date]);
@@ -359,18 +375,47 @@ FROM employee e, department dpt, position p, branch br, contract ct, pension_fun
 
     function temporary_sum_take_home($date)
     {
+        $query = "SELECT
+                SUM(salary + allowances - pension - loans - deductions - meals - taxdue) as takehome,
+                SUM(less_takehome) as takehome_less
+              FROM (
+                SELECT
+                    pl.\"empID\",
+                    CONCAT(e.fname, ' ', COALESCE(NULLIF(e.mname, ''), ' '), ' ', e.lname) AS name,
+                    COALESCE(
+                        (SELECT SUM(al.amount) FROM allowance_logs al WHERE al.\"empID\" = e.emp_id AND e.contract_type::integer = 2 AND al.payment_date = :date GROUP BY al.\"empID\"),
+                        0
+                    ) AS allowances,
+                    pl.less_takehome,
+                    pl.salary,
+                    pl.meals,
+                    pl.pension_employee AS pension,
+                    pl.taxdue,
+                    COALESCE(
+                        (SELECT SUM(ll.paid) FROM loan_logs ll JOIN loan l ON e.emp_id = l.\"empID\" WHERE e.contract_type::integer = 2 AND ll.payment_date = :date GROUP BY l.\"empID\"),
+                        0
+                    ) AS loans,
+                    COALESCE(
+                        (SELECT SUM(dl.paid) FROM deduction_logs dl WHERE dl.\"empID\" = e.emp_id AND e.contract_type::integer = 2 AND dl.payment_date = :date GROUP BY dl.\"empID\"),
+                        0
+                    ) AS deductions,
+                    b.name as bank,
+                    bb.name as branch,
+                    bb.swiftcode,
+                    pl.account_no
+                FROM
+                    employee e
+                    JOIN payroll_logs pl ON pl.\"empID\" = e.emp_id
+                    JOIN bank_branch bb ON bb.id = e.bank_branch
+                    JOIN bank b ON b.id = e.bank
+                WHERE
+                    e.contract_type::integer = 2 AND
+                    pl.payroll_date = :date
+              ) as parent_query";
 
-        $query = "SELECT SUM(salary + allowances-pension-loans-deductions-meals-taxdue) as takehome, SUM(less_takehome) as takehome_less FROM (SELECT  pl.empID,  CONCAT(e.fname,' ', IF(e.mname != null,e.mname,' '),' ', e.lname) AS name,
-	IF((SELECT SUM(al.amount) FROM allowance_logs al WHERE al.empID = e.emp_id and e.contract_type = 2 AND al.payment_date = '" . $date . "' GROUP BY al.empID)>0, (SELECT SUM(al.amount) FROM allowance_logs al WHERE al.empID = e.emp_id and e.contract_type = 2 AND al.payment_date = '" . $date . "' GROUP BY al.empID), 0) AS allowances,
-	pl.less_takehome,
-	pl.salary, pl.meals, pl.pension_employee AS pension, pl.taxdue,
-	IF((SELECT SUM(ll.paid) FROM loan_logs ll, loan l WHERE l.empID = e.emp_id and e.contract_type = 2 AND  ll.payment_date = '" . $date . "' GROUP BY l.empID)>0,(SELECT SUM(ll.paid) FROM loan_logs ll, loan l WHERE e.emp_id = l.empID and e.contract_type = 2 AND ll.loanID = l.id AND ll.payment_date = '" . $date . "' GROUP BY l.empID),0) AS loans,
-
-	IF((SELECT SUM(dl.paid) FROM deduction_logs dl WHERE dl.empID = e.emp_id and e.contract_type = 2 AND dl.payment_date = '" . $date . "' GROUP BY dl.empID)>0,(SELECT SUM(dl.paid) FROM deduction_logs dl WHERE dl.empID = e.emp_id and e.contract_type = 2 AND dl.payment_date = '" . $date . "' GROUP BY dl.empID),0) AS deductions,
-	b.name as bank, bb.name as branch, bb.swiftcode, pl.account_no
-	FROM employee e, payroll_logs pl,  bank_branch bb, bank b  WHERE pl.empID = e.emp_id and e.contract_type = 2 AND bb.id= e.bank_branch AND b.id = e.bank AND pl.payroll_date = '" . $date . "') as parent_query";
-        return DB::select(DB::raw($query));
+        return DB::select(DB::raw($query), ['date' => $date]);
     }
+
 
     function temporary_sum_take_home_temp($date)
     {
@@ -2972,11 +3017,24 @@ IF((SELECT SUM(amount)  FROM allowance_logs WHERE allowance_logs.description = a
         return DB::select(DB::raw($query));
     }
 
+    // public function v_payrollEmployee($current, $previous)
+    // {
+    //     $query = "select distinct pl.empID, concat(trim(e.fname),' ',trim(e.mname),' ',trim(e.lname)) as name from payroll_logs pl, employee e where e.emp_id = pl.empID and e.contract_type = 2 and (pl.payroll_date = '" . $current . "' or pl.payroll_date = '" . $previous . "')";
+    //     return DB::select(DB::raw($query));
+    // }
+
     public function v_payrollEmployee($current, $previous)
     {
-        $query = "select distinct pl.empID, concat(trim(e.fname),' ',trim(e.mname),' ',trim(e.lname)) as name from payroll_logs pl, employee e where e.emp_id = pl.empID and e.contract_type = 2 and (pl.payroll_date = '" . $current . "' or pl.payroll_date = '" . $previous . "')";
+        $query = "SELECT DISTINCT pl.\"empID\", CONCAT(TRIM(e.fname), ' ', TRIM(e.mname), ' ', TRIM(e.lname)) AS name
+                  FROM payroll_logs pl
+                  JOIN employee e ON e.emp_id = pl.\"empID\"
+                  WHERE e.contract_type::integer = 2 AND (pl.payroll_date = :current OR pl.payroll_date = :previous)";
+
         return DB::select(DB::raw($query));
     }
+
+
+
 
     public function v_payrollEmployee_temp($current, $previous)
     {
