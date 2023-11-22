@@ -20,7 +20,7 @@ return new class extends Migration
             $table->double('amount_employer')->comment('Employer Amount in percent');
             $table->integer('deduction_from')->comment('1-from Basic Salary, 2-From Gross');
             $table->integer('code');
-            $table->string('abbrv', 10);
+            $table->string('abbrv', 10)->nullable();
             $table->timestamps();
         });
     }

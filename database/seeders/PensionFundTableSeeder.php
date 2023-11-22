@@ -25,7 +25,7 @@ class PensionFundTableSeeder extends Seeder
                 'amount_employee' => 0.1,
                 'amount_employer' => 0.1,
                 'deduction_from' => '2',
-                'code' => 'PSSF',
+                'code' => '0002',
                 'abbrv' => null,
             ],
         ]);
