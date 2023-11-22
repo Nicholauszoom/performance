@@ -504,7 +504,7 @@ class AttendanceController extends Controller
             $startDate = $year . '-01-01'; // Start of the current year
             $endDate = $year . '-12-31';
 
-            $daysSpent = Leaves::where('empId', $employeeId)
+            $daysSpent = Leaves::where("empID", $employeeId)
                 ->where('nature', $natureId)
                 ->whereBetween('created_at', [$startDate, $endDate])
                 ->whereNot('reason', 'Automatic applied!')
@@ -514,7 +514,7 @@ class AttendanceController extends Controller
             $startDate = $year . '-01-01'; // Start of the current year
             $endDate = $currentYear . '-12-31'; // Current date
 
-            $daysSpent = Leaves::where('empId', $employeeId)
+            $daysSpent = Leaves::where('empID', $employeeId)
                 ->where('nature', $natureId)
                 ->whereBetween('created_at', [$startDate, $endDate])
                 ->whereNot('reason', 'Automatic applied!')
@@ -636,13 +636,13 @@ class AttendanceController extends Controller
             //     ->where('state', 1)
             //     ->whereDate('end', '>=', $start)
             //     ->first();
-            $pendingLeave = Leaves::where('empId', $empID)
+            $pendingLeave = Leaves::where('empID', $empID)
             ->where('state', 1)
             ->whereDate('start', '<=', $start)
             ->whereDate('end', '>=', $start)
             ->first();
 
-            $approvedLeave = Leaves::where('empId', $empID)
+            $approvedLeave = Leaves::where('empID', $empID)
             ->where('state', 0)
             ->whereDate('start', '<=', $start)
             ->whereDate('end', '>=', $start)
@@ -934,6 +934,7 @@ class AttendanceController extends Controller
 
                         $leaves->sub_category = $request->sub_cat;
                         $leaves->application_date = date('Y-m-d');
+                        $leaves->attachment = 0;
                         // START
                         if ($request->hasfile('image')) {
                             $request->validate([

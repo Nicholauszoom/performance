@@ -184,11 +184,13 @@
             </tbody>
         </table> --}}
 
+        {{-- {{ dd($my_overtimes) }} --}}
+
         <tbody>
             @foreach ($my_overtimes as $row)
             {{-- {{ dd($row) }} --}}
-                <tr id="domain{{ $row->SNo }}">
-                    <td width="1px">{{ $row->SNo }}</td>
+                <tr id="domain{{ $row->sno }}">
+                    <td width="1px">{{ $row->sno }}</td>
                     <td>{{ date('d-m-Y', strtotime($row->applicationDATE)) }}</td>
                     <td>
                         @foreach($employees as $mng)
@@ -198,7 +200,7 @@
                         @endforeach
                     </td>
                     <td>
-                        <b>Duration:</b> {{ $row->totoalHOURS }} Hrs.<br>
+                        <b>Duration:</b> {{ $row->total_hours }} Hrs.<br>
                         <b>From:</b> {{ $row->time_in }} <b> To </b> {{ $row->time_out }}
                     </td>
                     <td>{{ $row->reason }}</td>

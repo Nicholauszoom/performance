@@ -630,7 +630,7 @@ FROM payroll_logs pl, employee e WHERE e.emp_id = pl.empID and e.contract_type =
         $categories=DB::select(DB::raw($query));
 
         $allowance_categories_query="";
-        foreach ($categories as $category){         
+        foreach ($categories as $category){
 
             $allowance_categories_query =$allowance_categories_query. "(IF((SELECT SUM(al.amount) FROM temp_allowance_logs al join allowances on allowances.id=al.allowanceID WHERE  al.empID = e.emp_id AND allowances.allowance_category_id=". $category->id."  AND al.payment_date = '" . $date . "' GROUP BY al.empID >0),(SELECT SUM(al.amount) FROM temp_allowance_logs al join allowances on allowances.id=al.allowanceID WHERE al.empID = e.emp_id AND allowances.allowance_category_id=". $category->id." AND al.payment_date = '" . $date . "' GROUP BY al.empID),0)) AS category".$category->id.",";
 
@@ -851,6 +851,8 @@ FROM payroll_logs pl, employee e WHERE e.emp_id = pl.empID and e.contract_type =
 
         return DB::select(DB::raw($query));
     }
+
+    
 
     function v_pension($date, $pensionFund)
     {

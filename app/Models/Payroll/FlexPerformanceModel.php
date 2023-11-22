@@ -75,12 +75,37 @@ class FlexPerformanceModel extends Model
         return $row->attributeValue;
     }
 
-    public function employee()
-    {
-        $query = "SELECT @s:=@s+1 SNo, p.name as POSITION, d.name as DEPARTMENT, e.*, CONCAT(e.fname,' ',IF( e.mname != null,e.mname,' '),' ', e.lname) as NAME, (SELECT CONCAT(el.fname,' ', el.mname,' ', el.lname) FROM employee el where el.emp_id = e.line_manager limit 1 ) as LINEMANAGER, IF((( SELECT sum(days)  FROM `leaves` where nature=1 and empID=e.emp_id GROUP by nature)>0), (SELECT sum(days)  FROM `leaves` where nature=1 and empID=e.emp_id  GROUP by nature),0) as ACCRUED FROM employee e, department d, position p , (select @s:=0) as s WHERE  p.id=e.position and d.id=e.department and e.state=1";
+    // public function employee()
+    // {
+    //     $query = "SELECT @s:=@s+1 SNo, p.name as POSITION, d.name as DEPARTMENT, e.*, CONCAT(e.fname,' ',IF( e.mname != null,e.mname,' '),' ', e.lname) as NAME, (SELECT CONCAT(el.fname,' ', el.mname,' ', el.lname) FROM employee el where el.emp_id = e.line_manager limit 1 ) as LINEMANAGER, IF((( SELECT sum(days)  FROM `leaves` where nature=1 and empID=e.emp_id GROUP by nature)>0), (SELECT sum(days)  FROM `leaves` where nature=1 and empID=e.emp_id  GROUP by nature),0) as ACCRUED FROM employee e, department d, position p , (select @s:=0) as s WHERE  p.id=e.position and d.id=e.department and e.state=1";
 
-        return DB::select(DB::raw($query));
-    }
+    //     return DB::select(DB::raw($query));
+    // }
+
+
+
+    public function employee()
+{
+    $query = DB::table('employee as e')
+        ->selectRaw('p.name as "POSITION", d.name as "DEPARTMENT", e.*,
+            CONCAT(e.fname, \' \', COALESCE(e.mname, \'\'), \' \', e.lname) as "NAME",
+            (SELECT CONCAT(el.fname, \' \', el.mname, \' \', el.lname)
+             FROM employee el
+             WHERE el.emp_id = e.line_manager
+             LIMIT 1) as "LINEMANAGER",
+            COALESCE(
+                (SELECT SUM(days)
+                 FROM leaves
+                 WHERE nature::integer = 1 AND "empID" = e.emp_id
+                 GROUP BY nature), 0) as "ACCRUED"')
+        ->addSelect(DB::raw('ROW_NUMBER() OVER () as "sno"'))
+        ->join('department as d', 'd.id', '=', 'e.department')
+        ->join('position as p', 'p.id', '=', 'e.position')
+        ->where('e.state', '=', 1)
+        ->get();
+
+    return $query;
+}
 
     public function employeelinemanager($id)
     {
@@ -368,14 +393,34 @@ class FlexPerformanceModel extends Model
     IMPREST FUNCTIONS MOVED TO IMPREST MODEL
      */
 
-    public function my_overtimes($id)
-    {
-        $query = "SELECT @s:=@s+1 as SNo, eo.final_line_manager_comment as comment, eo.linemanager as line_manager,  eo.status as status, eo.id as eoid, eo.reason as reason, eo.empID as empID, CONCAT(e.fname,' ',IF( e.mname != null,e.mname,' '),' ', e.lname) as name, d.name as DEPARTMENT, p.name as POSITION, CAST(eo.application_time as date) as applicationDATE,
-             CAST(eo.time_end as time) as time_out ,CAST(eo.time_start as time) as time_in, (TIMESTAMPDIFF(MINUTE, eo.time_start, eo.time_end)/60) * (IF((eo.overtime_type = 0),((e.salary/240)*(SELECT day_percent FROM overtime_category WHERE id = eo.overtime_category)),((e.salary/240)*(SELECT day_percent FROM overtime_category WHERE id = eo.overtime_category)) )) AS earnings, ROUND((TIMESTAMPDIFF(SECOND, eo.time_start, eo.time_end) / 3600), 2) as totoalHOURS
-             FROM employee e, employee_overtime eo, position p, department d, (SELECT @s:=0) as s WHERE eo.empID = e.emp_id and e.department = d.id and e.position = p.id and eo.empID = '" . $id . "' ORDER BY eo.id DESC";
+     public function my_overtimes($id)
+     {
+         $query = DB::table('employee as e')
+             ->selectRaw(
+                 'ROW_NUMBER() OVER () as SNo, eo.final_line_manager_comment as comment, eo.linemanager as line_manager,
+                 eo.status as status, eo.id as eoid, eo.reason as reason, eo."empID" as empID,
+                 CONCAT(e.fname, \' \', COALESCE(e.mname, \'\'), \' \', e.lname) as name, d.name as DEPARTMENT,
+                 p.name as POSITION, CAST(eo.application_time as date) as "applicationDATE",
+                 CAST(eo.time_end as time) as time_out, CAST(eo.time_start as time) as time_in,
+                 (EXTRACT(EPOCH FROM (eo.time_end - eo.time_start)) / 3600) *
+                     (CASE WHEN eo.overtime_type = 0 THEN (e.salary / 240) * (SELECT day_percent FROM overtime_category WHERE id = eo.overtime_category)
+                           ELSE (e.salary / 240) * (SELECT day_percent FROM overtime_category WHERE id = eo.overtime_category)
+                     END) AS earnings,
+                 ROUND((EXTRACT(EPOCH FROM (eo.time_end - eo.time_start)) / 3600), 2) as total_hours'
+             )
+             ->leftJoin('employee_overtime as eo', function ($join) use ($id) {
+                 $join->on('e.emp_id', '=', 'eo.empID')
+                     ->where('eo.empID', '=', $id);
+             })
+             ->leftJoin('department as d', 'e.department', '=', 'd.id')
+             ->leftJoin('position as p', 'e.position', '=', 'p.id')
+             ->orderBy('eo.id', 'DESC')
+             ->get();
 
-        return DB::select(DB::raw($query));
-    }
+         return $query;
+     }
+
+
 
 
     public function Overtime_total($id)
@@ -427,16 +472,41 @@ class FlexPerformanceModel extends Model
         return $row[0]->total;
     }
 
+    // public function lineOvertimes($id)
+    // {
+    //     $query = "SELECT @s:=@s+1 as SNo, eo.final_line_manager_comment as comment,  eo.status as status, eo.id as eoid, eo.reason as reason, eo.empID as empID, CONCAT(e.fname,' ',IF( e.mname != null,e.mname,' '),' ', e.lname) as name, d.name as DEPARTMENT, p.name as POSITION, CAST(eo.application_time as date) as applicationDATE,
+	// 	CAST(eo.time_end as time) as time_out, CAST(eo.time_start as time) as time_in, (TIMESTAMPDIFF(MINUTE, eo.time_start, eo.time_end)/60) as totoalHOURS
+	// 	FROM employee e, employee_overtime eo, position p, department d, (SELECT @s:=0) as s WHERE   e.department = d.id and eo.empID = e.emp_id  and e.position = p.id   ORDER BY eo.id DESC";
+
+    //     //$query = "SELECT *  FROM employee_overtime";
+
+    //     return DB::select(DB::raw($query));
+    // }
+
     public function lineOvertimes($id)
-    {
-        $query = "SELECT @s:=@s+1 as SNo, eo.final_line_manager_comment as comment,  eo.status as status, eo.id as eoid, eo.reason as reason, eo.empID as empID, CONCAT(e.fname,' ',IF( e.mname != null,e.mname,' '),' ', e.lname) as name, d.name as DEPARTMENT, p.name as POSITION, CAST(eo.application_time as date) as applicationDATE,
-		CAST(eo.time_end as time) as time_out, CAST(eo.time_start as time) as time_in, (TIMESTAMPDIFF(MINUTE, eo.time_start, eo.time_end)/60) as totoalHOURS
-		FROM employee e, employee_overtime eo, position p, department d, (SELECT @s:=0) as s WHERE   e.department = d.id and eo.empID = e.emp_id  and e.position = p.id   ORDER BY eo.id DESC";
+{
+    $query = "SELECT row_number() OVER () as \"SNo\",
+        eo.final_line_manager_comment as comment,
+        eo.status as status,
+        eo.id as eoid,
+        eo.reason as reason,
+        eo.\"empID\" as empID,
+        CONCAT(e.fname,' ',COALESCE(e.mname,''),' ', e.lname) as name,
+        d.name as department,
+        p.name as position,
+        CAST(eo.application_time AS date) as application_date,
+        CAST(eo.time_end AS time) as time_out,
+        CAST(eo.time_start AS time) as time_in,
+        EXTRACT(EPOCH FROM (eo.time_end - eo.time_start))/3600 as total_hours
+    FROM employee e
+    JOIN employee_overtime eo ON e.emp_id = eo.\"empID\"
+    JOIN position p ON e.position = p.id
+    JOIN department d ON e.department = d.id
+    ORDER BY eo.id DESC";
 
-        //$query = "SELECT *  FROM employee_overtime";
+    return DB::select(DB::raw($query));
+}
 
-        return DB::select(DB::raw($query));
-    }
 
     public function lineOvertime($id)
     {
