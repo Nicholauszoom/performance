@@ -395,29 +395,43 @@ class FlexPerformanceModel extends Model
 
      public function my_overtimes($id)
      {
-         $query = DB::table('employee as e')
-             ->selectRaw(
-                 'ROW_NUMBER() OVER () as SNo, eo.final_line_manager_comment as comment, eo.linemanager as line_manager,
-                 eo.status as status, eo.id as eoid, eo.reason as reason, eo."empID" as empID,
-                 CONCAT(e.fname, \' \', COALESCE(e.mname, \'\'), \' \', e.lname) as name, d.name as DEPARTMENT,
-                 p.name as POSITION, CAST(eo.application_time as date) as "applicationDATE",
-                 CAST(eo.time_end as time) as time_out, CAST(eo.time_start as time) as time_in,
-                 (EXTRACT(EPOCH FROM (eo.time_end - eo.time_start)) / 3600) *
-                     (CASE WHEN eo.overtime_type = 0 THEN (e.salary / 240) * (SELECT day_percent FROM overtime_category WHERE id = eo.overtime_category)
-                           ELSE (e.salary / 240) * (SELECT day_percent FROM overtime_category WHERE id = eo.overtime_category)
-                     END) AS earnings,
-                 ROUND((EXTRACT(EPOCH FROM (eo.time_end - eo.time_start)) / 3600), 2) as total_hours'
-             )
-             ->leftJoin('employee_overtime as eo', function ($join) use ($id) {
-                 $join->on('e.emp_id', '=', 'eo.empID')
-                     ->where('eo.empID', '=', $id);
-             })
-             ->leftJoin('department as d', 'e.department', '=', 'd.id')
-             ->leftJoin('position as p', 'e.position', '=', 'p.id')
-             ->orderBy('eo.id', 'DESC')
-             ->get();
+        $query = "
+        SELECT
+            row_number() OVER () as SNo,
+            eo.final_line_manager_comment as comment,
+            eo.linemanager as line_manager,
+            eo.status as status,
+            eo.id as eoid,
+            eo.reason as reason,
+            eo.\"empID\" as empID,
+            CONCAT(e.fname, ' ', COALESCE(e.mname, ' '), ' ', e.lname) as name,
+            d.name as DEPARTMENT,
+            p.name as POSITION,
+            CAST(eo.application_time AS DATE) as \"applicationDATE\",
+            CAST(eo.time_end AS TIME) as time_out,
+            CAST(eo.time_start AS TIME) as time_in,
+            (EXTRACT(EPOCH FROM (eo.time_end - eo.time_start)) / 3600) *
+                (CASE WHEN eo.overtime_type = 0 THEN (e.salary / 240) * (SELECT day_percent FROM overtime_category WHERE id = eo.overtime_category)
+                    ELSE (e.salary / 240) * (SELECT day_percent FROM overtime_category WHERE id = eo.overtime_category)
+                END) AS earnings,
+            ROUND((EXTRACT(EPOCH FROM (eo.time_end - eo.time_start)) / 3600), 2) as total_hours
+        FROM
+            employee e
+        JOIN
+            employee_overtime eo ON eo.\"empID\" = e.emp_id
+        JOIN
+            department d ON e.department = d.id
+        JOIN
+            position p ON e.position  = p.id
+        WHERE
+            eo.\"empID\" = '$id'
+        ORDER BY
+            eo.id DESC;
+        ";
 
-         return $query;
+
+        // dd(DB::select(DB::raw($query)));
+         return DB::select(DB::raw($query));
      }
 
 
