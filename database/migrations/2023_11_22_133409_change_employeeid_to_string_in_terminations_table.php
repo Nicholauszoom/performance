@@ -14,8 +14,8 @@ class ChangeEmployeeIdToStringInTerminationsTable extends Migration
     public function up()
     {
         Schema::table('terminations', function (Blueprint $table) {
-            // $table->string("employeeID")->change();
-            $table->renameColumn('employeeWEWE', 'employid');
+            $table->string("employeeID")->change();
+            // $table->renameColumn('employeeID', 'employid');
         });
     }
 

@@ -21,9 +21,9 @@ return new class extends Migration
             $table->double('achieved');
             $table->boolean('status')->default(false);
             $table->timestamps();
-            $table->text('actions')->default('N/A');
-            $table->text('measures')->default('N/A');
-            $table->text('results')->default('N/A');
+            $table->string('actions')->default('N/A');
+            $table->string('measures')->default('N/A');
+            $table->string('results')->default('N/A');
             $table->double('rating')->default(0);
             $table->double('weighting')->default(0);
             $table->double('score')->default(0);

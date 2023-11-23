@@ -1054,6 +1054,7 @@ class GeneralController extends Controller
         }
     }
 
+
     public function deleteDepartment($id)
     {
 
@@ -1882,6 +1883,7 @@ class GeneralController extends Controller
             );
             $result = $this->flexperformance_model->addOrganizationLevel($data);
             if ($result == true) {
+                return redirect()->back();
                 $response_array['status'] = "OK";
                 $response_array['message'] = "<p class='alert alert-success text-center'>Organization Level Added Successifully!</p>";
             } else {
@@ -1891,6 +1893,20 @@ class GeneralController extends Controller
             header('Content-type: application/json');
             echo json_encode($response_array);
         }
+    }
+
+    public function deleteOrganizationLevel($id)
+    {
+        $result = $this->flexperformance_model->deleteOrganizationLevel($id);
+        if ($result == true) {
+            $response_array['status'] = "OK";
+            $response_array['message'] = "<p class='alert alert-success text-center'>Organization Level Deleted!</p>";
+        } else {
+            $response_array['status'] = "ERR";
+            $response_array['message'] = "<p class='alert alert-danger text-center'>FAILED: Organization Level NOT Deleted!</p>";
+        }
+        header('Content-type: application/json');
+        echo json_encode($response_array);
     }
 
     public function deletePosition(Request $request)
@@ -2025,7 +2041,7 @@ class GeneralController extends Controller
                             'time_recommended_line' => date('Y-m-d h:i:s'),
                             'time_approved_hr' => date('Y-m-d'),
                             'time_confirmed_line' => date('Y-m-d h:i:s'),
-                            'application_time'=> new DateTime(),
+                            'application_time' => new DateTime(),
 
                         );
 
@@ -2051,7 +2067,7 @@ class GeneralController extends Controller
                             'time_recommended_line' => date('Y-m-d h:i:s'),
                             'time_approved_hr' => date('Y-m-d'),
                             'time_confirmed_line' => date('Y-m-d h:i:s'),
-                            'application_time'=> new DateTime(),
+                            'application_time' => new DateTime(),
                         );
 
                         $result = $this->flexperformance_model->apply_overtime($data);
@@ -2076,7 +2092,7 @@ class GeneralController extends Controller
                             'time_recommended_line' => date('Y-m-d h:i:s'),
                             'time_approved_hr' => date('Y-m-d'),
                             'time_confirmed_line' => date('Y-m-d h:i:s'),
-                            'application_time'=> new DateTime(),
+                            'application_time' => new DateTime(),
 
                         );
 
@@ -2108,7 +2124,7 @@ class GeneralController extends Controller
                         'time_recommended_line' => date('Y-m-d h:i:s'),
                         'time_approved_hr' => date('Y-m-d'),
                         'time_confirmed_line' => date('Y-m-d h:i:s'),
-                        'application_time'=> new DateTime(),
+                        'application_time' => new DateTime(),
 
                     );
                     $result = $this->flexperformance_model->apply_overtime($data);
@@ -2130,7 +2146,7 @@ class GeneralController extends Controller
                         'time_recommended_line' => date('Y-m-d h:i:s'),
                         'time_approved_hr' => date('Y-m-d'),
                         'time_confirmed_line' => date('Y-m-d h:i:s'),
-                        'application_time'=> new DateTime(),
+                        'application_time' => new DateTime(),
 
                     );
                     $result = $this->flexperformance_model->apply_overtime($data);
@@ -5263,7 +5279,7 @@ class GeneralController extends Controller
     }
     public function addAllowanceCategory(Request $request)
     {
-            $data = array(
+        $data = array(
             'name' => $request->name,
         );
 
@@ -5285,8 +5301,8 @@ class GeneralController extends Controller
         if ($request->method() == "POST") {
             $data = array(
                 'name' => $request->input('name'),
-                'day_percent' => ($request->input('day_percent') ),
-                'night_percent' => ($request->input('night_percent') ),
+                'day_percent' => ($request->input('day_percent')),
+                'night_percent' => ($request->input('night_percent')),
             );
             $result = $this->flexperformance_model->addOvertimeCategory($data);
             if ($result == true) {
@@ -8205,19 +8221,19 @@ class GeneralController extends Controller
         $termination->noticePay = $request->noticePay;
         $termination->leavePay = $request->leavePay;
         $termination->livingCost = $request->livingCost;
-$termination->houseAllowance = $request->houseAllowance;
-$termination->utilityAllowance = $request->utilityAllowance;
+        $termination->houseAllowance = $request->houseAllowance;
+        $termination->utilityAllowance = $request->utilityAllowance;
         $termination->leaveAllowance = $request->leaveAllowance;
-$termination->tellerAllowance = $request->tellerAllowance;
+        $termination->tellerAllowance = $request->tellerAllowance;
         $termination->serevancePay = $request->serevancePay;
         $termination->leaveStand = $request->leaveStand;
         $termination->arrears = $request->arrears;
         $termination->exgracia = $request->exgracia;
-$termination->transport_allowance = $request->transport_allowance;
+        $termination->transport_allowance = $request->transport_allowance;
         $termination->nightshift_allowance = $request->nightshift_allowance;
         $termination->bonus = $request->bonus;
         $termination->actual_salary = $employee_actual_salary;
-$termination->longServing = $request->longServing;
+        $termination->longServing = $request->longServing;
         $termination->salaryAdvance = $request->salaryAdvance;
         $termination->otherDeductions = $request->otherDeductions;
         $termination->otherPayments = $request->otherPayments;
@@ -8514,7 +8530,6 @@ $termination->longServing = $request->longServing;
 
             $leave_allowance = $this->flexperformance_model->get_leave_allowance($employeeID, $termination_date, $january_date);
             $employee_salary = $this->flexperformance_model->get_employee_salary($employeeID, $termination_date, $dd);
-
         }
         $employee_actual_salary = $this->flexperformance_model->get_actual_basic_salary($employeeID);
 
@@ -10126,7 +10141,8 @@ $termination->longServing = $request->longServing;
     {
         request()->validate(
             [
-                'emp_id' => 'required']
+                'emp_id' => 'required'
+            ]
         );
 
         $emp_id = $request->emp_id;
@@ -10137,7 +10153,6 @@ $termination->longServing = $request->longServing;
 
         $msg = "Employee Leave Forfeiting has been save Successfully !";
         return back()->with('msg', $msg);
-
     }
     // end of update holiday function
 
@@ -10869,32 +10884,33 @@ $termination->longServing = $request->longServing;
         $id = auth()->user()->emp_id;
 
         $extra = $request->input('extra');
-        $data['employee'] = $this->flexperformance_model->userprofile($id);
 
-        // dd($this->flexperformance_model->userprofile($id));
-        $data['kin'] = $this->flexperformance_model->getkin($id);
-        $data['property'] = $this->flexperformance_model->getproperty($id);
-        $data['propertyexit'] = $this->flexperformance_model->getpropertyexit($id);
-        $data['active_properties'] = $this->flexperformance_model->getactive_properties($id);
-        $data['allrole'] = $this->flexperformance_model->role($id);
-        $data['role'] = $this->flexperformance_model->getuserrole($id);
-        $data['rolecount'] = $this->flexperformance_model->rolecount($id);
-        $data['task_duration'] = $this->performanceModel->total_task_duration($id);
-        $data['task_actual_duration'] = $this->performanceModel->total_task_actual_duration($id);
-        $data['task_monetary_value'] = $this->performanceModel->all_task_monetary_value($id);
-        $data['allTaskcompleted'] = $this->performanceModel->allTaskcompleted($id);
+        // $data['employee'] = $this->flexperformance_model->userprofile($id);
+        // // dd($this->flexperformance_model->userprofile($id));
+        // $data['kin'] = $this->flexperformance_model->getkin($id);
+        // $data['property'] = $this->flexperformance_model->getproperty($id);
+        // $data['propertyexit'] = $this->flexperformance_model->getpropertyexit($id);
+        // $data['active_properties'] = $this->flexperformance_model->getactive_properties($id);
+        // $data['allrole'] = $this->flexperformance_model->role($id);
+        // $data['role'] = $this->flexperformance_model->getuserrole($id);
+        // $data['rolecount'] = $this->flexperformance_model->rolecount($id);
+        // $data['task_duration'] = $this->performanceModel->total_task_duration($id);
+        // $data['task_actual_duration'] = $this->performanceModel->total_task_actual_duration($id);
+        // $data['task_monetary_value'] = $this->performanceModel->all_task_monetary_value($id);
+        // $data['allTaskcompleted'] = $this->performanceModel->allTaskcompleted($id);
+        // $data['skills_missing'] = $this->flexperformance_model->skills_missing($id);
+        // $data['requested_skills'] = $this->flexperformance_model->requested_skills($id);
+        // $data['skills_have'] = $this->flexperformance_model->skills_have($id);
+        // $data['month_list'] = $this->flexperformance_model->payroll_month_list();
 
-        $data['skills_missing'] = $this->flexperformance_model->skills_missing($id);
 
-        $data['requested_skills'] = $this->flexperformance_model->requested_skills($id);
-        $data['skills_have'] = $this->flexperformance_model->skills_have($id);
-        $data['month_list'] = $this->flexperformance_model->payroll_month_list();
         $data['title'] = "Profile";
         $data['empID'] = $id;
         $empID = $id;
-        $data['details'] = EmployeeDetail::where('employeeID', $empID)->first();
+        $data = [];
+        // $data['details'] = EmployeeDetail::where('employeeID', $empID)->first();
 
-        $data['emergency'] = EmergencyContact::where('employeeID', $empID)->first();
+        $data['emergency'] = EmergencyContact::where('employeeID', strval($empID))->first();
 
         $data['children'] = EmployeeDependant::where('employeeID', $empID)->get();
 
@@ -12247,7 +12263,8 @@ $termination->longServing = $request->longServing;
     }
 
 
-    public function loan_types(){
+    public function loan_types()
+    {
         $data['loan_types'] = LoanType::all();
         // dd($data);
         return view('loans.loan_types', $data);

@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('employee_parents', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('employeeID');
+            $table->string('employeeid');
             $table->string('parent_names')->nullable();
             $table->string('parent_relation')->nullable();
             $table->string('parent_birthdate')->nullable();
