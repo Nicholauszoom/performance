@@ -1405,44 +1405,45 @@ class FlexPerformanceModel extends Model
 
     public function userprofile($empID)
     {
-        $query =
-         "SELECT
-         e.*,
-         bank.name AS bankName,
-         ctry.name AS country,
-         b.name AS branch_name,
-         bb.name AS bankBranch,
-         d.name AS deptname,
-         c.name AS CONTRACT,
-         p.name AS pName,
-         (
-             SELECT CONCAT(fname, ' ', COALESCE(mname, ''), ' ', lname)
-             FROM employee
-             WHERE emp_id = e.line_manager
-         ) AS LINEMANAGER
-     FROM
-         employee e
-     JOIN
-         department d ON d.id = e.department
-     JOIN
-         contract c ON e.contract_type::bigint = c.id -- Casting e.contract_type to bigint
-     JOIN
-         country ctry ON ctry.code::bigint = e.nationality
-     JOIN
-         position p ON p.id = e.position
-     JOIN
-         bank ON e.bank = bank.id
-     JOIN
-         branch b ON e.branch = b.id
-     JOIN
-         bank_branch bb ON e.bank_branch = bb.id
-     WHERE
-         e.emp_id = '$empID';
-     ";
+       $query = "SELECT
+        e.*,
+        bank.name AS bankName,
+        ctry.name AS country,
+        b.name AS branch_name,
+        bb.name AS bankBranch,
+        d.name AS deptname,
+        c.name AS CONTRACT,
+        p.name AS pName,
+        (
+            SELECT CONCAT(fname,' ', COALESCE(mname,''),' ', lname)
+            FROM employee
+            WHERE emp_id = e.line_manager
+        ) AS LINEMANAGER
+    FROM
+        employee e
+    JOIN
+        department d ON d.id = e.department
+    JOIN
+        contract c ON e.contract_type = c.id
+    JOIN
+        country ctry ON ctry.code = e.nationality
+    JOIN
+        position p ON p.id = e.position
+    JOIN
+        bank ON e.bank = bank.id
+    JOIN
+        branch b ON e.branch = b.id
+    JOIN
+        bank_branch bb ON e.bank_branch = bb.id
+    WHERE
+        e.emp_id = '$empID'";
+
 
         $row = DB::select(DB::raw($query));
 
-        return $row;
+return $row;
+
+
     }
 
     public function shift()
