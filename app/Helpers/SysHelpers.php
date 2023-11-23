@@ -30,18 +30,18 @@ class SysHelpers
      */
     public static function AuditLog($risk, $action, Request $request)
     {
+        $employeeID = (int)Auth::user()->emp_id; // Casting to integer assuming emp_id is numeric
         $employee = Auth::user()->fname . ' ' . Auth::user()->mname . ' ' . Auth::user()->lname;
-        // $row = DB::table('payroll_months')->select('payroll_date')->last();
-        // $previous_payroll_month_raw = date('Y-m', strtotime(date('Y-m-d', strtotime($current_payroll_month . "-1 month"))));
 
         AuditTrail::create([
-            'emp_id' => Auth::user()->emp_id,
+            'emp_id' => $employeeID,
             'emp_name' => $employee,
             'action_performed' => $action,
             'ip_address' =>  $request->ip(),
             'user_agent' => $request->userAgent(),
             'risk' => $risk,
         ]);
+
     }
 
     /**

@@ -1403,11 +1403,41 @@ class FlexPerformanceModel extends Model
 
     public function userprofile($empID)
     {
+        $query =
+         "SELECT
+         e.*,
+         bank.name AS bankName,
+         ctry.name AS country,
+         b.name AS branch_name,
+         bb.name AS bankBranch,
+         d.name AS deptname,
+         c.name AS CONTRACT,
+         p.name AS pName,
+         (
+             SELECT CONCAT(fname, ' ', COALESCE(mname, ''), ' ', lname)
+             FROM employee
+             WHERE emp_id = e.line_manager
+         ) AS LINEMANAGER
+     FROM
+         employee e
+     JOIN
+         department d ON d.id = e.department
+     JOIN
+         contract c ON e.contract_type::bigint = c.id -- Casting e.contract_type to bigint
+     JOIN
+         country ctry ON ctry.code::bigint = e.nationality
+     JOIN
+         position p ON p.id = e.position
+     JOIN
+         bank ON e.bank = bank.id
+     JOIN
+         branch b ON e.branch = b.id
+     JOIN
+         bank_branch bb ON e.bank_branch = bb.id
+     WHERE
+         e.emp_id = '$empID';
+     ";
 
-        // dd($empID);
-        $query = "SELECT e.*, bank.name as bankName, ctry.name as country, b.name as branch_name,  bb.name as bankBranch, d.name as deptname, c.name as CONTRACT, p.name as pName, (SELECT CONCAT(fname,' ', mname,' ', lname) from employee where  emp_id = e.line_manager) as LINEMANAGER from employee e, department d, contract c, country ctry, position p, bank, branch b, bank_branch bb WHERE d.id=e.department and p.id=e.position and e.contract_type = c.id AND e.bank_branch = bb.id and ctry.code = e.nationality AND e.bank = bank.id AND e.branch = b.id AND e.emp_id ='" . $empID . "'";
-
-        // dd($query);
         $row = DB::select(DB::raw($query));
 
         return $row;
@@ -1415,8 +1445,15 @@ class FlexPerformanceModel extends Model
 
     public function shift()
     {
-        $query = "SELECT  shift.*, DATE_FORMAT(start_time, '%H:%i') as STARTtime , DATE_FORMAT(end_time, '%H:%i') as ENDtime FROM shift";
-        return DB::select(DB::raw($query));
+        $query = "SELECT
+                    shift.*,
+                    TO_CHAR(start_time, 'HH24:MI') AS STARTtime,
+                    TO_CHAR(end_time, 'HH24:MI') AS ENDtime
+                FROM
+                    shift";
+
+
+       return DB::select(DB::raw($query));
     }
 
     public function getLinemanager($id)
@@ -2610,28 +2647,27 @@ last_paid_date='" . $date . "' WHERE  state = 1 and type = 3";
     // }
 
     public function mysalary_advance($empID)
-{
-    $queryResult = DB::table('loan_application')
-        ->join('employee', 'loan_application.empID', '=', 'employee.emp_id')
-        ->join('position', 'employee.position', '=', 'position.id')
-        ->join('department', 'employee.department', '=', 'department.id')
-        ->join('loan_type', 'loan_application.type', '=', 'loan_type.id')
-        ->crossJoin(DB::raw('(SELECT @s:=0) as s'))
-        ->select(
-            DB::raw('@s:=@s+1 as SNo'),
-            'loan_application.empID',
-            'loan_type.name as TYPE',
-            'loan_application.*',
-            DB::raw("CONCAT(employee.fname, ' ', IF(employee.mname IS NOT NULL, employee.mname, ' '), ' ', employee.lname) as NAME"),
-            'department.name as DEPARTMENT',
-            'position.name as POSITION'
-        )
-        ->where('loan_application.empID', '=', $empID)
-        ->orderBy('loan_application.id', 'DESC')
-        ->get();
+    {
+        $queryResult = "SELECT
+            ROW_NUMBER() OVER (ORDER BY loan_application.id DESC) AS SNo,
+            loan_application.\"empID\",  -- Use the column name without quotes
+            loan_type.name AS TYPE,
+            loan_application.*,
+            CONCAT(employee.fname, ' ', COALESCE(employee.mname, ''), ' ', employee.lname) AS NAME,
+            department.name AS DEPARTMENT,
+            position.name AS POSITION
+        FROM loan_application
+        JOIN employee ON loan_application.\"empID\" = employee.emp_id  -- Use the column name without quotes
+        JOIN position ON employee.position = position.id
+        JOIN department ON employee.department = department.id
+        JOIN loan_type ON CAST(loan_application.type AS bigint) = loan_type.id
+        WHERE loan_application.\"empID\" = '$empID'  -- Use the column name without quotes
+        ORDER BY loan_application.id DESC";
 
-    return $queryResult;
-}
+
+
+            return  DB::select(DB::raw($queryResult));
+    }
 
 
     public function salary_advance()
@@ -2751,9 +2787,23 @@ last_paid_date='" . $date . "' WHERE  state = 1 and type = 3";
 
     public function my_confirmedloan($empID)
     {
-        $query = "SELECT @s:=@s+1 SNo, l.empID, l.*,  CONCAT(e.fname,' ',IF( e.mname != null,e.mname,' '),' ', e.lname) as name, d.name as department, p.name as position FROM loan l, employee e, position p, department d,  (SELECT @s:=0) as s WHERE l.empID=e.emp_id and e.position=p.id and e.department=d.id AND l.empID='" . $empID . "' ORDER BY l.state DESC ";
+        $queryResult = "SELECT
+        ROW_NUMBER() OVER () AS SNo,
+        l.\"empID\",
+        l.*,
+        CONCAT(e.fname, ' ', COALESCE(e.mname, ''), ' ', e.lname) AS name,
+        d.name AS department,
+        p.name AS position
+    FROM
+        loan l
+    JOIN
+        employee e ON l.\"empID\" = e.emp_id
+    JOIN
+        position p ON e.position = p.id
+    JOIN
+        department d ON e.department = d.id";
 
-        return DB::select(DB::raw($query));
+        return DB::select(DB::raw($queryResult));
     }
 
     public function all_confirmedloan()
@@ -3779,7 +3829,18 @@ return DB::select(DB::raw($query));
 
     public function customemployee()
     {
-        $query = "SELECT DISTINCT e.emp_id as empID, CONCAT(e.fname,' ',IF( e.mname != null,e.mname,' '),' ', e.lname) as NAME FROM employee e WHERE state = 1 ";
+         $query = "SELECT DISTINCT e.emp_id AS empID,
+         CONCAT(e.fname, ' ',
+             CASE
+                 WHEN e.mname IS NOT NULL THEN e.mname || ' '
+                 ELSE ''
+             END,
+             e.lname) AS NAME
+     FROM employee e
+     WHERE state = 1";
+
+
+
         return DB::select(DB::raw($query));
     }
 
