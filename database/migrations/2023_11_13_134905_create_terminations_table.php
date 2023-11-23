@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('terminations', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('employeeID');
+            $table->string('employeeid');
             $table->date('terminationDate');
             $table->string('reason');
             $table->decimal('salaryEnrollment', 10);

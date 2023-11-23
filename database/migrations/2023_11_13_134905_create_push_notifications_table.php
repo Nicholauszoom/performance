@@ -21,7 +21,7 @@ return new class extends Migration
             $table->tinyInteger('status')->default(0);
             $table->string('token')->nullable();
             $table->timestamps();
-            $table->unsignedBigInteger('emp_id')->nullable();
+            $table->unsignedBigstring('emp_id')->nullable();
         });
     }
 

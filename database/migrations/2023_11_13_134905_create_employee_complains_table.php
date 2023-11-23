@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('employee_complains', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('employeeID');
+            $table->string('employeeid');
             $table->mediumText('description');
             $table->bigInteger('action')->nullable();
             $table->timestamps();

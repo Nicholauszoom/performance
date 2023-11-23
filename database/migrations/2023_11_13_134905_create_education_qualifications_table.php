@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('education_qualifications', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('employeeID');
+            $table->string('employeeid');
             $table->string('institute');
             $table->string('level');
             $table->string('course');
