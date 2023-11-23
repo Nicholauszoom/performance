@@ -10758,6 +10758,7 @@ $termination->longServing = $request->longServing;
     {
         $data['title'] = "Overtime";
         $data['my_overtimes'] = $this->flexperformance_model->my_overtimes(auth()->user()->emp_id);
+        // dd($data['my_overtimes']);
         $data['overtimeCategory'] = $this->flexperformance_model->overtimeCategory();
         $data['employees'] = $this->flexperformance_model->Employee();
 

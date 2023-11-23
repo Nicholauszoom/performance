@@ -627,13 +627,12 @@ FROM payroll_logs pl, employee e WHERE e.emp_id = pl.empID and e.contract_type =
 
         $query = 'SELECT @s:=@s+1 SNo, a.* FROM allowance_categories a , (SELECT @s:=0) as s ';
 
-        $categories=DB::select(DB::raw($query));
+        $categories = DB::select(DB::raw($query));
 
-        $allowance_categories_query="";
-        foreach ($categories as $category){
+        $allowance_categories_query = "";
+        foreach ($categories as $category) {
 
-            $allowance_categories_query =$allowance_categories_query. "(IF((SELECT SUM(al.amount) FROM temp_allowance_logs al join allowances on allowances.id=al.allowanceID WHERE  al.empID = e.emp_id AND allowances.allowance_category_id=". $category->id."  AND al.payment_date = '" . $date . "' GROUP BY al.empID >0),(SELECT SUM(al.amount) FROM temp_allowance_logs al join allowances on allowances.id=al.allowanceID WHERE al.empID = e.emp_id AND allowances.allowance_category_id=". $category->id." AND al.payment_date = '" . $date . "' GROUP BY al.empID),0)) AS category".$category->id.",";
-
+            $allowance_categories_query = $allowance_categories_query . "(IF((SELECT SUM(al.amount) FROM temp_allowance_logs al join allowances on allowances.id=al.allowanceID WHERE  al.empID = e.emp_id AND allowances.allowance_category_id=" . $category->id . "  AND al.payment_date = '" . $date . "' GROUP BY al.empID >0),(SELECT SUM(al.amount) FROM temp_allowance_logs al join allowances on allowances.id=al.allowanceID WHERE al.empID = e.emp_id AND allowances.allowance_category_id=" . $category->id . " AND al.payment_date = '" . $date . "' GROUP BY al.empID),0)) AS category" . $category->id . ",";
         }
 
         $query = "SELECT
@@ -644,7 +643,7 @@ FROM payroll_logs pl, employee e WHERE e.emp_id = pl.empID and e.contract_type =
         'al.description' as allowance_id,
         0 as allowance_amount,
         (IF((SELECT SUM(al.amount) FROM temp_allowance_logs al WHERE al.empID = e.emp_id AND al.description lIKE '%Overtime%' AND al.payment_date = '" . $date . "' GROUP BY al.empID >0),(SELECT SUM(al.amount) FROM temp_allowance_logs al WHERE al.empID = e.emp_id AND al.description lIKE '%Overtime%' AND al.payment_date = '" . $date . "' GROUP BY al.empID),0)) AS overtime,
-          ".$allowance_categories_query."
+          " . $allowance_categories_query . "
 
          (IF((SELECT SUM(al.amount) FROM temp_allowance_logs al join allowances on allowances.id=al.allowanceID WHERE  al.empID = e.emp_id AND allowances.allowance_category_id is null  AND al.payment_date = '" . $date . "' GROUP BY al.empID >0),(SELECT SUM(al.amount) FROM temp_allowance_logs al join allowances on allowances.id=al.allowanceID WHERE al.empID = e.emp_id AND allowances.allowance_category_id is null AND al.payment_date = '" . $date . "' GROUP BY al.empID),0)) AS other_payments,
 
@@ -837,22 +836,65 @@ FROM payroll_logs pl, employee e WHERE e.emp_id = pl.empID and e.contract_type =
 
     function employee_pension($empID)
     {
-        $query = "
-(SELECT @s:=@s+1 as SNo, e.pf_membership_no,e.emp_id,e.fname,e.mname,e.lname,e.hire_date, CONCAT(e.fname,' ', IF(e.mname != null,e.mname,' '),' ', e.lname) as name,e.emp_id, pl.salary as salary,pl.years,pl.pension_employee,pl.receipt_no,pl.receipt_date,pl.payroll_date as payment_date, pl.pension_employee as pension_employer
- FROM employee e, payroll_logs pl, (SELECT @s:=0) s WHERE pl.empID = e.emp_id and e.contract_type != 2 AND e.salary != 0.00  AND pl.empID = '" . $empID . "' ORDER BY payroll_date ASC)
 
-  UNION
+        $query = DB::table('employee as e')
+            ->select(
+                DB::raw('ROW_NUMBER() OVER () as SNo'),
+                'e.pf_membership_no',
+                'e.emp_id',
+                'e.fname',
+                'e.mname',
+                'e.lname',
+                'e.hire_date',
+                DB::raw("CONCAT(e.fname, ' ', COALESCE(e.mname, ' '), ' ', e.lname) as name"),
+                'e.emp_id',
+                'pl.salary as salary',
+                'pl.years',
+                'pl.pension_employee',
+                'pl.receipt_no',
+                'pl.receipt_date',
+                'pl.payroll_date as payment_date',
+                'pl.pension_employee as pension_employer'
+            )
+            ->join('payroll_logs as pl', 'pl.empID', '=', 'e.emp_id')
+            ->crossJoin(DB::raw('(SELECT 0) as s'))
+            ->where('e.contract_type', '<>', 2)
+            ->where('e.salary', '<>', 0.00)
+            ->where('pl.empID', $empID)
+            ->orderBy('pl.payroll_date', 'ASC');
 
-(SELECT @s:=@s+1 as SNo, e.pf_membership_no,e.emp_id,e.fname,e.mname,e.lname,e.hire_date, CONCAT(e.fname,' ', IF(e.mname != null,e.mname,' '),' ', e.lname) as name,e.emp_id, tm.salaryEnrollment as salary,EXTRACT(YEAR FROM tm.terminationDate) AS years,tm.pension_employee,'-' as receipt_no,'-' as receipt_date,tm.terminationDate as payment_date, tm.pension_employee as pension_employer
- FROM employee e, terminations tm, (SELECT @s:=0) s WHERE tm.employeeID = e.emp_id and e.contract_type != 2 AND e.salary != 0.00  AND tm.employeeID = '" . $empID . "' ORDER BY terminationDate ASC)
+        $unionQuery = DB::table('employee as e')
+            ->select(
+                DB::raw('ROW_NUMBER() OVER () as SNo'),
+                'e.pf_membership_no',
+                'e.emp_id',
+                'e.fname',
+                'e.mname',
+                'e.lname',
+                'e.hire_date',
+                DB::raw("CONCAT(e.fname, ' ', COALESCE(e.mname, ' '), ' ', e.lname) as name"),
+                'e.emp_id',
+                'tm.salaryEnrollment as salary',
+                DB::raw("EXTRACT(YEAR FROM tm.\"terminationDate\") AS years"),
+                'tm.pension_employee',
+                DB::raw("'-' as receipt_no"),
+                DB::raw("'-' as receipt_date"),
+                'tm.terminationDate as payment_date',
+                'tm.pension_employee as pension_employer'
+            )
+            ->join('terminations as tm','tm."employeeID"', '=',   'e.emp_id')
+            ->crossJoin(DB::raw('(SELECT 0) as s'))
+            ->where('e.contract_type', '<>', 2)
+            ->where('e.salary', '<>', 0.00)
+            ->where('tm."/employeeID/"') ;// Explicitly cast $empID to integer
+            // ->orderBy('tm."\terminationDate\"', 'ASC');
 
- ";
+        $query->union($unionQuery);
 
-
-        return DB::select(DB::raw($query));
+        return $query->get();
     }
 
-    
+
 
     function v_pension($date, $pensionFund)
     {

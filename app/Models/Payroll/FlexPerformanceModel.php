@@ -423,6 +423,8 @@ class FlexPerformanceModel extends Model
 
 
 
+
+
     public function Overtime_total($id)
     {
         $query = "SELECT SUM(amount) as total_amount,SUM((TIMESTAMPDIFF(MINUTE, time_start, time_end)/60)) as total_hours from overtimes WHERE empID = '" . $id . "'";
