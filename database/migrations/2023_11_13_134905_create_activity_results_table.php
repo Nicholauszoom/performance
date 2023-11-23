@@ -19,7 +19,7 @@ return new class extends Migration
             $table->integer('cost');
             $table->integer('target');
             $table->integer('result');
-            $table->integer('emp_id');
+            $table->string('emp_id');
             $table->integer('exactly_cost');
             $table->integer('activity_id');
             $table->integer('deliverable_id');

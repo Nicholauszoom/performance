@@ -6,22 +6,28 @@ use App\Helpers\SysHelpers;
 use App\Models\Termination;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\App;
 
 class FlexPerformanceModel extends Model
 {
 
     public function audit_log($description)
     {
+        $request = App::make('request');
+        $userAgent = $request->header('User-Agent');
+        $ipAddress = $request->ip();
         $logData = array(
-            'empID' => auth()->user()->id,
-            'description' => $description,
-            'agent' => session('agent'),
-            'platform' => session('platform'),
-            'due_date' => date('Y-m-d h:i:s'),
-            'ip_address' => session('ip_address'),
+            'emp_id' => auth()->user()->emp_id,
+            'emp_name' => auth()->user()->fname . ' ' . auth()->user()->lname,
+            'action_performed' => $description,
+            'user_agent' => $userAgent,
+            'created_at' => date('Y-m-d h:i:s'),
+            'updated_at' => date('Y-m-d h:i:s'),
+            'ip_address' => $ipAddress,
+            'risk' => 1,
         );
 
-        DB::table('audit_logs')->insert($logData);
+        DB::table('audit_trails')->insert($logData);
     }
 
     public function audit_logs()
@@ -1180,6 +1186,15 @@ class FlexPerformanceModel extends Model
         return true;
     }
 
+    public function deleteOrganizationLevel($requestID)
+    {
+
+        $query = "DELETE FROM organization_level WHERE id = '" . $requestID . "'";
+        DB::insert(DB::raw($query));
+        $this->audit_log("Deleted Oraganization Level with ID =" . $requestID . " ");
+        return true;
+    }
+
     public function budget()
     {
         $query = "SELECT  @s:=@s+1 as SNo, tb.* FROM training_budget tb, (SELECT @s:=0) as s";
@@ -1906,22 +1921,22 @@ class FlexPerformanceModel extends Model
         return $row[0]->total_allowance;
     }
 
-            public function get_allowance_names_for_employee($empID)
-        {
-            $query = "SELECT a.name
+    public function get_allowance_names_for_employee($empID)
+    {
+        $query = "SELECT a.name
                         FROM emp_allowances ea
                         JOIN allowances a ON a.id = ea.allowance
                         WHERE ea.empID = {$empID}";
 
-            $rows = DB::select(DB::raw($query));
+        $rows = DB::select(DB::raw($query));
 
-            $allowanceNames = [];
-            foreach ($rows as $row) {
-                $allowanceNames[] = $row->name;
-            }
-
-            return $allowanceNames;
+        $allowanceNames = [];
+        foreach ($rows as $row) {
+            $allowanceNames[] = $row->name;
         }
+
+        return $allowanceNames;
+    }
 
 
     public function check_termination_payroll_date($date)
@@ -2649,27 +2664,27 @@ last_paid_date='" . $date . "' WHERE  state = 1 and type = 3";
     // }
 
     public function mysalary_advance($empID)
-    {
-        $queryResult = "SELECT
-            ROW_NUMBER() OVER (ORDER BY loan_application.id DESC) AS SNo,
-            loan_application.\"empID\",  -- Use the column name without quotes
-            loan_type.name AS TYPE,
-            loan_application.*,
-            CONCAT(employee.fname, ' ', COALESCE(employee.mname, ''), ' ', employee.lname) AS NAME,
-            department.name AS DEPARTMENT,
-            position.name AS POSITION
-        FROM loan_application
-        JOIN employee ON loan_application.\"empID\" = employee.emp_id  -- Use the column name without quotes
-        JOIN position ON employee.position = position.id
-        JOIN department ON employee.department = department.id
-        JOIN loan_type ON CAST(loan_application.type AS bigint) = loan_type.id
-        WHERE loan_application.\"empID\" = '$empID'  -- Use the column name without quotes
-        ORDER BY loan_application.id DESC";
-
-
-
-            return  DB::select(DB::raw($queryResult));
-    }
+{
+    $queryResult = DB::table('loan_application')
+        ->join('employee', 'loan_application.empID', '=', 'employee.emp_id')
+        ->join('position', 'employee.position', '=', 'position.id')
+        ->join('department', 'employee.department', '=', 'department.id')
+        ->join('loan_type', 'loan_application.type', '=', 'loan_type.id')
+        ->crossJoin(DB::raw('(SELECT @s:=0) as s'))
+        ->select(
+            DB::raw('@s:=@s+1 as SNo'),
+            'loan_application.empID',
+            'loan_type.name as TYPE',
+            'loan_application.*',
+            DB::raw("CONCAT(employee.fname, ' ', IF(employee.mname IS NOT NULL, employee.mname, ' '), ' ', employee.lname) as NAME"),
+            'department.name as DEPARTMENT',
+            'position.name as POSITION'
+        )
+        ->where('loan_application.empID', '=', $empID)
+        ->orderBy('loan_application.id', 'DESC')
+        ->get();
+    return $queryResult;
+}
 
 
     public function salary_advance()
