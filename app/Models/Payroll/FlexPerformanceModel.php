@@ -18,10 +18,11 @@ class FlexPerformanceModel extends Model
         $ipAddress = $request->ip();
         $logData = array(
             'emp_id' => auth()->user()->emp_id,
+            'emp_name' => auth()->user()->fname . ' ' . auth()->user()->lname,
             'action_performed' => $description,
-            // 'agent' => session('agent'),
             'user_agent' => $userAgent,
-            // 'due_date' => date('Y-m-d h:i:s'),
+            'created_at' => date('Y-m-d h:i:s'),
+            'updated_at' => date('Y-m-d h:i:s'),
             'ip_address' => $ipAddress,
             'risk' => 1,
         );
