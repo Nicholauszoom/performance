@@ -1425,15 +1425,15 @@ class FlexPerformanceModel extends Model
      JOIN
          department d ON d.id = e.department
      JOIN
-         contract c ON e.contract_type::bigint = c.id -- Casting e.contract_type to bigint
+         contract c ON e.contract_type = c.id::text -- Casting e.contract_type to bigint
      JOIN
-         country ctry ON ctry.code::bigint = e.nationality
+         country ctry ON ctry.code::text = e.nationality::text
      JOIN
          position p ON p.id = e.position
      JOIN
          bank ON e.bank = bank.id
      JOIN
-         branch b ON e.branch = b.id
+         branch b ON e.branch::text = b.id::text
      JOIN
          bank_branch bb ON e.bank_branch = bb.id
      WHERE
