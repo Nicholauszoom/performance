@@ -830,72 +830,26 @@ FROM payroll_logs pl, employee e WHERE e.emp_id = pl.empID and e.contract_type =
 
     function get_pension_years($empID)
     {
-        $query = "SELECT DISTINCT years from payroll_logs where empID = '" . $empID . "' ORDER BY years DESC";
+        $query = "SELECT DISTINCT years
+        FROM payroll_logs
+        WHERE \"empID\"= '$empID'
+        ORDER BY years DESC";
+
         return DB::select(DB::raw($query));
     }
 
     function employee_pension($empID)
     {
+        $query = "
+(SELECT @s:=@s+1 as SNo, e.pf_membership_no,e.emp_id,e.fname,e.mname,e.lname,e.hire_date, CONCAT(e.fname,' ', IF(e.mname != null,e.mname,' '),' ', e.lname) as name,e.emp_id, pl.salary as salary,pl.years,pl.pension_employee,pl.receipt_no,pl.receipt_date,pl.payroll_date as payment_date, pl.pension_employee as pension_employer
+ FROM employee e, payroll_logs pl, (SELECT @s:=0) s WHERE pl.empID = e.emp_id and e.contract_type != 2 AND e.salary != 0.00  AND pl.empID = '" . $empID . "' ORDER BY payroll_date ASC)
+  UNION
+(SELECT @s:=@s+1 as SNo, e.pf_membership_no,e.emp_id,e.fname,e.mname,e.lname,e.hire_date, CONCAT(e.fname,' ', IF(e.mname != null,e.mname,' '),' ', e.lname) as name,e.emp_id, tm.salaryEnrollment as salary,EXTRACT(YEAR FROM tm.terminationDate) AS years,tm.pension_employee,'-' as receipt_no,'-' as receipt_date,tm.terminationDate as payment_date, tm.pension_employee as pension_employer
+ FROM employee e, terminations tm, (SELECT @s:=0) s WHERE tm.employeeID = e.emp_id and e.contract_type != 2 AND e.salary != 0.00  AND tm.employeeID = '" . $empID . "' ORDER BY terminationDate ASC)
 
-        $query = DB::table('employee as e')
-            ->select(
-                DB::raw('ROW_NUMBER() OVER () as SNo'),
-                'e.pf_membership_no',
-                'e.emp_id',
-                'e.fname',
-                'e.mname',
-                'e.lname',
-                'e.hire_date',
-                DB::raw("CONCAT(e.fname, ' ', COALESCE(e.mname, ' '), ' ', e.lname) as name"),
-                'e.emp_id',
-                'pl.salary as salary',
-                'pl.years',
-                'pl.pension_employee',
-                'pl.receipt_no',
-                'pl.receipt_date',
-                'pl.payroll_date as payment_date',
-                'pl.pension_employee as pension_employer'
-            )
-            ->join('payroll_logs as pl', 'pl.empID', '=', 'e.emp_id')
-            ->crossJoin(DB::raw('(SELECT 0) as s'))
-            ->where('e.contract_type', '<>', 2)
-            ->where('e.salary', '<>', 0.00)
-            ->where('pl.empID', $empID)
-            ->orderBy('pl.payroll_date', 'ASC');
-
-        $unionQuery = DB::table('employee as e')
-            ->select(
-                DB::raw('ROW_NUMBER() OVER () as SNo'),
-                'e.pf_membership_no',
-                'e.emp_id',
-                'e.fname',
-                'e.mname',
-                'e.lname',
-                'e.hire_date',
-                DB::raw("CONCAT(e.fname, ' ', COALESCE(e.mname, ' '), ' ', e.lname) as name"),
-                'e.emp_id',
-                'tm.salaryEnrollment as salary',
-                DB::raw("EXTRACT(YEAR FROM tm.\"terminationDate\") AS years"),
-                'tm.pension_employee',
-                DB::raw("'-' as receipt_no"),
-                DB::raw("'-' as receipt_date"),
-                'tm.terminationDate as payment_date',
-                'tm.pension_employee as pension_employer'
-            )
-            ->join('terminations as tm','tm."employeeID"', '=',   'e.emp_id')
-            ->crossJoin(DB::raw('(SELECT 0) as s'))
-            ->where('e.contract_type', '<>', 2)
-            ->where('e.salary', '<>', 0.00)
-            ->where('tm."/employeeID/"') ;// Explicitly cast $empID to integer
-            // ->orderBy('tm."\terminationDate\"', 'ASC');
-
-        $query->union($unionQuery);
-
-        return $query->get();
+ ";
+return DB::select(DB::raw($query));
     }
-
-
-
     function v_pension($date, $pensionFund)
     {
         $query = "SELECT @s:=@s+1 as SNo, e.pf_membership_no , CONCAT(e.fname,' ', IF(e.mname != null,e.mname,' '),' ', e.lname) as name, pl.salary as salary, pl.allowances,pl.pension_employee, pl.pension_employer

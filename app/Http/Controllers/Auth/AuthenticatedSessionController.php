@@ -115,16 +115,23 @@ class AuthenticatedSessionController extends Controller
 
     public function setPermissions($emp_id) {
 
-        $query = "SELECT e.*, d.name AS dname, c.name AS CONTRACT, d.id AS departmentID, p.id AS positionID, p.name AS pName,
-            CONCAT(l.fname, ' ', l.mname, ' ', l.lname) AS lineManager
-            FROM employee e
-            LEFT JOIN contract c ON e.contract_type = c.id
-            LEFT JOIN department d ON d.id = e.department
-            LEFT JOIN position p ON p.id = e.position
-            LEFT JOIN employee l ON l.emp_id = e.line_manager
-            WHERE (e.state = '1' OR e.state = '3') AND e.emp_id = :emp_id";
+        $query =   "SELECT e.*,
+        d.name AS dname,
+        c.name AS contract,
+        d.id AS \"departmentID\",
+        p.id AS \"positionID\",
+        p.name AS \"pName\",
+        CONCAT(l.fname, ' ', l.mname, ' ', l.lname) AS \"lineManager\"
+        FROM employee e
+        LEFT JOIN contract c ON e.contract_type::bigint = c.id
+        LEFT JOIN department d ON d.id = e.department
+        LEFT JOIN position p ON p.id = e.position
+        LEFT JOIN employee l ON l.emp_id = e.line_manager
+        WHERE (e.state = '1' OR e.state = '3') AND e.emp_id = :emp_id"; // Use named placeholder
 
         $data = DB::select(DB::raw($query), ['emp_id' => $emp_id]);
+
+
 
 
         // dd($data);
@@ -166,7 +173,7 @@ class AuthenticatedSessionController extends Controller
             session(['postal_city' =>$data['postal_city']]);
             session(['mobile' =>$data['mobile']]);
             session(['linemanager' =>$data['lineManager']]);
-            session(['ctype' =>$data['CONTRACT']]);
+            session(['ctype' =>$data['contract']]);
             session(['postal_address' =>$data['postal_address']]);
             session(['physical_address' =>$data['physical_address']]);
             session(['salary' =>$data['salary']]);

@@ -6,9 +6,12 @@
     "license": "MIT",
     "require": {
         "php": "^8.1.0",
+        "ext-pdo_pgsql": "*",
         "ext-pgsql": "*",
+        "lib-pdo_pgsql-libpq": "*",
         "barryvdh/laravel-dompdf": "*",
         "consoletvs/charts": "^6.6",
+        "dibi/dibi": "^5.0",
         "doctrine/dbal": "*",
         "elibyy/tcpdf-laravel": "^10.0",
         "guzzlehttp/guzzle": "^7.5",
