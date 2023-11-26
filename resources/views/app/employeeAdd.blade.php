@@ -90,7 +90,7 @@
                                 required>
                                 <option selected disabled> Select </option>
                                 @foreach ($countrydrop as $row)
-                                    <option value="{{ $row->code }}">{{ $row->name }}</option>
+                                    <option value="{{ $row->item_code }}">{{ $row->description }}</option>
                                 @endforeach
                             </select>
                             <span id="nationality-error" class="text-danger error-message"></span>

@@ -2861,7 +2861,7 @@ last_paid_date='" . $date . "' WHERE  state = 1 and type = 3";
 
     public function countrydropdown()
     {
-        $query = "SELECT c.* FROM country c";
+        $query = "SELECT c.* FROM country_codes c";
 
         return DB::select(DB::raw($query));
     }
