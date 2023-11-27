@@ -209,7 +209,7 @@ class GeneralController extends Controller
         $data['employee_pension'] = $this->reports_model->employee_pension($id);
 
         //dd($data['employee_pension']);
-        $data['qualifications'] = EducationQualification::where('employeeID', $id)->get();
+        $data['qualifications'] = EducationQualification::where('employeeid', $id)->get();
 
         $data['photo'] = "";
 
@@ -9009,21 +9009,21 @@ class GeneralController extends Controller
 
         $data['pension'] = $this->flexperformance_model->pension_fund();
 
-        $details = EmployeeDetail::where('employeeID', $empID)->first();
+        $details = EmployeeDetail::where('employeeid', $empID)->first();
 
-        $emergency = EmergencyContact::where('employeeID', $empID)->first();
+        $emergency = EmergencyContact::where('employeeid', $empID)->first();
 
-        $children = EmployeeDependant::where('employeeID', $empID)->get();
+        $children = EmployeeDependant::where('employeeid', $empID)->get();
 
-        $spouse = EmployeeSpouse::where('employeeID', $empID)->first();
+        $spouse = EmployeeSpouse::where('employeeid', $empID)->first();
 
-        $parents = EmployeeParent::where('employeeID', $empID)->get();
+        $parents = EmployeeParent::where('employeeid', $empID)->get();
 
-        $data['qualifications'] = EducationQualification::where('employeeID', $empID)->orderBy('end_year', 'desc')->get();
+        $data['qualifications'] = EducationQualification::where('employeeid', $empID)->orderBy('end_year', 'desc')->get();
 
-        $data['certifications'] = ProfessionalCertification::where('employeeID', $empID)->orderBy('cert_end', 'desc')->get();
+        $data['certifications'] = ProfessionalCertification::where('employeeid', $empID)->orderBy('cert_end', 'desc')->get();
 
-        $data['histories'] = EmploymentHistory::where('employeeID', $empID)->orderBy('hist_end', 'desc')->get();
+        $data['histories'] = EmploymentHistory::where('employeeid', $empID)->orderBy('hist_end', 'desc')->get();
 
         $data['salaryTransfer'] = $this->flexperformance_model->pendingSalaryTranferCheck($empID);
 
@@ -9170,7 +9170,7 @@ class GeneralController extends Controller
             $employee->update();
 
             // Start of Employee Details
-            $profile = EmployeeDetail::where('employeeID', $id)->first();
+            $profile = EmployeeDetail::where('employeeid', $id)->first();
 
             if ($profile) {
 
@@ -9253,7 +9253,7 @@ class GeneralController extends Controller
             $employee->update();
 
             // Start of Employee Details
-            $profile = EmployeeDetail::where('employeeID', $id)->first();
+            $profile = EmployeeDetail::where('employeeid', $id)->first();
 
             if ($profile) {
                 $profile->former_title = $request->former_title;
@@ -9318,7 +9318,7 @@ class GeneralController extends Controller
             $auditLog = SysHelpers::AuditLog(1, "Employee Details with Employee Id .$employee->emp_id. are Updated by Employee Id " . $autheniticateduser, $request);
 
             // Start of Employee Details
-            $profile = EmployeeDetail::where('employeeID', $id)->first();
+            $profile = EmployeeDetail::where('employeeid', $id)->first();
 
             if ($profile) {
 
@@ -9396,7 +9396,7 @@ class GeneralController extends Controller
             $employee->update();
 
             // Start of Employee Details
-            $profile = EmployeeDetail::where('employeeID', $id)->first();
+            $profile = EmployeeDetail::where('employeeid', $id)->first();
 
             if ($profile) {
 
@@ -9474,7 +9474,7 @@ class GeneralController extends Controller
             $employee->update();
 
             // Start of Employee Details
-            $profile = EmployeeDetail::where('employeeID', $id)->first();
+            $profile = EmployeeDetail::where('employeeid', $id)->first();
 
             if ($profile) {
 
@@ -9552,7 +9552,7 @@ class GeneralController extends Controller
             $employee->update();
 
             // Start of Employee Details
-            $profile = EmployeeDetail::where('employeeID', $id)->first();
+            $profile = EmployeeDetail::where('employeeid', $id)->first();
 
             if ($profile) {
 
@@ -9593,7 +9593,7 @@ class GeneralController extends Controller
         $id = $request->employeeID;
 
         // Start of Employee Details
-        $profile = EmployeeDetail::where('employeeID', $id)->first();
+        $profile = EmployeeDetail::where('employeeid', $id)->first();
 
         if ($profile) {
 
@@ -9633,7 +9633,7 @@ class GeneralController extends Controller
     {
         $id = $request->employeeID;
 
-        $emergency = EmergencyContact::where('employeeID', $id)->first();
+        $emergency = EmergencyContact::where('employeeid', $id)->first();
 
         if ($emergency) {
 
@@ -9664,7 +9664,7 @@ class GeneralController extends Controller
     public function employeeParent(Request $request)
     {
         $empID = $request->employeeID;
-        $parent = EmployeeParent::where('employeeID', $empID)
+        $parent = EmployeeParent::where('employeeid', $empID)
             ->Where('parent_relation', 'LIKE', $request->parent_relation)
             ->where('parent_birthdate', 'LIKE', $request->parent_birthdate)
             ->first();
@@ -9702,7 +9702,7 @@ class GeneralController extends Controller
         $emp_id = $request->employeeID;
 
         // Check if the dependant already exists with the same details
-        $existingDependant = EmployeeDependant::where('employeeID', $emp_id)
+        $existingDependant = EmployeeDependant::where('employeeid', $emp_id)
             ->where('dep_name', $request->dep_name)
             ->where('dep_surname', $request->dep_surname)
             ->where('dep_birthdate', $request->dep_birthdate)
@@ -9735,7 +9735,7 @@ class GeneralController extends Controller
         $id = $request->employeeID;
 
         // start of spouse details
-        $spouse = EmployeeSpouse::where('employeeID', $id)->first();
+        $spouse = EmployeeSpouse::where('employeeid', $id)->first();
 
         if ($spouse) {
 
@@ -9983,25 +9983,25 @@ class GeneralController extends Controller
         $data['month_list'] = $this->flexperformance_model->payroll_month_list();
         $data['title'] = "Profile";
         $empID = $id;
-        $details = EmployeeDetail::where('employeeID', $empID)->first();
+        $details = EmployeeDetail::where('employeeid', $empID)->first();
 
-        $emergency = EmergencyContact::where('employeeID', $empID)->first();
+        $emergency = EmergencyContact::where('employeeid', $empID)->first();
 
-        $children = EmployeeDependant::where('employeeID', $empID)->get();
+        $children = EmployeeDependant::where('employeeid', $empID)->get();
 
-        $spouse = EmployeeSpouse::where('employeeID', $empID)->first();
+        $spouse = EmployeeSpouse::where('employeeid', $empID)->first();
 
-        $parents = EmployeeParent::where('employeeID', $empID)->get();
+        $parents = EmployeeParent::where('employeeid', $empID)->get();
 
-        $data['qualifications'] = EducationQualification::where('employeeID', $empID)->orderBy('end_year', 'desc')->get();
+        $data['qualifications'] = EducationQualification::where('employeeid', $empID)->orderBy('end_year', 'desc')->get();
 
-        $data['certifications'] = ProfessionalCertification::where('employeeID', $empID)->orderBy('cert_end', 'desc')->get();
+        $data['certifications'] = ProfessionalCertification::where('employeeid', $empID)->orderBy('cert_end', 'desc')->get();
 
-        $data['histories'] = EmploymentHistory::where('employeeID', $empID)->orderBy('hist_end', 'desc')->get();
+        $data['histories'] = EmploymentHistory::where('employeeid', $empID)->orderBy('hist_end', 'desc')->get();
         $data['profile'] = EMPL::where('emp_id', $empID)->first();
 
-        $childs = EmployeeDependant::where('employeeID', $empID)->count();
-        $data['qualifications'] = EducationQualification::where('employeeID', $id)->get();
+        $childs = EmployeeDependant::where('employeeid', $empID)->count();
+        $data['qualifications'] = EducationQualification::where('employeeid', $id)->get();
 
         $data['photo'] = "";
 
@@ -10404,25 +10404,25 @@ class GeneralController extends Controller
         $data['month_list'] = $this->flexperformance_model->payroll_month_list();
         $data['title'] = "Profile";
         $empID = $id;
-        $details = EmployeeDetail::where('employeeID', $empID)->first();
+        $details = EmployeeDetail::where('employeeid', $empID)->first();
 
-        $emergency = EmergencyContact::where('employeeID', $empID)->first();
+        $emergency = EmergencyContact::where('employeeid', $empID)->first();
 
-        $children = EmployeeDependant::where('employeeID', $empID)->get();
+        $children = EmployeeDependant::where('employeeid', $empID)->get();
 
-        $spouse = EmployeeSpouse::where('employeeID', $empID)->first();
+        $spouse = EmployeeSpouse::where('employeeid', $empID)->first();
 
-        $parents = EmployeeParent::where('employeeID', $empID)->get();
+        $parents = EmployeeParent::where('employeeid', $empID)->get();
 
-        $data['qualifications'] = EducationQualification::where('employeeID', $empID)->orderBy('end_year', 'desc')->get();
+        $data['qualifications'] = EducationQualification::where('employeeid', $empID)->orderBy('end_year', 'desc')->get();
 
-        $data['certifications'] = ProfessionalCertification::where('employeeID', $empID)->orderBy('cert_end', 'desc')->get();
+        $data['certifications'] = ProfessionalCertification::where('employeeid', $empID)->orderBy('cert_end', 'desc')->get();
 
-        $data['histories'] = EmploymentHistory::where('employeeID', $empID)->orderBy('hist_end', 'desc')->get();
+        $data['histories'] = EmploymentHistory::where('employeeid', $empID)->orderBy('hist_end', 'desc')->get();
         $data['profile'] = EMPL::where('emp_id', $empID)->first();
 
-        $childs = EmployeeDependant::where('employeeID', $empID)->count();
-        $data['qualifications'] = EducationQualification::where('employeeID', $id)->get();
+        $childs = EmployeeDependant::where('employeeid', $empID)->count();
+        $data['qualifications'] = EducationQualification::where('employeeid', $id)->get();
 
         $data['photo'] = "";
 
@@ -10885,12 +10885,12 @@ class GeneralController extends Controller
 
         $extra = $request->input('extra');
 
-        // $data['employee'] = $this->flexperformance_model->userprofile($id);
+        $data['employee'] = $this->flexperformance_model->userprofile($id);
         // // dd($this->flexperformance_model->userprofile($id));
-        // $data['kin'] = $this->flexperformance_model->getkin($id);
+        $data['kin'] = $this->flexperformance_model->getkin($id);
         // $data['property'] = $this->flexperformance_model->getproperty($id);
         // $data['propertyexit'] = $this->flexperformance_model->getpropertyexit($id);
-        // $data['active_properties'] = $this->flexperformance_model->getactive_properties($id);
+        $data['active_properties'] = $this->flexperformance_model->getactive_properties($id);
         // $data['allrole'] = $this->flexperformance_model->role($id);
         // $data['role'] = $this->flexperformance_model->getuserrole($id);
         // $data['rolecount'] = $this->flexperformance_model->rolecount($id);
@@ -10907,26 +10907,25 @@ class GeneralController extends Controller
         $data['title'] = "Profile";
         $data['empID'] = $id;
         $empID = $id;
-        $data = [];
-        // $data['details'] = EmployeeDetail::where('employeeID', $empID)->first();
+        $data['details'] = EmployeeDetail::where('employeeid', $empID)->first();
 
-        $data['emergency'] = EmergencyContact::where('employeeID', strval($empID))->first();
+        $data['emergency'] = EmergencyContact::where('employeeid', strval($empID))->first();
 
-        $data['children'] = EmployeeDependant::where('employeeID', $empID)->get();
+        $data['children'] = EmployeeDependant::where('employeeid', $empID)->get();
 
-        $data['spouse'] = EmployeeSpouse::where('employeeID', $empID)->first();
+        $data['spouse'] = EmployeeSpouse::where('employeeid', $empID)->first();
 
-        $data['parents'] = EmployeeParent::where('employeeID', $empID)->get();
+        $data['parents'] = EmployeeParent::where('employeeid', $empID)->get();
 
-        $data['qualifications'] = EducationQualification::where('employeeID', $empID)->orderBy('end_year', 'desc')->get();
+        $data['qualifications'] = EducationQualification::where('employeeid', $empID)->orderBy('end_year', 'desc')->get();
 
-        $data['certifications'] = ProfessionalCertification::where('employeeID', $empID)->orderBy('cert_end', 'desc')->get();
+        $data['certifications'] = ProfessionalCertification::where('employeeid', $empID)->orderBy('cert_end', 'desc')->get();
 
-        $data['histories'] = EmploymentHistory::where('employeeID', $empID)->orderBy('hist_end', 'desc')->get();
+        $data['histories'] = EmploymentHistory::where('employeeid', $empID)->orderBy('hist_end', 'desc')->get();
         $data['profile'] = EMPL::where('emp_id', $empID)->first();
 
-        $data['childs'] = EmployeeDependant::where('employeeID', $empID)->count();
-        $data['qualifications'] = EducationQualification::where('employeeID', $id)->get();
+        $data['childs'] = EmployeeDependant::where('employeeid', $empID)->count();
+        $data['qualifications'] = EducationQualification::where('employeeid', $id)->get();
 
         $data['photo'] = "";
 

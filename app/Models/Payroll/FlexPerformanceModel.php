@@ -1501,7 +1501,7 @@ class FlexPerformanceModel extends Model
 
     public function getactive_properties($id)
     {
-        $query = "SELECT COUNT(cp.id) as ACTIVE_PROPERTIES FROM company_property cp WHERE cp.isActive=1 and cp.given_to='" . $id . "'";
+        $query = "SELECT COUNT(cp.id) as \"ACTIVE_PROPERTIES\" FROM company_property cp WHERE cp.\"isActive\"=1 and cp.given_to='" . $id . "'";
         return DB::select(DB::raw($query));
     }
 
@@ -2604,7 +2604,7 @@ last_paid_date='" . $date . "' WHERE  state = 1 and type = 3";
 
      e.pension_fund AS pension_fund,
 
-     e.pf_membership_no as membership_no,
+     e.\"pf_membership_no\" as membership_no,
 
      e.bank AS bank,
      e.bank_branch AS bank_branch,

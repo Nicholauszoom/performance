@@ -14,10 +14,12 @@
 
 @section('content')
 
+{{ dd($employee)  }}
 
 
 <?php
   foreach ($employee as $row) {
+
     $name = $row->fname." ".$row->mname." ".$row->lname;
     $state = $row->state;
     $department = $row->deptname;
@@ -129,25 +131,25 @@
         </div>
 
 
-  
+
 
     </div>
 
- 
+
         {{-- Start of employee Bio data --}}
         <div class="row " style="border-bottom: 8px solid #00204e !important; ">
             <div class="col-md-12 ">
                 <div class="card border-top border-top-width-3 p-2 border-top-main  rounded-0 border-0 shadow-none">
-                   
-    
-                   
+
+
+
                         {{-- start of basic information details --}}
-                
+
                                 {{-- <div class="card-header d-flex justify-content-between">
-    
-    
+
+
                                 </div> --}}
-    
+
                                 <div class="row">
                                     {{-- start of name information --}}
                                     <div class="col-md-6 col-md-6 col-lg-6 col-6">
@@ -171,7 +173,7 @@
                                         <div class="col-6 col-md-6 col-lg-6 col-6">
                                             <p class="text-muted"> @if($profile) {{$profile->mname}} @endif</p>
                                         </div>
-    
+
                                         <div class="col-6 col-md-6 col-lg-6 col-6">
                                             <h6 class="text-main"> Surname</h6>
                                         </div>
@@ -187,7 +189,7 @@
                                        </div>
                                     </div>
                                     {{-- end of name information --}}
-    
+
                                     {{-- start of biography information --}}
                                     <div class="col-md-6 col-md-6 col-lg-6 col-6">
                                         <h5 class="text-center bg-main" style="border: 1px solid #00204e !important;"> Biography Information</h5>
@@ -210,7 +212,7 @@
                                          <div class="col-6">
                                              <p class="text-muted"> @if($details) {{$details->birthcountry}} @endif </p>
                                          </div>
-    
+
                                          <div class="col-6">
                                              <h6 class="text-main"> Gender/Sex:</h6>
                                          </div>
@@ -233,12 +235,12 @@
                                     </div>
                                     {{-- end of biography information --}}
                                 </div>
-                       
+
                         {{-- / --}}
-    
+
                         {{-- start of address and identification details --}}
-                
-    
+
+
                                 <div class="row">
                                     {{-- start of address information --}}
                                     <div class="col-md-6 col-md-6 col-6 col-lg-6">
@@ -256,11 +258,11 @@
                                         <div class="col-12">
                                             <p class="text-muted">  @if($details) {{$details->landmark}} @endif </p>
                                         </div>
-    
+
                                        </div>
                                     </div>
                                     {{-- end of address information --}}
-    
+
                                     {{-- start of personal identification information --}}
                                     <div class="col-md-6 col-md-6 col-6 col-lg-6">
                                         <h5 class="text-center bg-main" style="border: 1px solid #00204e !important;"> Personal Identification Information</h5>
@@ -284,30 +286,30 @@
                                          <div class="col-6 col-md-6 col-6 col-lg-6">
                                              <p class="text-muted"> @if($details) {{$details->passport_number}} @endif</p>
                                          </div>
-    
+
                                          <div class="col-6 col-md-6 col-6 col-lg-6">
                                              <h6 class="text-main"> Pension Fund Number:</h6>
                                          </div>
                                          <div class="col-6 col-md-6 col-6 col-lg-6">
-                                             <p class="text-muted"><?php echo $pf_membership_no; ?> </p>
+                                             {{-- <p class="text-muted"><?php echo $pf_membership_no; ?> </p> --}}
                                          </div>
                                          <div class="col-6 col-md-6 col-6 col-lg-6">
                                              <h6 class="text-main"> HELSB <small> (Loan Fund Index) </small>Number:</h6>
                                          </div>
                                          <div class="col-6 col-md-6 col-6 col-lg-6">
-                                             <p class="text-muted"><?php echo $HELSB; ?></p>
+                                             {{-- <p class="text-muted"><?php echo $HELSB; ?></p> --}}
                                          </div>
-    
+
                                          </div>
                                     </div>
                                     {{-- end of personal identification information --}}
-    
-                        
+
+
                         {{-- / --}}
-    
+
                         {{-- start of employment informations --}}
-                    
-    
+
+
                                 <div class="row">
                                     {{-- start of emergency contacts --}}
                                     <div class="col-md-6 col-md-6 col-6 col-lg-6">
@@ -349,11 +351,11 @@
                                         <div class="col-6 col-md-6 col-6 col-lg-6">
                                             <p class="text-muted"> @if($emergency) {{ $emergency->em_phone}} @endif </p>
                                         </div>
-    
+
                                        </div>
                                     </div>
                                     {{-- end of emergency contacts --}}
-    
+
                                     {{-- start of employment details --}}
                                     <div class="col-md-6 col-md-6 col-6 col-lg-6 ">
                                         <h5 class="text-center bg-main" style="border: 1px solid #00204e !important;"> Employment Details</h5>
@@ -376,7 +378,7 @@
                                          <div class="col-6 col-md-6 col-6 col-lg-6">
                                              <p class="text-muted"> <?php echo $title; ?> </p>
                                          </div>
-    
+
                                          <div class="col-6 col-md-6 col-6 col-lg-6">
                                              <h6 class="text-main"> Department & Branch:</h6>
                                          </div>
@@ -395,26 +397,26 @@
                                         <div class="col-6 col-md-6 col-6 col-lg-6">
                                             <p class="text-muted"> Name Here </p>
                                         </div>
-    
+
                                         <div class="col-6 col-md-6 col-6 col-lg-6">
                                             <h6 class="text-main">Employment Status:</h6>
                                         </div>
                                         <div class="col-6 col-md-6 col-6 col-lg-6">
                                             <p class="text-muted"> <?php echo $ctype; ?> </p>
                                         </div> --}}
-    
-    
+
+
                                          </div>
                                     </div>
                                     {{-- end of employment details --}}
-    
+
                                 </div>
-                        
+
                         {{-- / --}}
-    
+
                         {{-- Start of Family Informations --}}
-                   
-    
+
+
                                 <div class="row">
                                     @if($spouse || $children->count() >0)
                                     <h5 style="border-bottom:4px solid #00204e !important;">FAMILY DETAILS</h5>
@@ -422,7 +424,7 @@
                                     {{-- start of spouse details --}}
                                     @if($spouse)
                                     <div class="col-md-12">
-                                        
+
                                         <small class=""> <h6>Spouse Details:</h6></small>
                                         <hr>
                                         <div class="row mb-1">
@@ -474,22 +476,22 @@
                                         <div class="col-3">
                                             <p class="text-muted"> @if($spouse) {{ $spouse->spouse_employer}} @endif </p>
                                         </div>
-    
+
                                         <div class="col-3">
                                             <h6 class="text-main"> Job Title: </h6>
                                         </div>
                                         <div class="col-3">
                                             <p class="text-muted"> @if($spouse) {{ $spouse->spouse_job_title}} @endif </p>
                                         </div>
-    
-    
+
+
                                        </div>
-    
-    
+
+
                                     </div>
                                     @endif
                                     {{-- end of spouse details --}}
-    
+
                                     {{-- start of children details --}}
                                     @if($children->count() >0)
                                     <div class="col-md-12">
@@ -503,7 +505,7 @@
                                              <p class="text-muted"> @if($childs) {{ $childs }} @endif </p>
                                          </div>
                                          <div class="col-12">
-    
+
                                             @if($childs)
                                             <small><i>* (Birth Certificate/Adoption certificate stating you are the legal guardian must be attached)</i></small>
                                             <table class="table table-bordered " type="border" >
@@ -518,15 +520,15 @@
                                                 <tr>
                                                 @foreach ( $children as $item )
                                               <tr>
-    
+
                                                 <td>{{ $item->dep_name}} </td>
                                                 <td>{{ $item->dep_surname }} </td>
                                                 <td>{{ $item->dep_birthdate }}</td>
                                                 <td>{{ $item->dep_gender }}</td>
                                                 <td>{{ $item->dep_certificate }} </td>
-    
+
                                               </tr>
-    
+
                                              @endforeach
                                             </table>
                                              @endif
@@ -534,13 +536,13 @@
                                         </div>
                                     </div>
                                          @endif
-                                       
+
                                          {{-- start of Parents details --}}
 
                                          @if($parents->count() >0)
                                          <hr>
                                         <h5 class=""> Parent's Details :</h5>
-    
+
                                          <div class="col-12">
                                             <table class="table table-bordered" id="dynamicAddRemoveParent">
                                               <tr>
@@ -552,47 +554,47 @@
                                               </tr>
                                               @foreach ( $parents as $item )
                                               <tr>
-    
+
                                                 <td>{{ $item->parent_names}} </td>
                                                 <td>{{ $item->parent_relation }} </td>
                                                 <td>{{ $item->parent_birthdate }}</td>
                                                 <td>{{ $item->parent_residence }}</td>
                                                 <td>{{ $item->parent_living_status }} </td>
-    
+
                                               </tr>
                                               @endforeach
-    
-    
+
+
                                               </table>
-    
+
                                          </div>
                                          @endif
                                         {{-- end of parents details --}}
-                                         
-    
-    
+
+
+
                                     {{-- end of children details --}}
-    
+
                                 </div>
 
-                 
-                                
+
+
                         {{-- / --}}
-    
+
                         {{-- Start of Education --}}
- 
+
                         @if($qualifications->count() > 0 || $certifications->count() > 0)
                                 <div class="row">
-    
-    
+
+
                                     {{-- start of Academic Qualifications details --}}
                                     <div class="col-md-12">
-                                      
+
                                         <h5 class="" style="border-bottom:4px solid #00204e !important;">EDUCATIONAL BACKGROUND: </h5>
-                                     
+
                                         <div class="row mb-1">
                                          <div class="col-12">
-    
+
                                             <table class="table table-bordered" id="dynamicAddRemove">
                                                 <tr>
                                                 <th class="text-center">From /To(Month & Year)</th>
@@ -601,31 +603,31 @@
                                                 <th class="text-center">Disciplinary of Study </th>
                                                 <th class="text-center">Location </th>
                                                 <th class="text-center">Final Score & Grades</th>
-    
+
                                                 </tr>
                                                 @forelse ( $qualifications as $item )
                                               <tr>
-    
+
                                                 <td class="text-center">{{ $item->start_year}} - {{ $item->end_year}} </td>
                                                 <td class="text-center">{{ $item->institute }} </td>
                                                 <td class="text-center">{{ $item->level }}</td>
                                                 <td class="text-center">{{ $item->course }}</td>
                                                 <td class="text-center">{{ $item->study_location }} </td>
                                                 <td class="text-center">{{ $item->final_score }} </td>
-    
+
                                               </tr>
-    
+
                                               @empty
-    
+
                                               @endforelse
-                                            </table>                                     
-                                       
-    
-    
+                                            </table>
+
+
+
                                          </div>
                                         {{-- start of Proffessional Certification details --}}
                                         <h6 class=""> Professional Certification/License</h6>
-    
+
                                          <div class="col-12">
                                             <table class="table table-bordered" id="dynamicAddRemoveParent">
                                                 <tr>
@@ -634,52 +636,52 @@
                                                 <th class="text-center">Qualification Obtained </th>
                                                 <th class="text-center">Membership Number</th>
                                                 <th class="text-center">Status Active/ Inactive</th>
-    
+
                                                 </tr>
                                                 @forelse ( $certifications as $item )
                                                 <tr>
-    
+
                                                   <td class="text-center" >{{ $item->cert_start}} - {{ $item->cert_end }}</td>
                                                   <td class="text-center" >{{ $item->cert_name }} </td>
                                                   <td class="text-center">{{ $item->cert_qualification }}</td>
                                                   <td class="text-center">{{ $item->cert_number }}</td>
                                                   <td class="text-center">{{ $item->cert_status }} </td>
-    
+
                                                 </tr>
                                                 @empty
-    
+
                                                 @endforelse
-    
-    
+
+
                                                 </table>
-    
-    
-    
+
+
+
                                          </div>
-    
+
                                         {{-- end of parents details --}}
                                          </div>
-    
-    
-    
+
+
+
                                         </div>
                                     {{-- end of children details --}}
-    
+
                                 </div>
                         @endif
                         {{-- / --}}
-    
+
                         {{-- start of Employment History --}}
                         @if($histories->count() >0)
                                 <div class="row">
-    
-    
+
+
                                     {{-- start of previous employment details --}}
                                     <div class="col-md-12">
                                         <h5 class=""> EMPLOYMENT HISTORY:</h5>
                                         <div class="row mb-1">
                                          <div class="col-12">
-    
+
                                             <table class="table table-bordered" id="dynamicAddRemove">
                                                 <tr>
                                                 <th class="text-center">From /To(Month & Year)</th>
@@ -690,39 +692,39 @@
                                                 <th class="text-center">Reason for Leaving</th>
                                                 @forelse ( $histories as $item )
                                               <tr>
-    
+
                                                 <td class="text-center">{{ $item->hist_start}} - {{ $item->hist_end}} </td>
                                                 <td class="text-center">{{ $item->hist_employer }} </td>
                                                 <td class="text-center">{{ $item->hist_industry }} </td>
                                                 <td class="text-center">{{ $item->hist_position }}</td>
                                                 <td class="text-center">{{ $item->hist_status }}</td>
                                                 <td class="text-center">{{ $item->hist_reason }} </td>
-    
+
                                               </tr>
-    
+
                                               @empty
-    
+
                                               @endforelse
-    
+
                                                 </table>
-    
-    
-    
+
+
+
                                          </div>
-    
-    
+
+
                                         {{-- end of parents details --}}
                                          </div>
-    
-    
-    
+
+
+
                                         </div>
                                     {{-- end of children details --}}
-    
+
                                 </div>
                         @endif
                         {{-- / --}}
-    
+
                     </div>
                 </div>
             </div>
@@ -731,13 +733,13 @@
 
         {{-- / --}}
           </div>
-    
-    
-        
 
- 
 
-    
+
+
+
+
+
       </div>
 </div>
 
