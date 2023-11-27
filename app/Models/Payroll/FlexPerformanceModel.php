@@ -87,6 +87,26 @@ class FlexPerformanceModel extends Model
 
         return DB::select(DB::raw($query));
     }
+    public function employeeTerminatedPartial()
+    {
+        $query = "SELECT @s:=@s+1 SNo, p.name as POSITION, d.name as DEPARTMENT, e.*,
+                  CONCAT(e.fname,' ',IF(e.mname != null,e.mname,' '),' ', e.lname) as NAME,
+                  (SELECT CONCAT(el.fname,' ', el.mname,' ', el.lname)
+                   FROM employee el
+                   WHERE el.emp_id = e.line_manager LIMIT 1) as LINEMANAGER,
+                   IF(((SELECT sum(days) FROM `leaves` WHERE nature=1 and empID=e.emp_id GROUP by nature)>0),
+                   (SELECT sum(days) FROM `leaves` WHERE nature=1 and empID=e.emp_id GROUP by nature),0) as ACCRUED,
+                   IF(t.employeeID IS NOT NULL, 1, 0) AS termination_flag
+                  FROM employee e
+                  JOIN department d ON d.id = e.department
+                  JOIN position p ON p.id = e.position
+                  LEFT JOIN terminations t ON t.employeeID = e.emp_id
+                  WHERE t.employeeID IS NULL AND e.state=1";
+
+        return DB::select(DB::raw($query));
+    }
+
+
 
     public function employeelinemanager($id)
     {
@@ -1800,19 +1820,14 @@ class FlexPerformanceModel extends Model
 
     public function get_allowance_names_for_employee($empID)
     {
-        $query = "SELECT a.name
-                        FROM emp_allowances ea
-                        JOIN allowances a ON a.id = ea.allowance
-                        WHERE ea.empID = {$empID}";
+
+        $query = "SELECT a.id, a.name, ea.amount
+        FROM emp_allowances ea
+        JOIN allowances a ON a.id = ea.allowance
+        WHERE ea.empID = {$empID}";
 
         $rows = DB::select(DB::raw($query));
-
-        $allowanceNames = [];
-        foreach ($rows as $row) {
-            $allowanceNames[] = $row->name;
-        }
-
-        return $allowanceNames;
+        return $rows;
     }
 
 

@@ -13,11 +13,11 @@ return new class extends Migration
      */
     public function up()
     { ///iwe employee_termination_allowance_logs
-        Schema::create('employee_temporary_allowances', function (Blueprint $table) {
+        Schema::create('employee_termination_allowances', function (Blueprint $table) {
                 $table->id();
                 $table->integer('termination_id');
-                $table->string('empID', 10);
-                $table->integer('allowanceID')->default(6)->nullable();
+                $table->string('emp_id', 10);
+                $table->integer('allowance_id')->default(6)->nullable();
                 $table->string('description', 50)->default('Unclassified')->nullable();
                 $table->string('policy', 50)->default('Fixed Amount')->nullable();
                 $table->decimal('amount', 20, 2)->nullable();
@@ -33,6 +33,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('employee_temporary_allowances');
+        Schema::dropIfExists('employee_termination_allowances');
     }
 };

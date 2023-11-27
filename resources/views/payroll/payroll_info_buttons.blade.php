@@ -4,12 +4,12 @@
     @if ($payrollState != 0)
         <a
             href="{{ route('reports.get_reconsiliation_summary', ['payrolldate' => $payroll_date, 'payrollState' => $payroll_state,'type'=>1]) }}">
-            <button type="button" name="print" value="print" class="btn btn-main btn-sm"> Recon Summary</button>
+            <button type="button" name="print" value="print" class="btn btn-main btn-sm"> Reconciliation Summary</button>
         </a>
 
         <a class="ms-3"
         href="{{ route('reports.payrollReconciliationDetails_temp', ['payrolldate' => $payroll_date, 'payrollState' => $payroll_state,'type'=>1]) }}">
-        <button type="button" name="print" value="print" class="btn btn-main btn-sm"> Recon details</button>
+        <button type="button" name="print" value="print" class="btn btn-main btn-sm"> Reconciliation details</button>
     </a>
 
         <a class="ms-3"

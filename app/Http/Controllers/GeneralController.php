@@ -38,7 +38,7 @@ use App\Models\Holiday;
 use App\Models\InputSubmission;
 use App\Models\LeaveApproval;
 use App\Models\LeaveForfeiting;
-use App\Models\EmployeeTemporaryAllowance;
+use App\Models\EmployeeTerminationAllowance;
 
 //use PHPClamAV\Scanner;
 use App\Models\Leaves;
@@ -8166,7 +8166,7 @@ class GeneralController extends Controller
 
         $data['title'] = "Terminate Employee";
         $data['my_overtimes'] = $this->flexperformance_model->my_overtimes(auth()->user()->emp_id);
-        $data['employees'] = $this->flexperformance_model->Employee();
+        $data['employees'] = $this->flexperformance_model->employeeTerminatedPartial();
         $data['line_overtime'] = $this->flexperformance_model->lineOvertimes(auth()->user()->emp_id);
         $data['pendingPayroll'] = $this->payroll_model->pendingPayrollCheck();
         $data['parent'] = 'Workforce';
@@ -8181,6 +8181,7 @@ class GeneralController extends Controller
         if ($request->employeeID == $request->deligated) {
             return redirect()->back()->with(['error' => 'Terminated and deligated should not be the same person']);
         }
+
         $this->authenticateUser('add-termination');
         $employeeID = $request->employeeID;
         $terminationDate = $request->terminationDate;
@@ -8229,8 +8230,8 @@ class GeneralController extends Controller
         $termination->leaveStand = $request->leaveStand;
         $termination->arrears = $request->arrears;
         $termination->exgracia = $request->exgracia;
-        $termination->transport_allowance = $request->transport_allowance;
-        $termination->nightshift_allowance = $request->nightshift_allowance;
+        $termination->transport_allowance = $request->transport_allowance ?? 0;
+        $termination->nightshift_allowance = $request->nightshift_allowance ?? 0;
         $termination->bonus = $request->bonus;
         $termination->actual_salary = $employee_actual_salary;
         $termination->longServing = $request->longServing;
@@ -8305,7 +8306,13 @@ class GeneralController extends Controller
 
         $deduction_rate = $this->flexperformance_model->get_deduction_rate();
 
-        $paye = $paye1->excess_added + $paye1->rate * ($taxable - $paye1->minimum);
+        if($paye1){
+            $paye = $paye1->excess_added + $paye1->rate * ($taxable - $paye1->minimum);
+
+        }else{
+            $paye = 0;
+        }
+
         $take_home = $taxable - $paye;
 
         $termination->total_gross = $total_gross;
@@ -8324,6 +8331,25 @@ class GeneralController extends Controller
         $termination->take_home = $take_home;
         $termination->total_deductions = $total_deductions;
         $termination->save();
+
+        $newTerminationId = $termination->id;
+        $empId = $request->employeeID;
+
+
+        $allowancees =$this->flexperformance_model->get_allowance_names_for_employee($empId);
+
+
+        // dd($request->input('empallowance_6'));
+        foreach($allowancees as $allowance){
+            $allowanceCode =$request->input('empallowance_'.$allowance->id);
+                $employeeTerminationAllowance = new EmployeeTerminationAllowance();
+                $employeeTerminationAllowance->termination_id = $newTerminationId;
+                $employeeTerminationAllowance->emp_id = $empId;
+                $employeeTerminationAllowance->allowance_id = $allowance->id; // Assign the correct allowance ID here
+                $employeeTerminationAllowance->amount = $allowanceCode;
+                $employeeTerminationAllowance->save();
+
+        }
 
         // $employeeAllowanceLogs = new EmployeeTemporaryAllowance();
         // $employeeAllowanceLogs->terminnationId = $terminationYenyewe->id;

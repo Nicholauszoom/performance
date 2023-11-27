@@ -246,11 +246,6 @@
         $('#terminationDate').change(function(e) {
             var terminationDate = document.getElementById("terminationDate").value;
             var employeeID = document.getElementById("employeeID").value;
-
-
-
-
-            //e.preventDefault();
             $.ajax({
                     url: "<?php echo url(''); ?>/flex/get_employee_available_info",
                     headers: {
@@ -261,15 +256,9 @@
                         "terminationDate": terminationDate,
                         "employeeID": employeeID,
                     },
-                    //  processData:false,
-                    //  contentType:false,
-                    //  cache:false,
-                    //  async:false
                 })
                 .done(function(data) {
                     var data = JSON.parse(data);
-
-                    // alert(data.leave_allowance);
                     var deligate = data.deligate;
 
                     if(deligate > 0){
@@ -278,10 +267,8 @@
                         $("#deligation").hide();
                     }
 
-                    //alert(data.employee_allowance);
-
                     var emp_allowance =data.employee_allowance;
-                  // Loop through the array of allowances
+
                   var allowanceContainer = document.getElementById('allowanceContainer');
 
                     // Loop through the array of allowances
@@ -292,15 +279,15 @@
 
                         // Create label for the allowance
                         var allowanceLabel = document.createElement('label');
-                        allowanceLabel.textContent = emp_allowance[i]; // Set the label text
+                        allowanceLabel.textContent = emp_allowance[i].name; // Set the label text
 
                         // Create input field for the allowance
                         var allowanceInput = document.createElement('input');
 
                         allowanceInput.type = 'text';
                         allowanceInput.className = 'form-control';
-                        allowanceInput.value = '0';
-                        allowanceInput.name = 'empallowance_' + emp_allowance[i]; // Set the input name
+                        allowanceInput.value = emp_allowance[i].amount ;
+                        allowanceInput.name = 'empallowance_' + emp_allowance[i].id; // Set the input name
 
                         // Append label and input to the div
                         allowanceDiv.appendChild(allowanceLabel);
@@ -314,12 +301,6 @@
                     document.getElementById("salaryEnrollment").value = data.employee_salary;
                     document.getElementById("employee_actual_salary").value = data.employee_actual_salary;
                     document.getElementById("leave_entitled").value = data.leave_entitled;
-
-
-
-
-
-
                 })
                 .fail(function(jqXHR, textStatus, errorThrown) {
                 console.log("Error:", textStatus, errorThrown);
