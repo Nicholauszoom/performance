@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('disciplinaries', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('employeeID');
+            $table->string('employeeid');
             $table->unsignedBigInteger('department');
             $table->text('suspension')->nullable();
             $table->date('date_of_charge')->nullable();
