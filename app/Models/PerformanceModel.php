@@ -40,7 +40,13 @@ function total_task_duration($id)
 
 function total_task_actual_duration($id)
 {
-    $query = "SELECT IF(sum(EXTRACT(EPOCH FROM (t.end - t.start)))/60 > 0, sum(EXTRACT(EPOCH FROM (t.end - t.start)))/60, 0) as allDURATION FROM task t WHERE t.status = 2 AND t.assigned_to = '".$id."'";
+    $query = "SELECT CASE WHEN sum(EXTRACT(EPOCH FROM (t.end - t.start)) / 60)::numeric > 0
+                           THEN sum(EXTRACT(EPOCH FROM (t.end - t.start)) / 60)::numeric
+                           ELSE 0
+                      END as allDURATION
+              FROM task t
+              WHERE t.status = 2 AND t.assigned_to = '" . $id . "'";
+
     return DB::select(DB::raw($query));
 }
 
@@ -52,9 +58,16 @@ function allTaskcompleted($id)
 
 function all_task_monetary_value($id)
 {
-    $query = "SELECT IF(count(t.id) > 0, sum(t.monetaryValue), 0) as ComperableValue FROM task t WHERE t.status = 2 AND t.assigned_to = '".$id."'";
+    $query = "SELECT CASE WHEN count(t.id) > 0
+                           THEN sum(t.\"monetaryValue\")
+                           ELSE 0
+                      END as ComperableValue
+              FROM task t
+              WHERE t.status = 2 AND t.assigned_to = '" . $id . "'";
+
     return DB::select(DB::raw($query));
 }
+
 
 function total_task_progress($id)
 {

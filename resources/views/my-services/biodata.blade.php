@@ -14,7 +14,7 @@
 
 @section('content')
 
-{{ dd($employee)  }}
+{{-- {{ dd($employee)  }} --}}
 
 
 <?php
@@ -66,7 +66,7 @@
         $departmentID = $row->department;
         $position = $row->pName;
         $bankName = $row->bankName;
-        $bankBranch = $row->bankBranch;
+        // $bankBranch = $row->bankBranch;
         $positionID = $row->position;
         $ctype = $row->contract_type;
         $emp_shift = $row->shift;

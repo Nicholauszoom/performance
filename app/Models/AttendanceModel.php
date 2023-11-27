@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use DateTime;
 
+
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\App;
@@ -127,17 +128,20 @@ class AttendanceModel extends Model
     }
 
 
-
-
-
-
-
-    function leave_line($empID)
+    public function leave_line($empID)
     {
-        $query = "SELECT @s:=@s+1 SNo,  lt.type as TYPE,  CONCAT(e.fname,' ', e.mname,' ', e.lname) as NAME, l.* FROM leave_application l, employee e,  leave_type lt,  (SELECT @s:=0) as s WHERE l.empID = e.emp_id AND  l.nature=lt.id AND e.line_manager = '" . $empID . "' AND NOT e.emp_id =  '" . $empID . "'  ";
+        $results = DB::table('leave_application as l')
+            ->selectRaw('ROW_NUMBER() OVER () AS SNo, lt.type AS TYPE, CONCAT(e.fname, \' \', COALESCE(e.mname, \'\'), \' \', e.lname) AS NAME, l.*')
+            ->join('employee as e', 'l.empID', '=', 'e.emp_id')
+            ->join('leave_type as lt', 'l.nature', '=', DB::raw('CAST(lt.id AS TEXT)'))
+            ->where('e.line_manager', '=', $empID)
+            ->where('e.emp_id', '!=', $empID)
+            ->get();
 
-        return DB::select(DB::raw($query));
+        return $results;
     }
+
+
 
     function all_leave_line()
     {

@@ -14,30 +14,28 @@ class UserRoleSeeder extends Seeder
      */
     public function run()
     {
-         // Insert employee role data here
-         $employeeRoles = [
+        // Define employee roles data
+        $employeeRoles = [
             [
-                'user_id' => 1, // User ID of the employee
-                'role_id' => 1, // Role ID (e.g., role with ID 1)
+                'userID' => "EMP001",
+                'role' => 1,
+                'group_name' => '0',
             ],
         ];
 
-        // Insert employee roles into the 'employee_role' pivot table
-        // DB::table('users_roles')->insert($employeeRoles);
+        // Upsert employee roles into the 'emp_role' table
+        DB::table('emp_role')->upsert($employeeRoles, ['userID'], ['role', 'group_name']);
 
-
-         // Insert employee role data here
-         $employeeRoles = [
+        // Define user roles data
+        $userRoles = [
             [
-                'UserID' => "EMP001", // User ID of the employee
-                'role' => 1, // Role ID (e.g., role with ID 1)
-                'group_name'=>'0',            ],
+                'user_id' => 1,
+                'role_id' => 1,
+            ],
         ];
 
-        // Insert employee roles into the 'employee_role' pivot table
-        // DB::table('emp_role')->insert($employeeRoles);
-
-
-
+        // Upsert user roles into the 'users_roles' table
+        DB::table('users_roles')->upsert($userRoles, ['user_id'], ['role_id']);
     }
 }
+        

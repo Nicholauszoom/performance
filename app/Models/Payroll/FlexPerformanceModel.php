@@ -31,43 +31,60 @@ class FlexPerformanceModel extends Model
     }
 
     public function audit_logs()
-    {
-        $query = "SELECT d.name as department, p.name as position, al.*, p.name as position, d.name as department, CONCAT(e.fname,' ',IF( e.mname != null,e.mname,' '),' ', e.lname) as empName FROM audit_trails al, employee e, position p, department d  WHERE al.emp_id = e.emp_id AND p.id = e.position AND e.department = d.id ORDER BY al.created_at DESC";
+{
+    $query = "SELECT d.name as department, p.name as position, al.*, p.name as position, d.name as department, CONCAT(e.fname,' ', COALESCE(e.mname, ' '), ' ', e.lname) as empName
+              FROM audit_trails al
+              JOIN employee e ON al.emp_id = e.emp_id
+              JOIN position p ON p.id = e.position
+              JOIN department d ON e.department = d.id
+              ORDER BY al.created_at DESC";
 
-        return DB::select(DB::raw($query));
-    }
+    return DB::select(DB::raw($query));
+}
 
-    public function financialLogs($date)
-    {
 
-        $query = "SELECT Date(fn.created_at),fn.*, CONCAT(e.fname,' ', IF(e.mname != null,e.mname,''),' ', e.lname) as empName, CONCAT(au.fname,' ', au.mname,' ', au.lname) as authName FROM financial_logs fn, employee e, employee au  WHERE Date(fn.created_at) Like '%" . $date . "%' and fn.payrollno = e.emp_id AND fn.changed_by = au.emp_id  ORDER BY fn.created_at DESC";
+public function financialLogs($date)
+{
+    $query = "SELECT DATE(fn.created_at), fn.*, CONCAT(e.fname,' ', COALESCE(e.mname, ''),' ', e.lname) as empName, CONCAT(au.fname,' ', au.mname,' ', au.lname) as authName
+              FROM financial_logs fn
+              JOIN employee e ON fn.payrollno = e.emp_id
+              JOIN employee au ON fn.changed_by = au.emp_id
+              WHERE DATE(fn.created_at) LIKE '%" . $date . "%'
+              ORDER BY fn.created_at DESC";
 
-        return DB::select(DB::raw($query));
-    }
+    return DB::select(DB::raw($query));
+}
 
-    public function audit_purge_logs()
-    {
-        $query = "SELECT  d.name as department, p.name as position, al.*, CAST(al.due_date as date) as dated,   CAST(al.due_date as time) as timed, p.name as position,  d.name as department, CONCAT(e.fname,' ',IF( e.mname != null,e.mname,' '),' ', e.lname) as empName FROM audit_purge_logs al, employee e, position p, department d  WHERE al.empID = e.emp_id AND p.id = e.position AND e.department = d.id ORDER BY al.due_date DESC";
 
-        return DB::select(DB::raw($query));
-    }
+public function audit_purge_logs()
+{
+    $query = "SELECT d.name as department, p.name as position, al.*, CAST(al.due_date as date) as dated, CAST(al.due_date as time) as timed, p.name as position, d.name as department, CONCAT(e.fname,' ', COALESCE(e.mname, ''),' ', e.lname) as empName
+              FROM audit_purge_logs al
+              JOIN employee e ON al.empID = e.emp_id
+              JOIN position p ON p.id = e.position
+              JOIN department d ON e.department = d.id
+              ORDER BY al.due_date DESC";
 
-    public function clear_audit_logs()
-    {
-        DB::table('audit_logs')->truncate();
+    return DB::select(DB::raw($query));
+}
 
-        return true;
-    }
 
-    public function getCurrentStrategy()
-    {
-        $query = "id as strategyID  ORDER BY id DESC limit 1";
+public function clear_audit_logs()
+{
+    DB::table('audit_logs')->truncate();
 
-        $row = DB::table('strategy')
-            ->select(DB::raw($query))
-            ->first();
-        return $row->strategyID;
-    }
+    return true;
+}
+
+public function getCurrentStrategy()
+{
+    $query = "SELECT id as strategyID FROM strategy ORDER BY id DESC LIMIT 1";
+
+    $row = DB::select(DB::raw($query));
+
+    return count($row) > 0 ? $row[0]->strategyID : null;
+}
+
 
     public function getAttributeName($attribute, $table, $referenceName, $referenceValue)
     {
@@ -1362,31 +1379,52 @@ class FlexPerformanceModel extends Model
     }
 
     public function all_skills($empID)
-    {
-        $query = "SELECT s.*  FROM skills s WHERE s.id NOT IN(SELECT skill_ID FROM emp_skills WHERE empID = '" . $empID . "' ) AND s.id NOT IN(SELECT skill_ID FROM emp_skills WHERE empID = '" . $empID . "' ) AND s.id NOT IN(SELECT skillsID FROM training_application WHERE empID = '" . $empID . "')";
+{
+    $query = "SELECT s.*
+              FROM skills s
+              WHERE s.id NOT IN (SELECT skill_ID FROM emp_skills WHERE empID = '" . $empID . "')
+                AND s.id NOT IN (SELECT skill_ID FROM emp_skills WHERE empID = '" . $empID . "')
+                AND s.id NOT IN (SELECT skillsID FROM training_application WHERE empID = '" . $empID . "')";
 
-        return DB::select(DB::raw($query));
-    }
+    return DB::select(DB::raw($query));
+}
 
-    public function skills_have($id)
-    {
-        $query = "SELECT @s:=@s+1 as SNo, es.empID, es.skill_ID, s.name as NAME  FROM emp_skills es,  skills s, (SELECT @s:=0) as s where es.skill_ID = s.id and es.empID = '" . $id . "' ";
 
-        return DB::select(DB::raw($query));
-    }
+public function skills_have($id)
+{
+    $query = "SELECT ROW_NUMBER() OVER () as SNo, es.\"empID\", es.\"skill_ID\", s.name as NAME
+              FROM emp_skills es
+              JOIN skills s ON es.\"skill_ID\" = s.id
+              WHERE es.\"empID\" = '" . $id . "'";
 
-    public function requested_skills($empID)
-    {
-        $query = "SELECT (@s:=@s+1) as SNo, sk.*, ta.status as request_status, ta.* FROM skills sk, training_application ta,  (SELECT @s:=0) as s where sk.id = ta.skillsID AND ta.empID ='" . $empID . "'";
+    return DB::select(DB::raw($query));
+}
 
-        return DB::select(DB::raw($query));
-    }
-    public function skills_missing($empID)
-    {
-        $query = "SELECT @s:=@s+1 as SNo, sk.*, IF((SELECT COUNT(skillsID) from training_application WHERE skillsID = sk.id AND empID = '" . $empID . "')>0, (SELECT status FROM training_application WHERE skillsID = sk.id AND empID = '" . $empID . "'), 9) AS status FROM skills sk, (SELECT @s:=0) as s where sk.position_ref = (SELECT position from employee where emp_id ='" . $empID . "' ) and sk.id NOT IN(SELECT skill_ID from emp_skills WHERE empID = '" . $empID . "') ";
 
-        return DB::select(DB::raw($query));
-    }
+public function requested_skills($empID)
+{
+    $query = "SELECT ROW_NUMBER() OVER () as SNo, sk.*, ta.status as request_status, ta.*
+              FROM skills sk
+              JOIN training_application ta ON sk.id = ta.\"skillsID\"
+              WHERE ta.\"empID\" = '" . $empID . "'";
+
+    return DB::select(DB::raw($query));
+}
+
+public function skills_missing($empID)
+{
+    $query = "SELECT ROW_NUMBER() OVER () as SNo, sk.*,
+                     CASE WHEN (SELECT COUNT(\"skillsID\") FROM training_application WHERE \"skillsID\"::text = sk.id::text AND \"empID\" = '" . $empID . "') > 0
+                          THEN (SELECT status FROM training_application WHERE \"empID\"::text = sk.id::text AND \"empID\" = '" . $empID . "')
+                          ELSE 9
+                     END AS status
+              FROM skills sk
+              WHERE sk.position_ref = (SELECT position FROM employee WHERE emp_id ='" . $empID . "')
+                AND sk.id NOT IN (SELECT \"skill_ID\" FROM emp_skills WHERE \"empID\" = '" . $empID . "')";
+
+    return DB::select(DB::raw($query));
+}
+
     ##############################END LEARNING AND DEVELOPMENT(TRAINING)#############################
 
     public function getEmployeeName_and_email($empID)
@@ -1420,44 +1458,71 @@ class FlexPerformanceModel extends Model
 
     public function userprofile($empID)
     {
-        $query =
-         "SELECT
-         e.*,
-         bank.name AS bankName,
-         ctry.name AS country,
-         b.name AS branch_name,
-         bb.name AS bankBranch,
-         d.name AS deptname,
-         c.name AS CONTRACT,
-         p.name AS pName,
-         (
-             SELECT CONCAT(fname, ' ', COALESCE(mname, ''), ' ', lname)
-             FROM employee
-             WHERE emp_id = e.line_manager
-         ) AS LINEMANAGER
-     FROM
-         employee e
-     JOIN
-         department d ON d.id = e.department
-     JOIN
-         contract c ON e.contract_type = c.id::text -- Casting e.contract_type to bigint
-     JOIN
-         country ctry ON ctry.code::text = e.nationality::text
-     JOIN
-         position p ON p.id = e.position
-     JOIN
-         bank ON e.bank = bank.id
-     JOIN
-         branch b ON e.branch::text = b.id::text
-     JOIN
-         bank_branch bb ON e.bank_branch = bb.id
-     WHERE
-         e.emp_id = '$empID';
-     ";
 
-        $row = DB::select(DB::raw($query));
 
-return $row;
+            $query = DB::table('employee as e')
+                ->select(
+                    'e.*',
+                    'bank.name AS bankName',
+                    'ctry.name AS country',
+                    'b.name AS branch_name',
+                    // 'bb.name AS bankBranch',
+                    'd.name AS deptname',
+                    'c.name AS CONTRACT',
+                    'p.name AS pName',
+                    DB::raw("CONCAT(fname, ' ', COALESCE(mname, ''), ' ', lname) AS \"LINEMANAGER\"")
+                )
+                ->join('department as d', 'd.id', '=', 'e.department')
+                ->join('contract as c', 'c.id', '=', DB::raw('CAST(e.contract_type AS bigint)'))
+                ->join('country as ctry', 'ctry.code', '=', DB::raw('CAST(e.nationality AS bigint)'))
+                ->join('position as p', 'p.id', '=', 'e.position')
+                ->join('bank', 'e.bank', '=', 'bank.id')
+                ->join('branch as b', 'e.branch', '=', DB::raw('CAST(b.id AS text)'))
+                // ->join('bank_branch as bb', 'e.bank_branch', '=', 'bb.id')
+                ->where('e.emp_id', '=', $empID)
+                ->get();
+
+            return $query;
+       return DB::select(DB::raw($query));
+
+//         $query =
+//          "SELECT
+//          e.*,
+//          bank.name AS bankName,
+//          ctry.name AS country,
+//          b.name AS branch_name,
+//         --  bb.name AS bankBranch,
+//          d.name AS deptname,
+//          c.name AS CONTRACT,
+//          p.name AS pName,
+//          (
+//              SELECT CONCAT(fname, ' ', COALESCE(mname, ''), ' ', lname)
+//              FROM employee
+//              WHERE emp_id = e.line_manager
+//          ) AS LINEMANAGER
+//      FROM
+//          employee e
+//      JOIN
+//          department d ON d.id = e.department
+//      JOIN
+//          contract c ON e.contract_type = c.id::text -- Casting e.contract_type to bigint
+//      JOIN
+//          country ctry ON ctry.code::text = e.nationality::text
+//      JOIN
+//          position p ON p.id = e.position
+//      JOIN
+//          bank ON e.bank = bank.id
+//      JOIN
+//          branch b ON e.branch::text = b.id::text
+//     --  JOIN
+//     --      bank_branch bb ON e.bank_branch = bb.id
+//      WHERE
+//          e.emp_id = '$empID';
+//      ";
+
+//         $row = DB::select(DB::raw($query));
+
+// return $row;
 
 
     }
@@ -1489,17 +1554,32 @@ return $row;
         return $data->get();
     }
 
-    public function getproperty($id)
-    {
-        $query = "SELECT  @s:=@s+1 as SNo, cp.*, CONCAT(e.fname,' ',IF( e.mname != null,e.mname,' '),' ', e.lname) as PROVIDER FROM employee e, company_property cp, (SELECT @s:=0) as s WHERE cp.given_by =e.emp_id and cp.given_to='" . $id . "' and cp.isActive = 1";
-        return DB::select(DB::raw($query));
-    }
+    // public function getproperty($id)
+    // {
+    //     $query = "SELECT  @s:=@s+1 as SNo, cp.*, CONCAT(e.fname,' ',IF( e.mname != null,e.mname,' '),' ', e.lname) as PROVIDER FROM employee e, company_property cp, (SELECT @s:=0) as s WHERE cp.given_by =e.emp_id and cp.given_to='" . $id . "' and cp.isActive = 1";
+    //     return DB::select(DB::raw($query));
+    // }
 
-    public function getpropertyexit($id)
-    {
-        $query = "SELECT  @s:=@s+1 as SNo, cp.*, CONCAT(e.fname,' ',IF( e.mname != null,e.mname,' '),' ', e.lname) as PROVIDER FROM employee e, company_property cp, (SELECT @s:=0) as s WHERE cp.given_by =e.emp_id and cp.given_to='" . $id . "'";
-        return DB::select(DB::raw($query));
-    }
+    public function getproperty($id)
+{
+    $query = "SELECT ROW_NUMBER() OVER () as SNo, cp.*, CONCAT(e.fname, ' ', COALESCE(e.mname, ' '), ' ', e.lname) as PROVIDER
+              FROM employee e
+              JOIN company_property cp ON cp.given_by = e.emp_id
+              WHERE cp.given_to = '" . $id . "' AND cp.\"isActive\" = 1";
+
+    return DB::select(DB::raw($query));
+}
+
+
+public function getpropertyexit($id)
+{
+    $query = "SELECT ROW_NUMBER() OVER () as SNo, cp.*, CONCAT(e.fname, ' ', COALESCE(e.mname, ' '), ' ', e.lname) as PROVIDER
+              FROM employee e
+              JOIN company_property cp ON cp.given_by = e.emp_id
+              WHERE cp.given_to = '" . $id . "'";
+
+    return DB::select(DB::raw($query));
+}
 
     public function getactive_properties($id)
     {
@@ -3399,18 +3479,26 @@ d.department_pattern AS child_department, d.parent_pattern as parent_department 
 
     public function role($id)
     {
-        $query = "SELECT @s:=@s+1 as SNo, r.id, r.name FROM role r, (SELECT @s:=0) as s where r.id NOT IN (SELECT role FROM emp_role where userID ='" . $id . "') ";
+        $query = "SELECT r.id, r.name
+                  FROM public.role r
+                  LEFT JOIN public.emp_role er ON r.id = er.role AND er.\"userID\" = '" . $id . "'
+                  WHERE er.role IS NULL";
 
         return DB::select(DB::raw($query));
     }
 
+
     public function rolecount($id)
     {
-        $query = "SELECT @s:=@s+1 as SNo, r.id, r.name FROM role r, (SELECT @s:=0) as s where r.id NOT IN (SELECT role FROM emp_role where userID ='" . $id . "' ) ";
-        $row = DB::select(DB::raw($query));
+        $query = "SELECT ROW_NUMBER() OVER () as SNo, r.id, r.name
+                  FROM role r
+                  WHERE r.id NOT IN (SELECT role FROM emp_role WHERE \"userID\" = '" . $id . "')";
 
-        return count($row);
+        $rows = DB::select(DB::raw($query));
+
+        return count($rows);
     }
+
     public function allrole()
     {
         $query = "SELECT @s:=@s+1 as SNo, r.*  FROM role r, (SELECT @s:=0) as s  ";
@@ -3420,38 +3508,40 @@ d.department_pattern AS child_department, d.parent_pattern as parent_department 
 
     public function finencialgroups()
     {
-        $query = "SELECT @s:=@s+1 as SNo, g.* FROM groups g, (SELECT @s:=0) as s  WHERE type IN (0,1) ";
+        $query = "SELECT ROW_NUMBER() OVER () as SNo, g.* FROM groups g WHERE type IN (0,1)";
 
         return DB::select(DB::raw($query));
     }
+
 
     public function rolesgroupsnot()
-    {
-        $query = "SELECT @s:=@s+1 as SNo, g.* FROM groups g, (SELECT @s:=0) as s WHERE type = '2' and g.id NOT IN( SELECT group_name FROM emp_role ) ";
+{
+    $query = "SELECT ROW_NUMBER() OVER () as SNo, g.* FROM groups g WHERE type = '2' AND g.id NOT IN (SELECT group_name FROM emp_role)";
 
-        return DB::select(DB::raw($query));
-    }
+    return DB::select(DB::raw($query));
+}
+public function rolesgroupsin()
+{
+    $query = "SELECT ROW_NUMBER() OVER () as SNo, g.* FROM groups g WHERE type = '2'";
 
-    public function rolesgroupsin()
-    {
-        $query = "SELECT @s:=@s+1 as SNo, g.* FROM groups g, (SELECT @s:=0) as s WHERE type = '2' ";
+    return DB::select(DB::raw($query));
+}
 
-        return DB::select(DB::raw($query));
-    }
 
-    public function rolesgroups()
-    {
-        $query = "SELECT @s:=@s+1 as SNo, g.* FROM groups g, (SELECT @s:=0) as s WHERE type IN (0,2) ";
+public function rolesgroups()
+{
+    $query = "SELECT ROW_NUMBER() OVER () as SNo, g.* FROM groups g WHERE type IN (0,2)";
 
-        return DB::select(DB::raw($query));
-    }
+    return DB::select(DB::raw($query));
+}
 
-    public function group_byid($id)
-    {
-        $query = "SELECT id, name  FROM groups where id =" . $id . "";
+public function group_byid($id)
+{
+    $query = "SELECT id, name FROM groups WHERE id = " . $id;
 
-        return DB::select(DB::raw($query));
-    }
+    return DB::select(DB::raw($query));
+}
+
 
     public function memberscount($id)
     {
@@ -3809,7 +3899,11 @@ d.department_pattern AS child_department, d.parent_pattern as parent_department 
 
     public function getuserrole($id)
     {
-        $query = "SELECT @s:=@s+1 as SNo,  er.id,  CAST(er.duedate as date) as DATED, er.role, CONCAT(e.fname,' ',IF( e.mname != null,e.mname,' '),' ', e.lname) as eNAME,   r.name as NAME  FROM emp_role er, employee e, role r, (SELECT @s:=0) as s WHERE er.role=r.id AND er.userID = e.emp_id  AND er.userID ='" . $id . "'";
+        $query = "SELECT ROW_NUMBER() OVER () as SNo, er.id, CAST(er.duedate as date) as DATED, er.role, CONCAT(e.fname, ' ', COALESCE(e.mname, ' '), ' ', e.lname) as eNAME, r.name as NAME
+                  FROM emp_role er
+                  JOIN employee e ON er.\"userID\" = e.emp_id
+                  JOIN role r ON er.role = r.id
+                  WHERE er.\"userID\" = '" . $id . "'";
 
         return DB::select(DB::raw($query));
     }

@@ -12,7 +12,7 @@ class Permission extends Model
    //use SoftDeletes;
 
     protected $fillable = [
-        'slug', 'sys_module_id'
+       'id', 'slug', 'sys_module_id'
     ];
 
     protected $with = ['modules'];

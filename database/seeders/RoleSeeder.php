@@ -36,10 +36,17 @@ class RoleSeeder extends Seeder
                 'added_by'=>1
             ],
             [
+                'slug' => 'Managing Director',
+                'name' => 'Managing Director',
+                'added_by'=>1
+            ],
+            [
                 'slug' => 'Staff',
-                'name' => 'Staff',
+                'name' => 'Other Staff',
                 'added_by'=>1
             ]
+
+
 
         ];
 

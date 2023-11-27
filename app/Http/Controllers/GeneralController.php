@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+use Illuminate\Support\Facades\Gate;
 
 //use App\Http\Controllers\Controller;
 
@@ -39,6 +40,8 @@ use App\Models\InputSubmission;
 use App\Models\LeaveApproval;
 use App\Models\LeaveForfeiting;
 use App\Models\EmployeeTemporaryAllowance;
+use App\Models\Permission;
+
 
 //use PHPClamAV\Scanner;
 use App\Models\Leaves;
@@ -4052,6 +4055,9 @@ class GeneralController extends Controller
 
     public function home(Request $request)
     {
+
+
+    
 
         // $api = url('/flex/chart-line-ajax');
         // $chart = new EmployeeLineChart;
@@ -10888,20 +10894,20 @@ class GeneralController extends Controller
         $data['employee'] = $this->flexperformance_model->userprofile($id);
         // // dd($this->flexperformance_model->userprofile($id));
         $data['kin'] = $this->flexperformance_model->getkin($id);
-        // $data['property'] = $this->flexperformance_model->getproperty($id);
-        // $data['propertyexit'] = $this->flexperformance_model->getpropertyexit($id);
+        $data['property'] = $this->flexperformance_model->getproperty($id);
+        $data['propertyexit'] = $this->flexperformance_model->getpropertyexit($id);
         $data['active_properties'] = $this->flexperformance_model->getactive_properties($id);
-        // $data['allrole'] = $this->flexperformance_model->role($id);
-        // $data['role'] = $this->flexperformance_model->getuserrole($id);
-        // $data['rolecount'] = $this->flexperformance_model->rolecount($id);
-        // $data['task_duration'] = $this->performanceModel->total_task_duration($id);
+        $data['allrole'] = $this->flexperformance_model->role($id);
+        $data['role'] = $this->flexperformance_model->getuserrole($id);
+        $data['rolecount'] = $this->flexperformance_model->rolecount($id);
+        $data['task_duration'] = $this->performanceModel->total_task_duration($id);
         // $data['task_actual_duration'] = $this->performanceModel->total_task_actual_duration($id);
-        // $data['task_monetary_value'] = $this->performanceModel->all_task_monetary_value($id);
-        // $data['allTaskcompleted'] = $this->performanceModel->allTaskcompleted($id);
-        // $data['skills_missing'] = $this->flexperformance_model->skills_missing($id);
-        // $data['requested_skills'] = $this->flexperformance_model->requested_skills($id);
-        // $data['skills_have'] = $this->flexperformance_model->skills_have($id);
-        // $data['month_list'] = $this->flexperformance_model->payroll_month_list();
+        $data['task_monetary_value'] = $this->performanceModel->all_task_monetary_value($id);
+        $data['allTaskcompleted'] = $this->performanceModel->allTaskcompleted($id);
+        $data['skills_missing'] = $this->flexperformance_model->skills_missing($id);
+        $data['requested_skills'] = $this->flexperformance_model->requested_skills($id);
+        $data['skills_have'] = $this->flexperformance_model->skills_have($id);
+        $data['month_list'] = $this->flexperformance_model->payroll_month_list();
 
 
         $data['title'] = "Profile";

@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use App\Models\Admin\Permission;
+use Illuminate\Support\Facades\DB;
 
 class PermisionSeeder extends Seeder
 {
@@ -13,6 +14,9 @@ class PermisionSeeder extends Seeder
      */
     public function run()
     {
+
+
+
         $data = [
 
                 // Module 1: Work Force Management
@@ -141,19 +145,16 @@ class PermisionSeeder extends Seeder
                 [111, 'view-forfeitings', 3],
                 [112, 'view-loan-types', 4],
 
-
-
-
-
-
         ];
 
         foreach ($data as $permission) {
-            Permission::updateOrCreate([
-                'id' => $permission[0],
-                'slug' => $permission[1],
-                'sys_module_id' => $permission[2],
-            ]);
+            DB::table('permission')->upsert([
+                [
+                    'id' => $permission[0],
+                    'slug' => $permission[1],
+                    'sys_module_id' => $permission[2],
+                ],
+            ], ['id'], ['slug', 'sys_module_id']);
         }
     }
 }

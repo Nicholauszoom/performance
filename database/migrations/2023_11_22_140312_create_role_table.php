@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
+class CreateRoleTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,12 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('emp_role', function (Blueprint $table) {
+        Schema::create('role', function (Blueprint $table) {
             $table->id();
-            $table->string('userID', 10)->nullable();
-            $table->integer('role')->nullable();
-            $table->integer('group_name')->default(0);
-            $table->dateTime('duedate');
+            $table->string('name', 100);
+            $table->string('created_by', 50)->nullable();
+            $table->dateTime('created_on')->useCurrent();
+            $table->string('permissions', 500)->default('1');
             $table->timestamps();
         });
     }
@@ -30,6 +30,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('emp_role');
+        Schema::dropIfExists('role');
     }
-};
+}

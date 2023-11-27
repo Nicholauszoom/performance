@@ -38,6 +38,8 @@ use Illuminate\Support\Facades\DB;
 // use App\Http\Middleware\Employee;
 use Illuminate\Support\Facades\Notification;
 use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Support\Facades\Gate;
+
 
 class AttendanceController extends Controller
 {
@@ -2181,13 +2183,13 @@ class AttendanceController extends Controller
             $empID = $request->empID;
 
             // Check if there is a pending leave in the given number of days (start,end)
-            $pendingLeave = Leaves::where('empId', $empID)
+            $pendingLeave = Leaves::where('empid', $empID)
                 ->where('state', 1)
                 ->whereDate('start', '<=', $start)
                 ->whereDate('end', '>=', $start)
                 ->first();
 
-            $approvedLeave = Leaves::where('empId', $empID)
+            $approvedLeave = Leaves::where('empid', $empID)
                 ->where('state', 0)
                 ->whereDate('start', '<=', $start)
             ->whereDate('end', '>=', $start)
@@ -2210,7 +2212,7 @@ class AttendanceController extends Controller
             }
 
             // Checking used leave days based on leave type and sub type
-            $leaves = Leaves::where('empID', $empID)->where('nature', $nature)->where('sub_category', $request->sub_cat)->whereNot('reason', 'Automatic applied!')->whereYear('created_at', date('Y'))->sum('days');
+            $leaves = Leaves::where('empid', $empID)->where('nature', $nature)->where('sub_category', $request->sub_cat)->whereNot('reason', 'Automatic applied!')->whereYear('created_at', date('Y'))->sum('days');
 
             $leave_balance = $leaves;
             // For Leave Nature days
@@ -2273,7 +2275,7 @@ class AttendanceController extends Controller
                     // Case hasnt used all days
                     if ($total_leave_days < $maximum) {
                         $leaves = new Leaves();
-                        $leaves->empID = $request->empID;
+                        $leaves->empid = $request->empID;
                         $leaves->start = $request->start;
                         $leaves->status = 1;
                         $leaves->end = $request->end;
@@ -2357,7 +2359,7 @@ class AttendanceController extends Controller
                     if ($total_leave_days < $max_leave_days || $request->nature == 1 && $leave_type->type !== 'Sick') {
                         $remaining = $max_leave_days - ($leave_balance + $different_days);
                         $leaves = new Leaves();
-                        $leaves->empID = $empID;
+                        $leaves->empid = $empID;
                         $leaves->start = $request->start;
                         $leaves->status = 1;
                         $leaves->end = $request->end;
@@ -2550,7 +2552,7 @@ class AttendanceController extends Controller
 
                         $leaves = new Leaves();
                         // $empID=Auth::user()->emp_id;
-                        $leaves->empID = $empID;
+                        $leaves->empid = $empID;
                         $leaves->start = $request->start;
                         $leaves->end = $request->end;
                         $leaves->leave_address = $request->address;
@@ -2922,7 +2924,10 @@ class AttendanceController extends Controller
 
     }
     public function saveLeaveOnBehalf2(Request $request)
+
     {
+
+   
         request()->validate(
             []);
         $start = $request->start;
@@ -2972,7 +2977,7 @@ class AttendanceController extends Controller
                 return $url->with('error', $message);
             }
 
-            $leaves = Leaves::where('empID', $empID)->where('nature', $nature)->where('sub_category', $request->sub_cat)->whereNot('reason', 'Automatic applied!')->whereYear('created_at', date('Y'))->sum('days');
+            $leaves = Leaves::where('empid', $empID)->where('nature', $nature)->where('sub_category', $request->sub_cat)->whereNot('reason', 'Automatic applied!')->whereYear('created_at', date('Y'))->sum('days');
 
             $leave_balance = $leaves;
             $type = LeaveType::where('id', $nature)->first();
@@ -2988,6 +2993,7 @@ class AttendanceController extends Controller
                 $employeeDate = $year . '-01-01';
             }
         }
+
 
         $annualleaveBalance = $this->attendance_model->getLeaveBalance($empID, $employeeDate, date('Y-m-d'));
         $holidays = SysHelpers::countHolidays($start, $end);

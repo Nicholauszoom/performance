@@ -14,7 +14,7 @@ class Leaves extends Model
     protected $table= 'leaves';
 
 
-    
+
       // for relationship
       public function type()
       {
