@@ -1457,7 +1457,9 @@ class FlexPerformanceModel extends Model
 
         $row = DB::select(DB::raw($query));
 
-        return $row;
+return $row;
+
+
     }
 
     public function shift()
