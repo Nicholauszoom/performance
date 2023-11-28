@@ -1904,6 +1904,8 @@ class PayrollController extends Controller
         $result_month = $this->payroll_model->getPayrollMonth1();
         $this_payroll = $this->payroll_model->payrollMonthListpending();
         $payroll_id = $this_payroll[0]->id;
+
+        $cancel_date='';
         foreach ($result_month as $item) {
             $cancel_date = $item->payroll_date;
         }
