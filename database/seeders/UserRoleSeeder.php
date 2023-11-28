@@ -20,11 +20,11 @@ class UserRoleSeeder extends Seeder
                 'userID' => "EMP001",
                 'role' => 1,
                 'group_name' => '0',
+                'duedate' => '2023-11-28 20:19:04'
             ],
         ];
 
-        // Upsert employee roles into the 'emp_role' table
-        // DB::table('emp_role')->upsert($employeeRoles, ['userID'], ['role', 'group_name']);
+        DB::table('emp_role')->insert($employeeRoles);
 
         // Define user roles data
         $userRoles = [
@@ -34,8 +34,7 @@ class UserRoleSeeder extends Seeder
             ],
         ];
 
-        // Upsert user roles into the 'users_roles' table
-        // DB::table('users_roles')->upsert($userRoles, ['user_id'], ['role_id']);
+        DB::table('users_roles')->insert($userRoles);
     }
 }
 
