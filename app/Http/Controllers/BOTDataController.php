@@ -103,6 +103,7 @@ class BOTDataController extends Controller
 
 
 
+
         $data = [
             "reportingDate"=>$this->convertDate($employee->hire_date),
             "branchCode" => $employee->branch,
@@ -110,7 +111,7 @@ class BOTDataController extends Controller
             "empDob" =>  $this->convertDate($employee->birthdate), // DDMMYYYYHHMM
             "empNin" => $this->removeSpecialCharacters($employee->national_id),
             "empPosition" =>  $this->removeSpecialCharacters($employee->positions->name),
-            "empStatus" =>  $employee->state == 1?'Active':'Inactive',
+            "empStatus" =>  $employee->contract_type,
             "empDepartment" =>  $this->removeSpecialCharacters($employee->departments->name),
             "appointmentDate" =>$this->convertDate($employee->hire_date), // DDMMYYYYHHMM
             "lastPromotionDate" =>$this->convertDate($employee->hire_date), // DDMMYYYYHHMM
