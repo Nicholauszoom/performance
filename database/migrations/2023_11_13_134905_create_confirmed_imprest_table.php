@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('confirmed_imprest', function (Blueprint $table) {
             $table->id();
-            $table->string('empID', 10);
+            $table->string('empid', 10);
             $table->integer('imprestID');
             $table->decimal('initial', 15);
             $table->decimal('final', 15);

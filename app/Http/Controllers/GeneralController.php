@@ -10587,7 +10587,7 @@ class GeneralController extends Controller
 
     public function all_grievances()
     {
-        $data['my_grievances'] = Grievance::where('empID', Auth::user()->emp_id)->get();
+        $data['my_grievances'] = Grievance::where('empid', Auth::user()->emp_id)->get();
         $data['other_grievances'] = Grievance::all();
         return view('app/grievances', $data);
     }
@@ -10844,7 +10844,7 @@ class GeneralController extends Controller
 
     public function my_grievances()
     {
-        $data['my_grievances'] = Grievance::latest()->where('empID', Auth::user()->emp_id)->get();
+        $data['my_grievances'] = Grievance::latest()->where('empid', Auth::user()->emp_id)->get();
         return view('my-services.grievances', $data);
     }
 
@@ -12159,7 +12159,7 @@ class GeneralController extends Controller
 
         foreach ($employee as $item) {
             $performance = DB::table('employee')
-                ->join('employee_performances', 'employee.emp_id', '=', 'employee_performances.empID')
+                ->join('employee_performances', 'employee.emp_id', '=', 'employee_performances.empid')
                 ->where('employee.emp_id', $item->emp_id)
                 ->whereNotNull('employee_performances.performance')
                 // ->join('adhoc_tasks', 'employee.emp_id', '=', 'adhoc_tasks.assigned')
@@ -12168,14 +12168,14 @@ class GeneralController extends Controller
             ;
 
             $behaviour = DB::table('employee')
-                ->join('employee_performances', 'employee.emp_id', '=', 'employee_performances.empID')
+                ->join('employee_performances', 'employee.emp_id', '=', 'employee_performances.empid')
                 ->where('employee.emp_id', $item->emp_id)
                 ->whereNotNull('employee_performances.behaviour')
                 // ->join('adhoc_tasks', 'employee.emp_id', '=', 'adhoc_tasks.assigned')
                 ->avg('employee_performances.behaviour');
 
             $position = PositionSkills::where('position_ref', $item->position)->count();
-            $skills = EmployeeSkills::where('empID', $item->emp_id)->count();
+            $skills = EmployeeSkills::where('empid', $item->emp_id)->count();
 
             if ($skills > 0 && $position) {
                 $potential = number_format($skills / $position, 2) * 100;

@@ -151,20 +151,21 @@ public function getCurrentStrategy()
         return DB::select(DB::raw($query));
     }
 
-    public function alldepartment()
-    {
+    public function allDepartment()
+{
+    $test = DB::table('department')
+        ->join('cost_center', 'cost_center.id', '=', 'department.cost_center_id')
+        ->join('employee', 'employee.emp_id', '=',    DB::raw('CAST(department.hod AS TEXT)'))
+        ->join('department as d2', 'department.reports_to', '=', 'd2.id')
+        ->select('cost_center.name as CostCenterName', 'department.*', DB::raw("CONCAT(employee.fname, ' ', employee.mname, ' ', employee.lname) as HOD"), 'd2.name as parentdept')
+        ->where('department.state', 1)
+        ->where('department.type', 1)
+        ->get();
 
-        $test = DB::table('department')
-            ->join('cost_center', 'cost_center.id', '=', 'department.cost_center_id')
-            ->join('employee', 'employee.emp_id', '=', 'department.hod')
-            ->join('department as d2', 'department.reports_to', '=', 'd2.id')
-            ->select('cost_center.name as CostCenterName', 'department.*', DB::raw("CONCAT(employee.fname, ' ', employee.mname, ' ', employee.lname) as HOD"), 'd2.name as parentdept')
-            ->where('department.state', 1)
-            ->where('department.type', 1)
-            ->get();
+    return $test;
+}
 
-        return $test;
-    }
+
 
     public function costDepartments()
     {
@@ -188,11 +189,20 @@ public function getCurrentStrategy()
 
     public function inactive_department()
     {
-        $query = "SELECT @s:=@s+1 as SNo, CONCAT(e.fname,' ',IF( e.mname != null,e.mname,' '),' ', e.lname) as HOD,  d.*, pd.name as parentdept FROM department d, department pd, employee e,  (SELECT @s:=0) as s  WHERE d.reports_to = pd.id AND d.state = 0 AND d.hod = e.emp_id";
+        $result = DB::table(DB::raw('(SELECT 0) as s'))
+        ->join('department as d', function ($join) {
+            $join->on('d.state', '=', DB::raw('0'));
+        })
+        ->join('department as pd', 'd.reports_to', '=', 'pd.id')
+        ->join('employee as e', DB::raw('CAST(d.hod AS TEXT)'), '=', 'e.emp_id')
+        ->selectRaw('ROW_NUMBER() OVER () as "SNo"')
+        ->selectRaw('CONCAT(e.fname, \' \', COALESCE(e.mname, \'\'), \' \', e.lname) as "HOD"')
+        ->select('d.*', 'pd.name as "parentdept"')
+        ->get();
 
-        return DB::select(DB::raw($query));
+    return $result;
+
     }
-
     public function get_deligates($id)
     {
         $level1 = DB::table('level1')->where('deligetor', $id)->count();
@@ -230,11 +240,11 @@ public function getCurrentStrategy()
 
     public function costCenter()
     {
-        $query = "SELECT @s:=@s+1 as SNo, c.* FROM cost_center c, (SELECT @s:=0) as s ";
-
-        return DB::select(DB::raw($query));
+        return $this->selectRaw('ROW_NUMBER() OVER () as SNo, cost_centers.*')
+            ->from('cost_center as cost_centers')
+            ->crossJoin(DB::raw('(SELECT 0) as s'))
+            ->get();
     }
-
     public function addCompanyBranch($data)
     {
 
@@ -1475,10 +1485,10 @@ public function getCurrentStrategy()
 
 public function skills_have($id)
 {
-    $query = "SELECT ROW_NUMBER() OVER () as SNo, es.\"empID\", es.\"skill_ID\", s.name as NAME
+    $query = "SELECT ROW_NUMBER() OVER () as SNo, es.\"empid\", es.\"skill_ID\", s.name as NAME
               FROM emp_skills es
               JOIN skills s ON es.\"skill_ID\" = s.id
-              WHERE es.\"empID\" = '" . $id . "'";
+              WHERE es.\"empid\" = '" . $id . "'";
 
     return DB::select(DB::raw($query));
 }
@@ -1489,7 +1499,7 @@ public function requested_skills($empID)
     $query = "SELECT ROW_NUMBER() OVER () as SNo, sk.*, ta.status as request_status, ta.*
               FROM skills sk
               JOIN training_application ta ON sk.id = ta.\"skillsID\"
-              WHERE ta.\"empID\" = '" . $empID . "'";
+              WHERE ta.\"empid\" = '" . $empID . "'";
 
     return DB::select(DB::raw($query));
 }
@@ -1497,13 +1507,13 @@ public function requested_skills($empID)
 public function skills_missing($empID)
 {
     $query = "SELECT ROW_NUMBER() OVER () as SNo, sk.*,
-                     CASE WHEN (SELECT COUNT(\"skillsID\") FROM training_application WHERE \"skillsID\"::text = sk.id::text AND \"empID\" = '" . $empID . "') > 0
-                          THEN (SELECT status FROM training_application WHERE \"empID\"::text = sk.id::text AND \"empID\" = '" . $empID . "')
+                     CASE WHEN (SELECT COUNT(\"skillsID\") FROM training_application WHERE \"skillsID\"::text = sk.id::text AND \"empid\" = '" . $empID . "') > 0
+                          THEN (SELECT status FROM training_application WHERE \"empid\"::text = sk.id::text AND \"empid\" = '" . $empID . "')
                           ELSE 9
                      END AS status
               FROM skills sk
               WHERE sk.position_ref = (SELECT position FROM employee WHERE emp_id ='" . $empID . "')
-                AND sk.id NOT IN (SELECT \"skill_ID\" FROM emp_skills WHERE \"empID\" = '" . $empID . "')";
+                AND sk.id NOT IN (SELECT \"skill_ID\" FROM emp_skills WHERE \"empid\" = '" . $empID . "')";
 
     return DB::select(DB::raw($query));
 }
@@ -1710,12 +1720,23 @@ public function getpropertyexit($id)
         return true;
     }
 
+    // public function unpaid_leave_employee()
+    // {
+
+    //     $query = "SELECT e.emp_id,ul.status,ul.start_date,ul.end_date,CONCAT(e.fname,' ',IF( e.mname != null,e.mname,' '),' ', e.lname) as NAME,ul.reason FROM employee e,unpaid_leave ul where e.emp_id=ul.empID  AND ul.state=0";
+
+    //     return DB::select(DB::raw($query));
+    // }
+
     public function unpaid_leave_employee()
     {
-
-        $query = "SELECT e.emp_id,ul.status,ul.start_date,ul.end_date,CONCAT(e.fname,' ',IF( e.mname != null,e.mname,' '),' ', e.lname) as NAME,ul.reason FROM employee e,unpaid_leave ul where e.emp_id=ul.empID  AND ul.state=0";
-
-        return DB::select(DB::raw($query));
+        return $this->select('employee.emp_id', 'unpaid_leave.status', 'unpaid_leave.start_date', 'unpaid_leave.end_date')
+            ->selectRaw('CONCAT(employee.fname, \' \', COALESCE(employee.mname, \' \', \'\'), \' \', employee.lname) as name')
+            ->addSelect('unpaid_leave.reason')
+            ->from('employee as employee')
+            ->join('unpaid_leave as unpaid_leave', 'employee.emp_id', '=', 'unpaid_leave.empid')
+            ->where('unpaid_leave.state', '=', 0)
+            ->get();
     }
 
     public function confirm_upaid_leave($id)
@@ -2829,34 +2850,49 @@ last_paid_date='" . $date . "' WHERE  state = 1 and type = 3";
     // }
 
     public function mysalary_advance($empID)
-{
-    $queryResult = DB::table('loan_application')
-        ->join('employee', 'loan_application.empID', '=', 'employee.emp_id')
-        ->join('position', 'employee.position', '=', 'position.id')
-        ->join('department', 'employee.department', '=', 'department.id')
-        ->join('loan_type', 'loan_application.type', '=', 'loan_type.id')
-        ->crossJoin(DB::raw('(SELECT @s:=0) as s'))
-        ->select(
-            DB::raw('@s:=@s+1 as SNo'),
-            'loan_application.empID',
-            'loan_type.name as TYPE',
-            'loan_application.*',
-            DB::raw("CONCAT(employee.fname, ' ', IF(employee.mname IS NOT NULL, employee.mname, ' '), ' ', employee.lname) as NAME"),
-            'department.name as DEPARTMENT',
-            'position.name as POSITION'
-        )
-        ->where('loan_application.empID', '=', $empID)
-        ->orderBy('loan_application.id', 'DESC')
-        ->get();
-    return $queryResult;
-}
+    {
+        $result = DB::table('loan_application')
+            ->join('employee', 'loan_application.empid', '=', 'employee.emp_id')
+            ->join('position', 'employee.position', '=', 'position.id')
+            ->join('department', 'employee.department', '=', 'department.id')
+            ->join('loan_type', 'loan_application.type', '=', DB::raw('CAST(loan_type.id AS VARCHAR)'))
+            ->select(
+                DB::raw('ROW_NUMBER() OVER () as SNo'),
+                'loan_application.empid',
+                'loan_type.name as TYPE',
+                'loan_application.*',
+                DB::raw("CONCAT(employee.fname, ' ', CASE WHEN employee.mname IS NOT NULL THEN employee.mname ELSE '' END, ' ', employee.lname) as NAME"),
+                'department.name as DEPARTMENT',
+                'position.name as POSITION'
+            )
+            ->where('loan_application.empid', '=', $empID)
+            ->orderBy('loan_application.id', 'DESC')
+            ->get();
 
+        return $result;
+    }
+
+
+
+    // public function salary_advance()
+    // {
+    //     $query = "SELECT @s:=@s+1 SNo, la.empID, lt.name as TYPE, la.*,  CONCAT(e.fname,' ',IF( e.mname != null,e.mname,' '),' ', e.lname) as NAME, d.name as DEPARTMENT, p.name as POSITION FROM loan_application la, employee e, position p, department d, loan_type lt, (SELECT @s:=0) as s WHERE la.empID=e.emp_id and e.position=p.id and e.department=d.id and la.type=lt.id ORDER BY la.id DESC ";
+
+    //     return DB::select(DB::raw($query));
+    // }
 
     public function salary_advance()
     {
-        $query = "SELECT @s:=@s+1 SNo, la.empID, lt.name as TYPE, la.*,  CONCAT(e.fname,' ',IF( e.mname != null,e.mname,' '),' ', e.lname) as NAME, d.name as DEPARTMENT, p.name as POSITION FROM loan_application la, employee e, position p, department d, loan_type lt, (SELECT @s:=0) as s WHERE la.empID=e.emp_id and e.position=p.id and e.department=d.id and la.type=lt.id ORDER BY la.id DESC ";
 
-        return DB::select(DB::raw($query));
+            return $this->selectRaw('ROW_NUMBER() OVER () as SNo, la.empID, loan_types.name as TYPE, la.*, CONCAT(employee.fname, \' \', COALESCE(employee.mname, \' \', \'\'), \' \', employee.lname) as NAME, departments.name as DEPARTMENT, positions.name as POSITION')
+                ->from('loan_application as la')
+                ->join('employee as employee', 'la.empid', '=', 'employee.emp_id')
+                ->join('position as positions', 'employee.position', '=', 'positions.id')
+                ->join('department as departments', 'employee.department', '=', 'departments.id')
+                ->join('loan_type as loan_types', 'la.type', '=', DB::raw('CAST("loan_types".id AS text)')) // Explicit cast to INTEGER
+                ->orderBy('la.id', 'DESC')
+                ->get();
+
     }
 
     public function waitingsalary_advance_hr()
@@ -2971,7 +3007,7 @@ last_paid_date='" . $date . "' WHERE  state = 1 and type = 3";
     {
         $queryResult = "SELECT
         ROW_NUMBER() OVER () AS SNo,
-        l.\"empID\",
+        l.\"empid\",
         l.*,
         CONCAT(e.fname, ' ', COALESCE(e.mname, ''), ' ', e.lname) AS name,
         d.name AS department,
@@ -2979,7 +3015,7 @@ last_paid_date='" . $date . "' WHERE  state = 1 and type = 3";
     FROM
         loan l
     JOIN
-        employee e ON l.\"empID\" = e.emp_id
+        employee e ON l.\"empid\" = e.emp_id
     JOIN
         position p ON e.position = p.id
     JOIN
@@ -2988,14 +3024,24 @@ last_paid_date='" . $date . "' WHERE  state = 1 and type = 3";
         return DB::select(DB::raw($queryResult));
     }
 
+    // public function all_confirmedloan()
+    // {
+    //     $query = "SELECT @s:=@s+1 SNo, l.empID, l.*,  CONCAT(e.fname,' ',IF( e.mname != null,e.mname,' '),' ', e.lname) as name, d.name as department, p.name as position FROM loan l, employee e, position p, department d,  (SELECT @s:=0) as s WHERE l.empID=e.emp_id and e.position=p.id and e.department=d.id ORDER BY l.state DESC ";
+    //     return DB::select(DB::raw($query));
+    // }
+
+
     public function all_confirmedloan()
     {
-        $query = "SELECT @s:=@s+1 SNo, l.empID, l.*,  CONCAT(e.fname,' ',IF( e.mname != null,e.mname,' '),' ', e.lname) as name, d.name as department, p.name as position FROM loan l, employee e, position p, department d,  (SELECT @s:=0) as s WHERE l.empID=e.emp_id and e.position=p.id and e.department=d.id ORDER BY l.state DESC ";
-        //$query="SELECT @s:=@s+1 SNo, l.empID, l.* FROM loan l ";
-
-        //dd(DB::select(DB::raw($query)));
-        return DB::select(DB::raw($query));
+        return $this->selectRaw('ROW_NUMBER() OVER () as SNo, loans.empID, loans.*, CONCAT(employees.fname, \' \', COALESCE(employees.mname, \' \', \'\'), \' \', employees.lname) as name, departments.name as department, positions.name as position')
+            ->from('loan as loans')
+            ->join('employee as employees', 'loans.empid', '=', 'employees.emp_id')
+            ->join('position as positions', 'employees.position', '=', 'positions.id')
+            ->join('department as departments', 'employees.department', '=', 'departments.id')
+            ->orderByDesc('loans.state')
+            ->get();
     }
+
 
     public function getloan($loanID)
     {
@@ -3564,7 +3610,7 @@ d.department_pattern AS child_department, d.parent_pattern as parent_department 
     {
         $query = "SELECT r.id, r.name
                   FROM public.role r
-                  LEFT JOIN public.emp_role er ON r.id = er.role AND er.\"userID\" = '" . $id . "'
+                  LEFT JOIN public.emp_role er ON r.id = er.role AND er.\"userid\" = '" . $id . "'
                   WHERE er.role IS NULL";
 
         return DB::select(DB::raw($query));
@@ -3575,7 +3621,7 @@ d.department_pattern AS child_department, d.parent_pattern as parent_department 
     {
         $query = "SELECT ROW_NUMBER() OVER () as SNo, r.id, r.name
                   FROM role r
-                  WHERE r.id NOT IN (SELECT role FROM emp_role WHERE \"userID\" = '" . $id . "')";
+                  WHERE r.id NOT IN (SELECT role FROM emp_role WHERE \"userid\" = '" . $id . "')";
 
         $rows = DB::select(DB::raw($query));
 
@@ -3984,9 +4030,9 @@ public function group_byid($id)
     {
         $query = "SELECT ROW_NUMBER() OVER () as SNo, er.id, CAST(er.duedate as date) as DATED, er.role, CONCAT(e.fname, ' ', COALESCE(e.mname, ' '), ' ', e.lname) as eNAME, r.name as NAME
                   FROM emp_role er
-                  JOIN employee e ON er.\"userID\" = e.emp_id
+                  JOIN employee e ON er.\"userid\" = e.emp_id
                   JOIN role r ON er.role = r.id
-                  WHERE er.\"userID\" = '" . $id . "'";
+                  WHERE er.\"userid\" = '" . $id . "'";
 
         return DB::select(DB::raw($query));
     }
@@ -4226,10 +4272,25 @@ FROM payroll_logs pl, employee e, position p, department d where e.emp_id=pl.emp
 
     public function all_grievances()
     {
-        $query = "SELECT  @s:=@s+1 as SNo, g.id, g.*, CAST(g.timed as date) as DATED, CONCAT(e.fname,' ',IF( e.mname != null,e.mname,' '),' ', e.lname) as NAME, p.name as POSITION, d.name as DEPARTMENT, g.description FROM grievances g, employee e, department d, position p, (SELECT @s:=0) as s WHERE g.empID = e.emp_id and p.id = e.position and d.id = e.department";
+        $result = DB::table('grievances as g')
+            ->select(
+                DB::raw('ROW_NUMBER() OVER () as SNo'),
+                'g.id',
+                'g.*',
+                DB::raw('CAST(g.timed as date) as DATED'),
+                DB::raw("CONCAT(e.fname, ' ', CASE WHEN e.mname IS NOT NULL THEN e.mname ELSE '' END, ' ', e.lname) as NAME"),
+                'p.name as POSITION',
+                'd.name as DEPARTMENT',
+                'g.description'
+            )
+            ->join('employee as e', 'g.empid', '=', 'e.emp_id')
+            ->join('position as p', 'p.id', '=', 'e.position')
+            ->join('department as d', 'd.id', '=', 'e.department')
+            ->get();
 
-        return DB::select(DB::raw($query));
+        return $result;
     }
+
 
     public function my_grievances($empID)
 {
@@ -4239,7 +4300,7 @@ FROM payroll_logs pl, employee e, position p, department d where e.emp_id=pl.emp
             'g.*',
             DB::raw('CAST(g.timed as date) as DATED')
         )
-        ->where('g.empID', '=', $empID)
+        ->where('g.empid', '=', $empID)
         ->get();
 
     return $result;

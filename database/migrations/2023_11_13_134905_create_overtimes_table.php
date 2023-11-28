@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('overtimes', function (Blueprint $table) {
             $table->id();
             $table->integer('overtimeID');
-            $table->string('empID', 10);
+            $table->string('empid', 10);
             $table->dateTime('time_start')->useCurrent();
             $table->dateTime('time_end')->useCurrent();
             $table->string('overtime_category');

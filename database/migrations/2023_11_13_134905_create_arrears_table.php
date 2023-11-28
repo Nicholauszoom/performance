@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('arrears', function (Blueprint $table) {
             $table->id();
-            $table->string('empID', 10);
+            $table->string('empid', 10);
             $table->decimal('amount', 15);
             $table->decimal('paid', 15)->default(0);
             $table->decimal('amount_last_paid', 15)->default(0);

@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('unpaid_leave', function (Blueprint $table) {
             $table->id();
-            $table->string('empID', 10);
+            $table->string('empid', 10);
             $table->date('start_date');
             $table->date('end_date');
             $table->text('reason');

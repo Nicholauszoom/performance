@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('grievances', function (Blueprint $table) {
             $table->id();
-            $table->string('empID', 10);
+            $table->string('empid', 10);
             $table->string('title', 200)->default('N/A');
             $table->string('description', 500)->nullable();
             $table->string('attachment', 200)->nullable();

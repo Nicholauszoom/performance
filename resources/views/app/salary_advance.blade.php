@@ -274,7 +274,7 @@
                                <?php
                               foreach ($employee as $row) {
                                  # code... ?>
-                              <option value="<?php echo $row->empID; ?>"><?php echo $row->NAME; ?></option> <?php } ?>
+                              <option value="<?php echo $row->empid; ?>"><?php echo $row->name; ?></option> <?php } ?>
                             </select>
                             </div>
                           </div>

@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('imprest', function (Blueprint $table) {
             $table->id();
-            $table->string('empID', 10);
+            $table->string('empid', 10);
             $table->string('title', 100);
             $table->string('description', 200);
             $table->date('start')->default('2019-07-21');

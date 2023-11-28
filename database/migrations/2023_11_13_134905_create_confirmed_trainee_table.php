@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('confirmed_trainee', function (Blueprint $table) {
             $table->id();
             $table->integer('skillsID');
-            $table->string('empID', 10);
+            $table->string('empid', 10);
             $table->decimal('cost', 15);
             $table->integer('status')->default(0)->comment('0-On Training, 1-Graduated, 2-Paused');
             $table->string('recommended_by', 10);

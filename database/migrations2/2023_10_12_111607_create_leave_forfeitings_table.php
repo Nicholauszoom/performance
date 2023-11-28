@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('leave_forfeitings', function (Blueprint $table) {
             $table->id();
-            $table->string('empID', 10);
+            $table->string('empid', 10);
             $table->string('nature', 10);
             $table->string('days', 10);
             $table->timestamps();

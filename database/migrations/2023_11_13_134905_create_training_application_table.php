@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('training_application', function (Blueprint $table) {
             $table->id();
             $table->integer('skillsID');
-            $table->string('empID', 10);
+            $table->string('empid', 10);
             $table->integer('status')->default(0)->comment('0-requested, 1-recommended, 2-approved by HR, 3-Confirmed By Finance, 4-Held by Line Manager, 5-Dissaproved, 6-Unconfirmed, 7-Cancelled Employee');
             $table->string('recommended_by', 10);
             $table->date('date_recommended')->default('2019-07-29');

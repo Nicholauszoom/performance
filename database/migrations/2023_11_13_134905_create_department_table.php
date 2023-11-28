@@ -18,7 +18,9 @@ return new class extends Migration
             $table->string('dept_no');
             $table->integer('code')->default(1);
             $table->string('name');
-            $table->string('cost_center_id');
+            $table->integer('cost_center_id')->unsigned();
+
+            // $table->string('cost_center_id');
             $table->string('company');
             $table->integer('type')->default(1)->comment('1-Department, 2-Subdepartment');
             $table->integer('hod')->nullable();

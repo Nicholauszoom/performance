@@ -470,8 +470,8 @@ class AttendanceModel extends Model
 
         $days_this_month = intval(date('t', strtotime($last_month_date)));
 
-        $remaining_after_forfeitDays = LeaveForfeiting::where('empID', $empID)->value('days') ?? 0;
-        $broughtFowardDays = LeaveForfeiting::where('empID', $empID)->value('opening_balance') ?? 0;
+        $remaining_after_forfeitDays = LeaveForfeiting::where('empid', $empID)->value('days') ?? 0;
+        $broughtFowardDays = LeaveForfeiting::where('empid', $empID)->value('opening_balance') ?? 0;
 
 
         $accrual_days = (($days * $employee->accrual_rate) / 30) + $months * $employee->accrual_rate + $years * 12 * $employee->accrual_rate;
@@ -560,8 +560,8 @@ $row = DB::select(DB::raw($query));
 
         $days_this_month = intval(date('t', strtotime($last_month_date)));
 
-        $forfeitDays = LeaveForfeiting::where('empID', $empID)->value('days') ?? 0;
-        $broughtFowardDays = LeaveForfeiting::where('empID', $empID)->value('opening_balance') ?? 0;
+        $forfeitDays = LeaveForfeiting::where('empid', $empID)->value('days') ?? 0;
+        $broughtFowardDays = LeaveForfeiting::where('empid', $empID)->value('opening_balance') ?? 0;
 
         $accrual_days = (($days * $employee->accrual_rate) / 30) + $months * $employee->accrual_rate + $years * 12 * $employee->accrual_rate;
 

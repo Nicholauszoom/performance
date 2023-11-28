@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('emp_skills', function (Blueprint $table) {
             $table->id();
-            $table->string('empID', 10);
+            $table->string('empid', 10);
             $table->integer('skill_ID');
             $table->string('certificate', 50)->nullable();
             $table->string('remarks', 100)->nullable();

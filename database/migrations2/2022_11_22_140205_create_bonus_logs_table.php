@@ -15,7 +15,7 @@ class CreateBonusLogsTable extends Migration
     {
         Schema::create('bonus_logs', function (Blueprint $table) {
             $table->id();
-            $table->string('empID', 10);
+            $table->string('empid', 10);
             $table->decimal('amount', 15, 2);
             $table->integer('name');
             $table->string('init_author', 10)->nullable();
