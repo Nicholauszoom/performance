@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('employee_performances', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('empID');
+            $table->string('empid');
             $table->double('performance')->nullable();
             $table->double('behaviour')->nullable();
             $table->double('target')->nullable();

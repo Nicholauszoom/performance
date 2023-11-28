@@ -15,7 +15,7 @@ class CreateActivationDeactivationTable extends Migration
     {
         Schema::create('activation_deactivation', function (Blueprint $table) {
             $table->id();
-            $table->string('empID', 10);
+            $table->string('empid', 10);
             $table->integer('state')->comment("0-Deactivated, 1-Activated, 2-Request for Activation, 3-Request for Deactivation");
             $table->integer('current_state')->default(0)->comment("0-active, 1-committed");
             $table->integer('notification')->default(1)->comment("0-seen, 1-not seen");

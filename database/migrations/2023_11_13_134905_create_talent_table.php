@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('talent', function (Blueprint $table) {
             $table->id();
-            $table->string('empID', 10);
+            $table->string('empid', 10);
             $table->double('score');
             $table->string('description', 200);
             $table->date('due_date');

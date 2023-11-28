@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('attendance', function (Blueprint $table) {
             $table->id();
-            $table->string('empID', 10);
+            $table->string('empid', 10);
             $table->dateTime('due_in');
             $table->timestamp('due_out')->nullable();
             $table->integer('state')->default(1);

@@ -838,27 +838,73 @@ FROM payroll_logs pl, employee e WHERE e.emp_id = pl.empID and e.contract_type =
         return DB::select(DB::raw($query));
     }
 
-    function employee_pension($empID)
-    {
-        $query = "
-(SELECT ROW_NUMBER() OVER () as SNo, e.pf_membership_no, e.emp_id, e.fname, e.mname, e.lname, e.hire_date,
-    (e.fname || ' ' || COALESCE(e.mname, '') || ' ' || e.lname) as name, e.emp_id, pl.salary as salary, pl.years,
-    pl.pension_employee, pl.receipt_no, pl.receipt_date, pl.payroll_date as payment_date, pl.pension_employee as pension_employer
- FROM employee e, payroll_logs pl
- WHERE pl.empID = e.emp_id AND e.contract_type != 2 AND e.salary != 0.00 AND pl.empID = '" . $empID . "'
- ORDER BY payroll_date ASC)
-=
-(SELECT ROW_NUMBER() OVER () as SNo, e.pf_membership_no, e.emp_id, e.fname, e.mname, e.lname, e.hire_date,
-    (e.fname || ' ' || COALESCE(e.mname, '') || ' ' || e.lname) as name, e.emp_id, tm.salaryEnrollment as salary,
-    DATE_PART('year', tm.terminationDate) AS years, tm.pension_employee, '-' as receipt_no, '-' as receipt_date,
-    tm.terminationDate as payment_date, tm.pension_employee as pension_employer
- FROM employee e, terminations tm
- WHERE tm.employeeID = e.emp_id AND e.contract_type != 2 AND e.salary != 0.00 AND tm.employeeID = '" . $empID . "'
- ORDER BY terminationDate ASC)
- ";
+    public function employee_pension($empID)
+{
+    $payrollLogs = DB::table('employee as employee')
+        ->join('payroll_logs as pl', 'pl.empID', '=', 'employee.emp_id')
+        ->select(
+            DB::raw('ROW_NUMBER() OVER () as SNo'),
+            'employee.pf_membership_no',
+            'employee.emp_id',
+            'employee.fname',
+            'employee.mname',
+            'employee.lname',
+            'employee.hire_date',
+            DB::raw('(employee.fname || \' \' || COALESCE(employee.mname, \'\') || \' \' || employee.lname) as name'),
+            'employee.emp_id',
+            'pl.salary as salary', // Keep the salary as-is
+            'pl.years',
+            'pl.pension_employee',
+            'pl.receipt_no',
+            'pl.receipt_date',
+            'pl.payroll_date as payment_date',
+            'pl.pension_employee as pension_employer'
+        )
+        ->where('employee.contract_type', '!=', 2)
+        ->where('employee.salary', '!=', '0.00')
+        ->where('pl.empID', '=', $empID)
+        ->orderBy('pl.payroll_date', 'ASC');
 
-        return DB::select(DB::raw($query));
-    }
+        // dd($payrollLogs->get());
+
+    $terminations = DB::table('employee as employee')
+        ->join('terminations as tm', 'tm.employeeid', '=', 'employee.emp_id')
+        ->select(
+            DB::raw('ROW_NUMBER() OVER () as SNo'),
+            'employee.pf_membership_no',
+            'employee.emp_id',
+            'employee.fname',
+            'employee.mname',
+            'employee.lname',
+            'employee.hire_date',
+            DB::raw('(employee.fname || \' \' || COALESCE(employee.mname, \'\') || \' \' || employee.lname) as name'),
+            'employee.emp_id',
+            'employee.salary',
+            // 'salaryEnrollment as salary',
+            DB::raw('DATE_PART(\'year\', tm."terminationDate") AS years'),
+            'tm.pension_employee',
+            DB::raw('\'-\' as receipt_no'),
+            DB::raw('\'-\' as receipt_date'),
+            'tm.terminationDate as payment_date',
+            'tm.pension_employee as pension_employer'
+        )
+        ->where('employee.contract_type', '!=', 2)
+        ->where('employee.salary','!=', '0.00')
+        ->where('tm.employeeid', '=', $empID)
+        ->orderBy('tm.terminationDate', 'ASC');
+
+        // dd($terminations->get());
+
+
+    $result = $payrollLogs->union($terminations)->get();
+
+    return $result;
+}
+
+
+
+
+
     function v_pension($date, $pensionFund)
     {
         $query = "SELECT @s:=@s+1 as SNo, e.pf_membership_no , CONCAT(e.fname,' ', IF(e.mname != null,e.mname,' '),' ', e.lname) as name, pl.salary as salary, pl.allowances,pl.pension_employee, pl.pension_employer

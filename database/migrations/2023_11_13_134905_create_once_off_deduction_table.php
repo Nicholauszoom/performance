@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('once_off_deduction', function (Blueprint $table) {
             $table->id();
-            $table->string('empID', 10);
+            $table->string('empid', 10);
             $table->string('description', 50)->default('Unclassified');
             $table->string('policy', 50)->default('Fixed Amount');
             $table->decimal('paid', 15)->nullable();

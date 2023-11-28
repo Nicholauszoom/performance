@@ -15,7 +15,7 @@ class CreateOvertimeLogsTable extends Migration
     {
         Schema::create('overtime_logs', function (Blueprint $table) {
             $table->id();
-            $table->string('empID', 10);
+            $table->string('empid', 10);
             $table->dateTime('time_start')->useCurrent();
             $table->dateTime('time_end')->useCurrent();
             $table->decimal('amount', 15, 2);

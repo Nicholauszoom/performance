@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('employeeid');
             $table->date('terminationDate');
             $table->string('reason');
-            $table->decimal('salaryEnrollment', 10);
+            $table->double('salaryEnrollment', 10);
             $table->decimal('actual_salary', 10);
             $table->unsignedInteger('normalDays');
             $table->unsignedInteger('publicDays');

@@ -33,14 +33,14 @@
         @foreach($employees as $item)
 
         {{-- For Performance Results --}}
-    
+
         <tr>
             <td>{{ $item->emp_id }}</td>
             <td>{{ $item->fname }} {{ $item->mname }} {{ $item->lname }}</td>
             <td>
                 @php
                 $position= App\Models\PositionSkills::where('position_ref',$item->position)->count();
-                $skills= App\Models\EmployeeSkills::where('empID',$item->emp_id)->count();
+                $skills= App\Models\EmployeeSkills::where('empid',$item->emp_id)->count();
                 @endphp
 
                 @if ($skills>0 && $position)
@@ -49,9 +49,9 @@
                     N/L
                 @endif
             </td>
-            <td> 
+            <td>
                 @php
-                $performance= App\Models\EmployeePerformance::where('empID',$item->emp_id)->avg('performance');
+                $performance= App\Models\EmployeePerformance::where('empid',$item->emp_id)->avg('performance');
                 @endphp
 
                 @if ($performance)
@@ -59,12 +59,12 @@
                 @else
                     N/L
                 @endif
-              
+
             </td>
             <td>
                 @php
-                $achieved= App\Models\EmployeePerformance::where('empID',$item->emp_id)->avg('achieved');
-                $target= App\Models\EmployeePerformance::where('empID',$item->emp_id)->avg('target');
+                $achieved= App\Models\EmployeePerformance::where('empid',$item->emp_id)->avg('achieved');
+                $target= App\Models\EmployeePerformance::where('empid',$item->emp_id)->avg('target');
                 @endphp
                 @if ($achieved>0)
                 {{   number_format( $achieved/$target, 2)  }}

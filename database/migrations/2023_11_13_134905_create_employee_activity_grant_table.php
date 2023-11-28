@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('employee_activity_grant', function (Blueprint $table) {
             $table->id();
-            $table->string('empID', 10);
+            $table->string('empid', 10);
             $table->string('activity_code', 50);
             $table->string('grant_code', 50);
             $table->decimal('percent', 5);

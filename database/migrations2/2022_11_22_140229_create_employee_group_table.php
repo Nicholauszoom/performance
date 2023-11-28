@@ -15,7 +15,7 @@ class CreateEmployeeGroupTable extends Migration
     {
         Schema::create('employee_group', function (Blueprint $table) {
             $table->id();
-            $table->string('empID', 10);
+            $table->string('empid', 10);
             $table->integer('group_name')->index('group_name');
             $table->timestamps();
         });

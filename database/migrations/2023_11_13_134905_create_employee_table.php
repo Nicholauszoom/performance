@@ -37,7 +37,7 @@ return new class extends Migration
             $table->string('line_manager')->nullable();
             $table->string('contract_type')->nullable();
             $table->date('contract_renewal_date')->nullable();
-            $table->decimal('salary', 15)->nullable();
+            $table->double('salary', 15)->nullable();
             $table->string('currency')->nullable();
             $table->decimal('rate', 10)->nullable();
             $table->string('postal_address')->nullable();
