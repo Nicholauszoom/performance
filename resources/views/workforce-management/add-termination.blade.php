@@ -59,7 +59,7 @@
                             <div class="row mb-3">
                                 <label class="col-form-label col-sm-3">Termination Date</label>
                                 <div class="col-sm-9">
-                                    <input type="date" name="terminationDate" class="form-control" id="terminationDate">
+                                    <input type="date" name="terminationDate" class="form-control" id="terminationDate" required>
 
                                     @error('name')
                                         <p class="text-danger mt-1"> Input field Error </p>
@@ -72,7 +72,7 @@
                                 <label class="col-form-label col-sm-3">Reason for Termination <span
                                         class="text-danger">*</span> :</label>
                                 <div class="col-sm-9">
-                                    <textarea rows="3" cols="3" class="form-control" placeholder="Enter your message here" name="reason"></textarea>
+                                    <textarea rows="3" cols="3" class="form-control" placeholder="Enter your message here" name="reason" required></textarea>
                                     @error('name')
                                         <p class="text-danger mt-1"> Input field Error </p>
                                     @enderror

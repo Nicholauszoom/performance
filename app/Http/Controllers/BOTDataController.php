@@ -103,6 +103,11 @@ class BOTDataController extends Controller
 
 
 
+        // FIXME I have to query the contract and assign value
+
+
+
+
 
         $data = [
             "reportingDate"=>$this->convertDate($employee->hire_date),
