@@ -144,11 +144,6 @@
                                         id="">
                                 </div> --}}
                                 <div class="col-md-3 form-group">
-                                    <label for="">Utility Allowance</label>
-                                    <input type="text" class="form-control" value="0" name="utilityAllowance"
-                                        id="">
-                                </div>
-                                <div class="col-md-3 form-group">
                                     <label for="">Leave Allowance</label>
                                     <input type="text" class="form-control" value="0" name="leaveAllowance"
                                         id="leaveAllowance">
