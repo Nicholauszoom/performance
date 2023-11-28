@@ -24,7 +24,7 @@ class UserRoleSeeder extends Seeder
         ];
 
         // Upsert employee roles into the 'emp_role' table
-        DB::table('emp_role')->upsert($employeeRoles, ['userID'], ['role', 'group_name']);
+        // DB::table('emp_role')->upsert($employeeRoles, ['userID'], ['role', 'group_name']);
 
         // Define user roles data
         $userRoles = [
@@ -35,7 +35,7 @@ class UserRoleSeeder extends Seeder
         ];
 
         // Upsert user roles into the 'users_roles' table
-        DB::table('users_roles')->upsert($userRoles, ['user_id'], ['role_id']);
+        // DB::table('users_roles')->upsert($userRoles, ['user_id'], ['role_id']);
     }
 }
-        
+

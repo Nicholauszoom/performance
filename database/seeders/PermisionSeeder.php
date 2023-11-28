@@ -148,7 +148,7 @@ class PermisionSeeder extends Seeder
         ];
 
         foreach ($data as $permission) {
-            DB::table('permission')->upsert([
+            DB::table('permissions')->upsert([
                 [
                     'id' => $permission[0],
                     'slug' => $permission[1],

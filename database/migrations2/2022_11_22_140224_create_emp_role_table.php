@@ -15,7 +15,7 @@ class CreateEmpRoleTable extends Migration
     {
         Schema::create('emp_role', function (Blueprint $table) {
             $table->id();
-            $table->string('userID', 10)->nullable();
+            $table->string('userid', 10)->nullable();
             $table->integer('role')->nullable()->index('role');
             $table->integer('group_name')->default(0);
             $table->dateTime('duedate');

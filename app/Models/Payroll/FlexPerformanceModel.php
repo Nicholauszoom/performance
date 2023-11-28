@@ -897,28 +897,95 @@ public function getCurrentStrategy()
         return DB::select(DB::raw($query));
     }
 
+    // public function inactive_employee1()
+    // {
+    //     $query = "SELECT @s:=@s+1 SNo, p.name as POSITION, d.name as DEPARTMENT, e.*, CONCAT(e.fname,' ',
+    //IF( e.mname != null,e.mname,' '),' ', e.lname) as NAME,
+    //IF((SELECT COUNT(empID) FROM activation_deactivation WHERE state = 2 AND current_state = 0 )>0, 1, 0) as isRequested,
+    //e.last_updated as dated ,
+    //      CONCAT(el.fname,' ', el.mname,' ', el.lname) as LINEMANAGER
+    //       FROM employee e, employee el, department d, position p, (select @s:=0) as s
+    //        WHERE p.id=e.position and d.id=e.department AND el.emp_id = e.emp_id AND e.state=0 ";
+
+    //     return DB::select(DB::raw($query));
+    // }
+
+
     public function inactive_employee1()
     {
-        $query = "SELECT @s:=@s+1 SNo, p.name as POSITION, d.name as DEPARTMENT, e.*, CONCAT(e.fname,' ',IF( e.mname != null,e.mname,' '),' ', e.lname) as NAME, IF((SELECT COUNT(empID) FROM activation_deactivation WHERE state = 2 AND current_state = 0 )>0, 1, 0) as isRequested, e.last_updated as dated , CONCAT(el.fname,' ', el.mname,' ', el.lname) as LINEMANAGER FROM employee e, employee el, department d, position p, (select @s:=0) as s WHERE p.id=e.position and d.id=e.department AND el.emp_id = e.emp_id AND e.state=0 ";
+        $result = DB::table('employee')
+            ->select(
+                DB::raw('ROW_NUMBER() OVER () as SNo'),
+                'position.name as POSITION',
+                'department.name as DEPARTMENT',
+                'employee.*',
+                DB::raw("CONCAT_WS(' ', employee.fname, employee.mname, employee.lname) as NAME"),
+                DB::raw('(SELECT COUNT(empid) FROM activation_deactivation WHERE state = 2 AND current_state = 0 ) > 0 as isRequested'),
+                'employee.last_updated as dated',
+                DB::raw("CONCAT_WS(' ', linem.fname, linem.mname, linem.lname) as LINEMANAGER")
+            )
+            ->join('position', 'position.id', '=', 'employee.position')
+            ->join('department', 'department.id', '=', 'employee.department')
+            ->join('employee as linem', 'linem.emp_id', '=', 'employee.emp_id')
+            ->where('employee.state', '=', 0)
+            ->get();
 
-        return DB::select(DB::raw($query));
+        return $result;
     }
+
 
     public function inactive_employee2()
     {
-        $query = "SELECT @s:=@s+1 SNo, p.name as POSITION, d.name as DEPARTMENT, ad.state as log_state, ad.current_state, ad.author as initiator,
-		e.*, ad.id as logID, CONCAT(e.fname,' ',IF( e.mname != null,e.mname,' '),' ', e.lname) as NAME, (SELECT CONCAT(el.fname,' ', el.mname,' ', el.lname) from employee el where el.emp_id=e.line_manager ) as LINEMANAGER FROM employee e, activation_deactivation ad,  department d, position p , (select @s:=0) as s WHERE ad.empID = e.emp_id  and  p.id=e.position and d.id=e.department and e.state = 3 and ad.state = 3  ORDER BY ad.id DESC, ad.current_state ASC ";
+        $result = DB::table('employee as e')
+            ->select(
+                DB::raw('ROW_NUMBER() OVER () as SNo'),
+                'p.name as POSITION',
+                'd.name as DEPARTMENT',
+                'ad.state as log_state',
+                'ad.current_state',
+                'ad.author as initiator',
+                'e.*',
+                'ad.id as logID',
+                DB::raw("CONCAT(e.fname, ' ', CASE WHEN e.mname IS NOT NULL THEN e.mname ELSE '' END, ' ', e.lname) as NAME"),
+                DB::raw("(SELECT CONCAT(el.fname, ' ', el.mname, ' ', el.lname) FROM employee el WHERE el.emp_id = e.line_manager) as LINEMANAGER")
+            )
+            ->join('activation_deactivation as ad', 'ad.empid', '=', 'e.emp_id')
+            ->join('department as d', 'd.id', '=', 'e.department')
+            ->join('position as p', 'p.id', '=', 'e.position')
+            ->where('e.state', '=', 3)
+            ->where('ad.state', '=', 3)
+            ->orderBy('ad.id', 'DESC')
+            ->orderBy('ad.current_state', 'ASC')
+            ->get();
 
-        return DB::select(DB::raw($query));
+        return $result;
     }
 
     public function inactive_employee3()
     {
-        $query = "SELECT @s:=@s+1 SNo, p.name as POSITION, d.name as DEPARTMENT, ad.state as log_state, ad.current_state, ad.author as initiator,
-		e.*, ad.id as logID, CONCAT(e.fname,' ',IF( e.mname != null,e.mname,' '),' ', e.lname) as NAME, (SELECT CONCAT(el.fname,' ', el.mname,' ', el.lname) from employee el where el.emp_id=e.line_manager ) as LINEMANAGER FROM employee e, activation_deactivation ad,  department d, position p , (select @s:=0) as s WHERE ad.empID = e.emp_id  and  p.id=e.position and d.id=e.department  and e.state = 4  ORDER BY  ad.current_state ASC ";
+        $result = DB::table('employee as e')
+            ->select(
+                DB::raw('ROW_NUMBER() OVER () as SNo'),
+                'p.name as POSITION',
+                'd.name as DEPARTMENT',
+                'ad.state as log_state',
+                'ad.current_state',
+                'ad.author as initiator',
+                'e.*',
+                'ad.id as logID',
+                DB::raw("CONCAT(e.fname, ' ', CASE WHEN e.mname IS NOT NULL THEN e.mname ELSE '' END, ' ', e.lname) as NAME"),
+                DB::raw("(SELECT CONCAT(el.fname, ' ', el.mname, ' ', el.lname) FROM employee el WHERE el.emp_id = e.line_manager) as LINEMANAGER")
+            )
+            ->join('activation_deactivation as ad', 'ad.empid', '=', 'e.emp_id')
+            ->join('department as d', 'd.id', '=', 'e.department')
+            ->join('position as p', 'p.id', '=', 'e.position')
+            ->where('e.state', '=', 4)
+            ->orderBy('ad.current_state', 'ASC')
+            ->get();
 
-        return DB::select(DB::raw($query));
+        return $result;
     }
+
 
     public function updateemployeestatelog($data, $id)
     {
@@ -957,10 +1024,26 @@ public function getCurrentStrategy()
 
     public function employeeTransfers()
     {
-        $query = "SELECT @s:=@s+1 SNo, p.name as position_name, d.name as department_name, br.name as branch_name, tr.*, CONCAT(e.fname,'  ', e.lname) as empName FROM employee e, transfer tr, department d, position p, branch br, (SELECT @s:=0) as s WHERE tr.empID = e.emp_id AND e.branch = br.id AND  p.id=e.position AND d.id=e.department  ORDER BY tr.id DESC ";
+        $result = DB::table('employee as e')
+            ->select(
+                DB::raw('ROW_NUMBER() OVER () as SNo'),
+                'p.name as position_name',
+                'd.name as department_name',
+                'br.name as branch_name',
+                'tr.*',
+                DB::raw("CONCAT(e.fname, ' ', e.lname) as empName")
+            )
+            ->join('transfer as tr', 'tr.empid', '=', 'e.emp_id')
+            ->join('department as d', 'd.id', '=', 'e.department')
+            ->join('position as p', 'p.id', '=', 'e.position')
+            ->join('branch as br', 'br.id', '=', DB::raw('CAST(e.branch AS bigint)'))
+            ->orderBy('tr.id', 'DESC')
+            ->get();
 
-        return DB::select(DB::raw($query));
+        return $result;
     }
+
+
 
     public function newDepartmentTransfer($id)
     {
@@ -4149,11 +4232,19 @@ FROM payroll_logs pl, employee e, position p, department d where e.emp_id=pl.emp
     }
 
     public function my_grievances($empID)
-    {
-        $query = "SELECT  @s:=@s+1 as SNo, g.*, CAST(g.timed as date) as DATED FROM grievances g,(SELECT @s:=0) as s where g.empID = '" . $empID . "'";
+{
+    $result = DB::table('grievances as g')
+        ->select(
+            DB::raw('ROW_NUMBER() OVER () as SNo'),
+            'g.*',
+            DB::raw('CAST(g.timed as date) as DATED')
+        )
+        ->where('g.empID', '=', $empID)
+        ->get();
 
-        return DB::select(DB::raw($query));
-    }
+    return $result;
+}
+
 
     ####################### END GRIEVANCES #####################################
 

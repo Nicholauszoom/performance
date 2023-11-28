@@ -3790,7 +3790,6 @@ class GeneralController extends Controller
 
             $loanID = $id;
             $data = array(
-
                 'approved_date_finance' => date('Y-m-d'),
                 'approved_finance' => auth()->user()->emp_id,
                 'status' => 1,
@@ -4057,7 +4056,7 @@ class GeneralController extends Controller
     {
 
 
-    
+
 
         // $api = url('/flex/chart-line-ajax');
         // $chart = new EmployeeLineChart;
