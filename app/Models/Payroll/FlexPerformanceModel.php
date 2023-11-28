@@ -570,9 +570,31 @@ public function getCurrentStrategy()
 
     public function approvedOvertimes()
     {
-        $query = "SELECT  eo.id as id,CONCAT(e.fname,' ',IF( e.mname != null,e.mname,' '),' ', e.lname) as name, d.name as DEPARTMENT, p.name as POSITION,
+        $query1 = "SELECT  eo.id as id,CONCAT(e.fname,' ',IF( e.mname != null,e.mname,' '),' ', e.lname) as name, d.name as DEPARTMENT, p.name as POSITION,
 		  eo.days as totoalHOURS,eo.amount,eo.status as status,oc.name as overtime_category
 		FROM employee e, overtimes eo, position p, department d,overtime_category oc, (SELECT @s:=0) as s WHERE   e.department = d.id and eo.empID = e.emp_id  and e.position = p.id and eo.overtime_category = oc.id  ORDER BY eo.id DESC";
+        $query = "SELECT
+        eo.id as id,
+        CONCAT(e.fname, ' ', COALESCE(e.mname, ' '), ' ', e.lname) as name,
+        d.name as DEPARTMENT,
+        p.name as POSITION,
+        eo.days as totalHOURS,
+        eo.amount,
+        eo.status as status,
+        oc.name as overtime_category
+    FROM
+        employee e
+    JOIN
+        overtimes eo ON eo.\"empID\" = e.emp_id
+    JOIN
+        position p ON e.position = p.id
+    JOIN
+        department d ON e.department = d.id
+    JOIN
+        overtime_category oc ON eo.overtime_category::bigint = oc.id
+    ORDER BY
+        eo.id DESC
+    ";
 
         //$query = "SELECT *  FROM employee_overtime";
 
@@ -1701,7 +1723,12 @@ public function getpropertyexit($id)
 
     public function deduction()
     {
-        $query = 'SELECT @s:=@s+1 SNo, d.* FROM deduction d, (SELECT @s:=0) as s where is_active = 1 AND d.id NOT IN(7,8)';
+        $query = 'SELECT ROW_NUMBER() OVER (ORDER BY id) AS SNo, d.*
+        FROM (
+            SELECT * FROM deduction
+            WHERE is_active = 1 AND id NOT IN (7, 8)
+        ) d
+        ';
 
         return DB::select(DB::raw($query));
     }
@@ -1915,14 +1942,22 @@ public function getpropertyexit($id)
 
     public function allowance()
     {
-        $query = 'SELECT @s:=@s+1 SNo, a.* FROM allowances a , (SELECT @s:=0) as s  WHERE a.state=1';
+        $query = 'SELECT ROW_NUMBER() OVER (ORDER BY id) AS SNo, sub.*
+        FROM (
+            SELECT * FROM allowances WHERE state = 1
+        ) sub
+        ';
 
         return DB::select(DB::raw($query));
     }
 
     public function allowance_category()
     {
-        $query = 'SELECT @s:=@s+1 SNo, a.* FROM allowance_categories a , (SELECT @s:=0) as s ';
+        $query = 'SELECT ROW_NUMBER() OVER (ORDER BY id) AS SNo, sub.*
+        FROM (
+            SELECT * FROM allowance_categories
+        ) sub
+        ';
 
         return DB::select(DB::raw($query));
     }
@@ -1956,14 +1991,18 @@ public function getpropertyexit($id)
 
     public function deductions()
     {
-        $query = 'SELECT @s:=@s+1 SNo,  ded.* FROM deductions ded,  (SELECT @s:=0) as s ';
+        $query = 'SELECT ROW_NUMBER() OVER (ORDER BY id) AS SNo, ded.*
+        FROM deductions ded;
+         ';
 
         return DB::select(DB::raw($query));
     }
 
     public function pension_fund()
     {
-        $query = 'SELECT @s:=@s+1 SNo, pf.* FROM pension_fund pf, (SELECT @s:=0) as s';
+        $query = 'SELECT ROW_NUMBER() OVER (ORDER BY id) AS SNo, pf.*
+        FROM pension_fund pf;
+        ';
 
         return DB::select(DB::raw($query));
     }
@@ -1977,7 +2016,11 @@ public function getpropertyexit($id)
 
     public function meals_deduction()
     {
-        $query = 'SELECT @s:=@s+1 SNo, meals_deduction.* FROM meals_deduction, (SELECT @s:=0) as s LIMIT 1';
+        $query = 'SELECT ROW_NUMBER() OVER (ORDER BY id) AS SNo, sub.*
+        FROM (
+            SELECT * FROM meals_deduction
+        ) sub
+        ';
 
         return DB::select(DB::raw($query));
     }
@@ -2312,7 +2355,9 @@ IF(
 
     public function paye()
     {
-        $query = 'SELECT @s:=@s+1 SNo, p.* FROM paye p, (SELECT @s:=0) as s';
+        $query = 'SELECT ROW_NUMBER() OVER (ORDER BY id) AS SNo, p.*
+        FROM paye p
+        ';
 
         return DB::select(DB::raw($query));
     }
@@ -2884,14 +2929,15 @@ last_paid_date='" . $date . "' WHERE  state = 1 and type = 3";
     public function salary_advance()
     {
 
-            return $this->selectRaw('ROW_NUMBER() OVER () as SNo, la.empID, loan_types.name as TYPE, la.*, CONCAT(employee.fname, \' \', COALESCE(employee.mname, \' \', \'\'), \' \', employee.lname) as NAME, departments.name as DEPARTMENT, positions.name as POSITION')
-                ->from('loan_application as la')
-                ->join('employee as employee', 'la.empid', '=', 'employee.emp_id')
-                ->join('position as positions', 'employee.position', '=', 'positions.id')
-                ->join('department as departments', 'employee.department', '=', 'departments.id')
-                ->join('loan_type as loan_types', 'la.type', '=', DB::raw('CAST("loan_types".id AS text)')) // Explicit cast to INTEGER
-                ->orderBy('la.id', 'DESC')
-                ->get();
+        return $this->selectRaw('ROW_NUMBER() OVER () as \"SNo\", la.\"empID\", loan_types.name as \"TYPE\", la.*, CONCAT(employee.fname, \' \', COALESCE(employee.mname, \' \', \'\'), \' \', employee.lname) as "NAME", departments.name as "DEPARTMENT", positions.name as "POSITION"')
+        ->from('loan_application as la')
+        ->join('employee as employee', 'la.empid', '=', 'employee.emp_id')
+        ->join('position as positions', 'employee.position', '=', 'positions.id')
+        ->join('department as departments', 'employee.department', '=', 'departments.id')
+        ->join('loan_type as loan_types', 'la.type', '=', DB::raw('CAST("loan_types".id AS text)')) // Explicit cast to INTEGER
+        ->orderBy('la.id', 'DESC')
+        ->get();
+
 
     }
 
@@ -3630,7 +3676,9 @@ d.department_pattern AS child_department, d.parent_pattern as parent_department 
 
     public function allrole()
     {
-        $query = "SELECT @s:=@s+1 as SNo, r.*  FROM role r, (SELECT @s:=0) as s  ";
+        $query = "SELECT ROW_NUMBER() OVER () as SNo, r.id FROM roles r";
+
+
 
         return DB::select(DB::raw($query));
     }

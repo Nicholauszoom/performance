@@ -101,7 +101,14 @@ class ImprestModel {
 
 	function confirmedImprests()
 	{
-		$query = "SELECT @s:=@s+1 as SNo, im.id as imprestID, im.title, im.description, im.application_date, cim.*,initial  as initial_cost,  final  as final_cost FROM imprest im, confirmed_imprest cim,  (SELECT @s:=0) as s WHERE cim.imprestID = im.id ORDER BY cim.id DESC";
+		$query1 = "SELECT @s:=@s+1 as SNo, im.id as \"imprestID\", im.title, im.description, im.application_date, cim.*,initial  as initial_cost,  final  as final_cost FROM imprest im, confirmed_imprest cim,  (SELECT @s:=0) as s WHERE cim.\"imprestID\" = im.id ORDER BY cim.id DESC";
+		$query = "SELECT ROW_NUMBER() OVER (ORDER BY im.id) as SNo,
+        im.id as \"imprestID\", im.title, im.description, im.application_date, cim.*,
+        initial as initial_cost, final as final_cost
+    FROM imprest im
+    JOIN confirmed_imprest cim ON cim.\"imprestID\" = im.id
+    ORDER BY im.id
+    ";
 
 		return DB::select(DB::raw($query));
 	}
@@ -246,7 +253,7 @@ class ImprestModel {
 
     function getRecentImprest($empID)
 	{
-		$query ="SELECT id FROM imprest WHERE empID ='".$empID."' ORDER BY id DESC LIMIT 1 ";  
+		$query ="SELECT id FROM imprest WHERE empID ='".$empID."' ORDER BY id DESC LIMIT 1 ";
 		$row = DB::select(DB::raw($query));
 		return $row[0]->id;
 	}
@@ -264,8 +271,8 @@ class ImprestModel {
 			DB::table('imprest')
 			->where('id',$imprestID)
 			->delete();
-			
-         
+
+
 		});
 		return true;
 

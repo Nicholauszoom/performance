@@ -10,7 +10,12 @@ class Payroll extends Model
 {
     public function customemployee()
     {
-        $query = "SELECT DISTINCT e.emp_id as empID, CONCAT(e.fname,' ', IF(e.mname != null,e.mname,' '),' ', e.lname) as NAME FROM employee e WHERE  e.login_user != 1 ";
+        $query1 = "SELECT DISTINCT e.emp_id as empID, CONCAT(e.fname,' ', IF(e.mname != null,e.mname,' '),' ', e.lname) as NAME FROM employee e WHERE  e.login_user != 1 ";
+        $query = "SELECT DISTINCT e.emp_id AS \"empID\",
+        CONCAT(e.fname, ' ', COALESCE(e.mname, ''), ' ', e.lname) AS NAME
+    FROM employee e
+    WHERE e.login_user != 1
+     ";
         return DB::select(DB::raw($query));
     }
     public function customemployeeExit()
@@ -127,7 +132,11 @@ class Payroll extends Model
     public function payrollMonthList()
     {
         // $query = 'SELECT (@s:=@s+1) as SNo, pm.*,e.fname,e.mname,e.lname FROM payroll_months pm,employee e, ((SELECT @s:=0) as s ORDER BY pm.id DESC) where pm.init_author = e.emp_id ';
-        $query = 'SELECT (@s:=@s+1) as SNo, pm.*,e.fname,e.mname,e.lname FROM payroll_months pm,employee e where pm.init_author = e.emp_id ';
+        $query1 = 'SELECT (@s:=@s+1) as SNo, pm.*,e.fname,e.mname,e.lname FROM payroll_months pm,employee e where pm.init_author = e.emp_id ';
+        $query = 'SELECT ROW_NUMBER() OVER () AS SNo, pm.*, e.fname, e.mname, e.lname
+        FROM payroll_months pm
+        JOIN employee e ON pm.init_author = e.emp_id
+         ';
         return DB::select(DB::raw($query));
     }
     public function getNotifications()
@@ -142,7 +151,27 @@ class Payroll extends Model
     }
     public function employee_bonuses()
     {
-        $query = "SELECT @s:=@s+1 SNo, b.*, tags.name as tag,  CONCAT(e.fname,' ', IF(e.mname != null,e.mname,' '),' ', e.lname) as name, d.name as department, p.name as position FROM employee e, department d, position p, bonus b, bonus_tags tags, (SELECT @s:=0) as s WHERE e.department = d.id AND e.position = p.id AND e.emp_id = b.empID AND tags.id = b.name and e.state = 1 and e.login_user != 1";
+        $query1 = "SELECT @s:=@s+1 SNo, b.*, tags.name as tag,  CONCAT(e.fname,' ', IF(e.mname != null,e.mname,' '),' ', e.lname) as name, d.name as department, p.name as position FROM employee e, department d, position p, bonus b, bonus_tags tags, (SELECT @s:=0) as s WHERE e.department = d.id AND e.position = p.id AND e.emp_id = b.empID AND tags.id = b.name and e.state = 1 and e.login_user != 1";
+        $query = "SELECT
+        ROW_NUMBER() OVER (ORDER BY b.id) AS SNo,
+        b.*,
+        tags.name as tag,
+        CONCAT(e.fname, ' ', COALESCE(e.mname, ''), ' ', e.lname) as name,
+        d.name as department,
+        p.name as position
+    FROM
+        employee e
+    JOIN
+        department d ON e.department = d.id
+    JOIN
+        position p ON e.position = p.id
+    JOIN
+        bonus b ON e.emp_id = b.\"empID\"
+    JOIN
+        bonus_tags tags ON tags.id = b.name
+    WHERE
+        e.state = 1 AND e.login_user != 1
+    ";
         return DB::select(DB::raw($query));
     }
     public function waitingbonusesRecom()
@@ -2473,7 +2502,16 @@ FROM temp_loan_logs tlg, loan l WHERE l.id = tlg.loanID and payment_date = '" . 
     }
     public function pending_arrears_payment()
     {
-        $query = "SELECT (@s:=@s+1) as SNo, arp.id, ar.empID, ar.payroll_date, CONCAT(fname,' ', mname,' ', lname) AS empName, SUM(arp.amount) as amount, arp.status, ar.amount as arrear_amount, ar.paid as arrear_paid, ar.payroll_date, ar.last_paid_date, ar.amount_last_paid as amount_last_paid FROM employee e, arrears ar, arrears_pendings arp, (SELECT @s:=0) as s WHERE ar.empID = e.emp_id and e.state = 1 AND ar.id = arp.arrear_id GROUP BY e.fname,e.mname,e.lname,ar.payroll_date, ar.empID, ar.last_paid_date, ar.amount, ar.amount_last_paid, ar.paid,arp.id, arp.status";
+        $query1 = "SELECT (@s:=@s+1) as SNo, arp.id, ar.empID, ar.payroll_date, CONCAT(fname,' ', mname,' ', lname) AS empName, SUM(arp.amount) as amount, arp.status, ar.amount as arrear_amount, ar.paid as arrear_paid, ar.payroll_date, ar.last_paid_date, ar.amount_last_paid as amount_last_paid FROM employee e, arrears ar, arrears_pendings arp, (SELECT @s:=0) as s WHERE ar.empID = e.emp_id and e.state = 1 AND ar.id = arp.arrear_id GROUP BY e.fname,e.mname,e.lname,ar.payroll_date, ar.empID, ar.last_paid_date, ar.amount, ar.amount_last_paid, ar.paid,arp.id, arp.status";
+        $query = "SELECT ROW_NUMBER() OVER (ORDER BY arp.id) AS SNo, arp.id, ar.\"empID\", ar.payroll_date,
+        CONCAT(e.fname, ' ', COALESCE(e.mname, ''), ' ', e.lname) AS empName,
+        SUM(arp.amount) as amount, arp.status, ar.amount as arrear_amount,
+        ar.paid as arrear_paid, ar.payroll_date, ar.last_paid_date
+ FROM arrears_pendings arp
+ JOIN arrears ar ON arp.id = ar.id
+ JOIN employee e ON ar.\"empID\" = e.emp_id
+ GROUP BY arp.id, ar.\"empID\", ar.payroll_date, empName, arp.status, ar.amount, ar.paid, ar.payroll_date, ar.last_paid_date
+ ORDER BY arp.id";
         return DB::select(DB::raw($query));
     }
     public function employee_arrears($empID)
