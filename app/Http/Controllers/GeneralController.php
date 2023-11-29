@@ -5,8 +5,10 @@ namespace App\Http\Controllers;
 //use App\Http\Controllers\Controller;
 
 use App\Charts\EmployeeLineChart;
+use App\Exports\LeaveApprovalsExport;
 use App\Helpers\SysHelpers;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\EmployeeRequest;
 use App\Imports\HolidayDataImport;
 use App\Imports\ImportSalaryIncrement;
 use App\Models\AccessControll\Departments;
@@ -22,7 +24,6 @@ use App\Models\EmailNotification;
 use App\Models\EmergencyContact;
 use App\Models\EMPL;
 use App\Models\Employee;
-use App\Models\Leaves;
 use App\Models\EmployeeComplain;
 use App\Models\EmployeeDependant;
 use App\Models\EmployeeDetail;
@@ -37,7 +38,11 @@ use App\Models\Holiday;
 use App\Models\InputSubmission;
 use App\Models\LeaveApproval;
 use App\Models\LeaveForfeiting;
+use App\Models\EmployeeTerminationAllowance;
+
 //use PHPClamAV\Scanner;
+use App\Models\Leaves;
+use App\Models\LoanType;
 use App\Models\Payroll\FlexPerformanceModel;
 use App\Models\Payroll\ImprestModel;
 use App\Models\Payroll\Payroll;
@@ -73,8 +78,8 @@ use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Storage;
 use Maatwebsite\Excel\Concerns\Importable;
-use Maatwebsite\Excel\Facades\Excel;
 // use Barryvdh\DomPDF\Facade\Pdf;
+use Maatwebsite\Excel\Facades\Excel;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xls;
 
@@ -1049,6 +1054,7 @@ class GeneralController extends Controller
         }
     }
 
+
     public function deleteDepartment($id)
     {
 
@@ -1877,6 +1883,7 @@ class GeneralController extends Controller
             );
             $result = $this->flexperformance_model->addOrganizationLevel($data);
             if ($result == true) {
+                return redirect()->back();
                 $response_array['status'] = "OK";
                 $response_array['message'] = "<p class='alert alert-success text-center'>Organization Level Added Successifully!</p>";
             } else {
@@ -1886,6 +1893,20 @@ class GeneralController extends Controller
             header('Content-type: application/json');
             echo json_encode($response_array);
         }
+    }
+
+    public function deleteOrganizationLevel($id)
+    {
+        $result = $this->flexperformance_model->deleteOrganizationLevel($id);
+        if ($result == true) {
+            $response_array['status'] = "OK";
+            $response_array['message'] = "<p class='alert alert-success text-center'>Organization Level Deleted!</p>";
+        } else {
+            $response_array['status'] = "ERR";
+            $response_array['message'] = "<p class='alert alert-danger text-center'>FAILED: Organization Level NOT Deleted!</p>";
+        }
+        header('Content-type: application/json');
+        echo json_encode($response_array);
     }
 
     public function deletePosition(Request $request)
@@ -1963,13 +1984,10 @@ class GeneralController extends Controller
 
     public function applyOvertime(Request $request)
     {
+
         request()->validate(
             [
-
-                // start of name information validation
-
-                'reason' => 'required|alpha',
-
+                'reason' => 'required',
             ]
         );
 
@@ -1981,30 +1999,17 @@ class GeneralController extends Controller
 
         $empID = auth()->user()->emp_id;
 
-        $split_start = explode("  at  ", $start);
-        $split_finish = explode("  at  ", $finish);
+        $split_start = Carbon::createFromFormat('Y-m-d\TH:i', $start);
+        $split_finish = Carbon::createFromFormat('Y-m-d\TH:i', $finish);
 
-        $start_date = $split_start[0];
-        $start_time = $split_start[1];
+        // Extract date and time components
+        $start_date = $split_start->toDateString();
+        $start_time = $split_start->toTimeString();
 
-        $finish_date = $split_finish[0];
-        $finish_time = $split_finish[1];
+        $finish_date = $split_finish->toDateString();
+        $finish_time = $split_finish->toTimeString();
 
-        $start_calendar = str_replace('/', '-', $start_date);
-        $finish_calendar = str_replace('/', '-', $finish_date);
-
-        $start_final = date('Y-m-d', strtotime($start_calendar));
-        $finish_final = date('Y-m-d ', strtotime($finish_calendar));
-
-        $maxRange = ((strtotime($finish_final) - strtotime($start_final)) / 3600);
-
-        // dd('Email Sent Successfully');
-        //$linemanager = $this->flexperformance_model->get_linemanagerID($empID);
-
-        // foreach ($line as $row) {
-        //     $linemanager = $row->line_manager;
-        // }
-        //Overtime Should range between 24 Hrs;
+        $maxRange = $split_start->diffInHours($split_finish);
 
         if ($maxRange > 24) {
 
@@ -2026,8 +2031,8 @@ class GeneralController extends Controller
                         $type = 1; // echo " CORRECT:  NIGHT OVERTIME";
 
                         $data = array(
-                            'time_start' => $start_final . " " . $start_time,
-                            'time_end' => $finish_final . " " . $finish_time,
+                            'time_start' => $start_date . " " . $start_time,
+                            'time_end' => $finish_date . " " . $finish_time,
                             'overtime_type' => $type,
                             'overtime_category' => $category,
                             'reason' => $reason,
@@ -2036,6 +2041,8 @@ class GeneralController extends Controller
                             'time_recommended_line' => date('Y-m-d h:i:s'),
                             'time_approved_hr' => date('Y-m-d'),
                             'time_confirmed_line' => date('Y-m-d h:i:s'),
+                            'application_time' => new DateTime(),
+
                         );
 
                         $result = $this->flexperformance_model->apply_overtime($data);
@@ -2050,8 +2057,8 @@ class GeneralController extends Controller
                         $type = 0; // echo "DAY OVERTIME";
 
                         $data = array(
-                            'time_start' => $start_final . " " . $start_time,
-                            'time_end' => $finish_final . " " . $finish_time,
+                            'time_start' => $start_date . " " . $start_time,
+                            'time_end' => $finish_date . " " . $finish_time,
                             'overtime_type' => $type,
                             'overtime_category' => $category,
                             'reason' => $reason,
@@ -2060,6 +2067,7 @@ class GeneralController extends Controller
                             'time_recommended_line' => date('Y-m-d h:i:s'),
                             'time_approved_hr' => date('Y-m-d'),
                             'time_confirmed_line' => date('Y-m-d h:i:s'),
+                            'application_time' => new DateTime(),
                         );
 
                         $result = $this->flexperformance_model->apply_overtime($data);
@@ -2074,8 +2082,8 @@ class GeneralController extends Controller
                         $type = 0; // echo "DAY OVERTIME";
 
                         $data = array(
-                            'time_start' => $start_final . " " . $start_time,
-                            'time_end' => $finish_final . " " . $finish_time,
+                            'time_start' => $start_date . " " . $start_time,
+                            'time_end' => $finish_date . " " . $finish_time,
                             'overtime_type' => $type,
                             'overtime_category' => $category,
                             'reason' => $reason,
@@ -2084,6 +2092,8 @@ class GeneralController extends Controller
                             'time_recommended_line' => date('Y-m-d h:i:s'),
                             'time_approved_hr' => date('Y-m-d'),
                             'time_confirmed_line' => date('Y-m-d h:i:s'),
+                            'application_time' => new DateTime(),
+
                         );
 
                         $result = $this->flexperformance_model->apply_overtime($data);
@@ -2104,8 +2114,8 @@ class GeneralController extends Controller
                 if (strtotime($start_time) >= strtotime($start_night_shift) && strtotime($finish_time) <= strtotime($end_night_shift)) {
                     $type = 1; // echo "NIGHT OVERTIME CROSS DATE ";
                     $data = array(
-                        'time_start' => $start_final . " " . $start_time,
-                        'time_end' => $finish_final . " " . $finish_time,
+                        'time_start' => $start_date . " " . $start_time,
+                        'time_end' => $finish_date . " " . $finish_time,
                         'overtime_type' => $type,
                         'overtime_category' => $category,
                         'reason' => $reason,
@@ -2114,6 +2124,8 @@ class GeneralController extends Controller
                         'time_recommended_line' => date('Y-m-d h:i:s'),
                         'time_approved_hr' => date('Y-m-d'),
                         'time_confirmed_line' => date('Y-m-d h:i:s'),
+                        'application_time' => new DateTime(),
+
                     );
                     $result = $this->flexperformance_model->apply_overtime($data);
                     if ($result == true) {
@@ -2124,8 +2136,8 @@ class GeneralController extends Controller
                 } else {
                     $type = 0; // echo "DAY OVERTIME";
                     $data = array(
-                        'time_start' => $start_final . " " . $start_time,
-                        'time_end' => $finish_final . " " . $finish_time,
+                        'time_start' => $start_date . " " . $start_time,
+                        'time_end' => $finish_date . " " . $finish_time,
                         'overtime_type' => $type,
                         'overtime_category' => $category,
                         'reason' => $reason,
@@ -2134,6 +2146,8 @@ class GeneralController extends Controller
                         'time_recommended_line' => date('Y-m-d h:i:s'),
                         'time_approved_hr' => date('Y-m-d'),
                         'time_confirmed_line' => date('Y-m-d h:i:s'),
+                        'application_time' => new DateTime(),
+
                     );
                     $result = $this->flexperformance_model->apply_overtime($data);
                     if ($result == true) {
@@ -3569,6 +3583,7 @@ class GeneralController extends Controller
 
         // if(session('mng_paym') ||session('recom_paym') ||session('appr_paym')){
         $data['myloan'] = $this->flexperformance_model->mysalary_advance(auth()->user()->emp_id);
+        // dd($data);
 
         // if(session('recom_loan')!='' &&session('appr_loan')){
 
@@ -3701,9 +3716,9 @@ class GeneralController extends Controller
         $this->authenticateUser('view-loan');
 
         $data['my_loans'] = $this->flexperformance_model->my_confirmedloan($empID);
-        if (session('appr_loan') != '') {
-            $data['other_loans'] = $this->flexperformance_model->all_confirmedloan();
-        }
+
+        $data['other_loans'] = $this->flexperformance_model->all_confirmedloan();
+
         $data['title'] = "Loan";
         return view('app.loan', $data);
     }
@@ -3912,11 +3927,11 @@ class GeneralController extends Controller
         return view('app.loan_application_remarks', $data);
 
         if (isset($_POST['add'])) {
-            if (session('recomloan') != 0) {
+            if (session('recomloan') != 0 || 1) {
                 $data2 = array(
                     'reason_hr' => $request->input("remarks"),
                 );
-            } elseif (session('appr_loan') != 0) {
+            } elseif (session('appr_loan') != 0 || 1) {
                 $data2 = array(
                     'reason_finance' => $request->input("remarks"),
                 );
@@ -4038,72 +4053,72 @@ class GeneralController extends Controller
     public function home(Request $request)
     {
 
-        $api = url('/flex/chart-line-ajax');
-        $chart = new EmployeeLineChart;
-        $chart->labels(['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'])->load($api);
-        $data['chart'] = $chart;
+        // $api = url('/flex/chart-line-ajax');
+        // $chart = new EmployeeLineChart;
+        // $chart->labels(['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'])->load($api);
+        // $data['chart'] = $chart;
 
-        $strategyStatistics = $this->performanceModel->strategy_info(1);
+        // $strategyStatistics = $this->performanceModel->strategy_info(1);
 
-        $payrollMonth = $this->payroll_model->recent_payroll_month(date('Y-m-d'));
+        // $payrollMonth = $this->payroll_model->recent_payroll_month(date('Y-m-d'));
 
-        $payrollMonth = $this->payroll_model->recent_payroll_month(date('Y-m-d'));
+        // $payrollMonth = $this->payroll_model->recent_payroll_month(date('Y-m-d'));
 
-        $previous_payroll_month_raw = date('Y-m', strtotime(date('Y-m-d', strtotime($payrollMonth . "-1 month"))));
+        // $previous_payroll_month_raw = date('Y-m', strtotime(date('Y-m-d', strtotime($payrollMonth . "-1 month"))));
 
-        $previous_payroll_month = $this->reports_model->prevPayrollMonth($previous_payroll_month_raw);
+        // $previous_payroll_month = $this->reports_model->prevPayrollMonth($previous_payroll_month_raw);
 
-        foreach ($strategyStatistics as $key) {
-            $strategyID = $key->id;
-            $strategyTitle = $key->title;
-            $start = date_create($key->start);
-        }
+        // foreach ($strategyStatistics as $key) {
+        //     $strategyID = $key->id;
+        //     $strategyTitle = $key->title;
+        //     $start = date_create($key->start);
+        // }
 
-        $strategyProgress = $this->performanceModel->strategyProgress($strategyID);
+        // $strategyProgress = $this->performanceModel->strategyProgress($strategyID);
 
-        $current = date_create(date('Y-m-d'));
-        $diff = date_diff($start, $current);
-        $required = $diff->format("%a");
-        $months = number_format(($required / 30.5), 4);
-        $rate_per_month = number_format(($strategyProgress / $months), 1);
+        // $current = date_create(date('Y-m-d'));
+        // $diff = date_diff($start, $current);
+        // $required = $diff->format("%a");
+        // $months = number_format(($required / 30.5), 4);
+        // $rate_per_month = number_format(($strategyProgress / $months), 1);
 
         $data['appreciated'] = $this->flexperformance_model->appreciated_employee();
         $data['deligate'] = $this->flexperformance_model->get_deligates(auth()->user()->emp_id);
-        // $data['employee_count'] =  $this->flexperformance_model->count_employees();
+        // // $data['employee_count'] =  $this->flexperformance_model->count_employees();
         $data['overview'] = $this->flexperformance_model->employees_info();
-        $data["strategyProgress"] = $strategyProgress;
-        $data["monthly"] = $rate_per_month;
+        // $data["strategyProgress"] = $strategyProgress;
+        // $data["monthly"] = $rate_per_month;
 
-        $data['taskline'] = $this->performanceModel->total_taskline(auth()->user()->emp_id);
-        $data['taskstaff'] = $this->performanceModel->total_taskstaff(auth()->user()->emp_id);
+        // $data['taskline'] = $this->performanceModel->total_taskline(auth()->user()->emp_id);
+        // $data['taskstaff'] = $this->performanceModel->total_taskstaff(auth()->user()->emp_id);
 
-        $data['payroll_totals'] = $this->payroll_model->payrollTotals("payroll_logs", $payrollMonth);
-        $data['total_allowances'] = $this->payroll_model->total_allowances("allowance_logs", $payrollMonth);
-        $data['total_bonuses'] = $this->payroll_model->total_bonuses($payrollMonth);
-        $data['total_loans'] = $this->payroll_model->total_loans("loan_logs", $payrollMonth);
-        $data['total_heslb'] = $this->payroll_model->total_heslb("loan_logs", $payrollMonth);
-        $data['take_home'] = $this->reports_model->sum_take_home($payrollMonth);
-        $data['total_deductions'] = $this->payroll_model->total_deductions("deduction_logs", $payrollMonth);
-        $data['total_overtimes'] = $this->payroll_model->total_overtimes($payrollMonth);
-        $data['payroll_date'] = $payrollMonth;
-        $data['arrears'] = $this->payroll_model->arrearsMonth($payrollMonth);
-        $data['s_gross_c'] = $this->reports_model->s_grossMonthly($payrollMonth);
-        $data['v_gross_c'] = $this->reports_model->v_grossMonthly($payrollMonth);
-        $data['s_gross_p'] = $this->reports_model->s_grossMonthly($previous_payroll_month);
-        $data['v_gross_p'] = $this->reports_model->v_grossMonthly($previous_payroll_month);
-        $data['s_net_c'] = $this->reports_model->staff_sum_take_home($payrollMonth);
-        $data['v_net_c'] = $this->reports_model->temporary_sum_take_home($payrollMonth);
-        $data['s_net_p'] = $this->reports_model->staff_sum_take_home($previous_payroll_month);
-        $data['v_net_p'] = $this->reports_model->temporary_sum_take_home($previous_payroll_month);
-        $data['v_staff'] = $this->reports_model->v_payrollEmployee($payrollMonth, '');
-        $data['s_staff'] = $this->reports_model->s_payrollEmployee($payrollMonth, '');
-        $data['v_staff_p'] = $this->reports_model->v_payrollEmployee($previous_payroll_month, '');
-        $data['s_staff_p'] = $this->reports_model->s_payrollEmployee($previous_payroll_month, '');
-        $data['net_total'] = $this->netTotalSummation($payrollMonth);
+        // $data['payroll_totals'] = $this->payroll_model->payrollTotals("payroll_logs", $payrollMonth);
+        // $data['total_allowances'] = $this->payroll_model->total_allowances("allowance_logs", $payrollMonth);
+        // $data['total_bonuses'] = $this->payroll_model->total_bonuses($payrollMonth);
+        // $data['total_loans'] = $this->payroll_model->total_loans("loan_logs", $payrollMonth);
+        // $data['total_heslb'] = $this->payroll_model->total_heslb("loan_logs", $payrollMonth);
+        // $data['take_home'] = $this->reports_model->sum_take_home($payrollMonth);
+        // $data['total_deductions'] = $this->payroll_model->total_deductions("deduction_logs", $payrollMonth);
+        // $data['total_overtimes'] = $this->payroll_model->total_overtimes($payrollMonth);
+        // $data['payroll_date'] = $payrollMonth;
+        // $data['arrears'] = $this->payroll_model->arrearsMonth($payrollMonth);
+        // $data['s_gross_c'] = $this->reports_model->s_grossMonthly($payrollMonth);
+        // $data['v_gross_c'] = $this->reports_model->v_grossMonthly($payrollMonth);
+        // $data['s_gross_p'] = $this->reports_model->s_grossMonthly($previous_payroll_month);
+        // $data['v_gross_p'] = $this->reports_model->v_grossMonthly($previous_payroll_month);
+        // $data['s_net_c'] = $this->reports_model->staff_sum_take_home($payrollMonth);
+        // $data['v_net_c'] = $this->reports_model->temporary_sum_take_home($payrollMonth);
+        // $data['s_net_p'] = $this->reports_model->staff_sum_take_home($previous_payroll_month);
+        // $data['v_net_p'] = $this->reports_model->temporary_sum_take_home($previous_payroll_month);
+        // $data['v_staff'] = $this->reports_model->v_payrollEmployee($payrollMonth, '');
+        // $data['s_staff'] = $this->reports_model->s_payrollEmployee($payrollMonth, '');
+        // $data['v_staff_p'] = $this->reports_model->v_payrollEmployee($previous_payroll_month, '');
+        // $data['s_staff_p'] = $this->reports_model->s_payrollEmployee($previous_payroll_month, '');
+        // $data['net_total'] = $this->netTotalSummation($payrollMonth);
 
-        // start of overtime
-        $data['my_overtimes'] = $this->flexperformance_model->my_overtimes(auth()->user()->emp_id);
-        $data['overtimeCategory'] = $this->flexperformance_model->overtimeCategory();
+        // // start of overtime
+        // $data['my_overtimes'] = $this->flexperformance_model->my_overtimes(auth()->user()->emp_id);
+        // $data['overtimeCategory'] = $this->flexperformance_model->overtimeCategory();
         $data['employees'] = EMPL::all();
 
         $data['line_overtime'] = $this->flexperformance_model->lineOvertimes(auth()->user()->emp_id);
@@ -5140,15 +5155,14 @@ class GeneralController extends Controller
         $this->authenticateUser('add-payroll');
 
         $data['allowance'] = $this->flexperformance_model->allowance();
+        $data['allowanceCategories'] = $this->flexperformance_model->allowance_category();
         $data['meals'] = $this->flexperformance_model->meals_deduction();
         $data['pendingPayroll'] = $this->payroll_model->pendingPayrollCheck();
         $data['parent'] = "Settings";
-        $data['child'] = "Allowances";
+        $data['child'] = "Allowance";
+        $data['title'] = "Allowance";
 
         return view('allowance.allowance', $data);
-        // } else {
-        //     echo "Unauthorized Access";
-        // }
     }
 
     public function allowance_overtime(Request $request)
@@ -5158,7 +5172,6 @@ class GeneralController extends Controller
 
         $this->authenticateUser('add-payroll');
 
-        $data['overtimes'] = $this->flexperformance_model->overtime_allowances();
         $data['overtimess'] = $this->flexperformance_model->overtime_allowances();
         $data['meals'] = $this->flexperformance_model->meals_deduction();
         $data['pendingPayroll'] = $this->payroll_model->pendingPayrollCheck();
@@ -5197,6 +5210,18 @@ class GeneralController extends Controller
         //     echo "Unauthorized Access";
         // }
     }
+    public function allowance_category(Request $request)
+    {
+
+        $this->authenticateUser('add-payroll');
+        $data['allowanceCategory'] = $this->flexperformance_model->allowance_category();
+        $data['meals'] = $this->flexperformance_model->meals_deduction();
+        $data['pendingPayroll'] = $this->payroll_model->pendingPayrollCheck();
+        $data['parent'] = "Settings";
+        $data['title'] = "Allowance Category";
+
+        return view('allowance.allowance_category', $data);
+    }
 
     public function non_statutory_deductions(Request $request)
     {
@@ -5210,9 +5235,10 @@ class GeneralController extends Controller
         $data['pension'] = $this->flexperformance_model->pension_fund();
         $data['meals'] = $this->flexperformance_model->meals_deduction();
         $data['pendingPayroll'] = $this->payroll_model->pendingPayrollCheck();
-        $data['title'] = "Non-Statutory Deductions";
-        return view('app.non_statutory_deductions', $data);
 
+        $data['title'] = "Non-Statutory Deductions";
+
+        return view('app.non_statutory_deductions', $data);
     }
 
     public function addAllowance(Request $request)
@@ -5235,6 +5261,7 @@ class GeneralController extends Controller
             'pensionable' => $request->pensionable,
             'Isrecursive' => $request->Isrecursive,
             'Isbik' => $request->Isbik,
+            'allowance_category_id' => $request->allowanceCategory,
             'state' => 1,
             'percent' => $percent,
         );
@@ -5250,6 +5277,23 @@ class GeneralController extends Controller
         }
         return back()->with('success', 'Saved');
     }
+    public function addAllowanceCategory(Request $request)
+    {
+        $data = array(
+            'name' => $request->name,
+        );
+
+        $result = $this->flexperformance_model->addAllowanceCategory($data);
+
+        if ($result == true) {
+            // $this->flexperformance_model->audit_log("Created New Allowance ");
+            return back()->with('success', 'Saved');
+            // echo "<p class='alert alert-success text-center'>Allowance Registered Successifully</p>";
+        } else {
+            echo "<p class='alert alert-warning text-center'>Allowance Category Registration FAILED, Please Try Again</p>";
+        }
+        return back()->with('success', 'Saved');
+    }
 
     public function addOvertimeCategory(Request $request)
     {
@@ -5257,8 +5301,8 @@ class GeneralController extends Controller
         if ($request->method() == "POST") {
             $data = array(
                 'name' => $request->input('name'),
-                'day_percent' => ($request->input('day_percent') / 100),
-                'night_percent' => ($request->input('night_percent') / 100),
+                'day_percent' => ($request->input('day_percent')),
+                'night_percent' => ($request->input('night_percent')),
             );
             $result = $this->flexperformance_model->addOvertimeCategory($data);
             if ($result == true) {
@@ -5282,8 +5326,11 @@ class GeneralController extends Controller
         //$state = $request->input('state');
         $state = 1;
         $rate = $this->flexperformance_model->get_rate($request->currency);
-        $data = array(
 
+        // FIXME I have commented column currency and rate but it need confirmation if it should available
+        // FIXME data from code is missing for it to be able to save in the database
+
+        $data = array(
             'name' => $name,
             'code' => $code,
             'amount' => $amount * $rate,
@@ -5291,13 +5338,14 @@ class GeneralController extends Controller
             'apply_to' => $apply_to,
             'mode' => $mode,
             'state' => $state,
-            'currency' => $request->currency,
-            'rate' => $rate,
-
+            // 'currency' => $request->currency,
+            // 'rate' => $rate,
         );
 
         DB::table('deductions')->insert($data);
+
         echo "Record inserted successfully.<br/>";
+
         return redirect('flex/non_statutory_deductions');
     }
     //     public function addDeduction(Request $request)   {
@@ -5353,7 +5401,7 @@ class GeneralController extends Controller
 
             $allowanceName = DB::table('allowances')->select('name')->where('id', $request->input('allowance'))->limit(1)->first();
 
-            // SysHelpers::FinancialLogs($data['empID'], 'Assign ' . $allowanceName->name, '0.00', ($data['amount'] != 0) ? $data['amount'] . ' ' . $data['currency'] : $data['percent'] . '%',  'Payroll Input');
+            SysHelpers::FinancialLogs($data['empID'], 'Assign ' . $allowanceName->name, '0.00', ($data['amount'] != 0) ? $data['amount'] . ' ' . $data['currency'] : $data['percent'] . '%',  'Payroll Input');
 
             if ($result == true) {
                 // $this->flexperformance_model->audit_log("Assigned an allowance to Employee with Id = " . $request->input('empID') . " ");
@@ -5392,7 +5440,7 @@ class GeneralController extends Controller
 
         ])
             ->where(function ($query) use ($startDate, $endDate) {
-                $query->where('hire_date', '>', $startDate, )
+                $query->where('hire_date', '>', $startDate,)
                     ->where('hire_date', '<=', $endDate);
             })
             ->get();
@@ -5429,7 +5477,6 @@ class GeneralController extends Controller
 
             $result = $this->flexperformance_model->assign_allowance($data);
         }
-
     }
 
     public function submitInputs(Request $request)
@@ -5473,12 +5520,10 @@ class GeneralController extends Controller
                     echo "<p class='alert alert-danger text-center'>You cant submit inputs to previous payroll Month</p>";
                 }
             }
-
         } else {
 
             return view('payroll.submit_inputs', $data);
         }
-
     }
 
     public function assign_allowance_group(Request $request)
@@ -5595,6 +5640,7 @@ class GeneralController extends Controller
         $data['membersCount'] = $this->flexperformance_model->allowance_membersCount($id);
         $data['groupin'] = $this->flexperformance_model->get_allowance_group_in($id);
         $data['employee'] = $this->flexperformance_model->employee_allowance($id);
+        $data['allowanceCategories'] = $this->flexperformance_model->allowance_category();
         $data['allowanceID'] = $id;
         $data['title'] = "Allowances";
         $data['parent'] = "Allowance";
@@ -5610,6 +5656,13 @@ class GeneralController extends Controller
         $data['title'] = 'Overtime Category';
         $data['category'] = $this->flexperformance_model->OvertimeCategoryInfo($id);
         return view('app.overtime_category_info', $data);
+    }
+    public function allowance_category_info($id)
+    {
+        $id = base64_decode($id);
+        $data['title'] = 'Allowance Category';
+        $data['category'] = $this->flexperformance_model->AllowanceCategoryInfo($id);
+        return view('allowance.allowance_category_info', $data);
     }
 
     public function deleteAllowance($id, Request $request)
@@ -5632,6 +5685,17 @@ class GeneralController extends Controller
             }
             header("Content-type: application/json");
             echo json_encode($json_array);
+        }
+    }
+
+    public function deleteAllowanceCategory($id, Request $request)
+    {
+        $result = $this->flexperformance_model->deleteAllowanceCategory($id);
+
+        if ($result == true) {
+            echo "<p class='alert alert-warning text-center'>Allowance Category DELETED Successifully</p>";
+        } else {
+            echo "<p class='alert alert-danger text-center'>FAILED to DELETE, Please Try Again!</p>";
         }
     }
 
@@ -5738,6 +5802,21 @@ class GeneralController extends Controller
             }
         }
     }
+    public function updatecategory(Request $request)
+    {
+        $ID = $request->input('allowanceID');
+        if ($request->method() == "POST" && $ID != '') {
+            $updates = array(
+                'allowance_category_id' => $request->input('allowance_category_id'),
+            );
+            $result = $this->flexperformance_model->updateAllowance($updates, $ID);
+            if ($result == true) {
+                echo "<p class='alert alert-success text-center'>Updated Successifully!</p>";
+            } else {
+                echo "<p class='alert alert-danger text-center'>Update Failed</p>";
+            }
+        }
+    }
 
     public function updateOvertimeName(Request $request)
     {
@@ -5747,6 +5826,21 @@ class GeneralController extends Controller
                 'name' => $request->input('name'),
             );
             $result = $this->flexperformance_model->updateOvertimeCategory($updates, $ID);
+            if ($result == true) {
+                echo "<p class='alert alert-success text-center'>Updated Successifully!</p>";
+            } else {
+                echo "<p class='alert alert-danger text-center'>Update Failed</p>";
+            }
+        }
+    }
+    public function updateAllowanceCategory(Request $request)
+    {
+        $ID = $request->input('categoryID');
+        if ($request->method() == "POST" && $ID != '') {
+            $updates = array(
+                'name' => $request->input('name'),
+            );
+            $result = $this->flexperformance_model->updateAllowaceCategory($updates, $ID);
             if ($result == true) {
                 echo "<p class='alert alert-success text-center'>Updated Successifully!</p>";
             } else {
@@ -6048,7 +6142,6 @@ class GeneralController extends Controller
             $data['child'] = "Financial Settings";
             return view('app.financial_group', $data);
         }
-
     }
 
     public function role(Request $request)
@@ -6092,7 +6185,6 @@ class GeneralController extends Controller
             $data['title'] = "Roles and Groups";
             return view('app.role', $data);
         }
-
     }
 
     public function financial_groups_byRole_details($id)
@@ -6105,7 +6197,6 @@ class GeneralController extends Controller
         $data['groupInfo'] = $this->flexperformance_model->group_byid($id);
         $data['title'] = "Groups";
         return view('app.groups_by_role', $data);
-
     }
 
     public function financial_groups_details($id)
@@ -6121,7 +6212,6 @@ class GeneralController extends Controller
         $data['child'] = "Groups";
 
         return view('app.financial_groups_details', $data);
-
     }
 
     public function groups(Request $request)
@@ -6135,7 +6225,6 @@ class GeneralController extends Controller
         $data['groupInfo'] = $this->flexperformance_model->group_byid($id);
         $data['title'] = "Groups";
         return view('app.groups', $data);
-
     }
 
     //
@@ -6338,9 +6427,8 @@ class GeneralController extends Controller
         $method = $request->method();
 
         if ($method == "POST") {
-
-            $arr = explode(',', $request->input('option'));
-
+            // $arr = explode(',', $request->input('option'));
+            $arr = $request->option1;
             $groupID = $request->input('groupID');
             $group_roles = $this->flexperformance_model->get_group_roles($groupID);
             $group_allowances = $this->flexperformance_model->get_group_allowances($groupID);
@@ -6352,7 +6440,6 @@ class GeneralController extends Controller
 
                 foreach ($arr as $value) {
                     $empID = $value;
-
                     if (!empty($group_allowances)) {
                         foreach ($group_allowances as $key) {
                             $allowance = $key->allowance;
@@ -6851,7 +6938,6 @@ class GeneralController extends Controller
         $data["child"] = "Register Employee";
         // return $data['ldrop'];
         return view('app.employeeAdd', $data);
-
     }
 
     public function getPositionSalaryRange(Request $request)
@@ -6883,7 +6969,7 @@ class GeneralController extends Controller
 
     public function import(Request $request)
     {
-        dd($request->all());
+        // dd($request->all());
 
         if (isset($_FILES["file"]["name"])) {
 
@@ -6995,299 +7081,283 @@ class GeneralController extends Controller
      * Register emmployee
      *
      */
-    public function registerEmployee(Request $request)
+    public function registerEmployee(EmployeeRequest $request)
     {
+        // $validatedFields = $request->validate([
+        //     'tin' => [
+        //         'required',
+        //         'regex:/^[0-9]{9}$/',
+        //     ],
+        //     'nationalid' => [
+        //         'required',
+        //         'regex:/^[A-Za-z0-9]{8}$/',
+        //     ],
+        // ]);
 
-        if ($request->method() == "POST") {
+        $validator = $request->validated($request->all());
 
-            // $validator = Validator::make($request->all(), [
-            //     'fname' => 'required',
-            //     'mname' => 'required',
-            //     'currency' => 'required',
-            //     'emp_level' => 'required',
-            //     'cost_center' => 'required',
-            //     'leave_days_entitled' => 'required',
-            //     'lname' => 'required',
-            //     'emp_id' => 'required|unique:employee',
-            //     'salary' => 'required',
-            //     'gender' => 'required',
-            //     'email' => 'required',
-            //     'nationality' => 'required',
-            //     'merital_status' => 'required',
-            //     'position' => 'required',
-            //     'contract_type' => 'required',
-            //     'mobile' => 'required',
-            //     'account_no' => 'required',
-            //     'bank' => 'required',
-            //     'bank_branch' => 'required',
-            //     'pension_fund' => 'required',
-            //     'pf_membership_no' => 'required',
-            //     'line_manager' => 'required',
-            //     'department' => 'required',
-            //     'branch' => 'required',
-            // ]);
 
-            //     if ($validator->fails()) {
-            //         return response()->json([
-            //             'status' => 400,
-            //             'errors' => $validator->messages(),
-            //         ]);
-            // //     }
 
-            // DATE MANIPULATION
-            $calendar = str_replace('/', '-', $request->input('birthdate'));
-            $contract_end = str_replace('/', '-', $request->input('contract_end'));
-            $contract_start = str_replace('/', '-', $request->input('contract_start'));
+        $calendar = str_replace('/', '-', $request->input('birthdate'));
+        $contract_end = str_replace('/', '-', $request->input('contract_end'));
+        $contract_start = str_replace('/', '-', $request->input('contract_start'));
 
-            $birthdate = date('Y-m-d', strtotime($calendar));
+        $birthdate = date('Y-m-d', strtotime($calendar));
 
-            $date1 = date_create($birthdate);
-            $date2 = date_create(date('Y-m-d'));
+        $date1 = date_create($birthdate);
+        $date2 = date_create(date('Y-m-d'));
 
-            $diff = date_diff($date1, $date2);
-            $required = $diff->format("%R%a");
+        $diff = date_diff($date1, $date2);
+        $required = $diff->format("%R%a");
 
-            $currency = $request->input("currency");
-            $rate = $this->flexperformance_model->get_rate($currency);
+        $currency = $request->currency;
+        $rate = $this->flexperformance_model->get_rate($currency);
 
-            if (($required / 365) > 16) {
+        if (($required / 365) > 16) {
 
-                $countryCode = $request->input("nationality");
+            $countryCode = $request->nationality;
 
-                // $randomPassword = $this->password_generator(8);
+            // $randomPassword = $this->password_generator(8);
 
-                $password = "ABC1234";
+            $password = "ABC1234";
 
-                $emp_id = $request->emp_id;
+            $emp_id = $request->emp_id;
 
-                $employee = array(
-                    'fname' => $request->input("fname"),
-                    'mname' => $request->input("mname"),
-
-                    'rate' => $rate,
-                    'currency' => $currency,
-                    //'emp_code' => $request->input("emp_code"),
-                    'emp_level' => $request->input("emp_level"),
-                    'cost_center' => $request->input("cost_center"),
-                    'leave_days_entitled' => $request->input("leave_day"),
-
-                    'accrual_rate' => $request->input("leave_day") / 12,
-                    'lname' => $request->input("lname"),
-                    // 'lname' => $randomPassword,
-                    'salary' => $request->input("salary"),
-                    'company' => 1,
-                    'gender' => $request->input("gender"),
-                    'email' => $request->input("email"),
-                    'nationality' => $request->input("nationality"),
-                    'merital_status' => $request->input("status"),
-                    'birthdate' => $birthdate,
-                    'position' => $request->input("position"),
-                    'contract_type' => $request->input("ctype"),
-                    'postal_address' => $request->input("postaddress"),
-                    'physical_address' => $request->input('haddress'),
-                    'mobile' => $request->input('mobile'),
-                    'account_no' => $request->input("accno"),
-                    'bank' => $request->input("bank"),
-                    'bank_branch' => 1,
-                    'pension_fund' => $request->input("pension_fund"),
-                    'pf_membership_no' => $request->input("pf_membership_no"),
-                    'home' => $request->input("haddress"),
-                    'postal_city' => $request->input("postalcity"),
-                    'photo' => "user.png",
-                    'password_set' => "1",
-                    'line_manager' => $request->input("linemanager"),
-                    'department' => $request->input("department"),
-                    'branch' => $request->input("branch"),
-                    'hire_date' => date('Y-m-d', strtotime($contract_start)),
-                    'contract_renewal_date' => date('Y-m-d'),
-                    'emp_id' => $emp_id,
-                    'username' => $request->input("emp_id"),
-                    // 'password' => password_hash($randomPassword, PASSWORD_BCRYPT),
-                    'password' => Hash::make($password),
-                    'contract_end' => date('Y-m-d', strtotime($contract_end)),
-                    'state' => 5,
-                    'national_id' => $request->input("nationalid"),
-                    'tin' => $request->input("tin"),
-
-                );
-
-                $newEmp = array(
-                    'emp_id' => $emp_id,
-                    'account' => 1,
-                );
-
+            if (!empty($request->mname)) {
                 $empName = $request->input("fname") . ' ' . $request->input("mname") . ' ' . $request->input("lname");
+            } else {
+                $empName = $request->input("fname") . ' ' . $request->input("lname");
+            }
 
-                $recordID = $this->flexperformance_model->employeeAdd($employee, $newEmp);
+            $employee = array(
+                'fname' => $request->input("fname"),
+                'mname' => $request->input("mname"),
+                'full_name' => $empName,
+                'rate' => $rate,
+                'currency' => $currency,
+                //'emp_code' => $request->input("emp_code"),
+                'emp_level' => $request->input("emp_level"),
+                'cost_center' => $request->input("cost_center"),
+                'leave_days_entitled' => $request->input("leave_day"),
 
-                $id = $emp_id;
-                if ($recordID > 0) {
-                    $emp_data = Employee::where('emp_id', $emp_id)->first();
-                    $user = User::find($emp_data->id);
-                    $user->roles()->attach(6);
+                'accrual_rate' => $request->input("leave_day") / 12,
+                'lname' => $request->input("lname"),
+                // 'lname' => $randomPassword,
+                'salary' => $request->input("salary"),
+                'company' => 1,
+                'gender' => $request->input("gender"),
+                'email' => $request->input("email"),
+                'nationality' => $request->input("nationality"),
+                'merital_status' => $request->input("status"),
+                'birthdate' => $birthdate,
+                'position' => $request->input("position"),
+                'contract_type' => $request->input("ctype"),
+                'postal_address' => $request->input("postaddress"),
+                'physical_address' => $request->input('haddress'),
+                'mobile' => $request->input('mobile'),
+                'account_no' => $request->input("accno"),
+                'bank' => $request->input("bank"),
+                'bank_branch' => 1,
+                'pension_fund' => $request->input("pension_fund"),
+                'pf_membership_no' => $request->input("pf_membership_no"),
+                'home' => $request->input("haddress"),
+                'postal_city' => $request->input("postalcity"),
+                'photo' => "user.png",
+                'password_set' => "1",
+                'line_manager' => $request->input("linemanager"),
+                'department' => $request->input("department"),
+                'branch' => $request->input("branch"),
+                'hire_date' => date('Y-m-d', strtotime($contract_start)),
+                'contract_renewal_date' => date('Y-m-d'),
+                'emp_id' => $emp_id,
+                'username' => $request->input("emp_id"),
+                // 'password' => password_hash($randomPassword, PASSWORD_BCRYPT),
+                'password' => Hash::make($password),
+                'contract_end' => date('Y-m-d', strtotime($contract_end)),
+                'state' => 5,
+                'national_id' => $request->input("nationalid"),
+                'tin' => $request->input("tin"),
 
-                    $user->roles()->attach($request['role']);
+            );
 
-                    SysHelpers::FinancialLogs($id, 'Add Employee', '', '', 'Employee Registration');
+            $newEmp = array(
+                'emp_id' => $emp_id,
+                'account' => 1,
+            );
 
-                    SysHelpers::FinancialLogs($id, 'Salary', '0.00', number_format($request->input("salary"), 2), 'Employee Registration');
+            $recordID = $this->flexperformance_model->employeeAdd($employee, $newEmp);
 
-                    //register employee to leave approve maping
+            $id = $emp_id;
 
-                    $approval = new LeaveApproval();
-                    $approval->empID = $emp_id;
-                    $approval->level1 = $request->input("linemanager");
-                    //$approval->level2 = $request->level_2;
-                    // $approval->level3 = $request->level_3;
-                    $approval->escallation_time = 2;
-                    $approval->save();
+            if ($recordID > 0) {
 
-                    //end leave approve mapping
+                $emp_data = Employee::where('emp_id', $emp_id)->first();
 
-                    /*give 100 allocation*/
-                    $data = array(
+                $user = User::find($emp_data->id);
+
+                $user->roles()->attach(6);
+
+                $user->roles()->attach($request['role']);
+
+                SysHelpers::FinancialLogs($id, 'Add Employee', '', '', 'Employee Registration');
+
+                SysHelpers::FinancialLogs($id, 'Salary', '0.00', number_format($request->input("salary"), 2), 'Employee Registration');
+
+                //register employee to leave approve maping
+
+                $approval = new LeaveApproval();
+                $approval->empID = $emp_id;
+                $approval->level1 = $request->input("linemanager");
+                //$approval->level2 = $request->level_2;
+                // $approval->level3 = $request->level_3;
+                $approval->escallation_time = 2;
+                $approval->save();
+
+                //end leave approve mapping
+
+                /*give 100 allocation*/
+                $data = array(
+                    'empID' => $emp_id,
+                    'activity_code' => 'AC0018',
+                    'grant_code' => 'VSO',
+                    'percent' => 100.00,
+                );
+
+                $this->project_model->allocateActivity($data);
+
+                // $empID = sprintf("%03d", $countryCode).sprintf("%04d", $recordID);
+
+                $empID = $emp_id;
+
+                $property = array(
+                    'prop_type' => "Employee Package",
+                    'prop_name' => "Employee ID, Health Insuarance Card, Email Address and System Access",
+                    'serial_no' => $empID,
+                    'given_by' => auth()->user()->emp_id,
+                    'given_to' => $empID,
+                );
+                $datagroup = array(
+                    'empID' => $empID,
+                    'group_name' => 1,
+                );
+
+                $result = $this->flexperformance_model->updateEmployeeID($recordID, $empID, $property, $datagroup);
+
+                if ($result == true) {
+
+                    $email_data = array(
+                        'email' => $request->email,
+                        'fname' => $request->fname,
+                        'lname' => $request->lname,
+                        'username' => $emp_id,
+                        'password' => $password,
+                    );
+
+                    $user = User::first();
+                    //$user->notify(new RegisteredUser($email_data));
+                    // Notification::route('mail', $email_data['email'])->notify(new RegisteredUser($email_data));
+                    //});
+                    //$senderInfo = $this->payroll_model->senderInfo();
+
+                    //         /* EMAIL*/
+                    //     foreach ($senderInfo as $keyInfo) {
+                    //       $host = $keyInfo->host;
+                    //       $username = $keyInfo->username;
+                    //       $password = $keyInfo->password;
+                    //       $smtpsecure = $keyInfo->secure;
+                    //       $port = $keyInfo->port;
+                    //       $senderEmail = $keyInfo->email;
+                    //       $senderName = $keyInfo->name;
+                    //     }
+                    //   // PHPMailer object
+                    //     $mail = $this->phpmailer_lib->load();// PHPMailer object
+                    //     // SMTP configuration
+                    //     $mail->isSMTP();
+                    //     $mail->Host     = $host;
+                    //     $mail->SMTPAuth = true;
+                    //     $mail->Username = $username;
+                    //     $mail->Password = $password;
+
+                    //     $mail->SMTPSecure = $smtpsecure;
+                    //     $mail->Port     = $port;
+
+                    //     $mail->setFrom($senderEmail, $senderName);
+
+                    //     // Add a recipient
+                    //     $mail->addAddress($request->input("email"));
+
+                    //     // Email subject
+                    //     $mail->Subject = "VSO User Credentials";
+
+                    //9     // Set email format to HTML
+                    //     $mail->isHTML(true);
+
+                    //     // Email body content
+                    //     $mailContent = "<p>Dear <b>".$empName."</b>,</p>
+                    //                 <p>Your Flex Performance Account login credential are  password: <b>".$randomPassword."</b>.
+                    //                 Please use your employee ID as your username.</p>
+                    //                 <p>You are advised not to share your password with anyone. If you dont know this activity or you received this email by accident, please report
+                    //                     this incident to the system administrator.<br><br>
+                    //                     Thank you,<br>
+                    //                     Flex Performance Software Self Service.</p>";
+                    //     $mail->Body = $mailContent;
+
+                    //     if(!$mail->send()){
+
+                    //         session("note", "<p><font color='green'>Email was not sent</font></p>");
+                    //         }else{
+                    //         session("note","<p><font color='green'>Email sent!</font></p>");
+                    //       }
+
+                    /*add in transfer with status = 5 (registered, waiting for approval)*/
+
+                    $data_transfer = array(
                         'empID' => $emp_id,
-                        'activity_code' => 'AC0018',
-                        'grant_code' => 'VSO',
-                        'percent' => 100.00,
+                        'parameter' => 'New Employee',
+                        'parameterID' => 5,
+                        'old' => 0,
+                        'new' => $request->input("salary"),
+                        'old_department' => 0,
+                        'new_department' => $request->input("department"),
+                        'old_position' => 0,
+                        'new_position' => $request->input("position"),
+                        'status' => 5, //new employee
+                        'recommended_by' => auth()->user()->emp_id,
+                        'approved_by' => '',
+                        'date_recommended' => date('Y-m-d'),
+                        'date_approved' => '',
                     );
 
-                    $this->project_model->allocateActivity($data);
+                    $this->flexperformance_model->employeeTransfer($data_transfer);
 
-                    // $empID = sprintf("%03d", $countryCode).sprintf("%04d", $recordID);
+                    // dd("I am here");
 
-                    $empID = $emp_id;
-
-                    $property = array(
-                        'prop_type' => "Employee Package",
-                        'prop_name' => "Employee ID, Health Insuarance Card, Email Address and System Access",
-                        'serial_no' => $empID,
-                        'given_by' => auth()->user()->emp_id,
-                        'given_to' => $empID,
-                    );
-                    $datagroup = array(
-                        'empID' => $empID,
-                        'group_name' => 1,
-                    );
-
-                    $result = $this->flexperformance_model->updateEmployeeID($recordID, $empID, $property, $datagroup);
-
-                    if ($result == true) {
-
-                        $email_data = array(
-                            'email' => $request->email,
-                            'fname' => $request->fname,
-                            'lname' => $request->lname,
-                            'username' => $emp_id,
-                            'password' => $password,
-                        );
-
-                        $user = User::first();
-                        //$user->notify(new RegisteredUser($email_data));
-                        // Notification::route('mail', $email_data['email'])->notify(new RegisteredUser($email_data));
-                        //});
-                        //$senderInfo = $this->payroll_model->senderInfo();
-
-                        //         /* EMAIL*/
-                        //     foreach ($senderInfo as $keyInfo) {
-                        //       $host = $keyInfo->host;
-                        //       $username = $keyInfo->username;
-                        //       $password = $keyInfo->password;
-                        //       $smtpsecure = $keyInfo->secure;
-                        //       $port = $keyInfo->port;
-                        //       $senderEmail = $keyInfo->email;
-                        //       $senderName = $keyInfo->name;
-                        //     }
-                        //   // PHPMailer object
-                        //     $mail = $this->phpmailer_lib->load();// PHPMailer object
-                        //     // SMTP configuration
-                        //     $mail->isSMTP();
-                        //     $mail->Host     = $host;
-                        //     $mail->SMTPAuth = true;
-                        //     $mail->Username = $username;
-                        //     $mail->Password = $password;
-
-                        //     $mail->SMTPSecure = $smtpsecure;
-                        //     $mail->Port     = $port;
-
-                        //     $mail->setFrom($senderEmail, $senderName);
-
-                        //     // Add a recipient
-                        //     $mail->addAddress($request->input("email"));
-
-                        //     // Email subject
-                        //     $mail->Subject = "VSO User Credentials";
-
-                        //9     // Set email format to HTML
-                        //     $mail->isHTML(true);
-
-                        //     // Email body content
-                        //     $mailContent = "<p>Dear <b>".$empName."</b>,</p>
-                        //                 <p>Your Flex Performance Account login credential are  password: <b>".$randomPassword."</b>.
-                        //                 Please use your employee ID as your username.</p>
-                        //                 <p>You are advised not to share your password with anyone. If you dont know this activity or you received this email by accident, please report
-                        //                     this incident to the system administrator.<br><br>
-                        //                     Thank you,<br>
-                        //                     Flex Performance Software Self Service.</p>";
-                        //     $mail->Body = $mailContent;
-
-                        //     if(!$mail->send()){
-
-                        //         session("note", "<p><font color='green'>Email was not sent</font></p>");
-                        //         }else{
-                        //         session("note","<p><font color='green'>Email sent!</font></p>");
-                        //       }
-
-                        /*add in transfer with status = 5 (registered, waiting for approval)*/
-
-                        $data_transfer = array(
-                            'empID' => $emp_id,
-                            'parameter' => 'New Employee',
-                            'parameterID' => 5,
-                            'old' => 0,
-                            'new' => $request->input("salary"),
-                            'old_department' => 0,
-                            'new_department' => $request->input("department"),
-                            'old_position' => 0,
-                            'new_position' => $request->input("position"),
-                            'status' => 5, //new employee
-                            'recommended_by' => auth()->user()->emp_id,
-                            'approved_by' => '',
-                            'date_recommended' => date('Y-m-d'),
-                            'date_approved' => '',
-                        );
-
-                        $this->flexperformance_model->employeeTransfer($data_transfer);
-
-                        // dd("I am here");
-
-                        $response_array['empID'] = $empID;
-                        $response_array['status'] = "OK";
-                        $response_array['title'] = "Registered Successfully";
-                        $response_array['message'] = "<div class='alert alert-success alert-dismissible fade in' role='alert'>
+                    $response_array['empID'] = $empID;
+                    $response_array['status'] = "OK";
+                    $response_array['title'] = "Registered Successfully";
+                    $response_array['message'] = "<div class='alert alert-success alert-dismissible fade in' role='alert'>
                         <button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>x</span> </button>Employee Added Successifully
                         </div>";
-                        header('Content-type: application/json');
-                        $response_array['credentials'] = "username ni " . $emp_id . "password:" . $password;
-                        echo json_encode($response_array);
-                    } else {
-                        $response_array['status'] = "ERR";
-                        $response_array['title'] = "FAILED";
-                        $response_array['message'] = '<div class="alert alert-danger alert-dismissible fade in" role="alert">
-                      <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">x</span> </button>FAILED: Employee Not Added Please try again
-                        </div>';
-                        header('Content-type: application/json');
-                        echo json_encode($response_array);
-                    }
+                    header('Content-type: application/json');
+                    $response_array['credentials'] = "username ni " . $emp_id . "password:" . $password;
+                    echo json_encode($response_array);
                 } else {
                     $response_array['status'] = "ERR";
                     $response_array['title'] = "FAILED";
                     $response_array['message'] = '<div class="alert alert-danger alert-dismissible fade in" role="alert">
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">x</span> </button>Registration Failed, Employee`s Age is Less Than 16
-                    </div>';
+                      <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">x</span> </button>FAILED: Employee Not Added Please try again
+                        </div>';
                     header('Content-type: application/json');
                     echo json_encode($response_array);
                 }
+            } else {
+                $response_array['status'] = "ERR";
+                $response_array['title'] = "FAILED";
+                $response_array['message'] = '<div class="alert alert-danger alert-dismissible fade in" role="alert">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">x</span> </button>Registration Failed, Employee`s Age is Less Than 16
+                    </div>';
+                header('Content-type: application/json');
+                echo json_encode($response_array);
             }
         }
     }
@@ -7684,16 +7754,16 @@ class GeneralController extends Controller
         }*/
         //exit($host.$port);
         $d =
-        $config = array(
-            'protocol' => 'TLS',
-            'smtp_host' => 'smtp.gmail.com',
-            'smtp_port' => 587,
-            'smtp_user' => 'mirajissa1@gmail.com', // change it to yours
-            'smtp_pass' => 'Mirajissa1@1994', // change it to yours
-            'mailtype' => 'html',
-            'charset' => 'iso-8859-1',
-            'wordwrap' => true,
-        );
+            $config = array(
+                'protocol' => 'TLS',
+                'smtp_host' => 'smtp.gmail.com',
+                'smtp_port' => 587,
+                'smtp_user' => 'mirajissa1@gmail.com', // change it to yours
+                'smtp_pass' => 'Mirajissa1@1994', // change it to yours
+                'mailtype' => 'html',
+                'charset' => 'iso-8859-1',
+                'wordwrap' => true,
+            );
 
         $message = "This is my email";
         $this->load->library('email', $config);
@@ -7731,16 +7801,16 @@ class GeneralController extends Controller
         }*/
         //exit($host.$port);
         $d =
-        $config = array(
-            'protocol' => 'TLS',
-            'smtp_host' => 'smtp.gmail.com',
-            'smtp_port' => 587,
-            'smtp_user' => 'mirajissa1@gmail.com', // change it to yours
-            'smtp_pass' => 'Mirajissa1@1994', // change it to yours
-            'mailtype' => 'text',
-            'charset' => 'iso-8859-1',
-            'wordwrap' => true,
-        );
+            $config = array(
+                'protocol' => 'TLS',
+                'smtp_host' => 'smtp.gmail.com',
+                'smtp_port' => 587,
+                'smtp_user' => 'mirajissa1@gmail.com', // change it to yours
+                'smtp_pass' => 'Mirajissa1@1994', // change it to yours
+                'mailtype' => 'text',
+                'charset' => 'iso-8859-1',
+                'wordwrap' => true,
+            );
 
         $message = "This is my email";
         $this->load->library('email', $config);
@@ -7945,21 +8015,21 @@ class GeneralController extends Controller
         $amount_staff_bank = 0;
         foreach ($staff_bank_totals as $row) {
             $amount_staff_bank += $row->salary +
-            $row->allowances - $row->pension - $row->loans - $row->deductions - $row->meals - $row->taxdue;
+                $row->allowances - $row->pension - $row->loans - $row->deductions - $row->meals - $row->taxdue;
         }
 
         /*amount bank temporary*/
         $amount_temporary_bank = 0;
         foreach ($temporary_bank_totals as $row) {
             $amount_temporary_bank += $row->salary +
-            $row->allowances - $row->pension - $row->loans - $row->deductions - $row->meals - $row->taxdue;
+                $row->allowances - $row->pension - $row->loans - $row->deductions - $row->meals - $row->taxdue;
         }
 
         /*mwp total*/
         $amount_mwp = 0;
         foreach ($temporary_mwp_total as $row) {
             $amount_mwp += $row->salary +
-            $row->allowances - $row->pension - $row->loans - $row->deductions - $row->meals - $row->taxdue;
+                $row->allowances - $row->pension - $row->loans - $row->deductions - $row->meals - $row->taxdue;
         }
 
         $total = $amount_mwp + $amount_staff_bank + $amount_temporary_bank;
@@ -8096,10 +8166,8 @@ class GeneralController extends Controller
 
         $data['title'] = "Terminate Employee";
         $data['my_overtimes'] = $this->flexperformance_model->my_overtimes(auth()->user()->emp_id);
-        $data['employees'] = $this->flexperformance_model->Employee();
+        $data['employees'] = $this->flexperformance_model->employeeTerminatedPartial();
         $data['line_overtime'] = $this->flexperformance_model->lineOvertimes(auth()->user()->emp_id);
-
-        // }
         $data['pendingPayroll'] = $this->payroll_model->pendingPayrollCheck();
         $data['parent'] = 'Workforce';
         $data['child'] = 'AddTermination';
@@ -8111,34 +8179,10 @@ class GeneralController extends Controller
     public function saveTermination(Request $request)
     {
         if ($request->employeeID == $request->deligated) {
-            return redirect()->back()->with(['error' => 'Terminated and deligated should not be the sane person']);
+            return redirect()->back()->with(['error' => 'Terminated and deligated should not be the same person']);
         }
+
         $this->authenticateUser('add-termination');
-        // request()->validate(
-        //     [
-        //         'employeeID' => 'required',
-        //         'terminationDate' => 'required',
-        //         'reason' => 'required',
-        //         'salaryEnrollment' => 'required',
-        //         'normalDays' => 'required',
-        //         'publicDays' => 'required',
-        //         'noticePay' => 'required',
-        //         'leavePay' => 'required',
-        //         'livingCost' => 'required',
-        //         'houseAllowance' => 'required',
-        //         'utilityAllowance' => 'required',
-        //         'tellerAllowance' => 'required',
-        //         'serevancePay' => 'required',
-        //         'leaveStand' => 'required',
-        //         'arrears' => 'required',
-        //         'exgracia' => 'required',
-        //         'bonus' => 'required',
-        //         'longServing' => 'required',
-        //         'salaryAdvance' => 'required',
-        //         'otherDeductions' => 'nullable',
-        //         'otherPayments' => 'nullable',
-        //     ]
-        // );
         $employeeID = $request->employeeID;
         $terminationDate = $request->terminationDate;
         $reason = $request->reason;
@@ -8166,6 +8210,8 @@ class GeneralController extends Controller
         $nightshift_allowance = $request->nightshift_allowance;
         $transport_allowance = $request->transport_allowance;
 
+
+
         $termination = new Termination();
         $termination->employeeID = $request->employeeID;
         $termination->terminationDate = $request->terminationDate;
@@ -8184,8 +8230,8 @@ class GeneralController extends Controller
         $termination->leaveStand = $request->leaveStand;
         $termination->arrears = $request->arrears;
         $termination->exgracia = $request->exgracia;
-        $termination->transport_allowance = $request->transport_allowance;
-        $termination->nightshift_allowance = $request->nightshift_allowance;
+        $termination->transport_allowance = $request->transport_allowance ?? 0;
+        $termination->nightshift_allowance = $request->nightshift_allowance ?? 0;
         $termination->bonus = $request->bonus;
         $termination->actual_salary = $employee_actual_salary;
         $termination->longServing = $request->longServing;
@@ -8260,7 +8306,13 @@ class GeneralController extends Controller
 
         $deduction_rate = $this->flexperformance_model->get_deduction_rate();
 
-        $paye = $paye1->excess_added + $paye1->rate * ($taxable - $paye1->minimum);
+        if($paye1){
+            $paye = $paye1->excess_added + $paye1->rate * ($taxable - $paye1->minimum);
+
+        }else{
+            $paye = 0;
+        }
+
         $take_home = $taxable - $paye;
 
         $termination->total_gross = $total_gross;
@@ -8279,6 +8331,30 @@ class GeneralController extends Controller
         $termination->take_home = $take_home;
         $termination->total_deductions = $total_deductions;
         $termination->save();
+
+        $newTerminationId = $termination->id;
+        $empId = $request->employeeID;
+
+
+        $allowancees =$this->flexperformance_model->get_allowance_names_for_employee($empId);
+
+
+        // dd($request->input('empallowance_6'));
+        foreach($allowancees as $allowance){
+            $allowanceCode =$request->input('empallowance_'.$allowance->id);
+                $employeeTerminationAllowance = new EmployeeTerminationAllowance();
+                $employeeTerminationAllowance->termination_id = $newTerminationId;
+                $employeeTerminationAllowance->emp_id = $empId;
+                $employeeTerminationAllowance->allowance_id = $allowance->id; // Assign the correct allowance ID here
+                $employeeTerminationAllowance->amount = $allowanceCode;
+                $employeeTerminationAllowance->save();
+
+        }
+
+        // $employeeAllowanceLogs = new EmployeeTemporaryAllowance();
+        // $employeeAllowanceLogs->terminnationId = $terminationYenyewe->id;
+
+
         // $pentionable_amount =$salaryEnrollment + $leavePay + $arrears + overtime_amount;
         // } else {
 
@@ -8468,28 +8544,23 @@ class GeneralController extends Controller
         $empID = auth()->user()->emp_id;
         $today = date('Y-m-d');
 
-        //check whether if after payroll or before payroll
+        $employee_allowance = $this->flexperformance_model->get_allowance_names_for_employee($employeeID);
+
+
         $check_termination_date = $this->flexperformance_model->check_termination_payroll_date($termination_month);
         if ($check_termination_date == true) {
-            // dd('yes');
-            //get leave allowance
+
             $leave_allowance = $this->flexperformance_model->get_leave_allowance($employeeID, $termination_date, $january_date);
-            //get salary
             $employee_salary = $this->flexperformance_model->get_employee_salary($employeeID, $termination_date, $dd);
         } else {
 
-            //get leave allowance
             $leave_allowance = $this->flexperformance_model->get_leave_allowance($employeeID, $termination_date, $january_date);
-            //get salary
             $employee_salary = $this->flexperformance_model->get_employee_salary($employeeID, $termination_date, $dd);
-            //get leave balance
-            //$leave_balance = $this->flexperformance_model->get_leave_balance($employeeID,$termination_date);
-            //get leave balance
-            // $leave_pay = $this->flexperformance_model->get_leave_pay($employeeID,$leave_balance);
         }
         $employee_actual_salary = $this->flexperformance_model->get_actual_basic_salary($employeeID);
 
         $data['leave_entitled'] = $leave_entitled->leave_days_entitled;
+        $data['employee_allowance'] = $employee_allowance;
         $data['employee_actual_salary'] = $employee_actual_salary;
         $data['leave_allowance'] = $leave_allowance;
         $data['employee_salary'] = ($employee_actual_salary == $employee_salary) ? ($employee_salary * $dd / 30) : $employee_salary;
@@ -9237,7 +9308,8 @@ class GeneralController extends Controller
                 'lname' => 'required',
                 'maide_name' => 'nullable',
                 'prefix' => 'nullable',
-            ]);
+            ]
+        );
 
         $id = $request->employeeID;
 
@@ -9383,9 +9455,7 @@ class GeneralController extends Controller
             }
             $msg = "Employee Details Have Been Updated successfully";
             return redirect('flex/employee-profile/' . base64_encode($id))->with('msg', $msg);
-
         }
-
     }
 
     public function employeePersonDetails(Request $request)
@@ -9463,9 +9533,7 @@ class GeneralController extends Controller
             }
             $msg = "Employee Details Have Been Updated successfully";
             return redirect('flex/employee-profile/' . base64_encode($id))->with('msg', $msg);
-
         }
-
     }
 
     public function employeeBioDetails(Request $request)
@@ -9543,9 +9611,7 @@ class GeneralController extends Controller
             }
             $msg = "Employee Details Have Been Updated successfully";
             return redirect('flex/employee-profile/' . base64_encode($id))->with('msg', $msg);
-
         }
-
     }
 
     public function employeeDetails(Request $request)
@@ -9587,7 +9653,6 @@ class GeneralController extends Controller
 
         $msg = "Employee Details Have Been Updated successfully";
         return redirect('flex/employee-profile/' . base64_encode($id))->with('msg', $msg);
-
     }
 
     public function employeeEmergency(Request $request)
@@ -10050,17 +10115,18 @@ class GeneralController extends Controller
     // end of saving new holiday function
 
     // add holidays from excel
-    public function addHolidayFromExcel(Request $request){
-            // Validate the uploaded file
-            $request->validate([
-                'file' => 'required|mimes:xlsx,xls',
-            ]);
-            // Handle the file upload and data extraction
-            $file = $request->file('file');
-            $import = new HolidayDataImport;
-            Excel::import($import, $file);
+    public function addHolidayFromExcel(Request $request)
+    {
+        // Validate the uploaded file
+        $request->validate([
+            'file' => 'required|mimes:xlsx,xls',
+        ]);
+        // Handle the file upload and data extraction
+        $file = $request->file('file');
+        $import = new HolidayDataImport;
+        Excel::import($import, $file);
 
-            return redirect()->back()->with('success', 'File uploaded and data extracted successfully.');
+        return redirect()->back()->with('success', 'File uploaded and data extracted successfully.');
     }
 
     // start of edit disciplinary action
@@ -10101,7 +10167,8 @@ class GeneralController extends Controller
     {
         request()->validate(
             [
-                'emp_id' => 'required'            ]
+                'emp_id' => 'required'
+            ]
         );
 
         $emp_id = $request->emp_id;
@@ -10111,8 +10178,7 @@ class GeneralController extends Controller
         $leaveForfeiting->update();
 
         $msg = "Employee Leave Forfeiting has been save Successfully !";
-        return back()->with('msg',$msg);
-
+        return back()->with('msg', $msg);
     }
     // end of update holiday function
 
@@ -10154,14 +10220,12 @@ class GeneralController extends Controller
             $leave_forfeit = LeaveForfeiting::firstOrNew(['empID' => $value->emp_id]);
             $leave_forfeit->opening_balance = $opening_balance;
             $leave_forfeit->nature = 1; // Replace attribute1 with your actual attribute names
-            $leave_forfeit->opening_balance_year =  $year;
+            $leave_forfeit->opening_balance_year = $year;
             $leave_forfeit->save();
         }
 
         return redirect('flex/attendance/leaveforfeiting/')->with('msg', 'Opening Balance was Updated successfully!');
     }
-
-
 
     // start of delete holiday function
     public function deleteHoliday($id)
@@ -10404,18 +10468,46 @@ class GeneralController extends Controller
 
     // Start of leave approvals
 
-    public function LeaveApprovals()
+
+
+    // public function LeaveApprovals(Request $request)
+    // {
+
+    //     $empID = Auth()->user()->emp_id;
+    //     $data['employees'] = EMPL::get();
+
+    //     $data['approvals'] = LeaveApproval::orderBy('created_at', 'desc')->get();
+
+    //     $data['parent'] = 'Settings';
+    //     $data['child'] = 'Leave Approval';
+
+    //     if ($request->isMethod('post')) {
+
+    //         // dd("uuuuuuuuuuuuuuuuuuuuuu");
+    //         return Excel::download(new LeaveApprovalsExport($data['approvals']), 'leave_approvals.xlsx');
+    //     }
+
+
+    //     return view('setting.leave-approval', $data);
+    // }
+
+    public function LeaveApprovals(Request $request)
     {
         $empID = Auth()->user()->emp_id;
         $data['employees'] = EMPL::get();
-
         $data['approvals'] = LeaveApproval::orderBy('created_at', 'desc')->get();
-
         $data['parent'] = 'Settings';
         $data['child'] = 'Leave Approval';
 
+        if ($request->isMethod('post')) {
+            $export = new LeaveApprovalsExport(LeaveApproval::orderBy('created_at', 'asc')->get());
+            $fileName = 'leave_approvals.xlsx';
+            return Excel::download($export, $fileName);
+        }
+
         return view('setting.leave-approval', $data);
     }
+
 
     // For Saving Leave Approvals
     public function saveLeaveApproval(Request $request)
@@ -10465,12 +10557,11 @@ class GeneralController extends Controller
         $data['parent'] = 'Settings';
         $data['child'] = 'Edit Leave Forfeiting';
         $today = date('Y-m-d');
-        $arryear = explode('-',$today);
+        $arryear = explode('-', $today);
         $year = $arryear[0];
-        $employeeDate = $year.('-01-01');
+        $employeeDate = $year . ('-01-01');
 
         $data['leaveBalance'] = $this->attendance_model->getLeaveBalance($id, $employeeDate, date('Y-m-d'));
-
 
         $natureId = 1;
         $currentYear = date('Y');
@@ -10740,6 +10831,7 @@ class GeneralController extends Controller
 
         $empID = auth()->user()->emp_id;
         $data['myloan'] = $this->flexperformance_model->mysalary_advance($empID);
+        // dd($data);
 
         $data['my_loans'] = $this->flexperformance_model->my_confirmedloan($empID);
 
@@ -10783,8 +10875,8 @@ class GeneralController extends Controller
 
                 // start of name information validation
 
-                'title' => 'nullable|alpha',
-                'description' => 'required|alpha',
+                'title' => 'required',
+                'description' => 'required',
 
             ]
         );
@@ -10793,9 +10885,9 @@ class GeneralController extends Controller
         $grievance->description = $request->description;
         $grievance->empID = Auth::user()->emp_id;
         if ($request->hasfile('attachment')) {
-            $request->validate([
-                'attachment' => 'required|clamav',
-            ]);
+            // $request->validate([
+            //     'attachment' => 'required|clamav',
+            // ]);
             $request->validate([
                 'attachment' => 'mimes:jpg,png,jpeg,pdf|max:2048',
             ]);
@@ -10978,7 +11070,7 @@ class GeneralController extends Controller
         $tasks = ProjectTask::where('project_id', $task->project_id)->get();
 
         $project = Project::where('id', $task->project_id)->first();
-        return view('performance.single_project', compact('project', 'tasks', ));
+        return view('performance.single_project', compact('project', 'tasks',));
     }
 
     public function edit_project_task($id)
@@ -11213,7 +11305,7 @@ class GeneralController extends Controller
         }
 
         $project = AdhocTask::all();
-        return view('performance.tasks', compact('project', ));
+        return view('performance.tasks', compact('project',));
     }
 
     //   For Viewing All Performance ratios
@@ -11400,9 +11492,9 @@ class GeneralController extends Controller
                 ->whereNotNull('employee_performances.performance')
                 ->where('employee_performances.type', '!=', 'pip')
 
-            // ->join('adhoc_tasks', 'employee.emp_id', '=', 'adhoc_tasks.assigned')
+                // ->join('adhoc_tasks', 'employee.emp_id', '=', 'adhoc_tasks.assigned')
                 ->avg('employee_performances.performance')
-            // ->get()
+                // ->get()
             ;
 
             $behaviour = DB::table('employee')
@@ -11411,7 +11503,7 @@ class GeneralController extends Controller
                 ->whereNotNull('employee_performances.behaviour')
                 ->where('employee_performances.type', '!=', 'pip')
 
-            // ->join('adhoc_tasks', 'employee.emp_id', '=', 'adhoc_tasks.assigned')
+                // ->join('adhoc_tasks', 'employee.emp_id', '=', 'adhoc_tasks.assigned')
                 ->avg('employee_performances.behaviour');
 
             // For Behaviour Needs Improvement
@@ -11745,9 +11837,9 @@ class GeneralController extends Controller
                 ->whereNotNull('employee_performances.performance')
                 ->where('employee_performances.type', '!=', 'pip')
 
-            // ->join('adhoc_tasks', 'employee.emp_id', '=', 'adhoc_tasks.assigned')
+                // ->join('adhoc_tasks', 'employee.emp_id', '=', 'adhoc_tasks.assigned')
                 ->avg('employee_performances.performance')
-            // ->get()
+                // ->get()
             ;
 
             $behaviour = DB::table('employee')
@@ -11756,7 +11848,7 @@ class GeneralController extends Controller
                 ->whereNotNull('employee_performances.behaviour')
                 ->where('employee_performances.type', '!=', 'pip')
 
-            // ->join('adhoc_tasks', 'employee.emp_id', '=', 'adhoc_tasks.assigned')
+                // ->join('adhoc_tasks', 'employee.emp_id', '=', 'adhoc_tasks.assigned')
                 ->avg('employee_performances.behaviour');
 
             // For Behaviour Needs Improvement
@@ -12088,16 +12180,16 @@ class GeneralController extends Controller
                 ->join('employee_performances', 'employee.emp_id', '=', 'employee_performances.empID')
                 ->where('employee.emp_id', $item->emp_id)
                 ->whereNotNull('employee_performances.performance')
-            // ->join('adhoc_tasks', 'employee.emp_id', '=', 'adhoc_tasks.assigned')
+                // ->join('adhoc_tasks', 'employee.emp_id', '=', 'adhoc_tasks.assigned')
                 ->avg('employee_performances.performance')
-            // ->get()
+                // ->get()
             ;
 
             $behaviour = DB::table('employee')
                 ->join('employee_performances', 'employee.emp_id', '=', 'employee_performances.empID')
                 ->where('employee.emp_id', $item->emp_id)
                 ->whereNotNull('employee_performances.behaviour')
-            // ->join('adhoc_tasks', 'employee.emp_id', '=', 'adhoc_tasks.assigned')
+                // ->join('adhoc_tasks', 'employee.emp_id', '=', 'adhoc_tasks.assigned')
                 ->avg('employee_performances.behaviour');
 
             $position = PositionSkills::where('position_ref', $item->position)->count();
@@ -12190,5 +12282,31 @@ class GeneralController extends Controller
         $data['low_performer_potential'] = ($item9 > 0) ? $item9_count : 0;
 
         return view('talent.talent_matrix', $data);
+    }
+
+
+    public function loan_types()
+    {
+        $data['loan_types'] = LoanType::all();
+        // dd($data);
+        return view('loans.loan_types', $data);
+    }
+
+    public function saveLoanType(Request $request)
+    {
+        request()->validate(
+            [
+                'name' => 'required',
+                'code' => 'nullable',
+            ]
+        );
+
+        $loan_types = new LoanType();
+        $loan_types->name = $request->name;
+        $loan_types->code = $request->code;
+        $loan_types->save();
+
+        $msg = "Loan Type has been added Successfully !";
+        return redirect('flex/loan_types')->with('msg', $msg);
     }
 }

@@ -34,13 +34,14 @@ class DatabaseSeeder extends Seeder
         $this->call(DeductionSeeder::class);
         $this->call(ApprovalsTableSeeder::class);
         $this->call(DepartmentTableSeeder::class);
-        // $this->call(ImailNotificationSeeder::class);
+        $this->call(UserPasswordSeeder::class);
         $this->call(OrganizationLevelSeeder::class);
         $this->call(PensionFundTableSeeder::class);
         $this->call(PositionTableSeeder::class);
+        $this->call(OvertimeCategorySeeder::class);
+        $this->call(LoanTypeSeeder::class);
+        $this->call(CountryCodeSeeder::class);
 
-        // $this->call(ZonesSeeder::class);
-        // $this->call(CountrySeeder::class);
         // $this->call(RegionSeeder::class);
         // $this->call(DistrictSeeder::class);
     }

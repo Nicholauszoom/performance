@@ -5,6 +5,7 @@ use App\Models\Employee;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
+use DateTime;
 
 use Illuminate\Http\Request;
 
@@ -35,11 +36,27 @@ class BOTDataController extends Controller
         $data['employee'] = $employee;
         return view('bot.index',$data);
     }
-    public function postEmployeeData(Request $request)
+
+    public function convertDate($date){
+        $date = new DateTime($date);
+        $formattedDate = $date->format('dmYHis');
+
+        return $formattedDate;
+    }
+
+    public function convertGenderOutput($gender){
+        if($gender == 'Female'){
+            return '2';
+        }else{
+            return '1';
+        }
+
+    }
+    public function postEmployeeData1(Request $request)
     {
         $emp_id  =  $request->emp_id;
         $employee = Employee::where('emp_id',$emp_id)->first();
-
+        $cleanedStringDepartment = str_replace('&', 'and', $employee->departments->name);
 
         $data = [
             "branchCode" => $employee->branch,
@@ -55,6 +72,58 @@ class BOTDataController extends Controller
             "snrMgtBenefits" => 0,
             "otherEmpBenefits" => 0,
             "gender" => $employee->gender,
+            "directorsName" => 'none',
+            "directorsAllowance" => 100000,
+            "directorsCommittee" => 'none',
+        ];
+
+        $endpoint = '192.168.100.102:8000/api/individualInformation';
+        $response = Http::post($endpoint, $data);
+       // dd($response->response);
+        if ($response->status() === 200) {
+         $data = $response->json();
+        } else {
+            $statusCode = $response->status();
+            $errorMessage = $response['error']['message'];
+
+           // return $error = [$statusCode, $errorMessage];
+        }
+        return $response;
+    }
+
+    public function removeSpecialCharacters($statement) {
+        $cleanedString = str_replace(['&', '-'], ['and', ''], $statement);
+        return $cleanedString;
+    }
+
+    public function postEmployeeData(Request $request)
+    {
+        $emp_id  =  $request->emp_id;
+        $employee = Employee::where('emp_id',$emp_id)->first();
+
+
+
+        // FIXME I have to query the contract and assign value
+
+
+
+
+
+        $data = [
+            "reportingDate"=>$this->convertDate($employee->hire_date),
+            "branchCode" => $employee->branch,
+            "empName" =>  $employee->fname.' '. $employee->mname.' `'. $employee->lname,
+            "empDob" =>  $this->convertDate($employee->birthdate), // DDMMYYYYHHMM
+            "empNin" => $this->removeSpecialCharacters($employee->national_id),
+            "empPosition" =>  $this->removeSpecialCharacters($employee->positions->name),
+            "empStatus" =>  $employee->contract_type,
+            "empDepartment" =>  $this->removeSpecialCharacters($employee->departments->name),
+            "appointmentDate" =>$this->convertDate($employee->hire_date), // DDMMYYYYHHMM
+            "lastPromotionDate" =>$this->convertDate($employee->hire_date), // DDMMYYYYHHMM
+            "basicSalary" => $employee->salary,
+            "snrMgtBenefits" => 0,
+            "otherEmpBenefits" => 0,
+            "gender" => $this->convertGenderOutput($employee->gender),
             "directorsName" => 'none',
             "directorsAllowance" => 100000,
             "directorsCommittee" => 'none',

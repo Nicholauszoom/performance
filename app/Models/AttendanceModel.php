@@ -83,22 +83,52 @@ class AttendanceModel extends Model
         return DB::select(DB::raw($query));
     }
 
-    function myLeaves($empId)
-    {
-        $query = "SELECT l.*, la.level1, la.level2, la.level3
-          FROM leaves AS l
-          JOIN leave_approvals AS la ON l.empID = la.empID
-          WHERE l.reason != 'Automatic applied!'
-          AND :empId IN (la.level1, la.level2, la.level3)
-          ORDER BY l.id DESC";
+    
+        function myLeaves($empId)
+        {
+            $query = "SELECT l.*, la.level1, la.level2, la.level3
+                  FROM leaves AS l
+                  JOIN leave_approvals AS la ON l.empID = la.empID
+                  WHERE :empId IN (la.level1, la.level2, la.level3)
+                  ORDER BY l.id DESC";
+    
+            $bindings = ['empId' => $empId];
+            $results = DB::select(DB::raw($query), $bindings);
+            return $results;
+        }
+        public function getFilteredLeaves($emp_id)
+{
+    $leaveApprovals = LeaveApproval::where('empID', $emp_id)->first();
 
+    $leaves = Leaves::where(function ($query) use ($emp_id, $leaveApprovals) {
+        $query->where(function ($q) use ($emp_id, $leaveApprovals) {
+            $q->where('status', 1)->where('empID', $emp_id)->where('empID', $leaveApprovals->level1);
+        })->orWhere(function ($q) use ($emp_id, $leaveApprovals) {
+            $q->where('status', 2)
+                ->where(function ($q) use ($emp_id, $leaveApprovals) {
+                    $q->where('empID', $emp_id)
+                        ->where('empID', $leaveApprovals->level2)
+                        ->orWhere('empID', $leaveApprovals->level1);
+                });
+        })->orWhere(function ($q) use ($emp_id, $leaveApprovals) {
+            $q->where('status', 3)
+                ->where(function ($q) use ($emp_id, $leaveApprovals) {
+                    $q->where('empID', $emp_id)
+                        ->where('empID', $leaveApprovals->level3)
+                        ->orWhere('empID', $leaveApprovals->level2)
+                        ->orWhere('empID', $leaveApprovals->level1);
+                });
+        });
+    })->orWhere(function ($query) use ($emp_id) {
+        $query->where('status', 3)->where('empID', $emp_id)->where('deligated', $emp_id);
+    })->orderBy('id', 'desc')->get();
 
+    return $leaves;
+}
 
-        $bindings = ['empId' => $empId];
-        $results = DB::select(DB::raw($query), $bindings);
-        return $results;
-    }
-
+    
+    
+    
 
 
 
@@ -460,6 +490,32 @@ class AttendanceModel extends Model
         }
 
         return $maximum_days;
+    }
+
+    function getAccruedBalance($empID, $hireDate, $today)
+    {
+
+        $nature = 1;
+
+        $today = date("Y-m-d", strtotime($today));
+
+        $employee = DB::table('employee')->where('emp_id', $empID)->first();
+
+
+        $d1 = new DateTime($hireDate);
+
+        $d2 = new DateTime($today);
+
+        $diff = $d1->diff($d2);
+
+        $years = $diff->y;
+        $months = $diff->m;
+        $days = $diff->d;
+
+        $accrual_days = (($days * $employee->accrual_rate) / 30) + $months * $employee->accrual_rate + $years * 12 * $employee->accrual_rate;
+
+
+        return $accrual_days;
     }
 
 

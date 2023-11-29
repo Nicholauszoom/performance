@@ -20,6 +20,7 @@
 
             $Isbik = $key->Isbik;
             $Isrecursive = $key->Isrecursive;
+            $allowanceName = App\Models\Payroll\AllowanceCategory::where('id', $key->allowance_category_id)->value('name');
 
             $amount = $key->amount;
             $percent = $key->percent;
@@ -29,45 +30,7 @@
     @endphp
 
     <div class="card border-top  border-top-width-3 border-top-main rounded-0 p-2">
-        <ul class="nav nav-tabs nav-tabs-underline nav-justified mb-3" id="tabs-target-right" role="tablist">
-            <li class="nav-item" role="presentation">
-                <a href="{{ url('/flex/financial_group')}}" class="nav-link" aria-selected="false" role="tab"
-                    tabindex="-1">
-                    <i class="ph-list me-2"></i>
-                    Packages
-                </a>
-            </li>
-            <li class="nav-item" role="presentation">
-                <a href="{{ url('/flex/allowance_overtime') }}" class="nav-link" aria-selected="false" role="tab"
-                    tabindex="-1">
-                    <i class="ph-list me-2"></i>
-                    Overtime
-                </a>
-            </li>
-            <li class="nav-item" role="presentation">
-                <a href="{{ url('/flex/allowance') }}" class="nav-link  active show" aria-selected="false" role="tab"
-                    tabindex="-1">
-                    <i class="ph-list me-2"></i>
-                    Allowance
-                </a>
-            </li>
-
-
-            <li class="nav-item" role="presentation">
-                <a href="{{ url('/flex/statutory_deductions') }}" class="nav-link " aria-selected="false" role="tab"
-                    tabindex="-1">
-                    <i class="ph-list me-2"></i>
-                    Statutory Deductions
-                </a>
-            </li>
-            <li class="nav-item" role="presentation">
-                <a href="{{ url('/flex/non_statutory_deductions') }}" class="nav-link " aria-selected="false" role="tab"
-                    tabindex="-1">
-                    <i class="ph-list me-2"></i>
-                    Non Statutory Deductions
-                </a>
-            </li>
-        </ul>
+        @include('app.headers_payroll_input')
     </div>
 
     <div class="row">
@@ -276,54 +239,26 @@
                             </div>
                         </div>
                     </form>
-
-
-                    @if ($mode == 1)
-                    {{-- <form autocomplete="off"  id="updateAmount" class="form-horizontal form-label-left">
+                    <form autocomplete="off" id="updatecategory" class="form-horizontal form-label-left">
                         <div class="mb-3">
                             <input hidden name ="allowanceID" value="<?php echo $allowanceID; ?>">
 
-                            <label class="form-label">Amount</label>
+                            <label  for="first-name" for="stream" >Allowance Category</label>
                             <div class="input-group">
-                                <input required="" type="number" name="amount" step ="any" min="1" max="10000000" value="<?php echo $amount; ?>" class="form-control">
-                                <button  class="btn btn-main">Update Amount</button>
+                                <select name="allowance_category_id" class="select_type form-control" required tabindex="-1" id="Isbik">
+                                <option selected>{{$allowanceName}}</option>
+                                        @foreach ($allowanceCategories as $row)
+                                        <option value="{{$row->id}}">{{$row->name}}</option>
+                                    @endforeach
+                                </select>
+                                <button  class="btn btn-main">Update</button>
                             </div>
                         </div>
-                    </form> --}}
-                    @elseif ($mode ==2)
-                    {{-- <form autocomplete="off" id="updatePercent" class="form-horizontal form-label-left">
-                        <div class="mb-3">
-                            <input hidden name ="allowanceID" value="<?php echo $allowanceID; ?>">
+                    </form>
 
-                            <label class="form-label">Percent</label>
-                            <div class="input-group">
-                                <input type="number" name="percent" min="0" max="100" step ="0.1" value="<?php echo 100*$percent; ?>" class="form-control">
-                                <button  class="btn btn-main">Update Amount</button>
-                            </div>
-                        </div>
-                    </form> --}}
-                    @endif
 
-                    {{-- <form autocomplete="off" id="updatePolicy" method = "post" class="form-horizontal form-label-left">
-                        <div class="mb-3">
-                             <label class="form-label" for="first-name"> Change Policy </label>
-                             <input hidden name ="allowanceID" value="<?php echo $allowanceID; ?>">
 
-                            <div>
-                                <div class="d-inline-flex align-items-center me-3">
-                                    <input type="radio" name="policy" value="1" id="dc_li_c" {{ ($mode == 1) ? "checked" : "" }}>
-                                    <label class="ms-2" for="dc_li_c">Fixed Amout</label>
-                                </div>
-
-                                <div class="d-inline-flex align-items-center">
-                                    <input type="radio" name="policy" value="2" id="dc_li_u" {{ ($mode == 2) ? "checked" : "" }}>
-                                    <label class="ms-2" for="dc_li_u">Percent(From Basic Salary)</label>
-                                </div>
-                            </div>
-
-                            <button  name="updatename" class="btn btn-main mt-3">Update</button>
-                        </div>
-                    </form> --}}
+                  
                 </div>
 
                 <div class="card-body">

@@ -97,7 +97,7 @@
                         <select class="form-control select @error('nationality') is-invalid @enderror" name="nationality">
                             <option selected disabled> Select </option>
                             @foreach ($countryDrop as $row)
-                            <option value="{{ $row->code }}">{{ $row->name }}</option>
+                            <option value="{{ $row->item_code }}">{{ $row->description }}</option>
                             @endforeach
                         </select>
                     </div>
@@ -513,6 +513,7 @@
         .fail(function () {
             alert('Registration Failed');
         });
+
     });
 </script>
 

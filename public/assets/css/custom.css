@@ -45,7 +45,6 @@
 
 .bg-warning {
     background: #f0ab00 !important;
-
 }
 
 .border-top-warnin {
@@ -53,17 +52,15 @@
     border-bottom-color: (#f0ab00, var(--border-opacity)) !important;
 }
 
-
-.bg-pending{
-    background:  #f58646 !important;
+.bg-pending {
+    background: #f58646 !important;
 }
 
 .border-warning {
     border-bottom: 3px solid #f0ab00 !important;
-
 }
 
-button.swal2-confirm{
+button.swal2-confirm {
     background-color: #00204e !important;
     color: #fff;
     border: none !important;
@@ -80,14 +77,13 @@ button.swal2-confirm{
     font-size: 15px !important;
 } */
 
-button.swal2-cancel{
+button.swal2-cancel {
     background: #c20430 !important;
     color: #fff;
     border: none !important;
     border-radius: 2% !important;
     font-size: 15px !important;
     padding: auto;
-
 }
 
 /* button.swal2-cancel:hover{
@@ -99,13 +95,13 @@ button.swal2-cancel{
     font-size: 15px !important;
 } */
 
-.bg-main-gradient{
-    background-image: linear-gradient(180deg,  #0a1330 95%,#f0ab00 10%);
+.bg-main-gradient {
+    background-image: linear-gradient(180deg, #0a1330 95%, #f0ab00 10%);
     background-size: cover;
 }
 
-thead{
-    background-color:#00204e !important;
+thead {
+    background-color: #00204e !important;
     border: none !important;
     color: #fff;
 }
@@ -121,7 +117,8 @@ thead{
     font-stretch: normal;
     font-size: 1.1em;
     line-height: normal;
-    font-family: Verdana, Arial, Helvetica, "Liberation Sans", FreeSans, sans-serif;
+    font-family: Verdana, Arial, Helvetica, "Liberation Sans", FreeSans,
+        sans-serif;
     margin-bottom: 10px;
     text-transform: uppercase;
 }
@@ -138,7 +135,8 @@ h5 {
     font-stretch: normal;
     font-size: 1.1em;
     line-height: normal;
-    font-family: Verdana, Arial, Helvetica, "Liberation Sans", FreeSans, sans-serif;
+    font-family: Verdana, Arial, Helvetica, "Liberation Sans", FreeSans,
+        sans-serif;
     margin-bottom: 10px;
     text-transform: uppercase;
 }
@@ -155,70 +153,65 @@ h2 {
     font-stretch: normal;
     font-size: 1.1em;
     line-height: normal;
-    font-family: Verdana, Arial, Helvetica, "Liberation Sans", FreeSans, sans-serif;
+    font-family: Verdana, Arial, Helvetica, "Liberation Sans", FreeSans,
+        sans-serif;
     margin-bottom: 10px;
     text-transform: uppercase;
 }
 
-.panel-text{
+.panel-text {
     font-size: 42px !important;
-
 }
 
-.panel-text:hover{
+.panel-text:hover {
     font-size: 42px !important;
     color: #c20430;
 }
 
-.panel-footer{
+.panel-footer {
     font-size: 13px !important;
     color: #c20430;
     text-transform: uppercase;
 }
 
-.panel-footer:hover{
+.panel-footer:hover {
     font-size: 13px !important;
     color: #f0ab00 !important;
     text-transform: uppercase;
 }
 
 .btn-icon {
-    background-color:#00204e !important;
+    background-color: #00204e !important;
     color: #fff;
     visibility: visible;
     opacity: 1;
 }
-.swal2-title{
+.swal2-title {
     font-size: 14px !important;
     text-transform: none;
-    color:#00204e !important;
+    color: #00204e !important;
     font-weight: 600;
 }
 
-.active>.page-link
-{
-    background-color:#00204e !important;
+.active > .page-link {
+    background-color: #00204e !important;
     border: none !important;
-
 }
 
-.active.page-link:hover
-{
+.active.page-link:hover {
     /* background-color:#f0ab00 !important; */
     background-image: linear-gradient(180deg, #f0ab00 10%, #f7c341 100%);
     background-size: cover;
-
 }
-.nav-link:hover{
+.nav-link:hover {
     background-image: linear-gradient(180deg, #f0ab00 10%, #f7c341 100%);
     background-size: cover;
-    color:#c20430!important;
+    color: #c20430 !important;
 }
 
-
-.btn:hover{
+.btn:hover {
     background-color: #f0ab00 !important;
-    color:#00204e !important;
+    color: #00204e !important;
 }
 .nav-tabs-highlight,
 .nav-tabs-overline,
@@ -285,8 +278,3 @@ bg-extra {
 /* .card-layout{
     background: #c81a1a !important;
 } */
-
-
-
-
-

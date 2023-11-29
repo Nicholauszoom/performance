@@ -14,45 +14,7 @@
 
         <div class="card border-top  border-top-width-3 border-top-main rounded-0 ">
 
-        <ul class="nav nav-tabs nav-tabs-underline nav-justified mb-3" id="tabs-target-right" role="tablist">
-            <li class="nav-item" role="presentation">
-                <a href="{{ url('/flex/financial_group') }}" class="nav-link" aria-selected="false" role="tab"
-                    tabindex="-1">
-                    <i class="ph-list me-2"></i>
-                    Packages
-                </a>
-            </li>
-            <li class="nav-item" role="presentation">
-                <a href="{{ url('/flex/allowance_overtime') }}" class="nav-link" aria-selected="false" role="tab"
-                    tabindex="-1">
-                    <i class="ph-list me-2"></i>
-                    Overtime
-                </a>
-            </li>
-            <li class="nav-item" role="presentation">
-                <a href="{{ url('/flex/allowance') }}" class="nav-link  active show" aria-selected="false" role="tab"
-                    tabindex="-1">
-                    <i class="ph-list me-2"></i>
-                    Allowance
-                </a>
-            </li>
-
-
-            <li class="nav-item" role="presentation">
-                <a href="{{ url('/flex/statutory_deductions') }}" class="nav-link " aria-selected="false" role="tab"
-                    tabindex="-1">
-                    <i class="ph-list me-2"></i>
-                    Statutory Deductions
-                </a>
-            </li>
-            <li class="nav-item" role="presentation">
-                <a href="{{ url('/flex/non_statutory_deductions') }}" class="nav-link " aria-selected="false" role="tab"
-                    tabindex="-1">
-                    <i class="ph-list me-2"></i>
-                    Non Statutory Deductions
-                </a>
-            </li>
-        </ul>
+            @include('app.headers_payroll_input')
         <div class="row">
             <div class="col-md-12">
                 <div class="card border-top  border-top-width-3 border-top-main rounded-0 p-2">
@@ -65,22 +27,24 @@
 
                         <form id="addAllowance" method="post" autocomplete="off" class="form-horizontal form-label-left">
                             <div class="form-group row">
-                                <div class=" col-md-6 mb-6">
+                                <div class=" col-md-4 mb-4">
                                     <label class="form-label">Allowance Name:</label>
                                     <input type="text"  name="name" class="form-control">
                                 </div>
 
 
 
-                                {{-- <div class=" col-md-3 mb-3">
-                                    <label class="form-label">Payment Policy:</label>
-                                    <select class="form-control select_type select" name="policy" id="policy">
-                                        <option selected disabled> Select </option>
-                                        <option value=1>Fixed Amount</option>
-                                        <option value=2>Percent From Basic Salary</option>
+                                <div class=" col-md-4 mb-4">
+                                    <label class="form-label">Allowance Category:</label>
+                                    <select class="form-control select_type select" name="allowanceCategory" id="allowanceCategory">
+                                        <option selected disabled>Select</option>
+                                        @foreach ($allowanceCategories as $row)
+                                        <option value="{{$row->id}}">{{$row->name}}</option>
+                                    @endforeach
+
                                     </select>
-                                </div> --}}
-                                <div class=" col-md-6 mb-6">
+                                </div>
+                                <div class=" col-md-4 mb-4">
                                     <label class="form-label">Taxable</label>
                                     <select class="form-control select_type select" name="taxable" id="policy">
                                         <option selected disabled> Select </option>
@@ -302,7 +266,7 @@
                 .done(function(data) {
 
                     new Noty({
-                                    text: 'Alloance Added successfully!',
+                                    text: 'Allowance Added successfully!',
                                     type: 'success'
                                 }).show();
 

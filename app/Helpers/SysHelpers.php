@@ -83,8 +83,14 @@ class SysHelpers
     }
     public static function position($pos)
     {
-        $details = EMPL::where('job_title', $pos)->first();
+        $position=DB::table('position')->where('name',$pos)->first();
+        $details = EMPL::where('position', $position->id)->first();
         return $details;
+    }
+
+    public static function getUserPosition($id){
+        // Takes in position ID returns name
+        return Position::where('id',$id)->get()->pluck('name')[0];
     }
     public static function approvalEmp($position1, $position2)
     {
@@ -268,5 +274,24 @@ class SysHelpers
 
 
         return $workingDays;
+    }
+
+    public static function isDateNextToWeekendOrHoliday($dateString) {
+        $parsedDate = Carbon::parse($dateString);
+
+        // Check if the date is next to weekends (Friday or Monday)
+        if ($parsedDate->isFriday() || $parsedDate->isMonday()) {
+            return true; // It's next to a weekend
+        }
+
+        // Check if the date is a holiday or the day before/after a holiday
+        $holidays = Holiday::pluck('date')->toArray();
+        if (in_array($parsedDate->toDateString(), $holidays) ||
+            in_array($parsedDate->copy()->addDay()->toDateString(), $holidays) ||
+            in_array($parsedDate->copy()->subDay()->toDateString(), $holidays)) {
+            return true; // It's next to a holiday
+        }
+
+        return false; // It's not next to a weekend or holiday
     }
 }

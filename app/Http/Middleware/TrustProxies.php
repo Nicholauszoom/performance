@@ -8,6 +8,9 @@ use Closure;
 use App\Models\UserRole;
 use App\Models\Permission;
 
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
+
+
 class TrustProxies extends Middleware
 {
     /**
@@ -38,6 +41,10 @@ class TrustProxies extends Middleware
            $sameSite = 'lax';
 
             $response = $next($request);
+
+            if (!($response instanceof BinaryFileResponse)) {
+
+            $response->header('Content-Security-Policy', 'https://hc-uat.bancabc.co.tz');
             $response->header('Content-Security-Policy', 'https://hc-hub.bancabc.co.tz');
             $response->header('Content-Security-Policy', 'https://int.cits.co.tz');
             $response->header('X-Frame-Options', 'DENY');
@@ -47,7 +54,7 @@ class TrustProxies extends Middleware
             $response->header('Permissions-Policy', 'no-referrer-when-downgrade');
             $response->header('Permissions-Policy', 'geolocation=(), microphone=(), camera=()');
             $response->cookie('__Host-sess', $cookieValue, 0, $path, null, $secure, $httpOnly, $sameSite);
-
+            }
 
 
 

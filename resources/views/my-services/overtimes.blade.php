@@ -15,7 +15,7 @@
 
 @section('content')
     {{-- start of apply overtime div --}}
-    @can('add-overtime')
+    {{-- @can('add-overtime') --}}
     <div id="apply_overtime">
         <div class="row">
             <div class="col-md-12 ">
@@ -70,7 +70,7 @@
                                     <div class="col-sm-12">
                                         <div class="input-group">
                                             <span class="input-group-text"><i class="ph-calendar"></i></span>
-                                            <input type="date" required placeholder="Start Time" name="time_start"
+                                            <input type="datetime-local" required placeholder="Start Time" name="time_start"
                                                 id="time_start" class="form-control daterange-single">
                                         </div>
                                     </div>
@@ -81,7 +81,7 @@
                                     <div class="col-sm-12">
                                         <div class="input-group">
                                             <span class="input-group-text"><i class="ph-calendar"></i></span>
-                                            <input type="date" required placeholder="Finish Time" name="time_finish" id="time_end" class="form-control daterange-single">
+                                            <input type="datetime-local" required placeholder="Finish Time" name="time_finish" id="time_end" class="form-control daterange-single">
                                         </div>
                                     </div>
                                 </div>
@@ -105,11 +105,11 @@
             </div>
         </div>
     </div>
-    @endcan
+    {{-- @endcan --}}
     {{-- / --}}
 
     {{-- start of view my overtime card border-top border-bottom border-bottom-width-3 border-top-width-3 border-top-main border-bottom-main rounded-0--}}
-    @can('view-my-overtime')
+    {{-- @can('view-my-overtime') --}}
     <div class="card border-top  border-top-width-3 border-top-main rounded-0">
         <div class="card-header mb-0">
             <div class="d-flex justify-content-between">
@@ -141,7 +141,7 @@
             </thead>
 
 
-            <tbody>
+            {{-- <tbody>
                 <?php foreach ($my_overtimes as $row) { ?>
 
                 <tr id="domain<?php //echo $row->id;
@@ -157,7 +157,7 @@
                         @endforeach
                     </td>
                     <td>
-                        <?php echo '<b>Duration: </b>' . $row->totoalHOURS . ' Hrs.<br><b>From: </b>' . $row->time_in . ' <b> To </b>' . $row->time_out; ?>
+                        <?php echo '<b>Duration: </b>' . number_format($row->totoalHOURS,1) . ' Hrs.<br><b>From: </b>' . date('H:i', strtotime($row->time_in)) . ' <b> To </b>' . date('H:i', strtotime($row->time_out)); ?>
                     </td>
                     <td><?php echo $row->reason; ?></td>
                     <td>
@@ -182,9 +182,53 @@
                 <?php }  ?>
 
             </tbody>
-        </table>
+        </table> --}}
+
+        <tbody>
+            @foreach ($my_overtimes as $row)
+            {{-- {{ dd($row) }} --}}
+                <tr id="domain{{ $row->SNo }}">
+                    <td width="1px">{{ $row->SNo }}</td>
+                    <td>{{ date('d-m-Y', strtotime($row->applicationDATE)) }}</td>
+                    <td>
+                        @foreach($employees as $mng)
+                            @if($row->line_manager == $mng->emp_id)
+                                {{ $mng->fname }} {{ $mng->mname }} {{ $mng->lname }}
+                            @endif
+                        @endforeach
+                    </td>
+                    <td>
+                        <b>Duration:</b> {{ $row->totoalHOURS }} Hrs.<br>
+                        <b>From:</b> {{ $row->time_in }} <b> To </b> {{ $row->time_out }}
+                    </td>
+                    <td>{{ $row->reason }}</td>
+                    <td>
+                        <div id="status{{ $row->eoid }}">
+                            @if($row->status==0)
+                                <span class="badge bg-secondary">REQUESTED</span>
+                            @elseif($row->status==1)
+                                <span class="badge bg-info">RECOMMENDED</span>
+                            @elseif($row->status==2)
+                                <span class="badge bg-success">APPROVED</span>
+                            @elseif($row->status==3)
+                                <i style="color:red" class="ph-paper-plane-tilt"></i>
+                            @endif
+                        </div>
+                    </td>
+                    <td class="options-width">
+                        @if($row->status==0 || $row->status==3)
+                            <a href="javascript:void(0)" onclick="cancelOvertime({{ $row->eoid }})" title="Cancel overtime">
+                                <button type="button" class="btn btn-danger btn-xs"><i class="ph-x"></i></button>
+                            </a>
+                        @endif
+                    </td>
+                </tr>
+            @endforeach
+        </tbody>
+
+
     </div>
-    @endcan
+    {{-- @endcan --}}
     {{-- / --}}
 
 </div>

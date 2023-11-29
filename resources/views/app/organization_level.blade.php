@@ -69,7 +69,7 @@
                                         </td>
                                         <?php } ?>
                                     </tr>
-                                    <?php $SNo++; } //} 
+                                    <?php $SNo++; } //}
                                     ?>
                                 </tbody>
                             </table>
@@ -122,13 +122,11 @@
                                         <a href="{{ route('flex.organization_level_info', [$row->id]) }}"
                                             class="btn btn-main btn-sm" title="Edit {{ $row->name }}">
                                             <i class="ph-note-pencil"></i></a>
-        
-                                        <button type="button" id="edit" onclick="editOvertime({{ $row->id }})"
-                                            class="btn btn-danger btn-sm edit_permission_btn" data-toggle="modal" title="Delete {{ $row->name }}"
 
-                                            {{-- data-id="{{ $row->id }}"
-                                            data-name="{{ $row->name }}" --}}>
-                                            <i class="ph-trash"></i> 
+                                        <button type="button" onclick="deleteOrganizationLevel({{ $row->id }})"
+                                            class="btn btn-danger btn-sm" data-toggle="modal"
+                                            title="Delete {{ $row->name }}">
+                                            <i class="ph-trash"></i>
                                         </button>
                                     </td>
                                     {{-- <td><a href="{{ route('flex.organization_level_info',base64_encode($row->id))}}" class="btn btn-perfrom">View</a>
@@ -138,7 +136,7 @@
                                     </td> --}}
                                     {{-- <td><span class="badge bg-success bg-opacity-10 text-success">Active</span></td> --}}
                                     <td class="text-center">
-                                        
+
                                     </td>
                                 </tr>
                             @endforeach
@@ -212,10 +210,84 @@
             </div>
         </div>
     </div>
-
-
-
-
     <!-- /page content -->
+    <div class="modal fade bd-example-modal-sm" data-backdrop="static" data-keyboard="false" id="delete" tabindex="-1"
+        role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog modal-dialog-centered modal-sm" role="document">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <div id="message"></div>
+                </div>
+
+                <div class="row mb-4">
+                    <div class="col-sm-4"></div>
+
+                    <div class="col-sm-6">
+                        <button type="button" class="btn btn-warning btn-sm" data-dismiss="modal">No</button>
+                        <button type="button" id="yes_delete" class="btn btn-main btn-sm">Yes</button>
+                    </div>
+
+                    <div class="col-sm-2"></div>
+                </div>
+            </div>
+        </div>
+    </div>
 @endsection
+@push('footer-script')
+    <script>
+        function deleteOrganizationLevel(id) {
+            const message = "Are you sure you want to DELETE this level?";
+            $('#delete').modal('show');
+            $('#delete').find('.modal-body #message').text(message);
+
+            var id = id;
+            $("#yes_delete").click(function() {
+                $('#hide' + id).show();
+
+                $.ajax({
+                    url: "<?php echo url('flex/deleteOrganizationLevel'); ?>/" + id,
+                    success: function(data) {
+                        // success :function(result){
+                        // $('#alert').show();
+                        var data = JSON.parse(data);
+                        if (data.status == 'OK') {
+                            // alert("Record Deleted Sussessifully!");
+                            $('#domain' + id).hide();
+                            $('#delete').modal('hide');
+
+                            // notify('Department deleted successfuly!', 'top', 'right', 'success');
+
+                            new Noty({
+                                text: 'Organization Level is Deleted.',
+                                type: 'success'
+                            }).show();
+
+                            // $('#feedBackTable').fadeOut('fast', function(){
+                            // $('#feedBackTable').fadeIn('fast').html(data.message);
+                            // });
+                            setTimeout(function() {
+                                location.reload();
+                            }, 1000);
+
+                        } else if (data.status != 'SUCCESS') {
+                            $('#delete').modal('hide');
+
+                            new Noty({
+                                text: 'Organization Level not deleted.',
+                                type: 'warning'
+                            }).show();
+
+                            //   notify('Department not deleted!', 'top', 'right', 'danger');
+                            // alert("Property Not Deleted, Error In Deleting");
+                        }
+                    }
+
+                });
+            });
+            // if (confirm("Are You Sure You Want To Delete This Department") == true) {
+            //
+            // }
+        }
+    </script>
+@endpush
 @include('organisation.department.inc.add-level')

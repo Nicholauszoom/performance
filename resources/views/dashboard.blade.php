@@ -22,39 +22,7 @@
         $local_employee = $row->local_employee;
     }
 
-    foreach ($taskline as $row) {
-        $all = $row->ALL_TASKS;
-        $completed = $row->COMPLETED;
-    }
-
-    foreach ($taskstaff as $row) {
-        $allstaff = $row->ALL_TASKSTAFF;
-        $allstaff_completed = $row->COMPLETEDSTAFF;
-    }
-
-    foreach ($payroll_totals as $row) {
-        $salary = $row->salary;
-        $net_less = $row->takehome_less;
-        $pension_employee = $row->pension_employee;
-        $pension_employer = $row->pension_employer;
-
-        $medical_employee = $row->medical_employee;
-        $medical_employer = $row->medical_employer;
-        $sdl = $row->sdl;
-        $wcf = $row->wcf;
-        $allowances = $row->allowances;
-        $taxdue = $row->taxdue;
-        $meals = $row->meals;
-    }
-    foreach ($total_loans as $key) {
-        $paid = $key->paid;
-        $remained = $key->remained;
-    }
-
-    foreach ($take_home as $row) {
-        $net = $row->takehome - $arrears;
-    }
-
+    
     ?>
 
 
@@ -130,7 +98,7 @@
                         <a href="{{ route('flex.download_payslip') }}" style="text-decoration:none;"
                             title="Click here to view your Loans">
                             <h1 class="text-main"> <i class="ph-money panel-text"></i></h1>
-                            <h4 class="panel-footer">Salary Slip <i class="ph-arrow-circle-right"></i></h4>
+                            <h4 class="panel-footer">Pay Slip <i class="ph-arrow-circle-right"></i></h4>
 
                         </a>
                     </div>
@@ -210,7 +178,7 @@
 
 
 
-              
+
             </section>
         @endcan
 

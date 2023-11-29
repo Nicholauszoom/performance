@@ -1,37 +1,37 @@
 <?php
 
 namespace App\Http\Controllers\Import;
-use App\Models\BankLoan;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Auth;
-use Maatwebsite\Excel\Facades\Excel;
+
 use App\Exports\BankLoanTemplateExport;
+use App\Http\Controllers\Controller;
+use App\Models\BankLoan;
 use App\Models\Payroll\FlexPerformanceModel;
-
-
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Facades\Excel;
 
 class PensionPayslipController extends Controller
 {
     protected $flexperformance_model;
 
-
     public function __construct(FlexPerformanceModel $flexperformance_model)
     {
         $this->flexperformance_model = $flexperformance_model;
     }
-  /**
-    * @return \Illuminate\Support\Collection
-    */
+
+    /**
+     * @return
+     */
     public function index()
     {
-       // $loans = BankLoan::orderBy('created_at','DESC')->get();
-       $data['month_list'] = $this->flexperformance_model->payroll_month_list();
+        // $loans = BankLoan::orderBy('created_at','DESC')->get();
+        $data["parent"] = "Payroll";
+        $data["child"] = "Receipt";
+        $data['month_list'] = $this->flexperformance_model->payroll_month_list();
 
-        return view('payroll.pension_receipt',$data);
+        return view('payroll.pension_receipt', $data);
     }
-
 
     /**
      * Store a newly created resource in storage.
@@ -43,62 +43,60 @@ class PensionPayslipController extends Controller
     {
         request()->validate(
             [
-            'employee_id' => 'required|max:255',
-            'product' => 'required',
-            'amount' => 'required',
-            'created_at' => 'required',
-            'date'=>'required'
-             ]
-            );
+                'employee_id' => 'required|max:255',
+                'product' => 'required',
+                'amount' => 'required',
+                'created_at' => 'required',
+                'date' => 'required',
+            ]
+        );
 
-            $loan = new BankLoan();
-            $loan->employee_id=$request->employee_id;
-            $loan->product=$request->product;
-            $loan->amount=$request->amount;
-            $loan->created_at=$request->created_at;
-            $loan->added_by=Auth::user()->id;
-            $loan->date=$request->date;
+        $loan = new BankLoan();
+        $loan->employee_id = $request->employee_id;
+        $loan->product = $request->product;
+        $loan->amount = $request->amount;
+        $loan->created_at = $request->created_at;
+        $loan->added_by = Auth::user()->id;
+        $loan->date = $request->date;
 
+        dd($request->date);
+        $loan->save();
 
-            dd($request->date);
-            $loan->save();
-
-            return response()->json(['status' => "success"]);
+        return response()->json(['status' => "success"]);
     }
 
     /**
-    * @return \Illuminate\Support\Collection
-    */
+     * @return \Illuminate\Support\Collection
+     */
     public function export()
     {
         return Excel::download(new BankLoanExport, 'loans.xlsx');
     }
 
     /**
-    * @return \Illuminate\Support\Collection
-    */
+     * @return \Illuminate\Support\Collection
+     */
     public function template()
     {
         return Excel::download(new BankLoanTemplateExport, 'loans_template.xlsx');
     }
 
+    public function import(Request $request)
+    {
 
-    public function import(Request $request) {
+        $date = $request->date;
+        $receipt = $request->receipt;
+        $payroll_date = $request->payroll_date;
 
-      $date = $request->date;
-      $receipt = $request->receipt;
-      $payroll_date = $request->payroll_date;
+        $data = DB::table('payroll_logs')->where("payroll_date", $payroll_date)->update(['receipt_no' => $receipt, 'receipt_date' => $date]);
 
-      $data = DB::table('payroll_logs')->where("payroll_date",$payroll_date)->update(['receipt_no'=>$receipt,'receipt_date'=>$date]);
+        if ($data) {
+            return redirect()->back()->with('success', 'Pension Slip Updated successfully!');
 
+        } else {
+            return redirect()->back()->with('error', 'Error! Not Updated Succesfull');
 
-     if($data){
-        return redirect()->back()->with('success', 'Pension Slip Updated successfully!');
+        }
 
-     }else{
-        return redirect()->back()->with('errror', 'Error! Not Updated Succesfull');
-
-     }
-
-     }
+    }
 }

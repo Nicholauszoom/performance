@@ -21,7 +21,7 @@
       <div class="d-flex justify-content-between">
         <h4 class="lead text-warning ">List of Employees</h4>
 
-        
+
         @can('add-employee')
           <a href="{{ url('/flex/addEmployee') }}" class="btn btn-main">
             <i class="ph-plus me-2"></i> Register New Employee
@@ -34,7 +34,7 @@
     <table id="datatable" class="table table-striped table-bordered datatable-basic">
       <thead>
         <tr>
-          <th>No.</th>
+          <th>Payroll No</th>
           <th>Name</th>
           <th>Gender</th>
           <th>Position</th>
@@ -50,7 +50,7 @@
       <tbody>
         @foreach ($employee as $row)
         <tr>
-            <td width="1px">{{ $row->SNo }}</td>
+            <td width="1px">{{ $row->emp_id }}</td>
 
             <td><a title="More Details"  href="{{ route('flex.userprofile', base64_encode($row->emp_id)) }}"> {{ $row->NAME }} </a></td>
             <td>{{ $row->gender }}</td>
