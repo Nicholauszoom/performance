@@ -29,11 +29,11 @@ $payrollState = $payroll_state;
 
     @endphp
 
-    <div class="card border-top border-top-width-3 border-top-main border-bottom-main rounded-0 border-0 shadow-none">
-        <div class="card-header border-0">
+    <div class="card border-bottom-main rounded-0 border-0 shadow-none">
+
             @include('payroll.payroll_info_buttons')
 
-        </div>
+
 
 
         <div class="card-body">

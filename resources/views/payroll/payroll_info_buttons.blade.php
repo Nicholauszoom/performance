@@ -1,6 +1,6 @@
 <h3 class="me-4 text-center">Payroll Review For : {{ date('F, Y', strtotime($payroll_date)) }}
 </h3>
-<div class="d-flex">
+<div class="d-flex justify-content-center align-items-center">
     @if ($payrollState != 0)
         <a
             href="{{ route('reports.get_reconsiliation_summary', ['payrolldate' => $payroll_date, 'payrollState' => $payroll_state,'type'=>1]) }}">

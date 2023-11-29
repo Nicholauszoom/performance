@@ -27,12 +27,11 @@
 
 @endphp
 
-<div class="card border-top border-top-width-3 border-top-main border-bottom-main rounded-0 border-0 shadow-none">
-    <div class="card-header border-0">
+<div class="card border-bottom-main rounded-0 border-0 shadow-none">
 
        @include('payroll.payroll_info_buttons')
 
-    </div>
+
 
 
     <div class="card-body">
@@ -108,7 +107,7 @@
                                     foreach($allowance_categories as $category){
 
                                         $categories_total["category".$category->id]=0;
-                                        
+
                                     }
                                     // dd($summary);
                                 foreach ($summary as $row){
@@ -136,11 +135,11 @@
 
                                     $others += round($row->deductions,2);
 
-                                    
 
-                                    
 
-                                    
+
+
+
 
 
                                 ?>
@@ -165,7 +164,7 @@
                                     <td class="text-end">{{ number_format($row->salary, 2) }}</td>
 
                                     <td class="text-end">{{ number_format($row->overtime, 2) }}</td>
-                                    
+
                                     @foreach($allowance_categories as $category)
 
                                     @php
@@ -176,13 +175,13 @@
 
 
                                     @endphp
-                                     
+
                                     <td class="text-end">{{ number_format($row->$category_id, 2) }}</td>
 
                                     @endforeach
 
-                                    
-                                    
+
+
 
                                     <td class="text-end">{{ number_format($row->other_payments, 2) }}</td>
 
@@ -296,9 +295,9 @@
                                     <td class="text-end"><b><b>{{ number_format($total_salary, 2) }}</b></b></td>
                                     <td class="text-end"><b><b>{{ number_format($total_overtime, 2) }}</b></b></td>
 
-                                    
+
                                     @foreach($allowance_categories as $category)
-                                    
+
                                     <td class="text-end"><b><b>{{ number_format($categories_total["category".$category->id], 2) }}<b></b></td>
 
                                     @endforeach
