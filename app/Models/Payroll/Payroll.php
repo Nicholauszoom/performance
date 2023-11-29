@@ -25,9 +25,10 @@ class Payroll extends Model
     }
     public function payroll_month_list()
     {
-        $query = 'SELECT DISTINCT payroll_date FROM payroll_logs where payroll_date > "2022-12-31" ORDER BY payroll_date DESC';
+        $query = 'SELECT DISTINCT payroll_date FROM payroll_logs WHERE payroll_date > \'2022-12-31\' ORDER BY payroll_date DESC';
         return DB::select(DB::raw($query));
     }
+
     public function payroll_year_list()
     {
         $query = "SELECT DISTINCT DATE_FORMAT(`payroll_date`,'%Y') as year  FROM payroll_logs ORDER BY DATE_FORMAT(`payroll_date`,'%Y') DESC";
