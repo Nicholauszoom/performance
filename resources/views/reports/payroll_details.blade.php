@@ -88,8 +88,8 @@
                             <th class="text-end" style="margin-bottom: 30px;"><b>Basic Salary</b></th>
                             <th class="text-end" style="margin-bottom: 30px;"><b>Overtime</b></th>
                             <th class="text-end" style="margin-bottom: 30px;"><b>Response Allowance</b></th>
-                            <th class="text-end" style="margin-bottom: 30px;"><b>House Allowance</b></th>
-                            <th class="text-end" style="margin-bottom: 30px;"><b>Arrears</b></th>
+                            {{-- <th class="text-end" style="margin-bottom: 30px;"><b>House Allowance</b></th> --}}
+                            {{-- <th class="text-end" style="margin-bottom: 30px;"><b>Arrears</b></th> --}}
                             <th class="text-end" style="margin-bottom: 30px;"><b>Other Payment</b></th>
                             <th class="text-end" style="margin-bottom: 30px;"><b>Gross Salary</b></th>
                             <th class="text-end" style="margin-bottom: 30px;"><b>Tax Benefit</b></th>
@@ -125,7 +125,7 @@
                                     $total_allowance = round($total_allowance + $row->allowances,2) ;
                                     $total_arrears = round($total_arrears + $row->arrears_allowance,2);
                                     $total_overtime = round($total_overtime +$row->overtime,2);
-                                    $total_house_rent = round($total_house_rent + $row->house_rent,2);
+                                    // $total_house_rent = round($total_house_rent + $row->house_rent,2);
                                     $total_others = round($total_others + $row->other_payments,2) ;
                                     $total_taxs += round($row->taxdue,2);
 
@@ -135,7 +135,7 @@
                                     $total_wcf = round($total_wcf + $row->wcf,2);
                                     $total_taxable_amount += round($row->salary + $row->allowances-$row->pension_employer,2);
                                     $total_loans = round($total_loans + $row->total_loans,2);
-                                    $total_teller_allowance += round($row->teller_allowance,2);
+                                    // $total_teller_allowance += round($row->teller_allowance,2);
 
                                     $others += round($row->deductions,2);
 
@@ -162,8 +162,8 @@
                             <td class="text-end">{{ number_format($row->overtime, 2) }}</td>
 
 
-                            <td class="text-end">{{ number_format($row->teller_allowance, 2) }}</td>
-                            <td class="text-end">{{ number_format($row->house_rent, 2) }}</td>
+                            {{-- <td class="text-end">{{ number_format($row->teller_allowance, 2) }}</td> --}}
+                            {{-- <td class="text-end">{{ number_format($row->house_rent, 2) }}</td> --}}
 
                             <td class="text-end">{{ number_format($row->arrears_allowance, 2) }}</td>
 

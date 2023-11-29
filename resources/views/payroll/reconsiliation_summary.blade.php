@@ -27,21 +27,21 @@
                 <div class="col-md-12 col-sm-12 col-xs-12">
                     <h4 class="me-4 text-center">Payroll Reconciliation Summary</h4>
                     @if ($payrollState == 0)
-                    <a href="{{ route('reports.get_reconsiliation_summary1', ['payrolldate' => $payroll_date,'payrollState'=>$payrollState,'type'=>2]) }}" target="blank">
+                    <a href="{{ route('reports.payrollReconciliationDetails', ['payrolldate' => $payroll_date,'payrollState'=>$payrollState,'type'=>2]) }}" target="blank">
                         <button type="button" name="print" value="print" class="btn btn-main btn-sm"> PDF</button>
                     </a>
                     @else
-                    <a href="{{ route('reports.get_reconsiliation_summary', ['payrolldate' => $payroll_date,'payrollState'=>$payrollState,'type'=>2]) }}" target="blank">
+                    <a href="{{ route('payroll.get_reconsiliation_summary', ['payrolldate' => $payroll_date,'payrollState'=>$payrollState,'type'=>2]) }}" target="blank">
                         <button type="button" name="print" value="print" class="btn btn-main btn-sm"> PDF</button>
                     </a>
                     @endif
 
-                    <table class="table" id="reports" style="font-size:14px;  ">
+                    <table class="table datatable-button-html5-columns" id="reports" style="font-size:14px;  ">
                         <thead>
                             <tr>
                                 <th><b>RefNo</b></th>
                                 <th><b>Desc</b></th>
-                                <th style=""><b>Last Month</b></th>
+                                <th><b>Last Month</b></th>
                                 <th><b>This Month</b></th>
                                 <th><b>Amount</b></th>
                                 <th><b>Count</b></th>
