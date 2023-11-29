@@ -487,6 +487,8 @@ class ReportController extends Controller
         $date = $request->payrolldate;
         $data['summary'] = $this->reports_model->get_payroll_summary($date);
         $data['termination'] = $this->reports_model->get_termination($date);
+        $data['allowance_categories']=$this->flexperformance_model->allowance_category();
+
 
         $payrollMonth = $date;
         $pensionFund = 2;
