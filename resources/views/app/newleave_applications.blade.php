@@ -43,7 +43,7 @@
                             ->where('level3', $line_manager)
                             ->first();
 
-                        $approval = App\Models\LeaveApproval::where('empID', $item->empID)->first();
+                        $approval = App\Models\LeaveApproval::where('empID', $item->empID)->firstOrNew();
 
                         // $level2=$approve->level2;
                         // $level3=$approve->level3;
