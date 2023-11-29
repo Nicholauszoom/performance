@@ -25,6 +25,9 @@ use Illuminate\Support\Facades\Session;
 use App\Models\Payroll\FlexPerformanceModel;
 
 use Illuminate\Support\Facades\Notification;
+use App\Notifications\EmailRequests;
+use Symfony\Component\Mailer\Exception\TransportException;
+
 
 class LeaveController extends Controller
 {
@@ -990,11 +993,16 @@ return response(['msg'=>$msg],400);
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    
+  
+    
+     public function store(Request $request)
     {
      
             //For Gender 
             $gender=auth()->user()->gender;
+            $start = $request->start;
+            $end = $request->end;
             if($gender=="Male"){$gender=1; }else { $gender=2;  }
             // for checking balance
             $today = date('Y-m-d');
@@ -1002,34 +1010,19 @@ return response(['msg'=>$msg],400);
             $year = $arryear[0];
             $nature  = $request->nature;
             $empID  =auth()->user()->emp_id;
-    
-            // Checking used leave days based on leave type and sub type
-            $leaves=Leaves::where('empID',$empID)->where('nature',$nature)->where('sub_category',$request->sub_cat)->whereYear('created_at',date('Y'))->sum('days');
-            $leave_balance=$leaves;
-            // For Leave Nature days
-            $type=LeaveType::where('id',$nature)->first();
-            $max_leave_days= $type->max_days;
-    
-            // Annual leave accurated days
-    
-            $annualleaveBalance = $this->attendance_model->getLeaveBalance(auth()->user()->emp_id,auth()->user()->hire_date, date('Y-m-d'));
-            // $annualleaveBalance =10;
-            // dd($annualleaveBalance);
-           
-            // For  Requested days
-            $start = $request->start;
-            $end = $request->end;
 
             $pendingLeave = Leaves::where('empId', $empID)
             ->where('state', 1)
+            ->whereDate('start', '<=', $start)
             ->whereDate('end', '>=', $start)
             ->first();
 
-        $approvedLeave = Leaves::where('empId', $empID)
+            $approvedLeave = Leaves::where('empId', $empID)
             ->where('state', 0)
-            ->whereDate('end', '>=', $start)
+            ->whereDate('start', '<=', $start)
             ->whereDate('end', '>=', $start)
             ->first();
+
 
         if ($pendingLeave || $approvedLeave) {
             $message = 'You have a ';
@@ -1046,6 +1039,48 @@ return response(['msg'=>$msg],400);
 
             return response([ 'msg'=>$message ],202);
         }
+    
+            // Checking used leave days based on leave type and sub type
+             $leaves = Leaves::where('empID', $empID)->where('nature', $nature)->where('sub_category', $request->sub_cat)->whereNot('reason', 'Automatic applied!')->whereYear('created_at', date('Y'))->sum('days');
+            $leave_balance=$leaves;
+            // For Leave Nature days
+            $type=LeaveType::where('id',$nature)->first();
+            $max_leave_days= $type->max_days;
+    
+            // Annual leave accurated days
+            $employeeHiredate = explode('-', Auth::user()->hire_date);
+            $employeeHireYear = $employeeHiredate[0];
+            $employeeDate = '';
+
+            if ($employeeHireYear == $year) {
+                $employeeDate = Auth::user()->hire_date;
+
+            } else {
+                $employeeDate = $year . ('-01-01');
+            }
+    
+            $annualleaveBalance = $this->attendance_model->getLeaveBalance(auth()->user()->emp_id,auth()->user()->hire_date, date('Y-m-d'));
+            // $annualleaveBalance =10;
+            // dd($annualleaveBalance);
+            if ($nature == 1) {
+              $holidays = SysHelpers::countHolidays($start, $end);
+              $different_days = SysHelpers::countWorkingDays($start, $end) - $holidays;
+
+          } else {
+
+              // $holidays=SysHelpers::countHolidays($start,$end);
+              // $different_days = SysHelpers::countWorkingDays($start,$end)-$holidays;
+              $different_days = SysHelpers::countWorkingDaysForOtherLeaves($start, $end);
+
+              // $startDate = Carbon::parse($start);
+              // $endDate = Carbon::parse($end);
+              // $different_days = $endDate->diffInDays($startDate);
+          }
+           
+            // For  Requested days
+           
+
+
             
     
             $date1=date('d-m-Y', strtotime($start));
@@ -1060,10 +1095,10 @@ return response(['msg'=>$msg],400);
              $total_remaining=$leaves+$different_days;
     
             // For Working days
-            $d1 = new DateTime (Auth::user()->hire_date);
+            $d1 = new DateTime ($employeeDate);
             $d2 = new DateTime();
             $interval = $d2->diff($d1);
-            $day=$interval->days;
+            $day = SysHelpers::countWorkingDays($d1, $d2);
             
   
             // For Employees with less than 12 months of employement
@@ -1105,10 +1140,9 @@ return response(['msg'=>$msg],400);
                     $leaves->application_date = date('Y-m-d');
                   // START
                   if ($request->hasfile('image')) {
-    
                   $newImageName = $request->image->hashName();
                   $request->image->move(public_path('storage/leaves'), $newImageName);
-                  $leaves->attachment =  $newImageName;
+                  $leaves->attachment= $newImageName;
                   }
                  
               
@@ -1131,13 +1165,13 @@ return response(['msg'=>$msg],400);
                     );
      
                     try {
-     
+                      $msg=$type_name." Leave Request is submitted successfully!";
                      Notification::route('mail', $linemanager_data['email'])->notify(new EmailRequests($email_data));
+                     return response( [ 'msg'=>$msg ],202 );
      
                  } catch (Exception $exception) {
                      $msg=$type_name." Leave Request  Has been Requested But Email is not sent(SMTP Problem)!";
-                       return $url->with('msg', $msg);
-     
+                     return response( [ 'msg'=>$msg ],202 );
                  }
 
                     return response( [ 'msg'=>$msg ],202 );
@@ -1183,7 +1217,7 @@ return response(['msg'=>$msg],400);
 
 
                       
-                      $annualleaveBalance = $this->attendance_model->getLeaveBalance(auth()->user()->emp_id,auth()->user()->hire_date, date('Y-m-d'));
+                      $annualleaveBalance = $this->attendance_model->getLeaveBalance(auth()->user()->emp_id,$employeeDate, date('Y-m-d'));
     
                       // checking annual leave balance
                       if($different_days < $annualleaveBalance)
@@ -1217,38 +1251,34 @@ return response(['msg'=>$msg],400);
                         if ( $paternity) {
                           $d1 = $paternity->created_at;
                           $d2 = new DateTime();
-                          $interval = $d2->diff($d1);
-                          $range=$interval->days;
+                          $interval = SysHelpers::countWorkingDaysForOtherLeaves($d1, $d2);
+                          $range = SysHelpers::countWorkingDaysForOtherLeaves($d1, $d2);
     
                           // dd($total_leave_days);
-                          $month=$interval->format('%m months');
-                          if ($month <= 4 ) {
-                            $max_days=7;
-                            if($total_leave_days < $max_days)
-                            {
-                              if($different_days<=$max_days)
-                              {
-                                // dd('wait');
-                                $leaves->days = $different_days;
-                              }
-                              else
-                              {
-                                $leaves->days = $max_days;
-                              }
-                             
+                          $month = SysHelpers::countWorkingDaysForOtherLeaves($d1, $d2);
+                          if ($month < 112) {
+                            $max_days = 7;
+                            if ($total_leave_days < $max_days) {
+                                // Case reqested days are less than the balance
+                                if ($different_days <= $max_days) {
+                                    $leaves->days = $different_days;
+                                }
+                                // Case requested days are more than the balance
+                                else {
+                                    $msg = "Sorry, You have Insufficient  Leave Days Balance";
+                                    return response( [ 'msg'=>$msg ],202 );
+                                }
+
+                            } else {
+
+                                $leave_type = LeaveType::where('id', $nature)->first();
+                                $type_name = $leave_type->type;
+                                $msg = "Sorry, You have Insufficient " . $type_name . " Leave Days Balance";
+                                return response( [ 'msg'=>$msg ],202 );
+
                             }
-                            else
-                            {
-                             
-                              $leave_type=LeaveType::where('id',$nature)->first();
-                              $type_name=$leave_type->type;
-                              $msg="Sorry, You have Insufficient  Leave Days Balance".$type_name." Leave Days";
-                              return response( [ 'msg'=>$msg ],202 );
-                          
-                            
-                            }
-    
-                          }
+
+                        }
                           else
                           {
                             $max_days=10;
@@ -1261,60 +1291,49 @@ return response(['msg'=>$msg],400);
                             else
                             {
                               // $extra=$different_days-$max_days;
-                              $leaves->days = $max_days;
+                              $msg = "Sorry, You have Insufficient  Leave Days Balance";
+                               return response( [ 'msg'=>$msg ],202 );
                               // dd('You need '.$extra.' days.');
                             }
                           
                           }
                         }
                       // Incase an employee is applying for paternity for the first time
-                        else
-                        {
-                          $month=$interval->format('%m months');
-                             if ($month < 4 ) {
-                            $max_days=7;
-                            if($total_leave_days < $max_days)
-                            {
-                              if($different_days<=$max_days)
-                              {
-                                // dd('wait');
-                                $leaves->days = $different_days;
-                              }
-                              else
-                              {
-                                $leaves->days = $max_days;
-                              }
-                             
+                      else {
+                        // Checking if employee has less than 4 working months
+                        if ($day < 112) {
+                            $max_days = 7;
+                            if ($total_leave_days < $max_days) {
+                                if ($different_days <= $max_days) {
+                                    $leaves->days = $different_days;
+                                } else {
+                                    $msg = "Sorry, You have Insufficient  Leave Days Balance";
+                                    return response( [ 'msg'=>$msg ],202 );
+                                }
+
+                            } else {
+
+                                $leave_type = LeaveType::where('id', $nature)->first();
+                                $type_name = $leave_type->type;
+                                $msg = "Sorry, You have Insufficient  " . $type_name . " Leave Days Balance";
+                                return response( [ 'msg'=>$msg ],202 );
+
                             }
-                            else
-                            {
-                             
-                              $leave_type=LeaveType::where('id',$nature)->first();
-                              $type_name=$leave_type->type;
-                              $msg="Sorry, You have finished Your ".$type_name." Leave Days";
-                              return response( [ 'msg'=>$msg ],202 );
-                          
-                            
-                            }
-    
-                          }
-                          else
-                          {
-                            $max_days=10;
-    
-                            if($different_days<$max_days)
-                            {
-                              $leaves->days = $different_days;
-                            }
-                            else
-                            {
-                              // $extra=$different_days-$max_days;
-                              $leaves->days = $max_days;
-                              // dd('You need '.$extra.' days.');
-                            }
-                          
-                          }
+
                         }
+                        // For Employee with more than 4 working months
+                        else {
+                            $max_days = 10;
+
+                            if ($different_days < $max_days) {
+                                $leaves->days = $different_days;
+                            } else {
+                                $msg = "Sorry, You have Insufficient  Leave Days Balance";
+                                return response( [ 'msg'=>$msg ],202 );
+                            }
+
+                        }
+                    }
                     
                     }
                     $leaves->reason = $request->reason;
@@ -1335,6 +1354,8 @@ return response(['msg'=>$msg],400);
                     $linemanager =  LeaveApproval::where('empID',$empID)->first();
                     $linemanager_data = SysHelpers::employeeData($linemanager->level1);
                     $employee_data = SysHelpers::employeeData($empID);
+                    $leave_type = LeaveType::where('id', $nature)->first();
+                    $type_name = $leave_type->type;
                     $fullname = $linemanager_data['full_name'];
                     $email_data = array(
                         'subject' => 'Employee Leave Approval',
@@ -1346,16 +1367,14 @@ return response(['msg'=>$msg],400);
                     );
      
                     try {
-     
-                     Notification::route('mail', $linemanager_data['email'])->notify(new EmailRequests($email_data));
-     
-                 } catch (Exception $exception) {
-                     $msg=$type_name." Leave Request  Has been Requested But Email is not sent(SMTP Problem)!";
-                       return $url->with('msg', $msg);
-     
-                 }
+                      Notification::route('mail', $linemanager_data['email'])->notify(new EmailRequests($email_data));
+                  } catch (TransportException $exception) {
+                      $msg = $type_name . " Leave Request has been requested, but the email was not sent (SMTP Problem)!";
+                      return response(['msg' => $msg], 202);
+                  }
                      
                   $leave_type=LeaveType::where('id',$nature)->first();
+            
                   $type_name=$leave_type->type;
                   $msg=$type_name." Leave Request is submitted successfully!";
                   return response( [ 'msg'=>$msg ],202 );
@@ -1365,7 +1384,7 @@ return response(['msg'=>$msg],400);
     
                     $leave_type=LeaveType::where('id',$nature)->first();
                     $type_name=$leave_type->type;
-                    $msg="Sorry, You have finished Your ".$type_name." Leave Days";
+                    $msg = "Sorry, You have Insufficient " . $type_name . " Leave Days Balance";
                     return response( [ 'msg'=>$msg ],202 );
     
                   }
@@ -1395,7 +1414,7 @@ return response(['msg'=>$msg],400);
 
                      // for annual leave
                      if ($request->nature==1) {
-                      $annualleaveBalance = $this->attendance_model->getLeaveBalance(auth()->user()->emp_id,auth()->user()->hire_date, date('Y-m-d'));
+                      $annualleaveBalance = $this->attendance_model->getLeaveBalance(auth()->user()->emp_id, $employeeDate, date('Y-m-d'));
                       // checking annual leave balance
                       if($different_days < $annualleaveBalance)
                       {
@@ -1423,72 +1442,92 @@ return response(['msg'=>$msg],400);
     
                     $paternity=Leaves::where('empID',$empID)->where('nature',5)->where('sub_category',$request->sub_cat)->whereYear('created_at',date('Y'))->orderBy('created_at','desc')->first();
                     
-                    if ( $paternity) {
+                    if ($paternity) {
                       $d1 = $paternity->created_at;
                       $d2 = new DateTime();
-                      $interval = $d2->diff($d1);
-                      
-                      $month=$interval->format('%m');
-    
-                        if ($month <= 4 ) {
-                
-                            $max_days=7;
-                          
-                            if($total_leave_days <= $max_days)
-                            {
-                              if($different_days<$max_days)
-                              {
-                                $leaves->days = $different_days;
+                      $interval = SysHelpers::countWorkingDaysForOtherLeaves($d1, $d2);
+
+                      $month = $interval;
+                      // For Employee With Less Than 4 month of service and last application
+                      if ($month < 112) {
+
+                          $max_days = 7;
+                          // Case Requested days are less than max-days
+                          if ($total_leave_days <= $max_days) {
+                              if ($different_days < $max_days) {
+                                  $leaves->days = $different_days;
+                              } else {
+                                  $msg = "Sorry, You have Insufficient Leave Days Balance";
+                                  return response( [ 'msg'=>$msg ],202 );
                               }
-                              else
-                              {
-                                $leaves->days = $max_days;
-                              }
-                             
-                            }
-                            // case All Paternity days have been used up
-                            else
-                            {
-    
-                              $excess=$total_leave_days-$max_days;
-                              // dd($excess);
-                              // dd('You requested for '.$excess.' extra days!');
-                            }
-                            
-                          }
-                          
-                        else
-                        {
-                          $max_days=10;
-                          if($total_leave_days <= $max_days)
-                          {
-                            if($different_days<$max_days)
-                            {
-                              $leaves->days = $different_days;
-                            }
-                            else
-                            {
-                              $leaves->days = $max_days;
-                            }
-                           
+
                           }
                           // case All Paternity days have been used up
-                          else
-                          {
-    
-                            $excess=$total_leave_days-$max_days;
-                            // dd($excess);
-                            // dd('You requested for '.$excess.' extra days!');
+                          else {
+
+                              $msg = "Sorry, You have Insufficient " . $type_name . " Leave Days Balance4";
+                              return response( [ 'msg'=>$msg ],202 );
                           }
+
+                      }
+                      // For Employee who as attained more than 4 working days
+                      else {
+                          $max_days = 10;
+                          if ($total_leave_days <= $max_days) {
+                              if ($different_days < $max_days) {
+                                  $leaves->days = $different_days;
+                              } else {
+                                  $msg = "Sorry, You have Insufficient Leave Days Balance";
+                                  return response( [ 'msg'=>$msg ],202 );
+                              }
+
+                          }
+                          // case All Paternity days have been used up
+                          else {
+
+                              $excess = $total_leave_days - $max_days;
+                              // dd($excess);
+                              $msg = 'You requested for ' . $excess . ' extra days!';
+
+                              return response( [ 'msg'=>$msg ],202 );
+                          }
+                      }
+                  }
+                  else {
+                    // Checking if employee has less than 4 working months
+                    if ($day < 112) {
+                        $max_days = 7;
+                        if ($total_leave_days < $max_days) {
+                            if ($different_days <= $max_days) {
+                                $leaves->days = $different_days;
+                            } else {
+                                $msg = "Sorry, You have Insufficient  Leave Days Balance";
+                                return response( [ 'msg'=>$msg ],202 );
+                            }
+
+                        } else {
+
+                            $leave_type = LeaveType::where('id', $nature)->first();
+                            $type_name = $leave_type->type;
+                            $msg = "Sorry, You have Insufficient  " . $type_name . " Leave Days Balance";
+                            return response( [ 'msg'=>$msg ],202 );
+
                         }
-                      }
-                      else
-                      {
-                        // $max_days=10;
-                        $leaves->days = $different_days;
-                        // dd('wait');
-                      }
+
                     }
+                    // For Employee with more than 4 working months
+                    else {
+                        $max_days = 10;
+
+                        if ($different_days < $max_days) {
+                            $leaves->days = $different_days;
+                        } else {
+                            $msg = "Sorry, You have Insufficient  Leave Days Balance";
+                            return response( [ 'msg'=>$msg ],202 );
+                        }
+
+                    }
+                }
                
                 
                 
@@ -1529,28 +1568,30 @@ return response(['msg'=>$msg],400);
  
              } catch (Exception $exception) {
                  $msg=$type_name." Leave Request  Has been Requested But Email is not sent(SMTP Problem)!";
-                   return $url->with('msg', $msg);
+                 return response( [ 'msg'=>$msg ],202 );
  
              }
     
               $msg=$type_name." Leave Request is submitted successfully!";
               return response( [ 'msg'=>$msg ],202 );
               }
-              else
-              {
-                $leave_type=LeaveType::where('id',$nature)->first();
-                $type_name=$leave_type->type;
-                $msg="Sorry, You have finished Your ".$type_name." Leave Days";
-                return response( [ 'msg'=>$msg ],202 );
-    
-              }
+              
+             
      
               
+            } else
+            {
+              $leave_type=LeaveType::where('id',$nature)->first();
+              $type_name=$leave_type->type;
+              $msg = "Sorry, You have Insufficient " . $type_name . " Leave Days Balance";
+              return response( [ 'msg'=>$msg ],202 );
+  
             }
     
           
     
     }
+  }
 
     /**
      * Display the specified resource.
@@ -1656,6 +1697,720 @@ return response(['msg'=>$msg],400);
            
         ],200 );
     }
+
+    public function store2(Request $request){
+      $myurl="";
+     $this->saveLeaveMain($request,$myurl);
+  }
+
+  public function saveLeaveMain($request,$return_parameter)
+  {
+   
+      request()->validate(
+          [
+
+              // start of name information validation
+
+              //'mobile' => 'required|numeric',
+              // 'leave_address' => 'nullable|alpha',
+              // 'reason' => 'required|alpha',
+
+          ]);
+      $start = $request->start;
+      $end = $request->end;
+      // For Redirection Url
+      $url = redirect('flex/attendance/my-leaves');
+
+      $employeee = EMPL::where('emp_id', Auth::user()->emp_id)->first();
+
+      $linemanager = $employeee->line_manager;
+      $leaveApproval = new LeaveApproval();
+      $leaveApproval = $leaveApproval::where('empID', Auth::user()->emp_id)->first();
+
+      if(!$leaveApproval){
+         $leaveApproval =  new LeaveApproval();
+         $leaveApproval->empID = Auth::user()->emp_id;
+         $leaveApproval->level1 = $linemanager;
+         $leaveApproval->save();
+      }
+
+      if ($start <= $end) {
+
+          //For Gender
+          $gender = Auth::user()->gender;
+          if ($gender == "Male") {$gender = 1;} else { $gender = 2;}
+          // for checking balance
+          $today = date('Y-m-d');
+          $arryear = explode('-', $today);
+          $year = $arryear[0];
+          $nature = $request->nature;
+          $empID = Auth::user()->emp_id;
+
+          // Check if there is a pending leave in the given number of days (start,end)
+          // $pendingLeave = Leaves::where('empId', $empID)
+          //     ->where('state', 1)
+          //     ->whereDate('end', '>=', $start)
+          //     ->first();
+          $pendingLeave = Leaves::where('empId', $empID)
+          ->where('state', 1)
+          ->whereDate('start', '<=', $start)
+          ->whereDate('end', '>=', $start)
+          ->first();
+
+          $approvedLeave = Leaves::where('empId', $empID)
+          ->where('state', 0)
+          ->whereDate('start', '<=', $start)
+          ->whereDate('end', '>=', $start)
+          ->first();
+
+
+          if ($pendingLeave || $approvedLeave) {
+              $message = 'You have a ';
+
+              if ($pendingLeave) {
+                  $message .= 'pending ' . $pendingLeave->type->type . ' application ';
+              }
+
+              if ($approvedLeave) {
+                  $message .= ($pendingLeave ? 'and ' : '') . 'approved ' . $approvedLeave->type->type . ' application ';
+              }
+
+              $message .= 'within the requested leave time';
+            if($return_parameter=="webUrl"){
+              return $url->with('error', $message);
+            }else{
+              return response([ 'msg'=>$message ],202);
+            }
+              
+          }
+
+          // Checking used leave days based on leave type and sub type
+          $leaves = Leaves::where('empID', $empID)->where('nature', $nature)->where('sub_category', $request->sub_cat)->whereNot('reason', 'Automatic applied!')->whereYear('created_at', date('Y'))->sum('days');
+
+          $leave_balance = $leaves;
+          // For Leave Nature days
+          $type = LeaveType::where('id', $nature)->first();
+          $max_leave_days = $type->max_days;
+
+          //$max_leave_days = 10000;
+
+          $employeeHiredate = explode('-', Auth::user()->hire_date);
+          $employeeHireYear = $employeeHiredate[0];
+          $employeeDate = '';
+
+          if ($employeeHireYear == $year) {
+              $employeeDate = Auth::user()->hire_date;
+
+          } else {
+              $employeeDate = $year . ('-01-01');
+          }
+
+          // Annual leave accurated days
+          $annualleaveBalance = $this->attendance_model->getLeaveBalance(Auth::user()->emp_id, Auth::user()->hire_date, date('Y-m-d'));
+          // dd($annualleaveBalance);
+          // For  Requested days
+          if ($nature == 1) {
+              $holidays = SysHelpers::countHolidays($start, $end);
+              $different_days = SysHelpers::countWorkingDays($start, $end) - $holidays;
+
+          } else {
+
+              // $holidays=SysHelpers::countHolidays($start,$end);
+              // $different_days = SysHelpers::countWorkingDays($start,$end)-$holidays;
+              $different_days = SysHelpers::countWorkingDaysForOtherLeaves($start, $end);
+
+              // $startDate = Carbon::parse($start);
+              // $endDate = Carbon::parse($end);
+              // $different_days = $endDate->diffInDays($startDate);
+          }
+
+          // For Total Leave days
+          $total_remaining = $leaves + $different_days;
+
+          // For Working days
+          $d1 = new DateTime($employeeDate);
+          $d2 = new DateTime();
+          $interval = $d2->diff($d1);
+          $day = SysHelpers::countWorkingDays($d1, $d2);
+
+          // For Employees with less than 12 months of employement
+          if ($day <= 365) {
+
+              //  For Leaves with sub Category
+              if ($request->sub_cat > 0) {
+
+                  // For Sub Category details
+                  $sub_cat = $request->sub_cat;
+                  $sub = LeaveSubType::where('id', $sub_cat)->first();
+
+                  $total_leave_days = $leaves + $different_days;
+                  $maximum = $sub->max_days;
+                  // Case hasnt used all days
+                  if ($total_leave_days < $maximum) {
+                      $leaves = new Leaves();
+                      $empID = Auth::user()->emp_id;
+                      $leaves->empID = $empID;
+                      $leaves->status = 1;
+                      $leaves->start = $request->start;
+                      $leaves->end = $request->end;
+                      $leaves->leave_address = $request->address;
+                      $leaves->mobile = $request->mobile;
+                      $leaves->nature = $request->nature;
+
+                      // For Study Leave
+                      if ($request->nature == 6) {
+                          $leaves->days = $different_days;
+                      }
+                      //For Compassionate and Maternity
+                      else {
+                          $leaves->days = $different_days;
+                      }
+                      $leaves->reason = $request->reason;
+                      $leaves->sub_category = $request->sub_cat;
+                      $leaves->remaining = $request->sub_cat;
+                      $leaves->application_date = date('Y-m-d');
+                      // For Leave Attachments
+                      if ($request->hasfile('image')) {
+                          $request->validate([
+                              //  'image' => 'required|clamav',
+                          ]);
+                          $request->validate([
+                              'image' => 'mimes:jpg,png,jpeg,pdf|max:2048',
+                          ]);
+                          $newImageName = $request->image->hashName();
+                          $request->image->move(public_path('storage/leaves'), $newImageName);
+                          $leaves->attachment = $newImageName;
+
+                      }
+                      $leaves->save();
+                      $leave_type = LeaveType::where('id', $nature)->first();
+                      $type_name = $leave_type->type;
+
+                      //fetch Line manager data from employee table and send email
+                      $linemanager = LeaveApproval::where('empID', $empID)->first();
+                      $linemanager_data = SysHelpers::employeeData($linemanager->level1);
+                      $employee_data = SysHelpers::employeeData($empID);
+                      $fullname = $linemanager_data['full_name'];
+                      $email_data = array(
+                          'subject' => 'Employee Leave Approval',
+                          'view' => 'emails.linemanager.leave-approval',
+                          'email' => $linemanager_data['email'],
+                          'full_name' => $fullname,
+                          'employee_name' => $employee_data['full_name'],
+                          'next' => parse_url(route('attendance.leave'), PHP_URL_PATH),
+                      );
+
+                      try {
+
+                          Notification::route('mail', $linemanager_data['email'])->notify(new EmailRequests($email_data));
+
+                      } catch (Exception $exception) {
+                          $msg = $type_name . " Leave Request  Has been Requested But Email is not sent(SMTP Problem)!";
+                          if($return_parameter=="webUrl")
+                          {
+                          return $url->with('msg', $msg);}
+                          else{
+                              return response([ 'msg'=>$msg ],202);
+                          }
+
+                      }
+                      $msg = $type_name . " Leave Request  Has been Requested Successfully!";
+                      if($return_parameter=="webUrl"){
+                      return $url->with('msg', $msg);}
+                      else{
+                          return response([ 'msg'=>$msg ],202);
+                      }
+
+                  }
+                  //  Case has used up all days or has less remaining leave days balance
+                  else {
+
+                      $leave_type = LeaveType::where('id', $nature)->first();
+                      $type_name = $leave_type->type;
+                      $msg = "Sorry, You have Insufficient " . $type_name . " Leave Days Balance1";
+                      if($return_parameter=="webUrl"){
+                      return $url->with('msg', $msg);}
+                      else{
+                          return response([ 'msg'=>$msg ],202); 
+                      }
+                  }
+
+              }
+              // For Leaves with no sub Category
+              else {
+
+                  $total_leave_days = $leaves + $different_days;
+
+                  if ($total_leave_days < $max_leave_days || $request->nature == 1) {
+                      $remaining = $max_leave_days - ($leave_balance + $different_days);
+                      $leaves = new Leaves();
+                      $empID = Auth::user()->emp_id;
+                      $leaves->empID = $empID;
+                      $leaves->start = $request->start;
+                      $leaves->end = $request->end;
+                      $leaves->leave_address = $request->address;
+                      $leaves->status = 1;
+                      $leaves->mobile = $request->mobile;
+                      $leaves->nature = $request->nature;
+                      $leaves->deligated = $request->deligate;
+
+                      // for annual leave
+                      if ($request->nature == 1) {
+                          $annualleaveBalance = $this->attendance_model->getLeaveBalance(auth()->user()->emp_id, $employeeDate, date('Y-m-d'));
+
+                          // checking annual leave balance
+                          if ($different_days < $annualleaveBalance) {
+                              $leaves->days = $different_days;
+                              $remaining = $annualleaveBalance - $different_days;
+                          } else {
+                              // $leaves->days=$annualleaveBalance;
+                              $msg = 'You Have Insufficient Annual  Accrued Days';
+                             if($return_parameter=="webUrl"){
+                              return $url->with('msg', $msg);
+                             }else{
+                              return response([ 'msg'=>$msg ],202);
+                             }
+                          }
+                      }
+
+                      // For Paternity
+                      if ($request->nature != 5 && $request->nature != 1) {
+
+                          $leaves->days = $different_days;
+                      }
+                      if ($request->nature == 5) {
+
+                          // Incase the employee had already applied paternity before
+                          $paternity = Leaves::where('empID', $empID)->where('nature', $nature)->where('sub_category', $request->sub_cat)->first();
+                          if ($paternity) {
+                              $d1 = $paternity->created_at;
+                              $d2 = new DateTime();
+                              $interval = SysHelpers::countWorkingDaysForOtherLeaves($d1, $d2);
+                              $range = SysHelpers::countWorkingDaysForOtherLeaves($d1, $d2);
+
+                              $month = SysHelpers::countWorkingDaysForOtherLeaves($d1, $d2);
+                              // Incase an Employee has less than four working month since the last applied paternity
+                              if ($month < 112) {
+                                  $max_days = 7;
+                                  if ($total_leave_days < $max_days) {
+                                      // Case reqested days are less than the balance
+                                      if ($different_days <= $max_days) {
+                                          $leaves->days = $different_days;
+                                      }
+                                      // Case requested days are more than the balance
+                                      else {
+                                          $msg = "Sorry, You have Insufficient  Leave Days Balance";
+                                          if($return_parameter=="webUrl"){ return $url->with('msg', $msg);}else{
+                                              return response([ 'msg'=>$message ],202);
+                                          }
+                                      }
+
+                                  } else {
+
+                                      $leave_type = LeaveType::where('id', $nature)->first();
+                                      $type_name = $leave_type->type;
+                                      $msg = "Sorry, You have Insufficient " . $type_name . " Leave Days Balance2";
+                                      if($return_parameter=="webUrl"){
+                                          return $url->with('msg', $msg);
+                                      }else{
+                                          return response([ 'msg'=>$msg ],202);
+                                      }
+                                     
+
+                                  }
+
+                              }
+                              // For Employees who have attained 4 working months
+                              else {
+                                  $max_days = 10;
+
+                                  if ($different_days < $max_days) {
+                                      $leaves->days = $different_days;
+                                  } else {
+                                      $msg = "Sorry, You have Insufficient  Leave Days Balance";
+                                     if($return_parameter=="webUrl"){
+
+                                     return $url->with('msg', $msg);
+
+                                     }else{
+                                      return response([ 'msg'=>$msg ],202);
+                                     }
+                                  }
+
+                              }
+                          }
+                          // Incase an employee is applying for paternity for the first time
+                          else {
+                              // Checking if employee has less than 4 working months
+                              if ($day < 112) {
+                                  $max_days = 7;
+                                  if ($total_leave_days < $max_days) {
+                                      if ($different_days <= $max_days) {
+                                          $leaves->days = $different_days;
+                                      } else {
+                                          $msg = "Sorry, You have Insufficient  Leave Days Balance";
+                                         if($return_parameter=="webUrl"){
+                                           return $url->with('msg', $msg);
+                                          }
+                                           else{
+                                              return response([ 'msg'=>$msg ],202);
+                                          }
+                                      }
+
+                                  } else {
+
+                                      $leave_type = LeaveType::where('id', $nature)->first();
+                                      $type_name = $leave_type->type;
+                                      $msg = "Sorry, You have Insufficient  " . $type_name . " Leave Days Balance";
+                                      if($return_parameter=="webUrl"){
+                                      return $url->with('msg', $msg);
+                                      }else{
+                                          return response([ 'msg'=>$msg ],202);
+                                      }
+
+                                  }
+
+                              }
+                              // For Employee with more than 4 working months
+                              else {
+                                  $max_days = 10;
+
+                                  if ($different_days < $max_days) {
+                                      $leaves->days = $different_days;
+                                  } else {
+                                      
+                                      $msg = "Sorry, You have Insufficient  Leave Days Balance";
+                                     if($return_parameter=="webUrl"){
+                                      return $url->with('msg', $msg);
+                                     }else{
+                                      return response([ 'msg'=>$msg ],202);
+                                     }
+                                  }
+
+                              }
+                          }
+
+                      }
+                      $leaves->reason = $request->reason;
+                      $leaves->remaining = $remaining;
+
+                      $leaves->sub_category = $request->sub_cat;
+                      $leaves->application_date = date('Y-m-d');
+                      // START
+                      if ($request->hasfile('image')) {
+                          $request->validate([
+                              // 'image' => 'required|clamav',
+                          ]);
+                          $request->validate([
+                              'image' => 'mimes:jpg,png,jpeg,pdf|max:2048',
+                          ]);
+
+                          $newImageName = $request->image->hashName();
+                          $request->image->move(public_path('storage/leaves'), $newImageName);
+                          $leaves->attachment = $newImageName;
+
+                      }
+
+                      $leaves->save();
+
+                      //fetch Line manager data from employee table and send email
+                      $linemanager = LeaveApproval::where('empID', $empID)->first();
+                      $linemanager_data = SysHelpers::employeeData($linemanager->level1);
+                      $employee_data = SysHelpers::employeeData($empID);
+                      $fullname = $linemanager_data['full_name'];
+                      $email_data = array(
+                          'subject' => 'Employee Leave Approval',
+                          'view' => 'emails.linemanager.leave-approval',
+                          'email' => $linemanager_data['email'],
+                          'full_name' => $fullname,
+                          'employee_name' => $employee_data['full_name'],
+                          'next' => parse_url(route('attendance.leave'), PHP_URL_PATH),
+                      );
+                      try {
+
+                          Notification::route('mail', $linemanager_data['email'])->notify(new EmailRequests($email_data));
+
+                      } catch (Exception $exception) {
+                          $leave_type = LeaveType::where('id', $nature)->first();
+                          $type_name = $leave_type->type;
+                          $msg = $type_name . " Leave Request is submitted successfully But Email not sent(SMTP Problem)!";
+                      
+                          if($return_parameter=="webUrl"){
+                          return $url->with('msg', $msg);
+                         }else{
+                          return response([ 'msg'=>$msg ],202);
+                         }
+                      }
+
+                      $leave_type = LeaveType::where('id', $nature)->first();
+                      $type_name = $leave_type->type;
+                      $msg = $type_name . " Leave Request is submitted successfully!";
+                      if($return_parameter=="webUrl"){
+                      return $url->with('msg', $msg);
+                      }else{
+                          return response([ 'msg'=>$msg ],202);
+                      }
+                  } else {
+
+                      $leave_type = LeaveType::where('id', $nature)->first();
+                      $type_name = $leave_type->type;
+                      $msg = "Sorry, You have Insufficient " . $type_name . " Leave Days Balance3";
+                      if($return_parameter=="webUrl"){
+                      return $url->with('msg', $msg);
+                      }else{
+                          return response([ 'msg'=>$msg ],202);
+                      }
+
+                  }
+
+              }
+
+          }
+          // For Employee with more than 12 Month
+          else {
+
+              $total_leave_days = $leaves + $different_days;
+
+              if ($total_leave_days < $max_leave_days) {
+                  $remaining = $max_leave_days - ($leave_balance + $different_days);
+                  $leaves = new Leaves();
+                  $empID = Auth::user()->emp_id;
+                  $leaves->empID = $empID;
+                  $leaves->start = $request->start;
+                  $leaves->end = $request->end;
+                  $leaves->status = 1;
+                  $leaves->leave_address = $request->address;
+                  $leaves->mobile = $request->mobile;
+                  $leaves->nature = $request->nature;
+                  $leaves->deligated = $request->deligate;
+
+                  // for annual leave
+                  if ($request->nature == 1) {
+
+                      $annualleaveBalance = $this->attendance_model->getLeaveBalance(auth()->user()->emp_id, $employeeDate, date('Y-m-d'));
+
+                      // checking annual leave balance
+                      if ($different_days < $annualleaveBalance) {
+                          $leaves->days = $different_days;
+                          $remaining = $annualleaveBalance - $different_days;
+
+                      } else {
+                          $msg = 'You Have Insufficient Annual  Accrued Days';
+                          
+                          return response(['msg' => $msg], 202);
+                      }
+
+                  }
+
+                  if ($request->nature != 5 && $request->nature != 1) {
+
+                      $leaves->days = $different_days;
+                  }
+                  // For Paternity leabe
+                  if ($request->nature == 5) {
+
+                      $paternity = Leaves::where('empID', $empID)->where('nature', 5)->where('sub_category', $request->sub_cat)->whereYear('created_at', date('Y'))->orderBy('created_at', 'desc')->first();
+                      // Case an Employee has ever applied leave before
+                      if ($paternity) {
+                          $d1 = $paternity->created_at;
+                          $d2 = new DateTime();
+                          $interval = SysHelpers::countWorkingDaysForOtherLeaves($d1, $d2);
+
+                          $month = $interval;
+                          // For Employee With Less Than 4 month of service and last application
+                          if ($month < 112) {
+
+                              $max_days = 7;
+                              // Case Requested days are less than max-days
+                              if ($total_leave_days <= $max_days) {
+                                  if ($different_days < $max_days) {
+                                      $leaves->days = $different_days;
+                                  } else {
+                                      $msg = "Sorry, You have Insufficient Leave Days Balance";
+                                    
+                                      if($return_parameter=="webUrl")
+                                      { 
+                                           return $url->with('msg', $msg);
+                                      
+                                      }
+                                      else{
+                                          return response([ 'msg'=>$msg ],202);
+                                      };
+                                  }
+
+                              }
+                              // case All Paternity days have been used up
+                              else {
+
+                                  $msg = "Sorry, You have Insufficient " . $type_name . " Leave Days Balance4";
+                                  if($return_parameter=="webUrl"){
+                                  return $url->with('msg', $msg);
+                                  }else{
+                                      return response([ 'msg'=>$msg ],202);
+                                  }
+                              }
+
+                          }
+                          // For Employee who as attained more than 4 working days
+                          else {
+                              $max_days = 10;
+                              if ($total_leave_days <= $max_days) {
+                                  if ($different_days < $max_days) {
+                                      $leaves->days = $different_days;
+                                  } else {
+                                      $msg = "Sorry, You have Insufficient Leave Days Balance";
+                                      if($return_parameter=="webUrl"){
+                                      return $url->with('msg', $msg);
+                                      }else{
+                                          return response([ 'msg'=>$msg ],202);
+                                      }
+                                  }
+
+                              }
+                              // case All Paternity days have been used up
+                              else {
+
+                                  $excess = $total_leave_days - $max_days;
+                                  // dd($excess);
+                                  $msg = 'You requested for ' . $excess . ' extra days!';
+                                  if($return_parameter=="webUrl"){
+                                  return $url->with('msg', $msg);
+                                  }else{
+                                      return response([ 'msg'=>$msg ],202);
+                                  }
+                              }
+                          }
+                      }
+                      // Case an employee is applying paternity for the first time
+                      else {
+                          // Checking if employee has less than 4 working months
+                          if ($day < 112) {
+                              $max_days = 7;
+                              if ($total_leave_days < $max_days) {
+                                  if ($different_days <= $max_days) {
+                                      $leaves->days = $different_days;
+                                  } else {
+                                      $msg = "Sorry, You have Insufficient  Leave Days Balance";
+                                      if($return_parameter=="webUrl")
+                                      {
+                                            return $url->with('msg', $msg);}
+                                            else{
+                                          return response([ 'msg'=>$msg ],202);
+                                      }
+                                  }
+
+                              } else {
+
+                                  $leave_type = LeaveType::where('id', $nature)->first();
+                                  $type_name = $leave_type->type;
+                                  $msg = "Sorry, You have Insufficient  " . $type_name . " Leave Days Balance";
+                                  if($return_parameter=="webUrl"){
+
+          
+                                  return $url->with('msg', $msg);}
+                                  else{
+                                      return response([ 'msg'=>$msg ],202);
+                                  }
+
+                              }
+
+                          }
+                          // For Employee with more than 4 working months
+                          else {
+                              $max_days = 10;
+
+                              if ($different_days < $max_days) {
+                                  $leaves->days = $different_days;
+                              } else {
+
+                                  $msg = "Sorry, You have Insufficient  Leave Days Balance";
+                                  if($return_parameter=="webUrl"){
+                                  return $url->with('msg', $msg);}else{
+                                      return response([ 'msg'=>$msg ],202);
+                                  }
+                              }
+
+                          }
+                      }
+
+                  }
+
+                  $leaves->reason = $request->reason;
+                  $leaves->remaining = $remaining;
+                  $leaves->sub_category = $request->sub_cat;
+                  $leaves->application_date = date('Y-m-d');
+                  if ($request->hasfile('image')) {
+                      $request->validate([
+                          // 'image' => 'required|clamav',
+                      ]);
+                      $request->validate([
+                          'image' => 'mimes:jpg,png,jpeg,pdf|max:2048',
+                      ]);
+                      $newImageName = $request->image->hashName();
+                      $request->image->move(public_path('storage/leaves'), $newImageName);
+                      $leaves->attachment = $newImageName;
+
+                  }
+
+                  $leaves->save();
+                  $leave_type = LeaveType::where('id', $nature)->first();
+                  $type_name = $leave_type->type;
+
+                  //fetch Line manager data from employee table and send email
+                  $linemanager = LeaveApproval::where('empID', $empID)->first();
+                  $linemanager_data = SysHelpers::employeeData($linemanager->level1);
+                  $employee_data = SysHelpers::employeeData($empID);
+                  $fullname = $linemanager_data['full_name'];
+                  $email_data = array(
+                      'subject' => 'Employee Leave Approval',
+                      'view' => 'emails.linemanager.leave-approval',
+                      'email' => $linemanager_data['email'],
+                      'full_name' => $fullname,
+                      'employee_name' => $employee_data['full_name'],
+                      'next' => parse_url(route('attendance.leave'), PHP_URL_PATH),
+                  );
+                  try {
+
+                      Notification::route('mail', $linemanager_data['email'])->notify(new EmailRequests($email_data));
+
+                  } catch (Exception $exception) {
+                      $msg = $type_name . " Leave Request is submitted successfully but email not sent(SMTP Problem)!";
+                      if($return_parameter=="webUrl"){
+                      return $url->with('msg', $msg);}else{
+                          return response([ 'msg'=>$msg ],202);
+                      }
+                  }
+                  $msg = $type_name . " Leave Request is submitted successfully!";
+                  if($return_parameter=="webUrl"){
+                  return $url->with('msg', $msg);}else{
+                      return response([ 'msg'=>$msg ],202);
+                  }
+              } else {
+
+                  $leave_type = LeaveType::where('id', $nature)->first();
+                  $type_name = $leave_type->type;
+                  $msg = "Sorry, You have Insufficient " . $type_name . " Leave Days Balance";
+               
+               if($return_parameter=="webUrl"){
+
+                 return $url->with('msg', $msg);}
+                 else{
+                  return response([ 'msg'=>$msg ],202);
+                 }
+
+              }
+
+          }
+      } else {
+          $msg = "Error!! start date should be less than end date!";
+           if($return_parameter=="webUrl") {
+              return redirect()->back()->with('msg', $msg);}else{
+              return response([ 'msg'=>$message ],202);
+          }
+      }
+
+  }
+
 
 
 }
