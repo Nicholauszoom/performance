@@ -3311,7 +3311,7 @@ EOD;
             return view('payroll.payroll_changes', $data);
         else {
             $pdf = Pdf::loadView('reports.input_approval', $data)->setPaper('a4', 'potrait');
-            return $pdf->download('payroll_input_chage_report.pdf');
+            return $pdf->download('payroll_input_change_report.pdf');
         }
 
         //return view('audit-trail.financial_logs', $data);
