@@ -1,7 +1,7 @@
 <div class="sidebar sidebar-dark sidebar-main sidebar-expand-lg bg-main-nav">
     <div class="sidebar-section">
         <div class="sidebar-logo d-flex justify-content-center align-items-center">
-            <a href="index.html" class="d-inline-flex align-items-center pt-3 pb-2">
+            <a href="{{url('')}}" class="d-inline-flex align-items-center pt-3 pb-2">
                 <img src="{{ asset('img/logo.png') }}" class="image-fluid" width="200px" alt="BancABC atlasmara">
             </a>
         </div>
