@@ -19,17 +19,13 @@
     @endphp
 
 
-    <div class="card border-top border-top-width-3 border-top-main border-bottom-main rounded-0 border-0 shadow-none">
-        <div class="card-header border-0">
+<div class="card border-bottom-main rounded-0 border-0 shadow-none">
+
             @include('payroll.payroll_info_buttons')
-
-        </div>
-
-
         <div class="card-body">
             <div class="row">
                 <div class="col-md-12 col-sm-12 col-xs-12">
-                    <h5 class="text-center">Payroll Reconciliation Summary</h5>
+                    <h4 class="me-4 text-center">Payroll Reconciliation Summary</h4>
                     @if ($payrollState == 0)
                     <a href="{{ route('reports.get_reconsiliation_summary1', ['payrolldate' => $payroll_date,'payrollState'=>$payrollState,'type'=>2]) }}" target="blank">
                         <button type="button" name="print" value="print" class="btn btn-main btn-sm"> PDF</button>
@@ -243,7 +239,6 @@
                     </table>
                 </div>
             </div>
-            <hr>
 
 
             <?php ?>
