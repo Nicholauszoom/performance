@@ -2454,8 +2454,7 @@ class ReportController extends Controller
         $data['termination'] = $this->reports_model->get_termination($current_payroll_month);
 
 
-        //$pdf = Pdf::loadView('reports.payroll_reconciliation_summary1', $data);
-        // $pdf = Pdf::loadView('reports.payroll_details',$data);
+
 
         if ($request->type == 1) {
             return view('reports.reconsiliation_summary', $data);
@@ -2463,14 +2462,10 @@ class ReportController extends Controller
 
 
 
-        //return $pdf->download('sam.pdf');
         $pdf = Pdf::loadView('reports.payroll_reconciliation_summary1', $data)->setPaper('a4', 'potrait');
 
 
         return $pdf->download('payroll_reconciliation_summary-' . $current_payroll_month . '.pdf');
-        //return view('reports.payroll_reconciliation_summary1', $data);
-
-        // return view('reports.samplepdf', $data);
     }
 
 
