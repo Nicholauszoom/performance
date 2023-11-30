@@ -60,6 +60,7 @@ use App\Models\AccessControll\Departments;
 use App\Models\Helsb;
 use App\Models\Payroll\FlexPerformanceModel;
 use Illuminate\Support\Facades\Notification;
+use Symfony\Component\Mailer\Exception\TransportException;
 // use Barryvdh\DomPDF\Facade\Pdf;
 
 class GeneralController extends Controller
@@ -311,7 +312,22 @@ class GeneralController extends Controller
                         $result = $this->flexperformance_model->apply_overtime($data);
 
                         if ($result == true) {
-
+                            $linemanager_data = SysHelpers::employeeData($linemanager);
+                            $fullname = $linemanager_data['full_name'];
+                            $email_data = array(
+                                'subject' => 'Employee Overtime Approval',
+                                'view' => 'emails.linemanager.overtime-approval',
+                                'email' => $linemanager_data['email'],
+                                'full_name' => $fullname,
+                            );
+                            try {
+    
+                                Notification::route('mail', $linemanager_data['email'])->notify(new EmailRequests($email_data));
+                            } catch (TransportException $exception) {
+                                // echo "<p class='alert alert-danger text-center'>Overtime Request  Sent, But Email not sent due to connectivity problem!</p>";
+                                $msg='Overtime Request  Sent, But Email not sent due to connectivity problem!';
+                                return response( [ 'msg'=>$msg ],200);
+                            }
                             $msg='Overtime Request Sent Successifully!';
                             return response( [ 'msg'=>$msg ],200);
                         } else {
@@ -338,7 +354,22 @@ class GeneralController extends Controller
                         $result = $this->flexperformance_model->apply_overtime($data);
 
                         if ($result == true) {
-
+                            $linemanager_data = SysHelpers::employeeData($linemanager);
+                            $fullname = $linemanager_data['full_name'];
+                            $email_data = array(
+                                'subject' => 'Employee Overtime Approval',
+                                'view' => 'emails.linemanager.overtime-approval',
+                                'email' => $linemanager_data['email'],
+                                'full_name' => $fullname,
+                            );
+                            try {
+    
+                                Notification::route('mail', $linemanager_data['email'])->notify(new EmailRequests($email_data));
+                            } catch (TransportException $exception) {
+                                // echo "<p class='alert alert-danger text-center'>Overtime Request  Sent, But Email not sent due to connectivity problem!</p>";
+                                $msg='Overtime Request  Sent, But Email not sent due to connectivity problem!';
+                                return response( [ 'msg'=>$msg ],200);
+                            }
                             $msg='Overtime Request Sent Successifully !';
                             return response( [ 'msg'=>$msg ],200);
                         } else {
@@ -374,7 +405,22 @@ class GeneralController extends Controller
                     );
                     $result = $this->flexperformance_model->apply_overtime($data);
                     if ($result == true) {
+                        $linemanager_data = SysHelpers::employeeData($linemanager);
+                        $fullname = $linemanager_data['full_name'];
+                        $email_data = array(
+                            'subject' => 'Employee Overtime Approval',
+                            'view' => 'emails.linemanager.overtime-approval',
+                            'email' => $linemanager_data['email'],
+                            'full_name' => $fullname,
+                        );
+                        try {
 
+                            Notification::route('mail', $linemanager_data['email'])->notify(new EmailRequests($email_data));
+                        } catch (TransportException $exception) {
+                            // echo "<p class='alert alert-danger text-center'>Overtime Request  Sent, But Email not sent due to connectivity problem!</p>";
+                           $msg='Overtime Request  Sent, But Email not sent due to connectivity problem!';
+                            return response( [ 'msg'=>$msg ],200);
+                        }
                         $msg='Overtime Request Sent Successifully!';
                         return response( [ 'msg'=>$msg ],200);
                     } else {
@@ -398,6 +444,24 @@ class GeneralController extends Controller
                     );
                     $result = $this->flexperformance_model->apply_overtime($data);
                     if ($result == true) {
+
+                        $linemanager_data = SysHelpers::employeeData($linemanager);
+                        $fullname = $linemanager_data['full_name'];
+                        $email_data = array(
+                            'subject' => 'Employee Overtime Approval',
+                            'view' => 'emails.linemanager.overtime-approval',
+                            'email' => $linemanager_data['email'],
+                            'full_name' => $fullname,
+                        );
+                        try {
+
+                            Notification::route('mail', $linemanager_data['email'])->notify(new EmailRequests($email_data));
+                        } catch (TransportException $exception) {
+                            // echo "<p class='alert alert-danger text-center'>Overtime Request  Sent, But Email not sent due to connectivity problem!</p>";
+                         $msg='Overtime Request  Sent, But Email not sent due to connectivity problem!';
+                            return response( [ 'msg'=>$msg ],200);
+                        }
+                        // echo "<p class='alert alert-success text-center'>Overtime Request Sent Successifully</p>";
 
                         $msg='Overtime Request Sent Successifully!';
                         return response( [ 'msg'=>$msg ],200);

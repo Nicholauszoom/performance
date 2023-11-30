@@ -740,7 +740,7 @@ class LeaveController extends Controller
         }
         $emp_data = SysHelpers::employeeData($empID);
         $email_data = array(
-            'subject' => 'Employee Overtime Approval',
+            'subject' => 'Employee leave Approval',
             'view' => 'emails.linemanager.approved_leave',
             'email' => $emp_data->email,
             'full_name' => $emp_data->fname,' '.$emp_data->mname.' '.$emp_data->lname,
@@ -753,7 +753,7 @@ class LeaveController extends Controller
 
             Notification::route('mail', $emp_data->email)->notify(new EmailRequests($email_data));
 
-        } catch (Exception $exception) {
+        } catch (TransportException $exception) {
 
         $msg = "Leave Request Has been Approved Successfully But Email is not sent(SMPT problem) !";
         // return redirect('flex/view-action/'.$emp,$data)->with('msg', $msg);
@@ -1169,7 +1169,7 @@ return response(['msg'=>$msg],400);
                      Notification::route('mail', $linemanager_data['email'])->notify(new EmailRequests($email_data));
                      return response( [ 'msg'=>$msg ],202 );
      
-                 } catch (Exception $exception) {
+                 } catch (TransportException $exception) {
                      $msg=$type_name." Leave Request  Has been Requested But Email is not sent(SMTP Problem)!";
                      return response( [ 'msg'=>$msg ],202 );
                  }
@@ -1566,7 +1566,7 @@ return response(['msg'=>$msg],400);
  
                  Notification::route('mail', $linemanager_data['email'])->notify(new EmailRequests($email_data));
  
-             } catch (Exception $exception) {
+             } catch (TransportException $exception) {
                  $msg=$type_name." Leave Request  Has been Requested But Email is not sent(SMTP Problem)!";
                  return response( [ 'msg'=>$msg ],202 );
  
