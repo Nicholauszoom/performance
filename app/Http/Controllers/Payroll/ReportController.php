@@ -2239,6 +2239,8 @@ class ReportController extends Controller
         $calendar = $request->payrolldate;
 
         $previousDate = date('Y-m-d', strtotime($calendar . ' -1 months'));
+        $data['payroll_state'] = $request->payrollState;
+
 
 
         $datewell = explode("-", $calendar);
@@ -2454,6 +2456,10 @@ class ReportController extends Controller
 
         //$pdf = Pdf::loadView('reports.payroll_reconciliation_summary1', $data);
         // $pdf = Pdf::loadView('reports.payroll_details',$data);
+
+        if ($request->type == 1) {
+            return view('reports.reconsiliation_summary', $data);
+        }
 
 
 
