@@ -503,8 +503,35 @@ class GeneralController extends Controller
     public function myLeaves(Request $request)
     {
      
-        $data['leaves'] = Leaves::whereNot('reason', 'Automatic applied!')->orderBy('id', 'asc')->get();
+        $data['leaves'] = Leaves::whereNot('reason', 'Automatic applied!')->orderBy('id', 'desc')->get();
         $line_manager = auth()->user()->emp_id;
+        if ($data['leaves']->isNotEmpty()) {
+            foreach ($data['leaves'] as $key => $leave) {
+                $uniqueLeaveID = $leave['id'];
+
+                // Fetch 'appliedBy' value from 'sick_leave_forfeit_days' based on the unique 'leaveID'
+                $appliedByValue = DB::table('sick_leave_forfeit_days')
+                    ->where('leaveID', $uniqueLeaveID)
+                    ->value('appliedBy');
+
+                // Fetch 'forfeit_days' value from 'sick_leave_forfeit_days' based on the unique 'leaveID'
+                $forfeitDaysValue = DB::table('sick_leave_forfeit_days')
+                    ->where('leaveID', $uniqueLeaveID)
+                    ->value('forfeit_days');
+
+                if ($appliedByValue !== null) {
+                    // Fetch 'full_name' from 'EMPL' model based on 'emp_id'
+                    $full_name = EMPL::where('emp_id', $appliedByValue)->value('full_name');
+
+                    // Add the 'appliedBy' attribute to the leave item
+                    $data['leaves'][$key]['appliedBy'] = $full_name;
+
+                    // Add the 'forfeit_days' attribute to the leave item
+                    $data['leaves'][$key]['forfeit_days'] = $forfeitDaysValue;
+                }
+            }
+        }
+
         $filteredLeaves = [];
         
         foreach ($data['leaves'] as $leave) {

@@ -817,25 +817,61 @@ class LeaveController extends Controller
 
    public function cancelLeave(Request $request)  {
     $id=$request->id;
+    $message = $request ->message;
+
+    $data=   $id.'|'.$message;
+    $result = explode('|', $data);
+    if (count($result) > 1) {
+      $id = $result[0];
+      $info = $result[1];
+  } else {
+      $id = $data;
+      $info = '';
+  }
+
     $leaveID = $id;
 
     $leave=Leaves::where('id',$leaveID)->first();
     if($leave != null) {
    
     if($id!=''  && $leave -> state == 1){
+      if($info != ''){
+        $leave->position = 'Denied by '. SysHelpers::getUserPosition(Auth::user()->position);
+        $leave->state = 5;
+        $leave->level1 = Auth::user()->id;
+        $leave->revoke_reason = $info;
+        $leave->save();
+        $employee_data = SysHelpers::employeeData($leave->empID);
+        $fullname = $employee_data['full_name'];
+
+        $email_data = array(
+            'subject' => 'Employee Leave Disapproval',
+            'view' => 'emails.linemanager.leave-rejection',
+            'email' => $employee_data['email'],
+            'full_name' => $fullname,
+            'info' => $info,
+        );
+        //dd($employee_data['email']);
+        try {
   
+            Notification::route('mail', $employee_data['email'])->notify(new EmailRequests($email_data));
+  
+        } catch (TransportException $exception) {
+          $msg=" Leave Denial is successful but Email is not sent";
+          return response( [ 'msg'=>$msg ],202 );
+             
+        }
+         }
+    }
+    else if ($info == ''){
       $leave->state = 4;
       $leave->position = 'Cancelled by you';
       $leave->save();
-
-      $msg = "Leave  Canceled Successfully !";
-       
-
-
- 
-
- return response(['msg'=>$msg],200);
-}else{
+      $msg="Leave cancellation is successfully!";
+      return response(['msg'=>$msg],200);
+    }
+  
+   else{
   $msg="Leave cancellation failed!";
   return response(['msg'=>$msg],400);
 }
