@@ -55,12 +55,12 @@
                                 $i++;
                                 $amount = $row->salary + $row->allowances-$row->pension_employer-$row->loans-$row->deductions-$row->meals-$row->taxdue;
                                 $total_netpay =round($total_netpay,2)+ round($amount/$row->rate,2);
-                                $amount =round($amount,2); 
+                                $amount =round($amount,2);
                                 $total_gross_salary += ($row->salary + $row->allowances);
                                 $total_salary = $total_salary + $row->salary;
                                 $total_allowance = $total_allowance + $row->allowances ;
                                 $total_overtime = $total_overtime +$row->overtime;
-                                $total_house_rent = $total_house_rent + $row->house_rent;
+                                // $total_house_rent = $total_house_rent + $row->house_rent;
                                 $total_others = $total_others + $row->other_payments ;
                                 $total_taxs += round($row->taxdue,2);
 
@@ -70,7 +70,7 @@
                                 $total_wcf = $total_wcf + $row->wcf;
                                 $total_taxable_amount += intval($row->salary + $row->allowances-$row->pension_employer);
                                 $total_loans = $total_loans + $row->total_loans;
-                                $total_teller_allowance += $row->teller_allowance;
+                                // $total_teller_allowance += $row->teller_allowance;
 
                                 $others += $row->deductions;
 

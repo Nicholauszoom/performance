@@ -8,7 +8,7 @@
         </a>
 
         <a class="ms-3"
-        href="{{ route('payroll.payrollReconciliationDetails_temp', ['payrolldate' => $payroll_date, 'payrollState' => $payroll_state,'type'=>1]) }}">
+        href="{{ route('reports.payrollReconciliationDetails_temp', ['payrolldate' => $payroll_date, 'payrollState' => $payroll_state,'type'=>1]) }}">
         <button type="button" name="print" value="print" class="btn btn-main btn-sm"> Reconciliation details</button>
     </a>
 
