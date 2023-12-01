@@ -40,10 +40,14 @@
                                 <th  class="text-end"><b>Net Basic Salary</b></th>
                                 <th  class="text-end"><b>Overtime</b></th>
 
-                                <th  class="text-end"><b>Respons. Allowance</b></th>
+                                <!-- <th  class="text-end"><b>Respons. Allowance</b></th>
                                 <th  class="text-end"><b>House Allowance</b></th>
                                 <th  class="text-end"><b>Arrears</b></th>
-                                <th  class="text-end"><b>Other Payment</b></th>
+                                <th  class="text-end"><b>Other Payment</b></th> -->
+
+                                @foreach($allowance_categories as $row)
+                                    <th class="text-end" style="margin-bottom: 30px;"><b>{{ $row->name}}</b></th>
+                                    @endforeach
                                 <th  class="text-end"><b>Gross Salary</b></th>
                                 <th  class="text-end"><b>Tax Benefit</b></th>
                                 <th  class="text-end"><b>Taxable Gross</b></th>
@@ -88,7 +92,7 @@
                                 $total_allowance = round($total_allowance + $row->allowances,2) ;
                                 $total_overtime = round($total_overtime +$row->overtime,2);
                                 $total_arrears = round($total_arrears + $row->arrears_allowance,2);
-                                $total_house_rent = round($total_house_rent + $row->house_rent,2);
+                                // $total_house_rent = round($total_house_rent + $row->house_rent,2);
                                 $total_others +=  round($row->other_payments,2) ;
                                 $total_taxs += round($row->taxdue,2);
 
@@ -98,7 +102,7 @@
                                 $total_wcf = round($total_wcf + $row->wcf,2);
                                 $total_taxable_amount += round($row->salary + $row->allowances-$row->pension_employer,2);
                                 $total_loans = round($total_loans + $row->total_loans,2);
-                                $total_teller_allowance += round($row->teller_allowance,2);
+                                // $total_teller_allowance += round($row->teller_allowance,2);
 
                                 $total_actual_salary += round($row->actual_salary,2);
                                 $others += round($row->deductions,2);
@@ -129,12 +133,20 @@
                                 <td class="text-end">{{ number_format($row->overtime, 2) }}</td>
 
 
-                                <td class="text-end">{{ number_format($row->teller_allowance, 2) }}</td>
-                                <td class="text-end">{{ number_format($row->house_rent, 2) }}</td>
+                                @foreach($allowance_categories as $category)
 
-                                <td class="text-end">{{ number_format($row->arrears_allowance, 2) }}</td>
+                                @php
 
-                                <td class="text-end">{{ number_format($row->other_payments, 2) }}</td>
+                                $category_id="category".$category->id;
+
+                                $categories_total["category".$category->id]+= round($row->$category_id,2);
+
+
+                                @endphp
+
+                                <td class="text-end">{{ number_format($row->$category_id, 2) }}</td>
+
+                                @endforeach
 
                                 <td class="text-end">{{ number_format($row->salary + $row->allowances, 2) }}
                                 </td>
@@ -252,28 +264,15 @@
                         @endforeach
                             <tfoot>
                             <tr style="font-size:10px; !important; border:3px solid rgb(9, 5, 64)">
-
-                                {{-- <td></td>
-                                <td></td> --}}
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-
-                                <td>
+                            
+                                <td colspan="6">
                                         <b>
                                             <center><b>TOTAL<b></center>
                                             </b></td>
                                 <td class="text-end"><b><b>{{ number_format($total_actual_salary, 2) }}</b></b></td>
                                 <td class="text-end"><b><b>{{ number_format($total_salary, 2) }}</b></b></td>
                                 <td class="text-end"><b><b>{{ number_format($total_overtime, 2) }}</b></b></td>
-                                <td class="text-end"><b><b>{{ number_format($total_teller_allowance, 2) }}</b></b>
-                                </td>
 
-                                <td class="text-end"><b><b>{{ number_format($total_house_rent, 2) }}</b></b></td>
-                                <td class="text-end"><b><b>{{ number_format($total_arrears, 2) }}<b></b></td>
-                                <td class="text-end"><b><b>{{ number_format($total_others, 2) }}</b></b></td>
 
                                 <td class="text-end">
                                     <b><b>{{ number_format($total_gross_salary, 2) }}</b></b>

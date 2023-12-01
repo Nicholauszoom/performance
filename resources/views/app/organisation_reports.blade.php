@@ -48,7 +48,7 @@
                                     <input type="radio" name="type" value="1" id="p9" required>
                                     <label class="ms-2" for="p9">PDF</label>
                                 </div>
-                                <div class="d-inline-flex align-items-center d-none">
+                                <div class="d-inline-flex align-items-center">
                                     <input type="radio" name="type" value="2" id="p9a" required>
                                     <label class="ms-2" for="p9a">Excel</label>
                                 </div>
@@ -353,16 +353,6 @@
                             </div>
                         </div>
 
-                        {{--
-                    <div class="row mt-3">
-                        <label class="col-form-label col-md-2">Select Date</label>
-                        <div class="col-md-10">
-                            <div class="input-group">
-                                <span class="input-group-text"><i class="ph-calendar"></i></span>
-                                <input type="text" class="form-control daterange-predefined" name="duration" placeholder="Select dates">
-                            </div>
-                        </div>
-                    </div> --}}
 
                         <div class="mt-2">
                             <label class="form-label">Report Format:</label>
