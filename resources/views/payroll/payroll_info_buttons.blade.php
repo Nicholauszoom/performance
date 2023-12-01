@@ -1,8 +1,18 @@
+@if($payroll_state==1)
 <h3 class="me-4 text-center">Payroll Review For : {{ date('F, Y', strtotime($payroll_date)) }}
 </h3>
+
+@else
+
+<h3 class="me-4 text-center">Payroll Reports For : {{ date('F, Y', strtotime($payroll_date)) }}
+</h3>
+
+@endif
+
+
 <div class="d-flex justify-content-center align-items-center">
         <a
-            href="{{ route('reports.payrollReconciliationSummary', ['payrolldate' => $payroll_date, 'payrollState' => $payroll_state,'type'=>1]) }}">
+            href="{{ route('reports.payrollReconciliationSummary', ['payrolldate' => $payroll_date, 'payrollState' => $payroll_state,'type'=>2]) }}">
             <button type="button" name="print" value="print" class="btn btn-main btn-sm"> Reconciliation Summary</button>
         </a>
 
