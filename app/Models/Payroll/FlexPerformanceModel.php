@@ -357,7 +357,7 @@ class FlexPerformanceModel extends Model
 
     public function contractdrop()
     {
-        $query = "SELECT c.* FROM contract c WHERE NOT c.id = 23";
+        $query = "SELECT c.* FROM contract c WHERE NOT c.item_code = 23";
 
         return DB::select(DB::raw($query));
     }
