@@ -25,11 +25,9 @@
 
 @endphp
 
-<div class="card border-top border-top-width-3 border-top-main border-bottom-main rounded-0 border-0 shadow-none">
-    <div class="card-header border-0">
-        @include('payroll.payroll_info_buttons')
+<div class="card border-bottom-main rounded-0 border-0 shadow-none">
+    @include('payroll.payroll_info_buttons')
 
-    </div>
 
 
     <div class="card-body">
@@ -45,7 +43,7 @@
         <table class="table datatable-excel-filter">
             <thead>
                 <tr>
-                  <th>Payrollno</th>
+                  <th>Payroll Number</th>
                   <th>Name</th>
                   <th>Time Stamp</th>
                   <th>Change Made By</th>

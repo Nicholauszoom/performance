@@ -127,6 +127,7 @@
                                     $total_arrears = round($total_arrears + $row->arrears_allowance,2);
                                     $total_overtime = round($total_overtime +$row->overtime,2);
                                     // $total_house_rent = round($total_house_rent + $row->house_rent,2);
+                                    // $total_house_rent = round($total_house_rent + $row->house_rent,2);
                                     $total_others = round($total_others + $row->other_payments,2) ;
                                     $total_taxs += round($row->taxdue,2);
 
@@ -145,6 +146,7 @@
                                     $total_wcf = round($total_wcf + $row->wcf,2);
                                     $total_taxable_amount += round($row->salary + $row->allowances-$row->pension_employer,2);
                                     $total_loans = round($total_loans + $row->total_loans,2);
+                                    // $total_teller_allowance += round($row->teller_allowance,2);
                                     // $total_teller_allowance += round($row->teller_allowance,2);
 
                                     $others += round($row->deductions,2);
