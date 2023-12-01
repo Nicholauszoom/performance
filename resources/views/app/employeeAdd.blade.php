@@ -200,7 +200,7 @@
                             <select class="form-select select" name="ctype" id="ctype" required>
                                 <option value="" selected disabled>Select type</option>
                                 @foreach ($contract as $row)
-                                    <option value="{{ $row->id }}">{{ $row->name }}</option>
+                                    <option value="{{ $row->item_code }}">{{ $row->name }}</option>
                                 @endforeach
                             </select>
                             <span id="ctype-error" class="text-danger error-message"></span>
