@@ -45,7 +45,7 @@
         $emp_shift = $row->shift;
         $line_managerID = $row->line_manager;
         $linemanager = $row->LINEMANAGER;
-        $pf_membership_no = $row->pf_membership_no;
+        $pf_membership_no = $row->pf_membership_no ?? 0;
         $account_no = $row->account_no;
         $mobile = $row->mobile;
         $salary = $row->salary;
