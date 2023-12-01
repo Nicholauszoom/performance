@@ -314,7 +314,8 @@ Route::middleware('verify-outgoing-requests')->group(function () {
             Route::any('/approved_financial_payments', 'approved_financial_payments')->name('flex.approved_financial_payments');
         });
         Route::prefix('flex/payroll')->middleware('auth')->middleware([Payroll::class])->controller(PayrollController::class)->group(function () {
-
+            Route::any('/get_reconsiliation_summary', 'get_reconsiliation_summary')->name('reports.get_reconsiliation_summary');
+            Route::any('/get_reconsiliation_summary1', 'get_reconsiliation_summary1')->name('reports.get_reconsiliation_summary1');
             Route::any('/initPayroll', 'initPayroll')->name('payroll.initPayroll');
             Route::any('/financial_reports', 'financial_reports')->name('payroll.financial_reports');
             Route::any('/employee_payslip', 'employee_payslip')->name('payroll.employee_payslip');
@@ -877,6 +878,13 @@ Route::middleware('verify-outgoing-requests')->group(function () {
             Route::any('/updateskills', 'updateskills')->name('flex.updateskills');
 
 
+
+
+            // start of reconcilliation summary route
+            Route::any('/reconciliation-summary', 'reconcilliationSummary')->name('reports.recoSummary');
+            // end of reconcilliation summary route
+
+
             // start of education qualification route
             Route::any('/addQualification', 'addQualification')->name('flex.addQualification');
             // end of education qualification route
@@ -1305,11 +1313,12 @@ Route::middleware('verify-outgoing-requests')->group(function () {
             Route::any('/staffPayrollBankExport', 'staffPayrollBankExport')->name('reports.staffPayrollBankExport');
             Route::any('/payrollReconciliationSummary', 'payrollReconciliationSummary')->name('reports.payrollReconciliationSummary');
             Route::any('/payrollReconciliationDetails', 'payrollReconciliationDetails')->name('reports.payrollReconciliationDetails');
-            Route::any('/payrolldetails', 'payrolldetails')->name('reports.payrolldetails');
+            Route::any('/payrollReconciliationDetails_temp', 'payrollReconciliationDetails_temp')->name('reports.payrollReconciliationDetails_temp');
 
 
             Route::any('/dynamic_pdf', 'dynamic_pdf')->name('reports.dynamic_pdf');
             Route::any('/employeeReport', 'employeeReport')->name('reports.employeeReport');
+            Route::any('/payrolldetails', 'payrolldetails')->name('reports.payrolldetails');
 
 
             Route::any('/employeeCostExport', 'employeeCostExport')->name('reports.employeeCostExport');

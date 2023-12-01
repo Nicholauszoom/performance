@@ -27,14 +27,14 @@
             <button type="button" name="print" value="print" class="btn btn-main btn-sm"> Payroll Details</button>
         </a>
         <a class="ms-3"
-            href="{{ route('payroll.payrollReportLogs', ['payrolldate' => $payroll_date, 'type' => 2, 'payrollState' => $payrollState]) }}"
+            href="{{ route('reports.payrollReportLogs', ['payrolldate' => $payroll_date, 'type' => 2, 'payrollState' => $payrollState]) }}"
             target="blank">
             <button type="button" name="print" value="print" class="btn btn-main btn-sm">
                 Payroll Changes
             </button>
         </a>
         <a class="ms-3"
-            href="{{ route('payroll.payroll_inputs', ['date' => $payroll_date, 'type' => 1, 'nature' => 1, 'payrollState' => $payrollState]) }}"
+            href="{{ route('reports.payroll_inputs', ['date' => $payroll_date, 'type' => 1, 'nature' => 1, 'payrollState' => $payrollState]) }}"
             target="blank">
             <button type="button" name="print" value="print" class="btn btn-main btn-sm">
                 Payroll Inputs
