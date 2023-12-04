@@ -314,8 +314,6 @@ Route::middleware('verify-outgoing-requests')->group(function () {
             Route::any('/approved_financial_payments', 'approved_financial_payments')->name('flex.approved_financial_payments');
         });
         Route::prefix('flex/payroll')->middleware('auth')->middleware([Payroll::class])->controller(PayrollController::class)->group(function () {
-            Route::any('/get_reconsiliation_summary', 'get_reconsiliation_summary')->name('reports.get_reconsiliation_summary');
-            Route::any('/get_reconsiliation_summary1', 'get_reconsiliation_summary1')->name('reports.get_reconsiliation_summary1');
             Route::any('/initPayroll', 'initPayroll')->name('payroll.initPayroll');
             Route::any('/financial_reports', 'financial_reports')->name('payroll.financial_reports');
             Route::any('/employee_payslip', 'employee_payslip')->name('payroll.employee_payslip');

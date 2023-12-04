@@ -27,11 +27,11 @@
                 <div class="col-md-12 col-sm-12 col-xs-12">
                     <h4 class="me-4 text-center">Payroll Reconciliation Summary</h4>
                     @if ($payrollState == 0)
-                    <a href="{{ route('reports.payrollReconciliationDetails', ['payrolldate' => $payroll_date,'payrollState'=>$payrollState,'type'=>2]) }}" target="blank">
+                    <a href="{{ route('reports.payrollReconciliationSummary', ['payrolldate' => $payroll_date,'payrollState'=>$payrollState,'type'=>1]) }}" target="blank">
                         <button type="button" name="print" value="print" class="btn btn-main btn-sm"> PDF</button>
                     </a>
                     @else
-                    <a href="{{ route('payroll.get_reconsiliation_summary', ['payrolldate' => $payroll_date,'payrollState'=>$payrollState,'type'=>2]) }}" target="blank">
+                    <a href="{{ route('reports.payrollReconciliationSummary', ['payrolldate' => $payroll_date,'payrollState'=>$payrollState,'type'=>1]) }}" target="blank">
                         <button type="button" name="print" value="print" class="btn btn-main btn-sm"> PDF</button>
                     </a>
                     @endif
