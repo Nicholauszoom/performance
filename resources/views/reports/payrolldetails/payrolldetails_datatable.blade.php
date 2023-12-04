@@ -6,6 +6,15 @@
 @push('head-scriptTwo')
 @endpush
 
+@push('head-script')
+    <script src="{{ asset('assets/js/components/tables/datatables/datatables.min.js') }}"></script>
+    <script src="{{ asset('assets/js/components/tables/datatables/extensions/buttons.min.js') }}"></script>
+@endpush
+
+@push('head-scriptTwo')
+    <script src="{{ asset('assets/js/pages/datatables_extension_buttons_excel.js') }}"></script>
+@endpush
+
 @section('content')
     @php
 
@@ -32,16 +41,19 @@
                     </a>
                 
 
-                <table class="table datatable-basic">
+                <table class="table table datatable-excel-filter">
 
                 @php
 
                 $payNo_col = "";
                 $name_col = "";
-                $accountNumber_col = "";
-                $pensionNumber_col = "";
-                $department_col = "";
-                $costCenter_col = "";
+                $bank_col="d-none";
+                $branchCode_col="d-none";
+                $accountNumber_col = "d-none";
+                $pensionNumber_col = "d-none";
+                $currency_col="d-none";
+                $department_col = "d-none";
+                $costCenter_col = "d-none";
                 $basicSalary_col = "";
                 $netBasic_col = "";
                 $overtime_col = "";
@@ -51,14 +63,14 @@
                 $paye_col = "";
                 $nssfEmployee_col = "";
                 $nssfEmployer_col = "";
-                $nssfPayable_col = "";
-                $sdl_col = "";
-                $wcf_col = "";
+                $nssfPayable_col = "d-none";
+                $sdl_col = "d-none";
+                $wcf_col = "d-none";
                 $loanBoard_col = "";
                 $advanceOthers_col = "";
                 $totalDeduction_col = "";
                 $amountPayable_col = "";
-                $colspan_col = "6";
+                $colspan_col = "2";
 
                 @endphp
 

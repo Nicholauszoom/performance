@@ -6,6 +6,15 @@
 @push('head-scriptTwo')
 @endpush
 
+@push('head-script')
+    <script src="{{ asset('assets/js/components/tables/datatables/datatables.min.js') }}"></script>
+    <script src="{{ asset('assets/js/components/tables/datatables/extensions/buttons.min.js') }}"></script>
+@endpush
+
+@push('head-scriptTwo')
+    <script src="{{ asset('assets/js/pages/datatables_extension_buttons_excel.js') }}"></script>
+@endpush
+
 @section('content')
     @php
 
@@ -36,7 +45,7 @@
                     </a>
                     @endif
 
-                    <table class="table datatable-button-html5-columns" id="reports" style="font-size:14px;  ">
+                    <table class="table table datatable-excel-filter" id="reports" style="font-size:14px;  ">
                         <thead>
                             <tr>
                                 <th><b>RefNo</b></th>
