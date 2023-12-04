@@ -45,7 +45,7 @@
         $emp_shift = $row->shift;
         $line_managerID = $row->line_manager;
         $linemanager = $row->LINEMANAGER;
-        $pf_membership_no = $row->pf_membership_no;
+        $pf_membership_no = $row->pf_membership_no ?? 0;
         $account_no = $row->account_no;
         $mobile = $row->mobile;
         $salary = $row->salary;
@@ -67,7 +67,7 @@
 
 <div class="row">
         <div class="col-md-12">
-        <input type="hidden" name="employeeID"  value="<?php echo $empID; ?>" id="">
+        <input type="hidden" name="employeeID"  value="<?php echo $emp_id; ?>" id="">
             <div class="card border-top  rounded-0 border-0 shadow-none">
                 <div class="card-body border-0">
                     <ul class="nav nav-tabs nav-tabs-underline nav-justified nav-tabs-filled mb-3" id="tabs-target-right" role="tablist">
