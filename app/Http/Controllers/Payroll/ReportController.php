@@ -90,6 +90,59 @@ class ReportController extends Controller
         }
     }
 
+
+    function payroll_report1(Request $request)
+    {
+
+        $date = $request->pdate;
+        $data['summary'] = $this->reports_model->get_payroll_summary($date);
+        $data['termination'] = $this->reports_model->get_termination($date);
+
+        $payrollMonth = $date;
+        $pensionFund = 2;
+        $reportType = 1; //Staff = 1, temporary = 2
+
+        $datewell = explode("-", $payrollMonth);
+        $mm = $datewell[1];
+        $dd = $datewell[2];
+        $yyyy = $datewell[0];
+        $date = $yyyy . "-" . $mm;
+
+        $data['payroll_date'] = $request->payrolldate;
+
+
+
+        $summary = $data['summary'];
+        $data['allowance_categories']=$this->flexperformance_model->allowance_category();
+
+
+        //$data = ['title' => 'Welcome to ItSolutionStuff.com'];
+        if ($request->type == 1) {
+            $data['currency'] = 'TZS';
+        } else {
+            $data['currency'] = 'USD';
+        }
+
+        if ($request->format == 1) {
+            $pdf = Pdf::loadView('reports.payrolldetails.pay_checklist', $data)->setPaper('a4', 'potrait');
+            return $pdf->download('paychecklist-' . $payrollMonth . '.pdf');
+        } else {
+
+            return view('reports.payrolldetails.pay_checklist_datatable', $data);
+        }
+
+
+
+        //     if ($request->type != 1)
+        //         return view('reports.payrolldetails_datatable', $data);
+        //     else {
+        //         $pdf = Pdf::loadView('reports.payroll_details', $data)->setPaper('a4', 'landscape');
+        //         return $pdf->download('payrolldetails-'.$data['payroll_date'].'.pdf');
+        //    }
+
+        // include(app_path() . '/reports/temp_payroll.php');
+    }
+
     function payroll_report1_og(Request $request)
     {
 

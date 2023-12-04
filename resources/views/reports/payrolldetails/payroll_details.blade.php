@@ -59,7 +59,7 @@
                         <tr>
                             <td class="">
                                 <div class="box-text">
-                                    <h5 style="font-weight:bolder;text-align: left;"> Payroll Details </h5>
+                                    <h5 style="font-weight:bolder;text-align: left;"> Pay Checklist </h5>
                                 </div>
                             </td>
                             <td>
@@ -84,8 +84,11 @@
 
                     $payNo_col = "";
                     $name_col = "";
+                    $bank_col="d-none";
+                    $branchCode_col="d-none";
                     $accountNumber_col = "d-none";
                     $pensionNumber_col = "d-none";
+                    $currency_col="d-none";
                     $department_col = "d-none";
                     $costCenter_col = "d-none";
                     $basicSalary_col = "";
