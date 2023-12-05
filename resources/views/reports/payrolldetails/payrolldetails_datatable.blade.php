@@ -58,6 +58,7 @@
                 $netBasic_col = "";
                 $overtime_col = "";
                 $grossSalary_col = "";
+                $otherPayments_col="";
                 $taxBenefit_col = "";
                 $taxableGross_col = "";
                 $paye_col = "";
@@ -71,6 +72,8 @@
                 $totalDeduction_col = "";
                 $amountPayable_col = "";
                 $colspan_col = "2";
+                $show_terminations=true;
+
 
                 @endphp
 

@@ -32,6 +32,8 @@
                         @foreach($allowance_categories as $row)
                         <th class="text-end" style="margin-bottom: 30px;" style="margin-bottom: 30px;"><b>{{ $row->name}}</b></th>
                         @endforeach
+                        <th class=" {{ $otherPayments_col }} text-end" style="margin-bottom: 30px;"><b>Other Payments</b></th>
+
                         <th class=" {{ $grossSalary_col }} text-end" style="margin-bottom: 30px;"><b>Gross Salary</b></th>
                         <th class=" {{ $taxBenefit_col }} text-end" style="margin-bottom: 30px;"><b>Tax Benefit</b></th>
                         <th class=" {{ $taxableGross_col }} text-end" style="margin-bottom: 30px;"><b>Taxable Gross</b></th>
@@ -148,6 +150,8 @@
                                 <td class="text-end">{{ number_format($row->$category_id, 2) }}</td>
 
                                 @endforeach
+                                <td class=" {{ $otherPayments_col }} text-end">{{ number_format($row->other_payments,2) }}
+                                </td>
 
                                 <td class=" {{ $grossSalary_col }} text-end">{{ number_format($row->salary + $row->allowances, 2) }}
                                 </td>
@@ -177,6 +181,8 @@
                             </tr>
 
                         <?php } ?>
+
+                        @if($show_terminations)
                         @foreach ($termination as $row2)
                         @if ($row2->taxable != 0)
                         <tr style="border-bottom:2px solid rgb(67, 67, 73)">
@@ -186,15 +192,15 @@
 
                             <td class=" {{$name_col }} " style="margin-right: 0px" colspan="">{{ $row2->fname }} {{ $row2->mname }} {{ $row2->lname }}</td>
 
-                            <td class=" {{$bank_col }} " style="margin-right: 0px" colspan="">{{ $row2->bank_name }}
+                            <td class=" {{$bank_col }} " style="margin-right: 0px" colspan="">
                             </td>
-                            <td class=" {{$branchCode_col }} " style="margin-right: 0px" colspan="">{{ $row2->branch_code }}
+                            <td class=" {{$branchCode_col }} " style="margin-right: 0px" colspan="">
                             </td>
                             <td class=" {{$accountNumber_col }} " style="margin-right: 0px" colspan="">{{ $row2->account_no }}
                             </td>
                             <td class=" {{$pensionNumber_col }} " style="margin-right: 0px" colspan="">{{ $row2->pf_membership_no }}
                             </td>
-                            <td class=" {{$department_col }} " style="margin-right: 0px" colspan="">{{ $row2->currency}}
+                            <td class=" {{$currency_col }} " style="margin-right: 0px" colspan="">
                             </td>
                              <td class=" {{$department_col }} " style="margin-right: 0px" colspan="">{{ $row2->name}}
                             </td>
@@ -208,8 +214,6 @@
                             </td>
 
                             <td class=" {{$overtime_col }} text-end">{{ number_format(($row2->normal_days_overtime_amount+$row2->public_overtime_amount), 2) }}</td>
-
-                            <td classs="text-end">{{ number_format(0, 2) }}</td>
 
                             <td classs="text-end">
                                 {{ number_format($row2->leavePay + $row2->leaveAllowance+$row2->transport_allowance+$row2->nightshift_allowance, 2) }}
@@ -264,6 +268,8 @@
                         @endphp
                         @endif
                         @endforeach
+
+                        @endif
                 <tfoot>
                     <tr style="font-size:10px; !important; border:3px solid rgb(9, 5, 64)">
                         <td colspan="{{ $colspan_col }}"><b>
@@ -279,6 +285,9 @@
                         <td class=" {{ $grossSalary_col }} text-end">
                             <b><b>{{ number_format($total_gross_salary, 2) }}</b></b>
                         </td>
+
+                        <td class=" {{ $otherPayments_col }} text-end">{{ number_format($total_others,2) }}
+                                </td>
 
                         <td class=" {{ $taxBenefit_col }} text-end"><b><b> {{ number_format(0, 2) }}</b></b></td>
                         <td class=" {{ $taxableGross_col }} text-end">

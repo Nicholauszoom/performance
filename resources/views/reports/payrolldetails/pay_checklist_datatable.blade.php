@@ -37,6 +37,7 @@
         $netBasic_col = "d-none";
         $overtime_col = "d-none";
         $grossSalary_col = "d-none";
+        $otherPayments_col="";
         $taxBenefit_col = "d-none";
         $taxableGross_col = "d-none";
         $paye_col = "d-none";
@@ -50,6 +51,7 @@
         $totalDeduction_col = "d-none";
         $amountPayable_col = "";
         $colspan_col = "5";
+        $show_terminations=false;
 
         @endphp
         @include('reports.payrolldetails.payroll_details_calculation')
