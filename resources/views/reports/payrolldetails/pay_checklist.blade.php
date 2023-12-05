@@ -78,103 +78,42 @@
 
                 <hr>
                 <table class="table" id="reports" style="font-size:10px;">
-                    <thead style="border-bottom:2px solid rgb(9, 5, 64);">
-                        
-                        <tr>
-                            <th style="text-align: right;"><b>S/N</b></th>
-                            <th style="text-align: center;"><b>Payroll No</b></th>
-                            <th colspan="2"><b>Name</b></th>
 
-                            <th style="text-align: center;"><b>Bank</b></th>
+                @php
 
-                            <th style="text-align: center;"><b>Account No</b></th>
-                            <th><b>Currency</b></th>
-                            <th style="text-align: right;"><b>Net Pay</b></th>
-                        </tr>
+                $payNo_col = "";
+                $name_col = "";
+                $bank_col="";
+                $branchCode_col="";
+                $accountNumber_col = "d-none";
+                $pensionNumber_col = "d-none";
+                $currency_col="";
+                $department_col = "d-none";
+                $costCenter_col = "d-none";
+                $basicSalary_col = "d-none";
+                $netBasic_col = "d-none";
+                $overtime_col = "d-none";
+                $otherPayments_col="d-none";
+                $grossSalary_col = "d-none";
+                $taxBenefit_col = "d-none";
+                $taxableGross_col = "d-none";
+                $paye_col = "d-none";
+                $nssfEmployee_col = "d-none";
+                $nssfEmployer_col = "d-none";
+                $nssfPayable_col = "d-none";
+                $sdl_col = "d-none";
+                $wcf_col = "d-none";
+                $loanBoard_col = "d-none";
+                $advanceOthers_col = "d-none";
+                $totalDeduction_col = "d-none";
+                $amountPayable_col = "";
+                $colspan_col = "5";
+                $show_terminations=false;
 
-                        
-                    </thead>
-                    <tbody>
-                        <?php
-                                    $i =0;
-                                    if(!empty($summary)){
-                                        $total_loans = 0;
-                                        $others = 0;
-                                        $total_teller_allowance = 0;
-                                        $total_taxable_amount = 0;
-                                        $total_gross_salary = 0;
-                                        $total_taxs = 0;
-                                        $total_salary = 0; $total_netpay = 0; $total_allowance = 0; $total_overtime = 0; $total_house_rent = 0; $total_sdl = 0; $total_wcf = 0;
-                                        $total_tax = 0; $total_pension = 0; $total_others = 0; $total_deduction = 0; $total_gross_salary = 0; $taxable_amount = 0;
-                                    foreach ($summary as $row){
-                                        if($row->currency == $currency){
-                                        $i++;
-                                        $amount = $row->salary + $row->allowances-$row->pension_employer-$row->loans-$row->deductions-$row->meals-$row->taxdue;
-                                        $total_netpay = round($total_netpay,2) + round($amount/$row->rate,2);
-                                        $amount=round($amount,2);
-                                        $total_gross_salary += ($row->salary + $row->allowances);
-                                        $total_salary = $total_salary + $row->salary;
-                                        $total_allowance = $total_allowance + $row->allowances ;
-                                        $total_overtime = $total_overtime +$row->overtime;
-                                        $total_house_rent = $total_house_rent + $row->house_rent;
-                                        $total_others = $total_others + $row->other_payments ;
-                                        $total_taxs += round($row->taxdue,2);
-        
-                                        $total_pension = $total_pension + $row->pension_employer;
-                                        $total_deduction += ($row->salary + $row->allowances)-$amount;
-                                        $total_sdl = $total_sdl + $row->sdl;
-                                        $total_wcf = $total_wcf + $row->wcf;
-                                        $total_taxable_amount += intval($row->salary + $row->allowances-$row->pension_employer);
-                                        $total_loans = $total_loans + $row->total_loans;
-                                        $total_teller_allowance += $row->teller_allowance;
-        
-                                        $others += $row->deductions;
-        
-        
-                                    ?>
-        
-                                    <tr>
-                                        <td class="text-end">{{ $i }}</td>
-                                        <td class="text-end">{{ $row->emp_id }}</td>
-                                    
-                                        <td class="" style="margin-right: 0px" colspan="2">{{ $row->fname }}  {{ $row->mname }} {{ $row->lname }}
-                                        </td>
-                                       
-        
-                                        <td class="text-end">{{ $row->bank_name }}</td>
-        
-                
-        
-                                        <td class="text-end">{{ $row->account_no }}</td>
-        
-        
-                                        <td class="text-end">{{ $row->currency }}</td>
-                  
-                         
-                                        <td class="text-end">{{ number_format($amount/$row->rate, 2) }}</td>
-        
-        
-                                    </tr>
-        
-                                    <?php } } ?>
-                    </tbody>
-                                    <tfoot>
-                                    <tr style="font-size:10px; !important; border:3px solid rgb(9, 5, 64)">
-        
-                                        {{-- <td></td>
-                                        <td></td>
-                                        <td></td> --}}
-                                        <td colspan="7">
-                                                <b>
-                                                    <b>TOTAL<b>
-                                                    </b></td>
-                                       
-                                        <td colspan="2" class="text-end"><b><b>{{ number_format($total_netpay, 2) }}</b></b></td>
-        
-                                    </tr>
-                                </tfoot>
-        
-                                    <?php  } ?>
+
+                @endphp
+                @include('reports.payrolldetails.payroll_details_calculation')
+
                 </table>
                 
 

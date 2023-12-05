@@ -22,7 +22,7 @@
     </a>
 
         <a class="ms-3"
-            href="{{ route('reports.payrolldetails', ['date' => $payroll_date, 'payrollState' => $payrollState, 'type' => 1]) }}"
+            href="{{ route('reports.payrolldetails', ['payrolldate' => $payroll_date, 'payrollState' => $payrollState, 'type' => 2]) }}"
             target="blank">
             <button type="button" name="print" value="print" class="btn btn-main btn-sm"> Payroll Details</button>
         </a>
@@ -30,7 +30,7 @@
             href="{{ route('reports.payrollReportLogs', ['payrolldate' => $payroll_date, 'type' => 2, 'payrollState' => $payrollState]) }}"
             target="blank">
             <button type="button" name="print" value="print" class="btn btn-main btn-sm">
-                Payroll Changes
+                Payroll Changess
             </button>
         </a>
         <a class="ms-3"
