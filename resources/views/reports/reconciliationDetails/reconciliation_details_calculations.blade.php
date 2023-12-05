@@ -195,7 +195,6 @@
                             $total_amount = 0;
 
                             @endphp
-                             @endphp
                             @foreach ($basic_increase as $row)
 
                                 @php
