@@ -3098,7 +3098,7 @@ EOD;
     {
 
         $date = $request->payrolldate;
-        $data['summary'] = $this->reports_model->get_payroll_summary($date);
+        $data['summary'] = $this->reports_model->get_payroll_summary($date,$request->payrollState);
         $data['termination'] = $this->reports_model->get_termination($date);
 
 
