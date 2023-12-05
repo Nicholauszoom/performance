@@ -28,7 +28,6 @@
                             $total_amount = 0;
 
                             @endphp
-                             @endphp
                             @foreach ($employee_increase as $row)
 
                                 @php
@@ -112,7 +111,6 @@
                             $total_amount = 0;
 
                             @endphp
-                             @endphp
                             @foreach ($employee_decrease as $row)
 
                                 @php
@@ -278,7 +276,6 @@
                             $total_amount = 0;
 
                             @endphp
-                             @endphp
                             @foreach ($basic_decrease as $row)
 
                                 @php
@@ -361,7 +358,6 @@
                             $total_amount = 0;
 
                             @endphp
-                             @endphp
                             @foreach ($allowances as $row)
                             @if($row->description == $name)
                             @if($row->description == "Add/Less S-Overtime")
