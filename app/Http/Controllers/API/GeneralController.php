@@ -504,6 +504,9 @@ class GeneralController extends Controller
     {
      
         $data['leaves'] = Leaves::whereNot('reason', 'Automatic applied!')->orderBy('id', 'desc')->get();
+        $data['revoked_leaves'] = Leaves::where('revoke_status', 0)
+        ->orWhere('revoke_status', 1)
+        ->orderBy('id', 'DESC')->get();
         $line_manager = auth()->user()->emp_id;
         if ($data['leaves']->isNotEmpty()) {
             foreach ($data['leaves'] as $key => $leave) {
@@ -566,6 +569,7 @@ class GeneralController extends Controller
 
         $numberOfLeaves = count($filteredLeaves);
         $data['leaves']=$filteredLeaves;
+       
         return response( [ 'data'=>$data ],200);
 
     }
