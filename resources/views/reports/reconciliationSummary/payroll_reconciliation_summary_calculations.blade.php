@@ -5,7 +5,7 @@
                                 $total_amount += $total_previous_gross;
                             @endphp
 
-                            <tr style="border-bottom:1px solid rgb(211, 211, 230)">
+                            <tr class="hdr" style="border-bottom:1px solid rgb(211, 211, 230)">
                                 <td class="text-start">00001</td>
                                 <td class="text-start">Last Month Gross Salary</td>
                                 <td class="text-end">  {{ number_format(0, 2) }} </td>
@@ -16,7 +16,7 @@
 
 
                                 @if ($new_employee > 0)
-                                    <tr style="border-bottom:1px solid rgb(211, 211, 230)">
+                                    <tr class="hdr" style="border-bottom:1px solid rgb(211, 211, 230)">
                                         <td class="text-start">00002</td>
                                         <td class="text-start">Add New Employee</td>
                                         <td class="text-end"> {{ number_format(0, 2) }} </td>
@@ -33,7 +33,7 @@
                                 @endif
 
                                 @if ($terminated_employee > 0)
-                                    <tr style="border-bottom:1px solid rgb(211, 211, 230)">
+                                    <tr class="hdr" style="border-bottom:1px solid rgb(211, 211, 230)">
                                         <td class="text-start">00002</td>
                                         <td class="text-start">Less Terminated Employee</td>
                                         <td class="text-end">
@@ -55,7 +55,7 @@
 
                             @if ($count_previous_month != 0)
                                 @if ($current_increase['basic_increase'] > 0)
-                                    <tr style="border-bottom:1px solid rgb(211, 211, 230)">
+                                    <tr class="hdr" style="border-bottom:1px solid rgb(211, 211, 230)">
                                         <td class="text-start">00004</td>
                                         <td class="text-start">Add Increase in Basic Pay incomparison to Last M </td>
                                         <td class="text-end">
@@ -81,7 +81,7 @@
                                     @endphp
                                 @endif
                                 @if ($current_decrease['basic_decrease'] > 0)
-                                    <tr style="border-bottom:1px solid rgb(211, 211, 230)">
+                                    <tr class="hdr" style="border-bottom:1px solid rgb(211, 211, 230)">
                                         <td class="text-start">00004</td>
                                         <td class="text-start">Less Decrease in Basic Pay incomparison to Last M </td>
                                         <td class="text-end">
@@ -111,7 +111,7 @@
                                     @php $i++;  @endphp
                                     @if ($row->current_amount - $row->previous_amount != 0)
                                         @if ($row->description == 'Add/Less Leave Pay' || $row->description == 'Add/Less Leave Allowance')
-                                            <tr style="border-bottom:1px solid rgb(211, 211, 230)">
+                                            <tr class="hdr" style="border-bottom:1px solid rgb(211, 211, 230)">
                                                 <td class="text-start">{{ '000' . $i + 4 }}</td>
                                                 <td class="text-start">
                                                     @if ($row->description == 'Add/Less S-Overtime')
@@ -142,7 +142,7 @@
 
                                             @endphp
                                         @else
-                                            <tr style="border-bottom:1px solid rgb(211, 211, 230)">
+                                            <tr class="hdr" style="border-bottom:1px solid rgb(211, 211, 230)">
                                                 <td class="text-start">{{ '000' . $i + 14 }}</td>
                                                 <td class="text-start">
                                                     @if ($row->description == 'Add/Less S-Overtime')
@@ -173,7 +173,7 @@
                                 @endforeach
                             @endif
 
-                            <tr style="border-bottom:2px solid #F0C356;">
+                            <tr class="hdr" style="border-bottom:2px solid #F0C356;">
                                 <td class="text-start"></td>
                                 <td class="text-start"><b>This Month</b> </td>
                                 <td class="text-end">
