@@ -75,7 +75,8 @@
                         $total_wcf = 0;
                         $total_tax = 0;
                         $total_pension = 0;
-                        $total_others = 0;
+                        $total_others_normal = 0;
+                        $total_others_term = 0;
                         $total_deduction = 0;
                         $total_gross_salary = 0;
                         $taxable_amount = 0;
@@ -90,7 +91,7 @@
                             $total_overtime = round($total_overtime + $row->overtime, 2);
                             $total_arrears = round($total_arrears + $row->arrears_allowance, 2);
                             // $total_house_rent = round($total_house_rent + $row->house_rent,2);
-                            $total_others +=  round($row->other_payments, 2);
+                            $total_others_normal +=  round($row->other_payments, 2);
                             $total_taxs += round($row->taxdue, 2);
 
                             $total_pension = round($total_pension + $row->pension_employer, 2);
@@ -251,7 +252,7 @@
                         $total_salary += round($row2->salaryEnrollment,2);
                         $total_overtime +=round(($row2->normal_days_overtime_amount+$row2->public_overtime_amount),2);
 
-                        $total_others += round($row2->leavePay + $row2->leaveAllowance+$row2->transport_allowance+$row2->nightshift_allowance,2);
+                        $total_others_term += round($row2->leavePay + $row2->leaveAllowance+$row2->transport_allowance+$row2->nightshift_allowance ,2);
                         $total_taxable_amount += round($row2->taxable,2);
                         $total_taxs += round($row2->paye,2);
                         //$total_netpay += ($row2->taxable -$row2->paye);
@@ -286,8 +287,8 @@
                             <b><b>{{ number_format($total_gross_salary, 2) }}</b></b>
                         </td>
 
-                        <td class=" {{ $otherPayments_col }} text-end">{{ number_format($total_others,2) }}
-                                </td>
+                        <td class=" {{ $otherPayments_col }} text-end"><b><b>{{ number_format($total_others_term +$total_others_normal,2) }}
+                        </b></b></td>
 
                         <td class=" {{ $taxBenefit_col }} text-end"><b><b> {{ number_format(0, 2) }}</b></b></td>
                         <td class=" {{ $taxableGross_col }} text-end">
