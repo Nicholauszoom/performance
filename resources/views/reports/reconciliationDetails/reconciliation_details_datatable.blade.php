@@ -1,6 +1,12 @@
 @extends('layouts.vertical', ['title' => 'Payroll'])
 
 @push('head-script')
+
+<style> .hdr {
+
+font-size: 15px !important;
+}
+</style>
 @endpush
 
 @push('head-scriptTwo')
