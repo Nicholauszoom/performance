@@ -59,7 +59,7 @@
                         <tr>
                             <td class="">
                                 <div class="box-text">
-                                    <h5 style="font-weight:bolder;text-align: left;"> Pay Checklist </h5>
+                                    <h5 style="font-weight:bolder;text-align: left;"> Payroll Details </h5>
                                 </div>
                             </td>
                             <td>

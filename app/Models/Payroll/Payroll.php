@@ -5,6 +5,8 @@ namespace App\Models\Payroll;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
+
 
 class Payroll extends Model
 {
@@ -260,6 +262,41 @@ IF((e.unpaid_leave = 0)
 
 FROM employee e, emp_allowances ea,  allowances a WHERE e.emp_id = ea.empID AND a.id = ea.allowance AND a.state = 1 AND e.state = 1 and e.login_user != 1";
             DB::insert(DB::raw($query));
+
+            $query = "INSERT INTO financial_logs (payrollno, changed_by, field_name, action_from, action_to, input_screen)
+
+            SELECT ea.empID AS empID, ".Auth::user()->emp_id." AS changed_by,
+
+            a.name AS field_name,
+
+            0.00 As action_from,
+
+
+IF( (ea.mode = 1), 'Fixed Amount', CONCAT(100*ea.percent,'% ( Basic Salary )') ) AS policy,
+
+IF((e.unpaid_leave = 0)
+,0,IF((ea.mode = 1),
+          ea.amount,
+          IF(a.type = 1,IF(DATEDIFF('" . $last_date . "',e.hire_date) < 365,
+          ((DATEDIFF('" . $last_date . "',e.hire_date)+1)/365)*e.salary,ea.percent*e.salary),
+
+          (ea.percent*
+          IF((month(e.hire_date) = month('" . $payroll_date . "')) AND (year(e.hire_date) = year('" . $payroll_date . "')),
+          ((" . $days . " - (day(e.hire_date)+1))*e.salary/30),e.salary)
+           )
+
+      )
+      )
+
+  ) AS action_to,
+
+  'payroll_input' AS input_screen
+
+FROM employee e, emp_allowances ea,  allowances a WHERE e.emp_id = ea.empID AND a.id = ea.allowance AND a.state = 1 AND e.state = 1 and e.login_user != 1";
+
+           
+            DB::insert(DB::raw($query));
+
             //INSERT BONUS
             $query = " INSERT INTO temp_allowance_logs(empID, description, policy, amount, payment_date)
 
