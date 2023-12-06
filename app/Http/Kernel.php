@@ -39,6 +39,7 @@ class Kernel extends HttpKernel
             \Illuminate\View\Middleware\ShareErrorsFromSession::class,
             \App\Http\Middleware\VerifyCsrfToken::class,
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
+            \App\Http\Middleware\CheckSession::class,
         ],
 
         'api' => [
@@ -74,21 +75,18 @@ class Kernel extends HttpKernel
         'prevent-back-history' => \App\Http\Middleware\PreventBackHistory::class,
         'workforce' => \App\Http\Middleware\WorkForce::class, //workforce management middleware
         'payroll' => \App\Http\Middleware\Payroll::class, // Payroll management access middleware
-        'employee' => \App\Http\Middleware\Employee ::class, // For Employee related issues
-        'suspension' => \App\Http\Middleware\EmployeeSuspension ::class, // For Employee Suspension
-        'leave' => \App\Http\Middleware\Leave ::class, // For Employee leave
-        'loan' => \App\Http\Middleware\Loan ::class, // For Loan Management
-        'organisation' => \App\Http\Middleware\Organisation ::class, // For Organisation Management
-        'report' => \App\Http\Middleware\Report ::class, // For Report
-        'setting' => \App\Http\Middleware\Setting ::class, // For Report
+        'employee' => \App\Http\Middleware\Employee::class, // For Employee related issues
+        'suspension' => \App\Http\Middleware\EmployeeSuspension::class, // For Employee Suspension
+        'leave' => \App\Http\Middleware\Leave::class, // For Employee leave
+        'loan' => \App\Http\Middleware\Loan::class, // For Loan Management
+        'organisation' => \App\Http\Middleware\Organisation::class, // For Organisation Management
+        'report' => \App\Http\Middleware\Report::class, // For Report
+        'setting' => \App\Http\Middleware\Setting::class, // For Report
         'dashboard' => \App\Http\Middleware\Dashboard::class, // For Dashboard
         'emptermination' => \App\Http\Middleware\EmployeeTermination::class, // For Employee Termination
         'promotion' => \App\Http\Middleware\Promotion::class, // For Employee Promotion
         'verify-outgoing-requests' => \App\Http\Middleware\VerifyOutgoingRequests::class,
-
-
-
-
+        // 'check.session' => \App\Http\Middleware\CheckSession::class,
 
     ];
 }
