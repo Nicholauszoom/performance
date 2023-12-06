@@ -2454,7 +2454,7 @@ return response(['msg'=>$msg],400);
 
       $particularLeave = Leaves::where('id', $id)->first();
       $linemanager = LeaveApproval::where('empID', $particularLeave->empID)->first();
-      $linemanager_position = Employee::where('emp_id',$linemanager->level1)->value('position');
+      $linemanager_position = EMPL::where('emp_id',$linemanager->level1)->value('position');
       $position = Position::where('id', $linemanager_position)->first();
       $positionName = $position->name;
 
@@ -2493,15 +2493,15 @@ return response(['msg'=>$msg],400);
           Notification::route('mail', $linemanager_data['email'])->notify(new EmailRequests($email_data));
 
       } catch (TransportException $exception) {
-          $msg = $type_name . " Leave Revoke Request  Has been Requested But Email is not sent(SMTP Problem)!";
-        return response(['msg'->$msg],202);
+          $msg =" Leave Revoke Request  Has been Requested But Email is not sent(SMTP Problem)!";
+        return response(['msg'=>$msg],202);
 
       }
-      $msg = $type_name . " Leave Request  Has been Requested Successfully!";
-      return response(['msg'->$msg],200);
+      $msg =" Leave Revoke Request  Has been Requested Successfully!";
+      return response(['msg'=>$msg],200);
     }else{
-      $msg = $type_name . "leave can not be revoked";
-      return response(['msg'->$msg],202);
+      $msg ="leave can not be revoked";
+      return response(['msg'=>$msg],202);
     }
 
   }
