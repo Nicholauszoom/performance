@@ -4,7 +4,7 @@
                 <h4>Add New Employee</h4>
                 <table class="table" id="reports" style="font-size:9px; ">
                     <thead style="font-size:8px;">
-                        <tr style="border-bottom:2px solid rgb(9, 5, 64);">
+                        <tr class="hdr" style="border-bottom:2px solid rgb(9, 5, 64);">
 
                             <th><b>Number</b></th>
 
@@ -35,7 +35,7 @@
                                     $total_current += $row->current_amount;
                                     $total_amount += ($row->current_amount - $row->previous_amount);
                                 @endphp
-                                <tr style="border-bottom:2px solid rgb(67, 67, 73)">
+                                <tr  class="hdr"  style="border-bottom:2px solid rgb(67, 67, 73)">
 
                                     <td class="text-end">{{ $row->emp_id }}</td>
 
@@ -61,7 +61,7 @@
                                 </tr>
 
                             @endforeach
-                            <tr style="border-bottom:2px solid rgb(67, 67, 73)">
+                            <tr class="hdr"  style="border-bottom:2px solid rgb(67, 67, 73)">
 
                                 <td class="text-end" colspan="2"><b>TOTAL</b></td>
                                 <td></td>
