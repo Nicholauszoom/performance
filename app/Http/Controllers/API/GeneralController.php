@@ -504,8 +504,11 @@ class GeneralController extends Controller
     {
      
         $data['leaves'] = Leaves::whereNot('reason', 'Automatic applied!')->orderBy('id', 'desc')->get();
+        $data['revoked_leaves'] = Leaves::where('revoke_status', 0)->whereNot('reason', 'Automatic applied!')
+        ->orWhere('revoke_status', 1)
+        ->orderBy('id', 'DESC')->get();
         $line_manager = auth()->user()->emp_id;
-        if ($data['leaves']->isNotEmpty()) {
+        if ($data['leaves']->isNotEmpty()||$data['revoked_leaves']->isNotEmpty()) {
             foreach ($data['leaves'] as $key => $leave) {
                 $uniqueLeaveID = $leave['id'];
 
@@ -530,9 +533,34 @@ class GeneralController extends Controller
                     $data['leaves'][$key]['forfeit_days'] = $forfeitDaysValue;
                 }
             }
+            foreach ($data['revoked_leaves'] as $key => $leave) {
+                $uniqueLeaveID = $leave['id'];
+
+                // Fetch 'appliedBy' value from 'sick_leave_forfeit_days' based on the unique 'leaveID'
+                $appliedByValue = DB::table('sick_leave_forfeit_days')
+                    ->where('leaveID', $uniqueLeaveID)
+                    ->value('appliedBy');
+
+                // Fetch 'forfeit_days' value from 'sick_leave_forfeit_days' based on the unique 'leaveID'
+                $forfeitDaysValue = DB::table('sick_leave_forfeit_days')
+                    ->where('leaveID', $uniqueLeaveID)
+                    ->value('forfeit_days');
+
+                if ($appliedByValue !== null) {
+                    // Fetch 'full_name' from 'EMPL' model based on 'emp_id'
+                    $full_name = EMPL::where('emp_id', $appliedByValue)->value('full_name');
+
+                    // Add the 'appliedBy' attribute to the leave item
+                    $data['revoked_leaves'][$key]['appliedBy'] = $full_name;
+
+                    // Add the 'forfeit_days' attribute to the leave item
+                    $data['revoked_leaves'][$key]['forfeit_days'] = $forfeitDaysValue;
+                }
+            }
         }
 
         $filteredLeaves = [];
+        $filteredLeaves1 = [];
         
         foreach ($data['leaves'] as $leave) {
             $level1 = LeaveApproval::where('empID', $leave->empID)
@@ -558,14 +586,40 @@ class GeneralController extends Controller
                 $filteredLeaves[] = $leave;
             }
         }
+        foreach ($data['revoked_leaves'] as $leave) {
+            $level1 = LeaveApproval::where('empID', $leave->empID)
+                ->where('level1', $line_manager)
+                ->first();
+           
+            $level2 = LeaveApproval::where('empID', $leave->empID)
+                ->where('level2', $line_manager)
+                ->first();
         
+            $level3 = LeaveApproval::where('empID', $leave->empID)
+                ->where('level3', $line_manager)
+                ->first();
+        
+            $approval = LeaveApproval::where('empID', $leave->empID)->first();
+        
+            if (
+                auth()->user()->emp_id == $approval->level1 ||
+                (auth()->user()->emp_id == $approval->level2 && $leave->status == 2) ||
+                (auth()->user()->emp_id == $approval->level3 && $leave->status == 3) ||
+                (auth()->user()->emp_id == $leave->deligated && $leave->status == 3)
+            ) {
+                $filteredLeaves1[] = $leave;
+            }
+        }
        
         
        
 
 
         $numberOfLeaves = count($filteredLeaves);
+        $numberOfLeaves2 = count($filteredLeaves1);
         $data['leaves']=$filteredLeaves;
+        $data['revoked_leaves']=$filteredLeaves1;
+        
         return response( [ 'data'=>$data ],200);
 
     }

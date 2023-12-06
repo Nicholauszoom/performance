@@ -60,7 +60,12 @@ Route::middleware('auth:sanctum')->group( function () {
 
        //for approving Leaves
        Route::post('/approveLeave',[LeaveController::class,'approveLeave']);
-
+       
+       Route::post('/approveRevoke',[LeaveController::class,'revokeApprovedLeaveAdmin']);
+      
+       Route::post('/denyRevoke',[LeaveController::class,'revokeCancelLeaveAdmin']);
+       
+       Route::post('/revokeLeave',[LeaveController::class,'revokeApprovedLeave']);
 
        // For Saving Overtimes
       Route::post('/apply-overtime',[GeneralController::class,'applyOvertime']);

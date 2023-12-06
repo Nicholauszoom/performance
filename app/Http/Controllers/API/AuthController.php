@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use App\Models\Payroll\FlexPerformanceModel;
 use Illuminate\Support\Facades\Session;
+use App\Models\EmergencyContact;
 
 
 class AuthController extends Controller
@@ -121,6 +122,7 @@ class AuthController extends Controller
              //  dd(session()->all());
 
             $data['employee'] = $this->flexperformance_model->userprofile($request->emp_id);
+            // $data['emegerncy'] = EmergencyContact::where('employeeID', $request->emp_id)->first();
             // dd($data['employee'],$request->emp_id);
             //$annualleaveBalance = $this->attendance_model->getLeaveBalance($user->hire_date, date('Y-m-d'));
             $annualleaveBalance = $this->attendance_model->getLeaveBalance(auth()->user()->emp_id,auth()->user()->hire_date, date('Y-m-d'));
@@ -128,7 +130,9 @@ class AuthController extends Controller
             $myNewData = json_decode(json_encode($data['employee'][0]), true);
             $myNewData['accrued_days'] = $annualleaveBalance;
             $myNewData['pass_age'] = $pass_age;
-           // $myNewDataJson = json_encode($myNewData);
+            $myNewData['emegerncy'] =EmergencyContact::where('employeeID', $request->emp_id)->first();
+            
+             // $myNewDataJson = json_encode($myNewData);
 
 
 
@@ -174,7 +178,8 @@ class AuthController extends Controller
     {
         return response(
             [
-                'user'=>auth()->user()
+                'user'=>auth()->user(),
+                'emegency' =>  EmergencyContact::where('employeeID', auth()->user()->emp_id)->first()
             ],200);
     }
 

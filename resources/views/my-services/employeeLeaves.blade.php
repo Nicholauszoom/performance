@@ -202,7 +202,7 @@
                             <span class="label badge bg-warning text-whites label-info">PENDING APPROVAL OF LEAVE REVOKE</span>
                         <?php }
                   elseif($row->state==3){?>
-                            <span class="label badge bg-success text-whites label-info">APPROVED LEAVE REVOKE </span>
+                            <span class="label badge bg-success text-whites label-info">APPROVED LEAVE REVOKED </span>
                         <?php }
                   elseif($row->state==4){?>
                             <span class="label badge bg-secondary text-white">CANCELED</span>
