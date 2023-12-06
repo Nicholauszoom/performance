@@ -31,6 +31,7 @@ use App\Models\EmployeeParent;
 use App\Models\EmployeePerformance;
 use App\Models\EmployeeSkills;
 use App\Models\EmployeeSpouse;
+use App\Models\EmployeeTerminationAllowance;
 use App\Models\EmploymentHistory;
 use App\Models\FinancialLogs;
 use App\Models\Grievance;
@@ -38,7 +39,6 @@ use App\Models\Holiday;
 use App\Models\InputSubmission;
 use App\Models\LeaveApproval;
 use App\Models\LeaveForfeiting;
-use App\Models\EmployeeTerminationAllowance;
 
 //use PHPClamAV\Scanner;
 use App\Models\Leaves;
@@ -1053,7 +1053,6 @@ class GeneralController extends Controller
             }
         }
     }
-
 
     public function deleteDepartment($id)
     {
@@ -2453,7 +2452,6 @@ class GeneralController extends Controller
 
     public function approved_financial_payments(Request $request)
     {
-
         $this->authenticateUser('edit-payroll');
         // if(session('mng_paym')||session('recom_paym')||session('appr_paym')){
         $data['overtime'] = $this->flexperformance_model->approvedOvertimes();
@@ -5401,7 +5399,7 @@ class GeneralController extends Controller
 
             $allowanceName = DB::table('allowances')->select('name')->where('id', $request->input('allowance'))->limit(1)->first();
 
-            SysHelpers::FinancialLogs($data['empID'], 'Assign ' . $allowanceName->name, '0.00', ($data['amount'] != 0) ? $data['amount'] . ' ' . $data['currency'] : $data['percent'] . '%',  'Payroll Input');
+            SysHelpers::FinancialLogs($data['empID'], 'Assign ' . $allowanceName->name, '0.00', ($data['amount'] != 0) ? $data['amount'] . ' ' . $data['currency'] : $data['percent'] . '%', 'Payroll Input');
 
             if ($result == true) {
                 // $this->flexperformance_model->audit_log("Assigned an allowance to Employee with Id = " . $request->input('empID') . " ");
@@ -5440,7 +5438,7 @@ class GeneralController extends Controller
 
         ])
             ->where(function ($query) use ($startDate, $endDate) {
-                $query->where('hire_date', '>', $startDate,)
+                $query->where('hire_date', '>', $startDate, )
                     ->where('hire_date', '<=', $endDate);
             })
             ->get();
@@ -7096,8 +7094,6 @@ class GeneralController extends Controller
 
         $validator = $request->validated($request->all());
 
-
-
         $calendar = str_replace('/', '-', $request->input('birthdate'));
         $contract_end = str_replace('/', '-', $request->input('contract_end'));
         $contract_start = str_replace('/', '-', $request->input('contract_start'));
@@ -7754,16 +7750,16 @@ class GeneralController extends Controller
         }*/
         //exit($host.$port);
         $d =
-            $config = array(
-                'protocol' => 'TLS',
-                'smtp_host' => 'smtp.gmail.com',
-                'smtp_port' => 587,
-                'smtp_user' => 'mirajissa1@gmail.com', // change it to yours
-                'smtp_pass' => 'Mirajissa1@1994', // change it to yours
-                'mailtype' => 'html',
-                'charset' => 'iso-8859-1',
-                'wordwrap' => true,
-            );
+        $config = array(
+            'protocol' => 'TLS',
+            'smtp_host' => 'smtp.gmail.com',
+            'smtp_port' => 587,
+            'smtp_user' => 'mirajissa1@gmail.com', // change it to yours
+            'smtp_pass' => 'Mirajissa1@1994', // change it to yours
+            'mailtype' => 'html',
+            'charset' => 'iso-8859-1',
+            'wordwrap' => true,
+        );
 
         $message = "This is my email";
         $this->load->library('email', $config);
@@ -7801,16 +7797,16 @@ class GeneralController extends Controller
         }*/
         //exit($host.$port);
         $d =
-            $config = array(
-                'protocol' => 'TLS',
-                'smtp_host' => 'smtp.gmail.com',
-                'smtp_port' => 587,
-                'smtp_user' => 'mirajissa1@gmail.com', // change it to yours
-                'smtp_pass' => 'Mirajissa1@1994', // change it to yours
-                'mailtype' => 'text',
-                'charset' => 'iso-8859-1',
-                'wordwrap' => true,
-            );
+        $config = array(
+            'protocol' => 'TLS',
+            'smtp_host' => 'smtp.gmail.com',
+            'smtp_port' => 587,
+            'smtp_user' => 'mirajissa1@gmail.com', // change it to yours
+            'smtp_pass' => 'Mirajissa1@1994', // change it to yours
+            'mailtype' => 'text',
+            'charset' => 'iso-8859-1',
+            'wordwrap' => true,
+        );
 
         $message = "This is my email";
         $this->load->library('email', $config);
@@ -8015,21 +8011,21 @@ class GeneralController extends Controller
         $amount_staff_bank = 0;
         foreach ($staff_bank_totals as $row) {
             $amount_staff_bank += $row->salary +
-                $row->allowances - $row->pension - $row->loans - $row->deductions - $row->meals - $row->taxdue;
+            $row->allowances - $row->pension - $row->loans - $row->deductions - $row->meals - $row->taxdue;
         }
 
         /*amount bank temporary*/
         $amount_temporary_bank = 0;
         foreach ($temporary_bank_totals as $row) {
             $amount_temporary_bank += $row->salary +
-                $row->allowances - $row->pension - $row->loans - $row->deductions - $row->meals - $row->taxdue;
+            $row->allowances - $row->pension - $row->loans - $row->deductions - $row->meals - $row->taxdue;
         }
 
         /*mwp total*/
         $amount_mwp = 0;
         foreach ($temporary_mwp_total as $row) {
             $amount_mwp += $row->salary +
-                $row->allowances - $row->pension - $row->loans - $row->deductions - $row->meals - $row->taxdue;
+            $row->allowances - $row->pension - $row->loans - $row->deductions - $row->meals - $row->taxdue;
         }
 
         $total = $amount_mwp + $amount_staff_bank + $amount_temporary_bank;
@@ -8210,8 +8206,6 @@ class GeneralController extends Controller
         $nightshift_allowance = $request->nightshift_allowance;
         $transport_allowance = $request->transport_allowance;
 
-
-
         $termination = new Termination();
         $termination->employeeID = $request->employeeID;
         $termination->terminationDate = $request->terminationDate;
@@ -8306,10 +8300,10 @@ class GeneralController extends Controller
 
         $deduction_rate = $this->flexperformance_model->get_deduction_rate();
 
-        if($paye1){
+        if ($paye1) {
             $paye = $paye1->excess_added + $paye1->rate * ($taxable - $paye1->minimum);
 
-        }else{
+        } else {
             $paye = 0;
         }
 
@@ -8335,25 +8329,22 @@ class GeneralController extends Controller
         $newTerminationId = $termination->id;
         $empId = $request->employeeID;
 
-
-        $allowancees =$this->flexperformance_model->get_allowance_names_for_employee($empId);
-
+        $allowancees = $this->flexperformance_model->get_allowance_names_for_employee($empId);
 
         // dd($request->input('empallowance_6'));
-        foreach($allowancees as $allowance){
-            $allowanceCode =$request->input('empallowance_'.$allowance->id);
-                $employeeTerminationAllowance = new EmployeeTerminationAllowance();
-                $employeeTerminationAllowance->termination_id = $newTerminationId;
-                $employeeTerminationAllowance->emp_id = $empId;
-                $employeeTerminationAllowance->allowance_id = $allowance->id; // Assign the correct allowance ID here
-                $employeeTerminationAllowance->amount = $allowanceCode;
-                $employeeTerminationAllowance->save();
+        foreach ($allowancees as $allowance) {
+            $allowanceCode = $request->input('empallowance_' . $allowance->id);
+            $employeeTerminationAllowance = new EmployeeTerminationAllowance();
+            $employeeTerminationAllowance->termination_id = $newTerminationId;
+            $employeeTerminationAllowance->emp_id = $empId;
+            $employeeTerminationAllowance->allowance_id = $allowance->id; // Assign the correct allowance ID here
+            $employeeTerminationAllowance->amount = $allowanceCode;
+            $employeeTerminationAllowance->save();
 
         }
 
         // $employeeAllowanceLogs = new EmployeeTemporaryAllowance();
         // $employeeAllowanceLogs->terminnationId = $terminationYenyewe->id;
-
 
         // $pentionable_amount =$salaryEnrollment + $leavePay + $arrears + overtime_amount;
         // } else {
@@ -8545,7 +8536,6 @@ class GeneralController extends Controller
         $today = date('Y-m-d');
 
         $employee_allowance = $this->flexperformance_model->get_allowance_names_for_employee($employeeID);
-
 
         $check_termination_date = $this->flexperformance_model->check_termination_payroll_date($termination_month);
         if ($check_termination_date == true) {
@@ -10167,7 +10157,7 @@ class GeneralController extends Controller
     {
         request()->validate(
             [
-                'emp_id' => 'required'
+                'emp_id' => 'required',
             ]
         );
 
@@ -10468,8 +10458,6 @@ class GeneralController extends Controller
 
     // Start of leave approvals
 
-
-
     // public function LeaveApprovals(Request $request)
     // {
 
@@ -10486,7 +10474,6 @@ class GeneralController extends Controller
     //         // dd("uuuuuuuuuuuuuuuuuuuuuu");
     //         return Excel::download(new LeaveApprovalsExport($data['approvals']), 'leave_approvals.xlsx');
     //     }
-
 
     //     return view('setting.leave-approval', $data);
     // }
@@ -10507,7 +10494,6 @@ class GeneralController extends Controller
 
         return view('setting.leave-approval', $data);
     }
-
 
     // For Saving Leave Approvals
     public function saveLeaveApproval(Request $request)
@@ -11070,7 +11056,7 @@ class GeneralController extends Controller
         $tasks = ProjectTask::where('project_id', $task->project_id)->get();
 
         $project = Project::where('id', $task->project_id)->first();
-        return view('performance.single_project', compact('project', 'tasks',));
+        return view('performance.single_project', compact('project', 'tasks', ));
     }
 
     public function edit_project_task($id)
@@ -11305,7 +11291,7 @@ class GeneralController extends Controller
         }
 
         $project = AdhocTask::all();
-        return view('performance.tasks', compact('project',));
+        return view('performance.tasks', compact('project', ));
     }
 
     //   For Viewing All Performance ratios
@@ -11492,9 +11478,9 @@ class GeneralController extends Controller
                 ->whereNotNull('employee_performances.performance')
                 ->where('employee_performances.type', '!=', 'pip')
 
-                // ->join('adhoc_tasks', 'employee.emp_id', '=', 'adhoc_tasks.assigned')
+            // ->join('adhoc_tasks', 'employee.emp_id', '=', 'adhoc_tasks.assigned')
                 ->avg('employee_performances.performance')
-                // ->get()
+            // ->get()
             ;
 
             $behaviour = DB::table('employee')
@@ -11503,7 +11489,7 @@ class GeneralController extends Controller
                 ->whereNotNull('employee_performances.behaviour')
                 ->where('employee_performances.type', '!=', 'pip')
 
-                // ->join('adhoc_tasks', 'employee.emp_id', '=', 'adhoc_tasks.assigned')
+            // ->join('adhoc_tasks', 'employee.emp_id', '=', 'adhoc_tasks.assigned')
                 ->avg('employee_performances.behaviour');
 
             // For Behaviour Needs Improvement
@@ -11837,9 +11823,9 @@ class GeneralController extends Controller
                 ->whereNotNull('employee_performances.performance')
                 ->where('employee_performances.type', '!=', 'pip')
 
-                // ->join('adhoc_tasks', 'employee.emp_id', '=', 'adhoc_tasks.assigned')
+            // ->join('adhoc_tasks', 'employee.emp_id', '=', 'adhoc_tasks.assigned')
                 ->avg('employee_performances.performance')
-                // ->get()
+            // ->get()
             ;
 
             $behaviour = DB::table('employee')
@@ -11848,7 +11834,7 @@ class GeneralController extends Controller
                 ->whereNotNull('employee_performances.behaviour')
                 ->where('employee_performances.type', '!=', 'pip')
 
-                // ->join('adhoc_tasks', 'employee.emp_id', '=', 'adhoc_tasks.assigned')
+            // ->join('adhoc_tasks', 'employee.emp_id', '=', 'adhoc_tasks.assigned')
                 ->avg('employee_performances.behaviour');
 
             // For Behaviour Needs Improvement
@@ -12180,16 +12166,16 @@ class GeneralController extends Controller
                 ->join('employee_performances', 'employee.emp_id', '=', 'employee_performances.empID')
                 ->where('employee.emp_id', $item->emp_id)
                 ->whereNotNull('employee_performances.performance')
-                // ->join('adhoc_tasks', 'employee.emp_id', '=', 'adhoc_tasks.assigned')
+            // ->join('adhoc_tasks', 'employee.emp_id', '=', 'adhoc_tasks.assigned')
                 ->avg('employee_performances.performance')
-                // ->get()
+            // ->get()
             ;
 
             $behaviour = DB::table('employee')
                 ->join('employee_performances', 'employee.emp_id', '=', 'employee_performances.empID')
                 ->where('employee.emp_id', $item->emp_id)
                 ->whereNotNull('employee_performances.behaviour')
-                // ->join('adhoc_tasks', 'employee.emp_id', '=', 'adhoc_tasks.assigned')
+            // ->join('adhoc_tasks', 'employee.emp_id', '=', 'adhoc_tasks.assigned')
                 ->avg('employee_performances.behaviour');
 
             $position = PositionSkills::where('position_ref', $item->position)->count();
@@ -12283,7 +12269,6 @@ class GeneralController extends Controller
 
         return view('talent.talent_matrix', $data);
     }
-
 
     public function loan_types()
     {
