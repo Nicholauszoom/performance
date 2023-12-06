@@ -2476,8 +2476,8 @@ return response(['msg'=>$msg],400);
       $type_name = $leave_type->type;
 
       //fetch Line manager data from employee table and send email
-      $linemanager_data = Employee::where('emp_id',$linemanager->level1)->first();
-      $employee_data =  Employee::where('emp_id',$particularLeave->empID)->first();
+      $linemanager_data = EMPL::where('emp_id',$linemanager->level1)->first();
+      $employee_data =  EMPL::where('emp_id',$particularLeave->empID)->first();
       $fullname = $linemanager_data['fname'];
       $email_data = array(
           'subject' => 'Employee Leave Revoke',
