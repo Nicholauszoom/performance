@@ -5,10 +5,6 @@
 @endpush
 
 @push('head-scriptTwo')
-    <!-- notification Js -->
-
-
-
     <script src="{{ asset('assets/js/pages/datatables_basic.js') }}"></script>
 @endpush
 
@@ -112,8 +108,7 @@
 
                     <div class="tab-content" id="myTabContent">
 
-                        <div role="tabpanel" role="tabpanel" class="tab-pane fade " id="payrollReportTab"
-                            aria-labelledby="home-tab">
+                        <div role="tabpanel" role="tabpanel" class="tab-pane fade " id="payrollReportTab" aria-labelledby="home-tab">
                             <?php if ($pendingPayroll == 0 && session('mng_paym')) { ?>
 
                             <?php } ?>
@@ -330,6 +325,7 @@
                                 </div>
                             </div>
                         </div>
+
                         <div role="tabpanel" class="tab-pane active show" id="overtimeTab">
                             <div class="col-md-12 col-sm-12 col-xs-12">
                                 <div class="card  rounded-0 border-0 shadow-none">
@@ -1470,24 +1466,25 @@
         function recomendPayrollByHr() {
 
             const message = "Are you sure you want to recommend this payroll?";
+
             $('#delete').modal('show');
             $('#delete').find('.modal-body #message').text(message);
 
             $("#yes_delete").click(function() {
                 $('#hideList').hide();
                 var message = document.getElementById('comment').value;
-                var url =
-                    "{{ route('payroll.recommendpayrollByHr', ['pdate' => $pendingPayroll_month, 'message' => ':msg']) }}";
+                var url = "{{ route('payroll.recommendpayrollByHr', ['pdate' => $pendingPayroll_month, 'message' => ':msg']) }}";
                 url = url.replace(':msg', message);
+
                 if (message != "") {
                     $.ajax({
                         url: url,
                         async: true,
-                beforeSend: function () {
-                    $('.request__spinner').show() },
-                    complete: function(){
-
-                    },
+                        beforeSend: function () {
+                            $('#delete').modal('hide');
+                            $('.request__spinner').show();
+                        },
+                        complete: function(){},
                         success: function(data) {
                             var data = JSON.parse(data);
                             if (data.status == 'OK') {
@@ -1503,10 +1500,7 @@
                                     text: 'Payroll recommendation failed!',
                                     type: 'error'
                                 }).show();
-
-
                             }
-
                         }
 
                     });

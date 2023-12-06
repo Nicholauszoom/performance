@@ -584,7 +584,7 @@ FROM payroll_logs pl, employee e WHERE e.emp_id = pl.empID and e.contract_type =
         $deduction_table="deduction_logs";
         $loan_table="loan_logs";
 
-        if($payrollstate==1){  //Pending payroll
+        if($payrollstate !=0 ){  //Pending payroll
 
             $payroll_table="temp_payroll_logs";
             $allowance_table="temp_allowance_logs";
@@ -611,7 +611,6 @@ FROM payroll_logs pl, employee e WHERE e.emp_id = pl.empID and e.contract_type =
         pl.*,
         e.fname,e.mname,e.lname,e.account_no,e.pf_membership_no,pl.sdl,pl.wcf,e.currency,de.name,e.cost_center as costCenterName,b.name as bank_name,e.branch as branch_code,
         e.emp_id,e.rate,
-        'al.description' as allowance_id,
         0 as allowance_amount,
         (IF((SELECT SUM(al.amount) FROM ".$allowance_table." al WHERE al.empID = e.emp_id AND al.description lIKE '%Overtime%' AND al.payment_date = '" . $date . "' GROUP BY al.empID >0),(SELECT SUM(al.amount) FROM ".$allowance_table." al WHERE al.empID = e.emp_id AND al.description lIKE '%Overtime%' AND al.payment_date = '" . $date . "' GROUP BY al.empID),0)) AS overtime,
 
@@ -1550,7 +1549,7 @@ and e.branch = b.code and e.line_manager = el.emp_id and c.id = e.contract_type 
 
         $table="payroll_logs";
 
-        if($payrollstate==1){  //Pending payroll
+        if($payrollstate !=0){  //Pending payroll
 
             $table="temp_payroll_logs";
 
@@ -1576,7 +1575,7 @@ and e.branch = b.code and e.line_manager = el.emp_id and c.id = e.contract_type 
 
         $table="payroll_logs";
 
-        if($payrollstate==1){  //Pending payroll
+        if($payrollstate != 0){  //Pending payroll
 
             $table="temp_payroll_logs";
 
@@ -1610,7 +1609,7 @@ and e.branch = b.code and e.line_manager = el.emp_id and c.id = e.contract_type 
         
         $table="payroll_logs";
 
-        if($payrollstate==1){  //Pending payroll
+        if($payrollstate !=0){  //Pending payroll
 
             $table="temp_payroll_logs";
 
@@ -1696,7 +1695,7 @@ and e.branch = b.code and e.line_manager = el.emp_id and c.id = e.contract_type 
 
         $table="allowance_logs";
 
-        if($payrollstate==1){  //Pending payroll
+        if($payrollstate !=0){  //Pending payroll
 
             $table="temp_allowance_logs";
 
@@ -1721,7 +1720,7 @@ and e.branch = b.code and e.line_manager = el.emp_id and c.id = e.contract_type 
 
         $payroll_log="payroll_logs";
 
-        if($payrollstate==1){  //Pending payroll
+        if($payrollstate !=0){  //Pending payroll
 
             $payroll_log="temp_payroll_logs";
 
@@ -1793,7 +1792,7 @@ and e.branch = b.code and e.line_manager = el.emp_id and c.id = e.contract_type 
 
         $payroll_log="payroll_logs";
 
-        if($payrollstate==1){  //Pending payroll
+        if($payrollstate !=0){  //Pending payroll
 
             $payroll_log="temp_payroll_logs";
 
@@ -1812,7 +1811,7 @@ and e.branch = b.code and e.line_manager = el.emp_id and c.id = e.contract_type 
         $query = "SELECT SUM(pl.salary - pl.actual_salary) as amount from ".$payroll_log." pl where pl.actual_salary < pl.salary and pl.salary != (SELECT salary from payroll_logs where pl.empID = payroll_logs.empID and payroll_logs.payroll_date = '".$previous_payroll_month."') and pl.payroll_date = '" . $current_payroll_month . "'";
         $row = DB::select(DB::raw($query));
 
-        $query = "SELECT SUM(pl.salary - (SELECT salary from ".$payroll_log." where pl.empID = payroll_logs.empID and payroll_logs.payroll_date = '".$previous_payroll_month."')) as amount,SUM(pl.actual_salary) as actual_salary from payroll_logs pl where pl.actual_salary = pl.salary and pl.actual_salary > (SELECT salary from payroll_logs where pl.empID = payroll_logs.empID and payroll_logs.payroll_date = '".$previous_payroll_month."') and pl.payroll_date = '" . $current_payroll_month . "'";
+        $query = "SELECT SUM(pl.salary - (SELECT salary from payroll_logs where pl.empID = payroll_logs.empID and payroll_logs.payroll_date = '".$previous_payroll_month."')) as amount,SUM(pl.actual_salary) as actual_salary from payroll_logs pl where pl.actual_salary = pl.salary and pl.actual_salary > (SELECT salary from payroll_logs where pl.empID = payroll_logs.empID and payroll_logs.payroll_date = '".$previous_payroll_month."') and pl.payroll_date = '" . $current_payroll_month . "'";
         $row2 = DB::select(DB::raw($query));
 
         $data['basic_increase'] = $row[0]->amount + $row1[0]->amount + $row2[0]->amount;
@@ -2184,8 +2183,17 @@ and e.branch = b.code and e.line_manager = el.emp_id and c.id = e.contract_type 
 
     }
 
-    public function allowance_by_employee($current_payroll_month, $previous_payroll_month)
+    public function allowance_by_employee($current_payroll_month, $previous_payroll_month,$payrollstate=null)
     {
+
+        $allowance_log="allowance_logs";
+
+        if($payrollstate !=0){  //Pending payroll
+
+            $allowance_log="temp_allowance_logs";
+
+        }
+
         $calendar = explode('-', $current_payroll_month);
         $calendar1 = explode('-', $previous_payroll_month);
         if(count($calendar1) > 2){
@@ -2211,9 +2219,9 @@ and e.branch = b.code and e.line_manager = el.emp_id and c.id = e.contract_type 
 
 
           (SELECT  CONCAT('Add/Less ',al.description) as description,e.emp_id,e.hire_date,e.contract_end,e.fname,e.lname,
-          (IF((SELECT amount  FROM allowance_logs WHERE allowance_logs.description = al.description and e.emp_id = allowance_logs.empID  and  allowance_logs.payment_date = '" . $current_payroll_month . "' LIMIT 1 ) > 0,(SELECT amount  FROM allowance_logs WHERE allowance_logs.description = al.description and e.emp_id = allowance_logs.empID and  allowance_logs.payment_date = '" . $current_payroll_month . "'),0)) as current_amount,
+          (IF((SELECT amount  FROM ".$allowance_log." WHERE ".$allowance_log.".description = al.description and e.emp_id = ".$allowance_log.".empID  and  ".$allowance_log.".payment_date = '" . $current_payroll_month . "' LIMIT 1 ) > 0,(SELECT amount  FROM ".$allowance_log." WHERE ".$allowance_log.".description = al.description and e.emp_id = ".$allowance_log.".empID and  ".$allowance_log.".payment_date = '" . $current_payroll_month . "'),0)) as current_amount,
          (IF((SELECT amount  FROM allowance_logs WHERE allowance_logs.description = al.description and e.emp_id = allowance_logs.empID and  allowance_logs.payment_date = '" . $previous_payroll_month . "' LIMIT 1)  > 0,(SELECT amount  FROM allowance_logs WHERE allowance_logs.description = al.description and e.emp_id = allowance_logs.empID and  allowance_logs.payment_date = '" . $previous_payroll_month . "'),0)) as previous_amount
-           from employee e,allowance_logs al where e.emp_id = al.empID and e.state!=4)
+           from employee e,".$allowance_log." al where e.emp_id = al.empID and e.state!=4)
 
            UNION
 
@@ -2623,7 +2631,7 @@ and e.branch = b.code and e.line_manager = el.emp_id and c.id = e.contract_type 
 
         $allowance_log="allowance_logs";
 
-        if($payrollstate==1){  //Pending payroll
+        if($payrollstate !=0){  //Pending payroll
 
             $allowance_log="temp_allowance_logs";
 
@@ -3230,7 +3238,7 @@ and e.branch = b.code and e.line_manager = el.emp_id and c.id = e.contract_type 
 
         $table="payroll_logs";
 
-        if($payrollstate==1){  //Pending payroll
+        if($payrollstate !=0){  //Pending payroll
 
             $table="temp_payroll_logs";
 
