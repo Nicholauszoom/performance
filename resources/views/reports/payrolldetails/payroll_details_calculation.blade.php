@@ -1,9 +1,9 @@
                 <thead style="font-size:8px;">
-                    <tr style="border-bottom:2px solid rgb(9, 5, 64);">
+                    <tr class="hdr" style="border-bottom:2px solid rgb(9, 5, 64);">
 
-                        <th class=" {{ $payNo_col }} text-center" style="margin-bottom: 30px;"><b>Pay No</b></th>
+                        <th class=" {{ $payNo_col }} " ><b>Pay No</b></th>
 
-                        <th class=" {{ $name_col }} text-center" colspan="" style="margin-bottom: 30px;"><b>Name</b><br>
+                        <th class=" {{ $name_col }} text-center" colspan="2" style="margin-bottom: 30px;"><b>Name</b><br>
                         </th>
 
                         <th class=" {{ $bank_col }} text-center" colspan="" style="margin-bottom: 30px;"><b>Bank</b><br>
@@ -110,11 +110,13 @@
 
                     ?>
 
-                            <tr>
+                            <tr style="border-bottom:2px solid rgb(67, 67, 73)">
 
                                 <td class=" {{ $payNo_col }} text-end">{{ $row->emp_id }}</td>
 
-                                <td class=" {{ $name_col }} " style="margin-right: 0px" colspan="">{{ $row->fname }} {{ $row->mname }} {{ $row->lname }}
+                                <td class=" {{ $name_col }} " style="margin-right: 0px" colspan="">{{ $row->fname }}
+                                </td>
+                                <td class=" {{ $name_col }} " style="margin-right: 0px" colspan=""> {{ $row->lname }}
                                 </td>
                                 <td class=" {{$bank_col }} " style="margin-right: 0px" colspan="">{{ $row->bank_name }}
                                 </td>
@@ -191,8 +193,10 @@
                             <td class=" {{$payNo_col }} ">{{ $row2->emp_id }}</td>
 
 
-                            <td class=" {{$name_col }} " style="margin-right: 0px" colspan="">{{ $row2->fname }} {{ $row2->mname }} {{ $row2->lname }}</td>
-
+                            <td class=" {{ $name_col }} " style="margin-right: 0px" colspan="">{{ $row->fname }}
+                            </td>
+                            <td class=" {{ $name_col }} " style="margin-right: 0px" colspan=""> {{ $row->lname }}
+                            </td>
                             <td class=" {{$bank_col }} " style="margin-right: 0px" colspan="">
                             </td>
                             <td class=" {{$branchCode_col }} " style="margin-right: 0px" colspan="">

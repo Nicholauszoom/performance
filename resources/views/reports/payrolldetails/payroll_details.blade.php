@@ -108,7 +108,7 @@
                     $advanceOthers_col = "";
                     $totalDeduction_col = "";
                     $amountPayable_col = "";
-                    $colspan_col = "2";
+                    $colspan_col = "3";
                     $show_terminations=true;
 
 

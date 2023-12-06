@@ -1,5 +1,9 @@
 @extends('layouts.vertical', ['title' => 'Payroll'])
+<style> .hdr {
 
+    font-size: 15px !important;
+}
+</style>
 @push('head-script')
 @endpush
 
@@ -71,7 +75,7 @@
                 $advanceOthers_col = "";
                 $totalDeduction_col = "";
                 $amountPayable_col = "";
-                $colspan_col = "2";
+                $colspan_col = "3";
                 $show_terminations=true;
 
 
