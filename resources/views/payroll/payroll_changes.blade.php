@@ -3,6 +3,10 @@
 @push('head-script')
     <script src="{{ asset('assets/js/components/tables/datatables/datatables.min.js') }}"></script>
     <script src="{{ asset('assets/js/components/tables/datatables/extensions/buttons.min.js') }}"></script>
+    <style> .hdr {
+
+font-size: 18px !important;
+}</style>
 @endpush
 
 @push('head-scriptTwo')
@@ -42,7 +46,7 @@
             </a>
         <table class="table datatable-excel-filter">
             <thead>
-                <tr>
+                <tr class="hdr"  >
                   <th>Payroll Number</th>
                   <th>Name</th>
                   <th>Time Stamp</th>
@@ -56,7 +60,7 @@
 
             <tbody>
                 @foreach ($logs as $row)
-                    <tr id="{{ 'domain'.$row->id }}">
+                    <tr class="hdr" id="{{ 'domain'.$row->id }}">
                         <td>{{ $row->payrollno }}</td>
 
                         <td> {{ $row->empName }} </td>
