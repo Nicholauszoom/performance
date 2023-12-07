@@ -94,6 +94,7 @@
                     $basicSalary_col = "";
                     $netBasic_col = "";
                     $overtime_col = "";
+                    $allowanceCat_col="";
                     $otherPayments_col="";
                     $grossSalary_col = "";
                     $taxBenefit_col = "";

@@ -80,6 +80,16 @@
                         $total_deduction = 0;
                         $total_gross_salary = 0;
                         $taxable_amount = 0;
+                        foreach($allowance_categories as $category){
+
+                               
+
+                                $category_id="category".$category->id;
+
+                                $categories_total["category".$category->id]=0;
+
+
+                        }      
                         foreach ($summary as $row) {
                             $i++;
                             $amount = $row->salary + $row->allowances - $row->pension_employer - $row->loans - $row->deductions - $row->taxdue;
@@ -220,6 +230,20 @@
 
                             <td class=" {{$overtime_col }} text-end">{{ number_format(($row2->normal_days_overtime_amount+$row2->public_overtime_amount), 2) }}</td>
 
+
+                            @foreach($allowance_categories as $category)
+
+                                @php
+
+                                $category_id="category".$category->id;
+
+
+                                @endphp
+
+                                <td class="text-end">{{ number_format(0, 2) }}</td>
+
+                            @endforeach
+                            
                             <td classs="text-end">
                                 {{ number_format($row2->leavePay + $row2->leaveAllowance+$row2->transport_allowance+$row2->nightshift_allowance, 2) }}
                             </td>
@@ -285,7 +309,19 @@
                         <td class=" {{ $basicSalary_col }} text-end"><b><b>{{ number_format($total_actual_salary, 2) }}</b></b></td>
                         <td class=" {{ $netBasic_col }} text-end"><b><b>{{ number_format($total_salary, 2) }}</b></b></td>
                         <td class=" {{ $overtime_col }} text-end"><b><b>{{ number_format($total_overtime, 2) }}</b></b></td>
+                        @foreach($allowance_categories as $category)
 
+                               
+                            @php
+                            $category_id="category".$category->id;
+
+                            @endphp
+
+                            <td class=" {{ $allowanceCat_col }} text-end">
+                            <b><b>{{ number_format($categories_total["category".$category->id], 2) }}</b></b>
+                        </td>
+
+                        @endforeach     
 
                         <td class=" {{ $grossSalary_col }} text-end">
                             <b><b>{{ number_format($total_gross_salary, 2) }}</b></b>
