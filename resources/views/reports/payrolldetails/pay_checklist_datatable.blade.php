@@ -1,26 +1,51 @@
-@extends('layouts.vertical', ['title' => 'Dashboard'])
+@extends('layouts.vertical', ['title' => 'Payroll'])
+<style> .hdr {
+
+    font-size: 15px !important;
+}
+</style>
+@push('head-script')
+@endpush
+
+@push('head-scriptTwo')
+@endpush
 
 @push('head-script')
     <script src="{{ asset('assets/js/components/tables/datatables/datatables.min.js') }}"></script>
-
-    <script src="{{ asset('assets/js/components/tables/datatables/extensions/pdfmake/pdfmake.min.js') }}"></script>
-    <script src="{{ asset('assets/js/components/tables/datatables/extensions/pdfmake/vfs_fonts.min.js') }}"></script>
     <script src="{{ asset('assets/js/components/tables/datatables/extensions/buttons.min.js') }}"></script>
 @endpush
 
 @push('head-scriptTwo')
-    <script src="{{ asset('assets/js/pages/datatables_basic.js') }}"></script>
-    <script src="{{ asset('assets/js/pages/datatables_extension_buttons_html5.js') }} "></script>
+    <script src="{{ asset('assets/js/pages/datatables_extension_buttons_excel.js') }}"></script>
 @endpush
 
 @section('content')
-    <!-- Column selectors -->
-    <div class="card">
-        <div class="card-header">
-            <h5 class="mb-0">(Payroll Details)</h5>
-        </div>
+    @php
 
-        <table class="table datatable-button-html5-columns">
+        $payrollMonth = $payroll_date;
+        $payrollState = $payroll_state;
+
+        $total_previous = 0;
+                    $total_current = 0;
+                    $total_amount = 0;
+
+    @endphp
+
+
+<div class="card border-bottom-main rounded-0 border-0 shadow-none">
+
+            @include('payroll.payroll_info_buttons')
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-12 col-sm-12 col-xs-12">
+                    <h4 class="me-4 text-center">Payroll Checklist</h4>
+                   
+                    <a href="{{ route('reports.payrolldetails', ['payrolldate' => $payroll_date, 'payrollState' => $payrollState, 'type' => 1]) }}" target="blank">
+                        <button type="button" name="print" value="print" class="btn btn-main btn-sm"> PDF</button>
+                    </a>
+                
+
+                <table class="table table datatable-excel-filter">
 
         @php
 
@@ -37,6 +62,7 @@
         $netBasic_col = "d-none";
         $overtime_col = "d-none";
         $grossSalary_col = "d-none";
+        $allowanceCat_col="";
         $otherPayments_col="";
         $taxBenefit_col = "d-none";
         $taxableGross_col = "d-none";
@@ -50,7 +76,7 @@
         $advanceOthers_col = "d-none";
         $totalDeduction_col = "d-none";
         $amountPayable_col = "";
-        $colspan_col = "5";
+        $colspan_col = "6";
         $show_terminations=false;
 
         @endphp

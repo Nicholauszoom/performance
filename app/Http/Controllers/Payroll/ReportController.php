@@ -3101,6 +3101,7 @@ EOD;
         $data['summary'] = $this->reports_model->get_payroll_summary($date,$request->payrollState);
 
         // dd($data['summary']);
+        
         $data['termination'] = $this->reports_model->get_termination($date);
 
 
@@ -3110,12 +3111,25 @@ EOD;
 
         $data['allowance_categories']=$this->flexperformance_model->allowance_category();
 
+        if($request->nature==1){   //Return payroll details report
+
         if ($request->type != 1)
             return view('reports.payrolldetails.payrolldetails_datatable', $data);
         else {
             $pdf = Pdf::loadView('reports.payrolldetails.payroll_details', $data)->setPaper('a4', 'landscape');
             return $pdf->download('payrolldetails-' . $data['payroll_date'] . '.pdf');
         }
+
+    }
+
+    if ($request->type == 1) {  //Return pay checklist report
+
+        $pdf = Pdf::loadView('reports.payrolldetails.pay_checklist', $data)->setPaper('a4', 'potrait');
+        return $pdf->download('paychecklist-' . $date . '.pdf');
+    } else {
+
+        return view('reports.payrolldetails.pay_checklist_datatable', $data);
+    }
 
         // include(app_path() . '/reports/temp_payroll.php');
     }

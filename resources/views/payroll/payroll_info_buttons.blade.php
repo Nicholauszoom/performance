@@ -22,7 +22,7 @@
     </a>
 
         <a class="ms-3"
-            href="{{ route('reports.payrolldetails', ['payrolldate' => $payroll_date, 'payrollState' => $payrollState, 'type' => 2]) }}"
+            href="{{ route('reports.payrolldetails', ['payrolldate' => $payroll_date,'nature' => 1, 'payrollState' => $payrollState, 'type' => 2]) }}"
             target="blank">
             <button type="button" name="print" value="print" class="btn btn-main btn-sm"> Payroll Details</button>
         </a>
@@ -51,6 +51,18 @@
                 <button type="button" class="btn btn-warning btn-sm">Cancel Payroll </button>
             </a>
         @endif
+
+        <a class="px-4" href="{{ route('reports.payrolldetails',['payrolldate' => $payroll_date,  'nature' => 2, 'payrollState' => $payrollState,'type' => 2]) }}"
+            target="blank">
+            <button type="button" name="print" value="print" class="btn btn-main btn-sm"> <i
+                    class="ph-download-simple me-2"></i> Pay Checklist</button>
+        </a>
+
+        <a class="ms-3" href="{{ route('reports.payrolldetails',['payrolldate' => $payroll_date,  'nature' => 2, 'payrollState' => $payrollState,'type' => 1]) }}"
+            target="blank">
+            <button type="button" name="print" value="print" class="btn btn-main btn-sm"> Export</button>
+        </a>
+
 
 
 </div>

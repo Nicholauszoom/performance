@@ -321,14 +321,15 @@
                             <b><b>{{ number_format($categories_total["category".$category->id], 2) }}</b></b>
                         </td>
 
-                        @endforeach     
+                        @endforeach  
+                        
+                        
+                        <td class=" {{ $otherPayments_col }} text-end"><b><b>{{ number_format($total_others_term +$total_others_normal,2) }}
+                        </b></b></td>
 
                         <td class=" {{ $grossSalary_col }} text-end">
                             <b><b>{{ number_format($total_gross_salary, 2) }}</b></b>
                         </td>
-
-                        <td class=" {{ $otherPayments_col }} text-end"><b><b>{{ number_format($total_others_term +$total_others_normal,2) }}
-                        </b></b></td>
 
                         <td class=" {{ $taxBenefit_col }} text-end"><b><b> {{ number_format(0, 2) }}</b></b></td>
                         <td class=" {{ $taxableGross_col }} text-end">

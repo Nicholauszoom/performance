@@ -69,9 +69,9 @@
                 $paye_col = "";
                 $nssfEmployee_col = "";
                 $nssfEmployer_col = "";
-                $nssfPayable_col = "d-none";
-                $sdl_col = "d-none";
-                $wcf_col = "d-none";
+                $nssfPayable_col = "";
+                $sdl_col = "";
+                $wcf_col = "";
                 $loanBoard_col = "";
                 $advanceOthers_col = "";
                 $totalDeduction_col = "";

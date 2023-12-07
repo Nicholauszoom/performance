@@ -93,6 +93,7 @@
                 $basicSalary_col = "d-none";
                 $netBasic_col = "d-none";
                 $overtime_col = "d-none";
+                $allowanceCat_col="";
                 $otherPayments_col="d-none";
                 $grossSalary_col = "d-none";
                 $taxBenefit_col = "d-none";
