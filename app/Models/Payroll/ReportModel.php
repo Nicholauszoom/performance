@@ -2225,6 +2225,13 @@ and e.branch = b.code and e.line_manager = el.emp_id and c.id = e.contract_type 
 
            UNION
 
+           (SELECT  CONCAT('Add/Less ',al.description) as description,e.emp_id,e.hire_date,e.contract_end,e.fname,e.lname,
+           0 as current_amount,
+          (IF((SELECT amount  FROM allowance_logs WHERE allowance_logs.description = al.description and e.emp_id = allowance_logs.empID and  allowance_logs.payment_date = '" . $previous_payroll_month . "' LIMIT 1)  > 0,(SELECT amount  FROM allowance_logs WHERE allowance_logs.description = al.description and e.emp_id = allowance_logs.empID and  allowance_logs.payment_date = '" . $previous_payroll_month . "'),0)) as previous_amount
+            from employee e,allowance_logs al where e.emp_id = al.empID and al.description not in (select description from ".$allowance_log." where  ".$allowance_log.".payment_date = '" . $current_payroll_month . "') and e.state!=4)
+            
+           UNION
+
 
             SELECT 'Add/Less N-Overtime' as description,e.emp_id,e.hire_date,e.contract_end,e.fname,e.lname,
             IF(normal_days_overtime_amount > 0,normal_days_overtime_amount,0) as current_amount,
