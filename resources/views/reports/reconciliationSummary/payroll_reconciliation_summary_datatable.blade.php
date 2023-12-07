@@ -54,12 +54,12 @@ font-size: 18px !important;
                     <table class="table table datatable-excel-filter" id="reports" style="font-size:14px;  ">
                         <thead>
                             <tr>
-                                <th><b>RefNo</b></th>
-                                <th><b>Desc</b></th>
-                                <th><b>Last Month</b></th>
-                                <th><b>This Month</b></th>
-                                <th><b>Amount</b></th>
-                                <th><b>Count</b></th>
+                                <th>Ref No</th>
+                                <th>Description</th>
+                                <th>Last Month</th>
+                                <th>This Month</th>
+                                <th>Amount</th>
+                                <th>Count</th>
                             </tr>
                         </thead>
 
