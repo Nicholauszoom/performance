@@ -108,7 +108,7 @@
                 $advanceOthers_col = "d-none";
                 $totalDeduction_col = "d-none";
                 $amountPayable_col = "";
-                $colspan_col = "5";
+                $colspan_col = "6";
                 $show_terminations=false;
 
 
@@ -116,7 +116,7 @@
                 @include('reports.payrolldetails.payroll_details_calculation')
 
                 </table>
-                
+
 
                 <table class="table" id="reports" style="font-size:10px; height:20px;">
                     <tbody>
