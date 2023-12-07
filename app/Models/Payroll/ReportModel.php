@@ -1988,7 +1988,7 @@ and e.branch = b.code and e.line_manager = el.emp_id and c.id = e.contract_type 
 
         return $row;
     }
-    public function employee_basic_increase($current_payroll_month, $previous_payroll_month)
+    public function employee_basic_increase1($current_payroll_month, $previous_payroll_month)
     {
 
         $query = "SELECT  'Add Increase in Basic Pay incomparison to Last M' as description,e.emp_id,e.hire_date,e.contract_end,e.fname,e.lname,
@@ -2005,16 +2005,24 @@ and e.branch = b.code and e.line_manager = el.emp_id and c.id = e.contract_type 
         return $row;
     }
 
-    public function employee_basic_increase1($current_payroll_month, $previous_payroll_month)
+    public function employee_basic_increase($current_payroll_month, $previous_payroll_month,$payrollstate=null)
     {
 
+        $allowance_log="allowance_logs";
+
+        if($payrollstate !=0){  //Pending payroll
+
+            $allowance_log="temp_allowance_logs";
+
+        }
+
         $query = "SELECT  'Add Increase in Basic Pay incomparison to Last M' as description,e.emp_id,e.hire_date,e.contract_end,e.fname,e.lname,
-        (SELECT salary from temp_payroll_logs pl where e.emp_id = pl.empID and payroll_date = '" . $current_payroll_month . "' limit 1) as current_amount,
+        (SELECT salary from ".$allowance_log." pl where e.emp_id = pl.empID and payroll_date = '" . $current_payroll_month . "' limit 1) as current_amount,
          (SELECT salary from payroll_logs pl where e.emp_id = pl.empID and payroll_date = '" . $previous_payroll_month . "' limit 1) as previous_amount
 
-         from employee e where (SELECT salary from temp_payroll_logs pl where e.emp_id = pl.empID and payroll_date = '" . $current_payroll_month . "' limit 1) > (SELECT salary from payroll_logs pl where e.emp_id = pl.empID and payroll_date = '" . $previous_payroll_month . "' limit 1)
+         from employee e where (SELECT salary from ".$allowance_log." pl where e.emp_id = pl.empID and payroll_date = '" . $current_payroll_month . "' limit 1) > (SELECT salary from payroll_logs pl where e.emp_id = pl.empID and payroll_date = '" . $previous_payroll_month . "' limit 1)
          and e.emp_id IN (SELECT emp_id from payroll_logs pl where e.emp_id = pl.empID and payroll_date = '" . $previous_payroll_month . "')
-         and e.emp_id IN (SELECT emp_id from temp_payroll_logs pl where e.emp_id = pl.empID and payroll_date = '" . $current_payroll_month . "')
+         and e.emp_id IN (SELECT emp_id from ".$allowance_log." pl where e.emp_id = pl.empID and payroll_date = '" . $current_payroll_month . "')
 
         ";
         $row = DB::select(DB::raw($query));
@@ -2223,6 +2231,13 @@ and e.branch = b.code and e.line_manager = el.emp_id and c.id = e.contract_type 
          (IF((SELECT amount  FROM allowance_logs WHERE allowance_logs.description = al.description and e.emp_id = allowance_logs.empID and  allowance_logs.payment_date = '" . $previous_payroll_month . "' LIMIT 1)  > 0,(SELECT amount  FROM allowance_logs WHERE allowance_logs.description = al.description and e.emp_id = allowance_logs.empID and  allowance_logs.payment_date = '" . $previous_payroll_month . "'),0)) as previous_amount
            from employee e,".$allowance_log." al where e.emp_id = al.empID and e.state!=4)
 
+           UNION
+
+           (SELECT  CONCAT('Add/Less ',al.description) as description,e.emp_id,e.hire_date,e.contract_end,e.fname,e.lname,
+           0 as current_amount,
+          (IF((SELECT amount  FROM allowance_logs WHERE allowance_logs.description = al.description and e.emp_id = allowance_logs.empID and  allowance_logs.payment_date = '" . $previous_payroll_month . "' LIMIT 1)  > 0,(SELECT amount  FROM allowance_logs WHERE allowance_logs.description = al.description and e.emp_id = allowance_logs.empID and  allowance_logs.payment_date = '" . $previous_payroll_month . "'),0)) as previous_amount
+            from employee e,allowance_logs al where e.emp_id = al.empID and al.description not in (select description from ".$allowance_log." where  ".$allowance_log.".payment_date = '" . $current_payroll_month . "') and e.state!=4)
+            
            UNION
 
 
