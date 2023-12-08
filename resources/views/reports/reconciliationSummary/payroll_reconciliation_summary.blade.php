@@ -89,8 +89,8 @@
                 <table class="table" id="reports" style="font-size:12px;  ">
                     <thead>
                         <tr>
-                            <th><b>RefNo</b></th>
-                            <th><b>Desc</b></th>
+                            <th><b>Reference No.</b></th>
+                            <th><b>Description</b></th>
                             <th style=""><b>Last Month</b></th>
                             <th><b>This Month</b></th>
                             <th><b>Amount</b></th>
