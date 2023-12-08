@@ -91,6 +91,14 @@
 
                         }
                         foreach ($summary as $row) {
+
+                            // if($fitler_by_currency){
+
+                            //     if($row->currency != $currency){
+
+                            //         continue;
+                            //     }
+                            // }
                             $i++;
                             $amount = $row->salary + $row->allowances - $row->pension_employer - $row->loans - $row->deductions - $row->taxdue;
                             $total_netpay +=  round($amount, 2);

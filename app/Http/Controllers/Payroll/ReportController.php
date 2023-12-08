@@ -3111,6 +3111,8 @@ EOD;
 
         $data['allowance_categories']=$this->flexperformance_model->allowance_category();
 
+        $data['currency']="";
+
         if($request->nature==1){   //Return payroll details report
 
         if ($request->type != 1)
@@ -3120,6 +3122,12 @@ EOD;
             return $pdf->download('payrolldetails-' . $data['payroll_date'] . '.pdf');
         }
 
+    }
+
+    if ($request->nature == 2) {
+        $data['currency'] = 'TZS';
+    } else {
+        $data['currency'] = 'USD';
     }
 
     if ($request->type == 1) {  //Return pay checklist report
