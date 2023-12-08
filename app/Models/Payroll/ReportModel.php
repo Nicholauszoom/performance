@@ -2008,11 +2008,11 @@ and e.branch = b.code and e.line_manager = el.emp_id and c.id = e.contract_type 
     public function employee_basic_increase($current_payroll_month, $previous_payroll_month,$payrollstate=null)
     {
 
-        $allowance_log="allowance_logs";
+        $allowance_log="payroll_logs";
 
         if($payrollstate !=0){  //Pending payroll
 
-            $allowance_log="temp_allowance_logs";
+            $allowance_log="temp_payroll_logs";
 
         }
 
