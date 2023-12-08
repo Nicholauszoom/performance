@@ -8,7 +8,7 @@
 
                         <th class=" {{ $bank_col }} text-center" colspan="" style="margin-bottom: 30px;"><b>Bank</b><br>
                         </th>
-                        <th class=" {{ $branchCode_col }} text-center" style="margin-bottom: 30px;"><b>BranchCode</b><br>
+                        <th class=" {{ $branchCode_col }} text-center" style="margin-bottom: 30px;"><b>Branch Code</b><br>
                         </th>
 
                         <th class=" {{ $accountNumber_col }} text-center" style="margin-bottom: 30px;"><b>Account Number</b><br>
@@ -82,14 +82,14 @@
                         $taxable_amount = 0;
                         foreach($allowance_categories as $category){
 
-                               
+
 
                                 $category_id="category".$category->id;
 
                                 $categories_total["category".$category->id]=0;
 
 
-                        }      
+                        }
                         foreach ($summary as $row) {
                             $i++;
                             $amount = $row->salary + $row->allowances - $row->pension_employer - $row->loans - $row->deductions - $row->taxdue;
@@ -243,7 +243,7 @@
                                 <td class="text-end">{{ number_format(0, 2) }}</td>
 
                             @endforeach
-                            
+
                             <td classs="text-end">
                                 {{ number_format($row2->leavePay + $row2->leaveAllowance+$row2->transport_allowance+$row2->nightshift_allowance, 2) }}
                             </td>
@@ -311,7 +311,7 @@
                         <td class=" {{ $overtime_col }} text-end"><b><b>{{ number_format($total_overtime, 2) }}</b></b></td>
                         @foreach($allowance_categories as $category)
 
-                               
+
                             @php
                             $category_id="category".$category->id;
 
@@ -321,9 +321,9 @@
                             <b><b>{{ number_format($categories_total["category".$category->id], 2) }}</b></b>
                         </td>
 
-                        @endforeach  
-                        
-                        
+                        @endforeach
+
+
                         <td class=" {{ $otherPayments_col }} text-end"><b><b>{{ number_format($total_others_term +$total_others_normal,2) }}
                         </b></b></td>
 
