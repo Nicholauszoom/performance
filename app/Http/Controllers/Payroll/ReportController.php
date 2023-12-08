@@ -3124,20 +3124,22 @@ EOD;
 
     }
 
-    if ($request->nature == 2) {
-        $data['currency'] = 'TZS';
-    } else {
-        $data['currency'] = 'USD';
-    }
+    //For Payroll Checklist report 
 
-    if ($request->type == 1) {  //Return pay checklist report
+            if ($request->nature == 3) { //Check the currency selected
+                $data['currency'] = 'TZS';
+            } else {
+                $data['currency'] = 'USD';
+            }
 
-        $pdf = Pdf::loadView('reports.payrolldetails.pay_checklist', $data)->setPaper('a4', 'potrait');
-        return $pdf->download('paychecklist-' . $date . '.pdf');
-    } else {
+            if ($request->type == 1) {  //Return pay checklist report
 
-        return view('reports.payrolldetails.pay_checklist_datatable', $data);
-    }
+                $pdf = Pdf::loadView('reports.payrolldetails.pay_checklist', $data)->setPaper('a4', 'potrait');
+                return $pdf->download('paychecklist-' . $date . '.pdf');
+            } else {
+
+                return view('reports.payrolldetails.pay_checklist_datatable', $data);
+            }
 
         // include(app_path() . '/reports/temp_payroll.php');
     }
