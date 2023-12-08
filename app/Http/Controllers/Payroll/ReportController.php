@@ -3125,8 +3125,11 @@ EOD;
     }
 
     //For Payroll Checklist report 
+    // dd($request->payrolldate);
 
-            if ($request->nature == 3) { //Check the currency selected
+
+            if ($request->nature == 2) { //Check the currency selected
+
                 $data['currency'] = 'TZS';
             } else {
                 $data['currency'] = 'USD';
