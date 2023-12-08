@@ -140,6 +140,7 @@
                 @endif
             @endforeach
         @endif
+        <tfoot>
 
         <tr class="hdr" style="border-bottom:2px solid #F0C356;">
             <td class="text-start"></td>
@@ -153,4 +154,5 @@
             </td>
             <td class="text-end"><b>{{ ($payroll_date == '2023-02-17' ? $count_current_month - 1 : $count_current_month) }}</b></td>
         </tr>
+        </tfoot>
     </tbody>
