@@ -67,6 +67,7 @@
                 $taxBenefit_col = "";
                 $taxableGross_col = "";
                 $paye_col = "";
+                $nssf="";
                 $nssfEmployee_col = "";
                 $nssfEmployer_col = "";
                 $nssfPayable_col = "";

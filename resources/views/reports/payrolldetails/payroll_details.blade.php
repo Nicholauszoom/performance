@@ -100,8 +100,9 @@
                     $taxBenefit_col = "";
                     $taxableGross_col = "";
                     $paye_col = "";
-                    $nssfEmployee_col = "";
-                    $nssfEmployer_col = "";
+                    $nssf="";
+                    $nssfEmployee_col = "d-none";
+                    $nssfEmployer_col = "d-none";
                     $nssfPayable_col = "d-none";
                     $sdl_col = "d-none";
                     $wcf_col = "d-none";

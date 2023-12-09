@@ -331,7 +331,7 @@
                 </div>
 
                 <form id="demo-form2" enctype="multipart/form-data" method="post"
-                    action="{{ route('reports.payrolldetails') }}" data-parsley-validate
+                    action="{{ route('reports.payrolldetails', ['nature' => 1, 'payrollState' =>0]) }}" data-parsley-validate
                     class="form-horizontal form-label-left">
                     @csrf
 

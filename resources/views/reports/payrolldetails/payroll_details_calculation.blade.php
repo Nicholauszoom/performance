@@ -38,6 +38,7 @@
                         <th class=" {{ $taxBenefit_col }} text-end" style="margin-bottom: 30px;"><b>Tax Benefit</b></th>
                         <th class=" {{ $taxableGross_col }} text-end" style="margin-bottom: 30px;"><b>Taxable Gross</b></th>
                         <th class=" {{ $paye_col }} text-end" style="margin-bottom: 30px;"><b>PAYE</b></th>
+                        <th class=" {{ $nssf }} text-end" style="margin-bottom: 30px;"><b>NSSF</b></th>
                         <th class=" {{ $nssfEmployee_col }} text-end" style="margin-bottom: 30px;"><b>NSSF Employee</b></th>
                         <th class=" {{ $nssfEmployer_col }} text-end" style="margin-bottom: 30px;"><b>NSSF Employer</b></th>
                         <th class=" {{ $nssfPayable_col }} text-end" style="margin-bottom: 30px;"><b>NSSF Payable</b></th>
@@ -91,6 +92,8 @@
 
                         }
                         foreach ($summary as $row) {
+
+                            $row= $summary[0];
                             $i++;
                             $amount = $row->salary + $row->allowances - $row->pension_employer - $row->loans - $row->deductions - $row->taxdue;
                             $total_netpay +=  round($amount, 2);
@@ -173,7 +176,7 @@
                                     {{ number_format($row->salary + $row->allowances - $row->pension_employer, 2) }}
                                 </td>
                                 <td class=" {{ $paye_col }} text-end">{{ number_format($row->taxdue, 2) }}</td>
-
+                                <td class=" {{ $nssf }} text-end">{{ number_format($row->pension_employer, 2) }}</td>
                                 <td class=" {{ $nssfEmployee_col }} text-end">{{ number_format($row->pension_employer, 2) }}</td>
                                 <td class=" {{ $nssfEmployer_col }} text-end">{{ number_format($row->pension_employer, 2) }}</td>
                                 <td class=" {{ $nssfPayable_col }} text-end">{{ number_format($row->pension_employer*2, 2) }}</td>
@@ -203,9 +206,9 @@
                             <td class=" {{$payNo_col }} ">{{ $row2->emp_id }}</td>
 
 
-                            <td class=" {{ $name_col }} " style="margin-right: 0px" colspan="">{{ $row->fname }}
+                            <td class=" {{ $name_col }} " style="margin-right: 0px" colspan="">{{ $row2->fname }}
                             </td>
-                            <td class=" {{ $name_col }} " style="margin-right: 0px" colspan=""> {{ $row->lname }}
+                            <td class=" {{ $name_col }} " style="margin-right: 0px" colspan=""> {{ $row2->lname }}
                             </td>
                             <td class=" {{$bank_col }} " style="margin-right: 0px" colspan="">
                             </td>
@@ -221,8 +224,6 @@
                             </td>
                             <td class=" {{$costCenter_col }} " style="margin-right: 0px" colspan="">{{ $row2->costCenterName}}
                             </td>
-
-
                             <td class=" {{$basicSalary_col }} text-end">{{ number_format($row2->actual_salary, 2) }}
                             </td>
                             <td class=" {{$netBasic_col }} text-end">{{ number_format($row2->salaryEnrollment, 2) }}
@@ -256,6 +257,7 @@
                                 {{ number_format($row2->taxable, 2) }}
                             </td>
                             <td class=" {{$paye_col }} text-end">{{ number_format($row2->paye, 2) }}</td>
+                            <td class=" {{ $nssf }} text-end">{{ number_format($row2->pension_employee, 2) }}</td>
 
                             <td class=" {{$nssfEmployee_col }} text-end">{{ number_format($row2->pension_employee, 2) }}
                             </td>
@@ -337,6 +339,7 @@
                         </td>
 
                         <td class=" {{ $paye_col }} text-end"><b><b>{{ number_format($total_taxs, 2) }}</b></b></td>
+                        <td class=" {{ $nssf }} text-end">{{ number_format($total_pension, 2) }}</td>
 
                         <td class=" {{ $nssfEmployee_col }} text-end"><b><b>{{ number_format($total_pension, 2) }}</b></b></td>
                         <td class=" {{ $nssfEmployer_col }} text-end"><b><b>{{ number_format($total_pension, 2) }}</b></b></td>
