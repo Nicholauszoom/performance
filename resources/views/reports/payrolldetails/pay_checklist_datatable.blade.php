@@ -39,13 +39,13 @@
             <div class="row">
                 <div class="col-md-12 col-sm-12 col-xs-12">
                     <h4 class="me-4 text-center">Payroll Checklist</h4>
-                   
+
                     <a href="{{ route('reports.payrolldetails', ['payrolldate' => $payroll_date,'nature' => 2, 'payrollState' => $payrollState, 'type' => 1]) }}" target="blank">
                         <button type="button" name="print" value="print" class="btn btn-main btn-sm"> PDF</button>
                     </a>
-                
 
-                <table class="table table datatable-excel-filter">
+
+                <table class="table datatable-excel-filter">
 
         @php
 
