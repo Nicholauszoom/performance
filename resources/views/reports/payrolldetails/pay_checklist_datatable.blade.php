@@ -52,8 +52,8 @@
         $payNo_col = "";
         $name_col = "";
         $bank_col="";
-        $branchCode_col="";
-        $accountNumber_col = "";
+        $branchCode_col="d-none";
+        $accountNumber_col = "d-none";
         $pensionNumber_col = "d-none";
         $currency_col="";
         $department_col = "d-none";
@@ -78,9 +78,11 @@
         $amountPayable_col = "";
         $colspan_col = "6";
         $show_terminations=false;
+        $fitler_by_currency=true;
+
 
         @endphp
-        @include('reports.payrolldetails.payroll_details_calculation')
+        @include('reports.payrolldetails.payroll_checklist_calculation')
 
         </table>
     </div>

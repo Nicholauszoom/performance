@@ -3111,6 +3111,8 @@ EOD;
 
         $data['allowance_categories']=$this->flexperformance_model->allowance_category();
 
+        $data['currency']="";
+
         if($request->nature==1){   //Return payroll details report
 
         if ($request->type != 1)
@@ -3122,14 +3124,25 @@ EOD;
 
     }
 
-    if ($request->type == 1) {  //Return pay checklist report
+    //For Payroll Checklist report 
+    // dd($request->payrolldate);
 
-        $pdf = Pdf::loadView('reports.payrolldetails.pay_checklist', $data)->setPaper('a4', 'potrait');
-        return $pdf->download('paychecklist-' . $date . '.pdf');
-    } else {
 
-        return view('reports.payrolldetails.pay_checklist_datatable', $data);
-    }
+            if ($request->nature == 2) { //Check the currency selected
+
+                $data['currency'] = 'TZS';
+            } else {
+                $data['currency'] = 'USD';
+            }
+
+            if ($request->type == 1) {  //Return pay checklist report
+
+                $pdf = Pdf::loadView('reports.payrolldetails.pay_checklist', $data)->setPaper('a4', 'potrait');
+                return $pdf->download('paychecklist-' . $date . '.pdf');
+            } else {
+
+                return view('reports.payrolldetails.pay_checklist_datatable', $data);
+            }
 
         // include(app_path() . '/reports/temp_payroll.php');
     }

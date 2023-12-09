@@ -84,7 +84,7 @@
                 $payNo_col = "";
                 $name_col = "";
                 $bank_col="";
-                $branchCode_col="";
+                $branchCode_col="d-none";
                 $accountNumber_col = "d-none";
                 $pensionNumber_col = "d-none";
                 $currency_col="";
@@ -93,7 +93,7 @@
                 $basicSalary_col = "d-none";
                 $netBasic_col = "d-none";
                 $overtime_col = "d-none";
-                $allowanceCat_col="";
+                $allowanceCat_col="d-none";
                 $otherPayments_col="d-none";
                 $grossSalary_col = "d-none";
                 $taxBenefit_col = "d-none";
@@ -110,10 +110,12 @@
                 $amountPayable_col = "";
                 $colspan_col = "6";
                 $show_terminations=false;
+                $fitler_by_currency=true;
+
 
 
                 @endphp
-                @include('reports.payrolldetails.payroll_details_calculation')
+                @include('reports.payrolldetails.payroll_checklist_calculation')
 
                 </table>
 

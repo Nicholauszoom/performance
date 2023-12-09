@@ -78,6 +78,8 @@
                 $amountPayable_col = "";
                 $colspan_col = "3";
                 $show_terminations=true;
+                $fitler_by_currency=false;
+
 
 
                 @endphp
