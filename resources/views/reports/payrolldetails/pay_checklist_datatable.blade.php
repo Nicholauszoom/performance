@@ -39,13 +39,13 @@
             <div class="row">
                 <div class="col-md-12 col-sm-12 col-xs-12">
                     <h4 class="me-4 text-center">Payroll Checklist</h4>
-                   
+
                     <a href="{{ route('reports.payrolldetails', ['payrolldate' => $payroll_date,'nature' => 2, 'payrollState' => $payrollState, 'type' => 1]) }}" target="blank">
                         <button type="button" name="print" value="print" class="btn btn-main btn-sm"> PDF</button>
                     </a>
-                
 
-                <table class="table table datatable-excel-filter">
+
+                <table class="table datatable-excel-filter">
 
         @php
 
@@ -53,7 +53,7 @@
         $name_col = "";
         $bank_col="";
         $branchCode_col="";
-        $accountNumber_col = "d-none";
+        $accountNumber_col = "";
         $pensionNumber_col = "d-none";
         $currency_col="";
         $department_col = "d-none";
@@ -62,8 +62,8 @@
         $netBasic_col = "d-none";
         $overtime_col = "d-none";
         $grossSalary_col = "d-none";
-        $allowanceCat_col="";
-        $otherPayments_col="";
+        $allowanceCat_col="d-none";
+        $otherPayments_col="d-none";
         $taxBenefit_col = "d-none";
         $taxableGross_col = "d-none";
         $paye_col = "d-none";
