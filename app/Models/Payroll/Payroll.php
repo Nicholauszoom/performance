@@ -216,12 +216,13 @@ class Payroll extends Model
 
 
         $payroll_date = date($payroll_date);
-        /// dd($payroll_date);
-        //   $query = "SELECT DATEDIFF('".$payroll_date."',e.hire_date) as datediff from employee e";
-        //   DD(DB::select(DB::raw($query)));
+
         DB::transaction(function () use ($dateToday, $payroll_date, $payroll_month, $empID, $days, $year) {
-            $last_date = date("Y-m-t", strtotime($payroll_date));
-            $query = "UPDATE allowances SET state = IF(month('" . $payroll_date . "') = 12,1,0) WHERE type = 1";
+
+
+            $last_date = date("Y-m-t", strtotime($payroll_date)); //Last day of the month
+
+            $query = "UPDATE allowances SET state = IF(month('" . $payroll_date . "') = 12,1,0) WHERE type = 1";  //Activate leave allowance
             DB::insert(DB::raw($query));
             //Insert into Pending Payroll Table
             $query = "INSERT INTO payroll_months (payroll_date, state, init_author, appr_author, init_date, appr_date,sdl, wcf) VALUES
@@ -263,36 +264,36 @@ IF((e.unpaid_leave = 0)
 FROM employee e, emp_allowances ea,  allowances a WHERE e.emp_id = ea.empID AND a.id = ea.allowance AND a.state = 1 AND e.state = 1 and e.login_user != 1";
             DB::insert(DB::raw($query));
 
-            $query = "INSERT INTO financial_logs (payrollno, changed_by, field_name, action_from, action_to, input_screen)
+//             $query = "INSERT INTO financial_logs (payrollno, changed_by, field_name, action_from, action_to, input_screen)
 
-            SELECT ea.empID AS empID, ".Auth::user()->emp_id." AS changed_by,
+//             SELECT ea.empID AS empID, '".Auth::user()->emp_id."' AS changed_by,
 
-            a.name AS field_name,
+//             a.name AS field_name,
 
-            0.00 As action_from,
+//             0.00 As action_from,
 
-IF((e.unpaid_leave = 0)
-,0,IF((ea.mode = 1),
-          ea.amount,
-          IF(a.type = 1,IF(DATEDIFF('" . $last_date . "',e.hire_date) < 365,
-          ((DATEDIFF('" . $last_date . "',e.hire_date)+1)/365)*e.salary,ea.percent*e.salary),
+//             IF((e.unpaid_leave = 0)
+//             ,0,IF((ea.mode = 1),
+//                       ea.amount,
+//                       IF(a.type = 1,IF(DATEDIFF('" . $last_date . "',e.hire_date) < 365,
+//                       ((DATEDIFF('" . $last_date . "',e.hire_date)+1)/365)*e.salary,ea.percent*e.salary),
+            
+//                       (ea.percent*
+//                       IF((month(e.hire_date) = month('" . $payroll_date . "')) AND (year(e.hire_date) = year('" . $payroll_date . "')),
+//                       ((" . $days . " - (day(e.hire_date)+1))*e.salary/30),e.salary)
+//                        )
+            
+//                   )
+//                   )
+            
+//               ) AS action_to,
 
-          (ea.percent*
-          IF((month(e.hire_date) = month('" . $payroll_date . "')) AND (year(e.hire_date) = year('" . $payroll_date . "')),
-          ((" . $days . " - (day(e.hire_date)+1))*e.salary/30),e.salary)
-           )
+//   'payroll_input' AS input_screen
 
-      )
-      )
-
-  ) AS action_to,
-
-  'payroll_input' AS input_screen
-
-FROM employee e, emp_allowances ea,  allowances a WHERE e.emp_id = ea.empID AND a.id = ea.allowance AND a.state = 1 AND e.state = 1 and e.login_user != 1";
+// FROM employee e, emp_allowances ea,  allowances a WHERE e.emp_id = ea.empID AND a.id = ea.allowance AND a.state = 1 AND e.state = 1 and e.login_user != 1";
 
            
-            DB::insert(DB::raw($query));
+//             DB::insert(DB::raw($query));
 
             //INSERT BONUS
             $query = " INSERT INTO temp_allowance_logs(empID, description, policy, amount, payment_date)
@@ -2769,7 +2770,8 @@ as gross,
             $row = DB::select(DB::raw($query));
             $calender = explode('-', $row[0]->created_at);
             $date = $calender[0] . '-' . $calender[1];
-            DB::table('financial_logs')->where('created_at', 'like', '%' . $date . '%')->where('input_screen', 'Payroll Input')->where('field_name', 'NOT LIKE', '%vertime%')->delete();
+            $logs=DB::table('financial_logs')->where('created_at', 'like', '%' . $date . '%')->where('input_screen', 'Payroll Input')->where('field_name', 'NOT LIKE', '%vertime%')->delete();
+
             DB::table('input_submissions')->where('id', $row[0]->id)->delete();
         });
         return true;

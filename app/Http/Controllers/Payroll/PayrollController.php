@@ -1899,6 +1899,9 @@ class PayrollController extends Controller
 
     public function cancelpayroll($type)
     {
+
+
+        // dd("I am here");
         //dd($type);
         /*get the payroll month*/
         $result_month = $this->payroll_model->getPayrollMonth1();
@@ -1915,14 +1918,14 @@ class PayrollController extends Controller
 
         $initial_delete = $this->payroll_model->deleteArrears($cancel_date);
         if ($initial_delete) {
-            $result = $this->payroll_model->cancel_payroll();
+            $result = $this->payroll_model->cancelpayroll();
             if ($type == 'none') {
 
                 return redirect(route('payroll.payroll'));
             }
             if ($result == true) {
                 $response_array['status'] = "OK";
-                $response_array['message'] = "<p class='alert alert-success text-center'>Payroll CANCELLED Successifully</p>";
+                $response_array['message'] = "<p class='alert alert-success text-center'>Payroll CANCELLED Successfully</p>";
                 header('Content-type: application/json');
                 echo json_encode($response_array);
             } else {
