@@ -5,7 +5,7 @@
 
                         <th class=" {{ $payNo_col }} " ><b>Pay No</b></th>
 
-                        <th class=" {{ $name_col }} text-center" colspan="2" style="margin-bottom: 30px;"><b>Name</b><br>
+                        <th class=" {{ $name_col }} text-center" style="margin-bottom: 30px;"><b>Name</b><br>
                         </th>
 
                         <th class=" {{ $bank_col }} text-center" colspan="" style="margin-bottom: 30px;"><b>Bank</b><br>
@@ -134,10 +134,9 @@
 
                                 <td class=" {{ $payNo_col }} text-end">{{ $row->emp_id }}</td>
 
-                                <td class=" {{ $name_col }} " style="margin-right: 0px" colspan="">{{ $row->fname }}
+                                <td class=" {{ $name_col }} " style="margin-right: 0px" colspan="">{{ $row->fname }} {{  $row->lname }}  {{ $row->lname }}
                                 </td>
-                                <td class=" {{ $name_col }} " style="margin-right: 0px" colspan=""> {{ $row->lname }}
-                                </td>
+                 
                                 <td class=" {{$bank_col }} " style="margin-right: 0px" colspan="">{{ $row->bank_name }}
                                 </td>
                                 <td class=" {{$branchCode_col }} " style="margin-right: 0px" colspan="">{{ $row->branch_code }}
