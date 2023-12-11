@@ -88,7 +88,7 @@
                                     <input type="radio" name="type" value="1" id="p9" required>
                                     <label class="ms-2" for="p9">PDF</label>
                                 </div>
-                                <div  class="d-inline-flex align-items-center d-none">
+                                <div  class="d-inline-flex align-items-center">
                                     <input type="radio" name="type" value="2" id="p9a" required>
                                     <label class="ms-2" for="p9a">Excel</label>
                                 </div>

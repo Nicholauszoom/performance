@@ -1,4 +1,4 @@
-@if($payroll_state==1)
+@if($payroll_state !=0)
 <h3 class="me-4 text-center">Payroll Review For : {{ date('F, Y', strtotime($payroll_date)) }}
 </h3>
 
