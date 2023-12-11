@@ -6423,6 +6423,7 @@ class GeneralController extends Controller
 
     public function addEmployeeToGroup(Request $request)
     {
+        
 
         $this->authenticateUser('add-payroll');
 

@@ -163,7 +163,7 @@
 
 
 
-                            <table id="datatable-keytable" class="table table-bordered datatable-basic">
+                            <table id="datatable-keytable" class="table">
                                 <thead>
                                     <tr>
                                         <th>S/N</th>
