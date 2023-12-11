@@ -1918,7 +1918,7 @@ class PayrollController extends Controller
 
         $initial_delete = $this->payroll_model->deleteArrears($cancel_date);
         if ($initial_delete) {
-            $result = $this->payroll_model->cancelpayroll();
+            $result = $this->payroll_model->cancel_payroll();
             if ($type == 'none') {
 
                 return redirect(route('payroll.payroll'));

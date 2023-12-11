@@ -3333,7 +3333,7 @@ d.department_pattern AS child_department, d.parent_pattern as parent_department 
     public function memberscount($id)
     {
 
-        $query = "SELECT count(id) as headcounts  FROM employee_group WHERE group_name =" . $id . "";
+        $query = "SELECT count(eg.id) as headcounts  FROM employee_group eg,employee e WHERE   eg.empID=e.emp_id and e.state=1 and  eg.group_name =" . $id . "";
         $row = DB::select(DB::raw($query));
 
         return $row[0]->headcounts;

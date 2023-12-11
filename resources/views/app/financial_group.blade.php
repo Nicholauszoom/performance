@@ -37,7 +37,7 @@
                     <th>S/N</th>
                     <th>Name</th>
                     <th>Grouped By</th>
-                    <?php if($pendingPayroll==0 && session('mng_roles_grp')){ ?>
+                    <?php if($pendingPayroll==0 ){ ?>
                     <th>Option</th>
                     <?php } ?>
                 </tr>
@@ -50,7 +50,7 @@
                         <td><?php echo $row->name; ?></td>
                         <td>@if($row->grouped_by == 1) Employee @else Role @endif</td>
 
-                        <?php if($pendingPayroll==0 && session('mng_roles_grp')){ ?>
+                        <?php if($pendingPayroll==0 ){ ?>
                         <td class="options-width">
                             <?php if($row->type>0){ ?>
                             {{-- @if($row->grouped_by == 1)  --}}
@@ -81,7 +81,7 @@
 
 
 @section('modal')
-    @if( session('mng_roles_grp'))
+  
         <div>
             @include('app.modal.add-role-group')
         </div>
@@ -93,7 +93,7 @@
         <div>
             @include('app.modal.finance-group')
         </div>
-    @endif
+  
 @endsection
 
 

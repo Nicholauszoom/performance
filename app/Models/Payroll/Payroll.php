@@ -2792,12 +2792,65 @@ as gross,
         return $row[0]->total;
     }
 
+    public function getAssignedAllowanceActive($payroll_date)
+    {
+
+        $last_date = date("Y-m-t", strtotime(now())); //Last day of the month
+
+        $year = date('Y', strtotime($payroll_date));
+
+        // Calculate the number of days in the month of the payroll_date
+        $days = intval(date('t', strtotime($payroll_date)));
+
+
+        $payroll_date = date($payroll_date);
+
+        $query = "SELECT 
+        ea.*,
+        a.name,
+        a.state,
+        IF(
+            ea.mode = 1,
+            ea.amount,
+            IF(
+                a.type = 1,
+                IF(
+                    DATEDIFF('" . $last_date . "', e.hire_date) < 365,
+                    ((DATEDIFF('" . $last_date . "', e.hire_date) + 1) / 365) * e.salary,
+                    ea.percent * e.salary
+                ),
+                ea.percent *
+                    IF(
+                        MONTH(e.hire_date) = MONTH('" . $payroll_date . "') AND YEAR(e.hire_date) = YEAR('" . $payroll_date . "'),
+                        ((" . $days ." - (DAY(e.hire_date) + 1)) * e.salary / 30),
+                        e.salary
+                    )
+            )
+        ) AS amount
+        
+     FROM 
+        employee e, 
+        emp_allowances ea,  
+        allowances a 
+     WHERE 
+        e.emp_id = ea.empID 
+        AND a.id = ea.allowance 
+        AND a.state = 1 
+        AND e.state = 1 
+        AND e.login_user != 1";
+
+        // dd($query);
+
+        $row = DB::select(DB::raw($query));
+
+        return $row;
+    }
+
+
     public function getAssignedAllowance()
     {
         $query = "SELECT ea.*,a.name,a.state from emp_allowances ea,allowances a where a.id = ea.allowance";
         $row = DB::select(DB::raw($query));
-
-
         return $row;
     }
 

@@ -5491,6 +5491,8 @@ class GeneralController extends Controller
 
             $date = date("Y-m-d", strtotime($date));
             
+            $query = "UPDATE allowances SET state = IF(month('" . $date . "') = 12,1,0) WHERE type = 1";  //Activate leave allowance
+            DB::insert(DB::raw($query));
 
             $this->addPrevMonthSalaryArrears($date);
 
@@ -5500,7 +5502,8 @@ class GeneralController extends Controller
 
                 if ($month < 1) {
                     if ($submission < 1) {
-                        $allowances = $this->payroll_model->getAssignedAllowance();
+                        $allowances = $this->payroll_model->getAssignedAllowanceActive($date);
+                        
                         foreach ($allowances as $row) {
                             if ($row->state == 1) {
                                 SysHelpers::FinancialLogs($row->empID, $row->name, '0', ($row->amount != 0) ? number_format($row->amount, 2) . ' ' . $row->currency : $row->percent . '%', 'Payroll Input', $date);

@@ -2227,7 +2227,7 @@ and e.branch = b.code and e.line_manager = el.emp_id and c.id = e.contract_type 
 
 
           (SELECT  CONCAT('Add/Less ',al.description) as description,e.emp_id,e.hire_date,e.contract_end,e.fname,e.lname,
-          (IF((SELECT amount  FROM ".$allowance_log." WHERE ".$allowance_log.".description = al.description and e.emp_id = ".$allowance_log.".empID  and  ".$allowance_log.".payment_date = '" . $current_payroll_month . "' LIMIT 1 ) > 0,(SELECT amount  FROM ".$allowance_log." WHERE ".$allowance_log.".description = al.description and e.emp_id = ".$allowance_log.".empID and  ".$allowance_log.".payment_date = '" . $current_payroll_month . "'),0)) as current_amount,
+          (IF((SELECT amount  FROM ".$allowance_log." WHERE ".$allowance_log.".description = al.description and e.emp_id = ".$allowance_log.".empID  and  ".$allowance_log.".payment_date = '" . $current_payroll_month . "' LIMIT 1 ) > 0,(SELECT amount  FROM ".$allowance_log." WHERE ".$allowance_log.".description = al.description and e.emp_id = ".$allowance_log.".empID and  ".$allowance_log.".payment_date = '" . $current_payroll_month . "' LIMIT 1),0)) as current_amount,
          (IF((SELECT amount  FROM allowance_logs WHERE allowance_logs.description = al.description and e.emp_id = allowance_logs.empID and  allowance_logs.payment_date = '" . $previous_payroll_month . "' LIMIT 1)  > 0,(SELECT amount  FROM allowance_logs WHERE allowance_logs.description = al.description and e.emp_id = allowance_logs.empID and  allowance_logs.payment_date = '" . $previous_payroll_month . "'),0)) as previous_amount
            from employee e,".$allowance_log." al where e.emp_id = al.empID and e.state!=4)
 
