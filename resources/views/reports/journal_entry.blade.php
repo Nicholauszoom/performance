@@ -310,7 +310,7 @@
                             @foreach ($net_terminal_benefit as $row)
                                 <tr style="border-bottom:2px solid rgb(9, 5, 64);">
                                     <td>Terminal Benefit</td>
-                                    <td></td>
+                                    {{-- <td></td> --}}
                                     <td class="text-end">{{ number_format($row->amount, 2) }}</td>
                                     <td class="text-end">C</td>
                                     <td class="text-end-left">L20800000</td>
