@@ -354,7 +354,7 @@
                         </td>
 
                         <td class=" {{ $paye_col }} text-end"><b><b>{{ number_format($total_taxs, 2) }}</b></b></td>
-                        <td class=" {{ $nssf }} text-end">{{ number_format($total_pension, 2) }}</td>
+                        <td class=" {{ $nssf }} text-end"><b><b>{{ number_format($total_pension, 2) }}</b></b></td>
 
                         <td class=" {{ $nssfEmployee_col }} text-end"><b><b>{{ number_format($total_pension, 2) }}</b></b></td>
                         <td class=" {{ $nssfEmployer_col }} text-end"><b><b>{{ number_format($total_pension, 2) }}</b></b></td>
