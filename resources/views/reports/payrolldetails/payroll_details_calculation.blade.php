@@ -305,7 +305,23 @@
                         <td colspan="{{ $colspan_col }}"><b>
                                 <center><b>TOTAL<b></center>
                             </b></td>
-
+                        
+                         <td class=" {{ $name_col }} " style="margin-right: 0px" colspan="">
+                        </td>
+                        <td class=" {{$bank_col }} " style="margin-right: 0px" colspan="">
+                        </td>
+                        <td class=" {{$branchCode_col }} " style="margin-right: 0px" colspan="">
+                        </td>
+                        <td class=" {{$accountNumber_col }} " style="margin-right: 0px" colspan="">
+                        </td>
+                        <td class=" {{$pensionNumber_col }} " style="margin-right: 0px" colspan="">
+                        </td>
+                        <td class=" {{$currency_col }} " style="margin-right: 0px" colspan="">
+                        </td>
+                        <td class=" {{$department_col }} " style="margin-right: 0px" colspan="">
+                        </td>
+                        <td class=" {{$costCenter_col }} " style="margin-right: 0px" colspan="">
+                        </td>
 
                         <td class=" {{ $basicSalary_col }} text-end"><b><b>{{ number_format($total_actual_salary, 2) }}</b></b></td>
                         <td class=" {{ $netBasic_col }} text-end"><b><b>{{ number_format($total_salary, 2) }}</b></b></td>

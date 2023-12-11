@@ -110,7 +110,7 @@
                     $advanceOthers_col = "";
                     $totalDeduction_col = "";
                     $amountPayable_col = "";
-                    $colspan_col = "3";
+                    $colspan_col = "2";
                     $show_terminations=true;
                     $fitler_by_currency=false;
 
