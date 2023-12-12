@@ -5386,7 +5386,6 @@ class GeneralController extends Controller
         // Handle the file upload and data extraction
         $allowance = $request->allowance;
 
-        dd($request);
         $file = $request->file('file');
         Excel::import(new ImportEmployeeAllowance($allowance), $file);
 

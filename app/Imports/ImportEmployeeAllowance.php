@@ -26,19 +26,24 @@ class ImportEmployeeAllowance implements ToCollection
     {
         $flexperformance_model = new FlexPerformanceModel();
 
+        $firstIteration = true;
+
 
         foreach ($collection as $row) {
 
+            if ($firstIteration) {
+                $firstIteration = false;
+                continue; // Skip the header
+            }
             // Check if the 'currency' key exists in the $row array
-     // if (isset($row['currency'])) {
-         $rate = $flexperformance_model->get_rate($row['currency']);
+         $rate = $flexperformance_model->get_rate($row[3]);
          $data = array(
-             'empID' => $row['payroll number'],
+             'empID' => $row[0],
              'allowance' => $this->allowance,
-             'amount' => $row['amount'] * $rate,
+             'amount' => $row[2] * $rate,
              'mode' => '1',
              'percent' => 0,
-             'currency' => $row['currency'],
+             'currency' => $row[3],
              'rate' => $rate,
          );
 
