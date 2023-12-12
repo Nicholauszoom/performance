@@ -5326,6 +5326,8 @@ class GeneralController extends Controller
         $state = 1;
         $rate = $this->flexperformance_model->get_rate($request->currency);
 
+        // dd($rate);
+
         // FIXME I have commented column currency and rate but it need confirmation if it should available
         // FIXME data from code is missing for it to be able to save in the database
 
@@ -5337,8 +5339,8 @@ class GeneralController extends Controller
             'apply_to' => $apply_to,
             'mode' => $mode,
             'state' => $state,
-            // 'currency' => $request->currency,
-            // 'rate' => $rate,
+            'currency' => $request->currency,
+            'rate' => $rate,
         );
 
         DB::table('deductions')->insert($data);
