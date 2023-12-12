@@ -101,32 +101,32 @@
             }
 
             .loader--dot:first-child {
-                background-color: #8cc759;
+                background-color: #00204e;
                 animation-delay: 0.5s;
             }
 
             .loader--dot:nth-child(2) {
-                background-color: #8c6daf;
+                background-color: #f58646;
                 animation-delay: 0.4s;
             }
 
             .loader--dot:nth-child(3) {
-                background-color: #ef5d74;
+                background-color: #da2128;
                 animation-delay: 0.3s;
             }
 
             .loader--dot:nth-child(4) {
-                background-color: #f9a74b;
+                background-color: #00204e;
                 animation-delay: 0.2s;
             }
 
             .loader--dot:nth-child(5) {
-                background-color: #60beeb;
+                background-color: #37719f;
                 animation-delay: 0.1s;
             }
 
             .loader--dot:nth-child(6) {
-                background-color: #fbef5a;
+                background-color: #818386;
                 animation-delay: 0s;
             }
 
