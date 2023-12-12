@@ -869,6 +869,63 @@ class GeneralController extends Controller
 
 
     }
+    public function employeeEmergency(Request $request)
+    {
+        $id = auth()->user()->emp_id;
+
+        $emergency = EmergencyContact::where('employeeID', $id)->first();
+
+        if ($emergency) {
+
+            $emergency->employeeID = $id;
+            $emergency->em_fname = $request->em_fname;
+            $emergency->em_mname = $request->em_mname;
+            $emergency->em_sname = $request->em_lname;
+            $emergency->em_relationship = $request->em_relationship;
+            $emergency->em_occupation = $request->em_occupation;
+            $emergency->em_phone = $request->em_phone;
+            $emergency->update();
+        } else {
+            $emergency = new EmergencyContact();
+            
+            $emergency->employeeID = $id;
+            $emergency->em_fname = $request->em_fname;
+            $emergency->em_mname = $request->em_mname;
+            $emergency->em_sname = $request->em_lname;
+            $emergency->em_relationship = $request->em_relationship;
+            $emergency->em_occupation = $request->em_occupation;
+            $emergency->em_phone = $request->em_phone;
+            $emergency->save();
+        }
+
+        $msg = "Employee Details Have Been Updated successfully";
+        return response([$msg=>$msg],200);
+    }
+    public function updateUserInfo(Request $request)
+    {
+
+
+        $user = auth()->user()->emp_id;
+        // request()->validate([
+        //     'image' => 'required'
+        // ]);
+
+        $employee = EMPL::where('emp_id', $user)->first();
+
+            $employee->physical_address =$request->physical_address;
+            $employee->mobile=$request->mobile;
+            $employee->update();
+
+            $msg='Your Profile is update Successfully !';
+            return response( [ 'msg'=>$msg  ],200 );
+
+        
+        
+
+
+
+    }
+     
 
     //Viewing leave attachment
     // public function leaveAttachment(Request $request)
