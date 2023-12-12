@@ -258,7 +258,7 @@
 
 
 
-                  
+
                 </div>
 
                 <div class="card-body">
@@ -306,6 +306,41 @@
                             </div>
                         </div>
 
+                        <input type="text" hidden="hidden" name="allowance" value="<?php echo $allowanceID?>">
+                    </form>
+                </div>
+
+                <hr>
+                <div class="card-body">
+                    <h4 class="text-muted">Add Employees from excel</h4>
+                    <a  href="{{ asset('uploads/templates/allowance_templates.xlsx') }}" >
+                        Click here to download Allowance excel template
+                    </a>
+
+                    <form id="assigninmultiple" enctype="multipart/form-data" method="post" action="#" data-parsley-validate class="form-horizontal form-label-left">
+                        @csrf
+                        <div class="mb-3">
+                            <div class="form-group row align-items-center">
+                                <div class="col-md-12 col-lg-12 col-xs-12 d-flex justify-content-between ">
+                                    <div class="col-md-8 d-flex justify-content-start">
+                                        <label for="attachment" class="control-label col-md-2">Attachment <span class="text-danger">*</span></label>
+                                        <div class="col-9"> <!-- Reduce the column width and adjust the margin to the right -->
+                                            <input class="form-control col-md-12 col-xs-12" type="file" name="file" requiredes accept=".xls, .xlsx">
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-4 justify-content-end"> <!-- Adjust the column width, no need to adjust the margin -->
+                                        <button type="submit" class="btn btn-main w-75">Upload</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <span class="text-danger"><?php // echo form_error("mname"); ?></span>
+                        </div>
+                        <p>
+                            <small>
+                                <i>Note:</i> Please note that this action of uploading bulk allowance of this type long term allowance for each employee.
+                            </small>
+                        </p>
                         <input type="text" hidden="hidden" name="allowance" value="<?php echo $allowanceID?>">
                     </form>
                 </div>
