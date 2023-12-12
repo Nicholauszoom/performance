@@ -317,7 +317,7 @@
                         Click here to download Allowance excel template
                     </a>
 
-                    <form id="assigninmultiple" enctype="multipart/form-data" method="post" action="#" data-parsley-validate class="form-horizontal form-label-left">
+                    <form  enctype="multipart/form-data" method="post" action="{{route('flex.assign_allowance_employees')}}" data-parsley-validate class="form-horizontal form-label-left">
                         @csrf
                         <div class="mb-3">
                             <div class="form-group row align-items-center">
@@ -330,7 +330,7 @@
                                     </div>
 
                                     <div class="col-md-4 justify-content-end"> <!-- Adjust the column width, no need to adjust the margin -->
-                                        <button type="submit" class="btn btn-main w-75">Upload</button>
+                                        <button type="submit" name="submit" class="btn btn-main w-75">Upload</button>
                                     </div>
                                 </div>
                             </div>

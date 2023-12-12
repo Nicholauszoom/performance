@@ -877,6 +877,7 @@ Route::middleware('verify-outgoing-requests')->group(function () {
             Route::any('/overtimeCategoryDelete/{id}', 'overtimeCategoryDelete')->name('flex.overtimeCategoryDelete');
             Route::any('/addDeduction', 'addDeduction')->name('flex.addDeduction');
             Route::any('/assign_allowance_individual', 'assign_allowance_individual')->name('flex.assign_allowance_individual');
+            Route::any('/assign_allowance_employees', 'assign_allowance_employees')->name('flex.assign_allowance_employees');
             Route::any('/assign_allowance_group', 'assign_allowance_group')->name('flex.assign_allowance_group');
             Route::any('/remove_individual_from_allowance', 'remove_individual_from_allowance')->name('flex.remove_individual_from_allowance');
             Route::any('/remove_group_from_allowance', 'remove_group_from_allowance')->name('flex.remove_group_from_allowance');

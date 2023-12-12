@@ -1695,6 +1695,8 @@ class FlexPerformanceModel extends Model
 
     public function getallowancebyid($id)
     {
+
+      
         $query = "SELECT * FROM allowances WHERE id =" . $id . "";
 
         return DB::select(DB::raw($query));

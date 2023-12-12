@@ -10,6 +10,7 @@ use App\Helpers\SysHelpers;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\EmployeeRequest;
 use App\Imports\HolidayDataImport;
+use App\Imports\ImportEmployeeAllowance;
 use App\Imports\ImportSalaryIncrement;
 use App\Models\AccessControll\Departments;
 use App\Models\AdhocTask;
@@ -5377,6 +5378,23 @@ class GeneralController extends Controller
 
     //    }
 
+    public function assign_allowance_employees(Request $request){
+         // Validate the uploaded file
+         $request->validate([
+            'file' => 'required|mimes:xlsx,xls',
+        ]);
+        // Handle the file upload and data extraction
+        $allowance = $request->allowance;
+
+        dd($request);
+        $file = $request->file('file');
+        Excel::import(new ImportEmployeeAllowance($allowance), $file);
+
+        return redirect()->back()->with('success', 'File uploaded and data extracted successfully.');
+    }
+
+
+
     public function assign_allowance_individual(Request $request)
     {
         $method = $request->method();
@@ -5490,7 +5508,7 @@ class GeneralController extends Controller
             $date = $date->format('m/d/Y');
 
             $date = date("Y-m-d", strtotime($date));
-            
+
             $query = "UPDATE allowances SET state = IF(month('" . $date . "') = 12,1,0) WHERE type = 1";  //Activate leave allowance
             DB::insert(DB::raw($query));
 
@@ -5503,7 +5521,7 @@ class GeneralController extends Controller
                 if ($month < 1) {
                     if ($submission < 1) {
                         $allowances = $this->payroll_model->getAssignedAllowanceActive($date);
-                        
+
                         foreach ($allowances as $row) {
                             if ($row->state == 1) {
                                 SysHelpers::FinancialLogs($row->empID, $row->name, '0', ($row->amount != 0) ? number_format($row->amount, 2) . ' ' . $row->currency : $row->percent . '%', 'Payroll Input', $date);
@@ -6423,7 +6441,7 @@ class GeneralController extends Controller
 
     public function addEmployeeToGroup(Request $request)
     {
-        
+
 
         $this->authenticateUser('add-payroll');
 
