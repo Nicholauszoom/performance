@@ -3374,7 +3374,7 @@ d.department_pattern AS child_department, d.parent_pattern as parent_department 
     public function members_byid($id)
     {
 
-        $query = "SELECT DISTINCT @s:=@s+1 as SNo, eg.id as EGID,  e.emp_id as ID,  CONCAT(e.fname,' ',IF( e.mname != null,e.mname,' '),' ', e.lname) as NAME, d.name as DEPARTMENT, p.name as POSITION FROM employee e, position p, department d, employee_group eg,  (SELECT @s:=0) as s  where e.position = p.id and e.emp_id = eg.empID and e.department = d.id and eg.group_name = " . $id . "  and e.emp_id IN (SELECT empID from employee_group where group_name=" . $id . ")";
+        $query = "SELECT DISTINCT @s:=@s+1 as SNo, eg.id as EGID,  e.emp_id as ID,  CONCAT(e.fname,' ',IF( e.mname != null,e.mname,' '),' ', e.lname) as NAME, d.name as DEPARTMENT, p.name as POSITION FROM employee e, position p, department d, employee_group eg,  (SELECT @s:=0) as s  where e.position = p.id and e.emp_id = eg.empID and e.department = d.id and eg.group_name = " . $id . "  AND e.state =1 and e.emp_id IN (SELECT empID from employee_group where group_name=" . $id . ")";
 
         return DB::select(DB::raw($query));
     }
