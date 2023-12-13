@@ -14,7 +14,7 @@
     </li>
 
     <li class="nav-item" role="presentation">
-        <a href="{{ url('/flex/allowance')}}" class="nav-link{{ Request::is('flex/allowance*') ? ' active' : '' }}" aria-selected="false" role="tab" tabindex="-1">
+        <a href="{{ url('/flex/allowance')}}" class="nav-link{{ Request::is('flex/allowance') ? ' active' : '' }}{{ Request::is('flex/allowance_info*') ? ' active' : '' }}" aria-selected="false" role="tab" tabindex="-1">
             <i class="ph-list me-2"></i>
             Allowance
         </a>
