@@ -10,7 +10,7 @@
             <td class="text-start">Last Month Gross Salary</td>
             <td class="text-end">  {{ number_format(0, 2) }} </td>
             <td class="text-end"> {{ number_format(0, 2) }} </td>
-            <td class="text-end"> {{ number_format($total_previous_gross, 0) }} </td>
+            <td class="text-end"> {{ number_format($total_previous_gross, 2) }} </td>
             <td class="text-end"> {{ $payroll_date == '2023-03-19' ? $count_previous_month - 1 : $count_previous_month  }}</td>
         </tr>
 
@@ -91,7 +91,7 @@
                         {{ number_format($current_decrease['actual_amount'] - $current_decrease['basic_decrease'], 2) }}
                     </td>
                     <td class="text-end">
-                        {{ number_format($current_decrease['actual_amount'] - $current_decrease['basic_decrease'] - $current_decrease['actual_amount'], 1) }}
+                        {{ number_format($current_decrease['actual_amount'] - $current_decrease['basic_decrease'] - $current_decrease['actual_amount'], 2) }}
                     </td>
 
                     <td class="text-end"></td>
@@ -150,7 +150,7 @@
             </td>
             <td class="text-end"><b>{{ number_format($total_current, 2) }}</b></td>
             <td class="text-end">
-                <b>{{ number_format($total_amount, 0) }}</b>
+                <b>{{ number_format($total_amount, 2) }}</b>
             </td>
             <td class="text-end"><b>{{ ($payroll_date == '2023-02-17' ? $count_current_month - 1 : $count_current_month) }}</b></td>
         </tr>
