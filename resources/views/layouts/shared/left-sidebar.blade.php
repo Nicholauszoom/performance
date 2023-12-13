@@ -32,8 +32,10 @@
                         {{--  start of suspend employee link --}}
 
                         <li class="nav-item">
+                        
+
                             <a class="nav-link {{ request()->routeIs('flex.my-leaves') ? 'active' : null }}"
-                                href="{{ route('flex.my-leaves') }}">My Leaves</a>
+                                href="{{ route('flex.my-leaves') }}"><i class="ph-user-rectangle me-2"></i>My Leaves</a>
                         </li>
 
 
@@ -43,8 +45,10 @@
                         {{-- start of active employee link --}}
 
                         <li class="nav-item">
+                        
+
                             <a class="nav-link {{ request()->routeIs('flex.my-overtimes') ? 'active' : null }}"
-                                href="{{ route('flex.my-overtimes') }}">
+                                href="{{ route('flex.my-overtimes') }}"><i class="ph-clock me-2"></i>
                                 My Overtimes
                             </a>
                         </li>
@@ -55,7 +59,7 @@
 
                         <li class="nav-item">
                             <a class="nav-link {{ request()->routeIs('flex.my-pensions') ? 'active' : null }}"
-                                href="{{ route('flex.my-pensions') }}"> Pensions </a>
+                                href="{{ route('flex.my-pensions') }}"> <i class="ph-bank me-2"></i>Pensions </a>
                         </li>
 
 
@@ -64,7 +68,7 @@
 
                         <li class="nav-item ">
                             <a class="nav-link {{ request()->routeIs('flex.my-loans') ? 'active' : null }}"
-                                href="{{ route('flex.my-loans') }}">Loans(HESLB)</a>
+                                href="{{ route('flex.my-loans') }}"><i class="ph-buildings me-2"></i> Loans(HESLB)</a>
                         </li>
 
                         {{-- / --}}
@@ -74,7 +78,7 @@
 
                         <li class="nav-item">
                             <a class="nav-link {{ request()->routeIs('flex.download_payslip') ? 'active' : null }}"
-                                href="{{ route('flex.download_payslip') }}"> Payslip </a>
+                                href="{{ route('flex.download_payslip') }}"> <i class="ph-bank me-2"></i>Payslip </a>
                         </li>
 
                         {{-- / --}}
@@ -83,7 +87,7 @@
 
                         <li class="nav-item">
                             <a class="nav-link {{ request()->routeIs('flex.my-grievances') ? 'active' : null }}"
-                                href="{{ route('flex.my-grievances') }}"> Grievances </a>
+                                href="{{ route('flex.my-grievances') }}"><i class="ph-waves me-2"></i> Grievances </a>
                         </li>
 
                         {{-- / --}}
@@ -92,7 +96,7 @@
 
                         <li class="nav-item">
                             <a class="nav-link {{ request()->routeIs('flex.biodata') ? 'active' : null }}"
-                                href="{{ route('flex.my-biodata') }}"> Biodata </a>
+                                href="{{ route('flex.my-biodata') }}"> <i class="ph-user-circle me-2"></i>Biodata </a>
                         </li>
 
                         {{-- / --}}

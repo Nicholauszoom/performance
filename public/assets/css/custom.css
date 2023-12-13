@@ -209,6 +209,13 @@ h2 {
     color: #c20430 !important;
 }
 
+.nav-link.active {
+    background-color: #00204e !important;
+    background-size: cover;
+    color: #ffffff !important;
+}
+
+
 .btn:hover {
     background-color: #f0ab00 !important;
     color: #00204e !important;
