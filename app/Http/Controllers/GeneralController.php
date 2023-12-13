@@ -6926,6 +6926,7 @@ class GeneralController extends Controller
 
     public function addEmployee(Request $request)
     {
+        
         $this->authenticateUser('add-employee');
         $data['pdrop'] = $this->flexperformance_model->positiondropdown();
         $data['contract'] = $this->flexperformance_model->contractdrop();
@@ -6955,10 +6956,11 @@ class GeneralController extends Controller
 
         $minSalary = $maxSalary = 0;
         $result = $this->flexperformance_model->getPositionSalaryRange($positionID);
+        // dd($result);
 
         foreach ($result as $value) {
-            $minSalary = $value->minSalary;
-            $maxSalary = $value->maxSalary;
+            $minSalary = $value->minsalary;
+            $maxSalary = $value->maxsalary;
         }
         if ($result) {
             // $response_array['salary'] = "<div><input required='required'  class='form-control @error('salary') is-invalid @enderror' type='number' min='" . $minSalary . "' step='0.01' max='" . $maxSalary . "'  name='salary'><div class='form-text text-muted'>Minimum salary is " . $minSalary . " and Maximam salary is " . $maxSalary . "</div></div>";
@@ -7135,6 +7137,7 @@ class GeneralController extends Controller
             }
 
             $employee = array(
+                'old_emp_id'=>'0000',
                 'fname' => $request->input("fname"),
                 'mname' => $request->input("mname"),
                 'full_name' => $empName,
@@ -7222,7 +7225,7 @@ class GeneralController extends Controller
 
                 /*give 100 allocation*/
                 $data = array(
-                    'empID' => $emp_id,
+                    'empid' => $emp_id,
                     'activity_code' => 'AC0018',
                     'grant_code' => 'VSO',
                     'percent' => 100.00,
@@ -7240,9 +7243,10 @@ class GeneralController extends Controller
                     'serial_no' => $empID,
                     'given_by' => auth()->user()->emp_id,
                     'given_to' => $empID,
+                    'dated_on'=>null,
                 );
                 $datagroup = array(
-                    'empID' => $empID,
+                    'empid' => $empID,
                     'group_name' => 1,
                 );
 
@@ -7317,7 +7321,7 @@ class GeneralController extends Controller
                     /*add in transfer with status = 5 (registered, waiting for approval)*/
 
                     $data_transfer = array(
-                        'empID' => $emp_id,
+                        'empid' => $emp_id,
                         'parameter' => 'New Employee',
                         'parameterID' => 5,
                         'old' => 0,
@@ -7329,8 +7333,8 @@ class GeneralController extends Controller
                         'status' => 5, //new employee
                         'recommended_by' => auth()->user()->emp_id,
                         'approved_by' => '',
-                        'date_recommended' => date('Y-m-d'),
-                        'date_approved' => '',
+                        'date_recommended' => date('d-m-Y'),
+                        'date_approved' => date('d-m-Y'),
                     );
 
                     $this->flexperformance_model->employeeTransfer($data_transfer);
@@ -9184,7 +9188,7 @@ class GeneralController extends Controller
                 $profile->birthplace = $request->birthplace;
                 $profile->birthcountry = $request->birthcountry;
                 $profile->religion = $request->religion;
-                $profile->employeeID = $request->employeeID;
+                $profile->employeeid = $request->employeeID;
                 $profile->passport_number = $request->passport_number;
                 $profile->landmark = $request->landmark;
                 $profile->prefix = $request->prefix;
@@ -9199,7 +9203,7 @@ class GeneralController extends Controller
                 $profile->birthplace = $request->birthplace;
                 $profile->birthcountry = $request->birthcountry;
                 $profile->religion = $request->religion;
-                $profile->employeeID = $request->employeeID;
+                $profile->employeeid = $request->employeeID;
                 $profile->passport_number = $request->passport_number;
                 $profile->former_title = $request->former_title;
                 $profile->divorced_date = $request->divorced_date;
@@ -9332,7 +9336,7 @@ class GeneralController extends Controller
                 // $profile->birthplace = $request->birthplace;
                 // $profile->birthcountry = $request->birthcountry;
                 // $profile->religion = $request->religion;
-                $profile->employeeID = $request->employeeID;
+                $profile->employeeid = $request->employeeID;
                 // $profile->passport_number = $request->passport_number;
                 // $profile->landmark = $request->landmark;
                 $profile->prefix = $request->prefix;
@@ -9347,7 +9351,7 @@ class GeneralController extends Controller
                 // $profile->birthplace = $request->birthplace;
                 // $profile->birthcountry = $request->birthcountry;
                 // $profile->religion = $request->religion;
-                $profile->employeeID = $request->employeeID;
+                $profile->employeeid = $request->employeeID;
                 // $profile->passport_number = $request->passport_number;
                 // $profile->former_title = $request->former_title;
                 // $profile->divorced_date = $request->divorced_date;
@@ -9425,7 +9429,7 @@ class GeneralController extends Controller
                 //   $profile->birthplace = $request->birthplace;
                 //   $profile->birthcountry = $request->birthcountry;
                 //   $profile->religion = $request->religion;
-                $profile->employeeID = $request->employeeID;
+                $profile->employeeid = $request->employeeID;
                 // $profile->passport_number = $request->passport_number;
                 // $profile->former_title = $request->former_title;
                 //  $profile->divorced_date = $request->divorced_date;
@@ -9488,7 +9492,7 @@ class GeneralController extends Controller
                 //   $profile->birthplace = $request->birthplace;
                 //   $profile->birthcountry = $request->birthcountry;
                 //   $profile->religion = $request->religion;
-                $profile->employeeID = $request->employeeID;
+                $profile->employeeid = $request->employeeID;
                 $profile->passport_number = $request->passport_number;
                 // $profile->landmark = $request->landmark;
                 // $profile->prefix = $request->prefix;
@@ -9503,7 +9507,7 @@ class GeneralController extends Controller
                 //   $profile->birthplace = $request->birthplace;
                 //   $profile->birthcountry = $request->birthcountry;
                 //   $profile->religion = $request->religion;
-                $profile->employeeID = $request->employeeID;
+                $profile->employeeid = $request->employeeID;
                 $profile->passport_number = $request->passport_number;
                 // $profile->former_title = $request->former_title;
                 //  $profile->divorced_date = $request->divorced_date;
@@ -9607,7 +9611,7 @@ class GeneralController extends Controller
             $profile->birthplace = $request->birthplace;
             $profile->birthcountry = $request->birthcountry;
             $profile->religion = $request->religion;
-            $profile->employeeID = $request->employeeID;
+            $profile->employeeid = $request->employeeID;
             $profile->passport_number = $request->passport_number;
             $profile->landmark = $request->landmark;
             $profile->prefix = $request->prefix;
@@ -9622,7 +9626,7 @@ class GeneralController extends Controller
             $profile->birthplace = $request->birthplace;
             $profile->birthcountry = $request->birthcountry;
             $profile->religion = $request->religion;
-            $profile->employeeID = $request->employeeID;
+            $profile->employeeid = $request->employeeID;
             $profile->passport_number = $request->passport_number;
             $profile->former_title = $request->former_title;
             $profile->divorced_date = $request->divorced_date;
@@ -9642,7 +9646,7 @@ class GeneralController extends Controller
 
         if ($emergency) {
 
-            $emergency->employeeID = $request->employeeID;
+            $emergency->employeeid = $request->employeeID;
             $emergency->em_fname = $request->em_fname;
             $emergency->em_mname = $request->em_mname;
             $emergency->em_sname = $request->em_lname;
@@ -9652,7 +9656,7 @@ class GeneralController extends Controller
             $emergency->update();
         } else {
             $emergency = new EmergencyContact();
-            $emergency->employeeID = $request->employeeID;
+            $emergency->employeeid = $request->employeeID;
             $emergency->em_fname = $request->em_fname;
             $emergency->em_mname = $request->em_mname;
             $emergency->em_sname = $request->em_lname;
@@ -10865,7 +10869,7 @@ class GeneralController extends Controller
         $grievance = new Grievance();
         $grievance->title = $request->title;
         $grievance->description = $request->description;
-        $grievance->empID = Auth::user()->emp_id;
+        $grievance->empid = Auth::user()->emp_id;
         if ($request->hasfile('attachment')) {
             // $request->validate([
             //     'attachment' => 'required|clamav',

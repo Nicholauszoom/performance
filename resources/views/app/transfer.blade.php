@@ -51,13 +51,14 @@
                         <th>Option</th>
                     </tr>
                 </thead>
+{{-- {{ dd($transfers) }} --}}
 
                 <tbody>
                     @foreach ($transfers as $row)
                         @if ($row->status == 1 || $row->status >= 5)
                             <tr>
-                                <td width="1px"><?php echo $row->SNo; ?></td>
-                                <td><?php  echo $row->empName; ?></td>
+                                <td width="1px"><?php echo $row->sno; ?></td>
+                                <td><?php  echo $row->empname; ?></td>
                                 <td><?php echo "<b>DEPARTMENT:</b> ".$row->department_name."<br><b>POSITION: </b>".$row->position_name; ?></td>
                                 <td><?php echo $row->parameter; ?></td>
 
@@ -89,7 +90,7 @@
                                 </td>
 
                                 <td class="options-width">
-                                    <a href="<?php echo  url('') .'/flex/userprofile/'.$row->empID; ?>" title="Employee Info and Details" class="icon-2 info-tooltip">
+                                    <a href="<?php echo  url('') .'/flex/userprofile/'.$row->empid; ?>" title="Employee Info and Details" class="icon-2 info-tooltip">
                                         <button type="button" class="btn btn-info btn-xs"><i class="ph-info"></i></button>
                                     </a>
 
@@ -153,8 +154,8 @@
                     <?php foreach ($transfers as $row) {
                         if($row->status<5 || $row->status > 5) continue; ?>
                             <tr>
-                                <td width="1px"><?php echo $row->SNo; ?></td>
-                                <td><?php  echo $row->empName; ?></td>
+                                <td width="1px"><?php echo $row->sno; ?></td>
+                                <td><?php  echo $row->empname; ?></td>
                                 <td><?php echo "<b>DEPARTMENT:</b> ".$row->department_name."<br><b>POSITION: </b>".$row->position_name; ?></td>
                                 <td><?php echo $row->parameter; ?></td>
                                 <td>
@@ -166,7 +167,7 @@
                                 </td>
                                 <td class="options-width">
                                     <div class="d-flex">
-                                        <a href="<?php echo  url('').'/flex/userprofile/'.  base64_encode($row->empID); ?>" title="Employee Info and Details" class="icon-2 info-tooltip ms-2">
+                                        <a href="<?php echo  url('').'/flex/userprofile/'.  base64_encode($row->empid); ?>" title="Employee Info and Details" class="icon-2 info-tooltip ms-2">
                                             <button type="button" class="btn btn-info btn-xs"><i class="ph-info"></i></button>
                                         </a>
                                         <?php if($row->status==5){ ?>

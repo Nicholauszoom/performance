@@ -17,7 +17,7 @@ class UserRoleSeeder extends Seeder
         // Define employee roles data
         $employeeRoles = [
             [
-                'userID' => "EMP001",
+                'userid' => "EMP001",
                 'role' => 1,
                 'group_name' => '0',
                 'duedate' => '2023-11-28 20:19:04'

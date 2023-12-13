@@ -162,6 +162,7 @@
                             <span id="position-error" class="text-danger error-message"></span>
                         </div>
                     </div>
+                 
 
                     <div class="col-md-4 col-lg-4">
                         <div class="mb-3">
@@ -171,7 +172,7 @@
                                 required>
                                 <option selected disabled>Select line Manager</option>
                                 @foreach ($ldrop as $row)
-                                    <option value="{{ $row->empID }}"> {{ $row->empID }} - {{ $row->NAME }}
+                                    <option value="{{ $row->empid }}"> {{ $row->empid }} - {{ $row->name }}
                                     </option>
                                 @endforeach
                             </select>

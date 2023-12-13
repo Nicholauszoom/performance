@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('serial_no', 100)->nullable();
             $table->string('given_to', 10)->index('employee_fk');
             $table->string('given_by', 10)->nullable()->index('given_by');
-            $table->dateTime('dated_on');
+            $table->dateTime('dated_on')->nullable();
             $table->integer('isActive')->default(1);
             $table->timestamps();
         });

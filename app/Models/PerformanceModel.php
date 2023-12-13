@@ -40,14 +40,17 @@ function total_task_duration($id)
 
 function total_task_actual_duration($id)
 {
-    $query = "SELECT CASE WHEN sum(EXTRACT(EPOCH FROM (t.end - t.start)) / 60)::numeric > 0
-                           THEN sum(EXTRACT(EPOCH FROM (t.end - t.start)) / 60)::numeric
-                           ELSE 0
-                      END as allDURATION
-              FROM task t
-              WHERE t.status = 2 AND t.assigned_to = '" . $id . "'";
+    $result = DB::table('task as t')
+        ->select(DB::raw('
+            CASE WHEN SUM(EXTRACT(EPOCH FROM AGE(t.end, t.start)) / 60)::numeric > 0
+                 THEN SUM(EXTRACT(EPOCH FROM AGE(t.end, t.start)) / 60)::numeric
+                 ELSE 0
+            END as allDURATION'))
+        ->where('t.status', '=', 2)
+        ->where('t.assigned_to', '=', $id)
+        ->get();
 
-    return DB::select(DB::raw($query));
+    return $result[0]->allDURATION ?? 0;
 }
 
 function allTaskcompleted($id)

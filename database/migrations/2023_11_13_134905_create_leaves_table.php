@@ -30,7 +30,7 @@ return new class extends Migration
             $table->string('level1', 10)->nullable();
             $table->string('level2', 10)->nullable();
             $table->string('level3', 10)->nullable();
-            $table->integer('attachment');
+            $table->integer('attachment')->nullable();
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrent();
             $table->string('status');
@@ -54,5 +54,6 @@ return new class extends Migration
     public function down()
     {
         Schema::dropIfExists('leaves');
+        
     }
 };

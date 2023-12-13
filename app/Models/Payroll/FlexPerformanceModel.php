@@ -319,10 +319,13 @@ public function getCurrentStrategy()
     }
 
     public function nationality()
-    {
-        $query = "SELECT @s:=@s+1 as SNo, c.* FROM country c, (SELECT @s:=0) as s ";
+{
+    $countries = DB::table('country')
+        ->select(DB::raw('ROW_NUMBER() OVER() as SNo'), 'country.*')
+        ->get();
 
-        return DB::select(DB::raw($query));
+    return $countries;
+
     }
 
     public function addEmployeeNationality($data)
@@ -1110,7 +1113,7 @@ public function getCurrentStrategy()
     public function pendingSalaryTranferCheck($empID)
     {
 
-        $row = DB::table('transfer')->where('empID', $empID)->where('status', 0)->where('parameterID', 1)->count();
+        $row = DB::table('transfer')->where('empid', $empID)->where('status', 0)->where('parameterID', 1)->count();
 
         return $row;
     }
@@ -1118,7 +1121,7 @@ public function getCurrentStrategy()
     public function pendingPositionTranferCheck($empID)
     {
 
-        $row = DB::table('transfer')->where('empID', $empID)->where('status', 0)->where('parameterID', 2)->count();
+        $row = DB::table('transfer')->where('empid', $empID)->where('status', 0)->where('parameterID', 2)->count();
 
         return $row;
     }
@@ -1126,7 +1129,7 @@ public function getCurrentStrategy()
     public function pendingDepartmentTranferCheck($empID)
     {
 
-        $row = DB::table('transfer')->where('empID', $empID)->where('status', 0)->where('parameterID', 3)->count();
+        $row = DB::table('transfer')->where('empid', $empID)->where('status', 0)->where('parameterID', 3)->count();
 
         return $row;
     }
@@ -1134,7 +1137,7 @@ public function getCurrentStrategy()
     public function pendingBranchTranferCheck($empID)
     {
 
-        $row = DB::table('transfer')->where('empID', $empID)->where('status', 0)->where('parameterID', 4)->count();
+        $row = DB::table('transfer')->where('empid', $empID)->where('status', 0)->where('parameterID', 4)->count();
 
         return $row;
     }
@@ -3231,12 +3234,17 @@ last_paid_date='" . $date . "' WHERE  state = 1 and type = 3";
         return DB::select(DB::raw($query));
     }
 
+ 
+
     public function linemanagerdropdown()
-    {
-        // $query = "SELECT DISTINCT er.userID as empID,  CONCAT(e.fname,' ',IF( e.mname != null,e.mname,' '),' ', e.lname) as NAME FROM employee e, emp_role er, role r WHERE er.role = r.id and er.userID = e.emp_id and  r.permissions like '%p%'";
-        $query = "SELECT DISTINCT e.emp_id as empID,  CONCAT(e.fname,' ',IF( e.mname != null,e.mname,' '),' ', e.lname) as NAME FROM employee e where emp_id not like '%JOB_%'";
-        return DB::select(DB::raw($query));
-    }
+{
+    $query = "SELECT DISTINCT e.emp_id as empID, CONCAT(e.fname, ' ', COALESCE(e.mname, ' '), ' ', e.lname) as NAME 
+              FROM employee e 
+              WHERE e.emp_id NOT LIKE '%JOB_%'";
+
+    return DB::select(DB::raw($query));
+}
+
 
     public function departmentdropdown()
     {
@@ -3268,23 +3276,44 @@ last_paid_date='" . $date . "' WHERE  state = 1 and type = 3";
 
     public function getPositionSalaryRange($positionID)
     {
-        $query = "SELECT TRUNCATE((ol.minSalary/12),0) as minSalary, TRUNCATE((ol.maxSalary/12),0) as maxSalary from position p, organization_level ol WHERE p.organization_level = ol.id AND p.id = " . $positionID . "";
+        $result = DB::table('position')
+            ->join('organization_level', 'organization_level.id', '=', 'position.organization_level')
+            ->select(
+                DB::raw('(SELECT ROUND((minsalary/12), 0) FROM organization_level WHERE organization_level.id = position.organization_level) as minsalary'),
+                DB::raw('(SELECT ROUND((maxsalary/12), 0) FROM organization_level WHERE organization_level.id = position.organization_level) as maxsalary')
+            )
+            ->where('position.id', $positionID)
+            ->get();
 
-        return DB::select(DB::raw($query));
+    
+        return $result;
     }
+    
 
     public function bank()
     {
-        $query = "SELECT @s:=@s+1 as SNo, b.* FROM bank b, (SELECT @s:=0) as s";
+        $query = DB::table('bank')
+        ->select(
+            DB::raw('ROW_NUMBER() OVER () as SNo'),
+            'bank.*'
+        )
+        ->get();
 
-        return DB::select(DB::raw($query));
+    return $query;
     }
 
     public function bank_branch()
     {
-        $query = "SELECT @s:=@s+1 as SNo, b.name as bankname, bb.*  FROM bank b, bank_branch bb, (SELECT @s:=0) as s WHERE b.id = bb.bank";
+        $query = DB::table('bank_branch')
+        ->select(
+            DB::raw('ROW_NUMBER() OVER () as SNo'),
+            'bank.name as bankname',
+            'bank_branch.*'
+        )
+        ->join('bank', 'bank.id', '=', 'bank_branch.bank')
+        ->get();
 
-        return DB::select(DB::raw($query));
+    return $query;
     }
 
     public function bankBranchFetcher($id)
@@ -3342,18 +3371,42 @@ last_paid_date='" . $date . "' WHERE  state = 1 and type = 3";
     }
 
     // FORM
-    public function positionFetcher($id)
-    {
-        $query = "SELECT * FROM position where dept_id = '" . $id . "' and state = 1";
-        $query = DB::select(DB::raw($query));
-        $query_linemanager = "SELECT DISTINCT er.userID as empID,  CONCAT(e.fname,' ',IF( e.mname != null,e.mname,' '),' ', e.lname) as NAME FROM employee e, emp_role er, role r WHERE er.role = r.id and er.userID = e.emp_id and r.permissions like '%bs%' and e.department = '" . $id . "'";
-        $query_linemanager = DB::select(DB::raw($query_linemanager));
-        // $query_country_director = "SELECT DISTINCT er.userID as empID,  CONCAT(e.fname,' ',IF( e.mname != null,e.mname,' '),' ', e.lname) as NAME FROM employee e, emp_role er, role r WHERE er.role = r.id and er.userID = e.emp_id and (r.permissions like '%l%' || r.permissions like '%q%')";
-        // $query_country_director = DB::select(DB::raw($query_country_director));
-        // return [$query,$query_linemanager,$query_country_director];
+   
 
-        return [$query, $query_linemanager];
-    }
+
+public function positionFetcher($id)
+{
+   
+    $positions = DB::table('position')
+        ->where('dept_id', $id)
+        ->where('state', 1)
+        ->get();
+
+    $lineManagers = DB::table('employee')
+        ->select('emp_role.userid as empID', DB::raw("CONCAT(fname, ' ', COALESCE(mname, ' '), ' ', lname) as NAME"))
+        ->join('emp_role', 'employee.emp_id', '=', 'emp_role.userid')
+        ->join('role', 'emp_role.role', '=', 'role.id')
+        ->where('role.permissions', 'like', '%bs%')
+        ->where('employee.department', $id)
+        ->distinct()
+        ->get();
+
+    // $countryDirectors = DB::table('employee')
+    //     ->select('emp_role.userID as empID', DB::raw("CONCAT(fname, ' ', COALESCE(mname, ' '), ' ', lname) as NAME"))
+    //     ->join('emp_role', 'employee.emp_id', '=', 'emp_role.userID')
+    //     ->join('role', 'emp_role.role', '=', 'role.id')
+    //     ->where(function ($query) {
+    //         $query->where('role.permissions', 'like', '%l%')
+    //               ->orWhere('role.permissions', 'like', '%q%');
+    //     })
+    //     ->distinct()
+    //     ->get();
+
+    // Uncomment the above code if you want to fetch country directors as well.
+
+    return [$positions, $lineManagers];
+}
+
 
     // FORM
     public function employeeAdd($employee, $newEmp)

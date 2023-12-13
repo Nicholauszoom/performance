@@ -889,7 +889,7 @@ FROM payroll_logs pl, employee e WHERE e.emp_id = pl.empID and e.contract_type =
             'tm.pension_employee as pension_employer'
         )
         ->where('employee.contract_type', '!=', 2)
-        ->where('employee.salary','!=', '0.00')
+        ->where('(employee.salary','!=', '0.00')
         ->where('tm.employeeid', '=', $empID)
         ->orderBy('tm.terminationDate', 'ASC');
 

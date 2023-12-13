@@ -14,6 +14,8 @@
   @include('layouts.shared.page-header')
 @endsection
 
+{{-- {{ dd($employee) }} --}}
+
 @section('content')
 <?php
     foreach ($employee as $row) {
@@ -27,7 +29,6 @@
         $department = $row->deptname;
         $branch = $row->branch_name;
         $branchCode = $row->branch;
-        // $emp_code = $row->emp_code;
         $emp_level = $row->emp_level;
         $empID = $row->emp_id;
         $old_empID = $row->old_emp_id;
@@ -39,7 +40,7 @@
         $departmentID = $row->department;
         $position = $row->pName;
         $bankName = $row->bankName;
-        $bankBranch = $row->bankBranch;
+        // $bankBranch = $row->bankBranch;
         $positionID = $row->position;
         $ctype = $row->contract_type;
         $emp_shift = $row->shift;

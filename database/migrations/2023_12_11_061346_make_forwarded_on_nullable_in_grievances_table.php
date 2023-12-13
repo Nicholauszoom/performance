@@ -13,13 +13,12 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('organization_level', function (Blueprint $table) {
-            $table->id();
-            $table->string('name', 200);
-            $table->decimal('minsalary', 15);
-            $table->decimal('maxsalary', 15);
-            $table->timestamps();
-        });
+      
+            Schema::table('grievances', function (Blueprint $table) {
+                // Make the 'forwarded_on' column nullable
+                $table->dateTime('forwarded_on')->nullable()->change();
+            });
+        
     }
 
     /**
@@ -29,6 +28,8 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('organization_level');
+        Schema::table('grievances', function (Blueprint $table) {
+            //
+        });
     }
 };
