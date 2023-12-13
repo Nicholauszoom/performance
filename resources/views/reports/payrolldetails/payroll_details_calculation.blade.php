@@ -8,8 +8,7 @@
 
                         <th class=" {{ $bank_col }} text-center" colspan="" style="margin-bottom: 30px;"><b>Bank</b><br>
                         </th>
-                        <th class=" {{ $branchCode_col }} text-center" style="margin-bottom: 30px;"><b>Branch Code</b><br>
-                        </th>
+                        
 
                         <th class=" {{ $accountNumber_col }} text-center" style="margin-bottom: 30px;"><b>Account Number</b><br>
                         </th>
@@ -132,8 +131,6 @@
                                 </td>
                                 <td class=" {{$bank_col }} " style="margin-right: 0px" colspan="">{{ $row->bank_name }}
                                 </td>
-                                <td class=" {{$branchCode_col }} " style="margin-right: 0px" colspan="">{{ $row->branch_code }}
-                                </td>
                                 <td class=" {{ $accountNumber_col }} " style="margin-right: 0px" colspan="">{{ $row->account_no }}
                                 </td>
                                 <td class=" {{ $pensionNumber_col }} " style="margin-right: 0px" colspan="">{{ $row->pf_membership_no }}
@@ -210,8 +207,6 @@
                             <td class=" {{ $name_col }} " style="margin-right: 0px" colspan=""> {{ $row2->lname }}
                             </td>
                             <td class=" {{$bank_col }} " style="margin-right: 0px" colspan="">
-                            </td>
-                            <td class=" {{$branchCode_col }} " style="margin-right: 0px" colspan="">
                             </td>
                             <td class=" {{$accountNumber_col }} " style="margin-right: 0px" colspan="">{{ $row2->account_no }}
                             </td>
@@ -310,8 +305,7 @@
                         </td>
                         <td class=" {{$bank_col }} " style="margin-right: 0px" colspan="">
                         </td>
-                        <td class=" {{$branchCode_col }} " style="margin-right: 0px" colspan="">
-                        </td>
+
                         <td class=" {{$accountNumber_col }} " style="margin-right: 0px" colspan="">
                         </td>
                         <td class=" {{$pensionNumber_col }} " style="margin-right: 0px" colspan="">
