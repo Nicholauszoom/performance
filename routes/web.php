@@ -827,6 +827,7 @@ Route::middleware('verify-outgoing-requests')->group(function () {
             Route::any('/updateLineManager', 'updateLineManager')->name('flex.updateLineManager');
             Route::any('/updateEmployeeContract', 'updateEmployeeContract')->name('flex.updateEmployeeContract');
             Route::any('/updateMeritalStatus', 'updateMeritalStatus')->name('flex.updateMeritalStatus');
+            Route::any('/updateCostCenterEmployee', 'updateCostCenterEmployee')->name('flex.updateCostCenterEmployee');
             Route::any('/updatePensionFundNo', 'updatePensionFundNo')->name('flex.updatePensionFundNo');
             Route::any('/updateOldID', 'updateOldID')->name('flex.updateOldID');
             Route::any('/updateEmployeePhoto', 'updateEmployeePhoto')->name('flex.updateEmployeePhoto');
