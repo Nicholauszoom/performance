@@ -250,7 +250,7 @@
                             <select required name="contract" class="select_contract form-control" data-width="1%">
                                 <option> Select </option>
                                 <?php foreach ($contract as $row){ ?>
-                                <option <?php if($ctype == $row->id){ ?> selected="" <?php } ?>value="<?php echo $row->id; ?>"><?php echo $row->name; ?></option>
+                                <option <?php if($ctype == $row->item_code){ ?> selected="" <?php } ?>value="<?php echo $row->item_code; ?>"><?php echo $row->name; ?></option>
                                 <?php } ?>
                             </select>
                             <button class="btn btn-main">UPDATE</button>

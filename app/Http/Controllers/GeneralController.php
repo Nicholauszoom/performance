@@ -7119,6 +7119,7 @@ class GeneralController extends Controller
         $validator = $request->validated($request->all());
 
         $calendar = str_replace('/', '-', $request->input('birthdate'));
+
         $contract_end = str_replace('/', '-', $request->input('contract_end'));
         $contract_start = str_replace('/', '-', $request->input('contract_start'));
 
