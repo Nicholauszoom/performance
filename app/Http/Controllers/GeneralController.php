@@ -3493,6 +3493,22 @@ class GeneralController extends Controller
             }
         }
     }
+    public function updateCostCenterEmployee(Request $request)
+    {
+        $empID = $request->input('empID');
+        if ($request->method() == "POST" && $empID != '') {
+            $updates = array(
+                'cost_center' => $request->input('cost_center'),
+                'last_updated' => date('Y-m-d'),
+            );
+            $result = $this->flexperformance_model->updateEmployee($updates, $empID);
+            if ($result == true) {
+                echo "<p class='alert alert-success text-center'>Cost Center Address Updated Successifully!</p>";
+            } else {
+                echo "<p class='alert alert-danger text-center'>Update Failed</p>";
+            }
+        }
+    }
 
     public function updatePensionFundNo(Request $request)
     {

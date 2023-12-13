@@ -41,6 +41,7 @@
         $bankBranch = $row->bankBranch;
         $positionID = $row->position;
         $ctype = $row->contract_type;
+        $cost_center = $row->cost_center;
         $emp_shift = $row->shift;
         $line_managerID = $row->line_manager;
         $linemanager = $row->LINEMANAGER;
@@ -59,6 +60,7 @@
         $national_id = $row->national_id;
         $tin = $row->tin;
     }
+
  ?>
 
 
@@ -176,7 +178,7 @@
                 <div class="mb-3">
                     <form id="updateMeritalStatus">
                         <div id="feedBackMeritalStatus"></div>
-                        <label for="stream" class="form-label">Merital Status</label>
+                        <label for="stream" class="form-label">Marital Status</label>
 
                         <div class="input-group">
                             <select required name="merital_status" class="select_merital_status form-control" tabindex="-1">
@@ -240,6 +242,26 @@
 
 
         <div class="row">
+            <div class="col-lg-4">
+                <div class="mb-3">
+                    <form id="updateCostCenter">
+                        <div id="feedBackCostCenter"></div>
+                        <label for="cost_center" class="form-label">Cost Center</label>
+
+                        <div class="input-group">
+                            <select required name="cost_center" class="select_merital_status form-control" tabindex="-1">
+                                <option <?php if($cost_center == "Management"){ ?> selected=""
+                                    <?php } ?> value="Management">Management</option>
+                                <option <?php if($merital_status == "Non Management"){ ?> selected=""
+                                    <?php } ?> value="Non Management">Non Mnagement</option>
+                            </select>
+                            <button class="btn btn-main">UPDATE</button>
+
+                        </div>
+                        <input hidden name="empID" value="<?php echo $empID; ?>">
+                    </form>
+                </div>
+            </div>
             <div class="col-lg-4">
                 <div class="mb-3">
                     <form id="updateContract">
