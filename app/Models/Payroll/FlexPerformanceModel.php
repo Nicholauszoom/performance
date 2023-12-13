@@ -1739,7 +1739,7 @@ class FlexPerformanceModel extends Model
 
     public function allowance_membersCount($allowance)
     {
-        $query = "select COUNT(DISTINCT ea.empID) members from emp_allowances as ea  WHERE ea.allowance = " . $allowance . "  ";
+        $query = "select COUNT(DISTINCT ea.empID) members from emp_allowances as ea,employee e  WHERE e.emp_id=ea.empID AND e.state=1 AND ea.allowance = " . $allowance . "  ";
         $row = DB::select(DB::raw($query));
         return $row[0]->members;
     }
