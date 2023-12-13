@@ -12,10 +12,11 @@
 
 @section('content')
 
-        <div class="card border-top  border-top-width-3 border-top-main rounded-0 ">
 
-            @include('app.headers_payroll_input')
         <div class="row">
+
+        @include('app.headers_payroll_input')
+
             <div class="col-md-12">
                 <div class="card border-top  border-top-width-3 border-top-main rounded-0 p-2">
                     <div class="card-header">
@@ -188,7 +189,7 @@
 
 
         </div>
-    </div>
+
     @include('app.includes.update_allowances')
 @endsection
 
