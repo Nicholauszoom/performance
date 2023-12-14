@@ -6480,18 +6480,27 @@ class GeneralController extends Controller
                     $empID = $value;
                     if (!empty($group_allowances)) {
                         foreach ($group_allowances as $key) {
-                            $allowance = $key->allowance;
+                            $allowance_id = $key->allowance;
+
+                            $allowance= DB::table('allowances')->where('id', $allowance_id)->limit(1)->first();
+
+                            // $rate = $this->flexperformance_model->get_rate($allowance->currency);
+
+
                             $data = array(
                                 'empID' => $empID,
-                                'allowance' => $allowance,
+                                'allowance' => $allowance->id,
                                 'group_name' => $groupID,
+                                'amount'	=> $allowance->amount,
+                                'percent'=> $allowance->percent,
+                                'rate'	=>1,
+                                'mode'=>$allowance->mode,
                             );
 
-                            $allowanceName = DB::table('allowances')->select('name')->where('id', $allowance)->limit(1)->first();
 
                             $this->flexperformance_model->assign_allowance($data);
 
-                            if (empty($allowanceName)) {
+                            if (empty($allowance)) {
                                 //   SysHelpers::FinancialLogs($empID, 'Assigned allowance', '-', 'Allowance Not Found', 'Payroll Input');
                             } else {
                                 //  SysHelpers::FinancialLogs($empID, 'Assigned allowance', '-', $allowanceName->name, 'Payroll Input');
