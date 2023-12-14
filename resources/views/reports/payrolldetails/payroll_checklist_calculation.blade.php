@@ -131,7 +131,7 @@
 
                                 <td class=" {{ $payNo_col }} text-end">{{ $row->emp_id }}</td>
 
-                                <td class=" {{ $name_col }} " style="margin-right: 0px" colspan="">{{ $row->fname }}  {{ $row->lname }}
+                                <td class=" {{ $name_col }} " style="margin-right: 0px" colspan="">{{ $row->fname }}  {{ $row->mname }}  {{ $row->lname }}
                                 </td>
                  
                                 <td class=" {{$bank_col }} " style="margin-right: 0px" colspan="">{{ $row->bank_name }}

@@ -53,7 +53,7 @@
         $name_col = "";
         $bank_col="";
         $branchCode_col="d-none";
-        $accountNumber_col = "d-none";
+        $accountNumber_col = "";
         $pensionNumber_col = "d-none";
         $currency_col="";
         $department_col = "d-none";
