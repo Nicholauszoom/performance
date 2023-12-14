@@ -118,7 +118,7 @@ class AuthenticatedSessionController extends Controller
         $query = "SELECT e.*, d.name AS dname, c.name AS CONTRACT, d.id AS departmentID, p.id AS positionID, p.name AS pName,
         CONCAT(l.fname, ' ', l.mname, ' ', l.lname) AS lineManager
         FROM employee e
-        LEFT JOIN contract c ON e.contract_type = c.id
+        LEFT JOIN contract c ON e.contract_type = c.item_code
         LEFT JOIN department d ON d.id = e.department
         LEFT JOIN position p ON p.id = e.position
         LEFT JOIN employee l ON l.emp_id = e.line_manager

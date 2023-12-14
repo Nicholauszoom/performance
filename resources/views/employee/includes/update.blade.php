@@ -878,6 +878,37 @@
         });
     </script>
 
+<script type="text/javascript">
+    $('#updateCostCenter').submit(function(e){
+        e.preventDefault();
+             $.ajax({
+                 url:"<?php echo  url(''); ?>/flex/updateCostCenterEmployee",
+                 type:"post",
+                 headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
+                 data:new FormData(this),
+                 processData:false,
+                 contentType:false,
+                 cache:false,
+                 async:false
+             })
+        .done(function(data){
+         $('#feedBackCostCenter').fadeOut('fast', function(){
+              $('#feedBackCostCenter').fadeIn('fast').html(data);
+            });
+    setTimeout(function(){// wait for 2 secs(2)
+           $("#feedBackCostCenter").load(" #feedBackCostCenter"); // then reload the div to clear the success notification
+      }, 2000);
+    //   $('#updateMiddleName')[0].reset();
+        })
+        .fail(function(){
+     new Noty({
+                text: 'Updation Failed!! ...',
+                type: 'error'
+            }).show();
+        });
+    });
+</script>
+
     <script type="text/javascript">
         $('#updateLineManager').submit(function(e){
             e.preventDefault();

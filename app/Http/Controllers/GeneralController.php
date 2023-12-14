@@ -3493,6 +3493,22 @@ class GeneralController extends Controller
             }
         }
     }
+    public function updateCostCenterEmployee(Request $request)
+    {
+        $empID = $request->input('empID');
+        if ($request->method() == "POST" && $empID != '') {
+            $updates = array(
+                'cost_center' => $request->input('cost_center'),
+                'last_updated' => date('Y-m-d'),
+            );
+            $result = $this->flexperformance_model->updateEmployee($updates, $empID);
+            if ($result == true) {
+                echo "<p class='alert alert-success text-center'>Cost Center Address Updated Successifully!</p>";
+            } else {
+                echo "<p class='alert alert-danger text-center'>Update Failed</p>";
+            }
+        }
+    }
 
     public function updatePensionFundNo(Request $request)
     {
@@ -5326,6 +5342,8 @@ class GeneralController extends Controller
         $state = 1;
         $rate = $this->flexperformance_model->get_rate($request->currency);
 
+        // dd($rate);
+
         // FIXME I have commented column currency and rate but it need confirmation if it should available
         // FIXME data from code is missing for it to be able to save in the database
 
@@ -5337,8 +5355,8 @@ class GeneralController extends Controller
             'apply_to' => $apply_to,
             'mode' => $mode,
             'state' => $state,
-            // 'currency' => $request->currency,
-            // 'rate' => $rate,
+            'currency' => $request->currency,
+            'rate' => $rate,
         );
 
         DB::table('deductions')->insert($data);
@@ -7117,6 +7135,7 @@ class GeneralController extends Controller
         $validator = $request->validated($request->all());
 
         $calendar = str_replace('/', '-', $request->input('birthdate'));
+
         $contract_end = str_replace('/', '-', $request->input('contract_end'));
         $contract_start = str_replace('/', '-', $request->input('contract_start'));
 

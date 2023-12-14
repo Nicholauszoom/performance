@@ -195,15 +195,13 @@
 
                     <div class="col-md-4 col-lg-4">
                         <div class="mb-3">
-                            <label class="form-label" for="ctype">Contract Type <span
-                                    class="text-danger">*<span></label>
-                            <select class="form-select select" name="ctype" id="ctype" required>
+                            <label class="form-label">Contract Type:</label>
+                            <select class="form-control select" name="ctype" id="contractType" required>
                                 <option value="" selected disabled>Select type</option>
                                 @foreach ($contract as $row)
-                                    <option value="{{ $row->item_code }}">{{ $row->name }}</option>
+                                <option value="{{ $row->item_code }}">{{ $row->name }}</option>
                                 @endforeach
                             </select>
-                            <span id="ctype-error" class="text-danger error-message"></span>
                         </div>
                     </div>
 
@@ -258,13 +256,13 @@
                         </div>
                     </div>
 
-                    <div class="col-md-4 col-lg-4">
+                    <div class="col-md-4 col-lg-4" id="contractEndDiv" style="display: none;">
                         <div class="mb-3">
-                            <label class="form-label" for="contract_end">Contract End <span
-                                    class="text-danger">*<span></label>
-                            <input type="date" class="form-control daterange-single" name="contract_end"
-                                id="contract_end">
-                            <span id="contract_end-error" class="text-danger error-message"></span>
+                            <label class="form-label">Contract End:</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="ph-calendar"></i></span>
+                                <input type="text" class="form-control daterange-single" name="contract_end" id="contract_end">
+                            </div>
                         </div>
                     </div>
 
@@ -936,4 +934,21 @@
             });
         });
     </script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+
+    <script>
+    $('#contractType').change(function() {
+        console.log("tumefika");
+        var contractType = $(this).val();
+        var contractEndDiv = $('#contractEndDiv');
+
+        // Check if the selected contract type is 'permanent'
+        if (contractType === '3') { // Assuming '3' is the value for 'permanent'
+            contractEndDiv.hide(); // Hide the Contract End div
+        } else {
+            contractEndDiv.show(); // Show the Contract End div
+        }
+    });
+</script>
 @endpush
