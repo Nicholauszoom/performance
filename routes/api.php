@@ -74,7 +74,11 @@ Route::middleware('auth:sanctum')->group( function () {
 
       // For Updating profile image
       Route::post('/update-image',[GeneralController::class,'updateImg']);
+      
+      Route::post('/updateUserInfo',[GeneralController::class,'updateUserInfo']);
 
+            
+      Route::post('/updateEmergencyInfo',[GeneralController::class,'employeeEmergency']);
       //for geting payslip
       Route::prefix('flex')->controller(ReportController::class)->group(function (){
       Route::any('/reports/payslip','payslip')->name('flex.employee_payslip');

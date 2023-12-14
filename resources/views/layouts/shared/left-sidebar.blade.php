@@ -244,10 +244,10 @@
                         </a>
 
                         <ul
-                            class="nav-group-sub collapse {{ request()->routeIs('flex.submitInputs') || request()->routeIs('flex.non_statutory_deductions') || request()->routeIs('flex.statutory_deductions') || request()->routeIs('pension_receipt.index') || request()->routeIs('flex.allowance') || request()->routeIs('flex.financial_group') || request()->routeIs('payroll.employee_payslip') || request()->routeIs('flex.allowance_overtime') || request()->routeIs('payroll.payroll') || request()->routeIs('payroll.employee_payslip') || request()->routeIs('payroll.comission_bonus') || request()->routeIs('flex.approved_financial_payments') ? 'show' : null }}">
+                            class="nav-group-sub collapse {{ request()->routeIs('flex.submitInputs') || request()->routeIs('flex.financial_groups_details') || request()->routeIs('flex.non_statutory_deductions') || request()->routeIs('flex.statutory_deductions') || request()->routeIs('pension_receipt.index') || request()->routeIs('flex.allowance') || request()->routeIs('flex.financial_group') || request()->routeIs('payroll.employee_payslip') || request()->routeIs('flex.allowance_overtime') || request()->routeIs('payroll.payroll') || request()->routeIs('payroll.employee_payslip') || request()->routeIs('payroll.comission_bonus') || request()->routeIs('flex.approved_financial_payments') || request()->routeIs('flex.allowance_category') ? 'show' : null }}">
                             {{-- start of payroll link --}}
                             <li class="nav-item"><a
-                                    class="nav-link {{ request()->routeIs('flex.financial_group') ? 'active' : null }}"
+                                    class="nav-link {{ request()->routeIs('flex.financial_group') || request()->routeIs('flex.allowance_overtime') || request()->routeIs('flex.allowance') || request()->routeIs('flex.statutory_deductions') || request()->routeIs('flex.non_statutory_deductions') || request()->routeIs('flex.allowance_category') || request()->routeIs('flex.financial_groups_details')  ? 'active' : null }}"
                                     href="{{ route('flex.financial_group') }}"><i class="ph-arrow-circle-right"></i> Payroll inputs </a></li>
                             @can('view-payslip')
                                 <li class="nav-item"><a
