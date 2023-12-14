@@ -330,8 +330,15 @@
                 @endif
                 @endif
                 @foreach($names as $name)
-                <h4>{{ $name == 'Add/Less N-Overtime'? 'Add/Less Normal Day Overtime':($name == 'Add/Less S-Overtime' ? 'Add/Less Sunday Overtime':$name) }}</h4>
+                @if($name == 'Add/Less LSA')
+                <br>
+                @endif
 
+                @if($name == 'Add/Less Task Allowance')
+                <br>
+                @endif
+                <h4>{{ $name == 'Add/Less N-Overtime'? 'Add/Less Normal Day Overtime':($name == 'Add/Less S-Overtime' ? 'Add/Less Sunday Overtime':$name) }}</h4>
+        
                 <table class="table" id="reports" style="font-size:9px; ">
                     <thead>
                         <tr class="hdr" style="border-bottom:2px solid rgb(9, 5, 64);">
