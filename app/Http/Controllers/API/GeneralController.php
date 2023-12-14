@@ -899,7 +899,7 @@ class GeneralController extends Controller
         }
 
         $msg = "Employee Details Have Been Updated successfully";
-        return response([$msg=>$msg],200);
+        return response(['msg'=>$msg],200);
     }
     public function updateUserInfo(Request $request)
     {
