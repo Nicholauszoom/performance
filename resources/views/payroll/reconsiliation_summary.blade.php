@@ -28,7 +28,7 @@
                     <h4 class="me-4 text-center">Payroll Reconciliation Summary</h4>
                    
                     <a href="{{ route('reports.payrollReconciliationSummary', ['payrolldate' => $payroll_date,'payrollState'=>$payrollState,'type'=>2]) }}" target="blank">
-                        <button type="button" name="print" value="print" class="btn btn-main btn-sm"> PDF</button>
+                        <button type="button" name="print" value="print" class="btn btn-main btn-sm"> <i class="ph-file-pdf"></i> PDF</button>
                     </a>
                 
 

@@ -43,11 +43,11 @@ font-size: 18px !important;
                     <h4 class="me-4 text-center">Payroll Reconciliation Summary</h4>
                     @if ($payrollState == 0)
                     <a href="{{ route('reports.payrollReconciliationSummary', ['payrolldate' => $payroll_date,'payrollState'=>$payrollState,'type'=>1]) }}" target="blank">
-                        <button type="button" name="print" value="print" class="btn btn-main btn-sm"> PDF</button>
+                        <button type="button" name="print" value="print" class="btn btn-main btn-sm"> <i class="ph-file-pdf"></i> PDF</button>
                     </a>
                     @else
                     <a href="{{ route('reports.payrollReconciliationSummary', ['payrolldate' => $payroll_date,'payrollState'=>$payrollState,'type'=>1]) }}" target="blank">
-                        <button type="button" name="print" value="print" class="btn btn-main btn-sm"> PDF</button>
+                        <button type="button" name="print" value="print" class="btn btn-main btn-sm"> <i class="ph-file-pdf"></i> PDF</button>
                     </a>
                     @endif
 

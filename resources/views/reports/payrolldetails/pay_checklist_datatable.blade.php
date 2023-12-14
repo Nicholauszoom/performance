@@ -41,7 +41,7 @@
                     <h4 class="me-4 text-center">Payroll Checklist</h4>
 
                     <a href="{{ route('reports.payrolldetails', ['payrolldate' => $payroll_date,'nature' => 2, 'payrollState' => $payrollState, 'type' => 1]) }}" target="blank">
-                        <button type="button" name="print" value="print" class="btn btn-main btn-sm"> PDF</button>
+                        <button type="button" name="print" value="print" class="btn btn-main btn-sm"> <i class="ph-file-pdf"></i> PDF</button>
                     </a>
 
 

@@ -34,7 +34,7 @@ font-size: 15px !important;
                     <h4 class="me-4 text-center">Payroll Reconciliation Details</h4>
                    
                     <a href="{{ route('reports.payrollReconciliationDetails', ['payrolldate' => $payroll_date,'payrollState'=>$payrollState,'type'=>1]) }}" target="blank">
-                        <button type="button" name="print" value="print" class="btn btn-main btn-sm"> PDF</button>
+                        <button type="button" name="print" value="print" class="btn btn-main btn-sm"> <i class="ph-file-pdf"></i> PDF</button>
                     </a>
                 
 

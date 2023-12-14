@@ -1,6 +1,25 @@
+@php
 
+$column_count = 30;
+
+@endphp
 @if(isset($employee_increase))
                 @if(count($employee_increase) > 0)
+                
+                @if($column_count>52)
+                                
+                                
+                @php
+
+                $column_count=0;
+
+                @endphp
+
+                <br>
+                <br>
+                <br>
+                <br>
+                @endif
                 <h4>Add New Employee</h4>
                 <table class="table" id="reports" style="font-size:9px; ">
                     <thead style="font-size:8px;">
@@ -22,7 +41,7 @@
                     <tbody>
                         @if (!empty($employee_increase))
                             @php
-
+                            $column_count = $column_count+1;
                             $total_previous = 0;
                             $total_current = 0;
                             $total_amount = 0;
@@ -31,10 +50,26 @@
                             @foreach ($employee_increase as $row)
 
                                 @php
+                                $column_count = $column_count+1;
                                     $total_previous += $row->previous_amount;
                                     $total_current += $row->current_amount;
                                     $total_amount += ($row->current_amount - $row->previous_amount);
                                 @endphp
+
+                                 @if($column_count>52)
+                                
+                                
+                @php
+
+                $column_count=0;
+
+                @endphp
+
+                <br>
+                <br>
+                <br>
+                <br>
+                @endif
                                 <tr class="hdr"  class="hdr"  style="border-bottom:2px solid rgb(67, 67, 73)">
 
                                     <td class="text-end">{{ $row->emp_id }}</td>
@@ -54,7 +89,7 @@
 
                                     <td class="text-end">{{ $row->hire_date }}</td>
 
-                                    <td class="text-end">{{ number_format(0, 0) }}
+                                    <td class="text-end">{{ number_format($column_count, 0) }}
                                     </td>
 
 
@@ -84,6 +119,21 @@
 
                 @if(isset($employee_decrease))
                 @if(count($employee_decrease) > 0)
+                
+                @if($column_count>52)
+                                
+                                
+                @php
+
+                $column_count=0;
+
+                @endphp
+
+                <br>
+                <br>
+                <br>
+                <br>
+                @endif
                 <h4>Less Terminated Employee</h4>
                 <table class="table" id="reports" style="font-size:9px; ">
                     <thead style="font-size:8px;">
@@ -105,7 +155,7 @@
                     <tbody>
                         @if (!empty($employee_decrease))
                             @php
-
+                            $column_count = $column_count+1;
                             $total_previous = 0;
                             $total_current = 0;
                             $total_amount = 0;
@@ -114,10 +164,26 @@
                             @foreach ($employee_decrease as $row)
 
                                 @php
+                                $column_count = $column_count+1;
                                     $total_previous += $row->previous_amount;
                                     $total_current += $row->current_amount;
                                     $total_amount += ($row->current_amount - $row->previous_amount);
                                 @endphp
+
+                                 @if($column_count>52)
+                                
+                                
+                @php
+
+                $column_count=0;
+
+                @endphp
+
+                <br>
+                <br>
+                <br>
+                <br>
+                @endif
                                 <tr class="hdr" style="border-bottom:2px solid rgb(67, 67, 73)">
 
                                     <td class="text-end">{{ $row->emp_id }}</td>
@@ -137,7 +203,7 @@
 
                                     <td class="text-end">{{ $row->hire_date }}</td>
 
-                                    <td class="text-end">{{ number_format(0, 0) }}
+                                    <td class="text-end">{{ number_format($column_count, 0) }}
                                     </td>
 
 
@@ -166,6 +232,21 @@
                 @endif
                 @if(isset($basic_increase))
                 @if(count($basic_increase) > 0)
+                
+                @if($column_count>52)
+                                
+                                
+                @php
+
+                $column_count=0;
+
+                @endphp
+
+                <br>
+                <br>
+                <br>
+                <br>
+                @endif
                 <h4>Add Increase in Basic Pay Comparison to Last M</h4>
                 <table class="table" id="reports" style="font-size:9px; ">
                     <thead style="font-size:8px;">
@@ -187,7 +268,7 @@
                     <tbody>
                         @if (!empty($basic_increase))
                             @php
-
+                            $column_count = $column_count+1;
                             $total_previous = 0;
                             $total_current = 0;
                             $total_amount = 0;
@@ -196,10 +277,26 @@
                             @foreach ($basic_increase as $row)
 
                                 @php
+                                $column_count = $column_count+1;
                                     $total_previous += $row->previous_amount;
                                     $total_current += $row->current_amount;
                                     $total_amount += ($row->current_amount - $row->previous_amount);
                                 @endphp
+
+                                 @if($column_count>52)
+                                
+                                
+                @php
+
+                $column_count=0;
+
+                @endphp
+
+                <br>
+                <br>
+                <br>
+                <br>
+                @endif
                                 <tr class="hdr" style="border-bottom:2px solid rgb(67, 67, 73)">
 
                                     <td class="text-end">{{ $row->emp_id }}</td>
@@ -219,7 +316,7 @@
 
                                     <td class="text-end">{{ $row->hire_date }}</td>
 
-                                    <td class="text-end">{{ number_format(0, 0) }}
+                                    <td class="text-end">{{ number_format($column_count, 0) }}
                                     </td>
 
 
@@ -249,6 +346,21 @@
                 @if(isset($basic_decrease))
                 @if(count($basic_decrease) > 0)
                 <br>
+                
+                @if($column_count>52)
+                                
+                                
+                @php
+
+                $column_count=0;
+
+                @endphp
+
+                <br>
+                <br>
+                <br>
+                <br>
+                @endif
                 <h4>Less Decrease in Basic Pay Comparison to Last M</h4>
                 <table class="table" id="reports" style="font-size:9px; ">
                     <thead style="font-size:8px;">
@@ -270,7 +382,7 @@
                     <tbody>
                         @if (!empty($basic_decrease))
                             @php
-
+                            $column_count = $column_count+1;
                             $total_previous = 0;
                             $total_current = 0;
                             $total_amount = 0;
@@ -279,10 +391,26 @@
                             @foreach ($basic_decrease as $row)
 
                                 @php
+                                $column_count = $column_count+1;
                                     $total_previous += $row->previous_amount;
                                     $total_current += $row->current_amount;
                                     $total_amount += ($row->current_amount - $row->previous_amount);
                                 @endphp
+
+                                 @if($column_count>52)
+                                
+                                
+                @php
+
+                $column_count=0;
+
+                @endphp
+
+                <br>
+                <br>
+                <br>
+                <br>
+                @endif
                                 <tr class="hdr" style="border-bottom:2px solid rgb(67, 67, 73)">
 
                                     <td class="text-end">{{ $row->emp_id }}</td>
@@ -302,7 +430,7 @@
 
                                     <td class="text-end">{{ $row->hire_date }}</td>
 
-                                    <td class="text-end">{{ number_format(0, 0) }}
+                                    <td class="text-end">{{ number_format($column_count, 0) }}
                                     </td>
 
 
@@ -330,11 +458,20 @@
                 @endif
                 @endif
                 @foreach($names as $name)
-                @if($name == 'Add/Less LSA')
-                <br>
-                @endif
 
-                @if($name == 'Add/Less Task Allowance')
+                
+                @if($column_count>52)
+                                
+                                
+                @php
+
+                $column_count=0;
+
+                @endphp
+
+                <br>
+                <br>
+                <br>
                 <br>
                 @endif
                 <h4>{{ $name == 'Add/Less N-Overtime'? 'Add/Less Normal Day Overtime':($name == 'Add/Less S-Overtime' ? 'Add/Less Sunday Overtime':$name) }}</h4>
@@ -359,7 +496,7 @@
                     <tbody>
                         @if (!empty($allowances))
                             @php
-
+                            $column_count = $column_count+1;
                             $total_previous = 0;
                             $total_current = 0;
                             $total_amount = 0;
@@ -370,10 +507,26 @@
                             @if($row->description == "Add/Less S-Overtime")
                             @if($row->previous_amount != $row->current_amount)
                                 @php
+                                $column_count = $column_count+1;
                                     $total_previous += $row->previous_amount;
                                     $total_current += $row->current_amount;
                                     $total_amount += ($row->current_amount - $row->previous_amount);
                                 @endphp
+
+                                 @if($column_count>52)
+                                
+                                
+                @php
+
+                $column_count=0;
+
+                @endphp
+
+                <br>
+                <br>
+                <br>
+                <br>
+                @endif
                                 <tr class="hdr" style="border-bottom:2px solid rgb(67, 67, 73)">
 
                                     <td class="text-end">{{ $row->emp_id }}</td>
@@ -393,7 +546,7 @@
 
                                     <td class="text-end">{{ $row->hire_date }}</td>
 
-                                    <td class="text-end">{{ number_format(0, 0) }}
+                                    <td class="text-end">{{ number_format($column_count, 0) }}
                                     </td>
 
 
@@ -401,10 +554,26 @@
                             @endif
                             @else
                             @php
+                            $column_count = $column_count+1;
                             $total_previous += $row->previous_amount;
                             $total_current += $row->current_amount;
                             $total_amount += ($row->current_amount - $row->previous_amount);
                              @endphp
+
+                             @if($column_count>52)
+                                
+                                
+                @php
+
+                $column_count=0;
+
+                @endphp
+
+                <br>
+                <br>
+                <br>
+                <br>
+                @endif
                         <tr class="hdr" style="border-bottom:2px solid rgb(67, 67, 73)">
 
                             <td class="text-end">{{ $row->emp_id }}</td>
@@ -424,7 +593,7 @@
 
                             <td class="text-end">{{ $row->hire_date }}</td>
 
-                            <td class="text-end">{{ number_format(0, 0) }}
+                            <td class="text-end">{{ number_format($column_count, 0) }}
                             </td>
 
 
