@@ -44,7 +44,7 @@
 
                             <td colspan="4" class="w-50" style="">
                                 <div class="box-text text-end">
-                                    <img src="{{ asset('assets/images/logo-dif2.png') }}" alt="logo here" width="180px"
+                                    <img src="{{ public_path('assets/images/logo-dif2.png') }}" alt="logo here" width="180px"
                                         height="150px" class="image-fluid">
                                 </div>
                             </td>
@@ -187,7 +187,7 @@
 <br><br>
 
         <div id="logo2" style="margin-left: 7px; z-index: -10">
-            <img src="{{ asset('assets/images/x-right.png') }}" width="100px;" height="50px;">
+            <img src="{{ public_path('assets/images/x-right.png') }}" width="100px;" height="50px;">
         </div>
 
     </main>
@@ -216,8 +216,8 @@
     <script src="{{ public_path('assets/js/bootstrap/bootstrap.bundle.min.js') }}"></script>
 
 
-    <script src="{{ asset('assets/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
-    <script src="{{ asset('assets/js/jquery/jquery.min.js') }}"></script>
+    <script src="{{ public_path('assets/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+    <script src="{{ public_path('assets/js/jquery/jquery.min.js') }}"></script>
 
 </body>
 
