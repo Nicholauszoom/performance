@@ -916,7 +916,7 @@ class GeneralController extends Controller
             $employee->mobile=$request->mobile;
             $employee->update();
 
-            $msg='Your Profile is update Successfully !';
+            $msg='Your Profile is updated Successfully !';
             return response( [ 'msg'=>$msg  ],200 );
 
         
