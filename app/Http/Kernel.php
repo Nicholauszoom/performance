@@ -39,7 +39,6 @@ class Kernel extends HttpKernel
             \Illuminate\View\Middleware\ShareErrorsFromSession::class,
             \App\Http\Middleware\VerifyCsrfToken::class,
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
-            // \App\Http\Middleware\CheckSession::class,
         ],
 
         'api' => [
@@ -86,7 +85,5 @@ class Kernel extends HttpKernel
         'emptermination' => \App\Http\Middleware\EmployeeTermination::class, // For Employee Termination
         'promotion' => \App\Http\Middleware\Promotion::class, // For Employee Promotion
         'verify-outgoing-requests' => \App\Http\Middleware\VerifyOutgoingRequests::class,
-        // 'check.session' => \App\Http\Middleware\CheckSession::class,
-
     ];
 }
