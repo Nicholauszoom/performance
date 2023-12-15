@@ -46,6 +46,15 @@ Route::middleware('verify-outgoing-requests')->group(function () {
 
     Route::middleware('auth')->group(function () {
 
+        /**
+         * New view routes
+         */
+
+        Route::get('/faq', [HomeController::class, 'faq']);
+        Route::get('/knowledge', [HomeController::class, 'knowledge']);
+
+        // ###########################
+
         Route::get('/dashboard', [GeneralController::class, 'home'])->name('dashboard.index');
         //Route::get('file-import','Admin\JournalImportController@importView')->name('import-view');
 
