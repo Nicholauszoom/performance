@@ -757,7 +757,9 @@ class LeaveController extends Controller
 
         $msg = "Leave Request Has been Approved Successfully But Email is not sent(SMPT problem) !";
         // return redirect('flex/view-action/'.$emp,$data)->with('msg', $msg);
-        return redirect('flex/attendance/leave')->with('msg', $msg);
+        return response(['msg'=>$msg,
+        'status'=>'success'
+        ],200);
         }
 
 
