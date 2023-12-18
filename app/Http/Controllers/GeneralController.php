@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 //use App\Http\Controllers\Controller;
-
+use Illuminate\Support\Facades\Gate;
 use App\Charts\EmployeeLineChart;
 use App\Exports\LeaveApprovalsExport;
 use App\Helpers\SysHelpers;
@@ -105,17 +105,34 @@ class GeneralController extends Controller
         $this->payroll_model = new Payroll;
     }
 
-    public function authenticateUser($permissions)
-    {
-        if (!Auth::check()) {
-            return redirect()->route('login');
-        }
+    // public function authenticateUser($permissions)
+    // {
+    //     if (!Auth::check()) {
+    //         return redirect()->route('login');
+    //     }
 
-        if (!Auth::user()->can($permissions)) {
+    //     if (!Auth::user()->can($permissions)) {
 
-            abort(Response::HTTP_UNAUTHORIZED);
-        }
+       //     abort(Response::HTTP_UNAUTHORIZED);
+    //     }
+    // }
+    
+
+public function authenticateUser($permissions)
+{
+    // Check if the user is not authenticated
+    if (!auth()->check()) {
+        // Redirect the user to the login page
+        return redirect()->route('login');
     }
+
+    // Check if the authenticated user does not have the specified permissions
+    if (!Gate::allows($permissions)) {
+        // If not, abort the request with a 401 Unauthorized status code
+        abort(Response::HTTP_UNAUTHORIZED);
+    }
+}
+
 
     public function update_login_info(Request $request)
     {

@@ -24,6 +24,8 @@
 
             <div class="">
               <div class="col-md-12 col-sm-6 col-xs-12">
+                
+                
                 <div class="card">
                   <div class="card-head">
                     <h2 class="m-2"><i class="fa fa-user"></i> Grievance </h2>
@@ -40,6 +42,8 @@
                   <div class="card-body">
                 @if(Session::has('note'))      {{ session('note') }}  @endif  
 
+                @can('create-grivence')
+                  
                     <form id="demo-form2" autocomplete="off" enctype="multipart/form-data" action="{{ route('flex.save-grievances') }}" method="post" data-parsley-validate class="form-horizontal form-label-left">
                       @csrf
                       <div class="row">
@@ -87,10 +91,15 @@
                       <hr class="mt-2">
                     </div>
                       
-                      </form><br><br> 
+                      </form>
+                      @endcan
+
+                      <br><br> 
                  
                       <!-- Whole View -->
                <div class="col-md-12 col-sm-4 col-xs-12">
+                @can('view-grievances')
+                  
                 <div class="card">
                   <div class="card-head">
                     <!--<h2>All Grievances </h2>-->
@@ -158,6 +167,9 @@
                     </table>
                   </div>
                 </div>
+
+                @endcan
+
               </div>
             
 

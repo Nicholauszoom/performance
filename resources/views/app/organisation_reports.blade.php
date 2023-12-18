@@ -373,7 +373,7 @@
                 </form>
             </div>
         </div>
-        <div class="col-md-6 d-none">
+        <div class="col-md-6">
             <div class="card border-top  border-top-width-3 border-top-main rounded-0 p-2">
                 <div class="card-header">
                     <h5 class="text-warning">Pension History</h5>

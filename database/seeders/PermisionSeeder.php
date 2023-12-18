@@ -14,6 +14,21 @@ class PermisionSeeder extends Seeder
     public function run()
     {
         $data = [
+            //my services
+            [113, 'apply-leave', 10],
+            [114, 'view-leaves', 10],
+            [115, 'apply-overtime', 10],
+            [116, 'view-overtime', 10],
+            [117, 'print-pension-summary', 10],
+            [118, 'view-loans', 10],
+            [119, 'view-aproved-loans', 10],
+            [120, 'print-payslip', 10],
+            [121, 'create-grivence', 10],
+            [122, 'view-grievances', 10],
+
+
+            
+
 
                 // Module 1: Work Force Management
                 [1, 'view-workforce', 1],

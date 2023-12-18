@@ -237,14 +237,30 @@
                 {{-- start of view payroll dropdown --}}
                 @can('view-payroll-management')
                     <li
-                        class="nav-item nav-item-submenu {{ request()->routeIs('flex.submitInputs') || request()->routeIs('flex.non_statutory_deductions') || request()->routeIs('flex.statutory_deductions') || request()->routeIs('flex.allowance') || request()->routeIs('pension_receipt.index') || request()->routeIs('flex.financial_group') || request()->routeIs('flex.allowance_overtime') || request()->routeIs('payroll.payroll') || request()->routeIs('payroll.employee_payslip') || request()->routeIs('payroll.comission_bonus') || request()->routeIs('flex.approved_financial_payments') ? 'nav-item-expand nav-item-open' : null }}">
+                        class="nav-item nav-item-submenu {{ request()->routeIs('flex.submitInputs') 
+                        || request()->routeIs('flex.non_statutory_deductions') 
+                        || request()->routeIs('flex.statutory_deductions') 
+                        || request()->routeIs('flex.allowance') 
+                        || request()->routeIs('pension_receipt.index') 
+                        || request()->routeIs('flex.financial_group') 
+                        || request()->routeIs('flex.allowance_overtime') 
+                        || request()->routeIs('payroll.payroll') 
+                        || request()->routeIs('payroll.employee_payslip') 
+                        || request()->routeIs('payroll.comission_bonus') 
+                        || request()->routeIs('flex.approved_financial_payments') 
+                        || request()->routeIs('payroll.temp_payroll_info') 
+                        || request()->routeIs('reports.payrollReconciliationSummary')
+                        || request()->routeIs('reports.payrollReconciliationDetails') 
+                        || request()->routeIs('reports.payrolldetails')
+                        || request()->routeIs('reports.payrollReportLogs') || request()->routeIs('reports.payroll_inputs') ? 'nav-item-expand nav-item-open' : null }}">
                         <a href="#" class="nav-link">
                             <i class="ph-calculator"></i>
                             <span>Payroll Management</span>
                         </a>
 
                         <ul
-                            class="nav-group-sub collapse {{ request()->routeIs('flex.submitInputs') || request()->routeIs('flex.financial_groups_details') || request()->routeIs('flex.non_statutory_deductions') || request()->routeIs('flex.statutory_deductions') || request()->routeIs('pension_receipt.index') || request()->routeIs('flex.allowance') || request()->routeIs('flex.financial_group') || request()->routeIs('payroll.employee_payslip') || request()->routeIs('flex.allowance_overtime') || request()->routeIs('payroll.payroll') || request()->routeIs('payroll.employee_payslip') || request()->routeIs('payroll.comission_bonus') || request()->routeIs('flex.approved_financial_payments') || request()->routeIs('flex.allowance_category') ? 'show' : null }}">
+                            class="nav-group-sub collapse {{ request()->routeIs('flex.submitInputs') || request()->routeIs('flex.financial_groups_details') || request()->routeIs('flex.non_statutory_deductions') || request()->routeIs('flex.statutory_deductions') || request()->routeIs('pension_receipt.index') || request()->routeIs('flex.allowance') || request()->routeIs('flex.financial_group') || request()->routeIs('payroll.employee_payslip') || request()->routeIs('flex.allowance_overtime') || request()->routeIs('payroll.payroll') || request()->routeIs('payroll.employee_payslip') || request()->routeIs('payroll.comission_bonus') || request()->routeIs('flex.approved_financial_payments') || request()->routeIs('flex.allowance_category') || request()->routeIs('payroll.temp_payroll_info') || request()->routeIs('reports.payrollReconciliationSummary') || request()->routeIs('reports.payrollReconciliationDetails') 
+                            || request()->routeIs('reports.payrolldetails') || request()->routeIs('reports.payrollReportLogs') || request()->routeIs('reports.payroll_inputs') ? 'show' : null }}">
                             {{-- start of payroll link --}}
                             <li class="nav-item"><a
                                     class="nav-link {{ request()->routeIs('flex.financial_group') || request()->routeIs('flex.allowance_overtime') || request()->routeIs('flex.allowance') || request()->routeIs('flex.statutory_deductions') || request()->routeIs('flex.non_statutory_deductions') || request()->routeIs('flex.allowance_category') || request()->routeIs('flex.financial_groups_details')  ? 'active' : null }}"
@@ -256,7 +272,7 @@
                             @endcan
                             @can('view-payroll')
                                 <li class="nav-item"><a
-                                        class="nav-link {{ request()->routeIs('payroll.payroll') ? 'active' : null }}"
+                                        class="nav-link {{ request()->routeIs('payroll.payroll') || request()->routeIs('payroll.temp_payroll_info') || request()->routeIs('reports.payrollReconciliationSummary') || request()->routeIs('reports.payrollReconciliationDetails') || request()->routeIs('reports.payrolldetails') || request()->routeIs('reports.payrollReportLogs') || request()->routeIs('reports.payroll_inputs') ? 'active' : null }}"
                                         href="{{ route('payroll.payroll') }}"><i class="ph-note"></i> Payroll </a></li>
                             @endcan
                             {{-- / --}}
