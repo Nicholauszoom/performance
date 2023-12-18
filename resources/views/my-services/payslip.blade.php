@@ -36,6 +36,9 @@
 
                             <div class="row">
                                 <div class="col-md-12">
+                                   
+                                   @can('print-payslip')
+                                       
                                     <form method="post" action="{{ route('reports.payslip') }}" target="_blank">
                                         @csrf
                                         <div class="card border-0 rounded-0">
@@ -61,6 +64,9 @@
                                             </div>
                                         </div>
                                     </form>
+
+                                    @endcan
+
                                 </div>
                             </div>
 

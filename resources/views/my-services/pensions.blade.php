@@ -33,9 +33,14 @@ $empID= Auth()->user()->emp_id;
                                 <h6 class="text-warning">Pension Summary</h6>
 
                                 <a class="ms-3" href="{{ route('reports.employee_pension',['emp_id'=>base64_encode($empID)]) }}" target="blank">
+                                    @can('print-pension-summary')
+                                        
+                                    
                                     <button type="button" name="print" value="print" class="btn btn-main btn-sm float-end">
                                         Print
                                     </button>
+
+                                    @endcan
                                 </a>
                                 <hr>
                             </div>
