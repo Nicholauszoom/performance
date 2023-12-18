@@ -120,7 +120,7 @@
     <div class="card border-top  border-top-width-3 border-top-main rounded-0">
         <div class="card-header mb-0">
 
-            @can('view-overtime')
+            @can('view-my-overtime')
 
                 <div class="d-flex justify-content-between">
                     <h4 class="text-warning">My Overtimes</h4>

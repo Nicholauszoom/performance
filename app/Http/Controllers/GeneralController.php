@@ -2002,6 +2002,7 @@ public function authenticateUser($permissions)
     public function applyOvertime(Request $request)
     {
 
+        $this->authenticateUser('apply-overtime');
         request()->validate(
             [
                 'reason' => 'required',
@@ -2195,8 +2196,10 @@ public function authenticateUser($permissions)
     public function applyOvertimeOnbehalf(Request $request)
     {
 
-        $days = $request->input('days');
 
+        $this->authenticateUser('apply-overtime-onbehalf');
+
+        $days = $request->input('days');
         $overtime_category = $request->input('category');
         $empID = $request->empID;
         $signatory = auth()->user()->emp_id;
@@ -6986,6 +6989,7 @@ public function authenticateUser($permissions)
     public function addEmployee(Request $request)
     {
         $this->authenticateUser('add-employee');
+
         $data['pdrop'] = $this->flexperformance_model->positiondropdown();
         $data['contract'] = $this->flexperformance_model->contractdrop();
         $data['ldrop'] = $this->flexperformance_model->linemanagerdropdown();
@@ -7135,6 +7139,8 @@ public function authenticateUser($permissions)
 
     public function download_payslip()
     {
+
+        $this->authenticateUser('print-pension-summary');
 
         $data['month_list'] = $this->flexperformance_model->payroll_month_list();
 
@@ -7536,6 +7542,9 @@ public function authenticateUser($permissions)
 
     public function grievances(Request $request)
     {
+
+        $this->authenticateUser('view-grivences');
+
         $empID = auth()->user()->emp_id;
         $data['title'] = 'Grievances and Disciplinary';
         $data['my_grievances'] = $this->flexperformance_model->my_grievances($empID);
@@ -10922,6 +10931,8 @@ public function authenticateUser($permissions)
     // For Saving New Grievances
     public function save_grievance(Request $request)
     {
+
+        $this->auhenticateUser('add-grivance');
 
         request()->validate(
             [

@@ -18,8 +18,6 @@
         <!-- page content -->
         <div class="right_col" role="main">
 
-                 
-
             <div class="clearfix"></div>
 
             <div class="">
@@ -42,7 +40,7 @@
                   <div class="card-body">
                 @if(Session::has('note'))      {{ session('note') }}  @endif  
 
-                @can('create-grivence')
+                @can('add-grivance')
                   
                     <form id="demo-form2" autocomplete="off" enctype="multipart/form-data" action="{{ route('flex.save-grievances') }}" method="post" data-parsley-validate class="form-horizontal form-label-left">
                       @csrf
@@ -98,7 +96,7 @@
                  
                       <!-- Whole View -->
                <div class="col-md-12 col-sm-4 col-xs-12">
-                @can('view-grievances')
+                @can('view-grivance')
                   
                 <div class="card">
                   <div class="card-head">

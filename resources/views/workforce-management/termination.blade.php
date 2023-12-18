@@ -39,6 +39,8 @@
     </div>
     @endif
 
+    @can('view-termination')
+        
     <table class="table table-striped table-bordered  datatable-basic">
         <thead>
             <tr>
@@ -116,6 +118,9 @@
             @endforeach
         </tbody>
     </table>
+
+    @endcan
+
 </div>
 
 @endsection

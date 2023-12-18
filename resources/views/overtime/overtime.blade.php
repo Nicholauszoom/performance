@@ -19,6 +19,9 @@
     {{--  start of others overtime --}}
 
     {{-- @if (count($line_overtime) > 0) --}}
+    @can('view-overtime')
+        
+   
         <div class="card border-top  border-top-width-3 border-top-main rounded-0">
             <div class="card-header">
                 <h4 class="text-warning">Overtime Requests</h4>
@@ -122,6 +125,8 @@
                 </tbody>
             </table>
         </div>
+
+        @endcan
     {{-- @endif --}}
 
     {{-- / --}}

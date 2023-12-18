@@ -14,21 +14,38 @@ class PermisionSeeder extends Seeder
     public function run()
     {
         $data = [
-            //my services
-            [113, 'apply-leave', 10],
-            [114, 'view-leaves', 10],
-            [115, 'apply-overtime', 10],
-            [116, 'view-overtime', 10],
-            [117, 'print-pension-summary', 10],
-            [118, 'view-loans', 10],
-            [119, 'view-aproved-loans', 10],
-            [120, 'print-payslip', 10],
-            [121, 'create-grivence', 10],
-            [122, 'view-grievances', 10],
-
-
-            
-
+             
+                    [113, 'apply-leave', 1],
+                    [114, 'view-leaves', 1],
+                    [115, 'apply-overtime', 1],
+                    [116, 'print-pension-summary', 1],
+                    [117, 'view-loans', 1],
+                    [118, 'view-aproved-loans', 1],
+                    [119, 'print-payslip', 1],
+                    [120, 'add-package-group', 1],
+                    [121, 'add-overtime-setting',1],
+                    [122, 'add-allowance', 1],
+                    [123, 'view-allowance', 1],
+                    [124, 'view-pension-funds', 1],
+                    [125, 'view-deduction-funds', 1],
+                    [126, 'edit-deduction-funds', 1],
+                    [127, 'add-payee-range', 1],
+                    [128, 'view-payee-ranges', 1],
+                    [129, 'add-deduction', 1],
+                    [130, 'view-deductions', 1],
+                    [131, 'add-allowance-category', 1],
+                    [132, 'view-allowance-category', 1],
+                    [133, 'apply-leave-onbehalf', 1],
+                    [134, 'view-new-leave-applications', 1],
+                    [135, 'view-aproved-leave-applications', 1],
+                    [136, 'view-revoked-leave-applications', 1],
+                    [137, 'add-leave-forfeit', 1],
+                    [138, 'update-employee-opening-balance', 1],
+                    [139, 'edit-leave-forfeit', 1],
+                    [140, 'apply-overtime-onbehalf', 1],
+                    [141, 'deactivate-employee', 1],
+                    [142, 'view-overtime-setting', 1],
+                            
 
                 // Module 1: Work Force Management
                 [1, 'view-workforce', 1],
@@ -37,6 +54,7 @@ class PermisionSeeder extends Seeder
                 [4, 'delete-employee', 1],
                 [5, 'add-employee', 1],
                 [6, 'activate-employee', 1],
+
                 [7, 'suspend-employee', 1],
                 [8, 'transfer-employee', 1],
                 [9, 'view-termination', 1],
@@ -45,12 +63,14 @@ class PermisionSeeder extends Seeder
                 [12, 'delete-termination', 1],
                 [13, 'confirm-termination', 1],
                 [14, 'print-termination', 1],
+
                 [15, 'view-promotions', 1],
                 [16, 'add-promotion', 1],
                 [17, 'add-increment', 1],
                 [18, 'edit-promotion', 1],
                 [19, 'edit-increment', 1],
                 [20, 'delete-promotion', 1],
+
                 [21, 'view-overtime', 1],
                 [22, 'add-overtime', 1],
                 [23, 'edit-overtime', 1],
@@ -59,6 +79,7 @@ class PermisionSeeder extends Seeder
                 [26, 'view-others-overtime', 1],
                 [27, 'approve-overtime', 1],
                 [28, 'cancel-overtime', 1],
+                
                 [29, 'view-imprest', 1],
                 [30, 'add-imprest', 1],
                 [31, 'edit-imprest', 1],

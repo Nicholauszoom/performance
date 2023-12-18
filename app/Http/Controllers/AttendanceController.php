@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 //use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Gate;
 
 use App\Helpers\SysHelpers;
 use App\Http\Controllers\API\PushNotificationController;
@@ -64,18 +65,18 @@ class AttendanceController extends Controller
 
     public function authenticateUser($permissions)
     {
-        if (!Auth::check()) {
+        // Check if the user is not authenticated
+        if (!auth()->check()) {
+            // Redirect the user to the login page
             return redirect()->route('login');
         }
-
-        if (!Auth::user()->can($permissions)) {
-
-            abort(Response::HTTP_UNAUTHORIZED, '500|Page Not Found');
-
+    
+        // Check if the authenticated user does not have the specified permissions
+        if (!Gate::allows($permissions)) {
+            // If not, abort the request with a 401 Unauthorized status code
+            abort(Response::HTTP_UNAUTHORIZED);
         }
-
     }
-
     public function attendance()
     {
 
@@ -303,6 +304,8 @@ class AttendanceController extends Controller
     // For My Leaves
     public function myLeaves()
     {
+
+        $this->authenticateUser('view-leaves');
         $data['myleave'] = Leaves::where('empID', Auth::user()->emp_id)->orderBy('id', 'desc')->get();
         $id = Auth::user()->emp_id;
         $employeee = Employee::where('emp_id', $id)->first();
@@ -356,6 +359,8 @@ class AttendanceController extends Controller
         return view('my-services/leaves', $data);
     }
 
+
+    
     public function annuaLeaveSummary($year)
     {
 
@@ -1351,6 +1356,8 @@ class AttendanceController extends Controller
 
     public function apply_leave(Request $request)
     {
+
+        $this->authenticateUser('apply-leave');
         // echo "<p class='alert alert-success text-center'>Record Added Successifully</p>";
 
         if ($request->method() == "POST") {

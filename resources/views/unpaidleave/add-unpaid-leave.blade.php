@@ -36,6 +36,8 @@
                     <div class="modal-content">
 
 
+                        @can('add-unpaid-leaves')
+                      
                         <form
                             action="{{ route('flex.save_unpaid_leave') }}"
                             method="POST"
@@ -93,11 +95,6 @@
                                         @enderror
                                     </div>
                                 </div>
-
-
-
-
-
                             </div>
 
                             <div class="modal-footer">
@@ -106,6 +103,8 @@
                                 <button type="submit" class="btn btn-perfrom mb-2 mt-2">Save</button>
                             </div>
                         </form>
+
+                        @endcan
                     </div>
                 </div>
             </div>

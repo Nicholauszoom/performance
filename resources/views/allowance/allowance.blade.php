@@ -18,6 +18,9 @@
         @include('app.headers_payroll_input')
 
             <div class="col-md-12">
+                @can('add-allowance')
+                    
+              
                 <div class="card border-top  border-top-width-3 border-top-main rounded-0 p-2">
                     <div class="card-header">
                         <h5 class="text-warning">Add Allowance</h5>
@@ -109,8 +112,12 @@
                         </form>
                     </div>
                 </div>
+                @endcan
             </div>
             <div class="col-md-12">
+                @can('view-allowance')
+                    
+                
                 <div class="card border-top  border-top-width-3 border-top-main rounded-0 p-2">
                     <div class="card-header border-0 shadow-none">
                         <div class="d-flex justify-content-between align-itens-center">
@@ -183,6 +190,8 @@
                     </table>
 
                 </div>
+
+                @endcan
             </div>
 
 
