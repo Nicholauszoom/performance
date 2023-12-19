@@ -1360,6 +1360,8 @@ class AttendanceController extends Controller
         $this->authenticateUser('apply-leave');
         // echo "<p class='alert alert-success text-center'>Record Added Successifully</p>";
 
+        $autheniticateduser = auth()->user()->emp_id;
+
         if ($request->method() == "POST") {
 
             // DATE MANIPULATION
@@ -1420,6 +1422,8 @@ class AttendanceController extends Controller
 
                 $result = $this->attendance_model->applyleave($data);
                 if ($result == true) {
+                    $auditLog = SysHelpers::AuditLog(2, "Leave application  by " . $autheniticateduser, $request);
+
                     echo "<p class='alert alert-success text-center'>Application Sent Added Successifully</p>";
                 } else {echo "<p class='alert alert-danger text-center'>Application NOT Sent, Please Try Again</p>";}
 

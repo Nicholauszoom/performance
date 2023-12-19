@@ -80,7 +80,7 @@
                    </tr>
                 @endforeach
 
-                @foreach ($purge_logs as $row)
+                 {{-- @foreach ($purge_logs as $row)
                    <tr id="{{ 'domain'.$row->id }}">
                         <td>{{ $loop->iteration }}</td>
                         <td><a title="More Details">{{ $row->empName }}</a></td>
@@ -98,7 +98,7 @@
                             <p> <strong>Time </strong> : {{ $row->timed }} </p>
                         </td>
                     </tr>
-                @endforeach
+                @endforeach  --}}
               </tbody>
         </table>
     </div>
