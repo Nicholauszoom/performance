@@ -36,7 +36,7 @@
             @endif
             <div class="">
 
-                @can('view-loan-type')
+                @can('view-loan-types')
                 <table class="table datatable-basic">
                     <thead>
                         <th>SN</th>
