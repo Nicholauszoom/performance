@@ -40,9 +40,26 @@
                 <div class="col-md-12 col-sm-12 col-xs-12">
                     <h4 class="me-4 text-center">Payroll Checklist</h4>
 
-                    <a href="{{ route('reports.payrolldetails', ['payrolldate' => $payroll_date,'nature' => 2, 'payrollState' => $payrollState, 'type' => 1]) }}" target="blank">
-                        <button type="button" name="print" value="print" class="btn btn-main btn-sm"> <i class="ph-file-pdf"></i> PDF</button>
-                    </a>
+                    <div>
+                        <label for="currency-tzs">
+                          <input type="radio" id="currency-tzs" name="currency" value="2">
+                          TZS
+                        </label>
+                        <label for="currency-usd">
+                          <input type="radio" id="currency-usd" name="currency" value="3">
+                          USD
+                        </label>
+                      </div>
+{{--
+                      <a id="pdf-link" href="#" target="_blank">
+                        <button type="button" name="print" value="print" class="btn btn-main btn-sm">
+                          <i class="ph-file-pdf"></i> PDF
+                        </button>
+                      </a> --}}
+
+                      <button id="generate-pdf" class="btn btn-main btn-sm">
+                        <i class="ph-file-pdf"></i> Generate PDF
+                      </button>
 
 
                 <table class="table datatable-excel-filter">
@@ -89,4 +106,45 @@
 
 
     <!-- /column selectors -->
+
+
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+          const generatePDFButton = document.querySelector('#generate-pdf');
+          const currencyRadios = document.querySelectorAll('input[name="currency"]');
+
+          // Function to handle PDF generation
+          function generatePDF() {
+            const selectedCurrency = document.querySelector('input[name="currency"]:checked').value;
+
+            // Send AJAX request to server to generate PDF
+            const xhr = new XMLHttpRequest();
+            xhr.open('GET', `{{ route('reports.payrolldetails') }}?payrolldate={{ $payroll_date }}&payrollState={{ $payrollState }}&type=1&nature=${selectedCurrency}`, true);
+            xhr.responseType = 'blob'; // Response type is set to blob
+
+            xhr.onload = function() {
+              if (xhr.status === 200) {
+                // Create a blob object from the response
+                const blob = new Blob([xhr.response], { type: 'application/pdf' });
+
+                // Create a temporary link element to trigger the download
+                const link = document.createElement('a');
+                link.href = window.URL.createObjectURL(blob);
+                link.download = 'generated_pdf.pdf'; // Specify the filename for the downloaded file
+
+                // Trigger the download
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+              }
+            };
+
+            xhr.send();
+          }
+
+          // Event listener for the Generate PDF button
+          generatePDFButton.addEventListener('click', generatePDF);
+        });
+      </script>
 @endsection
