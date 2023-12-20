@@ -1727,7 +1727,7 @@ public function authenticateUser($permissions)
     public function addskills(Request $request)
     {
 
-        
+
 
         if (isset($_POST['add'])) {
             $id = $request->input('positionID');
@@ -3132,6 +3132,8 @@ public function authenticateUser($permissions)
             );
             $result = $this->flexperformance_model->updateEmployee($updates, $empID);
             if ($result == true) {
+                $autheniticateduser = auth()->user()->emp_id;
+
                 echo "<p class='alert alert-success text-center'>Pension Fund Updated Successifully!</p>";
             } else {
                 echo "<p class='alert alert-danger text-center'>Update Failed</p>";
@@ -3793,6 +3795,9 @@ public function authenticateUser($permissions)
 
             $result = $this->flexperformance_model->applyloan($data);
             if ($result == true) {
+                $autheniticateduser = auth()->user()->emp_id;
+                $auditLog = SysHelpers::AuditLog(2, "Salary advance applied by " . $autheniticateduser, $request);
+
                 echo "<p class='alert alert-success text-center'>Request Submitted Successifully</p>";
             } else {
                 echo "<p class='alert alert-warning text-center'>Request FAILED, Please Try Again</p>";
@@ -3834,6 +3839,8 @@ public function authenticateUser($permissions)
 
             $result = $this->flexperformance_model->applyloan($data);
             if ($result == true) {
+                $autheniticateduser = auth()->user()->emp_id;
+         $auditLog = SysHelpers::AuditLog(2, "Direct loan inserted by " . $autheniticateduser, $request);
                 echo "<p class='alert alert-success text-center'>Request Submitted Successifully</p>";
             } else {
                 echo "<p class='alert alert-warning text-center'>Request FAILED, Please Try Again</p>";
@@ -3886,7 +3893,7 @@ public function authenticateUser($permissions)
             $result = $this->flexperformance_model->updateLoan($data, $loanID);
             if ($result) {
                 $response_array['status'] = "OK";
-                $response_array['message'] = "<p class='alert alert-success text-center'>Updated Updated Successifully</p>";
+                $response_array['message'] = "<p class='alert alert-success text-center'> Updated Successifully</p>";
             } else {
                 $response_array['status'] = "ERR";
                 $response_array['message'] = "<p class='alert alert-danger text-center'>FAILED: Loan Not Updated, Please try again</p>";
@@ -4098,6 +4105,9 @@ public function authenticateUser($permissions)
 
             $result = $this->flexperformance_model->update_loan($updates, $loanID);
             if ($result == true) {
+                $autheniticateduser = auth()->user()->emp_id;
+         $auditLog = SysHelpers::AuditLog(2, "Loan info updated by " . $autheniticateduser, $request);
+
                 echo "<p class='alert alert-success text-center'>Application Updated Successifully</p>";
             } else {
                 echo "<p class='alert alert-warning text-center'>Application Update FAILED, Please Try Again</p>";
@@ -4951,6 +4961,8 @@ public function authenticateUser($permissions)
                 );
                 $result = $this->flexperformance_model->addpaye($data);
                 if ($result) {
+                    $autheniticateduser = auth()->user()->emp_id;
+         $auditLog = SysHelpers::AuditLog(2, "Paye added  by " . $autheniticateduser, $request);
                     $response_array['status'] = "OK";
                     $response_array['title'] = "SUCCESS";
                     $response_array['message'] = "<p class='alert alert-success text-center'>Branch Added Successifully</p>";
@@ -5008,6 +5020,8 @@ public function authenticateUser($permissions)
                 );
                 $result = $this->flexperformance_model->updatepaye($updates, $payeID);
                 if ($result) {
+                    $autheniticateduser = auth()->user()->emp_id;
+         $auditLog = SysHelpers::AuditLog(2, "Payee updated by " . $autheniticateduser, $request);
                     // $this->flexperformance_model->audit_log("Updated PAYE Brackets");
                     $response_array['status'] = "OK";
                     $response_array['title'] = "SUCCESS";
@@ -5041,6 +5055,8 @@ public function authenticateUser($permissions)
             );
             $result = $this->flexperformance_model->updateCommonDeductions($updates, $allowanceID);
             if ($result == true) {
+                $autheniticateduser = auth()->user()->emp_id;
+         $auditLog = SysHelpers::AuditLog(2, "Overtime allowance updated by " . $autheniticateduser, $request);
                 echo "<p class='alert alert-success text-center'>Updated Successifully</p>";
             } else {
                 echo "<p class='alert alert-danger text-center'>Updation Failed, Please Try Again</p>";
@@ -5401,6 +5417,8 @@ public function authenticateUser($permissions)
         $result = $this->flexperformance_model->addAllowance($data);
 
         if ($result == true) {
+            $autheniticateduser = auth()->user()->emp_id;
+         $auditLog = SysHelpers::AuditLog(2, "New allowance created by " . $autheniticateduser, $request);
             // $this->flexperformance_model->audit_log("Created New Allowance ");
             return back()->with('success', 'Saved');
             // echo "<p class='alert alert-success text-center'>Allowance Registered Successifully</p>";
@@ -5438,6 +5456,8 @@ public function authenticateUser($permissions)
             );
             $result = $this->flexperformance_model->addOvertimeCategory($data);
             if ($result == true) {
+                $autheniticateduser = auth()->user()->emp_id;
+         $auditLog = SysHelpers::AuditLog(2, "Overtime category added by " . $autheniticateduser, $request);
                 // $this->flexperformance_model->audit_log("Created New Overtime ");
                 echo "<p class='alert alert-success text-center'>Overtime Registered Successifully</p>";
             } else {
@@ -5477,6 +5497,8 @@ public function authenticateUser($permissions)
         );
 
         DB::table('deductions')->insert($data);
+        $autheniticateduser = auth()->user()->emp_id;
+         $auditLog = SysHelpers::AuditLog(2, "Deduction added by " . $autheniticateduser, $request);
 
         echo "Record inserted successfully.<br/>";
 
@@ -5551,9 +5573,13 @@ public function authenticateUser($permissions)
 
             $allowanceName = DB::table('allowances')->select('name')->where('id', $request->input('allowance'))->limit(1)->first();
 
+
+
             // SysHelpers::FinancialLogs($data['empID'], 'Assign ' . $allowanceName->name, '0.00', ($data['amount'] != 0) ? $data['amount'] . ' ' . $data['currency'] : $data['percent'] . '%', 'Payroll Input');
 
             if ($result == true) {
+                $autheniticateduser = auth()->user()->emp_id;
+         $auditLog = SysHelpers::AuditLog(2, "Allowance assigned by " . $autheniticateduser, $request);
                 // $this->flexperformance_model->audit_log("Assigned an allowance to Employee with Id = " . $request->input('empID') . " ");
                 echo "<p class='alert alert-success text-center'>Added Successifully!</p>";
             } else {
@@ -5711,6 +5737,8 @@ public function authenticateUser($permissions)
 
             if ($result == true) {
                 // $this->flexperformance_model->audit_log("Assigned an allowance to Group with Id = " . $request->input('group') . " ");
+                $autheniticateduser = auth()->user()->emp_id;
+         $auditLog = SysHelpers::AuditLog(2, "Allowance group assigned by " . $autheniticateduser, $request);
                 echo "<p class='alert alert-success text-center'>Added Successifully!</p>";
             } else {
                 echo "<p class='alert alert-danger text-center'>Not Added, Try Again</p>";
@@ -5720,7 +5748,7 @@ public function authenticateUser($permissions)
 
     public function remove_individual_from_allowance(Request $request)
     {
-
+        
         $method = $request->method();
 
         if ($method == "POST") {
@@ -5746,6 +5774,8 @@ public function authenticateUser($permissions)
                     $result = $this->flexperformance_model->remove_individual_from_allowance($empID, $allowanceID);
                 }
                 if ($result == true) {
+                    $autheniticateduser = auth()->user()->emp_id;
+         $auditLog = SysHelpers::AuditLog(2, "Employee was removed from allowance by " . $autheniticateduser, $request);
                     //  $this->flexperformance_model->audit_log("Removed Employees of IDs = " . implode(',', $arr) . " From an allowance  with Id = " . $allowanceID . " ");
                     echo "<p class='alert alert-success text-center'>Added Successifully!</p>";
                 } else {
@@ -5773,6 +5803,8 @@ public function authenticateUser($permissions)
                     $result = $this->flexperformance_model->remove_group_from_allowance($groupID, $allowanceID);
                 }
                 if ($result == true) {
+                    $autheniticateduser = auth()->user()->emp_id;
+         $auditLog = SysHelpers::AuditLog(2, "Allowance removed from group " . $autheniticateduser, $request);
                     // $this->flexperformance_model->audit_log("Removed Group of ID = " . implode(',', $arr) . " From Alowance with Id = " . $allowanceID . " ");
                     echo "<p class='alert alert-warning text-center'>Group Removed </p>";
                 } else {
