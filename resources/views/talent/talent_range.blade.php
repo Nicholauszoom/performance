@@ -43,8 +43,14 @@
                 <i class="ph-plus"></i>
                 Add Target Ranges
             </a> --}}
-            <button class="float-end btn btn-main mb-2 mx-1"  data-bs-toggle="modal" data-bs-target="#approval">   <i class="ph-plus"></i>  Add Target Ranges</button>
+
+            @can('add-target-range')
+            <button class="float-end btn btn-main mb-2 mx-1"  data-bs-toggle="modal" data-bs-target="#approval">   <i class="ph-plus"></i>  Add Target Ranges</button> 
+            @endcan
+
             <div id="resultFeedback" class="my-3"></div>
+
+            @can('view-target-range')
 
             <table id="datatable" class="table table-striped table-bordered datatable-basic">
                 <thead>
@@ -80,7 +86,7 @@
       
                 </tbody>
             </table>
-
+@endcan
         </div>
         {{-- / --}}
 
@@ -88,9 +94,14 @@
         <div role="tabpanel" class="tab-pane  " id="register-approve" aria-labelledby="approve-tab">
 
             <h6 class="text-warning mb-3 mx-3">Behaviour Ranges</h6>
+            
+            @can('add-behavior-range')
             <button class="float-end btn btn-main mb-2 mx-1"  data-bs-toggle="modal" data-bs-target="#behaviour-ratio">   <i class="ph-plus"></i>  Add Behaviour Ranges</button>
+            @endcan
+
             <div id="resultFeedback"></div>
 
+           @can('view-behavior-range')
             <table id="datatable1" class="table table-striped table-bordered datatable-basic">
                 <thead>
                     <tr>
@@ -123,6 +134,7 @@
                     @endforeach
                 </tbody>
             </table>
+@endcan
 
         </div>
         {{-- / --}}
@@ -131,9 +143,12 @@
         <div role="tabpanel" class="tab-pane  " id="time-ratios" aria-labelledby="approve-tab">
 
             <h6 class="text-warning mb-3 mx-3">Time Ranges</h6>
+            @can('add-time-range')
             <button class="float-end btn btn-main mb-2 mx-1"  data-bs-toggle="modal" data-bs-target="#time-ratio">   <i class="ph-plus"></i>  Add Time Ranges</button>
-            <div id="resultFeedback"></div>
+        @endcan
 
+            <div id="resultFeedback"></div>
+@can('view-time-range')
             <table id="datatable1" class="table table-striped table-bordered datatable-basic">
                 <thead>
                     <tr>
@@ -166,6 +181,7 @@
                     @endforeach
                 </tbody>
             </table>
+            @endcan
 
         </div>
         {{-- / --}}

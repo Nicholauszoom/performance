@@ -367,6 +367,7 @@ public function authenticateUser($permissions)
 
     public function departmentCost()
     {
+        $this->authenticateUser('view-department-cost');
         $data['projects'] = $this->flexperformance_model->costProjects();
         $data['departments'] = $this->flexperformance_model->costDepartments();
         $data['parent'] = "Department";
@@ -377,6 +378,8 @@ public function authenticateUser($permissions)
 
     public function storeDepartmentCost(Request $request)
     {
+
+        $this->authenticateUser('add-department-cost');
 
         $type = $request->type;
 
@@ -3839,7 +3842,7 @@ public function authenticateUser($permissions)
     {
         $empID = auth()->user()->emp_id;
 
-        $this->authenticateUser('view-loan');
+        $this->authenticateUser('view-aproved-loan');
 
         $data['my_loans'] = $this->flexperformance_model->my_confirmedloan($empID);
 
@@ -12277,6 +12280,7 @@ public function authenticateUser($permissions)
     public function employee_profiles()
     {
 
+$this->authenticateUser('view-Talent');
         $data['employees'] = EMPL::where('state', '1')->get();
         return view('talent.profiling', $data);
     }
@@ -12465,6 +12469,8 @@ public function authenticateUser($permissions)
 
     public function loan_types()
     {
+        $this->authenticateUser('view-loan-type');
+
         $data['loan_types'] = LoanType::all();
         // dd($data);
         return view('loans.loan_types', $data);
@@ -12472,6 +12478,10 @@ public function authenticateUser($permissions)
 
     public function saveLoanType(Request $request)
     {
+
+        $this->authenticateUser('add-loan-type');
+
+
         request()->validate(
             [
                 'name' => 'required',

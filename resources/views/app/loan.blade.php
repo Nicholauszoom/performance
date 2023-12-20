@@ -37,6 +37,8 @@
                 <?php if(true){ ?>
 
                 <div class="col-md-12 col-sm-12 col-xs-12">
+
+                    @can('view-aproved-loan')
                     <div class="card border-top  border-top-width-3 border-top-main rounded-0">
                         <div class="card-head px-3">
                             <h2 class="text-warning mt-2"> Approved Loans &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -109,6 +111,7 @@
                             </tbody>
                         </table>
                     </div>
+                    @endcan
                 </div>
                 <?php } ?>
 

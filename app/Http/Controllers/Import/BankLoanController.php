@@ -48,6 +48,7 @@ class BankLoanController extends Controller
     //    For Delete  Grievances
     public function delete_loan($id)
     {
+        $this->authenticateUser('delete-bank-loan');
         $project = BankLoan::where('id',$id)->first();
 
         $project->delete();
@@ -64,6 +65,7 @@ class BankLoanController extends Controller
      */
     public function store(Request $request)
     {
+        $this->authenticateUser('add-loan');
         request()->validate(
             [
             'employee_id' => 'required|max:255',
@@ -83,7 +85,6 @@ class BankLoanController extends Controller
             $loan->date=$request->date;
 
 
-            dd($request->date);
             $loan->save();
 
             return response()->json(['status' => "success"]);
@@ -107,6 +108,7 @@ class BankLoanController extends Controller
 
 
     public function import(Request $request) {
+        
 
         $complain = new TempDate();
         $complain->date=$request->date;

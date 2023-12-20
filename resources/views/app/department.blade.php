@@ -18,7 +18,9 @@
 </div>
 
 <div class="row">
+
     <div class="@if(session('mng_org')) col-md-7 @else col-md-12 @endif">
+        @can('view-department')
         <div class="card border-top  border-top-width-3 border-top-main rounded-0">
             <div class="card-header">
                 <h4 class="text-main">Department List</h4>
@@ -63,8 +65,11 @@
                     @endforeach
                 </tbody>
             </table>
+            @endcan
         </div>
     </div>
+
+    @can('add-department')
 
     <?php if(session('mng_org')){ ?>
     <div class="col-md-5">
@@ -124,6 +129,10 @@
     <?php } ?>
 </div>
 
+@endcan
+
+
+@can('view-disabled-department')
 <div class="card border-top  border-top-width-3 border-top-main rounded-0">
     <div class="card-header">
         <h4 class="text-main"> Disabled Departments</h4>
@@ -172,6 +181,8 @@
         </tbody>
       </table>
 </div>
+
+@endcan
 
 <div class="modal fade bd-example-modal-sm" data-backdrop="static" data-keyboard="false" id="delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
     <div class="modal-dialog modal-dialog-centered modal-sm" role="document">

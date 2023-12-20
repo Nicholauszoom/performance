@@ -141,15 +141,33 @@ class PermisionSeeder extends Seeder
                 [74, 'delete-loan', 4],
                 [75, 'approve-loan', 4],
                 [76, 'view-bank-loan', 4],
+                [117, 'view-loans', 4],
+                [118, 'view-aproved-loans', 4],
+                [201, 'delete-bank-loan', 4],
+                [202, 'insert-direct-deduction', 4],
+                [203, 'view-aproved-loan', 4],
+                [204, 'add-loan-type', 4],
+                [205, 'view-loan-type', 5]
 
-                [117, 'view-loans', 11],
-                [118, 'view-aproved-loans', 11],
+
+                
 
                 // Module 5: Organization
                 [77, 'view-organization', 5],
                 [78, 'edit-organization', 5],
                 [79, 'add-organization', 5],
                 [80, 'delete-organization', 5],
+                [220, 'add-department', 5],
+                [221, 'view-department', 5],
+                [221, 'view-disabled-department', 5],
+
+                [223, 'view-department-cost', 5],
+                [224, 'add-department-cost', 5],
+
+
+
+
+
 
                 // Module 6: Reports
                 [81, 'view-report', 6],
@@ -185,7 +203,12 @@ class PermisionSeeder extends Seeder
                 [106, 'delete-Talent', 10],
                 [107, 'view-Talent-matrix', 10],
                 [111, 'view-forfeitings', 3],
-                [112, 'view-loan-types', 4],
+                [202, 'add-target-range', 10],
+                [203, 'view-target-range', 10],
+                [204, 'add-behavior-range', 10],
+                [205, 'view-behavior-range', 10],
+                [206, 'add-time-range', 10],
+                [207, 'view-time-range', 10],
 
 
 
