@@ -41,6 +41,8 @@ class DatabaseSeeder extends Seeder
         $this->call(OvertimeCategorySeeder::class);
         $this->call(LoanTypeSeeder::class);
         $this->call(CountryCodeSeeder::class);
+        $this->call(RoleSeeder::class);
+
 
         // $this->call(RegionSeeder::class);
         // $this->call(DistrictSeeder::class);

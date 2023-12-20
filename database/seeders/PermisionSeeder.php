@@ -14,14 +14,13 @@ class PermisionSeeder extends Seeder
     public function run()
     {
         $data = [
-               //my service 
-             
+               //my service
+
                 [113, 'apply-leave', 11],
                 [114, 'view-leaves', 11],
                 [115, 'apply-overtime', 11],
                 [116, 'print-pension-summary', 11],
                 [119, 'print-payslip', 11],
-                
                 // Module 1: Work Force Management
                 [1, 'view-workforce', 1],
                 [2, 'view-employee', 1],
@@ -143,10 +142,10 @@ class PermisionSeeder extends Seeder
                 [202, 'insert-direct-deduction', 4],
                 [203, 'view-aproved-loan', 4],
                 [204, 'add-loan-type', 4],
-                [205, 'view-loan-type', 5],
+                [205, 'view-loan-types', 4],
 
 
-                
+
 
                 // Module 5: Organization
                 [77, 'view-organization', 5],
