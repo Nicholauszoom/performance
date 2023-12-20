@@ -21,9 +21,6 @@ class PermisionSeeder extends Seeder
                 [115, 'apply-overtime', 11],
                 [116, 'print-pension-summary', 11],
                 [119, 'print-payslip', 11],
-
-
-
                 // Module 1: Work Force Management
                 [1, 'view-workforce', 1],
                 [2, 'view-employee', 1],
@@ -32,7 +29,6 @@ class PermisionSeeder extends Seeder
                 [5, 'add-employee', 1],
                 [6, 'activate-employee', 1],
                 [141,'deactivate-employee', 1],
-
 
                 [7, 'suspend-employee', 1],
                 [8, 'transfer-employee', 1],
@@ -61,7 +57,6 @@ class PermisionSeeder extends Seeder
 
                 [121, 'add-overtime-setting',1],
                 [140, 'apply-overtime-onbehalf', 1],
-
 
                 [29, 'view-imprest', 1],
                 [30, 'add-imprest', 1],
@@ -134,9 +129,6 @@ class PermisionSeeder extends Seeder
                 [137, 'add-leave-forfeit', 3],
                 [139, 'edit-leave-forfeit', 3],
 
-
-
-
                 // Module 4: Loan Management
                 [71, 'view-loan', 4],
                 [72, 'edit-loan', 4],
@@ -171,12 +163,6 @@ class PermisionSeeder extends Seeder
                 [227, 'add-position', 5],
                 [228, 'edit-position', 5],
                 [229, 'delete-position', 5],
-
-
-
-
-
-
 
                 // Module 6: Reports
                 [81, 'view-report', 6],
@@ -217,11 +203,6 @@ class PermisionSeeder extends Seeder
                 [205, 'view-behavior-range', 10],
                 [206, 'add-time-range', 10],
                 [207, 'view-time-range', 10],
-
-
-
-
-
 
         ];
 
