@@ -130,8 +130,11 @@ class PermisionSeeder extends Seeder
                 [134, 'view-new-leave-applications', 3],
                 [135, 'view-aproved-leave-applications', 3],
                 [136, 'view-revoked-leave-applications', 3],
-                [137, 'add-leave-forfeit', 11],
-                [139, 'edit-leave-forfeit', 11],
+                [111, 'view-forfeitings', 3],
+                [137, 'add-leave-forfeit', 3],
+                [139, 'edit-leave-forfeit', 3],
+
+              
 
 
                 // Module 4: Loan Management
@@ -147,7 +150,7 @@ class PermisionSeeder extends Seeder
                 [202, 'insert-direct-deduction', 4],
                 [203, 'view-aproved-loan', 4],
                 [204, 'add-loan-type', 4],
-                [205, 'view-loan-type', 5]
+                [205, 'view-loan-type', 5],
 
 
                 
@@ -163,6 +166,12 @@ class PermisionSeeder extends Seeder
 
                 [223, 'view-department-cost', 5],
                 [224, 'add-department-cost', 5],
+                [225, 'add-bank-branch', 5],
+                [226, 'can-view-bank-branch', 5],
+                [227, 'add-position', 5],
+                [228, 'edit-position', 5],
+                [229, 'delete-position', 5],
+
 
 
 
@@ -202,7 +211,6 @@ class PermisionSeeder extends Seeder
                 [105, 'edit-Talent', 10],
                 [106, 'delete-Talent', 10],
                 [107, 'view-Talent-matrix', 10],
-                [111, 'view-forfeitings', 3],
                 [202, 'add-target-range', 10],
                 [203, 'view-target-range', 10],
                 [204, 'add-behavior-range', 10],
@@ -219,7 +227,7 @@ class PermisionSeeder extends Seeder
 
         foreach ($data as $permission) {
             Permission::updateOrCreate([
-                'id' => $permission[0],
+                // 'id' => $permission[0],
                 'slug' => $permission[1],
                 'sys_module_id' => $permission[2],
             ]);

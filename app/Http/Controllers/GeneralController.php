@@ -1727,6 +1727,8 @@ public function authenticateUser($permissions)
     public function addskills(Request $request)
     {
 
+        
+
         if (isset($_POST['add'])) {
             $id = $request->input('positionID');
             if ($request->input('mandatory') == '1') {
@@ -1884,6 +1886,7 @@ public function authenticateUser($permissions)
     }
     public function addPosition(Request $request)
     {
+        $this->authenticateUser('add-position');
         if ($request->method() == "POST") {
 
             if ($request->input('driving_licence') == "") {
