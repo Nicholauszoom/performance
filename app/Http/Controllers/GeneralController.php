@@ -116,7 +116,7 @@ class GeneralController extends Controller
        //     abort(Response::HTTP_UNAUTHORIZED);
     //     }
     // }
-    
+
 
 public function authenticateUser($permissions)
 {
@@ -1727,7 +1727,7 @@ public function authenticateUser($permissions)
     public function addskills(Request $request)
     {
 
-        
+
 
         if (isset($_POST['add'])) {
             $id = $request->input('positionID');
@@ -8349,7 +8349,7 @@ public function authenticateUser($permissions)
     }
 
     // For Saving Termination
-    public function saveTermination(Request $request)
+    public function saveTermination122(Request $request)
     {
         if ($request->employeeID == $request->deligated) {
             return redirect()->back()->with(['error' => 'Terminated and deligated should not be the same person']);
@@ -8530,6 +8530,189 @@ public function authenticateUser($permissions)
         // }
         return redirect('flex/termination')->with('status', $msg);
     }
+
+
+     // For Saving Termination
+     public function saveTermination(Request $request)
+     {
+         if ($request->employeeID == $request->deligated) {
+             return redirect()->back()->with(['error' => 'Terminated and deligated should not be the sane person']);
+         }
+         $this->authenticateUser('add-termination');
+         // request()->validate(
+         //     [
+         //         'employeeID' => 'required',
+         //         'terminationDate' => 'required',
+         //         'reason' => 'required',
+         //         'salaryEnrollment' => 'required',
+         //         'normalDays' => 'required',
+         //         'publicDays' => 'required',
+         //         'noticePay' => 'required',
+         //         'leavePay' => 'required',
+         //         'livingCost' => 'required',
+         //         'houseAllowance' => 'required',
+         //         'utilityAllowance' => 'required',
+         //         'tellerAllowance' => 'required',
+         //         'serevancePay' => 'required',
+         //         'leaveStand' => 'required',
+         //         'arrears' => 'required',
+         //         'exgracia' => 'required',
+         //         'bonus' => 'required',
+         //         'longServing' => 'required',
+         //         'salaryAdvance' => 'required',
+         //         'otherDeductions' => 'nullable',
+         //         'otherPayments' => 'nullable',
+         //     ]
+         // );
+         $employeeID = $request->employeeID;
+         $terminationDate = $request->terminationDate;
+         $reason = $request->reason;
+         $salaryEnrollment = $request->salaryEnrollment;
+         $normalDays = $request->normalDays;
+         $publicDays = $request->publicDays;
+         $noticePay = $request->noticePay;
+         $leavePay = $request->leavePay;
+         $livingCost = $request->livingCost;
+         $houseAllowance = $request->houseAllowance;
+         $utilityAllowance = $request->utilityAllowance;
+         $leaveAllowance = $request->leaveAllowance;
+         $tellerAllowance = $request->tellerAllowance;
+         $serevancePay = $request->serevancePay;
+         $leaveStand = $request->leaveStand;
+         $arrears = $request->arrears;
+         $exgracia = $request->exgracia;
+         $bonus = $request->bonus;
+         $longServing = $request->longServing;
+         $salaryAdvance = $request->salaryAdvance;
+         $otherDeductions = $request->otherDeductions;
+         $otherPayments = $request->otherPayments;
+         $employee_actual_salary = $request->employee_actual_salary;
+         $loan_balance = $request->loan_balance;
+         $nightshift_allowance = $request->nightshift_allowance;
+         $transport_allowance = $request->transport_allowance;
+
+         $termination = new Termination();
+         $termination->employeeID = $request->employeeID;
+         $termination->terminationDate = $request->terminationDate;
+         $termination->reason = $request->reason;
+         $termination->salaryEnrollment = $request->salaryEnrollment;
+         $termination->normalDays = $request->normalDays;
+         $termination->publicDays = $request->publicDays;
+         $termination->noticePay = $request->noticePay;
+         $termination->leavePay = $request->leavePay;
+         $termination->livingCost = $request->livingCost;
+         $termination->houseAllowance = $request->houseAllowance;
+         $termination->utilityAllowance = $request->utilityAllowance;
+         $termination->leaveAllowance = $request->leaveAllowance;
+         $termination->tellerAllowance = $request->tellerAllowance;
+         $termination->serevancePay = $request->serevancePay;
+         $termination->leaveStand = $request->leaveStand;
+         $termination->arrears = $request->arrears;
+         $termination->exgracia = $request->exgracia;
+         $termination->transport_allowance = $request->transport_allowance;
+         $termination->nightshift_allowance = $request->nightshift_allowance;
+         $termination->bonus = $request->bonus;
+         $termination->actual_salary = $employee_actual_salary;
+         $termination->longServing = $request->longServing;
+         $termination->salaryAdvance = $request->salaryAdvance;
+         $termination->otherDeductions = $request->otherDeductions;
+         $termination->otherPayments = $request->otherPayments;
+
+         $msg = "Employee Termination Benefits have been saved successfully";
+
+         $calendar = $request->terminationDate;
+         $datewell = explode("-", $calendar);
+         $mm = $datewell[1];
+         $dd = $datewell[0];
+         $yyyy = $datewell[2];
+         $payroll_date = $yyyy . "-" . $mm . "-" . $dd;
+         $payroll_month = $yyyy . "-" . $mm;
+         $empID = auth()->user()->emp_id;
+         $today = date('Y-m-d');
+
+         $normal_days_overtime_amount = ($employee_actual_salary / 176) * 1.5 * $normalDays;
+         $public_overtime_amount = ($employee_actual_salary / 176) * 2.0 * $publicDays;
+
+         $total_gross = $salaryEnrollment +
+             $normal_days_overtime_amount +
+             $public_overtime_amount +
+             $noticePay +
+             $leavePay +
+             $livingCost +
+             $houseAllowance +
+             $utilityAllowance +
+             $leaveAllowance +
+             $tellerAllowance +
+             $serevancePay +
+             $arrears +
+             $exgracia +
+             $bonus +
+             $longServing +
+             $transport_allowance +
+             $nightshift_allowance +
+             $otherPayments;
+
+         //overtime calculation
+
+         //check whether if is after payroll or before payroll
+         $check_termination_date = $this->flexperformance_model->check_termination_payroll_date($payroll_month);
+         //get employee basic salary
+         //$overtime_amount = $this->flexperformance_model->get_overtime($normalDays,$publicDays,$employeeID);
+         $overtime_amount = $normal_days_overtime_amount + $public_overtime_amount;
+
+         // if ($check_termination_date == false) {
+         $net_pay = 0;
+         $take_home = 0;
+         // $total_gross = 0;
+         $taxable = 0;
+
+         $pension_employer = $this->flexperformance_model->get_pension_employer($salaryEnrollment, $leavePay, $arrears, $overtime_amount, $employeeID);
+
+         $pension_employee = $this->flexperformance_model->get_pension_employee($salaryEnrollment, $leavePay, $arrears, $overtime_amount, $employeeID);
+
+         $total_deductions = $salaryAdvance;
+         //+ $otherDeductions
+
+         $net_pay = $total_gross - $total_deductions;
+
+         //$net_pay = $total_gross - $total_deductions;
+
+         // $taxable = ($net_pay - $pension_employee);
+         $taxable = ($total_gross - $pension_employee);
+         //$taxable = ($taxable < 0) ? -1*$taxable:$taxable;
+
+         $paye1 = DB::table('paye')->where('maximum', '>', $taxable)->where('minimum', '<=', $taxable)->first();
+
+         $deduction_rate = $this->flexperformance_model->get_deduction_rate();
+
+         $paye = $paye1->excess_added + $paye1->rate * ($taxable - $paye1->minimum);
+         $take_home = $taxable - $paye;
+
+         $termination->total_gross = $total_gross;
+         //wcf and sdl
+         $termination->wcf = $total_gross * $deduction_rate['wcf'];
+         $termination->sdl = $total_gross * $deduction_rate['sdl'];
+
+         $termination->loan_balance = $loan_balance;
+
+         $termination->taxable = $taxable;
+         $termination->normal_days_overtime_amount = $normal_days_overtime_amount;
+         $termination->public_overtime_amount = $public_overtime_amount;
+         $termination->paye = $paye;
+         $termination->pension_employee = $pension_employee;
+         $termination->net_pay = $net_pay;
+         $termination->take_home = $take_home;
+         $termination->total_deductions = $total_deductions;
+         $termination->save();
+         // $pentionable_amount =$salaryEnrollment + $leavePay + $arrears + overtime_amount;
+         // } else {
+
+         //     dd('YES');
+         // }
+         return redirect('flex/termination')->with('status', $msg);
+     }
+
+
 
     // For Aprroving termination
     public function approveTermination($id)
