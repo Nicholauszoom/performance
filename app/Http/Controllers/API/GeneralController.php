@@ -708,7 +708,28 @@ class GeneralController extends Controller
                     $data['paid_with_arrears_d'] = $this->reports_model->employeeArrearPaidAll($empID, $payroll_date);
                     $data['salary_advance_loan_remained'] = $this->reports_model->loansAmountRemained($empID, $payroll_date);
 
-                    $slipinfo = $data['slipinfo'];
+                    //
+                    foreach ($data['slipinfo'] as &$slip) {
+                        $slipArray = json_decode(json_encode($slip), true);
+    
+                    
+                      foreach( $data['allowances'] as $alownce){
+                        $slipArray['allowances'] = [$alownce];
+                      }
+                  
+                        $slipArray['total_allowances'] =  $data['total_allowances'];
+                
+                      foreach( $data['deductions'] as $alownce){
+                        $slipArray['deductions'] = [$alownce];
+                      }
+                        $slipArray['total_deductions'] =  $data['total_deductions'];
+
+                        $slip = (array) $slipArray;
+
+                        
+                    }
+                    
+                    $slipinfo =$data['slipinfo'];
                     $leaves = $data['leaves'];
                     $annualLeaveSpent = $data['annualLeaveSpent'];
                     $allowances = $data['allowances'];
@@ -742,7 +763,7 @@ class GeneralController extends Controller
 
                     // return $pdf->download('payslip_for_'.$empID.'.pdf');
 
-        return response( [ 'data'=>$data  ],200 );
+                return response( [ 'data'=>$data  ],200 );
                 }
             } else {
                 // DATE MANIPULATION
@@ -798,8 +819,28 @@ class GeneralController extends Controller
                         $data['paid_with_arrears_d'] = $this->reports_model->employeeArrearPaidAll($payroll_emp_id->empID, $payroll_date);
                         $data['salary_advance_loan_remained'] = $this->reports_model->loansAmountRemained($payroll_emp_id->empID, $payroll_month);
                         $data_all['dat'][$payroll_emp_id->empID] = $data;
+                        foreach ($data['slipinfo'] as &$slip) {
+                            $slipArray = json_decode(json_encode($slip), true);
+        
+                        
+                          foreach( $data['allowances'] as $alownce){
+                            $slipArray['allowances'] = $alownce;
+                          }
+                      
+                            $slipArray['total_allowances'] =  $data['total_allowances'];
+                    
+                          foreach( $data['deductions'] as $alownce){
+                            $slipArray['deductions'] = $alownce;
+                          }
+                            $slipArray['total_deductions'] =  $data['total_deductions'];
+    
+                            $slip = (array)[ $slipArray];
+                            // $slipArray = get_object_vars($slip);
 
-                        $slipinfo = $data['slipinfo'];
+    
+                           
+                        }
+                        $slipinfo =$data['slipInfo'];
                         $leaves = $data['leaves'];
                         $annualLeaveSpent = $data['annualLeaveSpent'];
                         $allowances = $data['allowances'];
@@ -1102,7 +1143,8 @@ class GeneralController extends Controller
         // }
 
     }
-    public function dashboardData(){
+
+   public function dashboardData(){
         $id=auth()->user()->emp_id;
         $active_leaves=Leaves::where('empID',auth()->user()->emp_id)->with('type:id,type,max_days')->whereNot('reason', 'Automatic applied!')->get();
         $data=$active_leaves;
