@@ -24,7 +24,7 @@ return new class extends Migration
             $table->string('Isrecursive', 50);
             $table->string('Isbik', 50);
             $table->string('type', 50)->default('1')->comment('1-anual leave allowance, 0.normal allowance');
-            $table->integer('mode')->default(1)->comment('1-fixed value, 2-percent value depending basic salary ');
+            $table->integer('mode')->default(1)->comment('1-fixed value, 2-percent value depending basic salary');
             $table->integer('apply_to')->default(0)->comment('1-apply to all, 2-apply to specific');
             $table->integer('state')->default(1)->comment('1-active, 0-inactive');
             $table->string('temporary', 50);

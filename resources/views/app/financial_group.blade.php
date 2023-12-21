@@ -25,9 +25,12 @@
                     Packages <br> <small>Allowances, Bonuses and Deductions</small>
                 </h5>
 
+                @can('add-package-group')   
                 <button type="button" class="btn btn-main" data-bs-toggle="modal" data-bs-target="#add-finance-group">
                     <i class="ph-plus me-2"></i>New Group
                 </button>
+                @endcan
+
             </div>
         </div>
 

@@ -16,19 +16,24 @@
                 </div>
             </div>
   <!-- Basic datatable -->
+
       <div class="card border-top  border-top-width-3 border-top-main rounded-0">
         <div class="card-header">
           <div class="d-flex justify-content-between">
             <h5 class="mb-0">Company Branches</h5>
+
+            @can('add-bank-branch')
             <button   type="button"
                     class="btn btn-perfrom"
                     data-bs-toggle="modal"
                     data-bs-target="#addPermissionModal">
                     <i class="ph-plus me-2"></i>Add New
             </button>
+            @endcan
           </div>
 
         </div>
+        @can('can-view-bank-branch')
         <table id="datatable" class="table datatable-basic">
           <thead>
             <tr>
@@ -56,6 +61,7 @@
             @endif
           </tbody>
         </table>
+        @endcan
       </div>
   <!-- /basic datatable -->
 

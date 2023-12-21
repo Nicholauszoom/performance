@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\Import;
+use Illuminate\Support\Facades\Gate;
 
 use App\Exports\BankLoanTemplateExport;
 use App\Http\Controllers\Controller;
@@ -10,6 +11,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
+
+
 
 class PensionPayslipController extends Controller
 {
@@ -33,6 +36,22 @@ class PensionPayslipController extends Controller
         return view('payroll.pension_receipt', $data);
     }
 
+    
+public function authenticateUser($permissions)
+{
+    // Check if the user is not authenticated
+    if (!auth()->check()) {
+        // Redirect the user to the login page
+        return redirect()->route('login');
+    }
+
+    // Check if the authenticated user does not have the specified permissions
+    if (Gate::allows($permissions)) {
+        // If not, abort the request with a 401 Unauthorized status code
+        abort(Response::HTTP_UNAUTHORIZED);
+    }
+}
+
     /**
      * Store a newly created resource in storage.
      *
@@ -41,6 +60,10 @@ class PensionPayslipController extends Controller
      */
     public function store(Request $request)
     {
+
+
+        $this->authenticateUser('add-loan');
+
         request()->validate(
             [
                 'employee_id' => 'required|max:255',
@@ -83,6 +106,10 @@ class PensionPayslipController extends Controller
 
     public function import(Request $request)
     {
+
+
+        $this->authenticateUser('add-loan');
+
 
         $date = $request->date;
         $receipt = $request->receipt;

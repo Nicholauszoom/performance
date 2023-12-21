@@ -116,7 +116,7 @@ class GeneralController extends Controller
        //     abort(Response::HTTP_UNAUTHORIZED);
     //     }
     // }
-    
+
 
 public function authenticateUser($permissions)
 {
@@ -367,6 +367,7 @@ public function authenticateUser($permissions)
 
     public function departmentCost()
     {
+        $this->authenticateUser('view-department-cost');
         $data['projects'] = $this->flexperformance_model->costProjects();
         $data['departments'] = $this->flexperformance_model->costDepartments();
         $data['parent'] = "Department";
@@ -377,6 +378,8 @@ public function authenticateUser($permissions)
 
     public function storeDepartmentCost(Request $request)
     {
+
+        $this->authenticateUser('add-department-cost');
 
         $type = $request->type;
 
@@ -472,6 +475,10 @@ public function authenticateUser($permissions)
             );
             $result = $this->flexperformance_model->updateOrganizationLevel($updates, $ID);
             if ($result == true) {
+
+                $autheniticateduser = auth()->user()->emp_id;
+                $auditLog = SysHelpers::AuditLog(2, "Organization level updated  by " . $autheniticateduser, $request);
+
                 return back()->with('success', 'Organization Level Updated Successifully!');
                 // echo "<p class='alert alert-success text-center'>Updated Successifully!</p>";
             } else {
@@ -603,6 +610,8 @@ public function authenticateUser($permissions)
             $result = $this->flexperformance_model->addCompanyInfo($data);
 
             if ($result == true) {
+                $autheniticateduser = auth()->user()->emp_id;
+                $auditLog = SysHelpers::AuditLog(2, "Company info updated by " . $autheniticateduser, $request);
                 return redirect()->route('flex.companyInfo');
                 echo "<p class='alert alert-success text-center'>Branch Added Successifully!</p>";
             } else {
@@ -623,6 +632,8 @@ public function authenticateUser($permissions)
         $data = $request->except('_token', '_method');
         $result = $this->flexperformance_model->updateCompanyInfo($data, $id);
         if ($result == true) {
+            $autheniticateduser = auth()->user()->emp_id;
+         $auditLog = SysHelpers::AuditLog(2, "Company info updated by " . $autheniticateduser, $request);
             return redirect()->back();
             // echo "<p class='alert alert-success text-center'>Branch Updated Successifully!</p>";
         } else {
@@ -652,6 +663,9 @@ public function authenticateUser($permissions)
                 'country' => $request->input('country'),
             );
             $branchID = $this->flexperformance_model->addCompanyBranch($data);
+            $autheniticateduser = auth()->user()->emp_id;
+         $auditLog = SysHelpers::AuditLog(2, "Company branch added by " . $autheniticateduser, $request);
+
             if ($branchID > 0) {
                 $code = sprintf("%03d", $branchID);
                 $updates = array(
@@ -683,6 +697,8 @@ public function authenticateUser($permissions)
             );
             $branchID = $this->flexperformance_model->addCostCenter($data);
             if ($branchID > 0) {
+                $autheniticateduser = auth()->user()->emp_id;
+         $auditLog = SysHelpers::AuditLog(2, "Const Center added  by " . $autheniticateduser, $request);
 
                 echo "<p class='alert alert-success text-center'>Cost Center Added Successifully!</p>";
             } else {
@@ -724,6 +740,8 @@ public function authenticateUser($permissions)
 
         $result = $this->flexperformance_model->updateCostCenter($updates, $branchID);
         if ($result) {
+            $autheniticateduser = auth()->user()->emp_id;
+         $auditLog = SysHelpers::AuditLog(2, "COnst center updated by " . $autheniticateduser, $request);
             session('note', "<p class='alert alert-success text-center'>Updated Successifully</p>");
             return redirect('/flex/costCenter/');
         } else {
@@ -767,6 +785,10 @@ public function authenticateUser($permissions)
             "bank_code" => $bank_code,
         );
         DB::table('bank')->insert($data);
+
+        $autheniticateduser = auth()->user()->emp_id;
+         $auditLog = SysHelpers::AuditLog(2, "Bank added by " . $autheniticateduser, $request);
+
         echo "Record inserted successfully.<br/>";
         return redirect('flex/bank');
     }
@@ -817,6 +839,10 @@ public function authenticateUser($permissions)
             );
             $result = $this->flexperformance_model->addBankBranch($data);
             if ($result) {
+
+                $autheniticateduser = auth()->user()->emp_id;
+         $auditLog = SysHelpers::AuditLog(2, "Bank branch added  by " . $autheniticateduser, $request);
+
                 $response_array['status'] = "OK";
                 $response_array['message'] = "<p class='alert alert-success text-center'>Branch Added Successifully</p>";
                 header('Content-type: application/json');
@@ -862,6 +888,8 @@ public function authenticateUser($permissions)
             );
             $result = $this->flexperformance_model->addBankBranch($data);
             if ($result) {
+                $autheniticateduser = auth()->user()->emp_id;
+         $auditLog = SysHelpers::AuditLog(2, "Bank branch name updated by " . $autheniticateduser, $request);
                 $response_array['status'] = "OK";
                 $response_array['message'] = "<p class='alert alert-success text-center'>Branch Added Successifully</p>";
                 header('Content-type: application/json');
@@ -884,6 +912,10 @@ public function authenticateUser($permissions)
             );
             $result = $this->flexperformance_model->updateBank($data, $bankID);
             if ($result) {
+
+                $autheniticateduser = auth()->user()->emp_id;
+         $auditLog = SysHelpers::AuditLog(2, "Bank name updated by " . $autheniticateduser, $request);
+
                 $response_array['status'] = "OK";
                 $response_array['message'] = "<p class='alert alert-success text-center'>Bank Name Updated Successifully</p>";
                 header('Content-type: application/json');
@@ -1245,6 +1277,8 @@ public function authenticateUser($permissions)
             );
             $result = $this->flexperformance_model->updateBudget($data, $budgetID);
             if ($result == true) {
+                $autheniticateduser = auth()->user()->emp_id;
+         $auditLog = SysHelpers::AuditLog(2, "Budget uproved  by " . $autheniticateduser, $request);
                 echo "<p class='alert alert-success text-center'>Budget Approved Successifully</p>";
             } else {
                 echo "<p class='alert alert-danger text-center'>FAILED to Approve, Please Try Again!</p>";
@@ -1263,6 +1297,8 @@ public function authenticateUser($permissions)
             );
             $result = $this->flexperformance_model->updateBudget($data, $budgetID);
             if ($result == true) {
+                $autheniticateduser = auth()->user()->emp_id;
+         $auditLog = SysHelpers::AuditLog(2, "Budget disaproved by " . $autheniticateduser, $request);
                 echo "<p class='alert alert-success text-center'>Budget Disapproved Successifully</p>";
             } else {
                 echo "<p class='alert alert-danger text-center'>FAILED to Disapprove, Please Try Again!</p>";
@@ -1276,6 +1312,8 @@ public function authenticateUser($permissions)
             $budgetID = $this->uri->segment(3);
             $result = $this->flexperformance_model->deleteBudget($budgetID);
             if ($result == true) {
+                $autheniticateduser = auth()->user()->emp_id;
+         $auditLog = SysHelpers::AuditLog(2, "Budget deleted  by " . $autheniticateduser, $request);
                 echo "<p class='alert alert-success text-center'>Budget Deleted Successifully</p>";
             } else {
                 echo "<p class='alert alert-danger text-center'>FAILED to Delete, Please Try Again!</p>";
@@ -1689,6 +1727,8 @@ public function authenticateUser($permissions)
     public function addskills(Request $request)
     {
 
+
+
         if (isset($_POST['add'])) {
             $id = $request->input('positionID');
             if ($request->input('mandatory') == '1') {
@@ -1846,6 +1886,7 @@ public function authenticateUser($permissions)
     }
     public function addPosition(Request $request)
     {
+        $this->authenticateUser('add-position');
         if ($request->method() == "POST") {
 
             if ($request->input('driving_licence') == "") {
@@ -2002,6 +2043,12 @@ public function authenticateUser($permissions)
     public function applyOvertime(Request $request)
     {
 
+        $this->authenticateUser('apply-overtime');
+
+        $autheniticateduser = auth()->user()->emp_id;
+        $auditLog = SysHelpers::AuditLog(1, "Overtime application by Employee Id " . $autheniticateduser, $request);
+
+
         request()->validate(
             [
                 'reason' => 'required',
@@ -2065,6 +2112,10 @@ public function authenticateUser($permissions)
                         $result = $this->flexperformance_model->apply_overtime($data);
 
                         if ($result == true) {
+
+                            $auditLog = SysHelpers::AuditLog(1, "Overtime application by Employee Id " . $autheniticateduser, $request);
+
+
                             echo "<p class='alert alert-success text-center'>Overtime Request Sent Successifully</p>";
                         } else {
                             echo "<p class='alert alert-danger text-center'>Overtime Request Not Sent, Please Try Again!</p>";
@@ -2090,6 +2141,8 @@ public function authenticateUser($permissions)
                         $result = $this->flexperformance_model->apply_overtime($data);
 
                         if ($result == true) {
+                            $auditLog = SysHelpers::AuditLog(1, "Overtime application by Employee Id " . $autheniticateduser, $request);
+
                             echo "<p class='alert alert-success text-center'>Overtime Request Sent Successifully</p>";
                         } else {
                             echo "<p class='alert alert-danger text-center'>Overtime Request Not Sent, Please Try Again!</p>";
@@ -2116,6 +2169,8 @@ public function authenticateUser($permissions)
                         $result = $this->flexperformance_model->apply_overtime($data);
 
                         if ($result == true) {
+                            $auditLog = SysHelpers::AuditLog(1, "Overtime application by Employee Id " . $autheniticateduser, $request);
+
                             echo "<p class='alert alert-success text-center'>Overtime Request Sent Successifully</p>";
                         } else {
                             echo "<p class='alert alert-danger text-center'>Overtime Request Not Sent, Please Try Again!</p>";
@@ -2146,6 +2201,8 @@ public function authenticateUser($permissions)
                     );
                     $result = $this->flexperformance_model->apply_overtime($data);
                     if ($result == true) {
+                        $auditLog = SysHelpers::AuditLog(1, "Overtime application by Employee Id " . $autheniticateduser, $request);
+
                         echo "<p class='alert alert-success text-center'>Overtime Request Sent Successifully</p>";
                     } else {
                         echo "<p class='alert alert-danger text-center'>Overtime Request Not Sent, Please Try Again!</p>";
@@ -2168,6 +2225,8 @@ public function authenticateUser($permissions)
                     );
                     $result = $this->flexperformance_model->apply_overtime($data);
                     if ($result == true) {
+                        $auditLog = SysHelpers::AuditLog(1, "Overtime application by Employee Id " . $autheniticateduser, $request);
+
                         //fetch Line manager data from employee table and send email
                         $linemanager_data = SysHelpers::employeeData($linemanager);
                         $fullname = $linemanager_data['full_name'];
@@ -2195,8 +2254,10 @@ public function authenticateUser($permissions)
     public function applyOvertimeOnbehalf(Request $request)
     {
 
-        $days = $request->input('days');
 
+        $this->authenticateUser('apply-overtime-onbehalf');
+
+        $days = $request->input('days');
         $overtime_category = $request->input('category');
         $empID = $request->empID;
         $signatory = auth()->user()->emp_id;
@@ -2546,6 +2607,9 @@ public function authenticateUser($permissions)
             'status' => 3,
         );
         $this->flexperformance_model->update_overtime($data, $overtimeID);
+        $request = new Request();
+        $autheniticateduser = auth()->user()->emp_id;
+         $auditLog = SysHelpers::AuditLog(2, "Overtime held by " . $autheniticateduser, $request);
         echo "<p class='alert alert-warning text-center'>Overtime Held</p>";
     }
 
@@ -2575,6 +2639,10 @@ public function authenticateUser($permissions)
 
             SysHelpers::FinancialLogs($emp_id, $overtime_name, '0.00', number_format($overtime, 2), 'Payroll Input');
 
+            $request = new Request();
+            $autheniticateduser = auth()->user()->emp_id;
+         $auditLog = SysHelpers::AuditLog(2, "Overtime uproved by " . $autheniticateduser, $request);
+
             echo "<p class='alert alert-success text-center'>Overtime Approved Successifully</p>";
         } else {
             echo "<p class='alert alert-danger text-center'>Overtime Not Approved, Some Errors Occured Please Try Again!</p>";
@@ -2600,6 +2668,10 @@ public function authenticateUser($permissions)
             $result = $this->flexperformance_model->lineapproveOvertime($overtimeID, $time_approved);
 
             if ($result == true) {
+                $request = new Request();
+                $autheniticateduser = auth()->user()->emp_id;
+         $auditLog = SysHelpers::AuditLog(2, "Overtime approved by " . $autheniticateduser, $request);
+
                 echo "<p class='alert alert-success text-center'>Overtime Approved Successifully</p>";
             } else {
                 echo "<p class='alert alert-danger text-center'>Overtime Not Approved, Some Errors Occured Please Try Again!</p>";
@@ -2623,6 +2695,9 @@ public function authenticateUser($permissions)
         $time_approved = date('Y-m-d');
         $result = $this->flexperformance_model->hrapproveOvertime($overtimeID, $signatory, $time_approved);
         if ($result == true) {
+            $request = new Request();
+            $autheniticateduser = auth()->user()->emp_id;
+         $auditLog = SysHelpers::AuditLog(2, "Overtime approved by " . $autheniticateduser, $request);
             echo "<p class='alert alert-success text-center'>Overtime Approved Successifully</p>";
         } else {
             echo "<p class='alert alert-danger text-center'>Overtime Not Approved, Some Errors Occured Please Try Again!</p>";
@@ -2647,6 +2722,9 @@ public function authenticateUser($permissions)
         $time_approved = date('Y-m-d');
         $result = $this->flexperformance_model->fin_approveOvertime($overtimeID, $signatory, $time_approved);
         if ($result == true) {
+            $request = new Request();
+            $autheniticateduser = auth()->user()->emp_id;
+         $auditLog = SysHelpers::AuditLog(2, "Overtime final aproval by " . $autheniticateduser, $request);
             echo "<p class='alert alert-success text-center'>Overtime Approved Successifully</p>";
         } else {
             echo "<p class='alert alert-danger text-center'>Overtime Not Approved, Some Errors Occured Please Try Again!</p>";
@@ -2663,6 +2741,11 @@ public function authenticateUser($permissions)
         $overtimeID = $id;
         $result = $this->flexperformance_model->deny_overtime($overtimeID);
         if ($result == true) {
+
+            $autheniticateduser = auth()->user()->emp_id;
+            $request = new Request();
+         $auditLog = SysHelpers::AuditLog(2, "Overtime  denied by " . $autheniticateduser, $request);
+
             echo "<p class='alert alert-warning text-center'>Overtime DISSAPPROVED Successifully</p>";
         } else {
             echo "<p class='alert alert-danger text-center'>FAILED to Disapprove, Some Errors Occured Please Try Again!</p>";
@@ -2674,6 +2757,10 @@ public function authenticateUser($permissions)
         $result = $this->flexperformance_model->deleteOvertime($id);
 
         if ($result == true) {
+            $request = new Request();
+            $autheniticateduser = auth()->user()->emp_id;
+         $auditLog = SysHelpers::AuditLog(2, "Overtime  canceled by " . $autheniticateduser, $request);
+
             echo "<p class='alert alert-warning text-center'>Overtime DELETED Successifully</p>";
         } else {
             echo "<p class='alert alert-danger text-center'>FAILED to DELETE, Please Try Again!</p>";
@@ -2686,6 +2773,9 @@ public function authenticateUser($permissions)
         $result = $this->flexperformance_model->deleteApprovedOvertime($id);
 
         if ($result == true) {
+            $autheniticateduser = auth()->user()->emp_id;
+            $request = new Request();
+         $auditLog = SysHelpers::AuditLog(2, "Cancel Approved Overtimes by " . $autheniticateduser, $request);
 
             echo "<p class='alert alert-warning text-center'>Overtime DELETED Successifully</p>";
         } else {
@@ -2701,6 +2791,11 @@ public function authenticateUser($permissions)
             $overtimeID = $this->uri->segment(3);
             $result = $this->flexperformance_model->confirmOvertimePayment($overtimeID, 1);
             if ($result == true) {
+
+                  $autheniticateduser = auth()->user()->emp_id;
+                   $auditLog = SysHelpers::AuditLog(2, "Confirm Overtime Payment by " . $autheniticateduser, $request);
+
+
                 echo "<p class='alert alert-warning text-center'>Overtime Payment Confirmed Successifully</p>";
             } else {
                 echo "<p class='alert alert-danger text-center'>FAILED to Confirm, Please Try Again!</p>";
@@ -2716,6 +2811,11 @@ public function authenticateUser($permissions)
             $overtimeID = $this->uri->segment(3);
             $result = $this->flexperformance_model->confirmOvertimePayment($overtimeID, 0);
             if ($result == true) {
+
+                $autheniticateduser = auth()->user()->emp_id;
+                   $auditLog = SysHelpers::AuditLog(2, "Unconfirm Overtime Payment by " . $autheniticateduser, $request);
+
+
                 echo "<p class='alert alert-warning text-center'>Overtime Payment Unconfirmed Successifully</p>";
             } else {
                 echo "<p class='alert alert-danger text-center'>FAILED to Unconfirm, Please Try Again!</p>";
@@ -3032,6 +3132,8 @@ public function authenticateUser($permissions)
             );
             $result = $this->flexperformance_model->updateEmployee($updates, $empID);
             if ($result == true) {
+                $autheniticateduser = auth()->user()->emp_id;
+
                 echo "<p class='alert alert-success text-center'>Pension Fund Updated Successifully!</p>";
             } else {
                 echo "<p class='alert alert-danger text-center'>Update Failed</p>";
@@ -3693,6 +3795,9 @@ public function authenticateUser($permissions)
 
             $result = $this->flexperformance_model->applyloan($data);
             if ($result == true) {
+                $autheniticateduser = auth()->user()->emp_id;
+                $auditLog = SysHelpers::AuditLog(2, "Salary advance applied by " . $autheniticateduser, $request);
+
                 echo "<p class='alert alert-success text-center'>Request Submitted Successifully</p>";
             } else {
                 echo "<p class='alert alert-warning text-center'>Request FAILED, Please Try Again</p>";
@@ -3734,6 +3839,8 @@ public function authenticateUser($permissions)
 
             $result = $this->flexperformance_model->applyloan($data);
             if ($result == true) {
+                $autheniticateduser = auth()->user()->emp_id;
+         $auditLog = SysHelpers::AuditLog(2, "Direct loan inserted by " . $autheniticateduser, $request);
                 echo "<p class='alert alert-success text-center'>Request Submitted Successifully</p>";
             } else {
                 echo "<p class='alert alert-warning text-center'>Request FAILED, Please Try Again</p>";
@@ -3745,7 +3852,7 @@ public function authenticateUser($permissions)
     {
         $empID = auth()->user()->emp_id;
 
-        $this->authenticateUser('view-loan');
+        $this->authenticateUser('view-aproved-loan');
 
         $data['my_loans'] = $this->flexperformance_model->my_confirmedloan($empID);
 
@@ -3786,7 +3893,7 @@ public function authenticateUser($permissions)
             $result = $this->flexperformance_model->updateLoan($data, $loanID);
             if ($result) {
                 $response_array['status'] = "OK";
-                $response_array['message'] = "<p class='alert alert-success text-center'>Updated Updated Successifully</p>";
+                $response_array['message'] = "<p class='alert alert-success text-center'> Updated Successifully</p>";
             } else {
                 $response_array['status'] = "ERR";
                 $response_array['message'] = "<p class='alert alert-danger text-center'>FAILED: Loan Not Updated, Please try again</p>";
@@ -3998,6 +4105,9 @@ public function authenticateUser($permissions)
 
             $result = $this->flexperformance_model->update_loan($updates, $loanID);
             if ($result == true) {
+                $autheniticateduser = auth()->user()->emp_id;
+         $auditLog = SysHelpers::AuditLog(2, "Loan info updated by " . $autheniticateduser, $request);
+
                 echo "<p class='alert alert-success text-center'>Application Updated Successifully</p>";
             } else {
                 echo "<p class='alert alert-warning text-center'>Application Update FAILED, Please Try Again</p>";
@@ -4851,6 +4961,8 @@ public function authenticateUser($permissions)
                 );
                 $result = $this->flexperformance_model->addpaye($data);
                 if ($result) {
+                    $autheniticateduser = auth()->user()->emp_id;
+         $auditLog = SysHelpers::AuditLog(2, "Paye added  by " . $autheniticateduser, $request);
                     $response_array['status'] = "OK";
                     $response_array['title'] = "SUCCESS";
                     $response_array['message'] = "<p class='alert alert-success text-center'>Branch Added Successifully</p>";
@@ -4908,6 +5020,8 @@ public function authenticateUser($permissions)
                 );
                 $result = $this->flexperformance_model->updatepaye($updates, $payeID);
                 if ($result) {
+                    $autheniticateduser = auth()->user()->emp_id;
+         $auditLog = SysHelpers::AuditLog(2, "Payee updated by " . $autheniticateduser, $request);
                     // $this->flexperformance_model->audit_log("Updated PAYE Brackets");
                     $response_array['status'] = "OK";
                     $response_array['title'] = "SUCCESS";
@@ -4941,6 +5055,8 @@ public function authenticateUser($permissions)
             );
             $result = $this->flexperformance_model->updateCommonDeductions($updates, $allowanceID);
             if ($result == true) {
+                $autheniticateduser = auth()->user()->emp_id;
+         $auditLog = SysHelpers::AuditLog(2, "Overtime allowance updated by " . $autheniticateduser, $request);
                 echo "<p class='alert alert-success text-center'>Updated Successifully</p>";
             } else {
                 echo "<p class='alert alert-danger text-center'>Updation Failed, Please Try Again</p>";
@@ -5301,6 +5417,8 @@ public function authenticateUser($permissions)
         $result = $this->flexperformance_model->addAllowance($data);
 
         if ($result == true) {
+            $autheniticateduser = auth()->user()->emp_id;
+         $auditLog = SysHelpers::AuditLog(2, "New allowance created by " . $autheniticateduser, $request);
             // $this->flexperformance_model->audit_log("Created New Allowance ");
             return back()->with('success', 'Saved');
             // echo "<p class='alert alert-success text-center'>Allowance Registered Successifully</p>";
@@ -5338,6 +5456,8 @@ public function authenticateUser($permissions)
             );
             $result = $this->flexperformance_model->addOvertimeCategory($data);
             if ($result == true) {
+                $autheniticateduser = auth()->user()->emp_id;
+         $auditLog = SysHelpers::AuditLog(2, "Overtime category added by " . $autheniticateduser, $request);
                 // $this->flexperformance_model->audit_log("Created New Overtime ");
                 echo "<p class='alert alert-success text-center'>Overtime Registered Successifully</p>";
             } else {
@@ -5377,6 +5497,8 @@ public function authenticateUser($permissions)
         );
 
         DB::table('deductions')->insert($data);
+        $autheniticateduser = auth()->user()->emp_id;
+         $auditLog = SysHelpers::AuditLog(2, "Deduction added by " . $autheniticateduser, $request);
 
         echo "Record inserted successfully.<br/>";
 
@@ -5451,9 +5573,13 @@ public function authenticateUser($permissions)
 
             $allowanceName = DB::table('allowances')->select('name')->where('id', $request->input('allowance'))->limit(1)->first();
 
+
+
             // SysHelpers::FinancialLogs($data['empID'], 'Assign ' . $allowanceName->name, '0.00', ($data['amount'] != 0) ? $data['amount'] . ' ' . $data['currency'] : $data['percent'] . '%', 'Payroll Input');
 
             if ($result == true) {
+                $autheniticateduser = auth()->user()->emp_id;
+         $auditLog = SysHelpers::AuditLog(2, "Allowance assigned by " . $autheniticateduser, $request);
                 // $this->flexperformance_model->audit_log("Assigned an allowance to Employee with Id = " . $request->input('empID') . " ");
                 echo "<p class='alert alert-success text-center'>Added Successifully!</p>";
             } else {
@@ -5611,6 +5737,8 @@ public function authenticateUser($permissions)
 
             if ($result == true) {
                 // $this->flexperformance_model->audit_log("Assigned an allowance to Group with Id = " . $request->input('group') . " ");
+                $autheniticateduser = auth()->user()->emp_id;
+         $auditLog = SysHelpers::AuditLog(2, "Allowance group assigned by " . $autheniticateduser, $request);
                 echo "<p class='alert alert-success text-center'>Added Successifully!</p>";
             } else {
                 echo "<p class='alert alert-danger text-center'>Not Added, Try Again</p>";
@@ -5620,7 +5748,7 @@ public function authenticateUser($permissions)
 
     public function remove_individual_from_allowance(Request $request)
     {
-
+        
         $method = $request->method();
 
         if ($method == "POST") {
@@ -5646,6 +5774,8 @@ public function authenticateUser($permissions)
                     $result = $this->flexperformance_model->remove_individual_from_allowance($empID, $allowanceID);
                 }
                 if ($result == true) {
+                    $autheniticateduser = auth()->user()->emp_id;
+         $auditLog = SysHelpers::AuditLog(2, "Employee was removed from allowance by " . $autheniticateduser, $request);
                     //  $this->flexperformance_model->audit_log("Removed Employees of IDs = " . implode(',', $arr) . " From an allowance  with Id = " . $allowanceID . " ");
                     echo "<p class='alert alert-success text-center'>Added Successifully!</p>";
                 } else {
@@ -5673,6 +5803,8 @@ public function authenticateUser($permissions)
                     $result = $this->flexperformance_model->remove_group_from_allowance($groupID, $allowanceID);
                 }
                 if ($result == true) {
+                    $autheniticateduser = auth()->user()->emp_id;
+         $auditLog = SysHelpers::AuditLog(2, "Allowance removed from group " . $autheniticateduser, $request);
                     // $this->flexperformance_model->audit_log("Removed Group of ID = " . implode(',', $arr) . " From Alowance with Id = " . $allowanceID . " ");
                     echo "<p class='alert alert-warning text-center'>Group Removed </p>";
                 } else {
@@ -6986,6 +7118,7 @@ public function authenticateUser($permissions)
     public function addEmployee(Request $request)
     {
         $this->authenticateUser('add-employee');
+
         $data['pdrop'] = $this->flexperformance_model->positiondropdown();
         $data['contract'] = $this->flexperformance_model->contractdrop();
         $data['ldrop'] = $this->flexperformance_model->linemanagerdropdown();
@@ -7135,6 +7268,8 @@ public function authenticateUser($permissions)
 
     public function download_payslip()
     {
+
+        $this->authenticateUser('print-pension-summary');
 
         $data['month_list'] = $this->flexperformance_model->payroll_month_list();
 
@@ -7536,6 +7671,9 @@ public function authenticateUser($permissions)
 
     public function grievances(Request $request)
     {
+
+        $this->authenticateUser('view-grivences');
+
         $empID = auth()->user()->emp_id;
         $data['title'] = 'Grievances and Disciplinary';
         $data['my_grievances'] = $this->flexperformance_model->my_grievances($empID);
@@ -7579,6 +7717,8 @@ public function authenticateUser($permissions)
                 }
 
                 $this->flexperformance_model->add_grievance($data);
+                $autheniticateduser = auth()->user()->emp_id;
+               $auditLog = SysHelpers::AuditLog(2, "Grievance  added by " . $autheniticateduser, $request);
                 session('note', "<p class='alert alert-success text-center'>Your Grievance has been Submitted Successifully</p>");
                 return redirect('/flex/grievances');
             } else {
@@ -7604,6 +7744,8 @@ public function authenticateUser($permissions)
                 }
 
                 $this->flexperformance_model->add_grievance($data);
+                $autheniticateduser = auth()->user()->emp_id;
+        $auditLog = SysHelpers::AuditLog(2, "Grievance  added by " . $autheniticateduser, $request);
                 session('note', "<p class='alert alert-success text-center'>Your Grievance has been Submitted Successifully</p>");
                 return redirect('/flex/grievances');
             }
@@ -7618,7 +7760,7 @@ public function authenticateUser($permissions)
             $data['logs'] = $this->flexperformance_model->audit_logs();
 
             // selecting audit trail for someone who deleted all tha audit logs
-            $data['purge_logs'] = $this->flexperformance_model->audit_purge_logs();
+            // $data['purge_logs'] = $this->flexperformance_model->audit_purge_logs();
 
             $data['parent'] = "Settings";
             $data['child'] = "Audit Log";
@@ -8239,7 +8381,7 @@ public function authenticateUser($permissions)
     }
 
     // For Saving Termination
-    public function saveTermination(Request $request)
+    public function saveTermination122(Request $request)
     {
         if ($request->employeeID == $request->deligated) {
             return redirect()->back()->with(['error' => 'Terminated and deligated should not be the same person']);
@@ -8420,6 +8562,189 @@ public function authenticateUser($permissions)
         // }
         return redirect('flex/termination')->with('status', $msg);
     }
+
+
+     // For Saving Termination
+     public function saveTermination(Request $request)
+     {
+         if ($request->employeeID == $request->deligated) {
+             return redirect()->back()->with(['error' => 'Terminated and deligated should not be the sane person']);
+         }
+         $this->authenticateUser('add-termination');
+         // request()->validate(
+         //     [
+         //         'employeeID' => 'required',
+         //         'terminationDate' => 'required',
+         //         'reason' => 'required',
+         //         'salaryEnrollment' => 'required',
+         //         'normalDays' => 'required',
+         //         'publicDays' => 'required',
+         //         'noticePay' => 'required',
+         //         'leavePay' => 'required',
+         //         'livingCost' => 'required',
+         //         'houseAllowance' => 'required',
+         //         'utilityAllowance' => 'required',
+         //         'tellerAllowance' => 'required',
+         //         'serevancePay' => 'required',
+         //         'leaveStand' => 'required',
+         //         'arrears' => 'required',
+         //         'exgracia' => 'required',
+         //         'bonus' => 'required',
+         //         'longServing' => 'required',
+         //         'salaryAdvance' => 'required',
+         //         'otherDeductions' => 'nullable',
+         //         'otherPayments' => 'nullable',
+         //     ]
+         // );
+         $employeeID = $request->employeeID;
+         $terminationDate = $request->terminationDate;
+         $reason = $request->reason;
+         $salaryEnrollment = $request->salaryEnrollment;
+         $normalDays = $request->normalDays;
+         $publicDays = $request->publicDays;
+         $noticePay = $request->noticePay;
+         $leavePay = $request->leavePay;
+         $livingCost = $request->livingCost;
+         $houseAllowance = $request->houseAllowance;
+         $utilityAllowance = $request->utilityAllowance;
+         $leaveAllowance = $request->leaveAllowance;
+         $tellerAllowance = $request->tellerAllowance;
+         $serevancePay = $request->serevancePay;
+         $leaveStand = $request->leaveStand;
+         $arrears = $request->arrears;
+         $exgracia = $request->exgracia;
+         $bonus = $request->bonus;
+         $longServing = $request->longServing;
+         $salaryAdvance = $request->salaryAdvance;
+         $otherDeductions = $request->otherDeductions;
+         $otherPayments = $request->otherPayments;
+         $employee_actual_salary = $request->employee_actual_salary;
+         $loan_balance = $request->loan_balance;
+         $nightshift_allowance = $request->nightshift_allowance;
+         $transport_allowance = $request->transport_allowance;
+
+         $termination = new Termination();
+         $termination->employeeID = $request->employeeID;
+         $termination->terminationDate = $request->terminationDate;
+         $termination->reason = $request->reason;
+         $termination->salaryEnrollment = $request->salaryEnrollment;
+         $termination->normalDays = $request->normalDays;
+         $termination->publicDays = $request->publicDays;
+         $termination->noticePay = $request->noticePay;
+         $termination->leavePay = $request->leavePay;
+         $termination->livingCost = $request->livingCost;
+         $termination->houseAllowance = $request->houseAllowance;
+         $termination->utilityAllowance = $request->utilityAllowance;
+         $termination->leaveAllowance = $request->leaveAllowance;
+         $termination->tellerAllowance = $request->tellerAllowance;
+         $termination->serevancePay = $request->serevancePay;
+         $termination->leaveStand = $request->leaveStand;
+         $termination->arrears = $request->arrears;
+         $termination->exgracia = $request->exgracia;
+         $termination->transport_allowance = $request->transport_allowance;
+         $termination->nightshift_allowance = $request->nightshift_allowance;
+         $termination->bonus = $request->bonus;
+         $termination->actual_salary = $employee_actual_salary;
+         $termination->longServing = $request->longServing;
+         $termination->salaryAdvance = $request->salaryAdvance;
+         $termination->otherDeductions = $request->otherDeductions;
+         $termination->otherPayments = $request->otherPayments;
+
+         $msg = "Employee Termination Benefits have been saved successfully";
+
+         $calendar = $request->terminationDate;
+         $datewell = explode("-", $calendar);
+         $mm = $datewell[1];
+         $dd = $datewell[0];
+         $yyyy = $datewell[2];
+         $payroll_date = $yyyy . "-" . $mm . "-" . $dd;
+         $payroll_month = $yyyy . "-" . $mm;
+         $empID = auth()->user()->emp_id;
+         $today = date('Y-m-d');
+
+         $normal_days_overtime_amount = ($employee_actual_salary / 176) * 1.5 * $normalDays;
+         $public_overtime_amount = ($employee_actual_salary / 176) * 2.0 * $publicDays;
+
+         $total_gross = $salaryEnrollment +
+             $normal_days_overtime_amount +
+             $public_overtime_amount +
+             $noticePay +
+             $leavePay +
+             $livingCost +
+             $houseAllowance +
+             $utilityAllowance +
+             $leaveAllowance +
+             $tellerAllowance +
+             $serevancePay +
+             $arrears +
+             $exgracia +
+             $bonus +
+             $longServing +
+             $transport_allowance +
+             $nightshift_allowance +
+             $otherPayments;
+
+         //overtime calculation
+
+         //check whether if is after payroll or before payroll
+         $check_termination_date = $this->flexperformance_model->check_termination_payroll_date($payroll_month);
+         //get employee basic salary
+         //$overtime_amount = $this->flexperformance_model->get_overtime($normalDays,$publicDays,$employeeID);
+         $overtime_amount = $normal_days_overtime_amount + $public_overtime_amount;
+
+         // if ($check_termination_date == false) {
+         $net_pay = 0;
+         $take_home = 0;
+         // $total_gross = 0;
+         $taxable = 0;
+
+         $pension_employer = $this->flexperformance_model->get_pension_employer($salaryEnrollment, $leavePay, $arrears, $overtime_amount, $employeeID);
+
+         $pension_employee = $this->flexperformance_model->get_pension_employee($salaryEnrollment, $leavePay, $arrears, $overtime_amount, $employeeID);
+
+         $total_deductions = $salaryAdvance;
+         //+ $otherDeductions
+
+         $net_pay = $total_gross - $total_deductions;
+
+         //$net_pay = $total_gross - $total_deductions;
+
+         // $taxable = ($net_pay - $pension_employee);
+         $taxable = ($total_gross - $pension_employee);
+         //$taxable = ($taxable < 0) ? -1*$taxable:$taxable;
+
+         $paye1 = DB::table('paye')->where('maximum', '>', $taxable)->where('minimum', '<=', $taxable)->first();
+
+         $deduction_rate = $this->flexperformance_model->get_deduction_rate();
+
+         $paye = $paye1->excess_added + $paye1->rate * ($taxable - $paye1->minimum);
+         $take_home = $taxable - $paye;
+
+         $termination->total_gross = $total_gross;
+         //wcf and sdl
+         $termination->wcf = $total_gross * $deduction_rate['wcf'];
+         $termination->sdl = $total_gross * $deduction_rate['sdl'];
+
+         $termination->loan_balance = $loan_balance;
+
+         $termination->taxable = $taxable;
+         $termination->normal_days_overtime_amount = $normal_days_overtime_amount;
+         $termination->public_overtime_amount = $public_overtime_amount;
+         $termination->paye = $paye;
+         $termination->pension_employee = $pension_employee;
+         $termination->net_pay = $net_pay;
+         $termination->take_home = $take_home;
+         $termination->total_deductions = $total_deductions;
+         $termination->save();
+         // $pentionable_amount =$salaryEnrollment + $leavePay + $arrears + overtime_amount;
+         // } else {
+
+         //     dd('YES');
+         // }
+         return redirect('flex/termination')->with('status', $msg);
+     }
+
+
 
     // For Aprroving termination
     public function approveTermination($id)
@@ -10585,6 +10910,10 @@ public function authenticateUser($permissions)
         $approval->save();
 
         $msg = "Leave Approval has been added Successfully !";
+
+        $autheniticateduser = auth()->user()->emp_id;
+        $auditLog = SysHelpers::AuditLog(1, "New Leave approval with id" .$approval->id. "by " . $autheniticateduser, $request);
+
         return redirect('flex/leave-approvals')->with('msg', $msg);
     }
 
@@ -10777,6 +11106,10 @@ public function authenticateUser($permissions)
             $this->authenticateUser('edit-employee');
         }
         $project->delete();
+          $request = new Request();
+         $autheniticateduser = auth()->user()->emp_id;
+         $auditLog = SysHelpers::AuditLog(2, "Grievance canceled by " . $autheniticateduser, $request);
+
 
         return redirect('flex/my-grievences');
     }
@@ -10791,6 +11124,9 @@ public function authenticateUser($permissions)
 
         $grievance->status = 1;
         $grievance->update();
+        $request = new Request();
+        $autheniticateduser = auth()->user()->emp_id;
+        $auditLog = SysHelpers::AuditLog(2, "Grievance resolved by " . $autheniticateduser, $request);
 
         $msg = "Grievance is resolved successfully!";
 
@@ -10807,6 +11143,9 @@ public function authenticateUser($permissions)
 
         $grievance->status = 0;
         $grievance->update();
+        $autheniticateduser = auth()->user()->emp_id;
+        $request = new Request();
+         $auditLog = SysHelpers::AuditLog(2, "Grievance unresolved by " . $autheniticateduser, $request);
 
         $msg = "Grievance is un-resolved successfully!";
 
@@ -10838,6 +11177,8 @@ public function authenticateUser($permissions)
         }
         $grievance->status = 1;
         $grievance->update();
+        $autheniticateduser = auth()->user()->emp_id;
+         $auditLog = SysHelpers::AuditLog(2, "Grievance updated by " . $autheniticateduser, $request);
 
         $msg = "Grievance Feedback was Added successfully!";
 
@@ -10868,7 +11209,7 @@ public function authenticateUser($permissions)
         $data['title'] = "Overtime";
         $data['my_overtimes'] = $this->flexperformance_model->my_overtimes(auth()->user()->emp_id);
         $data['overtimeCategory'] = $this->flexperformance_model->overtimeCategory();
-        $data['employees'] = $this->flexperformance_model->Employee();
+        $data['employees'] = $this->flexdperformance_model->Employee();
 
         $data['line_overtime'] = $this->flexperformance_model->approvedOvertimes();
 
@@ -10923,6 +11264,8 @@ public function authenticateUser($permissions)
     public function save_grievance(Request $request)
     {
 
+        $this->authenticateUser('add-grivance');
+
         request()->validate(
             [
 
@@ -10950,6 +11293,10 @@ public function authenticateUser($permissions)
         }
         $grievance->anonymous = $request->anonymous == true ? '1' : '0';
         $grievance->save();
+
+        $autheniticateduser = auth()->user()->emp_id;
+        $auditLog = SysHelpers::AuditLog(2, "Grievance  added by " . $autheniticateduser, $request);
+
 
         return redirect('flex/my-grievences');
     }
@@ -12151,6 +12498,7 @@ public function authenticateUser($permissions)
     public function employee_profiles()
     {
 
+$this->authenticateUser('view-Talent');
         $data['employees'] = EMPL::where('state', '1')->get();
         return view('talent.profiling', $data);
     }
@@ -12339,6 +12687,8 @@ public function authenticateUser($permissions)
 
     public function loan_types()
     {
+        $this->authenticateUser('view-loan-type');
+
         $data['loan_types'] = LoanType::all();
         // dd($data);
         return view('loans.loan_types', $data);
@@ -12346,6 +12696,10 @@ public function authenticateUser($permissions)
 
     public function saveLoanType(Request $request)
     {
+
+        $this->authenticateUser('add-loan-type');
+
+
         request()->validate(
             [
                 'name' => 'required',

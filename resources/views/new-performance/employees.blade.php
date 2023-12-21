@@ -39,9 +39,6 @@
 
                         <div class="modal-body">
                             <div class="row mb-3">
-
-
-
                                 <input type="hidden" name="oldRate" class="form-control" id="oldRate">
 
                                 <input type="hidden" name="oldSalary" class="form-control" id="oldsalary">
@@ -53,18 +50,9 @@
                                             <option value="{{ $item->emp_id }}">{{ $item->emp_id  }} | {{ $item->fname }} {{ $item->mname }} {{ $item->lname }}</option>
                                             @endforeach
                                         </select>
-
-
-
-
                                     </div>
                                 </div>
-                         
-
-
                             </div>
-
-
                         </div>
 
                         <div class="modal-footer">
