@@ -411,7 +411,7 @@
 
                                 <span class="text-muted">NET PAY </span>
                                 <span class="font-weight-bold">
-                                    {{ number_format($termination->taxable - $termination->paye, 2) }}
+                                    {{ number_format($termination->total_gross - ($termination->pension_employee + $termination->paye + $termination->otherDeductions), 2) }}
                                 </span>
                             </li>
 
