@@ -26,7 +26,7 @@
                     <div class="card-header py-3">
                         <h5><?php echo $groupName; ?> &nbsp;&nbsp;(<b> <?php echo $headcounts; ?> Employees</b>) </h5>
 
-                        <div class="col-md-6 col-sm-12 col-xs-12">
+                        {{-- <div class="col-md-6 col-sm-12 col-xs-12">
                             <form id="updateGroup" enctype="multipart/form-data" autocomplete="off" method="post"
                                 data-parsley-validate class="form-horizontal form-label-left">
                                 <div class="form-group">
@@ -42,7 +42,7 @@
                                     </div>
                                 </div>
                             </form>
-                        </div>
+                        </div> --}}
 
                     </div>
 
