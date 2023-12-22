@@ -21,47 +21,7 @@
         <div class="row">
             <div class="col-lg-12">
                 <div class="card">
-                    <ul class="nav nav-tabs nav-tabs-underline nav-justified mb-3" id="tabs-target-right" role="tablist">
-                        <li class="nav-item" role="presentation">
-                            <a href="{{ url('/flex/financial_group') }}" class="nav-link active show" aria-selected="false"
-                                role="tab" tabindex="-1">
-                                <i class="ph-list me-2"></i>
-                                Packages
-                            </a>
-                        </li>
-
-                        <li class="nav-item" role="presentation">
-                            <a href="{{ url('/flex/allowance_overtime') }}" class="nav-link" aria-selected="false"
-                                role="tab" tabindex="-1">
-                                <i class="ph-list me-2"></i>
-                                Overtime
-                            </a>
-                        </li>
-
-                        <li class="nav-item" role="presentation">
-                            <a href="{{ url('/flex/allowance') }}" class="nav-link" aria-selected="false" role="tab"
-                                tabindex="-1">
-                                <i class="ph-list me-2"></i>
-                                Allowance
-                            </a>
-                        </li>
-
-                        <li class="nav-item" role="presentation">
-                            <a href="{{ url('/flex/statutory_deductions') }}" class="nav-link" aria-selected="false"
-                                role="tab" tabindex="-1">
-                                <i class="ph-list me-2"></i>
-                                Statutory Deductions
-                            </a>
-                        </li>
-
-                        <li class="nav-item" role="presentation">
-                            <a href="{{ url('/flex/non_statutory_deductions') }}" class="nav-link" aria-selected="false"
-                                role="tab" tabindex="-1">
-                                <i class="ph-list me-2"></i>
-                                Non Statutory Deductions
-                            </a>
-                        </li>
-                    </ul>
+                    @include('app.headers_payroll_input')
 
                     <div class="card-header py-3">
                         <h5><?php echo $groupName; ?> &nbsp;&nbsp;(<b> <?php echo $headcounts; ?> Employees</b>) </h5>
@@ -158,12 +118,12 @@
                         <form id="addToGroup" method="post">
                             @csrf
                             <input type="text" name="groupID" hidden="" value="<?php echo $groupID; ?>">
-                            <input type="text" name="groupName" value="<?php echo $groupName; ?>" class="form-control">
+                            {{-- <input type="text" name="groupName" value="" class="form-control"> --}}
                             <input type="hidden" name="option" id="option" value="" class="form-control">
 
 
 
-                            <table id="datatable-keytable" class="table">
+                            <table id="datatable-keytable" class="table table-bordered datatable-basic">
                                 <thead>
                                     <tr>
                                         <th>S/N</th>
