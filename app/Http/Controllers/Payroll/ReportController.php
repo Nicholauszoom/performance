@@ -503,7 +503,7 @@ class ReportController extends Controller
     {
 
 
-        $id = base64_decode($request->emp_id);
+        $id = $request->emp_id;
 
 
         if ($id != auth()->user()->emp_id) {

@@ -24,15 +24,17 @@ class PushNotificationController extends Controller
         return response()->json($push_notifications, 200);
      }
      public static function bulksend($title, $body, $img, $id)
-{
+    {
     $user = auth()->user()->emp_id;
 
     $employee = EMPL::where('emp_id', $user)->first();
-
+ 
     $comment = new PushNotification();
     $comment->title = $title;
     $comment->body = $body;
     $comment->image = $img;
+    $comment->receiver_emp_id=$id;
+    $comment->sender_emp_id=$user;
     $comment->save();
 
     $fcmServerKey = 'AAAAOqacTg8:APA91bHAbmLdf_oh9Wr_DaHhvznWVB4uLDloVvq0RKRfzXmXFlYSCX4ecsm4Dkb656XRo7PBa1mrkHkrQ1w9sfLsnni-y_KNYe-F7T9GeiIhC5qCg-3r1jwJLk8Z4xz5kvEK3VLOBzoQ';
@@ -173,9 +175,12 @@ class PushNotificationController extends Controller
         }
     }
 
-    public function create()
+    public function test()
     {
-        return view('notification.create');
+        $user = auth()->user()->emp_id;
+        PushNotificationController::bulksend("Testing Notification",
+        "Your Leave request is successful granted",
+      "",$user);
     }
 
     public function destroy(PushNotification $pushNotification)
