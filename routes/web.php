@@ -129,6 +129,7 @@ Route::middleware('verify-outgoing-requests')->group(function () {
             //start of disciplinary actions routes
             Route::any('/grievancesCompain', 'grievancesComplains')->name('flex.grievancesCompain');
             Route::any('/add-action', 'addDisciplinary')->name('flex.addDisciplinary');
+            Route::post('/addBulkDisciplinary', 'addBulkDisciplinary')->name('flex.addBulkDisciplinary');
             Route::any('/save-action', 'saveDisciplinary')->name('flex.saveDisciplinary');
             Route::any('/view-action/{id}', 'viewDisciplinary')->name('flex.viewDisciplinary');
             Route::any('/edit-action/{id}', 'editDisciplinary')->name('flex.editDisciplinary');
