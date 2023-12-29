@@ -37,9 +37,9 @@ class PushNotificationController extends Controller
     $comment->sender_emp_id=$user;
     $comment->save();
 
-    $fcmServerKey = 'AAAAOqacTg8:APA91bHAbmLdf_oh9Wr_DaHhvznWVB4uLDloVvq0RKRfzXmXFlYSCX4ecsm4Dkb656XRo7PBa1mrkHkrQ1w9sfLsnni-y_KNYe-F7T9GeiIhC5qCg-3r1jwJLk8Z4xz5kvEK3VLOBzoQ';
+    $fcmServerKey = env('FCM_SERVER_KEY');
 
-    $deviceTokens = [$employee->device_token];
+    $deviceTokens = ['c4veT2s8SYqMatqsKyrPrF:APA91bHMAGsv4lYeuRrM0wrJDhMWAxrp_Jy1HRgvukhUoBOB68YNgxzlmbyusZU4xtSTyNSWV4-nEe9JUwMtyJp8urI735ZWemKol5Inn5CkdrMy5aeWgyrHa9NX-QG-56ERsuDUz8_b'];
 
     $notification = [
         'title' => $title,

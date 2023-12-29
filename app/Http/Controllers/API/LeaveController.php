@@ -57,7 +57,7 @@ class LeaveController extends Controller
 {
     // Print the value of auth()->check()
     
-
+   
     $id=auth()->user()->emp_id;
     $today = date('Y-m-d');
     $arryear = explode('-',$today);
