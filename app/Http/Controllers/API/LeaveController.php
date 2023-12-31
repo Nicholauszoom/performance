@@ -745,11 +745,19 @@ class LeaveController extends Controller
             'email' => $emp_data->email,
             'full_name' => $emp_data->fname,' '.$emp_data->mname.' '.$emp_data->lname,
         );
+      
 
         try {
-          PushNotificationController::bulksend("Leave Approval",
-        "Your Leave request is successful granted",
-      "",$empID);
+          PushNotificationController::bulksend([
+            'title' => '3',
+            'body' =>'Your leave request is successful approved',
+            'img' => '',
+            'id' => $empID,
+            'leave_id' => $leave->id,
+            'overtime_id' => '',
+           
+            ]);
+          
 
             Notification::route('mail', $emp_data->email)->notify(new EmailRequests($email_data));
 
@@ -821,6 +829,7 @@ class LeaveController extends Controller
     $id=$request->id;
     $message = $request ->message;
 
+
     $data=   $id.'|'.$message;
     $result = explode('|', $data);
     if (count($result) > 1) {
@@ -833,11 +842,17 @@ class LeaveController extends Controller
 
     $leaveID = $id;
 
+
     $leave=Leaves::where('id',$leaveID)->first();
-    if($leave != null) {
    
+    if($leave != null) {
+
+     
     if($id!=''  && $leave -> state == 1){
+  
       if($info != ''){
+     
+
         $leave->position = 'Denied by '. SysHelpers::getUserPosition(Auth::user()->position);
         $leave->state = 5;
         $leave->level1 = Auth::user()->id;
@@ -864,19 +879,23 @@ class LeaveController extends Controller
              
         }
          }
-    }
-    else if ($info == ''){
-      $leave->state = 4;
-      $leave->position = 'Cancelled by you';
-      $leave->save();
-      $msg="Leave cancellation is successfully!";
-      return response(['msg'=>$msg],200);
+         else if ($info == ''){
+ 
+          $leave->state = 4;
+        
+          $leave->position = 'Cancelled by you';
+          $leave->save();
+          $msg="Leave cancellation is successfully!";
+          return response(['msg'=>$msg],200);
+        }
+    }  else{
+
+      $msg="Leave cancellation failed!";
+      return response(['msg'=>$msg],400);
     }
   
-   else{
-  $msg="Leave cancellation failed!";
-  return response(['msg'=>$msg],400);
-}
+  
+ 
     }
     else{
       $msg="That leave does not exist";

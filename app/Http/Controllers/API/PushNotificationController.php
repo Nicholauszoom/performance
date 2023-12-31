@@ -3,6 +3,7 @@ namespace App\Http\Controllers\API;
 
 use App\Models\EMPL;
 use App\Models\Employee;
+use App\Models\NotificationTitle;
 
 use Illuminate\Http\Request;
 use App\Models\PushNotification;
@@ -18,40 +19,42 @@ class PushNotificationController extends Controller
         // $this->data = $email_data;
     }
 
-    public function index()
+  
+    public static function bulksend($params)
     {
-        $push_notifications = PushNotification::orderBy('created_at', 'desc')->get();
-        return response()->json($push_notifications, 200);
-     }
-     public static function bulksend($title, $body, $img, $id)
-    {
-    $user = auth()->user()->emp_id;
+        try {
+            $user = auth()->user()->emp_id;
+    
+            $employee = EMPL::where('emp_id', $params['id'])->first();
+            // dd($params['id']);
+            $comment = new PushNotification();
+            $comment->title = $params['title'] ?? null;
+            $comment->body = $params['body'] ?? null;
+            $comment->image= $params['img'] ?? null;
+            $comment->receiver_emp_id = $params['id'] ?? null;
+            $comment->leave_id = $params['leave_id'] ?? null;
+            $comment->overtime_id = $params['overtime_id'] ?? null;
+            $comment->sender_emp_id=$user;
+            $comment->save();
 
-    $employee = EMPL::where('emp_id', $user)->first();
- 
-    $comment = new PushNotification();
-    $comment->title = $title;
-    $comment->body = $body;
-    $comment->image = $img;
-    $comment->receiver_emp_id=$id;
-    $comment->sender_emp_id=$user;
-    $comment->save();
 
-    $fcmServerKey = env('FCM_SERVER_KEY');
+            $fcmServerKey = env('FCM_SERVER_KEY');
+            // $fcmServerKey = 'AAAAOqacTg8:APA91bHAbmLdf_oh9Wr_DaHhvznWVB4uLDloVvq0RKRfzXmXFlYSCX4ecsm4Dkb656XRo7PBa1mrkHkrQ1w9sfLsnni-y_KNYe-F7T9GeiIhC5qCg-3r1jwJLk8Z4xz5kvEK3VLOBzoQ';
 
-    $deviceTokens = ['c4veT2s8SYqMatqsKyrPrF:APA91bHMAGsv4lYeuRrM0wrJDhMWAxrp_Jy1HRgvukhUoBOB68YNgxzlmbyusZU4xtSTyNSWV4-nEe9JUwMtyJp8urI735ZWemKol5Inn5CkdrMy5aeWgyrHa9NX-QG-56ERsuDUz8_b'];
-
+    $deviceTokens = [$employee->device_token];
+    $new_title= NotificationTitle::where('id',$comment->title)->get()->first();
+  
     $notification = [
-        'title' => $title,
-        'body' => $body,
-        'image' => $img,
+        'title' => $new_title->title,
+        'body' => $params['body'] ,
+        'image' =>  '',
         'sound' => 'default',
         'badge' => '1',
     ];
 
     $data = [
         'click_action' => 'FLUTTER_NOTIFICATION_CLICK',
-        'id' => $id,
+        'id' =>   $comment->receiver_emp_id,
         'status' => 'done',
     ];
 
@@ -66,7 +69,7 @@ class PushNotificationController extends Controller
         'Authorization: key=' . $fcmServerKey,
         'Content-Type: application/json',
     ];
-
+   
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_URL, 'https://fcm.googleapis.com/fcm/send');
     curl_setopt($ch, CURLOPT_POST, true);
@@ -75,78 +78,21 @@ class PushNotificationController extends Controller
     curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($payload));
     $result = curl_exec($ch);
     curl_close($ch);
-
-    return response()->json([
-        'msg' => 'Notification sent successfully',
-        'result' => $result
-    ], 200);
-}
-
-//     public static function bulksend(Request $req)
-//     {
-//         $user = auth()->user()->emp_id;
-
-//     //   $deviceToken = $request->input('device_token');
-
-//      //   $employee = Employee::find($employeeId);
-//      $employee = EMPL::where('emp_id', $user)->first();
-
-//         $comment = new PushNotification();
-//         $comment->title = $req->input('title');
-//         $comment->body = $req->input('body');
-//         $comment->image = $req->input('img');
-//         $comment->save();
-
-
-//         // Construct FCM payload
-//        // $fcmServerKey = config('app.fcm_server_key');
-//       // $employee = Employee::find($employeeId);
-//        $fcmServerKey='AAAAOqacTg8:APA91bHAbmLdf_oh9Wr_DaHhvznWVB4uLDloVvq0RKRfzXmXFlYSCX4ecsm4Dkb656XRo7PBa1mrkHkrQ1w9sfLsnni-y_KNYe-F7T9GeiIhC5qCg-3r1jwJLk8Z4xz5kvEK3VLOBzoQ';
-//       //  $deviceTokens = ['e2-zE6WPRPGLXpcI52ptwh:APA91bH8aGxf6RG7Tjw4XJeQA141K6RpEsxqi4zoV2q-pDSqUf3-suNim9fZQYMlJi0JyFRnEmtgZ7L-MGJOSbTbMwE0F807Tqr4kxUFtLJOPeYLKpppgjwcvwRTGWvnccl2ZtqSbdCH']; // Replace with actual device tokens
-// $deviceTokens=[$employee->device_token];
-//         $notification = [
-//             'title' => $req->title,
-//             'body' => $req->body,
-//             'image' => $req->img,
-//             'sound' => 'default',
-//             'badge' => '1',
-//         ];
-
-//         $data = [
-//             'click_action' => 'FLUTTER_NOTIFICATION_CLICK',
-//             'id' => $req->id,
-//             'status' => 'done',
-//         ];
-
-//         $payload = [
-//             'registration_ids' => $deviceTokens,
-//             'notification' => $notification,
-//             'data' => $data,
-//             'priority' => 'high',
-//         ];
-
-//         $headers = [
-//             'Authorization: key=' . $fcmServerKey,
-//             'Content-Type: application/json',
-//         ];
-
-//         // Send FCM request
-//         $ch = curl_init();
-//         curl_setopt($ch, CURLOPT_URL, 'https://fcm.googleapis.com/fcm/send');
-//         curl_setopt($ch, CURLOPT_POST, true);
-//         curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-//         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-//         curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($payload));
-//         $result = curl_exec($ch);
-//         curl_close($ch);
-
-//         return response()->json([
-//             'msg' => 'Notification sent successfully',
-//             "result"=>$result
-//         ], 200);
-//     }
-
-
+   
+            return response([
+                'msg' => 'Notification sent successfully',
+                'result' => $result
+            ], 200);
+        } catch (\Exception $e) {
+            // Handle the exception here
+            return response([
+                'error' => 'Failed to send notification',
+                'message' => $e->getMessage(), // Include the error message if needed for debugging
+            ], 500); // Use appropriate HTTP status code based on the error
+        }
+       
+    }
+    
     public function updateDeviceToken(Request $request,)
     {
         $user = auth()->user()->emp_id;
@@ -178,10 +124,31 @@ class PushNotificationController extends Controller
     public function test()
     {
         $user = auth()->user()->emp_id;
-        PushNotificationController::bulksend("Testing Notification",
-        "Your Leave request is successful granted",
-      "",$user);
+        PushNotificationController::bulksend([
+            'title' => '3',
+            'body' =>'Your leave request is successful approved',
+            'img' => '',
+            'id' => '100281',
+            'leave_id' => '',
+            'overtime_id' => '',
+           
+            ]);
+          
     }
+    public function updateNotification(){
+        $user = auth()->user()->emp_id;
+        $push_notifications = PushNotification::orderBy('created_at', 'desc')->get();
+        $comment =  PushNotification::where('receiver_emp_id',$user)->orderBy('created_at','desc')->get();
+        $comment->status=1;
+        $comment->update();
+
+        dd(PushNotification::where('receiver_emp_id',$user)->orderBy('created_at','desc')->get());
+    }
+    public function getNotifications()
+    {
+        $push_notifications = PushNotification::orderBy('created_at', 'desc')->where('receiver_emp_id',auth->user()->emp_id)->get();
+        return response()->json($push_notifications, 200);
+     }
 
     public function destroy(PushNotification $pushNotification)
     {
