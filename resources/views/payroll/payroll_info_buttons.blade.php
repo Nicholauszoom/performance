@@ -33,13 +33,13 @@
                 Payroll Changes
             </button>
         </a>
-        <a class="ms-3"
+        {{-- <a class="ms-3"
             href="{{ route('reports.payroll_inputs', ['date' => $payroll_date, 'type' => 1, 'nature' => 1, 'payrollState' => $payrollState]) }}"
             target="blank">
             <button type="button" name="print" value="print" class="btn btn-main btn-sm">
                 Payroll Inputs
             </button>
-        </a>
+        </a> --}}
         @if ($payrollState == 2)
             <a href="javascript:void(0)" onclick="generate_checklist()" class="ms-3">
                 <button type="button" class="btn btn-main btn-sm" id="percal">
