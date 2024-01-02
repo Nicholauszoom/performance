@@ -70,7 +70,7 @@ class AttendanceController extends Controller
             // Redirect the user to the login page
             return redirect()->route('login');
         }
-    
+
         // Check if the authenticated user does not have the specified permissions
         if (!Gate::allows($permissions)) {
             // If not, abort the request with a 401 Unauthorized status code
@@ -360,7 +360,7 @@ class AttendanceController extends Controller
     }
 
 
-    
+
     public function annuaLeaveSummary($year)
     {
 
@@ -396,6 +396,7 @@ class AttendanceController extends Controller
 
         if ($year > date('Y')) {
             $daysAccrued = 0;
+            $outstandingLeaveBalance = 0;
         } elseif ($year < date('Y')) {
             if ($employeeHireYear == $year) {
                 $employeeDate = Auth::user()->hire_date;
@@ -404,7 +405,8 @@ class AttendanceController extends Controller
             }
             $endDate = $year . '-12-31';
             $daysAccrued = $this->attendance_model->getAccruedBalance(Auth::user()->emp_id, $employeeDate, $endDate);
-
+            $spent = $this->getspentDays(Auth::user()->emp_id, $year);
+            $outstandingLeaveBalance =  $daysAccrued  - $spent + $openingBalance - $forfeitDays;
         } else {
             if ($employeeHireYear == $year) {
                 $employeeDate = Auth::user()->hire_date;
@@ -412,12 +414,12 @@ class AttendanceController extends Controller
                 $employeeDate = $year . '-01-01';
             }
             $daysAccrued = $this->attendance_model->getAccruedBalance(Auth::user()->emp_id, $employeeDate, date('Y-m-d'));
-                // dd($daysAccrued);
+            $outstandingLeaveBalance = $this->attendance_model->getLeaveBalance(Auth::user()->emp_id, $employeeDate, date('Y-m-d'));
         }
         $data['Days Taken	'] = $this->getspentDays(Auth::user()->emp_id, $year);
 
 
-        $outstandingLeaveBalance = $this->attendance_model->getLeaveBalance(Auth::user()->emp_id, $employeeDate, date('Y-m-d'));
+
         $data['Accrued Days'] = number_format($daysAccrued ?? 0, 2);
         $data['Outstanding Leave Balance'] = number_format($outstandingLeaveBalance , 2) ;
         return response()->json($data);
@@ -598,11 +600,11 @@ class AttendanceController extends Controller
         request()->validate(
             [
 
-                // start of name information validation
+               // start of name information validation
 
-                //'mobile' => 'required|numeric',
-                // 'leave_address' => 'nullable|alpha',
-                // 'reason' => 'required|alpha',
+                'mobile' => 'required|numeric',
+                'leave_address' => 'nullable|alpha',
+                'reason' => 'required|alpha',
 
             ]);
         $start = $request->start;
@@ -692,7 +694,7 @@ class AttendanceController extends Controller
             }
 
             // Annual leave accurated days
-            $annualleaveBalance = $this->attendance_model->getLeaveBalance(Auth::user()->emp_id, Auth::user()->hire_date, date('Y-m-d'));
+            $annualleaveBalance = $this->attendance_model->getLeaveBalance(Auth::user()->emp_id, $employeeDate, date('Y-m-d'));
             // dd($annualleaveBalance);
             // For  Requested days
             if ($nature == 1) {

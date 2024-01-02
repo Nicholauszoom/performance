@@ -5748,7 +5748,7 @@ public function authenticateUser($permissions)
 
     public function remove_individual_from_allowance(Request $request)
     {
-        
+
         $method = $request->method();
 
         if ($method == "POST") {
@@ -10553,10 +10553,14 @@ public function authenticateUser($permissions)
             ]
         );
 
+        $year = date('Y');
+
         $emp_id = $request->emp_id;
         $leaveForfeiting = LeaveForfeiting::where('empID', $emp_id)->first();
         $leaveForfeiting->opening_balance = $request->opening_balance;
         $leaveForfeiting->days = $request->days;
+        $leaveForfeiting->adjusted_days = $request->opening_balance -  $request->days;
+        $leaveForfeiting->forfeiting_year = $year;
         $leaveForfeiting->update();
 
         $msg = "Employee Leave Forfeiting has been save Successfully !";
@@ -10584,7 +10588,9 @@ public function authenticateUser($permissions)
         $employees = Employee::get();
 
         $today = date('Y-m-d');
-        $year = date('Y');
+        $month = date('m');
+        $year = date('Y') - 1;
+
         $employeeHiredate = explode('-', Auth::user()->hire_date);
         $employeeHireYear = $employeeHiredate[0];
         $employeeDate = '';
@@ -10595,6 +10601,8 @@ public function authenticateUser($permissions)
             $employeeDate = $year . '-01-01';
         }
 
+
+
         foreach ($employees as $value) {
             $opening_balance = $this->attendance_model->getLeaveBalance($value->emp_id, $employeeDate, $year . '-12-31');
 
@@ -10602,7 +10610,7 @@ public function authenticateUser($permissions)
             $leave_forfeit = LeaveForfeiting::firstOrNew(['empID' => $value->emp_id]);
             $leave_forfeit->opening_balance = $opening_balance;
             $leave_forfeit->nature = 1; // Replace attribute1 with your actual attribute names
-            $leave_forfeit->opening_balance_year = $year;
+            $leave_forfeit->opening_balance_year = $year +1;
             $leave_forfeit->save();
         }
 
@@ -10936,7 +10944,7 @@ public function authenticateUser($permissions)
         // dd($id);
         $data['leaveForfeitings'] = LeaveForfeiting::with('employee')->where('empID', $id)->first();
         $data['employees'] = Employee::get();
-        $data['parent'] = 'Settings';
+        $data['parent'] = 'Leave Management';
         $data['child'] = 'Edit Leave Forfeiting';
         $today = date('Y-m-d');
         $arryear = explode('-', $today);
@@ -11209,7 +11217,7 @@ public function authenticateUser($permissions)
         $data['title'] = "Overtime";
         $data['my_overtimes'] = $this->flexperformance_model->my_overtimes(auth()->user()->emp_id);
         $data['overtimeCategory'] = $this->flexperformance_model->overtimeCategory();
-        $data['employees'] = $this->flexdperformance_model->Employee();
+        $data['employees'] = $this->flexperformance_model->Employee();
 
         $data['line_overtime'] = $this->flexperformance_model->approvedOvertimes();
 
