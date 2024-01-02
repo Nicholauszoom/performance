@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('employee_evaluations', function (Blueprint $table) {
             $table->id();
-            $table->string('empID');
+            $table->string('empid');
             $table->boolean('status')->default(false);
             $table->timestamps();
         });

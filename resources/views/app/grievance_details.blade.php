@@ -16,10 +16,10 @@
   
     if (isset($details)){
               foreach ($details as $row) {
-                $name = $row->NAME; 
+                $name = $row->name; 
                 $dpt=$row->DEPARTMENT;
                 $file = $row->attachment;
-                 $datesValue = str_replace('-', '/', $row->DATED);
+                 $datesValue = str_replace('-', '/', $row->dated);
                 $timed = date('d-m-Y', strtotime($datesValue));
                 $description = $row->description;
                 $position = $row->POSITION;

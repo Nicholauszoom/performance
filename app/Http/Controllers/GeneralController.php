@@ -8616,13 +8616,13 @@ class GeneralController extends Controller
 
         // saving old employee data
         $old = new Promotion();
-        $old->employeeID = $id;
-        $old->oldSalary = $empl->salary;
-        $old->newSalary = $request->newSalary;
-        $old->oldPosition = $empl->position;
-        $old->newPosition = $request->newPosition;
-        $old->oldLevel = $empl->emp_level;
-        $old->newLevel = $request->newLevel;
+        $old->employeeid = $id;
+        $old->oldsalary = $empl->salary;
+        $old->newsalary = $request->newSalary;
+        $old->oldposition = $empl->position;
+        $old->newposition = $request->newPosition;
+        $old->oldlevel = $empl->emp_level;
+        $old->newlevel = $request->newLevel;
         $old->effective_date = $request->effective_date;
         $old->created_by = Auth::user()->id;
         $old->action = "promoted";
@@ -8885,7 +8885,7 @@ class GeneralController extends Controller
         // dd($emp);
 
         $disciplinary = new Disciplinary();
-        $disciplinary->employeeID = $id;
+        $disciplinary->employeeid = $id;
         $disciplinary->department = $department;
         $disciplinary->suspension = $request->suspension;
         $disciplinary->date_of_charge = $request->date_of_charge;

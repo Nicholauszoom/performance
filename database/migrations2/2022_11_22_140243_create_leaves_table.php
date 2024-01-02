@@ -15,7 +15,7 @@ class CreateLeavesTable extends Migration
     {
         Schema::create('leaves', function (Blueprint $table) {
             $table->id();
-            $table->string('empID');
+            $table->string('empid');
             $table->date('start')->nullable();
             $table->date('end')->nullable();
             $table->date('application_date')->nullable();

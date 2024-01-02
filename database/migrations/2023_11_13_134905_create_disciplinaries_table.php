@@ -26,12 +26,12 @@ return new class extends Migration
             $table->mediumText('recommended_sanctum')->nullable();
             $table->mediumText('final_decission')->nullable();
             $table->timestamps();
-            $table->string('appeal_received_by');
-            $table->date('date_of_receiving_appeal');
-            $table->string('appeal_reasons');
-            $table->string('appeal_findings');
-            $table->string('appeal_outcomes');
-            $table->string('investigation_report');
+            $table->string('appeal_received_by')->nullable();
+            $table->date('date_of_receiving_appeal')->nullable();
+            $table->string('appeal_reasons')->nullable();
+            $table->string('appeal_findings')->nullable();
+            $table->string('appeal_outcomes')->nullable();
+            $table->string('investigation_report')->nullable();
         });
     }
 

@@ -15,13 +15,13 @@ return new class extends Migration
     {
         Schema::create('promotions', function (Blueprint $table) {
             $table->id();
-            $table->integer('employeeID');
-            $table->double('oldSalary')->nullable();
-            $table->double('newSalary');
-            $table->integer('oldLevel')->nullable();
-            $table->integer('newLevel')->nullable();
-            $table->integer('oldPosition')->nullable();
-            $table->integer('newPosition')->nullable();
+            $table->string('employeeid');
+            $table->double('oldsalary')->nullable();
+            $table->double('newsalary');
+            $table->integer('oldlevel')->nullable();
+            $table->integer('newlevel')->nullable();
+            $table->integer('oldposition')->nullable();
+            $table->integer('newposition')->nullable();
             $table->string('action');
             $table->integer('created_by');
             $table->timestamps();

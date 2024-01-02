@@ -4366,10 +4366,26 @@ FROM payroll_logs pl, employee e, position p, department d where e.emp_id=pl.emp
 
     public function grievance_details($id)
     {
-        $query = "SELECT  @s:=@s+1 as SNo, g.id, g.*, CAST(g.timed as date) as DATED, CONCAT(e.fname,' ',IF( e.mname != null,e.mname,' '),' ', e.lname) as NAME, p.name as POSITION, d.name as DEPARTMENT, g.description FROM grievances g, employee e, department d, position p, (SELECT @s:=0) as s WHERE g.empID = e.emp_id and p.id = e.position and d.id = e.department and g.id = '" . $id . "'";
-
-        return DB::select(DB::raw($query));
+        $result = DB::table('grievances as g')
+            ->join('employee as e', 'g.empid', '=', 'e.emp_id')
+            ->join('position as p', 'e.position', '=', 'p.id')
+            ->join('department as d', 'e.department', '=', 'd.id')
+            ->select(
+                DB::raw('row_number() OVER () as "SNo"'),
+                'g.id',
+                'g.*',
+                DB::raw('CAST(g.timed AS DATE) as DATED'),
+                DB::raw("CONCAT(e.fname, ' ', COALESCE(e.mname, ''), ' ', e.lname) as NAME"),
+                'p.name as POSITION',
+                'd.name as DEPARTMENT',
+                'g.description'
+            )
+            ->where('g.id', '=', $id)
+            ->get();
+    
+        return $result;
     }
+    
 
     public function all_grievances()
     {

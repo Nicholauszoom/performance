@@ -73,7 +73,7 @@
 
         <tbody>
                @foreach ($promotions as $item)
-            <tr>
+            <tr>                
             <td>{{$i++}}</td>
              <td>{{ $item->employee->fname}} {{ $item->employee->mname}} {{ $item->employee->lname}}</td>
              <td>{{ $item->position->name}}</td>

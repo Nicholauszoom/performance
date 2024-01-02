@@ -16,7 +16,7 @@ class Disciplinary extends Model
             // for relationship
             public function employee()
             {
-                return $this->belongsTo(Employee::class, 'employeeID','emp_id');
+                return $this->belongsTo(Employee::class, 'employeeid','emp_id');
             }
 
             public function departments()

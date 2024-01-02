@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('leave_approvals', function (Blueprint $table) {
             $table->id();
-            $table->string('empID');
+            $table->string('empid');
             $table->string('level1');
             $table->string('level2')->nullable();
             $table->string('level3')->nullable();

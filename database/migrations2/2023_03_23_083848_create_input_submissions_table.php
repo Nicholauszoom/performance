@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('input_submissions', function (Blueprint $table) {
             $table->id();
-            $table->string('empID');
+            $table->string('empid');
             $table->date('date');
             $table->timestamps();
         });

@@ -444,8 +444,8 @@ class AttendanceModel extends Model
 
         $query = "SELECT
         CASE
-            WHEN (SELECT COUNT(id) FROM leaves WHERE nature::integer = " . $nature . " AND \"empID\" = '" . $empID . "') = 0 THEN 0
-            ELSE (SELECT SUM(days) FROM leaves WHERE nature::integer = " . $nature . " AND state::integer = 0 AND  \"empID\" = '" . $empID . "' AND start <= '" . $today . "' AND leave_address != 'auto' AND start BETWEEN '" . $hireDate . "' AND '" . $today . "' GROUP BY nature) END as days_spent,  (SELECT EXTRACT(EPOCH FROM ('" . $today . "'::timestamp - '" . $hireDate . "'::timestamp)) / 86400) as days_accrued";
+            WHEN (SELECT COUNT(id) FROM leaves WHERE nature::integer = " . $nature . " AND \"empid\" = '" . $empID . "') = 0 THEN 0
+            ELSE (SELECT SUM(days) FROM leaves WHERE nature::integer = " . $nature . " AND state::integer = 0 AND  \"empid\" = '" . $empID . "' AND start <= '" . $today . "' AND leave_address != 'auto' AND start BETWEEN '" . $hireDate . "' AND '" . $today . "' GROUP BY nature) END as days_spent,  (SELECT EXTRACT(EPOCH FROM ('" . $today . "'::timestamp - '" . $hireDate . "'::timestamp)) / 86400) as days_accrued";
 
 
 
@@ -453,7 +453,7 @@ class AttendanceModel extends Model
 
         $employee = DB::table('employee')->where('emp_id', $empID)->first();
 
-        $remain = DB::table('leaves')->where('empID', $empID)->latest('created_at')->first();
+        $remain = DB::table('leaves')->where('empid', $empID)->latest('created_at')->first();
 
         $d1 = new DateTime($hireDate);
 

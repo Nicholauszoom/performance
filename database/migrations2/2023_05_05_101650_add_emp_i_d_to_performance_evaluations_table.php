@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::table('performance_evaluations', function (Blueprint $table) {
             //
-            $table->string('empID');
+            $table->string('empid');
         });
     }
 

@@ -30,7 +30,7 @@ return new class extends Migration
             $table->double('self_evaluation')->default(0);
             $table->double('manager_evaluation')->default(0);
             $table->string('strategy_type')->default('N/A');
-            $table->string('empID');
+            $table->string('empid');
         });
     }
 
