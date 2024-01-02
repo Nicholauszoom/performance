@@ -131,7 +131,8 @@ class AuthController extends Controller
             $myNewData['accrued_days'] = $annualleaveBalance;
             $myNewData['pass_age'] = $pass_age;
             $myNewData['emegerncy'] =EmergencyContact::where('employeeID', $request->emp_id)->first();
-            
+            $referer = request()->header('referer');
+            $myNewData['referer'] = $referer;
              // $myNewDataJson = json_encode($myNewData);
 
 

@@ -36,9 +36,13 @@ Route::get('/test', function (Request $request) {
     return $request->header('apikey');
 });
 Route::middleware('auth:sanctum')->group( function () {
+    Route::post('/push',[PushNotificationController::class,'test']);
+
+
  Route::post('/logout',[AuthController::class,'logout']);
       Route::post('/updateToken',[PushNotificationController::class,'updateDeviceToken']);
       Route::post('/send-bulk-notification',[PushNotificationController::class,'bulksend']);
+      Route::post('/updateNotification',[PushNotificationController::class,'updateNotification']);
 
       // For user details
       Route::get('/user',[AuthController::class,'user']);
