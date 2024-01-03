@@ -30,7 +30,7 @@ class ClearLeavesImport implements ToCollection, WithHeadingRow
 
                 // Check if a record with the same empID and forfeiting_year exists
                 // Check if a record with the same empID, forfeiting_year, or opening_balance_year exists
-                    $existingRecord = LeaveForfeiting::where('empID', $empId)
+                    $existingRecord = LeaveForfeiting::where('empid', $empId)
                     ->where(function($query) use ($forfeit_year) {
                         $query->where('forfeiting_year', $forfeit_year)
                             ->orWhere('opening_balance_year', $forfeit_year);
@@ -47,7 +47,7 @@ class ClearLeavesImport implements ToCollection, WithHeadingRow
                 } else {
                     // If no record exists, create a new one
                     LeaveForfeiting::create([
-                        'empID' => $empId,
+                        'empid' => $empId,
                         'nature' => 1,
                         'days' => $remaining,
                         'forfeiting_year' => $forfeit_year

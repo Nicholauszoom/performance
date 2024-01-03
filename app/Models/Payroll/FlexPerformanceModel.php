@@ -119,7 +119,7 @@ public function getCurrentStrategy()
             COALESCE(
                 (SELECT SUM(days)
                  FROM leaves
-                 WHERE nature::integer = 1 AND "empID" = e.emp_id
+                 WHERE nature::integer = 1 AND "empid" = e.emp_id
                  GROUP BY nature), 0) as "ACCRUED"')
         ->addSelect(DB::raw('ROW_NUMBER() OVER () as "sno"'))
         ->join('department as d', 'd.id', '=', 'e.department')
@@ -1183,28 +1183,40 @@ public function getCurrentStrategy()
     }
 
     public function updateDepartmentPosition($code, $departmentID)
-    {
-        DB::transaction(function () use ($code, $departmentID) {
-            $query = "UPDATE department SET code = '" . $code . "' WHERE id ='" . $departmentID . "'";
-            DB::insert(DB::raw($query));
-            //         $query = "UPDATE position SET dept_id = '".$departmentID."', dept_code = '".$code."' WHERE id ='".$positionID ."'";
-        });
-        return true;
-    }
+{
+    DB::transaction(function () use ($code, $departmentID) {
+        DB::table('department')
+            ->where('id', $departmentID)
+            ->update(['code' => $code]);
 
-    public function getdepartmentbyid($id)
-    {
-        $query = "SELECT CONCAT(e.fname,' ',IF( e.mname != null,e.mname,' '),' ', e.lname) as HOD, d.* FROM department d, employee e WHERE d.hod = e.emp_id and
-			d.id ='" . $id . "'";
+        // If you have the information for updating positions, you can uncomment and include the position update logic as well.
+        // $positionID = ...; // You need to provide the positionID
+        // DB::table('position')
+        //    ->where('id', $positionID)
+        //    ->update(['dept_id' => $departmentID, 'dept_code' => $code]);
+    });
 
-        return DB::select(DB::raw($query));
-    }
-    public function updatedepartment($data, $id)
-    {
-        DB::table('department')->where('id', $id)
-            ->update($data);
-        return true;
-    }
+    return true;
+}
+
+
+public function getdepartmentbyid($id)
+{
+    return DB::table('department as d')
+        ->join('employee as e', 'd.hod', '=', 'e.emp_id')
+        ->where('d.id', $id)
+        ->select(DB::raw('CONCAT(e.fname, \' \' || COALESCE(e.mname, \'\') || \' \' || e.lname) as HOD'), 'd.*')
+        ->get();
+}
+
+
+public function updatedepartment($data, $id)
+{
+    DB::table('department')->where('id', $id)->update($data);
+
+    return true;
+}
+
 
     public function getaccountability($id)
     {
@@ -1774,7 +1786,7 @@ public function getpropertyexit($id)
         DB::transaction(function () use ($id) {
             DB::table('employee')->where('emp_id', $id)->update(['unpaid_leave' => 0]);
 
-            DB::table('unpaid_leave')->where('empID', $id)->update(['status' => 1]);
+            DB::table('unpaid_leave')->where('empid', $id)->update(['status' => 1]);
         });
 
         return true;
@@ -1785,7 +1797,7 @@ public function getpropertyexit($id)
         DB::transaction(function () use ($id) {
             DB::table('employee')->where('emp_id', $id)->update(['unpaid_leave' => 1]);
 
-            DB::table('unpaid_leave')->where('empID', $id)->update(['state' => 1]);
+            DB::table('unpaid_leave')->where('empid', $id)->update(['state' => 1]);
         });
 
         return true;
@@ -1882,7 +1894,7 @@ public function getpropertyexit($id)
 
     public function remove_individual_deduction($empID, $deductionID)
     {
-        DB::table('emp_deductions')->where('empID', $empID)
+        DB::table('emp_deductions')->where('empid', $empID)
             ->where('group_name', 0)
             ->where('deduction', $deductionID)
             ->delete();
@@ -2929,20 +2941,33 @@ last_paid_date='" . $date . "' WHERE  state = 1 and type = 3";
     //     return DB::select(DB::raw($query));
     // }
 
+    // public function salary_advance()
+    // {
+
+    //     return $this->selectRaw('ROW_NUMBER() OVER () as "SNo", la.empid, loan_types.name as \"TYPE\", la.*, CONCAT(employee.fname, \' \', COALESCE(employee.mname, \' \', \'\'), \' \', employee.lname) as "NAME", departments.name as "DEPARTMENT", positions.name as "POSITION"')
+    //     ->from('loan_application as la')
+    //     ->join('employee as employee', 'la.empid', '=', 'employee.emp_id')
+    //     ->join('position as positions', 'employee.position', '=', 'positions.id')
+    //     ->join('department as departments', 'employee.department', '=', 'departments.id')
+    //     ->join('loan_type as loan_types', 'la.type', '=', DB::raw('CAST("loan_types".id AS text)')) // Explicit cast to INTEGER
+    //     ->orderBy('la.id', 'DESC')
+    //     ->get();
+
+
+    // }
+
     public function salary_advance()
     {
-
-        return $this->selectRaw('ROW_NUMBER() OVER () as \"SNo\", la.\"empID\", loan_types.name as \"TYPE\", la.*, CONCAT(employee.fname, \' \', COALESCE(employee.mname, \' \', \'\'), \' \', employee.lname) as "NAME", departments.name as "DEPARTMENT", positions.name as "POSITION"')
-        ->from('loan_application as la')
-        ->join('employee as employee', 'la.empid', '=', 'employee.emp_id')
-        ->join('position as positions', 'employee.position', '=', 'positions.id')
-        ->join('department as departments', 'employee.department', '=', 'departments.id')
-        ->join('loan_type as loan_types', 'la.type', '=', DB::raw('CAST("loan_types".id AS text)')) // Explicit cast to INTEGER
-        ->orderBy('la.id', 'DESC')
-        ->get();
-
-
+        return $this->selectRaw('ROW_NUMBER() OVER () as "SNo", la.empid, loan_types.name as "TYPE", la.*, CONCAT(employee.fname, \' \', COALESCE(employee.mname, \' \', \'\'), \' \', employee.lname) as "NAME", departments.name as "DEPARTMENT", positions.name as "POSITION"')
+            ->from('loan_application as la')
+            ->join('employee as employee', 'la.empid', '=', 'employee.emp_id')
+            ->join('position as positions', 'employee.position', '=', 'positions.id')
+            ->join('department as departments', 'employee.department', '=', 'departments.id')
+            ->join('loan_type as loan_types', 'la.type', '=', DB::raw('CAST("loan_types".id AS text)')) // Explicit cast to INTEGER
+            ->orderBy('la.id', 'DESC')
+            ->get();
     }
+
 
     public function waitingsalary_advance_hr()
     {
@@ -2998,9 +3023,9 @@ last_paid_date='" . $date . "' WHERE  state = 1 and type = 3";
     public function update_salary_advance_notification_staff($empID)
     {
         DB::transaction(function () use ($empID) {
-            $query = "UPDATE loan_application SET notification = 0 WHERE empID = '" . $empID . "' AND notification =1";
+            $query = "UPDATE loan_application SET notification = 0 WHERE empid = '" . $empID . "' AND notification =1";
             DB::insert(DB::raw($query));
-            $query = "UPDATE loan_application SET notification = 4 WHERE empID = '" . $empID . "' AND notification = 3";
+            $query = "UPDATE loan_application SET notification = 4 WHERE empid = '" . $empID . "' AND notification = 3";
             DB::insert(DB::raw($query));
         });
         return true;
@@ -3983,7 +4008,7 @@ public function group_byid($id)
 
     public function remove_individual_from_allowance($empID, $allowanceID)
     {
-        DB::table('emp_allowances')->where('empID', $empID)
+        DB::table('emp_allowances')->where('empid', $empID)
             ->where('group_name', 0)
             ->where('allowance', $allowanceID)
             ->delete();
@@ -3992,7 +4017,7 @@ public function group_byid($id)
 
     public function get_individual_from_allowance($empID, $allowanceID)
     {
-        $row = DB::table('emp_allowances')->where('empID', $empID)
+        $row = DB::table('emp_allowances')->where('empid', $empID)
             ->where('group_name', 0)
             ->where('allowance', $allowanceID)
             ->select('*')->first();

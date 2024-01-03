@@ -15,11 +15,11 @@ return new class extends Migration
     {
         Schema::create('performance_pillars', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
+            $table->string('name')->nullable();
             $table->boolean('status')->default(false);
             $table->string('type')->nullable();
             $table->timestamps();
-            $table->text('notes');
+            $table->text('notes')->nullable();
         });
     }
 

@@ -15,19 +15,19 @@ return new class extends Migration
     {
         Schema::create('department', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('dept_no');
+            $table->string('dept_no')->nullable();
             $table->integer('code')->default(1);
-            $table->string('name');
+            $table->string('name')->nullable();
             $table->integer('cost_center_id')->unsigned();
 
             // $table->string('cost_center_id');
-            $table->string('company');
+            $table->string('company')->nullable();
             $table->integer('type')->default(1)->comment('1-Department, 2-Subdepartment');
-            $table->integer('hod')->nullable();
+            $table->string('hod')->nullable();
             $table->integer('reports_to')->default(3);
             $table->integer('state')->default(1);
-            $table->string('department_pattern');
-            $table->string('parent_pattern');
+            $table->string('department_pattern')->nullable();
+            $table->string('parent_pattern')->nullable();
             $table->integer('level')->default(1);
             $table->string('created_by')->nullable();
             $table->timestamps();

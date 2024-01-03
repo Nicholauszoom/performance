@@ -30,8 +30,8 @@ return new class extends Migration
             $table->date('approved_date_hr')->nullable();
             $table->date('approved_date_finance')->nullable();
             $table->integer('notification')->default(2)->comment('0-seen, 1-Employee, 2-hr recommend, 3-Finance Approve, 4-seen by employee waiting finance');
-            $table->string('time_approved_cd', 110);
-            $table->string('approved_cd', 110);
+            $table->string('time_approved_cd', 110)->nullable();
+            $table->string('approved_cd', 110)->nullable();
             $table->timestamps();
         });
     }

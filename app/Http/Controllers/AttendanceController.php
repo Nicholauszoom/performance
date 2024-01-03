@@ -189,7 +189,7 @@ class AttendanceController extends Controller
     {
 
         //$this->authenticateUser('view-leave');
-        $data['myleave'] = Leaves::where('empID', Auth::user()->emp_id)->get();
+        $data['myleave'] = Leaves::where('empid', Auth::user()->emp_id)->get();
 
         if (session('appr_leave') || 1) {
             $data['otherleave'] = $this->attendance_model->leave_line(Auth::user()->emp_id);
@@ -220,12 +220,12 @@ class AttendanceController extends Controller
 
                 // Fetch 'appliedBy' value from 'sick_leave_forfeit_days' based on the unique 'leaveID'
                 $appliedByValue = DB::table('sick_leave_forfeit_days')
-                    ->where('leaveID', $uniqueLeaveID)
-                    ->value('appliedBy');
+                    ->where('leaveid', $uniqueLeaveID)
+                    ->value('appliedby');
 
                 // Fetch 'forfeit_days' value from 'sick_leave_forfeit_days' based on the unique 'leaveID'
                 $forfeitDaysValue = DB::table('sick_leave_forfeit_days')
-                    ->where('leaveID', $uniqueLeaveID)
+                    ->where('leaveid', $uniqueLeaveID)
                     ->value('forfeit_days');
 
                 if ($appliedByValue !== null) {
@@ -233,7 +233,7 @@ class AttendanceController extends Controller
                     $full_name = EMPL::where('emp_id', $appliedByValue)->value('full_name');
 
                     // Add the 'appliedBy' attribute to the leave item
-                    $data['leaves'][$key]['appliedBy'] = $full_name;
+                    $data['leaves'][$key]['appliedby'] = $full_name;
 
                     // Add the 'forfeit_days' attribute to the leave item
                     $data['leaves'][$key]['forfeit_days'] = $forfeitDaysValue;
@@ -249,10 +249,10 @@ class AttendanceController extends Controller
                 // Fetch 'appliedBy' value from 'sick_leave_forfeit_days' based on the unique 'leaveID'
                 $appliedByValue = DB::table('sick_leave_forfeit_days')
                     ->where('leaveID', $uniqueLeaveID)
-                    ->value('appliedBy');
+                    ->value('appliedby');
                 // Fetch 'forfeit_days' value from 'sick_leave_forfeit_days' based on the unique 'leaveID'
                 $forfeitDaysValue = DB::table('sick_leave_forfeit_days')
-                    ->where('leaveID', $uniqueLeaveID)
+                    ->where('leaveid', $uniqueLeaveID)
                     ->value('forfeit_days');
 
                 if ($appliedByValue !== null) {
@@ -261,7 +261,7 @@ class AttendanceController extends Controller
                     $data['approved_leaves'][$key]['forfeit_days'] = $forfeitDaysValue;
 
                     // Add the 'appliedBy' attribute to the leave item
-                    $data['approved_leaves'][$key]['appliedBy'] = $full_name;
+                    $data['approved_leaves'][$key]['appliedby'] = $full_name;
                 }
             }
         }
@@ -278,7 +278,7 @@ class AttendanceController extends Controller
 
         foreach ($employ as $item) {
             $balance = $this->attendance_model->getLeaveBalance($item->emp_id, $item->hire_date, date('Y-m-d'));
-            $total_leave = Leaves::where('empID', $item->emp_id)->where('nature', 1)->sum('days');
+            $total_leave = Leaves::where('empid', $item->emp_id)->where('nature', 1)->sum('days');
 
             $remaining = $balance - $total_leave - 6.99;
 
@@ -305,7 +305,7 @@ class AttendanceController extends Controller
     // For My Leaves
     public function myLeaves()
     {
-        $data['myleave'] = Leaves::where('empID', Auth::user()->emp_id)->orderBy('id', 'desc')->get();
+        $data['myleave'] = Leaves::where('empid', Auth::user()->emp_id)->orderBy('id', 'desc')->get();
         $id = Auth::user()->emp_id;
         $employeee = Employee::where('emp_id', $id)->first();
 
@@ -524,7 +524,7 @@ class AttendanceController extends Controller
             $startDate = $year . '-01-01'; // Start of the current year
             $endDate = $currentYear . '-12-31'; // Current date
 
-            $daysSpent = Leaves::where('empID', $employeeId)
+            $daysSpent = Leaves::where('empid', $employeeId)
                 ->where('nature', $natureId)
                 ->whereBetween('created_at', [$startDate, $endDate])
                 ->whereNot('reason', 'Automatic applied!')
@@ -580,7 +580,7 @@ class AttendanceController extends Controller
         $currentYear = Carbon::now()->year;
 
         // Get the leaves for the specified employee within the current year
-        $leaves = Leaves::where('empID', $empID)
+        $leaves = Leaves::where('empid', $empID)
             ->whereYear('start', $currentYear)
             ->get();
 
@@ -648,17 +648,17 @@ class AttendanceController extends Controller
             $empID = Auth::user()->emp_id;
 
             // Check if there is a pending leave in the given number of days (start,end)
-            // $pendingLeave = Leaves::where('empId', $empID)
+            // $pendingLeave = Leaves::where('empid', $empID)
             //     ->where('state', 1)
             //     ->whereDate('end', '>=', $start)
             //     ->first();
-            $pendingLeave = Leaves::where('empID', $empID)
+            $pendingLeave = Leaves::where('empid', $empID)
                 ->where('state', 1)
                 ->whereDate('start', '<=', $start)
                 ->whereDate('end', '>=', $start)
                 ->first();
 
-            $approvedLeave = Leaves::where('empID', $empID)
+            $approvedLeave = Leaves::where('empid', $empID)
                 ->where('state', 0)
                 ->whereDate('start', '<=', $start)
                 ->whereDate('end', '>=', $start)
@@ -862,7 +862,7 @@ class AttendanceController extends Controller
                         if ($request->nature == 5) {
 
                             // Incase the employee had already applied paternity before
-                            $paternity = Leaves::where('empID', $empID)->where('nature', $nature)->where('sub_category', $request->sub_cat)->first();
+                            $paternity = Leaves::where('empid', $empID)->where('nature', $nature)->where('sub_category', $request->sub_cat)->first();
                             if ($paternity) {
                                 $d1 = $paternity->created_at;
                                 $d2 = new DateTime();
@@ -1050,7 +1050,7 @@ class AttendanceController extends Controller
                     // For Paternity leabe
                     if ($request->nature == 5) {
 
-                        $paternity = Leaves::where('empID', $empID)->where('nature', 5)->where('sub_category', $request->sub_cat)->whereYear('created_at', date('Y'))->orderBy('created_at', 'desc')->first();
+                        $paternity = Leaves::where('empid', $empID)->where('nature', 5)->where('sub_category', $request->sub_cat)->whereYear('created_at', date('Y'))->orderBy('created_at', 'desc')->first();
                         // Case an Employee has ever applied leave before
                         if ($paternity) {
                             $d1 = $paternity->created_at;
@@ -2441,7 +2441,7 @@ class AttendanceController extends Controller
                         if ($request->nature == 5) {
 
                             // Incase the employee had already applied paternity before
-                            $paternity = Leaves::where('empID', $empID)->where('nature', $nature)->where('sub_category', $request->sub_cat)->first();
+                            $paternity = Leaves::where('empid', $empID)->where('nature', $nature)->where('sub_category', $request->sub_cat)->first();
                             if ($paternity) {
                                 $d1 = $paternity->created_at;
                                 $d2 = new DateTime();
@@ -2635,7 +2635,7 @@ class AttendanceController extends Controller
                         // dd($leaves->nature);
                         $condition = [
                             'emp_id' => $empID,
-                            'appliedBy' => Auth::user()->emp_id,
+                            'appliedby' => Auth::user()->emp_id,
                             'leaveId' => $leaves->id,
                             'nature' => $leaves->nature,
 
@@ -2646,7 +2646,7 @@ class AttendanceController extends Controller
                         // Create data to insert for extra days.
                         $extraData = [
                             'emp_id' => $condition['emp_id'],
-                            'appliedBy' => $condition['appliedBy'],
+                            'appliedby' => $condition['appliedBy'],
                             'leaveId' => $condition['leaveId'],
                             'nature' => $condition['nature'],
                             'forfeit_days' => $extradays
@@ -2698,7 +2698,7 @@ class AttendanceController extends Controller
 
                         $leaves = new Leaves();
                         // $empID=Auth::user()->emp_id;
-                        $leaves->empID = $empID;
+                        $leaves->empid = $empID;
                         $leaves->start = $request->start;
                         $leaves->end = $request->end;
                         $leaves->status = 1;
@@ -2731,7 +2731,7 @@ class AttendanceController extends Controller
                         // dd($leaves->nature);
                         $condition = [
                             'emp_id' => $empID,
-                            'appliedBy' => Auth::user()->emp_id,
+                            'appliedby' => Auth::user()->emp_id,
                             'leaveId' => $leaves->id,
                             'nature' => $leaves->nature,
 
@@ -2742,7 +2742,7 @@ class AttendanceController extends Controller
                         // Create data to insert for extra days.
                         $extraData = [
                             'emp_id' => $condition['emp_id'],
-                            'appliedBy' => $condition['appliedBy'],
+                            'appliedby' => $condition['appliedBy'],
                             'leaveId' => $condition['leaveId'],
                             'nature' => $condition['nature'],
                             'forfeit_days' => 0
@@ -2823,7 +2823,7 @@ class AttendanceController extends Controller
                 // For Paternity leabe
                 if ($request->nature == 5) {
 
-                    $paternity = Leaves::where('empID', $empID)->where('nature', 5)->where('sub_category', $request->sub_cat)->whereYear('created_at', date('Y'))->orderBy('created_at', 'desc')->first();
+                    $paternity = Leaves::where('empid', $empID)->where('nature', 5)->where('sub_category', $request->sub_cat)->whereYear('created_at', date('Y'))->orderBy('created_at', 'desc')->first();
                     // Case an Employee has ever applied leave before
                     if ($paternity) {
                         $d1 = $paternity->created_at;
@@ -3107,14 +3107,14 @@ class AttendanceController extends Controller
             $leaves->save();
             $condition = [
                 'emp_id' => $empID,
-                'appliedBy' => Auth::user()->emp_id,
+                'appliedby' => Auth::user()->emp_id,
                 'leaveId' => $leaves->id,
                 'nature' => $leaves->nature,
 
             ];
             $extraData = [
                 'emp_id' => $condition['emp_id'],
-                'appliedBy' => $condition['appliedBy'],
+                'appliedby' => $condition['appliedBy'],
                 'leaveId' => $condition['leaveId'],
                 'nature' => $condition['nature'],
                 'forfeit_days' => $extradays
@@ -3158,7 +3158,7 @@ class AttendanceController extends Controller
 
             $leaves = new Leaves();
             // $empID=Auth::user()->emp_id;
-            $leaves->empID = $empID;
+            $leaves->empid = $empID;
             $leaves->start = $request->start;
             $leaves->end = $request->end;
             $leaves->leave_address = $request->address;
@@ -3190,14 +3190,14 @@ class AttendanceController extends Controller
             $leaves->save();
             $condition = [
                 'emp_id' => $empID,
-                'appliedBy' => Auth::user()->emp_id,
+                'appliedby' => Auth::user()->emp_id,
                 'leaveId' => $leaves->id,
                 'nature' => $leaves->nature,
 
             ];
             $extraData = [
                 'emp_id' => $condition['emp_id'],
-                'appliedBy' => $condition['appliedBy'],
+                'appliedby' => $condition['appliedBy'],
                 'leaveId' => $condition['leaveId'],
                 'nature' => $condition['nature'],
                 'forfeit_days' => $extradays
@@ -3206,7 +3206,7 @@ class AttendanceController extends Controller
             DB::table('sick_leave_forfeit_days')->updateOrInsert($condition, array_merge($extraData, ['updated_at' => now(), 'created_at' => now()]));
             $leave_type = LeaveType::where('id', $nature)->first();
             $type_name = $leave_type->type;
-            $linemanager = LeaveApproval::where('empID', $empID)->first();
+            $linemanager = LeaveApproval::where('empid', $empID)->first();
             $linemanager_data = SysHelpers::employeeData($linemanager->level1);
             $employee_data = SysHelpers::employeeData($empID);
             $fullname = $linemanager_data['full_name'];

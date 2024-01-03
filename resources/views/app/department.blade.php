@@ -47,7 +47,7 @@
                             <td width="1px">{{ $loop->iteration }}</td>
                             <td><?php echo $row->name; ?></td>
                             <td><?php echo $row->CostCenterName; ?></td>
-                            <td><a title="More Details"  href="{{ route('flex.employee_info',$row->hod) }}"><?php echo $row->HOD; ?></a></td>
+                            <td><a title="More Details"  href="{{ route('flex.employee_info',$row->hod) }}"><?php echo $row->hod; ?></a></td>
                             <td><?php echo $row->parentdept; ?></td>
 
                             <?php if(session('mng_org')){ ?>
@@ -146,15 +146,15 @@
                 <?php } ?>
             </tr>
         </thead>
-
         <tbody>
+            {{-- {{dd($inactive_department)}} --}}
         <?php foreach ($inactive_department as $row) { ?>
             <tr id="domain<?php echo $row->id;?>">
-                <td width="1px"><?php echo $row->SNo; ?></td>
+                <td width="1px"><?php echo $row->id; ?></td>
                 <th hidden></th>
                 <td><?php echo $row->name; ?></td>
-                <td><a title="More Details"  href=""><?php echo $row->HOD; ?></a></td>
-                <td><?php echo $row->parentdept; ?></td>
+                <td><a title="More Details"  href=""><?php echo $row->hod; ?></a></td>
+                <td><?php echo $row->parent_pattern; ?></td>
                 <?php if(session('mng_org')){ ?>
                 <td class="options-width d-flex">
                     <a href="{{ route('flex.department_info',$row->id) }}" title="Info and Details" class="icon-2 info-tooltip me-2">

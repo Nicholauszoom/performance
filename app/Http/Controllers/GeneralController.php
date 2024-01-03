@@ -487,7 +487,7 @@ class GeneralController extends Controller
             $identifiers = $this->flexperformance_model->departmentAdd($departmentData);
             if (!empty($identifiers)) {
                 foreach ($identifiers as $key) {
-                    $departmentID = $key->depID;
+                    $departmentID = $key->depid;
                     // $positionID = $key->posID;
                 }
                 $code = sprintf("%03d", $departmentID);
@@ -3652,7 +3652,7 @@ class GeneralController extends Controller
             }
 
             $data = array(
-                'empID' => auth()->user()->emp_id,
+                'empid' => auth()->user()->emp_id,
                 'amount' => $amount,
                 'deduction_amount' => $deduction_amount,
                 'type' => 1,
@@ -3690,7 +3690,7 @@ class GeneralController extends Controller
             }
 
             $data = array(
-                'empID' => $request->input("employee"),
+                'empid' => $request->input("employee"),
                 'amount' => $request->input("amount"),
                 'deduction_amount' => $deduction,
                 'approved_hr' => auth()->user()->emp_id,
@@ -4580,7 +4580,7 @@ class GeneralController extends Controller
             ]
         );
 
-        $data = ['empID' => $request->empID, 'start_date' => $request->start_date, 'end_date' => $request->end_date, 'reason' => $request->reason];
+        $data = ['empid' => $request->empID, 'start_date' => $request->start_date, 'end_date' => $request->end_date, 'reason' => $request->reason];
 
         SysHelpers::FinancialLogs($request->empID, 'Unpaid Leave', $request->start_date, $request->end_date, 'Payroll Input');
 
@@ -4707,7 +4707,7 @@ class GeneralController extends Controller
 
             foreach ($members as $row) {
                 $data = array(
-                    'empID' => $row->empID,
+                    'empid' => $row->empID,
                     'deduction' => $request->input('deduction'),
                     'group_name' => $request->input('group'),
                 );

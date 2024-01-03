@@ -107,9 +107,9 @@
                                                 <option></option>
                                                 <?php
                               foreach ($employee as $employee) { ?>
-                                                <option <?php  if($hod==$employee->empID){ ?> selected="" <?php } ?>
-                                                    value="<?php echo $employee->empID; ?>">
-                                                    <?php echo $employee->NAME; ?></option> <?php } ?>
+                                                <option <?php  if($hod==$employee->empid){ ?> selected="" <?php } ?>
+                                                    value="<?php echo $employee->empid; ?>">
+                                                    <?php echo $employee->name; ?></option> <?php } ?>
                                             </select>
                                             <input type="hidden" name="type" value="updatehod" id="">
                                             <span class="input-group-btn">

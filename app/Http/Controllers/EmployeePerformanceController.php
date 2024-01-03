@@ -59,7 +59,7 @@ class EmployeePerformanceController extends Controller
     public function employee_performance(Request $request)
     {
         // $employee=EMPL::where('emp_id',$request->empID)->first();
-        $data['evaluations']=EmployeeEvaluation::where('empID',$request->empID)->latest()->get();
+        $data['evaluations']=EmployeeEvaluation::where('empid',$request->empID)->latest()->get();
         $data['employee']=EMPL::where('emp_id',$request->empID)->first();
         return view('new-performance.employee-performance',$data);
         // dd($employee);

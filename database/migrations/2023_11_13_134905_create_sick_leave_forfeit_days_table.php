@@ -16,10 +16,10 @@ return new class extends Migration
         Schema::create('sick_leave_forfeit_days', function (Blueprint $table) {
             $table->id();
             $table->string('emp_id');
-            $table->double('forfeit_days');
+            $table->double('forfeit_days')->nullable();
             $table->timestamps();
-            $table->unsignedBigInteger('leaveId')->nullable();
-            $table->unsignedBigInteger('appliedBy')->nullable();
+            $table->string('leaveid')->nullable();
+            $table->string('appliedby')->nullable();
             $table->string('nature')->nullable();
         });
     }
