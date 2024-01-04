@@ -582,6 +582,8 @@ Route::middleware('verify-outgoing-requests')->group(function () {
             Route::any('/department_structure', 'department_structure')->name('flex.department_structure');
             Route::any('/Oldorganization_structure', 'Oldorganization_structure')->name('flex.Oldorganization_structure');
             Route::any('/grievances', 'grievances')->name('flex.grievances');
+            Route::any('/brand_settings','brand_settings')->name('flex.brand_settings');
+            
         });
         //end of organization access permission  routes
 

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 //use App\Http\Controllers\Controller;
+use App\Models\BrandSetting;
 use Illuminate\Support\Facades\Gate;
 use App\Charts\EmployeeLineChart;
 use App\Exports\LeaveApprovalsExport;
@@ -12714,5 +12715,42 @@ $this->authenticateUser('view-Talent');
 
         $msg = "Loan Type has been added Successfully !";
         return redirect('flex/loan_types')->with('msg', $msg);
+    }
+
+    public function brand_settings(Request $request){
+
+        $brandSetting = BrandSetting::firstOrCreate();
+
+        if ($request->isMethod('post')) {
+            
+            $brandSettings = $request->all();
+
+            foreach (['company_logo', 'report_logo', 'login_picture', 'dashboard_logo'] as $fileField) {
+                if ($request->hasFile($fileField)) {
+
+                    $existingFilePath = $brandSetting->$fileField;
+                                  
+                    if ($existingFilePath) {
+                        Storage::disk('public')->delete($existingFilePath);
+                    }
+
+                
+                    $file = $request->file($fileField);
+                    $path = $file->storeAs('brand_settings', $fileField . '.' . $file->getClientOriginalExtension(), 'public');
+                    $brandSettings[$fileField] = $path;
+                }
+            }
+            $brandSetting->update($brandSettings);
+
+            
+            $msg = 'Brand settings updated successful';
+            return redirect('flex/brand_settings')->with('msg', $msg);
+
+
+        }
+
+          $data = ['brandSetting' => $brandSetting];
+         return view('setting.brand-settings', $data);
+
     }
 }

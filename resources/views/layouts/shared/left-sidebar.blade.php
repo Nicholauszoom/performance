@@ -1,8 +1,21 @@
+@php
+    $brandSetting = \App\Models\BrandSetting::first();
+@endphp
+
+
 <div class="sidebar sidebar-dark sidebar-main sidebar-expand-lg bg-main-nav">
     <div class="sidebar-section">
         <div class="sidebar-logo d-flex justify-content-center align-items-center">
-            <a href="{{url('')}}" class="d-inline-flex align-items-center pt-3 pb-2">
-                <img src="{{ asset('img/logo.png') }}" class="image-fluid" width="200px" alt="BancABC atlasmara">
+            <a href="{{ url('') }}" class="d-inline-flex align-items-center pt-3 pb-2">
+
+
+                @if ($brandSetting->company_logo)
+                    <img src="{{ asset('storage/' . $brandSetting->company_logo) }}" class="image-fluid" width="200px"
+                        alt="BancABC atlasmara">
+                @else
+                    <img src="{{ asset('img/logo.png') }}" class="image-fluid" width="200px" alt="BancABC atlasmara">
+                @endif
+
             </a>
         </div>
     </div>
@@ -32,7 +45,7 @@
                         {{--  start of suspend employee link --}}
 
                         <li class="nav-item">
-                        
+
 
                             <a class="nav-link {{ request()->routeIs('flex.my-leaves') ? 'active' : null }}"
                                 href="{{ route('flex.my-leaves') }}"><i class="ph-user-rectangle me-2"></i>My Leaves</a>
@@ -45,7 +58,7 @@
                         {{-- start of active employee link --}}
 
                         <li class="nav-item">
-                        
+
 
                             <a class="nav-link {{ request()->routeIs('flex.my-overtimes') ? 'active' : null }}"
                                 href="{{ route('flex.my-overtimes') }}"><i class="ph-clock me-2"></i>
@@ -160,7 +173,8 @@
                             @can('suspend-employee')
                                 <li class="nav-item">
                                     <a class="nav-link {{ request()->routeIs('flex.inactive_employee') ? 'active' : null }}"
-                                          href="{{ route('flex.inactive_employee') }}"> <i class="ph-warning-octagon"></i> Suspended Employees</a>
+                                        href="{{ route('flex.inactive_employee') }}"> <i class="ph-warning-octagon"></i>
+                                        Suspended Employees</a>
                                 </li>
                             @endcan
                             {{-- / --}}
@@ -169,7 +183,8 @@
                             @can('view-termination')
                                 <li class="nav-item ">
                                     <a class="nav-link {{ request()->routeIs('flex.addTermination') || request()->routeIs('flex.termination') ? 'active' : null }}"
-                                        href="{{ route('flex.termination') }}"> <i class="ph-user-circle-minus"></i> Employee Termination</a>
+                                        href="{{ route('flex.termination') }}"> <i class="ph-user-circle-minus"></i> Employee
+                                        Termination</a>
                                 </li>
                             @endcan
                             {{-- / --}}
@@ -178,7 +193,8 @@
                             @can('view-promotions')
                                 <li class="nav-item ">
                                     <a class="nav-link {{ request()->routeIs('flex.addPromotion') || request()->routeIs('flex.addIncrement') || request()->routeIs('flex.promotion') ? 'active' : null }}"
-                                        href="{{ route('flex.promotion') }}"><i class="ph-trend-up"></i> Promotions/Increments</a>
+                                        href="{{ route('flex.promotion') }}"><i class="ph-trend-up"></i>
+                                        Promotions/Increments</a>
                                 </li>
                             @endcan
                             {{-- / --}}
@@ -206,7 +222,8 @@
                             @can('transfer-employee')
                                 <li class="nav-item "><a
                                         class="nav-link {{ request()->routeIs('flex.transfers') ? 'active' : null }}"
-                                        href="{{ route('flex.transfers') }}"><i class="ph-note-pencil"></i> Employee Approval</a></li>
+                                        href="{{ route('flex.transfers') }}"><i class="ph-note-pencil"></i> Employee
+                                        Approval</a></li>
                             @endcan
                             {{-- / --}}
 
@@ -214,7 +231,8 @@
                             @can('view-grivance')
                                 <li class="nav-item">
                                     <a class="nav-link {{ request()->routeIs('flex.addDisciplinary') || request()->routeIs('flex.grievancesCompain') ? 'active' : null }}"
-                                        href="{{ route('flex.grievancesCompain') }}"><i class="ph-scales"></i> Disciplinary Actions</a>
+                                        href="{{ route('flex.grievancesCompain') }}"><i class="ph-scales"></i> Disciplinary
+                                        Actions</a>
                                 </li>
                             @endcan
                             {{-- / --}}
@@ -223,7 +241,8 @@
                             @can('view-grivance')
                                 <li class="nav-item">
                                     <a class="nav-link {{ request()->routeIs('flex.grievances') ? 'active' : null }}"
-                                        href="{{ route('flex.grievances') }}"><i class="ph-smiley-nervous"></i> Employees Grievance</a>
+                                        href="{{ route('flex.grievances') }}"><i class="ph-smiley-nervous"></i> Employees
+                                        Grievance</a>
                                 </li>
                             @endcan
                             {{-- / --}}
@@ -237,38 +256,63 @@
                 {{-- start of view payroll dropdown --}}
                 @can('view-payroll-management')
                     <li
-                        class="nav-item nav-item-submenu {{ request()->routeIs('flex.submitInputs') 
-                        || request()->routeIs('flex.non_statutory_deductions') 
-                        || request()->routeIs('flex.statutory_deductions') 
-                        || request()->routeIs('flex.allowance') 
-                        || request()->routeIs('pension_receipt.index') 
-                        || request()->routeIs('flex.financial_group') 
-                        || request()->routeIs('flex.allowance_overtime') 
-                        || request()->routeIs('payroll.payroll') 
-                        || request()->routeIs('payroll.employee_payslip') 
-                        || request()->routeIs('payroll.comission_bonus') 
-                        || request()->routeIs('flex.approved_financial_payments') 
-                        || request()->routeIs('payroll.temp_payroll_info') 
-                        || request()->routeIs('reports.payrollReconciliationSummary')
-                        || request()->routeIs('reports.payrollReconciliationDetails') 
-                        || request()->routeIs('reports.payrolldetails')
-                        || request()->routeIs('reports.payrollReportLogs') || request()->routeIs('reports.payroll_inputs') ? 'nav-item-expand nav-item-open' : null }}">
+                        class="nav-item nav-item-submenu {{ request()->routeIs('flex.submitInputs') ||
+                        request()->routeIs('flex.non_statutory_deductions') ||
+                        request()->routeIs('flex.statutory_deductions') ||
+                        request()->routeIs('flex.allowance') ||
+                        request()->routeIs('pension_receipt.index') ||
+                        request()->routeIs('flex.financial_group') ||
+                        request()->routeIs('flex.allowance_overtime') ||
+                        request()->routeIs('payroll.payroll') ||
+                        request()->routeIs('payroll.employee_payslip') ||
+                        request()->routeIs('payroll.comission_bonus') ||
+                        request()->routeIs('flex.approved_financial_payments') ||
+                        request()->routeIs('payroll.temp_payroll_info') ||
+                        request()->routeIs('reports.payrollReconciliationSummary') ||
+                        request()->routeIs('reports.payrollReconciliationDetails') ||
+                        request()->routeIs('reports.payrolldetails') ||
+                        request()->routeIs('reports.payrollReportLogs') ||
+                        request()->routeIs('reports.payroll_inputs')
+                            ? 'nav-item-expand nav-item-open'
+                            : null }}">
                         <a href="#" class="nav-link">
                             <i class="ph-calculator"></i>
                             <span>Payroll Management</span>
                         </a>
 
                         <ul
-                            class="nav-group-sub collapse {{ request()->routeIs('flex.submitInputs') || request()->routeIs('flex.financial_groups_details') || request()->routeIs('flex.non_statutory_deductions') || request()->routeIs('flex.statutory_deductions') || request()->routeIs('pension_receipt.index') || request()->routeIs('flex.allowance') || request()->routeIs('flex.financial_group') || request()->routeIs('payroll.employee_payslip') || request()->routeIs('flex.allowance_overtime') || request()->routeIs('payroll.payroll') || request()->routeIs('payroll.employee_payslip') || request()->routeIs('payroll.comission_bonus') || request()->routeIs('flex.approved_financial_payments') || request()->routeIs('flex.allowance_category') || request()->routeIs('payroll.temp_payroll_info') || request()->routeIs('reports.payrollReconciliationSummary') || request()->routeIs('reports.payrollReconciliationDetails') 
-                            || request()->routeIs('reports.payrolldetails') || request()->routeIs('reports.payrollReportLogs') || request()->routeIs('reports.payroll_inputs') ? 'show' : null }}">
+                            class="nav-group-sub collapse {{ request()->routeIs('flex.submitInputs') ||
+                            request()->routeIs('flex.financial_groups_details') ||
+                            request()->routeIs('flex.non_statutory_deductions') ||
+                            request()->routeIs('flex.statutory_deductions') ||
+                            request()->routeIs('pension_receipt.index') ||
+                            request()->routeIs('flex.allowance') ||
+                            request()->routeIs('flex.financial_group') ||
+                            request()->routeIs('payroll.employee_payslip') ||
+                            request()->routeIs('flex.allowance_overtime') ||
+                            request()->routeIs('payroll.payroll') ||
+                            request()->routeIs('payroll.employee_payslip') ||
+                            request()->routeIs('payroll.comission_bonus') ||
+                            request()->routeIs('flex.approved_financial_payments') ||
+                            request()->routeIs('flex.allowance_category') ||
+                            request()->routeIs('payroll.temp_payroll_info') ||
+                            request()->routeIs('reports.payrollReconciliationSummary') ||
+                            request()->routeIs('reports.payrollReconciliationDetails') ||
+                            request()->routeIs('reports.payrolldetails') ||
+                            request()->routeIs('reports.payrollReportLogs') ||
+                            request()->routeIs('reports.payroll_inputs')
+                                ? 'show'
+                                : null }}">
                             {{-- start of payroll link --}}
                             <li class="nav-item"><a
-                                    class="nav-link {{ request()->routeIs('flex.financial_group') || request()->routeIs('flex.allowance_overtime') || request()->routeIs('flex.allowance') || request()->routeIs('flex.statutory_deductions') || request()->routeIs('flex.non_statutory_deductions') || request()->routeIs('flex.allowance_category') || request()->routeIs('flex.financial_groups_details')  ? 'active' : null }}"
-                                    href="{{ route('flex.financial_group') }}"><i class="ph-arrow-circle-right"></i> Payroll inputs </a></li>
+                                    class="nav-link {{ request()->routeIs('flex.financial_group') || request()->routeIs('flex.allowance_overtime') || request()->routeIs('flex.allowance') || request()->routeIs('flex.statutory_deductions') || request()->routeIs('flex.non_statutory_deductions') || request()->routeIs('flex.allowance_category') || request()->routeIs('flex.financial_groups_details') ? 'active' : null }}"
+                                    href="{{ route('flex.financial_group') }}"><i class="ph-arrow-circle-right"></i>
+                                    Payroll inputs </a></li>
                             @can('view-payslip')
                                 <li class="nav-item"><a
                                         class="nav-link {{ request()->routeIs('flex.submitInputs') ? 'active' : null }}"
-                                        href="{{ route('flex.submitInputs') }}"><i class="ph-paper-plane-tilt"></i> Submit Inputs </a></li>
+                                        href="{{ route('flex.submitInputs') }}"><i class="ph-paper-plane-tilt"></i> Submit
+                                        Inputs </a></li>
                             @endcan
                             @can('view-payroll')
                                 <li class="nav-item"><a
@@ -279,14 +323,16 @@
                             @can('view-pending-payments')
                                 <li class="nav-item"><a
                                         class="nav-link {{ request()->routeIs('flex.approved_financial_payments') ? 'active' : null }}"
-                                        href="{{ route('flex.approved_financial_payments') }}"><i class="ph-calendar-check"></i>Payroll Approvers </a></li>
+                                        href="{{ route('flex.approved_financial_payments') }}"><i
+                                            class="ph-calendar-check"></i>Payroll Approvers </a></li>
                             @endcan
 
                             {{-- start of payslip link  --}}
                             @can('view-payslip')
                                 <li class="nav-item"><a
                                         class="nav-link {{ request()->routeIs('payroll.employee_payslip') ? 'active' : null }}"
-                                        href="{{ route('payroll.employee_payslip') }}"><i class="ph-scroll"></i> Payslip </a></li>
+                                        href="{{ route('payroll.employee_payslip') }}"><i class="ph-scroll"></i> Payslip </a>
+                                </li>
                             @endcan
                             {{-- / --}}
 
@@ -304,7 +350,8 @@
                             @can('view-payslip')
                                 <li class="nav-item"><a
                                         class="nav-link {{ request()->routeIs('pension_receipt.index') ? 'active' : null }}"
-                                        href="{{ route('pension_receipt.index') }}"><i class="ph-upload-simple"></i> Upload Pension Receipt </a></li>
+                                        href="{{ route('pension_receipt.index') }}"><i class="ph-upload-simple"></i> Upload
+                                        Pension Receipt </a></li>
                             @endcan
                             {{-- / --}}
 
@@ -330,7 +377,8 @@
                             @endif
                             <li class="nav-item">
                                 <a class="nav-link {{ request()->routeIs('attendance.leave') ? 'active' : null }}"
-                                    href="{{ route('attendance.leave') }}"><i class="ph-note-pencil"></i>Leave Applications</a>
+                                    href="{{ route('attendance.leave') }}"><i class="ph-note-pencil"></i>Leave
+                                    Applications</a>
                             </li>
 
 
@@ -339,19 +387,22 @@
                             @can('view-unpaid-leaves')
                                 <li class="nav-item ">
                                     <a class="nav-link {{ request()->routeIs('flex.add_unpaid_leave') || request()->routeIs('flex.end_unpaid_leave') || request()->routeIs('flex.save_unpaid_leave') || request()->routeIs('flex.add_unpaid_leave') || request()->routeIs('flex.unpaid_leave') ? 'active' : null }}"
-                                        href="{{ route('flex.unpaid_leave') }}"><i class="ph-identification-badge"></i>Unpaid Leaves</a>
+                                        href="{{ route('flex.unpaid_leave') }}"><i class="ph-identification-badge"></i>Unpaid
+                                        Leaves</a>
                                 </li>
                             @endcan
                             {{-- / --}}
                             @can('view-report')
                                 <li class="nav-item"><a
                                         class="nav-link {{ request()->routeIs('attendance.leavereport') ? 'active' : null }}"
-                                        href="{{ route('attendance.leavereport') }}"><i class="ph-address-book"></i>Leave History</a></li>
+                                        href="{{ route('attendance.leavereport') }}"><i class="ph-address-book"></i>Leave
+                                        History</a></li>
                             @endcan
                             @can('view-forfeitings')
                                 <li class="nav-item"><a
                                         class="nav-link {{ request()->routeIs('attendance.leaveforfeiting') ? 'active' : null }}"
-                                        href="{{ route('attendance.leaveforfeiting') }}"><i class="ph-upload-simple"></i>Leave Forfeiting</a></li>
+                                        href="{{ route('attendance.leaveforfeiting') }}"><i
+                                            class="ph-upload-simple"></i>Leave Forfeiting</a></li>
                             @endcan
                         </ul>
                     </li>
@@ -374,17 +425,20 @@
                             @can('view-loan')
                                 <li class="nav-item"><a
                                         class="nav-link {{ request()->routeIs('flex.salary_advance') ? 'active' : null }}"
-                                        href="{{ route('flex.salary_advance') }}"><i class="ph-newspaper-clipping"></i> Other Loans(HESLB)</a></li>
+                                        href="{{ route('flex.salary_advance') }}"><i class="ph-newspaper-clipping"></i> Other
+                                        Loans(HESLB)</a></li>
                             @endcan
                             @can('approve-loan')
                                 <li class="nav-item"><a
                                         class="nav-link {{ request()->routeIs('flex.confirmed_loans') ? 'active' : null }}"
-                                        href="{{ route('flex.confirmed_loans') }}"><i class="ph-check-square"></i> Approved Loans</a></li>
+                                        href="{{ route('flex.confirmed_loans') }}"><i class="ph-check-square"></i> Approved
+                                        Loans</a></li>
                             @endcan
                             @can('view-loan-types')
                                 <li class="nav-item"><a
                                         class="nav-link {{ request()->routeIs('flex.loan_types') ? 'active' : null }}"
-                                        href="{{ route('flex.loan_types') }}"><i class="ph-bag-simple"></i> Loan Types</a></li>
+                                        href="{{ route('flex.loan_types') }}"><i class="ph-bag-simple"></i> Loan Types</a>
+                                </li>
                             @endcan
                         </ul>
                     </li>
@@ -489,7 +543,7 @@
                             <li class="nav-item">
                                 <a href="{{ route('flex.employee-profiles') }}"
                                     class="nav-link {{ request()->routeIs('flex.employee-profiles') ? 'active' : null }}">
-                                    <i class="ph-users"></i>  Employees Profiles
+                                    <i class="ph-users"></i> Employees Profiles
                                 </a>
                             </li>
                             <li class="nav-item">
@@ -524,19 +578,24 @@
 
                             <li class="nav-item"><a
                                     class="nav-link {{ request()->routeIs('flex.department') ? 'active' : null }}"
-                                    href="{{ route('flex.department') }}"><i class="ph-browsers"></i>Departments </a></li>
+                                    href="{{ route('flex.department') }}"><i class="ph-browsers"></i>Departments </a>
+                            </li>
                             <li class="nav-item"><a
                                     class="nav-link {{ request()->routeIs('flex.costCenter') ? 'active' : null }}"
-                                    href="{{ route('flex.costCenter') }}"><i class="ph-buildings"></i>Cost Center </a></li>
+                                    href="{{ route('flex.costCenter') }}"><i class="ph-buildings"></i>Cost Center </a>
+                            </li>
                             <li class="nav-item"><a
                                     class="nav-link {{ request()->routeIs('flex.branch') ? 'active' : null }}"
-                                    href="{{ route('flex.branch') }}"><i class="ph-git-branch"></i>Company Branches </a></li>
+                                    href="{{ route('flex.branch') }}"><i class="ph-git-branch"></i>Company Branches </a>
+                            </li>
                             <li class="nav-item"><a
                                     class="nav-link {{ request()->routeIs('flex.position') ? 'active' : null }}"
-                                    href="{{ route('flex.position') }}"><i class="ph-briefcase-metal"></i>Positions</a></li>
+                                    href="{{ route('flex.position') }}"><i class="ph-briefcase-metal"></i>Positions</a>
+                            </li>
                             <li class="nav-item"><a
                                     class="nav-link {{ request()->routeIs('flex.organization_level') ? 'active' : null }}"
-                                    href="{{ route('flex.organization_level') }}"><i class="ph-arrow-fat-lines-up"></i>Organisation Levels </a></li>
+                                    href="{{ route('flex.organization_level') }}"><i
+                                        class="ph-arrow-fat-lines-up"></i>Organisation Levels </a></li>
                             @if (session('mng_emp'))
                                 {{-- <li class="nav-item"><a
                                     class="nav-link {{ request()->routeIs('flex.contract') ? 'active' : null }}"
@@ -570,15 +629,18 @@
 
                             <li class="nav-item"><a
                                     class="nav-link {{ request()->routeIs('flex.financial_reports') ? 'active' : null }}"
-                                    href="{{ route('flex.financial_reports') }}"><i class="ph-table"></i>Statutory Reports </a></li>
+                                    href="{{ route('flex.financial_reports') }}"><i class="ph-table"></i>Statutory
+                                    Reports </a></li>
                             <li class="nav-item"><a
                                     class="nav-link {{ request()->routeIs('flex.organisation_reports') ? 'active' : null }}"
-                                    href="{{ route('flex.organisation_reports') }}"><i class="ph-chart-line-up"></i>Organisation Reports </a>
+                                    href="{{ route('flex.organisation_reports') }}"><i
+                                        class="ph-chart-line-up"></i>Organisation Reports </a>
                             </li>
                             {{-- For Performance Reports --}}
                             <li class="nav-item"><a
                                     class="nav-link {{ request()->routeIs('flex.performance-reports') ? 'active' : null }}"
-                                    href="{{ route('flex.performance-reports') }}"><i class="ph-chart-bar"></i>Performance Reports </a>
+                                    href="{{ route('flex.performance-reports') }}"><i
+                                        class="ph-chart-bar"></i>Performance Reports </a>
                             </li>
                             {{-- ./ --}}
 
@@ -598,7 +660,8 @@
                             @if (session('mng_roles_grp'))
                                 <li class="nav-item"><a
                                         class="nav-link {{ request()->routeIs('flex.companyInfo') ? 'active' : null }}"
-                                        href="{{ route('flex.companyInfo') }}"><i class="ph-house-line"></i>Company Info</a></li>
+                                        href="{{ route('flex.companyInfo') }}"><i class="ph-house-line"></i>Company
+                                        Info</a></li>
                             @endif
 
 
@@ -614,13 +677,14 @@
                             <li class=" nav-item"><a
                                     class="nav-link {{ request()->routeIs('roles.index') ? 'active' : null }} "
                                     href="{{ url('roles') }}">
-                                   <i class="ph-person-simple"></i> Roles</a>
+                                    <i class="ph-person-simple"></i> Roles</a>
                             </li>
 
 
 
                             <li class=" nav-item {{ request()->routeIs('permissions.index') ? 'active' : null }} "><a
-                                    class="nav-link " href="{{ url('permissions') }}"><i class="ph-check-square-offset"></i>Permission</a>
+                                    class="nav-link " href="{{ url('permissions') }}"><i
+                                        class="ph-check-square-offset"></i>Permission</a>
 
                             </li>
 
@@ -637,7 +701,8 @@
 
                             <li class="nav-item"><a
                                     class="nav-link {{ request()->routeIs('flex.email-notifications') ? 'active' : null }}"
-                                    href="{{ route('flex.email-notifications') }}"><i class="ph-envelope-open"></i>Email Notification</a>
+                                    href="{{ route('flex.email-notifications') }}"><i class="ph-envelope-open"></i>Email
+                                    Notification</a>
                             </li>
 
                             <li class="nav-item"><a
@@ -647,24 +712,32 @@
 
                             <li class="nav-item"><a
                                     class="nav-link {{ request()->routeIs('flex.leave-approval') ? 'active' : null }}"
-                                    href="{{ route('flex.leave-approval') }}"><i class="ph-circle-wavy-check"></i>Leave Approvals</a>
+                                    href="{{ route('flex.leave-approval') }}"><i class="ph-circle-wavy-check"></i>Leave
+                                    Approvals</a>
                             </li>
 
                             @if (session('mng_audit'))
                                 <li class="nav-item"><a
                                         class="nav-link {{ request()->routeIs('flex.audit_logs') ? 'active' : null }}"
-                                        href="{{ route('flex.audit_logs') }}"><i class="ph-path"></i>Audit Trail</a></li>
+                                        href="{{ route('flex.audit_logs') }}"><i class="ph-path"></i>Audit Trail</a>
+                                </li>
                             @endif
+                            <li class="nav-item"><a
+                                    class="nav-link {{ request()->routeIs('flex.brand_settings') ? 'active' : null }}"
+                                    href="{{ route('flex.brand_settings') }}"><i class="ph-path"></i>Brand Settings</a>
+                            </li>
 
                             @if (session('mng_audit'))
                                 <li class="nav-item"><a
                                         class="nav-link {{ request()->routeIs('flex.passwordAutogenerate') ? 'active' : null }}"
-                                        href="{{ route('flex.passwordAutogenerate') }}"><i class="ph-password"></i>Password Reset</a></li>
+                                        href="{{ route('flex.passwordAutogenerate') }}"><i
+                                            class="ph-password"></i>Password Reset</a></li>
                             @endif
                             @if (session('mng_audit'))
                                 <li class="nav-item"><a
                                         class="nav-link {{ request()->routeIs('bot.botIndex') ? 'active' : null }}"
-                                        href="{{ route('bot.botIndex') }}"><i class="ph-paper-plane-tilt"></i>Post data to BOT</a></li>
+                                        href="{{ route('bot.botIndex') }}"><i class="ph-paper-plane-tilt"></i>Post data
+                                        to BOT</a></li>
                             @endif
 
 

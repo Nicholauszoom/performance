@@ -9,6 +9,28 @@
         <link rel="stylesheet" href="{{ asset('assets/notification/css/notification.min.css') }}">
         <script src="{{ asset('assets/loader.js') }}"></script>
 
+        @php
+        $brandSetting = \App\Models\BrandSetting::first();
+       @endphp
+
+        <style>
+            :root {
+                /* previous bank ABC #00204e */
+                --primary-color: {{ $brandSetting->primary_color }}; 
+                /* previous bank ABC #f0ab00 */
+                --secondary-color: {{ $brandSetting->secondary_color }};
+                /* previous bankABC #f0ab00 */
+                --hover-color: {{ $brandSetting->hover_color }};
+
+                 /* previous bankABC ##f7c341 */
+                 --hover-color-two: {{ $brandSetting->hover_color_two }};
+                /* Add more variables for other colors as needed */
+
+            }
+        </style>
+
+
+
         <style>
             .request__spinner {
                 /* background: red; */
