@@ -11,6 +11,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Http\Response;
+
 
 
 
@@ -36,7 +38,7 @@ class PensionPayslipController extends Controller
         return view('payroll.pension_receipt', $data);
     }
 
-    
+
 public function authenticateUser($permissions)
 {
     // Check if the user is not authenticated
@@ -82,7 +84,7 @@ public function authenticateUser($permissions)
         $loan->added_by = Auth::user()->id;
         $loan->date = $request->date;
 
-        dd($request->date);
+        // dd($request->date);
         $loan->save();
 
         return response()->json(['status' => "success"]);
@@ -108,7 +110,7 @@ public function authenticateUser($permissions)
     {
 
 
-        $this->authenticateUser('add-loan');
+        // $this->authenticateUser('add-loan');
 
 
         $date = $request->date;

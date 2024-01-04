@@ -114,7 +114,7 @@ class PermisionSeeder extends Seeder
 
                 // Module 3: Leave Management
                 [64, 'view-leave-management', 3],
-                [65, 'view-leave', 3],
+                // [65, 'view-leave', 3],
                 [66, 'view-unpaid-leaves', 3],
                 [67, 'add-unpaid-leaves', 3],
                 [68, 'edit-unpaid-leaves', 3],
