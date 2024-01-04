@@ -23,6 +23,9 @@ class NotificationTitlesSeeder extends Seeder
             'overtime_approval',
             'leave_revoke',
             'leave_revoke_approval',
+            'leave_denial',
+            'overtime_denial',
+            'leave_revoke_denial'
         ];
 
         foreach ($titles as $title) {

@@ -254,6 +254,7 @@ class GeneralController extends Controller
         $linemanager = $request->input('linemanager');
 
         $empID = auth()->user()->emp_id;
+        $employee_data =  EMPL::where('emp_id',$empID)->first();
 
 
 
@@ -321,6 +322,15 @@ class GeneralController extends Controller
                                 'full_name' => $fullname,
                             );
                             try {
+                                PushNotificationController::bulksend([
+                                    'title' => '4',
+                                    'body' =>''.$employee_data['full_name'].' has an overtime request',
+                                    'img' => '',
+                                    'id' => $linemanager,
+                                    'leave_id' => '',
+                                    'overtime_id' => '',
+                                   
+                                    ]);
     
                                 Notification::route('mail', $linemanager_data['email'])->notify(new EmailRequests($email_data));
                             } catch (TransportException $exception) {
@@ -363,6 +373,15 @@ class GeneralController extends Controller
                                 'full_name' => $fullname,
                             );
                             try {
+                                PushNotificationController::bulksend([
+                                    'title' => '4',
+                                    'body' =>''.$employee_data['full_name'].' has an overtime request',
+                                    'img' => '',
+                                    'id' => $linemanager,
+                                    'leave_id' => '',
+                                    'overtime_id' => '',
+                                   
+                                    ]);
     
                                 Notification::route('mail', $linemanager_data['email'])->notify(new EmailRequests($email_data));
                             } catch (TransportException $exception) {
@@ -414,6 +433,15 @@ class GeneralController extends Controller
                             'full_name' => $fullname,
                         );
                         try {
+                            PushNotificationController::bulksend([
+                                'title' => '4',
+                                'body' =>''.$employee_data['full_name'].' has an overtime request',
+                                'img' => '',
+                                'id' => $linemanager,
+                                'leave_id' => '',
+                                'overtime_id' => '',
+                               
+                                ]);
 
                             Notification::route('mail', $linemanager_data['email'])->notify(new EmailRequests($email_data));
                         } catch (TransportException $exception) {
@@ -454,6 +482,15 @@ class GeneralController extends Controller
                             'full_name' => $fullname,
                         );
                         try {
+                            PushNotificationController::bulksend([
+                                'title' => '4',
+                                'body' =>''.$employee_data['full_name'].' has an overtime request',
+                                'img' => '',
+                                'id' => $linemanager,
+                                'leave_id' => '',
+                                'overtime_id' => '',
+                               
+                                ]);
 
                             Notification::route('mail', $linemanager_data['email'])->notify(new EmailRequests($email_data));
                         } catch (TransportException $exception) {
@@ -644,9 +681,8 @@ class GeneralController extends Controller
         //  start of employee Slips function
         public function mySlips(Request $request)
         {
-            // $empID = auth()->user()->emp_id;
-
-            $data['month_list'] = $this->flexperformance_model->payroll_month_list();
+            $empID = auth()->user()->emp_id;
+            $data['month_list'] = $this->flexperformance_model->payroll_month_list2($empID);
 
 
         return response( [ 'data'=>$data  ],200 );
@@ -1052,7 +1088,7 @@ class GeneralController extends Controller
     public function approveOvertime(Request $request)
     {
 
-        $overtimeID =$request->$id;
+        $overtimeID =$request->id;
 
         // $status = $this->flexperformance_model->checkApprovedOvertime($overtimeID);
         // // $overtime_type = $this->flexperformance_model->get_overtime_type($overtimeID);
@@ -1092,9 +1128,11 @@ class GeneralController extends Controller
 
         $status = $this->flexperformance_model->checkOvertimeStatus($overtimeID);
    //     dd($status);
-        // $overtime_type = $this->flexperformance_model->get_overtime_type($overtimeID);
+        $empID = $this->flexperformance_model->get_employee_overtimeID($overtimeID);
+        $approver=EMPL::where('emp_id',auth()->user()->emp_id)->first();
+        $employee_data =  EMPL::where('emp_id',$empID)->first();
         // $rate = $this->flexperformance_model->get_overtime_rate();
-      
+   
         if ($status == 0) {
             $signatory = session('emp_id');
           //  dd($signatory)
@@ -1102,6 +1140,15 @@ class GeneralController extends Controller
             $result = $this->flexperformance_model->lineapproveOvertime($overtimeID, $time_approved);
 
             if ($result == true) {
+                       PushNotificationController::bulksend([
+                                    'title' => '5',
+                                    'body' =>'Dear '.$employee_data['full_name'].',  Your overtime request has been recommended by '.$approver['full_name'].'',
+                                    'img' => '',
+                                    'id' =>$empID,
+                                    'leave_id' => '',
+                                    'overtime_id' => '',
+                                   
+                                    ]);
                 return response()->json([
                 
                     'msg' => 'Overtime Recommended Successifully'],200);
@@ -1300,11 +1347,23 @@ class GeneralController extends Controller
     { //or disapprove
 
         $overtimeID = $request->id;
+        $empID = $this->flexperformance_model->get_employee_overtimeID($overtimeID);
+        $approver=EMPL::where('emp_id',auth()->user()->emp_id)->first();
+        $employee_data =  EMPL::where('emp_id',$empID)->first();
 
         $status = $this->flexperformance_model->checkOvertimeStatus($overtimeID);
         if($status===0){
         $result = $this->flexperformance_model->deny_overtime($overtimeID);
         if ($result == true) {
+            PushNotificationController::bulksend([
+                'title' => '9',
+                'body' =>'Dear '.$employee_data['full_name'].',  Your overtime request is denied by '.$approver['full_name'].'',
+                'img' => '',
+                'id' =>$empID,
+                'leave_id' => '',
+                'overtime_id' => '',
+               
+                ]);
             $msg="Overtime denied Successfully";
             return response([
                 'msg'=>$msg

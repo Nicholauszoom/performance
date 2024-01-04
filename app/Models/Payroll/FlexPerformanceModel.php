@@ -2170,6 +2170,11 @@ IF(
         $query = 'SELECT DISTINCT payroll_date FROM payroll_logs ORDER BY payroll_date DESC';
         return DB::select(DB::raw($query));
     }
+    public function payroll_month_list2($empId)
+    {
+        $query = 'SELECT DISTINCT payroll_date FROM payroll_logs WHERE empID = '.$empId.' ORDER BY payroll_date DESC';
+        return DB::select(DB::raw($query));
+    }
 
     public function payroll_year_list()
     {

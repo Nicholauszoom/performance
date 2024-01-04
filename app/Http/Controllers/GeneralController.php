@@ -11209,7 +11209,7 @@ public function authenticateUser($permissions)
         $data['title'] = "Overtime";
         $data['my_overtimes'] = $this->flexperformance_model->my_overtimes(auth()->user()->emp_id);
         $data['overtimeCategory'] = $this->flexperformance_model->overtimeCategory();
-        $data['employees'] = $this->flexdperformance_model->Employee();
+        $data['employees'] = $this->flexperformance_model->Employee();
 
         $data['line_overtime'] = $this->flexperformance_model->approvedOvertimes();
 
