@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 //use App\Http\Controllers\Controller;
+use App\Models\BrandSetting;
 use Illuminate\Support\Facades\Gate;
 use App\Charts\EmployeeLineChart;
 use App\Exports\LeaveApprovalsExport;
@@ -5748,7 +5749,7 @@ public function authenticateUser($permissions)
 
     public function remove_individual_from_allowance(Request $request)
     {
-        
+
         $method = $request->method();
 
         if ($method == "POST") {
@@ -10553,10 +10554,14 @@ public function authenticateUser($permissions)
             ]
         );
 
+        $year = date('Y');
+
         $emp_id = $request->emp_id;
         $leaveForfeiting = LeaveForfeiting::where('empID', $emp_id)->first();
         $leaveForfeiting->opening_balance = $request->opening_balance;
         $leaveForfeiting->days = $request->days;
+        $leaveForfeiting->adjusted_days = $request->opening_balance -  $request->days;
+        $leaveForfeiting->forfeiting_year = $year;
         $leaveForfeiting->update();
 
         $msg = "Employee Leave Forfeiting has been save Successfully !";
@@ -10584,7 +10589,9 @@ public function authenticateUser($permissions)
         $employees = Employee::get();
 
         $today = date('Y-m-d');
-        $year = date('Y');
+        $month = date('m');
+        $year = date('Y') - 1;
+
         $employeeHiredate = explode('-', Auth::user()->hire_date);
         $employeeHireYear = $employeeHiredate[0];
         $employeeDate = '';
@@ -10595,6 +10602,8 @@ public function authenticateUser($permissions)
             $employeeDate = $year . '-01-01';
         }
 
+
+
         foreach ($employees as $value) {
             $opening_balance = $this->attendance_model->getLeaveBalance($value->emp_id, $employeeDate, $year . '-12-31');
 
@@ -10602,7 +10611,7 @@ public function authenticateUser($permissions)
             $leave_forfeit = LeaveForfeiting::firstOrNew(['empID' => $value->emp_id]);
             $leave_forfeit->opening_balance = $opening_balance;
             $leave_forfeit->nature = 1; // Replace attribute1 with your actual attribute names
-            $leave_forfeit->opening_balance_year = $year;
+            $leave_forfeit->opening_balance_year = $year +1;
             $leave_forfeit->save();
         }
 
@@ -10936,7 +10945,7 @@ public function authenticateUser($permissions)
         // dd($id);
         $data['leaveForfeitings'] = LeaveForfeiting::with('employee')->where('empID', $id)->first();
         $data['employees'] = Employee::get();
-        $data['parent'] = 'Settings';
+        $data['parent'] = 'Leave Management';
         $data['child'] = 'Edit Leave Forfeiting';
         $today = date('Y-m-d');
         $arryear = explode('-', $today);
@@ -12714,5 +12723,42 @@ $this->authenticateUser('view-Talent');
 
         $msg = "Loan Type has been added Successfully !";
         return redirect('flex/loan_types')->with('msg', $msg);
+    }
+
+    public function brand_settings(Request $request){
+
+        $brandSetting = BrandSetting::firstOrCreate();
+
+        if ($request->isMethod('post')) {
+            
+            $brandSettings = $request->all();
+
+            foreach (['company_logo', 'report_logo', 'login_picture', 'dashboard_logo'] as $fileField) {
+                if ($request->hasFile($fileField)) {
+
+                    $existingFilePath = $brandSetting->$fileField;
+                                  
+                    if ($existingFilePath) {
+                        Storage::disk('public')->delete($existingFilePath);
+                    }
+
+                
+                    $file = $request->file($fileField);
+                    $path = $file->storeAs('brand_settings', $fileField . '.' . $file->getClientOriginalExtension(), 'public');
+                    $brandSettings[$fileField] = $path;
+                }
+            }
+            $brandSetting->update($brandSettings);
+
+            
+            $msg = 'Brand settings updated successful';
+            return redirect('flex/brand_settings')->with('msg', $msg);
+
+
+        }
+
+          $data = ['brandSetting' => $brandSetting];
+         return view('setting.brand-settings', $data);
+
     }
 }
