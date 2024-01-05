@@ -1917,6 +1917,11 @@ public function authenticateUser($permissions)
 
             $result = $this->flexperformance_model->addposition($data);
             if ($result == true) {
+
+                $autheniticateduser = auth()->user()->emp_id;
+                $auditLog = SysHelpers::AuditLog(1, "Position added  by " . $autheniticateduser, $request);
+
+                
                 return redirect()->back();
                 //$response_array['status'] = "OK";
                 // $response_array['message'] = "<p class='alert alert-success text-center'>Position Added Successifully!</p>";
@@ -1942,6 +1947,11 @@ public function authenticateUser($permissions)
             );
             $result = $this->flexperformance_model->addOrganizationLevel($data);
             if ($result == true) {
+
+                $autheniticateduser = auth()->user()->emp_id;
+                $auditLog = SysHelpers::AuditLog(1, "Organization level added  by " . $autheniticateduser, $request);
+
+                
                 return redirect()->back();
                 $response_array['status'] = "OK";
                 $response_array['message'] = "<p class='alert alert-success text-center'>Organization Level Added Successifully!</p>";
@@ -1958,6 +1968,11 @@ public function authenticateUser($permissions)
     {
         $result = $this->flexperformance_model->deleteOrganizationLevel($id);
         if ($result == true) {
+
+            $request = new Request();
+            $autheniticateduser = auth()->user()->emp_id;
+            $auditLog = SysHelpers::AuditLog(1, "Organization level deleted  by " . $autheniticateduser, $request);
+
             $response_array['status'] = "OK";
             $response_array['message'] = "<p class='alert alert-success text-center'>Organization Level Deleted!</p>";
         } else {
@@ -1977,6 +1992,10 @@ public function authenticateUser($permissions)
         );
         $result = $this->flexperformance_model->updateposition($data, $id);
         if ($result == true) {
+            $autheniticateduser = auth()->user()->emp_id;
+            $auditLog = SysHelpers::AuditLog(1, "Position deleted  by " . $autheniticateduser, $request);
+
+
             $response_array['status'] = "OK";
             $response_array['message'] = "<p class='alert alert-success text-center'>Position Deleted!</p>";
         } else {
@@ -1996,6 +2015,11 @@ public function authenticateUser($permissions)
         );
         $result = $this->flexperformance_model->updateposition($data, $id);
         if ($result == true) {
+
+            $autheniticateduser = auth()->user()->emp_id;
+            $auditLog = SysHelpers::AuditLog(1, "Position activated  by " . $autheniticateduser, $request);
+
+
             $response_array['status'] = "OK";
             $response_array['message'] = "<p class='alert alert-success text-center'>Position Activated Successifully!</p>";
         } else {
@@ -2270,6 +2294,11 @@ public function authenticateUser($permissions)
 
         $result = $this->flexperformance_model->direct_insert_overtime($empID, $signatory, $overtime_category, $date, $days, $percent, $line_maager);
         if ($result == true) {
+
+            $autheniticateduser = auth()->user()->emp_id;
+            $auditLog = SysHelpers::AuditLog(1, "Overtime on behalf applied  by " . $autheniticateduser, $request);
+
+
             $amount = $days * ($employee_data->salary / 176) * $percent;
 
             SysHelpers::FinancialLogs($empID, $overtime_name, '0.00', number_format($amount, 2), 'Payroll Input');
@@ -2494,6 +2523,10 @@ public function authenticateUser($permissions)
 
             $this->flexperformance_model->update_overtime($data, $overtimeID);
 
+            $autheniticateduser = auth()->user()->emp_id;
+            $auditLog = SysHelpers::AuditLog(1, "Overtime updated  by " . $autheniticateduser, $request);
+
+
             session('note', "<p class='alert alert-success text-center'>Your Overtime was Updated Successifully</p>");
 
             return redirect('/flex/overtime');
@@ -2515,6 +2548,12 @@ public function authenticateUser($permissions)
             'linemanager' => auth()->user()->emp_id,
         );
         $this->flexperformance_model->update_overtime($data, $overtimeID);
+
+        $request = new Request();
+        $autheniticateduser = auth()->user()->emp_id;
+        $auditLog = SysHelpers::AuditLog(1, "Overtime confirmed  by " . $autheniticateduser, $request);
+
+
         echo "<p class='alert alert-success text-center'>Overtime Confirmed Successifully</p>";
     }
 
@@ -2526,6 +2565,13 @@ public function authenticateUser($permissions)
             'time_recommended_line' => date('Y-m-d h:i:s'),
         );
         $this->flexperformance_model->update_overtime($data, $overtimeID);
+
+        $request = new Request();
+        $autheniticateduser = auth()->user()->emp_id;
+        $auditLog = SysHelpers::AuditLog(1, "Overtime reccomendation   by " . $autheniticateduser, $request);
+
+
+        
         echo "<p class='alert alert-success text-center'>Overtime Recommended Successifully</p>";
     }
 
@@ -2887,6 +2933,7 @@ public function authenticateUser($permissions)
             );
 
             $this->flexperformance_model->updatedepartment($data, $id);
+            
             session('note', "<p class='alert alert-success text-center'>Department Updated Successifully</p>");
             return redirect('/flex/department');
         } elseif ($request->type == 'updatecenter') {
