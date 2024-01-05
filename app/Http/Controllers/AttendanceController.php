@@ -304,8 +304,10 @@ class AttendanceController extends Controller
     // For My Leaves
     public function myLeaves()
     {
+    
 
         $this->authenticateUser('view-leaves');
+        
         $data['myleave'] = Leaves::where('empID', Auth::user()->emp_id)->orderBy('id', 'desc')->get();
         $id = Auth::user()->emp_id;
         $employeee = Employee::where('emp_id', $id)->first();
@@ -789,6 +791,14 @@ class AttendanceController extends Controller
                         );
 
                         try {
+                            PushNotificationController::bulksend([
+                                'title' => '2',
+                                'body' => 'Dear '.$linemanager_data['full_name'].',You have a leave request to approve of ' . $employee_data['full_name'],
+                                'img' => '',
+                                'id' => $linemanager->level1,
+                                'leave_id' => $leaves->id,
+                                'overtime_id' => '',
+                            ]);
 
                             Notification::route('mail', $linemanager_data['email'])->notify(new EmailRequests($email_data));
 
@@ -972,6 +982,14 @@ class AttendanceController extends Controller
                             'next' => parse_url(route('attendance.leave'), PHP_URL_PATH),
                         );
                         try {
+                            PushNotificationController::bulksend([
+                                'title' => '2',
+                                'body' => 'Dear '.$linemanager_data['full_name'].',You have a leave request to approve of ' . $employee_data['full_name'],
+                                'img' => '',
+                                'id' => $linemanager->level1,
+                                'leave_id' => $leaves->id,
+                                'overtime_id' => '',
+                            ]);
 
                             Notification::route('mail', $linemanager_data['email'])->notify(new EmailRequests($email_data));
 
@@ -1167,6 +1185,14 @@ class AttendanceController extends Controller
                         'next' => parse_url(route('attendance.leave'), PHP_URL_PATH),
                     );
                     try {
+                        PushNotificationController::bulksend([
+                            'title' => '2',
+                            'body' => 'Dear '.$linemanager_data['full_name'].',You have a leave request to approve of ' . $employee_data['full_name'],
+                            'img' => '',
+                            'id' => $linemanager->level1,
+                            'leave_id' => $leaves->id,
+                            'overtime_id' => '',
+                        ]);
 
                         Notification::route('mail', $linemanager_data['email'])->notify(new EmailRequests($email_data));
 
@@ -1294,9 +1320,14 @@ class AttendanceController extends Controller
         );
 
         try {
-            PushNotificationController::bulksend("Leave Approval",
-                "Your Leave request is successful granted",
-                "", $empID);
+            PushNotificationController::bulksend([
+                'title' => '3',
+                'body' =>'Dear '.$emp_data->full_name.',Your leave request is successful approved by '.$position->name.'',
+                'img' => '',
+                'id' => $empID,
+                'leave_id' => $leave->id,
+                'overtime_id' => '',
+                ]);
 
             Notification::route('mail', $emp_data->email)->notify(new EmailRequests($email_data));
 
@@ -1476,6 +1507,15 @@ class AttendanceController extends Controller
                 );
                 //dd($employee_data['email']);
                 try {
+                    PushNotificationController::bulksend([
+                        'title' => '8',
+                        'body' =>'Your leave request is Denied by '. SysHelpers::getUserPosition(Auth::user()->position).'',
+                        'img' => '',
+                        'id' =>$leave->empID,
+                        'leave_id' => $leave->id,
+                        'overtime_id' => '',
+                       
+                        ]);
 
                     Notification::route('mail', $employee_data['email'])->notify(new EmailRequests($email_data));
 
@@ -1596,6 +1636,16 @@ class AttendanceController extends Controller
         );
 
         try {
+            PushNotificationController::bulksend([
+                'title' => '6',
+                'body' =>'Dear '.$linemanager_data['full_name'].''.$employee_data['full_name'].' has a leave revoke request',
+                'img' => '',
+                'id' => $linemanager->level1,
+                'leave_id' => $particularLeave->id,
+                'overtime_id' => '',
+               
+                ]);
+      
 
             Notification::route('mail', $linemanager_data['email'])->notify(new EmailRequests($email_data));
 
@@ -1643,9 +1693,15 @@ class AttendanceController extends Controller
 
                 Notification::route('mail', $emp_data->email)->notify(new EmailRequests($email_data));
 
-                PushNotificationController::bulksend("Leave Revoke",
-                    "Your Revoke Leave request is successful granted",
-                    "", $particularLeave->empID);
+                PushNotificationController::bulksend([
+                    'title' => '7',
+                    'body' =>'Dear '.$emp_data->full_name.',Your leave Revoke is successful approved by '.$position.'',
+                    'img' => '',
+                    'id' => $particularLeave->empID,
+                    'leave_id' => $particularLeave->id,
+                    'overtime_id' => '',
+                   
+                    ]);
             } catch (Exception $exception) {
                 $msg = " Revoke Leave Request Has been Approved Successfully But Email is not sent(SMPT problem) !";
                 // return redirect('flex/view-action/'.$emp,$data)->with('msg', $msg);
@@ -1679,13 +1735,18 @@ class AttendanceController extends Controller
             );
 
             try {
+                PushNotificationController::bulksend([
+                    'title' => '10',
+                    'body' =>'Dear '.$emp_data->full_name.', Your  Leave  Revoke request is denied by '. $position.'',
+                    'img' => '',
+                    'id' => $particularLeave->empID,
+                    'leave_id' => $particularLeave->id,
+                    'overtime_id' => '',
+                   
+                    ]);
 
                 Notification::route('mail', $emp_data->email)->notify(new EmailRequests($email_data));
-
-                PushNotificationController::bulksend("Leave Revoke",
-                    "Your Revoke Leave request is not granted",
-                    "", $particularLeave->empID);
-
+           
 
             } catch (Exception $exception) {
                 $msg = " Revoke Leave Request Has been Cancel Successfully But Email is not sent(SMPT problem) !";

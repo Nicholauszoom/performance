@@ -26,7 +26,10 @@ class PushNotificationController extends Controller
             $user = auth()->user()->emp_id;
     
             $employee = EMPL::where('emp_id', $params['id'])->first();
+    
+        
             // dd($params['id']);
+           
             $comment = new PushNotification();
             $comment->title = $params['title'] ?? null;
             $comment->body = $params['body'] ?? null;
@@ -51,7 +54,7 @@ class PushNotificationController extends Controller
         'sound' => 'default',
         'badge' => '1',
     ];
-
+  
     $data = [
         'click_action' => 'FLUTTER_NOTIFICATION_CLICK',
         'id' =>   $comment->receiver_emp_id,
