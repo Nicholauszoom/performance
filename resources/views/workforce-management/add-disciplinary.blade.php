@@ -44,16 +44,17 @@
                             <div class="row mb-3">
                                 <div class="col-md-12 col-lg-12">
                                     <div class="mb-3">
-                                        <select class="form-control select"  name="employeeID" id="docNo">
+                                        <select class="form-control select" name="employeeID" id="docNo">
                                             @php
                                             $employees = $employees->sortBy('fname'); // Sort by first name in ascending order
-                                        @endphp
-                                        @foreach ($employees as $item)
+                                            @endphp
+                                            @foreach ($employees as $item)
                                             <option value="{{ $item->emp_id }}">{{ $item->emp_id }} -
                                                 {{ $item->fname }} {{ $item->mname }} {{ $item->lname }}</option>
-                                        @endforeach
+                                            @endforeach
                                         </select>
                                     </div>
+
                                 </div>
                                 <div class="col-12 col-lg-12">
                                     <div class="mb-3">
@@ -259,6 +260,17 @@
 @endsection
 
 @push('footer-script')
+
+
+<script>
+    $(document).ready(function () {
+        // Initialize Select2 on your <select> element
+        $('#docNo').select2({
+            placeholder: "Search by name",
+            allowClear: true // Optional: Adds a clear button to the select input
+        });
+    });
+</script>
     <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.css" rel="stylesheet">
     </head>
