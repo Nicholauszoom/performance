@@ -16,7 +16,7 @@
     <script src="{{ asset('assets/js/app.js') }}"></script>
 
     @php
-        $brandSetting = \App\Models\BrandSetting::first();
+        $brandSetting = \App\Models\BrandSetting::firstOrCreate();
     @endphp
 
     <style>
@@ -100,10 +100,9 @@
 
 
         .login-cover {
-            /* background-image: url('{{ asset('storage/' . $brandSetting->login_picture) }}'); */
-            /* background-image: url('{{ asset('img/s-1.jpg') }}'); */
+         
 
-            background-image: url('{{ $brandSetting->login_picture ? asset('storage/' . $brandSetting->login_picture) : asset('img/s-1.jpg') }}');
+         background-image: url('{{$brandSetting !=null && $brandSetting->login_picture != null ? asset('storage/' . $brandSetting->login_picture) : asset('img/s-1.jpg') }}'); */
 
             min-height: 500px;
             /* background-color: #cccccc; */
