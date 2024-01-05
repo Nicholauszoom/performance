@@ -45,11 +45,13 @@
                                 <div class="col-md-12 col-lg-12">
                                     <div class="mb-3">
                                         <select class="form-control select"  name="employeeID" id="docNo">
-                                            <option selected disabled>Select Accused Employee</option>
-                                            @foreach ($employees as $item)
-                                                <option value="{{ $item->emp_id }}">{{ $item->emp_id }} -
-                                                    {{ $item->fname }} {{ $item->mname }} {{ $item->lname }}</option>
-                                            @endforeach
+                                            @php
+                                            $employees = $employees->sortBy('fname'); // Sort by first name in ascending order
+                                        @endphp
+                                        @foreach ($employees as $item)
+                                            <option value="{{ $item->emp_id }}">{{ $item->emp_id }} -
+                                                {{ $item->fname }} {{ $item->mname }} {{ $item->lname }}</option>
+                                        @endforeach
                                         </select>
                                     </div>
                                 </div>

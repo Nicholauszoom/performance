@@ -1921,7 +1921,7 @@ public function authenticateUser($permissions)
                 $autheniticateduser = auth()->user()->emp_id;
                 $auditLog = SysHelpers::AuditLog(1, "Position added  by " . $autheniticateduser, $request);
 
-                
+
                 return redirect()->back();
                 //$response_array['status'] = "OK";
                 // $response_array['message'] = "<p class='alert alert-success text-center'>Position Added Successifully!</p>";
@@ -1951,7 +1951,7 @@ public function authenticateUser($permissions)
                 $autheniticateduser = auth()->user()->emp_id;
                 $auditLog = SysHelpers::AuditLog(1, "Organization level added  by " . $autheniticateduser, $request);
 
-                
+
                 return redirect()->back();
                 $response_array['status'] = "OK";
                 $response_array['message'] = "<p class='alert alert-success text-center'>Organization Level Added Successifully!</p>";
@@ -2571,7 +2571,7 @@ public function authenticateUser($permissions)
         $auditLog = SysHelpers::AuditLog(1, "Overtime reccomendation   by " . $autheniticateduser, $request);
 
 
-        
+
         echo "<p class='alert alert-success text-center'>Overtime Recommended Successifully</p>";
     }
 
@@ -2933,7 +2933,7 @@ public function authenticateUser($permissions)
             );
 
             $this->flexperformance_model->updatedepartment($data, $id);
-            
+
             session('note', "<p class='alert alert-success text-center'>Department Updated Successifully</p>");
             return redirect('/flex/department');
         } elseif ($request->type == 'updatecenter') {
@@ -9309,7 +9309,7 @@ public function authenticateUser($permissions)
 
         $this->authenticateUser('view-grivance');
         // $id=Auth::user()->emp_id;
-        $data['employees'] = EMPL::all();
+        $data['employees'] = Employee::orderBy('emp_id', 'asc')->get();
 
         return view('workforce-management.add-disciplinary', $data);
     }
@@ -12846,19 +12846,19 @@ $this->authenticateUser('view-Talent');
         $brandSetting = BrandSetting::firstOrCreate();
 
         if ($request->isMethod('post')) {
-            
+
             $brandSettings = $request->all();
 
             foreach (['company_logo', 'report_logo', 'login_picture', 'dashboard_logo'] as $fileField) {
                 if ($request->hasFile($fileField)) {
 
                     $existingFilePath = $brandSetting->$fileField;
-                                  
+
                     if ($existingFilePath) {
                         Storage::disk('public')->delete($existingFilePath);
                     }
 
-                
+
                     $file = $request->file($fileField);
                     $path = $file->storeAs('brand_settings', $fileField . '.' . $file->getClientOriginalExtension(), 'public');
                     $brandSettings[$fileField] = $path;
@@ -12868,7 +12868,7 @@ $this->authenticateUser('view-Talent');
             $autheniticateduser = auth()->user()->emp_id;
             $auditLog = SysHelpers::AuditLog(1, "Brand settings updated  by " . $autheniticateduser, $request);
 
-            
+
             $msg = 'Brand settings updated successful';
             return redirect('flex/brand_settings')->with('msg', $msg);
 
