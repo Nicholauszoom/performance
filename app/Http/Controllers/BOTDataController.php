@@ -96,59 +96,97 @@ class BOTDataController extends Controller
         return $cleanedString;
     }
 
-    public function postEmployeeData(Request $request)
-    {
-        $emp_id  =  $request->emp_id;
-        $employee = Employee::where('emp_id',$emp_id)->first();
+     private function sendEmployeeData($data)
+        {
+            $endpoint = 'https://compliance.bancabc.co.tz/api/employeerecord';
 
+            $headers = [
+                'Content-Type' => 'application/json',
+                'informationCode' => '1074',
+                'Authorization' => 'Bearer 14ee8c99777e78e8c94d0925b2dc0de267d82add43274233f21eeefacce39ecb',
+            ];
 
+            $response = Http::withHeaders($headers)->post($endpoint, $data);
 
-        // FIXME I have to query the contract and assign value
-
-        $data = [
-            "reportingDate"=>$this->convertDate($employee->hire_date),
-            "branchCode" => $employee->branch,
-            "empName" =>  $employee->fname.' '. $employee->mname.' `'. $employee->lname,
-            "empDob" =>  $this->convertDate($employee->birthdate), // DDMMYYYYHHMM
-            "empNin" => $this->removeSpecialCharacters($employee->national_id),
-            "empPosition" =>  $this->removeSpecialCharacters($employee->positions->name),
-            "empStatus" =>  $employee->contract_type,
-            "empDepartment" =>  $this->removeSpecialCharacters($employee->departments->name),
-            "appointmentDate" =>$this->convertDate($employee->hire_date), // DDMMYYYYHHMM
-            "lastPromotionDate" =>$this->convertDate($employee->hire_date), // DDMMYYYYHHMM
-            "basicSalary" => $employee->salary,
-            "snrMgtBenefits" => 0,
-            "otherEmpBenefits" => 0,
-            "gender" => $this->convertGenderOutput($employee->gender),
-            "directorsName" => 'none',
-            "directorsAllowance" => 100000,
-            "directorsCommittee" => 'none',
-        ];
-
-
-        $endpoint = 'https://compliance.bancabc.co.tz/api/employeerecord';     
-
-        $headers = [
-            'Content-Type' => 'application/json',
-            'informationCode' => '1074',
-            'Authorization' => 'Bearer 14ee8c99777e78e8c94d0925b2dc0de267d82add43274233f21eeefacce39ecb',
-        ];
-        $response = Http::withHeaders($headers)->post($endpoint, $data);
-       // dd($response->response);
-        if ($response->status() === 200) {
-         $data = $response->json();
-        } else {
-            $statusCode = $response->status();
-            $errorMessage = $response['error']['message'];
-
-           // return $error = [$statusCode, $errorMessage];
+            return $response;
         }
 
-        //
+        public function postEmployeeData(Request $request)
+        {
+            if ($request->emp_id === 'all') {
+                $employees = Employee::all();
+                $responses = [];
 
+                foreach ($employees as $employee) {
 
-        // $response = $this->postEndPointResponse('/individualInformation/', $data);
+                    $data = [
+                        "reportingDate"=>$this->convertDate($employee->hire_date),
+                        "branchCode" => $employee->branch,
+                        "empName" =>  $employee->fname.' '. $employee->mname.' `'. $employee->lname,
+                        "empDob" =>  $this->convertDate($employee->birthdate), // DDMMYYYYHHMM
+                        "empNin" => $this->removeSpecialCharacters($employee->national_id),
+                        "empPosition" =>  $this->removeSpecialCharacters($employee->positions->name),
+                        "empStatus" =>  $employee->contract_type,
+                        "empDepartment" =>  $this->removeSpecialCharacters($employee->departments->name),
+                        "appointmentDate" =>$this->convertDate($employee->hire_date), // DDMMYYYYHHMM
+                        "lastPromotionDate" =>$this->convertDate($employee->hire_date), // DDMMYYYYHHMM
+                        "basicSalary" => $employee->salary,
+                        "snrMgtBenefits" => 0,
+                        "otherEmpBenefits" => 0,
+                        "gender" => $this->convertGenderOutput($employee->gender),
+                        "directorsName" => 'none',
+                        "directorsAllowance" => 100000,
+                        "directorsCommittee" => 'none',
+                    ];
 
-        return $response;
-    }
+                    $response = $this->sendEmployeeData($data);
+
+                    if ($response->status() === 200) {
+                        $responseData = $response->json();
+                        $responses[] = $responseData; // Collect response data for all employees
+                    } else {
+                        $statusCode = $response->status();
+                        $errorMessage = $response['error']['message'];
+                        // Handle error if needed for each employee
+                    }
+                }
+
+                return $responses; // Return array of responses for all employees
+            } else {
+                $emp_id = $request->emp_id;
+                $employee = Employee::where('emp_id', $emp_id)->first();
+
+                $data = [
+                    "reportingDate"=>$this->convertDate($employee->hire_date),
+                    "branchCode" => $employee->branch,
+                    "empName" =>  $employee->fname.' '. $employee->mname.' `'. $employee->lname,
+                    "empDob" =>  $this->convertDate($employee->birthdate), // DDMMYYYYHHMM
+                    "empNin" => $this->removeSpecialCharacters($employee->national_id),
+                    "empPosition" =>  $this->removeSpecialCharacters($employee->positions->name),
+                    "empStatus" =>  $employee->contract_type,
+                    "empDepartment" =>  $this->removeSpecialCharacters($employee->departments->name),
+                    "appointmentDate" =>$this->convertDate($employee->hire_date), // DDMMYYYYHHMM
+                    "lastPromotionDate" =>$this->convertDate($employee->hire_date), // DDMMYYYYHHMM
+                    "basicSalary" => $employee->salary,
+                    "snrMgtBenefits" => 0,
+                    "otherEmpBenefits" => 0,
+                    "gender" => $this->convertGenderOutput($employee->gender),
+                    "directorsName" => 'none',
+                    "directorsAllowance" => 100000,
+                    "directorsCommittee" => 'none',
+                ];
+
+                $response = $this->sendEmployeeData($data);
+
+                if ($response->status() === 200) {
+                    $responseData = $response->json();
+                } else {
+                    $statusCode = $response->status();
+                    $errorMessage = $response['error']['message'];
+                    // Handle error for the single employee request
+                }
+
+                return $response;
+            }
+        }
 }
