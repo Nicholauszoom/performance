@@ -42,111 +42,165 @@
                 <div class="container">
                     <form method="POST" action="" enctype="multipart/form-data">
                         @csrf
+                        <h4>Logo/Pictures</h4>
+                        <div class="d-flex flex-wrap">
+                            <div class="col-md-6">
+                                <div class="form-group m-2">
+                                    <label for="company_logo">Company Logo <span>
+                                            @if ($brandSetting->company_logo)
+                                                <a href="{{ asset('storage/' . $brandSetting->company_logo) }}"> view</a>
+                                            @endif
+                                        </span></label>
+                                    <input type="file" name="company_logo" class="form-control">
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+
+                                <div class="form-group m-2">
+                                    <label for="report_logo">Report Logo <span>
+                                            @if ($brandSetting->report_logo)
+                                                <a href="{{ asset('storage/' . $brandSetting->report_logo) }}"> view</a>
+                                            @endif
+
+                                        </span></label>
+                                    <input type="file" name="report_logo" class="form-control">
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="form-group m-2">
+                                    <label for="dashboard_logo">Dashboard Logo <span>
+                                            @if ($brandSetting->dashboard_logo)
+                                                <a href="{{ asset('storage/' . $brandSetting->dashboard_logo) }}"> view</a>
+                                            @endif
+
+                                        </span></label>
+                                    <input type="file" name="dashboard_logo" class="form-control">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group m-2">
+                                    <label for="login_picture">Login Picture</label>
+                                    <input type="file" name="login_picture" class="form-control">
+                                </div>
+                            </div>
+                        </div>
+
+                        <h4>Colors</h4>
+
+                        <div class="d-flex">
+                            <div class="col-md-3 m-1">
+                                <div class="form-group mb-3">
+                                    <label for="primary_color">Primary Color</label>
+                                    <input type="color" name="primary_color" class="form-control"
+                                        value="{{ $brandSetting->primary_color }}">
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+
+                                <div class="form-group mb-3 m-1">
+                                    <label for="secondary_color">Secondary Color</label>
+                                    <input type="color" name="secondary_color" class="form-control"
+                                        value="{{ $brandSetting->secondary_color }}">
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+
+                                <div class="form-group mb-3 m-1">
+                                    <label for="hover_color">Hover Color</label>
+                                    <input type="color" name="hover_color" class="form-control"
+                                        value="{{ $brandSetting->hover_color }}">
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group mb-3 m-1">
+                                    <label for="hover_color">Hover Color 2</label>
+                                    <input type="color" name="hover_color_two" class="form-control"
+                                        value="{{ $brandSetting->hover_color_two }}">
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <h4>Loader Colors</h4>
+                        <div class="d-flex flex-wrap">
+                            <div class="col-md-2">
+                                <div class="form-group mb-3 m-1">
+                                    <label for="loader_color_one">Loader Color 1</label>
+                                    <input type="color" name="loader_color_one" class="form-control" value="{{ $brandSetting->loader_color_one }}">
+                                </div>
+                            </div>
                         
-                        <div class="form-group mb-3 mt-3">
-                            <label for="company_logo">Company Logo <span>
-                                @if ($brandSetting->company_logo)
-                                    <a href="{{ asset('storage/' . $brandSetting->company_logo) }}"> view</a>
-                                    @endif
-                                </span></label>
-                            <input type="file" name="company_logo" class="form-control">
+                            <div class="col-md-2">
+                                <div class="form-group mb-3 m-1">
+                                    <label for="loader_color_two">Loader Color 2</label>
+                                    <input type="color" name="loader_color_two" class="form-control" value="{{ $brandSetting->loader_color_two }}">
+                                </div>
+                            </div>
+                        
+                            <div class="col-md-2">
+                                <div class="form-group mb-3 m-1">
+                                    <label for="loader_color_three">Loader Color 3</label>
+                                    <input type="color" name="loader_color_three" class="form-control" value="{{ $brandSetting->loader_color_three }}">
+                                </div>
+                            </div>
+                        
+                            <div class="col-md-2">
+                                <div class="form-group mb-3 m-1">
+                                    <label for="loader_color_four">Loader Color 4</label>
+                                    <input type="color" name="loader_color_four" class="form-control" value="{{ $brandSetting->loader_color_four }}">
+                                </div>
+                            </div>
+                        
+                            <div class="col-md-2">
+                                <div class="form-group mb-3 m-1">
+                                    <label for="loader_color_five">Loader Color 5</label>
+                                    <input type="color" name="loader_color_five" class="form-control" value="{{ $brandSetting->loader_color_five }}">
+                                </div>
+                            </div>
+                        
+                            <div class="col-md-2">
+                                <div class="form-group mb-3 m-1">
+                                    <label for="loader_color_six">Loader Color 6</label>
+                                    <input type="color" name="loader_color_six" class="form-control" value="{{ $brandSetting->loader_color_six }}">
+                                </div>
+                            </div>
                         </div>
 
-                        <div class="form-group mb-3">
-                            <label for="report_logo">Report Logo <span>
-                                    @if ($brandSetting->report_logo)
-                                        <a href="{{ asset('storage/' . $brandSetting->report_logo) }}"> view</a>
-                                    @endif
-
-                                </span></label>
-                            <input type="file" name="report_logo" class="form-control">
+                        <h4 class="ml-3">Report Adresses</h4>
+                        <div class="d-flex">
+                            <div class="col-md-3">
+                                <div class="form-group m-2 ">
+                                    <label for="address_1">Address 1</label>
+                                    <input type="text" name="address_1" class="form-control" value="{{ $brandSetting->address_1 }}">
+                                </div>
+                            </div>
+                        
+                            <div class="col-md-3">
+                                <div class="form-group  m-2">
+                                    <label for="address_2">Address 2</label>
+                                    <input type="text" name="address_2" class="form-control" value="{{ $brandSetting->address_2 }}">
+                                </div>
+                            </div>
+                        
+                            <div class="col-md-3">
+                                <div class="form-group m-2">
+                                    <label for="address_3">Address 3</label>
+                                    <input type="text" name="address_3" class="form-control" value="{{ $brandSetting->address_3 }}">
+                                </div>
+                            </div>
+                        
+                            <div class="col-md-3">
+                                <div class="form-group  m-2">
+                                    <label for="address_4">Address 4</label>
+                                    <input type="text" name="address_4" class="form-control" value="{{ $brandSetting->address_4 }}">
+                                </div>
+                            </div>
                         </div>
 
-                        <div class="form-group mb-3">
-                            <label for="dashboard_logo">Dashboard Logo <span>
-                                    @if ($brandSetting->dashboard_logo)
-                                        <a href="{{ asset('storage/' . $brandSetting->dashboard_logo) }}"> view</a>
-                                    @endif
 
-                                </span></label>
-                            <input type="file" name="dashboard_logo" class="form-control">
-                        </div>
 
-                        <div class="form-group mb-3">
-                            <label for="primary_color">Primary Color</label>
-                            <input type="color" name="primary_color" class="form-control"
-                                value="{{ $brandSetting->primary_color }}">
-                        </div>
-
-                        <div class="form-group mb-3">
-                            <label for="secondary_color">Secondary Color</label>
-                            <input type="color" name="secondary_color" class="form-control"
-                                value="{{ $brandSetting->secondary_color }}">
-                        </div>
-
-                        <div class="form-group mb-3">
-                            <label for="hover_color">Hover Color</label>
-                            <input type="color" name="hover_color" class="form-control"
-                                value="{{ $brandSetting->hover_color }}">
-                        </div>
-                        <div class="form-group mb-3">
-                            <label for="hover_color">Hover Color 2</label>
-                            <input type="color" name="hover_color_two" class="form-control"
-                                value="{{ $brandSetting->hover_color_two }}">
-                        </div>
-
-                        <div class="form-group mb-3">
-                            <label for="loader_color_one">Loader Color 1</label>
-                            <input type="color" name="loader_color_one" class="form-control"
-                                value="{{ $brandSetting->loader_color_one }}">
-                        </div>
-
-                        <div class="form-group mb-3">
-                            <label for="loader_color_two">Loader Color 2</label>
-                            <input type="color" name="loader_color_two" class="form-control"
-                                value="{{ $brandSetting->loader_color_two }}">
-                        </div>
-
-                        <div class="form-group mb-3">
-                            <label for="loader_color_three">Loader Color 3</label>
-                            <input type="color" name="loader_color_three" class="form-control"
-                                value="{{ $brandSetting->loader_color_three }}">
-                        </div>
-
-                        <div class="form-group mb-3">
-                            <label for="loader_color_four">Loader Color 4</label>
-                            <input type="color" name="loader_color_four" class="form-control"
-                                value="{{ $brandSetting->loader_color_four }}">
-                        </div>
-
-                        <div class="form-group mb-3">
-                            <label for="address_1">Address 1</label>
-                            <input type="text" name="address_1" class="form-control"
-                                value="{{ $brandSetting->address_1 }}">
-                        </div>
-
-                        <div class="form-group mb-3">
-                            <label for="address_2">Address 2</label>
-                            <input type="text" name="address_2" class="form-control"
-                                value="{{ $brandSetting->address_2 }}">
-                        </div>
-
-                        <div class="form-group mb-3">
-                            <label for="address_3">Address 3</label>
-                            <input type="text" name="address_3" class="form-control"
-                                value="{{ $brandSetting->address_3 }}">
-                        </div>
-
-                        <div class="form-group mb-3">
-                            <label for="address_4">Address 4</label>
-                            <input type="text" name="address_4" class="form-control"
-                                value="{{ $brandSetting->address_4 }}">
-                        </div>
-
-                        <div class="form-group mb-3">
-                            <label for="login_picture">Login Picture</label>
-                            <input type="file" name="login_picture" class="form-control">
-                        </div>
 
                         <div class="form-group mb-3">
                             <button type="submit" class="btn btn-primary">Save</button>

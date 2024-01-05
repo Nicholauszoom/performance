@@ -27,6 +27,8 @@ return new class extends Migration
             $table->string('loader_color_two')->nullable();
             $table->string('loader_color_three')->nullable();
             $table->string('loader_color_four')->nullable();
+            $table->string('loader_color_five')->nullable();
+            $table->string('loader_color_six')->nullable();
             $table->string('address_1')->nullable();
             $table->string('address_2')->nullable();
             $table->string('address_3')->nullable();

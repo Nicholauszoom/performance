@@ -26,6 +26,24 @@
                  --hover-color-two: {{ $brandSetting->hover_color_two }};
                 /* Add more variables for other colors as needed */
 
+                /* previous bankABC ##f7c341 */
+                --loader-colorone: {{ $brandSetting->loader_color_one }};
+                
+                /* previous bankABC ##f7c341 */
+                --loader-colortwo: {{ $brandSetting->loader_color_two }};
+
+                  /* previous bankABC ##f7c341 */               
+                --loader-colorthree: {{ $brandSetting->loader_color_three }};
+
+                 /* previous bankABC ##f7c341 */
+                --loader-colorfor: {{ $brandSetting->loader_color_four }};
+
+                 /* previous bankABC ##f7c341 */
+                --loader-colorfive: {{ $brandSetting->loader_color_five }};
+
+                /* previous bankABC ##f7c341 */
+                --loader-colorsix: {{ $brandSetting->loader_color_six }};
+
             }
         </style>
 
@@ -123,34 +141,42 @@
             }
 
             .loader--dot:first-child {
-                background-color: #00204e;
+                background-color: var(--loader-colorone);
+                /* background-color: #00204e; */
                 animation-delay: 0.5s;
             }
 
             .loader--dot:nth-child(2) {
-                background-color: #f58646;
+                /* background-color: #f58646; */
+                background-color: var(--loader-colortwo);
                 animation-delay: 0.4s;
             }
 
             .loader--dot:nth-child(3) {
-                background-color: #da2128;
+                /* background-color: #da2128; */
+                background-color: var(--loader-colorthree);
                 animation-delay: 0.3s;
             }
 
             .loader--dot:nth-child(4) {
-                background-color: #00204e;
+                /* background-color: #00204e; */
+                background-color: var(--loader-colorfour);
                 animation-delay: 0.2s;
             }
 
             .loader--dot:nth-child(5) {
-                background-color: #37719f;
+                /* background-color: #37719f; */
+                background-color: var(--loader-colorfive);
                 animation-delay: 0.1s;
             }
 
             .loader--dot:nth-child(6) {
-                background-color: #818386;
+                /* background-color: #818386; */
+                background-color: var(--loader-colorsix);
                 animation-delay: 0s;
             }
+
+
 
             .loader--text {
                 position: absolute;

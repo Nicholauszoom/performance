@@ -1139,7 +1139,7 @@ FROM employee e, emp_allowances ea,  allowances a WHERE e.emp_id = ea.empID AND 
                               /*End all Allowances and Bonuses*/
     
                               /*END OF TAXABLE AMOUNT CALCULATION */
-    
+     
                                )/*End Taxable Amount*/)
     
     
@@ -1376,7 +1376,8 @@ FROM employee e, emp_allowances ea,  allowances a WHERE e.emp_id = ea.empID AND 
              '" . $year . "' as years,
              e.salary as actual_salary
              FROM employee e, pension_fund pf, bank bn, bank_branch bb WHERE e.pension_fund = pf.id AND  e.bank = bn.id AND bb.id = e.bank_branch AND e.state = 1 and e.login_user != 1";
-                DB::insert(DB::raw($query));
+             dd($query);   
+             DB::insert(DB::raw($query));
 
             $query = "update temp_payroll_logs set wcf = gross*(SELECT rate_employer from deduction where id=2)";
             DB::insert(DB::raw($query));
