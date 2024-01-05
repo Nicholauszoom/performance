@@ -105,10 +105,6 @@ class BOTDataController extends Controller
 
         // FIXME I have to query the contract and assign value
 
-
-
-
-
         $data = [
             "reportingDate"=>$this->convertDate($employee->hire_date),
             "branchCode" => $employee->branch,
@@ -129,8 +125,15 @@ class BOTDataController extends Controller
             "directorsCommittee" => 'none',
         ];
 
-        $endpoint = '192.168.100.102:8000/api/individualInformation';
-        $response = Http::post($endpoint, $data);
+
+        $endpoint = 'https://compliance.bancabc.co.tz/api/employeerecord';     
+
+        $headers = [
+            'Content-Type' => 'application/json',
+            'informationCode' => '1074',
+            'Authorization' => 'Bearer 14ee8c99777e78e8c94d0925b2dc0de267d82add43274233f21eeefacce39ecb',
+        ];
+        $response = Http::withHeaders($headers)->post($endpoint, $data);
        // dd($response->response);
         if ($response->status() === 200) {
          $data = $response->json();
