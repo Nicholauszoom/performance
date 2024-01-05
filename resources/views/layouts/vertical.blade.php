@@ -1,58 +1,59 @@
 <!DOCTYPE html>
 
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-    <head>
-        @include('layouts.shared.title-meta', ['title' => $title])
-        @include('layouts.shared.head-css')
 
-        <script src="{{ asset('assets/notification/js/bootstrap-growl.min.js') }}"></script>
-        <link rel="stylesheet" href="{{ asset('assets/notification/css/notification.min.css') }}">
-        <script src="{{ asset('assets/loader.js') }}"></script>
+<head>
+    @include('layouts.shared.title-meta', ['title' => $title])
+    @include('layouts.shared.head-css')
 
-        @php
+    <script src="{{ asset('assets/notification/js/bootstrap-growl.min.js') }}"></script>
+    <link rel="stylesheet" href="{{ asset('assets/notification/css/notification.min.css') }}">
+    <script src="{{ asset('assets/loader.js') }}"></script>
+
+    @php
         $brandSetting = \App\Models\BrandSetting::first();
-       @endphp
+    @endphp
 
-        <style>
-            :root {
-                /* previous bank ABC #00204e */
-                --primary-color: {{ $brandSetting->primary_color }}; 
-                /* previous bank ABC #f0ab00 */
-                --secondary-color: {{ $brandSetting->secondary_color }};
-                /* previous bankABC #f0ab00 */
-                --hover-color: {{ $brandSetting->hover_color }};
+    <style>
+        :root {
+            /* previous bank ABC #00204e */
+            --primary-color: {{ $brandSetting->primary_color }};
+            /* previous bank ABC #f0ab00 */
+            --secondary-color: {{ $brandSetting->secondary_color }};
+            /* previous bankABC #f0ab00 */
+            --hover-color: {{ $brandSetting->hover_color }};
 
-                 /* previous bankABC ##f7c341 */
-                 --hover-color-two: {{ $brandSetting->hover_color_two }};
-                /* Add more variables for other colors as needed */
+            /* previous bankABC ##f7c341 */
+            --hover-color-two: {{ $brandSetting->hover_color_two }};
+            /* Add more variables for other colors as needed */
 
-                /* previous bankABC ##f7c341 */
-                --loader-colorone: {{ $brandSetting->loader_color_one }};
-                
-                /* previous bankABC ##f7c341 */
-                --loader-colortwo: {{ $brandSetting->loader_color_two }};
+            /* previous bankABC ##f7c341 */
+            --loader-colorone: {{ $brandSetting->loader_color_one }};
 
-                  /* previous bankABC ##f7c341 */               
-                --loader-colorthree: {{ $brandSetting->loader_color_three }};
+            /* previous bankABC ##f7c341 */
+            --loader-colortwo: {{ $brandSetting->loader_color_two }};
 
-                 /* previous bankABC ##f7c341 */
-                --loader-colorfor: {{ $brandSetting->loader_color_four }};
+            /* previous bankABC ##f7c341 */
+            --loader-colorthree: {{ $brandSetting->loader_color_three }};
 
-                 /* previous bankABC ##f7c341 */
-                --loader-colorfive: {{ $brandSetting->loader_color_five }};
+            /* previous bankABC ##f7c341 */
+            --loader-colorfor: {{ $brandSetting->loader_color_four }};
 
-                /* previous bankABC ##f7c341 */
-                --loader-colorsix: {{ $brandSetting->loader_color_six }};
+            /* previous bankABC ##f7c341 */
+            --loader-colorfive: {{ $brandSetting->loader_color_five }};
 
-            }
-        </style>
+            /* previous bankABC ##f7c341 */
+            --loader-colorsix: {{ $brandSetting->loader_color_six }};
+
+        }
+    </style>
 
 
 
-        <style>
-            .request__spinner {
-                /* background: red; */
-                /* position: absolute;
+    <style>
+        .request__spinner {
+            /* background: red; */
+            /* position: absolute;
                 z-index: 99999;
                 left: 50%;
                 top: 50%;
@@ -70,418 +71,439 @@
                 -ms-border-radius: 50%;
                 border-radius: 50%; */
 
-                position: absolute;
-                top: calc(50% - 15px);
-                left: calc(50% - 15px);
-                width: 40px;
-                height: 40px;
-                border: 4px solid #a9a9a9;
-                border-top-color: #000;
-                border-radius: 30px;
-                animation: spin 1s linear infinite;
-                display: none;
+            position: absolute;
+            top: calc(50% - 15px);
+            left: calc(50% - 15px);
+            width: 40px;
+            height: 40px;
+            border: 4px solid #a9a9a9;
+            border-top-color: #000;
+            border-radius: 30px;
+            animation: spin 1s linear infinite;
+            display: none;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
             }
 
-            @keyframes spin {
-                0% {
-                    transform: rotate(0deg);
-                }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
 
-                100% {
-                    transform: rotate(360deg);
-                }
+        body {
+            background-image: url('{{ asset('img/bg2.png') }}');
+            /* background-color: #f1f1f1; */
+            background-color: #ffff;
+            /* background: cover; */
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+
+        .card {
+            background-color: transparent !important;
+        }
+
+
+        .loader {
+            height: 100vh;
+            width: 100vw;
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            margin: auto;
+            background: #ffffff;
+            z-index: 99;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .removed {
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        .loader--dot {
+            animation-name: loader;
+            animation-timing-function: ease-in-out;
+            animation-duration: 3s;
+            animation-iteration-count: infinite;
+            height: 20px;
+            width: 20px;
+            border-radius: 100%;
+            background-color: black;
+            position: absolute;
+            border: 2px solid white;
+        }
+
+        .loader--dot:first-child {
+            background-color: var(--loader-colorone, #00204e);
+            animation-delay: 0.5s;
+        }
+
+        .loader--dot:nth-child(2) {
+            background-color: var(--loader-colortwo, #f58646);
+            animation-delay: 0.4s;
+        }
+
+        .loader--dot:nth-child(3) {
+            background-color: var(--loader-colorthree, #da2128);
+            animation-delay: 0.3s;
+        }
+
+        .loader--dot:nth-child(4) {
+            background-color: var(--loader-colorfour, #00204e);
+            animation-delay: 0.2s;
+        }
+
+        .loader--dot:nth-child(5) {
+            background-color: var(--loader-colorfive, #37719f);
+            animation-delay: 0.1s;
+        }
+
+        .loader--dot:nth-child(6) {
+            background-color: var(--loader-colorsix, #818386);
+            animation-delay: 0s;
+        }
+
+
+
+
+        .loader--text {
+            position: absolute;
+            top: 200%;
+            left: 0;
+            right: 0;
+            width: 10rem;
+            margin: auto;
+        }
+
+        .loader--text:after {
+            content: "Loading ...";
+            font-weight: bold;
+            animation-name: loading-text;
+            animation-duration: 3s;
+            animation-iteration-count: infinite;
+        }
+
+        @keyframes loader {
+            15% {
+                transform: translateX(0);
             }
 
-            body {
-                background-image: url('{{ asset('img/bg2.png') }}');
-                /* background-color: #f1f1f1; */
-                background-color: #ffff;
-                /* background: cover; */
-                background-position:center;
-                background-repeat: no-repeat;
+            45% {
+                transform: translateX(230px);
             }
 
-            .card {
-                background-color: transparent !important;
+            65% {
+                transform: translateX(230px);
             }
 
+            95% {
+                transform: translateX(0);
+            }
+        }
 
-            .loader {
-                height: 100vh;
-                width: 100vw;
-                position: absolute;
-                top: 0;
-                bottom: 0;
-                left: 0;
-                right: 0;
-                margin: auto;
-                background: #ffffff;
-                z-index: 99;
-                display: flex;
-                align-items: center;
-                justify-content: center;
+        @keyframes loading-text {
+            0% {
+                content: "Loading";
             }
 
-            .removed{
-                opacity: 0;
-                transition: opacity 0.5s ease;
+            25% {
+                content: "Loading .";
             }
 
-            .loader--dot {
-                animation-name: loader;
-                animation-timing-function: ease-in-out;
-                animation-duration: 3s;
-                animation-iteration-count: infinite;
-                height: 20px;
-                width: 20px;
-                border-radius: 100%;
-                background-color: black;
-                position: absolute;
-                border: 2px solid white;
+            50% {
+                content: "Loading  ..";
             }
 
-            .loader--dot:first-child {
-                background-color: var(--loader-colorone);
-                /* background-color: #00204e; */
-                animation-delay: 0.5s;
+            75% {
+                content: "Loading  ...";
             }
+        }
+    </style>
+</head>
 
-            .loader--dot:nth-child(2) {
-                /* background-color: #f58646; */
-                background-color: var(--loader-colortwo);
-                animation-delay: 0.4s;
-            }
+<body>
+    <div class="request__spinner"></div>
 
-            .loader--dot:nth-child(3) {
-                /* background-color: #da2128; */
-                background-color: var(--loader-colorthree);
-                animation-delay: 0.3s;
-            }
-
-            .loader--dot:nth-child(4) {
-                /* background-color: #00204e; */
-                background-color: var(--loader-colorfour);
-                animation-delay: 0.2s;
-            }
-
-            .loader--dot:nth-child(5) {
-                /* background-color: #37719f; */
-                background-color: var(--loader-colorfive);
-                animation-delay: 0.1s;
-            }
-
-            .loader--dot:nth-child(6) {
-                /* background-color: #818386; */
-                background-color: var(--loader-colorsix);
-                animation-delay: 0s;
-            }
-
-
-
-            .loader--text {
-                position: absolute;
-                top: 200%;
-                left: 0;
-                right: 0;
-                width: 10rem;
-                margin: auto;
-            }
-
-            .loader--text:after {
-                content: "Loading ...";
-                font-weight: bold;
-                animation-name: loading-text;
-                animation-duration: 3s;
-                animation-iteration-count: infinite;
-            }
-
-            @keyframes loader {
-                15% {
-                    transform: translateX(0);
-                }
-                45% {
-                    transform: translateX(230px);
-                }
-                65% {
-                    transform: translateX(230px);
-                }
-                95% {
-                    transform: translateX(0);
-                }
-            }
-
-            @keyframes loading-text {
-                0% {
-                    content: "Loading";
-                }
-                25% {
-                    content: "Loading .";
-                }
-                50% {
-                    content: "Loading  ..";
-                }
-                75% {
-                    content: "Loading  ...";
-                }
-            }
-        </style>
-    </head>
-
-    <body>
-        <div class="request__spinner"></div>
-
-        <div class="page-content">
-            {{-- page loader --}}
-            <div id="loadingOverlay" class="loading-overlay">
-                <div class='loader' id="element-to-remove">
-                        <div class='loader--dot'></div>
-                        <div class='loader--dot'></div>
-                        <div class='loader--dot'></div>
-                        <div class='loader--dot'></div>
-                        <div class='loader--dot'></div>
-                        <div class='loader--dot'></div>
-                        <div class='loader--text'></div>
-                    </div>
+    <div class="page-content">
+        {{-- page loader --}}
+        <div id="loadingOverlay" class="loading-overlay">
+            <div class='loader' id="element-to-remove">
+                <div class='loader--dot'></div>
+                <div class='loader--dot'></div>
+                <div class='loader--dot'></div>
+                <div class='loader--dot'></div>
+                <div class='loader--dot'></div>
+                <div class='loader--dot'></div>
+                <div class='loader--text'></div>
             </div>
-            {{-- / Page loader --}}
+        </div>
+        {{-- / Page loader --}}
 
-            {{-- Left sidebar --}}
-            @include('layouts.shared.left-sidebar')
-            {{-- /Left sidebar --}}
+        {{-- Left sidebar --}}
+        @include('layouts.shared.left-sidebar')
+        {{-- /Left sidebar --}}
 
-            {{-- main content --}}
-            <div class="content-wrapper">
+        {{-- main content --}}
+        <div class="content-wrapper">
 
-                @include('layouts.shared.topbar')
+            @include('layouts.shared.topbar')
 
 
-                {{-- Inner content --}}
-                <div class="content-inner">
-                    {{-- Page header --}}
-                    <div class="page-header page-header-light shadow">
-                        @include('layouts.shared.page-header')
-                    </div>
-                    {{-- /Page header --}}
+            {{-- Inner content --}}
+            <div class="content-inner">
+                {{-- Page header --}}
+                <div class="page-header page-header-light shadow">
+                    @include('layouts.shared.page-header')
+                </div>
+                {{-- /Page header --}}
 
-                    {{-- Content area --}}
-                    <div class="content">
-                        @include('layouts.alerts.message')
+                {{-- Content area --}}
+                <div class="content">
+                    @include('layouts.alerts.message')
 
-                        @if ($errors->any())
+                    @if ($errors->any())
                         <div class="btn disabled btn-danger ">
                             <div class="col-12">
                                 @foreach ($errors->all() as $error)
-                                <p>{{$error}}</p>
+                                    <p>{{ $error }}</p>
                                 @endforeach
                             </div>
                         </div>
-                        @endif
+                    @endif
 
-                        @yield('content')
-                    </div>
-                    {{-- /Content area --}}
-
-                    @include('layouts.shared.footer')
-
+                    @yield('content')
                 </div>
-                {{-- /Inner content --}}
+                {{-- /Content area --}}
+
+                @include('layouts.shared.footer')
 
             </div>
-            {{-- /Main content --}}
+            {{-- /Inner content --}}
 
         </div>
+        {{-- /Main content --}}
 
-        <!-- Notifications -->
-        <div class="offcanvas offcanvas-end" tabindex="-1" id="notifications">
-            <div class="offcanvas-header py-0">
-                <h5 class="offcanvas-title py-3">Activity</h5>
-                <button type="button" class="btn btn-light btn-sm btn-icon border-transparent rounded-pill" data-bs-dismiss="offcanvas">
-                    <i class="ph-x"></i>
-                </button>
-            </div>
+    </div>
 
-            <div class="offcanvas-body p-0">
-                <div class="bg-light fw-medium py-2 px-3">New notifications</div>
-                <div class="p-3">
-                    <div class="d-flex align-items-start mb-3">
-                        <a href="#" class="status-indicator-container me-3">
-                            <img src="../../../assets/images/demo/users/face1.jpg" class="w-40px h-40px rounded-pill" alt="">
-                            <span class="status-indicator bg-success"></span>
-                        </a>
-                        <div class="flex-fill">
-                            <a href="#" class="fw-semibold">James</a> has completed the task <a href="#">Submit documents</a> from <a href="#">Onboarding</a> list
+    <!-- Notifications -->
+    <div class="offcanvas offcanvas-end" tabindex="-1" id="notifications">
+        <div class="offcanvas-header py-0">
+            <h5 class="offcanvas-title py-3">Activity</h5>
+            <button type="button" class="btn btn-light btn-sm btn-icon border-transparent rounded-pill"
+                data-bs-dismiss="offcanvas">
+                <i class="ph-x"></i>
+            </button>
+        </div>
 
-                            <div class="bg-light rounded p-2 my-2">
-                                <label class="form-check ms-1">
-                                    <input type="checkbox" class="form-check-input" checked disabled>
-                                    <del class="form-check-label">Submit personal documents</del>
-                                </label>
-                            </div>
+        <div class="offcanvas-body p-0">
+            <div class="bg-light fw-medium py-2 px-3">New notifications</div>
+            <div class="p-3">
+                <div class="d-flex align-items-start mb-3">
+                    <a href="#" class="status-indicator-container me-3">
+                        <img src="../../../assets/images/demo/users/face1.jpg" class="w-40px h-40px rounded-pill"
+                            alt="">
+                        <span class="status-indicator bg-success"></span>
+                    </a>
+                    <div class="flex-fill">
+                        <a href="#" class="fw-semibold">James</a> has completed the task <a href="#">Submit
+                            documents</a> from <a href="#">Onboarding</a> list
 
-                            <div class="fs-sm text-muted mt-1">2 hours ago</div>
+                        <div class="bg-light rounded p-2 my-2">
+                            <label class="form-check ms-1">
+                                <input type="checkbox" class="form-check-input" checked disabled>
+                                <del class="form-check-label">Submit personal documents</del>
+                            </label>
                         </div>
-                    </div>
 
-                    <div class="d-flex align-items-start mb-3">
-                        <a href="#" class="status-indicator-container me-3">
-                            <img src="../../../assets/images/demo/users/face3.jpg" class="w-40px h-40px rounded-pill" alt="">
-                            <span class="status-indicator bg-warning"></span>
-                        </a>
-                        <div class="flex-fill">
-                            <a href="#" class="fw-semibold">Margo</a> has added 4 users to <span class="fw-semibold">Customer enablement</span> channel
-
-                            <div class="d-flex my-2">
-                                <a href="#" class="status-indicator-container me-1">
-                                    <img src="../../../assets/images/demo/users/face10.jpg" class="w-32px h-32px rounded-pill" alt="">
-                                    <span class="status-indicator bg-danger"></span>
-                                </a>
-                                <a href="#" class="status-indicator-container me-1">
-                                    <img src="../../../assets/images/demo/users/face11.jpg" class="w-32px h-32px rounded-pill" alt="">
-                                    <span class="status-indicator bg-success"></span>
-                                </a>
-                                <a href="#" class="status-indicator-container me-1">
-                                    <img src="../../../assets/images/demo/users/face12.jpg" class="w-32px h-32px rounded-pill" alt="">
-                                    <span class="status-indicator bg-success"></span>
-                                </a>
-                                <a href="#" class="status-indicator-container me-1">
-                                    <img src="../../../assets/images/demo/users/face13.jpg" class="w-32px h-32px rounded-pill" alt="">
-                                    <span class="status-indicator bg-success"></span>
-                                </a>
-                                <button type="button" class="btn btn-light btn-icon d-inline-flex align-items-center justify-content-center w-32px h-32px rounded-pill p-0">
-                                    <i class="ph-plus ph-sm"></i>
-                                </button>
-                            </div>
-
-                            <div class="fs-sm text-muted mt-1">3 hours ago</div>
-                        </div>
-                    </div>
-
-                    <div class="d-flex align-items-start">
-                        <div class="me-3">
-                            <div class="bg-warning bg-opacity-10 text-warning rounded-pill">
-                                <i class="ph-warning p-2"></i>
-                            </div>
-                        </div>
-                        <div class="flex-1">
-                            Subscription <a href="#">#466573</a> from 10.12.2021 has been cancelled. Refund case <a href="#">#4492</a> created
-                            <div class="fs-sm text-muted mt-1">4 hours ago</div>
-                        </div>
+                        <div class="fs-sm text-muted mt-1">2 hours ago</div>
                     </div>
                 </div>
 
-                <div class="bg-light fw-medium py-2 px-3">Older notifications</div>
-                <div class="p-3">
-                    <div class="d-flex align-items-start mb-3">
-                        <a href="#" class="status-indicator-container me-3">
-                            <img src="../../../assets/images/demo/users/face25.jpg" class="w-40px h-40px rounded-pill" alt="">
-                            <span class="status-indicator bg-success"></span>
-                        </a>
-                        <div class="flex-fill">
-                            <a href="#" class="fw-semibold">Nick</a> requested your feedback and approval in support request <a href="#">#458</a>
+                <div class="d-flex align-items-start mb-3">
+                    <a href="#" class="status-indicator-container me-3">
+                        <img src="../../../assets/images/demo/users/face3.jpg" class="w-40px h-40px rounded-pill"
+                            alt="">
+                        <span class="status-indicator bg-warning"></span>
+                    </a>
+                    <div class="flex-fill">
+                        <a href="#" class="fw-semibold">Margo</a> has added 4 users to <span
+                            class="fw-semibold">Customer enablement</span> channel
 
-                            <div class="my-2">
-                                <a href="#" class="btn btn-success btn-sm me-1">
-                                    <i class="ph-checks ph-sm me-1"></i>
-                                    Approve
-                                </a>
-                                <a href="#" class="btn btn-light btn-sm">
-                                    Review
-                                </a>
-                            </div>
+                        <div class="d-flex my-2">
+                            <a href="#" class="status-indicator-container me-1">
+                                <img src="../../../assets/images/demo/users/face10.jpg"
+                                    class="w-32px h-32px rounded-pill" alt="">
+                                <span class="status-indicator bg-danger"></span>
+                            </a>
+                            <a href="#" class="status-indicator-container me-1">
+                                <img src="../../../assets/images/demo/users/face11.jpg"
+                                    class="w-32px h-32px rounded-pill" alt="">
+                                <span class="status-indicator bg-success"></span>
+                            </a>
+                            <a href="#" class="status-indicator-container me-1">
+                                <img src="../../../assets/images/demo/users/face12.jpg"
+                                    class="w-32px h-32px rounded-pill" alt="">
+                                <span class="status-indicator bg-success"></span>
+                            </a>
+                            <a href="#" class="status-indicator-container me-1">
+                                <img src="../../../assets/images/demo/users/face13.jpg"
+                                    class="w-32px h-32px rounded-pill" alt="">
+                                <span class="status-indicator bg-success"></span>
+                            </a>
+                            <button type="button"
+                                class="btn btn-light btn-icon d-inline-flex align-items-center justify-content-center w-32px h-32px rounded-pill p-0">
+                                <i class="ph-plus ph-sm"></i>
+                            </button>
+                        </div>
 
-                            <div class="fs-sm text-muted mt-1">3 days ago</div>
+                        <div class="fs-sm text-muted mt-1">3 hours ago</div>
+                    </div>
+                </div>
+
+                <div class="d-flex align-items-start">
+                    <div class="me-3">
+                        <div class="bg-warning bg-opacity-10 text-warning rounded-pill">
+                            <i class="ph-warning p-2"></i>
                         </div>
                     </div>
+                    <div class="flex-1">
+                        Subscription <a href="#">#466573</a> from 10.12.2021 has been cancelled. Refund case <a
+                            href="#">#4492</a> created
+                        <div class="fs-sm text-muted mt-1">4 hours ago</div>
+                    </div>
+                </div>
+            </div>
 
-                    <div class="d-flex align-items-start mb-3">
-                        <a href="#" class="status-indicator-container me-3">
-                            <img src="../../../assets/images/demo/users/face24.jpg" class="w-40px h-40px rounded-pill" alt="">
-                            <span class="status-indicator bg-grey"></span>
-                        </a>
-                        <div class="flex-fill">
-                            <a href="#" class="fw-semibold">Mike</a> added 1 new file(s) to <a href="#">Product management</a> project
+            <div class="bg-light fw-medium py-2 px-3">Older notifications</div>
+            <div class="p-3">
+                <div class="d-flex align-items-start mb-3">
+                    <a href="#" class="status-indicator-container me-3">
+                        <img src="../../../assets/images/demo/users/face25.jpg" class="w-40px h-40px rounded-pill"
+                            alt="">
+                        <span class="status-indicator bg-success"></span>
+                    </a>
+                    <div class="flex-fill">
+                        <a href="#" class="fw-semibold">Nick</a> requested your feedback and approval in support
+                        request <a href="#">#458</a>
 
-                            <div class="bg-light rounded p-2 my-2">
-                                <div class="d-flex align-items-center">
-                                    <div class="me-2">
-                                        <img src="../../../assets/images/icons/pdf.svg" width="34" height="34" alt="">
-                                    </div>
-                                    <div class="flex-fill">
-                                        new_contract.pdf
-                                        <div class="fs-sm text-muted">112KB</div>
-                                    </div>
-                                    <div class="ms-2">
-                                        <button type="button" class="btn btn-flat-dark text-body btn-icon btn-sm border-transparent rounded-pill">
-                                            <i class="ph-arrow-down"></i>
-                                        </button>
-                                    </div>
+                        <div class="my-2">
+                            <a href="#" class="btn btn-success btn-sm me-1">
+                                <i class="ph-checks ph-sm me-1"></i>
+                                Approve
+                            </a>
+                            <a href="#" class="btn btn-light btn-sm">
+                                Review
+                            </a>
+                        </div>
+
+                        <div class="fs-sm text-muted mt-1">3 days ago</div>
+                    </div>
+                </div>
+
+                <div class="d-flex align-items-start mb-3">
+                    <a href="#" class="status-indicator-container me-3">
+                        <img src="../../../assets/images/demo/users/face24.jpg" class="w-40px h-40px rounded-pill"
+                            alt="">
+                        <span class="status-indicator bg-grey"></span>
+                    </a>
+                    <div class="flex-fill">
+                        <a href="#" class="fw-semibold">Mike</a> added 1 new file(s) to <a
+                            href="#">Product management</a> project
+
+                        <div class="bg-light rounded p-2 my-2">
+                            <div class="d-flex align-items-center">
+                                <div class="me-2">
+                                    <img src="../../../assets/images/icons/pdf.svg" width="34" height="34"
+                                        alt="">
+                                </div>
+                                <div class="flex-fill">
+                                    new_contract.pdf
+                                    <div class="fs-sm text-muted">112KB</div>
+                                </div>
+                                <div class="ms-2">
+                                    <button type="button"
+                                        class="btn btn-flat-dark text-body btn-icon btn-sm border-transparent rounded-pill">
+                                        <i class="ph-arrow-down"></i>
+                                    </button>
                                 </div>
                             </div>
+                        </div>
 
-                            <div class="fs-sm text-muted mt-1">1 day ago</div>
+                        <div class="fs-sm text-muted mt-1">1 day ago</div>
+                    </div>
+                </div>
+
+                <div class="d-flex align-items-start mb-3">
+                    <div class="me-3">
+                        <div class="bg-success bg-opacity-10 text-success rounded-pill">
+                            <i class="ph-calendar-plus p-2"></i>
                         </div>
                     </div>
+                    <div class="flex-fill">
+                        All hands meeting will take place coming Thursday at 13:45.
 
-                    <div class="d-flex align-items-start mb-3">
-                        <div class="me-3">
-                            <div class="bg-success bg-opacity-10 text-success rounded-pill">
-                                <i class="ph-calendar-plus p-2"></i>
-                            </div>
+                        <div class="my-2">
+                            <a href="#" class="btn btn-primary btn-sm">
+                                <i class="ph-calendar-plus ph-sm me-1"></i>
+                                Add to calendar
+                            </a>
                         </div>
-                        <div class="flex-fill">
-                            All hands meeting will take place coming Thursday at 13:45.
 
-                            <div class="my-2">
-                                <a href="#" class="btn btn-primary btn-sm">
-                                    <i class="ph-calendar-plus ph-sm me-1"></i>
-                                    Add to calendar
-                                </a>
-                            </div>
+                        <div class="fs-sm text-muted mt-1">2 days ago</div>
+                    </div>
+                </div>
 
-                            <div class="fs-sm text-muted mt-1">2 days ago</div>
+                <div class="d-flex align-items-start mb-3">
+                    <a href="#" class="status-indicator-container me-3">
+                        <img src="../../../assets/images/demo/users/face4.jpg" class="w-40px h-40px rounded-pill"
+                            alt="">
+
+
+                        <span class="status-indicator bg-danger"></span>
+                    </a>
+                    <div class="flex-fill">
+                        <a href="#" class="fw-semibold">Christine</a> commented on your community <a
+                            href="#">post</a> from 10.12.2021
+
+                        <div class="fs-sm text-muted mt-1">2 days ago</div>
+                    </div>
+                </div>
+
+                <div class="d-flex align-items-start mb-3">
+                    <div class="me-3">
+                        <div class="bg-primary bg-opacity-10 text-primary rounded-pill">
+                            <i class="ph-users-four p-2"></i>
                         </div>
                     </div>
+                    <div class="flex-fill">
+                        <span class="fw-semibold">HR department</span> requested you to complete internal survey by
+                        Friday
 
-                    <div class="d-flex align-items-start mb-3">
-                        <a href="#" class="status-indicator-container me-3">
-                            <img src="../../../assets/images/demo/users/face4.jpg" class="w-40px h-40px rounded-pill" alt="">
-
-
-                            <span class="status-indicator bg-danger"></span>
-                        </a>
-                        <div class="flex-fill">
-                            <a href="#" class="fw-semibold">Christine</a> commented on your community <a href="#">post</a> from 10.12.2021
-
-                            <div class="fs-sm text-muted mt-1">2 days ago</div>
-                        </div>
+                        <div class="fs-sm text-muted mt-1">3 days ago</div>
                     </div>
+                </div>
 
-                    <div class="d-flex align-items-start mb-3">
-                        <div class="me-3">
-                            <div class="bg-primary bg-opacity-10 text-primary rounded-pill">
-                                <i class="ph-users-four p-2"></i>
-                            </div>
-                        </div>
-                        <div class="flex-fill">
-                            <span class="fw-semibold">HR department</span> requested you to complete internal survey by Friday
-
-                            <div class="fs-sm text-muted mt-1">3 days ago</div>
-                        </div>
-                    </div>
-
-                    <div class="text-center">
-                        <div class="spinner-border" role="status">
-                            <span class="visually-hidden">Loading...</span>
-                        </div>
+                <div class="text-center">
+                    <div class="spinner-border" role="status">
+                        <span class="visually-hidden">Loading...</span>
                     </div>
                 </div>
             </div>
         </div>
-        <!-- /notifications -->
+    </div>
+    <!-- /notifications -->
 
-        @yield('modal')
+    @yield('modal')
 
-        @stack('footer-script')
-    </body>
+    @stack('footer-script')
+</body>
 
 </html>

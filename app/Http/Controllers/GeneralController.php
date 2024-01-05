@@ -1917,6 +1917,11 @@ public function authenticateUser($permissions)
 
             $result = $this->flexperformance_model->addposition($data);
             if ($result == true) {
+
+                $autheniticateduser = auth()->user()->emp_id;
+                $auditLog = SysHelpers::AuditLog(1, "Position added  by " . $autheniticateduser, $request);
+
+                
                 return redirect()->back();
                 //$response_array['status'] = "OK";
                 // $response_array['message'] = "<p class='alert alert-success text-center'>Position Added Successifully!</p>";
@@ -1942,6 +1947,11 @@ public function authenticateUser($permissions)
             );
             $result = $this->flexperformance_model->addOrganizationLevel($data);
             if ($result == true) {
+
+                $autheniticateduser = auth()->user()->emp_id;
+                $auditLog = SysHelpers::AuditLog(1, "Organization level added  by " . $autheniticateduser, $request);
+
+                
                 return redirect()->back();
                 $response_array['status'] = "OK";
                 $response_array['message'] = "<p class='alert alert-success text-center'>Organization Level Added Successifully!</p>";
@@ -1958,6 +1968,11 @@ public function authenticateUser($permissions)
     {
         $result = $this->flexperformance_model->deleteOrganizationLevel($id);
         if ($result == true) {
+
+            $request = new Request();
+            $autheniticateduser = auth()->user()->emp_id;
+            $auditLog = SysHelpers::AuditLog(1, "Organization level deleted  by " . $autheniticateduser, $request);
+
             $response_array['status'] = "OK";
             $response_array['message'] = "<p class='alert alert-success text-center'>Organization Level Deleted!</p>";
         } else {
@@ -1977,6 +1992,10 @@ public function authenticateUser($permissions)
         );
         $result = $this->flexperformance_model->updateposition($data, $id);
         if ($result == true) {
+            $autheniticateduser = auth()->user()->emp_id;
+            $auditLog = SysHelpers::AuditLog(1, "Position deleted  by " . $autheniticateduser, $request);
+
+
             $response_array['status'] = "OK";
             $response_array['message'] = "<p class='alert alert-success text-center'>Position Deleted!</p>";
         } else {
@@ -1996,6 +2015,11 @@ public function authenticateUser($permissions)
         );
         $result = $this->flexperformance_model->updateposition($data, $id);
         if ($result == true) {
+
+            $autheniticateduser = auth()->user()->emp_id;
+            $auditLog = SysHelpers::AuditLog(1, "Position activated  by " . $autheniticateduser, $request);
+
+
             $response_array['status'] = "OK";
             $response_array['message'] = "<p class='alert alert-success text-center'>Position Activated Successifully!</p>";
         } else {
@@ -2047,7 +2071,6 @@ public function authenticateUser($permissions)
         $this->authenticateUser('apply-overtime');
 
         $autheniticateduser = auth()->user()->emp_id;
-        $auditLog = SysHelpers::AuditLog(1, "Overtime application by Employee Id " . $autheniticateduser, $request);
 
 
         request()->validate(
@@ -2271,6 +2294,11 @@ public function authenticateUser($permissions)
 
         $result = $this->flexperformance_model->direct_insert_overtime($empID, $signatory, $overtime_category, $date, $days, $percent, $line_maager);
         if ($result == true) {
+
+            $autheniticateduser = auth()->user()->emp_id;
+            $auditLog = SysHelpers::AuditLog(1, "Overtime on behalf applied  by " . $autheniticateduser, $request);
+
+
             $amount = $days * ($employee_data->salary / 176) * $percent;
 
             SysHelpers::FinancialLogs($empID, $overtime_name, '0.00', number_format($amount, 2), 'Payroll Input');
@@ -2495,6 +2523,10 @@ public function authenticateUser($permissions)
 
             $this->flexperformance_model->update_overtime($data, $overtimeID);
 
+            $autheniticateduser = auth()->user()->emp_id;
+            $auditLog = SysHelpers::AuditLog(1, "Overtime updated  by " . $autheniticateduser, $request);
+
+
             session('note', "<p class='alert alert-success text-center'>Your Overtime was Updated Successifully</p>");
 
             return redirect('/flex/overtime');
@@ -2516,6 +2548,12 @@ public function authenticateUser($permissions)
             'linemanager' => auth()->user()->emp_id,
         );
         $this->flexperformance_model->update_overtime($data, $overtimeID);
+
+        $request = new Request();
+        $autheniticateduser = auth()->user()->emp_id;
+        $auditLog = SysHelpers::AuditLog(1, "Overtime confirmed  by " . $autheniticateduser, $request);
+
+
         echo "<p class='alert alert-success text-center'>Overtime Confirmed Successifully</p>";
     }
 
@@ -2527,6 +2565,13 @@ public function authenticateUser($permissions)
             'time_recommended_line' => date('Y-m-d h:i:s'),
         );
         $this->flexperformance_model->update_overtime($data, $overtimeID);
+
+        $request = new Request();
+        $autheniticateduser = auth()->user()->emp_id;
+        $auditLog = SysHelpers::AuditLog(1, "Overtime reccomendation   by " . $autheniticateduser, $request);
+
+
+        
         echo "<p class='alert alert-success text-center'>Overtime Recommended Successifully</p>";
     }
 
@@ -2888,6 +2933,7 @@ public function authenticateUser($permissions)
             );
 
             $this->flexperformance_model->updatedepartment($data, $id);
+            
             session('note', "<p class='alert alert-success text-center'>Department Updated Successifully</p>");
             return redirect('/flex/department');
         } elseif ($request->type == 'updatecenter') {
@@ -7386,6 +7432,9 @@ public function authenticateUser($permissions)
 
             $recordID = $this->flexperformance_model->employeeAdd($employee, $newEmp);
 
+            $autheniticateduser = auth()->user()->emp_id;
+            $auditLog = SysHelpers::AuditLog(2, "New employee registed  by " . $autheniticateduser, $request);
+
             $id = $emp_id;
 
             if ($recordID > 0) {
@@ -10492,6 +10541,10 @@ public function authenticateUser($permissions)
         $holiday->recurring = $request->recurring == true ? '1' : '0';
         $holiday->save();
 
+        $autheniticateduser = auth()->user()->emp_id;
+        $auditLog = SysHelpers::AuditLog(1, "New holyday added  by " . $autheniticateduser, $request);
+
+
         $msg = "Holiday has been save Successfully !";
         return redirect('flex/holidays')->with('msg', $msg);
     }
@@ -10508,6 +10561,10 @@ public function authenticateUser($permissions)
         $file = $request->file('file');
         $import = new HolidayDataImport;
         Excel::import($import, $file);
+
+        $autheniticateduser = auth()->user()->emp_id;
+        $auditLog = SysHelpers::AuditLog(1, "Holiday from exel added   by " . $autheniticateduser, $request);
+
 
         return redirect()->back()->with('success', 'File uploaded and data extracted successfully.');
     }
@@ -10542,6 +10599,9 @@ public function authenticateUser($permissions)
         $holiday->date = $request->date;
         $holiday->recurring = $request->recurring == true ? '1' : '0';
         $holiday->update();
+        $autheniticateduser = auth()->user()->emp_id;
+        $auditLog = SysHelpers::AuditLog(1, "Holiday updated  by " . $autheniticateduser, $request);
+
 
         $msg = "Holiday has been save Successfully !";
         return redirect('flex/holidays')->with('msg', $msg);
@@ -10563,6 +10623,10 @@ public function authenticateUser($permissions)
         $leaveForfeiting->adjusted_days = $request->opening_balance -  $request->days;
         $leaveForfeiting->forfeiting_year = $year;
         $leaveForfeiting->update();
+
+        $autheniticateduser = auth()->user()->emp_id;
+        $auditLog = SysHelpers::AuditLog(1, "Leave forteight updated  by " . $autheniticateduser, $request);
+
 
         $msg = "Employee Leave Forfeiting has been save Successfully !";
         return back()->with('msg', $msg);
@@ -10624,6 +10688,11 @@ public function authenticateUser($permissions)
         $holiday = Holiday::find($id);
 
         $holiday->delete();
+        $request = new Request();
+
+        $autheniticateduser = auth()->user()->emp_id;
+        $auditLog = SysHelpers::AuditLog(1, "Holiday deleted  by " . $autheniticateduser, $request);
+
 
         return redirect('flex/holidays/')->with('msg', 'Holiday was Deleted successfully !');
     }
@@ -10707,6 +10776,10 @@ public function authenticateUser($permissions)
         $approval->escallation_time = $request->escallation_time;
         $approval->save();
 
+        $autheniticateduser = auth()->user()->emp_id;
+        $auditLog = SysHelpers::AuditLog(1, "New aproval added   by " . $autheniticateduser, $request);
+
+
         $msg = "Approval has been added Successfully !";
         return redirect('flex/approvals')->with('msg', $msg);
     }
@@ -10758,7 +10831,11 @@ public function authenticateUser($permissions)
         $approval->levels = $approval->levels + 1;
         $approval->update();
 
+
         $Level->save();
+        $autheniticateduser = auth()->user()->emp_id;
+        $auditLog = SysHelpers::AuditLog(1, "Aproval level updated  by " . $autheniticateduser, $request);
+
 
         $msg = "Approval has been added Successfully !";
         return redirect('flex/approval_levels/' . base64_encode($appID))->with('msg', $msg);
@@ -10770,6 +10847,11 @@ public function authenticateUser($permissions)
     {
         $approval = Approvals::where('id', $id)->first();
         $approval->delete();
+
+        $request = new Request();
+        $autheniticateduser = auth()->user()->emp_id;
+        $auditLog = SysHelpers::AuditLog(1, "Approval deleted  by " . $autheniticateduser, $request);
+
 
         return redirect('flex/approvals')->with('msg', "Approval role was deleted successfully!");
     }
@@ -10890,6 +10972,10 @@ public function authenticateUser($permissions)
         if ($request->isMethod('post')) {
             $export = new LeaveApprovalsExport(LeaveApproval::orderBy('created_at', 'asc')->get());
             $fileName = 'leave_approvals.xlsx';
+
+            $autheniticateduser = auth()->user()->emp_id;
+            $auditLog = SysHelpers::AuditLog(1, "Leave approval expoted  by " . $autheniticateduser, $request);
+
             return Excel::download($export, $fileName);
         }
 
@@ -10917,6 +11003,7 @@ public function authenticateUser($permissions)
         $approval->level3 = $request->level_3;
         $approval->escallation_time = $request->escallation_time;
         $approval->save();
+
 
         $msg = "Leave Approval has been added Successfully !";
 
@@ -10974,6 +11061,10 @@ public function authenticateUser($permissions)
         $approval = LeaveApproval::find($id);
 
         $approval->delete();
+         $request = new Request();
+        $autheniticateduser = auth()->user()->emp_id;
+        $auditLog = SysHelpers::AuditLog(1, "Leave approval deleted by " . $autheniticateduser, $request);
+
 
         return redirect('flex/leave-approvals');
     }
@@ -10989,6 +11080,10 @@ public function authenticateUser($permissions)
         $approval->level3 = $request->level_3;
         $approval->escallation_time = $request->escallation_time;
         $approval->update();
+
+        $autheniticateduser = auth()->user()->emp_id;
+        $auditLog = SysHelpers::AuditLog(1, "Leave approval updated  by " . $autheniticateduser, $request);
+
 
         $msg = "Leave Approval has been Updated Successfully !";
         return redirect('flex/leave-approvals')->with('msg', $msg);
@@ -11389,6 +11484,10 @@ public function authenticateUser($permissions)
         $project->end_date = $request->end_date;
         $project->save();
 
+        $autheniticateduser = auth()->user()->emp_id;
+        $auditLog = SysHelpers::AuditLog(1, "New project saved by " . $autheniticateduser, $request);
+
+
         return redirect('flex/projects');
     }
 
@@ -11407,6 +11506,11 @@ public function authenticateUser($permissions)
         $project->start_date = $request->start_date;
         $project->end_date = $request->end_date;
         $project->update();
+
+        $autheniticateduser = auth()->user()->emp_id;
+        $auditLog = SysHelpers::AuditLog(1, "Project updated  by " . $autheniticateduser, $request);
+
+
         return redirect('flex/projects')->with('msg', 'Project was updated Successfully !');
     }
 
@@ -11417,6 +11521,12 @@ public function authenticateUser($permissions)
         $project = Project::where('id', $id)->first();
         $project->status = 1;
         $project->update();
+
+$request = new Request();
+        $autheniticateduser = auth()->user()->emp_id;
+        $auditLog = SysHelpers::AuditLog(1, "Project marked completed  by " . $autheniticateduser, $request);
+
+
         return back()->with('msg', 'Project was Completed Successfully !');
     }
     // View single project
@@ -12696,7 +12806,7 @@ $this->authenticateUser('view-Talent');
 
     public function loan_types()
     {
-        $this->authenticateUser('view-loan-type');
+        $this->authenticateUser('view-loan-types');
 
         $data['loan_types'] = LoanType::all();
         // dd($data);
@@ -12720,6 +12830,12 @@ $this->authenticateUser('view-Talent');
         $loan_types->name = $request->name;
         $loan_types->code = $request->code;
         $loan_types->save();
+
+        $autheniticateduser = auth()->user()->emp_id;
+        $auditLog = SysHelpers::AuditLog(1, "New loan type added by " . $autheniticateduser, $request);
+
+
+
 
         $msg = "Loan Type has been added Successfully !";
         return redirect('flex/loan_types')->with('msg', $msg);
@@ -12749,6 +12865,8 @@ $this->authenticateUser('view-Talent');
                 }
             }
             $brandSetting->update($brandSettings);
+            $autheniticateduser = auth()->user()->emp_id;
+            $auditLog = SysHelpers::AuditLog(1, "Brand settings updated  by " . $autheniticateduser, $request);
 
             
             $msg = 'Brand settings updated successful';

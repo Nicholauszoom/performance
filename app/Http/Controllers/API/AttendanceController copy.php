@@ -228,6 +228,9 @@ elseif($nature == 7)
         $type=LeaveType::where('id',$nature)->first();
         $max_leave_days= $type->max_days;
 
+        $autheniticateduser = auth()->user()->emp_id;
+
+
         // Annual leave accurated days
 
         $annualleaveBalance = $this->attendance_model->getLeaveBalance(session('emp_id'), session('hire_date'), date('Y-m-d'));
@@ -314,6 +317,8 @@ elseif($nature == 7)
              
           
                 $leaves->save();
+                $auditLog = SysHelpers::AuditLog(2, "Leave application  by " . $autheniticateduser, $request);
+
                 $leave_type=LeaveType::where('id',$nature)->first();
                 $type_name=$leave_type->type;
 
@@ -505,6 +510,8 @@ elseif($nature == 7)
                  
           
                 $leaves->save();
+                $auditLog = SysHelpers::AuditLog(2, "Leave application  by " . $autheniticateduser, $request);
+
                  
               $leave_type=LeaveType::where('id',$nature)->first();
               $type_name=$leave_type->type;
@@ -638,6 +645,8 @@ elseif($nature == 7)
              
       
             $leaves->save();
+            $auditLog = SysHelpers::AuditLog(2, "Leave application  by " . $autheniticateduser, $request);
+
                    
             $leave_type=LeaveType::where('id',$nature)->first();
             $type_name=$leave_type->type;
@@ -735,7 +744,7 @@ elseif($nature == 7)
                     'attachment'=>$newImageName
                 );
 
-                dd($data);
+                // dd($data);
                 $result = $this->attendance_model->applyleave($data);
                 if($result ==true){
                     echo "<p class='alert alert-success text-center'>Application Sent Added Successifully</p>";

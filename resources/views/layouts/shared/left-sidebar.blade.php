@@ -722,10 +722,13 @@
                                         href="{{ route('flex.audit_logs') }}"><i class="ph-path"></i>Audit Trail</a>
                                 </li>
                             @endif
-                            <li class="nav-item"><a
+                            <li class="nav-item">
+                                <a
                                     class="nav-link {{ request()->routeIs('flex.brand_settings') ? 'active' : null }}"
                                     href="{{ route('flex.brand_settings') }}"><i class="ph-path"></i>Brand Settings</a>
                             </li>
+
+
 
                             @if (session('mng_audit'))
                                 <li class="nav-item"><a
