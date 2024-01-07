@@ -85,6 +85,19 @@
                                     <input type="file" name="login_picture" class="form-control">
                                 </div>
                             </div>
+                            <div class="col-md-6">
+                                <div class="form-group m-2">
+                                    <label for="body_background">Body Background Picture  
+                                        <span>
+                                            @if ($brandSetting->body_background)
+                                                <a href="{{ asset('storage/' . $brandSetting->body_background) }}"> view</a>
+                                            @endif
+
+                                        </span>
+                                    </label>
+                                    <input type="file" name="body_background" class="form-control">
+                                </div>
+                            </div>
                         </div>
 
                         <h4>Colors</h4>

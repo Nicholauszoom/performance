@@ -31,6 +31,7 @@ class BrandSetting extends Model
         'address_3',
         'address_4',
         'login_picture',
+        'body_background',
     ];
     
 }

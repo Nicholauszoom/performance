@@ -14,6 +14,8 @@
         $brandSetting = \App\Models\BrandSetting::first();
     @endphp
 
+    {{-- {{dd($brandSetting->body_background)}} --}}
+
     <style>
         :root {
             /* previous bank ABC #00204e */
@@ -94,7 +96,8 @@
         }
 
         body {
-            background-image: url('{{ asset('img/bg2.png') }}');
+            /* background-image: url('{{ asset('img/bg2.png') }}'); */
+            background-image: url('{{$brandSetting !=null && $brandSetting->body_background != null ? asset('storage/' . $brandSetting->body_background) : asset('img/bg2.png') }}');
             /* background-color: #f1f1f1; */
             background-color: #ffff;
             /* background: cover; */
