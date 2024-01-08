@@ -514,7 +514,7 @@ class AttendanceController extends Controller
             $startDate = $year . '-01-01'; // Start of the current year
             $endDate = $year . '-12-31';
 
-            $daysSpent = Leaves::where("empID", $employeeId)
+            $daysSpent = Leaves::where("empid", $employeeId)
                 ->where('nature', $natureId)
                 ->whereBetween('created_at', [$startDate, $endDate])
                 ->whereNot('reason', 'Automatic applied!')
@@ -626,7 +626,7 @@ class AttendanceController extends Controller
 
         if (!$leaveApproval) {
             $leaveApproval = new LeaveApproval();
-            $leaveApproval->empID = Auth::user()->emp_id;
+            $leaveApproval->empid = Auth::user()->emp_id;
             $leaveApproval->level1 = $linemanager;
             $leaveApproval->save();
         }
@@ -746,7 +746,7 @@ class AttendanceController extends Controller
                     if ($total_leave_days < $maximum) {
                         $leaves = new Leaves();
                         $empID = Auth::user()->emp_id;
-                        $leaves->empID = $empID;
+                        $leaves->empid = $empID;
                         $leaves->status = 1;
                         $leaves->start = $request->start;
                         $leaves->end = $request->end;
@@ -784,7 +784,7 @@ class AttendanceController extends Controller
                         $type_name = $leave_type->type;
 
                         //fetch Line manager data from employee table and send email
-                        $linemanager = LeaveApproval::where('empID', $empID)->first();
+                        $linemanager = LeaveApproval::where('empid', $empID)->first();
                         $linemanager_data = SysHelpers::employeeData($linemanager->level1);
                         $employee_data = SysHelpers::employeeData($empID);
                         $fullname = $linemanager_data['full_name'];
@@ -830,7 +830,7 @@ class AttendanceController extends Controller
                         $remaining = $max_leave_days - ($leave_balance + $different_days);
                         $leaves = new Leaves();
                         $empID = Auth::user()->emp_id;
-                        $leaves->empID = $empID;
+                        $leaves->empid = $empID;
                         $leaves->start = $request->start;
                         $leaves->end = $request->end;
                         $leaves->leave_address = $request->address;
@@ -969,7 +969,7 @@ class AttendanceController extends Controller
                         $leaves->save();
 
                         //fetch Line manager data from employee table and send email
-                        $linemanager = LeaveApproval::where('empID', $empID)->first();
+                        $linemanager = LeaveApproval::where('empid', $empID)->first();
                         $linemanager_data = SysHelpers::employeeData($linemanager->level1);
                         $employee_data = SysHelpers::employeeData($empID);
                         $fullname = $linemanager_data['full_name'];
@@ -1017,7 +1017,7 @@ class AttendanceController extends Controller
                     $remaining = $max_leave_days - ($leave_balance + $different_days);
                     $leaves = new Leaves();
                     $empID = Auth::user()->emp_id;
-                    $leaves->empID = $empID;
+                    $leaves->empid = $empID;
                     $leaves->start = $request->start;
                     $leaves->end = $request->end;
                     $leaves->status = 1;
@@ -2790,7 +2790,7 @@ class AttendanceController extends Controller
                 $remaining = $max_leave_days - ($leave_balance + $different_days);
                 $leaves = new Leaves();
                 // $empID=Auth::user()->emp_id;
-                $leaves->empID = $empID;
+                $leaves->empid = $empID;
                 $leaves->start = $request->start;
                 $leaves->end = $request->end;
                 $leaves->leave_address = $request->address;
@@ -3075,7 +3075,7 @@ class AttendanceController extends Controller
 
             $leaves = new Leaves();
             // $empID=Auth::user()->emp_id;
-            $leaves->empID = $empID;
+            $leaves->empid = $empID;
             $leaves->start = $request->start;
             $leaves->end = $request->end;
             $leaves->leave_address = $request->address;

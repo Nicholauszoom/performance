@@ -72,7 +72,7 @@
                         <?php
 
                         if ($row->status == 1) {
-                            $levelID = App\Models\LeaveApproval::where('empID', Auth::user()->emp_id)->value('level1');
+                            $levelID = App\Models\LeaveApproval::where('empid', Auth::user()->emp_id)->value('level1');
                             // dd( $levelID );
 
                             if ($row->position == null) {

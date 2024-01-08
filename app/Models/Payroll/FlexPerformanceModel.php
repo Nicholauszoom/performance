@@ -588,7 +588,7 @@ public function getCurrentStrategy()
     FROM
         employee e
     JOIN
-        overtimes eo ON eo.\"empID\" = e.emp_id
+        overtimes eo ON eo.\"empid\" = e.emp_id
     JOIN
         position p ON e.position = p.id
     JOIN
@@ -3810,17 +3810,53 @@ public function group_byid($id)
     public function nonmembers_roles_byid($id)
     {
 
-        $query = "SELECT DISTINCT @s:=@s+1 as SNo,p.id as ID, p.name as POSITION,d.name as DEPARTMENT   FROM position p INNER JOIN department d ON p.dept_id = d.id ,  (SELECT @s:=0) as s WHERE p.state = 1 AND   p.id NOT IN (SELECT roleID from role_groups  where group_name=" . $id . ")";
+        // $query = "SELECT DISTINCT @s:=@s+1 as SNo,p.id as ID, p.name as POSITION,d.name as DEPARTMENT   FROM position p INNER JOIN department d ON p.dept_id = d.id ,  (SELECT @s:=0) as s WHERE p.state = 1 AND   p.id NOT IN (SELECT roleID from role_groups  where group_name=" . $id . ")";
+
+
+        $results = DB::table('position as p')
+    ->select(
+        DB::raw('DISTINCT ROW_NUMBER() OVER () as SNo'),
+        'p.id as ID',
+        'p.name as POSITION',
+        'd.name as DEPARTMENT'
+    )
+    ->join('department as d', 'p.dept_id', '=', 'd.id')
+    ->where('p.state', 1)
+    ->whereNotIn('p.id', function ($query) use ($id) {
+        $query->select('roleID')
+            ->from('role_groups')
+            ->where('group_name', $id);
+    })
+    ->get();
 
         //dd(DB::select(DB::raw($query)));
-        return DB::select(DB::raw($query));
+        return $results;
     }
 
     public function nonmembers_byid($id)
     {
-        $query = "SELECT DISTINCT @s:=@s+1 as SNo, e.emp_id as ID,  CONCAT(e.fname,' ',IF( e.mname != null,e.mname,' '),' ', e.lname) as NAME, d.name as DEPARTMENT, p.name as POSITION FROM employee e, position p, department d,  (SELECT @s:=0) as s  where e.position = p.id AND e.department = d.id AND e.state =1 AND e.emp_id NOT IN (SELECT empID from employee_group where group_name=" . $id . ")";
 
-        return DB::select(DB::raw($query));
+$results = DB::table('employee as e')
+    ->select(
+        DB::raw('DISTINCT ROW_NUMBER() OVER () as SNo'),
+        'e.emp_id as ID',
+        DB::raw("CONCAT(e.fname, ' ', COALESCE(e.mname, ' '), ' ', e.lname) as NAME"),
+        'd.name as DEPARTMENT',
+        'p.name as POSITION'
+    )
+    ->join('position as p', 'e.position', '=', 'p.id')
+    ->join('department as d', 'e.department', '=', 'd.id')
+    ->where('e.state', 1)
+    ->whereNotIn('e.emp_id', function ($query) use ($id) {
+        $query->select('empid')
+            ->from('employee_group')
+            ->where('group_name', $id);
+    })
+    ->get();
+
+        // $query = "SELECT DISTINCT @s:=@s+1 as SNo, e.emp_id as ID,  CONCAT(e.fname,' ',IF( e.mname != null,e.mname,' '),' ', e.lname) as NAME, d.name as DEPARTMENT, p.name as POSITION FROM employee e, position p, department d,  (SELECT @s:=0) as s  where e.position = p.id AND e.department = d.id AND e.state =1 AND e.emp_id NOT IN (SELECT empID from employee_group where group_name=" . $id . ")";
+
+        return $results;
     }
 
     public function roleswithingroup($id)
@@ -3840,16 +3876,65 @@ public function group_byid($id)
     public function members_byid($id)
     {
 
-        $query = "SELECT DISTINCT @s:=@s+1 as SNo, eg.id as EGID,  e.emp_id as ID,  CONCAT(e.fname,' ',IF( e.mname != null,e.mname,' '),' ', e.lname) as NAME, d.name as DEPARTMENT, p.name as POSITION FROM employee e, position p, department d, employee_group eg,  (SELECT @s:=0) as s  where e.position = p.id and e.emp_id = eg.empID and e.department = d.id and eg.group_name = " . $id . "  and e.emp_id IN (SELECT empID from employee_group where group_name=" . $id . ")";
+        // $query = "SELECT DISTINCT @s:=@s+1 as SNo, eg.id as EGID,  e.emp_id as ID,  CONCAT(e.fname,' ',IF( e.mname != null,e.mname,' '),' ', e.lname) as NAME, d.name as DEPARTMENT, p.name as POSITION FROM employee e, position p, department d, employee_group eg,  (SELECT @s:=0) as s  where e.position = p.id and e.emp_id = eg.empID and e.department = d.id and eg.group_name = " . $id . "  and e.emp_id IN (SELECT empID from employee_group where group_name=" . $id . ")";
+
+        $query = " SELECT
+        DISTINCT ROW_NUMBER() OVER (ORDER BY eg.id) + 1 AS SNo,
+        eg.id AS EGID,
+        e.emp_id AS ID,
+        CONCAT(
+          e.fname,
+          ' ',
+          COALESCE(e.mname, ' '), -- Using COALESCE instead of IF for NULL check
+          ' ',
+          e.lname
+        ) AS NAME,
+        d.name AS DEPARTMENT,
+        p.name AS POSITION
+      FROM
+        employee e
+        JOIN position p ON e.position = p.id
+        JOIN department d ON e.department = d.id
+        JOIN employee_group eg ON e.emp_id = eg.empID
+      WHERE
+        eg.group_name = 1
+        AND e.emp_id IN (
+          SELECT
+            empID
+          FROM
+            employee_group
+          WHERE
+            group_name = 1
+        );
+      ";
 
         return DB::select(DB::raw($query));
     }
     public function roles_byid($id)
     {
 
-        $query = "SELECT DISTINCT @s:=@s+1 as SNo, rg.id as RGID,  p.id as ID, d.name as DEPARTMENT, p.name as POSITION FROM  position p INNER JOIN department d ON p.dept_id = d.id INNER JOIN role_groups rg ON p.id = rg.roleID,  (SELECT @s:=0) as s  where  p.id = rg.roleID  and rg.group_name = " . $id . "  and p.id IN (SELECT roleID from role_groups where group_name=" . $id . ")";
+        // $query = "SELECT DISTINCT @s:=@s+1 as SNo, rg.id as RGID,  p.id as ID, d.name as DEPARTMENT, p.name as POSITION FROM  position p INNER JOIN department d ON p.dept_id = d.id INNER JOIN role_groups rg ON p.id = rg.roleID,  (SELECT @s:=0) as s  where  p.id = rg.roleID  and rg.group_name = " . $id . "  and p.id IN (SELECT roleID from role_groups where group_name=" . $id . ")";
 
-        return DB::select(DB::raw($query));
+
+        $results = DB::table('position as p')
+    ->select(
+        DB::raw('DISTINCT ROW_NUMBER() OVER () as SNo'),
+        'rg.id as RGID',
+        'p.id as ID',
+        'd.name as DEPARTMENT',
+        'p.name as POSITION'
+    )
+    ->join('department as d', 'p.dept_id', '=', 'd.id')
+    ->join('role_groups as rg', 'p.id', '=', 'rg.roleID')
+    ->where('rg.group_name', $id)
+    ->whereIn('p.id', function ($query) use ($id) {
+        $query->select('roleID')
+            ->from('role_groups')
+            ->where('group_name', $id);
+    })
+    ->get();
+
+        return $results;
     }
     public function get_employee_by_position($position)
     {

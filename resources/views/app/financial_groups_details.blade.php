@@ -117,15 +117,15 @@
                                 // if ($department->num_rows() > 0){
                                 foreach ($members as $row) { ?>
                                     <tr>
-                                        <td width="1px"><?php echo $row->SNo; ?></td>
-                                        <td><?php echo $row->ID.' - '.$row->NAME; ?></td>
-                                        <td><?php echo '<b>Department: </b>' . $row->DEPARTMENT . '<br><b>Position: </b>' . $row->POSITION; ?></td>
+                                        <td width="1px"><?php echo $row->sno; ?></td>
+                                        <td><?php echo $row->id.' - '.$row->name; ?></td>
+                                        <td><?php echo '<b>Department: </b>' . $row->department . '<br><b>Position: </b>' . $row->position; ?></td>
                                         <td hidden></td>
                                         <td hidden></td>
                                         <td hidden></td>
                                         <td class="options-width">
                                             <label class="containercheckbox">
-                                                <input type="checkbox" name="option1[]" value="<?php echo $row->EGID . '|' . $row->ID; ?>">
+                                                <input type="checkbox" name="option1[]" value="<?php echo $row->egid . '|' . $row->id; ?>">
                                                 <span class="checkmark"></span>
                                             </label>
                                         </td>
@@ -182,8 +182,8 @@
                                 // if ($department->num_rows() > 0){
                                 foreach ($nonmembers as $row) { ?>
                                     <tr>
-                                        <td width="1px"><?php echo $row->SNo; ?></td>
-                                        <td><?php echo $row->ID.' - '.$row->NAME; ?></td>
+                                        <td width="1px"><?php echo $row->sno; ?></td>
+                                        <td><?php echo $row->ID.' - '.$row->name; ?></td>
                                         <td><?php echo '<b>Department: </b>' . $row->DEPARTMENT . '<br><b>Position: </b>' . $row->POSITION; ?></td>
 
                                         <td class="options-width">

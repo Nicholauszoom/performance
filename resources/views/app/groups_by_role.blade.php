@@ -73,7 +73,7 @@
                         // if ($department->num_rows() > 0){
                           foreach ($members as $row) { ?>
                           <tr>
-                            <td width="1px"><?php echo $row->SNo; ?></td>
+                            <td width="1px"><?php echo $row->sno; ?></td>
                             <td><?php echo $row->POSITION; ?></td>
                             <td><?php echo "<b>Department: </b>".$row->DEPARTMENT; ?></td>
                             
@@ -132,7 +132,7 @@
                         // if ($department->num_rows() > 0){
                           foreach ($nonmembers as $row) { ?>
                           <tr>
-                            <td width="1px"><?php echo $row->SNo; ?></td>
+                            <td width="1px"><?php echo $row->sno; ?></td>
                             <td><?php echo $row->POSITION; ?></td>
                             <td><?php echo "<b>Department: </b>".$row->DEPARTMENT; ?></td>
                             
