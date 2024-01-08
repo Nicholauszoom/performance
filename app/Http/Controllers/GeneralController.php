@@ -7722,7 +7722,7 @@ public function authenticateUser($permissions)
     public function grievances(Request $request)
     {
 
-        $this->authenticateUser('view-grivences');
+        $this->authenticateUser('view-grivance');
 
         $empID = auth()->user()->emp_id;
         $data['title'] = 'Grievances and Disciplinary';
