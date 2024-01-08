@@ -7722,7 +7722,7 @@ public function authenticateUser($permissions)
     public function grievances(Request $request)
     {
 
-        $this->authenticateUser('view-grivences');
+        $this->authenticateUser('view-grivance');
 
         $empID = auth()->user()->emp_id;
         $data['title'] = 'Grievances and Disciplinary';
@@ -12849,7 +12849,7 @@ $this->authenticateUser('view-Talent');
 
             $brandSettings = $request->all();
 
-            foreach (['company_logo', 'report_logo', 'login_picture', 'dashboard_logo', 'body_background'] as $fileField) {
+            foreach (['company_logo', 'report_logo', 'login_picture', 'dashboard_logo', 'body_background', 'report_top_banner', 'report_bottom_banner'] as $fileField) {
                 if ($request->hasFile($fileField)) {
 
                     $existingFilePath = $brandSetting->$fileField;

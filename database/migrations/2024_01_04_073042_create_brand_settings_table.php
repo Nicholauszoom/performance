@@ -34,9 +34,6 @@ return new class extends Migration
             $table->string('address_3')->nullable();
             $table->string('address_4')->nullable();
             $table->string('login_picture')->nullable();
-
-            $table->string('body_background')->nullable();
-            
             $table->timestamps();
         });
     }
