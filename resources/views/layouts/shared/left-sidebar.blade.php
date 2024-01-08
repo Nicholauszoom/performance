@@ -725,7 +725,11 @@
                             <li class="nav-item">
                                 <a
                                     class="nav-link {{ request()->routeIs('flex.brand_settings') ? 'active' : null }}"
-                                    href="{{ route('flex.brand_settings') }}"><i class="ph-path"></i>Brand Settings</a>
+                                    href="{{ route('flex.brand_settings') }}">
+
+                                    <i class="ph-presentation-chart"></i>
+                                    
+                                    Brand Settings</a>
                             </li>
 
 
