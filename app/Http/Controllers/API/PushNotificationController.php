@@ -40,6 +40,8 @@ class PushNotificationController extends Controller
             $comment->sender_emp_id=$user;
             $comment->save();
 
+         
+
 
             $fcmServerKey = env('FCM_SERVER_KEY');
             // $fcmServerKey = 'AAAAOqacTg8:APA91bHAbmLdf_oh9Wr_DaHhvznWVB4uLDloVvq0RKRfzXmXFlYSCX4ecsm4Dkb656XRo7PBa1mrkHkrQ1w9sfLsnni-y_KNYe-F7T9GeiIhC5qCg-3r1jwJLk8Z4xz5kvEK3VLOBzoQ';
@@ -57,7 +59,7 @@ class PushNotificationController extends Controller
   
     $data = [
         'click_action' => 'FLUTTER_NOTIFICATION_CLICK',
-        'id' =>   $comment->receiver_emp_id,
+        'id' =>   $comment->id,
         'status' => 'done',
     ];
 
@@ -145,13 +147,34 @@ class PushNotificationController extends Controller
         $comment->status=1;
         $comment->update();
 
-        dd(PushNotification::where('receiver_emp_id',$user)->orderBy('created_at','desc')->get());
+        // dd(PushNotification::where('receiver_emp_id',$user)->orderBy('created_at','desc')->get());
     }
     public function getNotifications()
     {
-        $push_notifications = PushNotification::orderBy('created_at', 'desc')->where('receiver_emp_id',auth->user()->emp_id)->get();
-        return response()->json($push_notifications, 200);
-     }
+        $pushNotifications = PushNotification::orderBy('created_at', 'desc')
+            ->where('receiver_emp_id', auth()->user()->emp_id)
+            ->get();
+                 
+        foreach ($pushNotifications as $key => $notification) { 
+            $slipArray = json_decode(json_encode($notification), true);
+            $titles = NotificationTitle::where('id', $notification->title)->get();
+    
+            foreach ($titles as $title) {
+                $slipArray['title_name'] = $title['title'];
+            }
+    
+            $pushNotifications[$key] = (array) $slipArray; // Update the specific element in $pushNotifications
+        }
+    
+        return response()->json($pushNotifications, 200);
+    }
+    
+
+     public function getNotificationTitles()
+     {
+         $push_notifications=NotificationTitle::get();
+         return response()->json($push_notifications, 200);
+      }
 
     public function destroy(PushNotification $pushNotification)
     {

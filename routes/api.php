@@ -29,14 +29,16 @@ Route::controller(AuthController::class)->group(function(){
 
 });
 
-Route::get('/getNotification',[PushNotificationController::class,'index']);
-
 
 Route::get('/test', function (Request $request) {
     return $request->header('apikey');
 });
 Route::middleware('auth:sanctum')->group( function () {
     Route::post('/push',[PushNotificationController::class,'test']);
+    Route::get('/getNotification',[PushNotificationController::class,'getNotifications']);
+   
+    Route::get('/getNotificationTitles',[PushNotificationController::class,'getNotificationTitles']);
+
 
 
  Route::post('/logout',[AuthController::class,'logout']);
