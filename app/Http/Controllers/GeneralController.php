@@ -12849,7 +12849,7 @@ $this->authenticateUser('view-Talent');
 
             $brandSettings = $request->all();
 
-            foreach (['company_logo', 'report_logo', 'login_picture', 'dashboard_logo', 'body_background'] as $fileField) {
+            foreach (['company_logo', 'report_logo', 'login_picture', 'dashboard_logo', 'body_background', 'report_top_banner', 'report_bottom_banner'] as $fileField) {
                 if ($request->hasFile($fileField)) {
 
                     $existingFilePath = $brandSetting->$fileField;
