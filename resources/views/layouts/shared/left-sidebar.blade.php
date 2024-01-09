@@ -361,7 +361,7 @@
                 {{-- / --}}
 
                 {{-- start of leave management dropdown --}}
-                @can('view-leave')
+                @can('view-leave-management')
                     <li
                         class="nav-item nav-item-submenu {{ request()->routeIs('flex.add_unpaid_leave') || request()->routeIs('attendance.leaveforfeiting') || request()->routeIs('attendance.revokeLeave') || request()->routeIs('attendance.leave') || request()->routeIs('flex.end_unpaid_leave') || request()->routeIs('flex.save_unpaid_leave') || request()->routeIs('flex.add_unpaid_leave') || request()->routeIs('flex.unpaid_leave') || request()->routeIs('attendance.leavereport') ? 'nav-item-expand nav-item-open' : null }}">
 
