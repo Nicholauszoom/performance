@@ -226,7 +226,8 @@ class Payroll extends Model
         if (count($records) == 1) {
             $row = $records[0];
             return $row->payroll_month;
-        } else return 0;
+        } else
+            return 0;
     }
     public function payrollcheck($date)
     {
@@ -2027,7 +2028,8 @@ as gross,
              '" . $year . "' as years,
              e.salary as actual_salary
              FROM employee e, pension_fund pf, bank bn, bank_branch bb WHERE e.pension_fund = pf.id AND  e.bank = bn.id AND bb.id = e.bank_branch AND e.state = 1 and e.login_user != 1";
-            DB::insert(DB::raw($query));
+
+             DB::insert(DB::raw($query));
             $query = " UPDATE payroll_months SET state = 0, appr_author = '" . $empID . "', appr_date = '" . $todate . "'  WHERE state = 1 ";
             DB::insert(DB::raw($query));
 
@@ -2542,7 +2544,8 @@ FROM temp_loan_logs tlg, loan l WHERE l.id = tlg.loanID and payment_date = '" . 
         $result = $row;
         if ($result > 0) {
             return true;
-        } else return false;
+        } else
+            return false;
     }
     public function updatePendingArrear($arrearID, $updates)
     {
