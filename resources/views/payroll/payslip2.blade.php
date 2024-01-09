@@ -47,8 +47,14 @@
                 <tr>
                     <td class="">
                         <div class="box-text">
-                            <img src="{{ public_path('assets/images/logo-dif2.png') }}" width="100" height="70"
-                                class="image-fluid"> <br>
+                            @if ($brandSetting->report_logo)
+                            <img src="{{ asset('storage/' . $brandSetting->report_logo) }}" alt="logo here" width="180px" height="150px" class="image-fluid">          
+                            @else
+                            <img src="{{ public_path('assets/images/logo-dif2.png') }}" alt="logo here" width="180px" height="150px" class="image-fluid">          
+                            @endif
+                                
+                                
+                                <br>
 
                         </div>
                     </td>
