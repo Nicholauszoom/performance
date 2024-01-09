@@ -361,7 +361,7 @@
                 {{-- / --}}
 
                 {{-- start of leave management dropdown --}}
-                @can('view-leave')
+                @can('view-leave-management')
                     <li
                         class="nav-item nav-item-submenu {{ request()->routeIs('flex.add_unpaid_leave') || request()->routeIs('attendance.leaveforfeiting') || request()->routeIs('attendance.revokeLeave') || request()->routeIs('attendance.leave') || request()->routeIs('flex.end_unpaid_leave') || request()->routeIs('flex.save_unpaid_leave') || request()->routeIs('flex.add_unpaid_leave') || request()->routeIs('flex.unpaid_leave') || request()->routeIs('attendance.leavereport') ? 'nav-item-expand nav-item-open' : null }}">
 
@@ -725,11 +725,7 @@
                             <li class="nav-item">
                                 <a
                                     class="nav-link {{ request()->routeIs('flex.brand_settings') ? 'active' : null }}"
-                                    href="{{ route('flex.brand_settings') }}">
-
-                                    <i class="ph-presentation-chart"></i>
-                                    
-                                    Brand Settings</a>
+                                    href="{{ route('flex.brand_settings') }}"><i class="ph-paint-brush-household"></i>Brand Settings</a>
                             </li>
 
 
