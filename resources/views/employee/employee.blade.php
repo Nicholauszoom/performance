@@ -13,13 +13,9 @@
 
 @can('view-employee')
   <div class="card border-top  border-top-width-3 border-top-main rounded-0">
-    <div class="card-header  mb-0">
-      <h5 class="text-main">Employees</h5>
-    </div>
-
-    <div class="card-body ">
+    <div class="card-header">
       <div class="d-flex justify-content-between">
-        <h4 class="lead text-warning ">List of Employees</h4>
+        <h5 class="text-warning ">List of Employees</h5>
 
 
         @can('add-employee')
@@ -31,6 +27,7 @@
       </div>
     </div>
 
+    <div class="card-body">
     <table id="datatable" class="table table-striped table-bordered datatable-basic">
       <thead>
         <tr>
@@ -84,7 +81,7 @@
 
 
                 @can('deactivate-employee')
-                    
+
                 <a href="javascript:void(0)" onclick="requestDeactivation('<?php echo $row->emp_id; ?>')"  class="btn btn-danger btn-sm"  title="Deactivate">
                 <i class="ph-prohibit"></i>
                 </a>
@@ -130,6 +127,7 @@
             </div>
         </div>
     </div>
+</div>
 </div>
 
 @endsection
