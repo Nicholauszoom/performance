@@ -1220,7 +1220,7 @@ class GeneralController extends Controller
         }
         else if($overtime->status =='1'){
    $count2++;
-        }else if($overtime->status =='3'){
+        }else if($overtime->status =='2'){
             $count3++;
         }
         else if($overtime->status =='4'){

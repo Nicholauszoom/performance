@@ -36,7 +36,7 @@ Route::get('/test', function (Request $request) {
 Route::middleware('auth:sanctum')->group( function () {
     Route::post('/push',[PushNotificationController::class,'test']);
     Route::get('/getNotification',[PushNotificationController::class,'getNotifications']);
-   
+    Route::post('/deleteNotification',[PushNotificationController::class,'deleteNotification']);
     Route::get('/getNotificationTitles',[PushNotificationController::class,'getNotificationTitles']);
 
 

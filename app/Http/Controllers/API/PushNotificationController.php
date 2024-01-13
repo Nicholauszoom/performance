@@ -140,12 +140,23 @@ class PushNotificationController extends Controller
             ]);
           
     }
-    public function updateNotification(){
+    public function updateNotification(Request $request){
+       try{
         $user = auth()->user()->emp_id;
-        $push_notifications = PushNotification::orderBy('created_at', 'desc')->get();
-        $comment =  PushNotification::where('receiver_emp_id',$user)->orderBy('created_at','desc')->get();
+        $id = $request->id;
+
+        $push_notifications =  PushNotification::where('receiver_emp_id',$user)->get();
+
+        $comment =  PushNotification::where('receiver_emp_id',$user)->where('id',$id)->get()->first();
+    
         $comment->status=1;
-        $comment->update();
+       
+        $comment->save();
+        return response(["msg"=>"successful updated"],200);
+       }
+       catch(Exception $e){
+        return response(["msg"=>"Failed".$e],400);
+       }
 
         // dd(PushNotification::where('receiver_emp_id',$user)->orderBy('created_at','desc')->get());
     }
@@ -176,8 +187,26 @@ class PushNotificationController extends Controller
          return response()->json($push_notifications, 200);
       }
 
-    public function destroy(PushNotification $pushNotification)
-    {
-        //
-    }
+      public function deleteNotification(Request $request)
+      {
+          $user = auth()->user()->emp_id;
+          $notifications = $request->notification;
+          $allNotFound = true;
+      
+          foreach ($notifications as $item) {
+              $comment = PushNotification::where('receiver_emp_id', $user)->where('id', $item)->first();
+      
+              if ($comment) {
+                  $comment->delete();
+                  $allNotFound = false; // Set flag to false if at least one notification is found
+              }
+          }
+      
+          if ($allNotFound) {
+              return response(['msg' => "None of the notifications exist"], 404);
+          }
+      
+          return response(['msg' => "Successful"], 200);
+      }
+      
 }
