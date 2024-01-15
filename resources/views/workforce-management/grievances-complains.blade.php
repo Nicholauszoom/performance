@@ -44,28 +44,37 @@
     {{ session('msg') }}
     </div>
     @endif
+
+
+    @foreach ($actions->groupBy(function($item) {
+        return \Carbon\Carbon::parse($item->date_of_charge)->format('Y');
+    }) as $year => $yearlyActions)
+     <div style="margin-bottom: 20px;">
+        <h2 style="border-bottom: 2px solid #ccc; padding-bottom: 5px;"> YEAR {{ $year }}</h2>
+
+
     <table class="table table-striped table-bordered datatable-basic">
         <thead>
             <tr>
-                <th>SN</th>
-                <th>Employee Name</th>
-                <th>Department</th>
+                <th  style="border: 1px solid #ccc;" >SN</th>
+                <th  style="border: 1px solid #ccc;">Employee Name</th>
+                <th  style="border: 1px solid #ccc;">Department</th>
                 {{-- <th>Suspension</th> --}}
-                <th>Charge Date</th>
-                <th >Action</th>
-                <th hidden></th>
+                <th  style="border: 1px solid #ccc;">Charge Date</th>
+                <th  style="border: 1px solid #ccc;" >Action</th>
+                {{-- <th hidden></th> --}}
             </tr>
         </thead>
 
         <tbody>
-               @foreach ($actions as $item)
+               @foreach ($yearlyActions  as $item)
             <tr>
-            <td>{{$i++}}</td>
-             <td>{{ $item->employee->fname}} {{ $item->employee->mname}} {{ $item->employee->lname}}</td>
-             <td>{{ $item->departments->name}}</td>
+            <td style="border: 1px solid #ccc;">{{$i++}}</td>
+             <td style="border: 1px solid #ccc;">{{ $item->employee->fname}} {{ $item->employee->mname}} {{ $item->employee->lname}}</td>
+             <td style="border: 1px solid #ccc;">{{ $item->departments->name}}</td>
              {{-- <td>  {{ $item->suspension}}  </td> --}}
-             <td> {{ $item->date_of_charge}}</td>
-             <td>
+             <td style="border: 1px solid #ccc;"> {{ $item->date_of_charge}}</td>
+             <td style="border: 1px solid #ccc;">
                 <a  href="{{ route('flex.viewDisciplinary', base64_encode($item->id)) }}"  title="Info and Details">
                     <button type="button" class="btn btn-sm btn-main btn-xs"><i class="ph-info"></i></button>
                 </a>
@@ -82,14 +91,17 @@
                  </a>
                 @endcan
              </td>
-             <td hidden>
+             {{-- <td hidden>
 
-             </td>
+             </td> --}}
 
             </tr>
             @endforeach
         </tbody>
     </table>
+     </div>
+    @endforeach
+
 
 
     <!-- Modal -->
