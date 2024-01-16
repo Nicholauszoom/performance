@@ -42,6 +42,24 @@
                 <div class="container">
                     <form method="POST" action="" enctype="multipart/form-data">
                         @csrf
+
+                        <div class="d-flex">
+                            <div class="col-md-3">
+                                <div class="form-group  m-2">
+                                    <label for="report_system_name">Report system Name</label>
+                                    <input type="text" name="report_system_name" class="form-control" value="{{ $brandSetting->report_system_name }}">
+                                </div>
+                            </div>
+
+                            <div class="col-md-3">
+                                <div class="form-group  m-2">
+                                    <label for="website_url">Website URL</label>
+                                    <input type="text" name="website_url" class="form-control" value="{{ $brandSetting->website_url }}">
+                                </div>
+                            </div>
+
+                        </div>
+                        
                         <h4>Logo/Pictures</h4>
                         <div class="d-flex flex-wrap">
                             <div class="col-md-6">
@@ -85,6 +103,49 @@
                                     <input type="file" name="login_picture" class="form-control">
                                 </div>
                             </div>
+                            <div class="col-md-6">
+                                <div class="form-group m-2">
+                                    <label for="body_background">Body Background Picture  
+                                        <span>
+                                            @if ($brandSetting->body_background)
+                                                <a href="{{ asset('storage/' . $brandSetting->body_background) }}"> view</a>
+                                            @endif
+
+                                        </span>
+                                    </label>
+                                    <input type="file" name="body_background" class="form-control">
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="form-group m-2">
+                                    <label for="body_background">Report top banner  
+                                        <span>
+                                            @if ($brandSetting->report_top_banner)
+                                                <a href="{{ asset('storage/' . $brandSetting->report_top_banner) }}"> view</a>
+                                            @endif
+
+                                        </span>
+                                    </label>
+                                    <input type="file" name="report_top_banner" class="form-control">
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="form-group m-2">
+                                    <label for="body_background">Report bottom banner  
+                                        <span>
+                                            @if ($brandSetting->report_bottom_banner)
+                                                <a href="{{ asset('storage/' . $brandSetting->report_bottom_banner) }}"> view</a>
+                                            @endif
+
+                                        </span>
+                                    </label>
+                                    <input type="file" name="report_bottom_banner" class="form-control">
+                                </div>
+                            </div>
+
+
                         </div>
 
                         <h4>Colors</h4>

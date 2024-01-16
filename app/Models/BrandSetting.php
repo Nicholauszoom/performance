@@ -19,15 +19,23 @@ class BrandSetting extends Model
         'primary_color',
         'secondary_color',
         'hover_color',
+        'hover_color_two',
         'loader_color_one',
         'loader_color_two',
         'loader_color_three',
         'loader_color_four',
+        'loader_color_five',
+        'loader_color_six',
         'address_1',
         'address_2',
         'address_3',
         'address_4',
         'login_picture',
+        'body_background',
+        'website_url',
+        'report_top_banner',
+        'report_bottom_banner',
+        'report_system_name',
     ];
     
 }

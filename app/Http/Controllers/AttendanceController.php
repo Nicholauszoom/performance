@@ -773,6 +773,9 @@ class AttendanceController extends Controller
 
                         }
                         $leaves->save();
+                        $autheniticateduser = auth()->user()->emp_id;
+                        $auditLog = SysHelpers::AuditLog(2, "Leave application  by " . $autheniticateduser, $request);
+                
                         $leave_type = LeaveType::where('id', $nature)->first();
                         $type_name = $leave_type->type;
 
@@ -967,6 +970,9 @@ class AttendanceController extends Controller
                         }
 
                         $leaves->save();
+                        $autheniticateduser = auth()->user()->emp_id;
+                        $auditLog = SysHelpers::AuditLog(2, "Leave application  by " . $autheniticateduser, $request);
+                
 
                         //fetch Line manager data from employee table and send email
                         $linemanager = LeaveApproval::where('empID', $empID)->first();
@@ -1168,6 +1174,11 @@ class AttendanceController extends Controller
                     }
 
                     $leaves->save();
+
+                    $autheniticateduser = auth()->user()->emp_id;
+                    $auditLog = SysHelpers::AuditLog(2, "Leave application  by " . $autheniticateduser, $request);
+
+                    
                     $leave_type = LeaveType::where('id', $nature)->first();
                     $type_name = $leave_type->type;
 
@@ -1258,6 +1269,10 @@ class AttendanceController extends Controller
             $leave->updated_at = new DateTime();
             $leave->update();
 
+            $autheniticateduser = auth()->user()->emp_id;
+            $auditLog = SysHelpers::AuditLog(2, "Leave aproval  by " . $autheniticateduser, $request);
+    
+
         } elseif ($approval->level2 == $approver) {
 
             // For Deligation
@@ -1284,6 +1299,9 @@ class AttendanceController extends Controller
             $leave->position = 'Approved by Line Manager' ;
             $leave->updated_at = new DateTime();
             $leave->update();
+            $autheniticateduser = auth()->user()->emp_id;
+            $auditLog = SysHelpers::AuditLog(2, "Leave approval  by " . $autheniticateduser, $request);
+    
         } elseif ($approval->level3 == $approver) {
 
             // For Deligation
@@ -1304,6 +1322,9 @@ class AttendanceController extends Controller
             $leave->position = 'Approved by Line Manager' ;
             $leave->updated_at = new DateTime();
             $leave->update();
+            $autheniticateduser = auth()->user()->emp_id;
+            $auditLog = SysHelpers::AuditLog(2, "Leave approval  by " . $autheniticateduser, $request);
+    
         } else {
 
             $msg = 'Sorry, You are Not Authorized';
@@ -1393,7 +1414,7 @@ class AttendanceController extends Controller
         $this->authenticateUser('apply-leave');
         // echo "<p class='alert alert-success text-center'>Record Added Successifully</p>";
 
-        $autheniticateduser = auth()->user()->emp_id;
+      
 
         if ($request->method() == "POST") {
 
@@ -1452,8 +1473,11 @@ class AttendanceController extends Controller
                     'application_date' => date('Y-m-d'),
                     'attachment' => $newImageName,
                 );
+                // dd($data);
 
                 $result = $this->attendance_model->applyleave($data);
+
+
                 if ($result == true) {
                     $auditLog = SysHelpers::AuditLog(2, "Leave application  by " . $autheniticateduser, $request);
 
@@ -2380,6 +2404,9 @@ class AttendanceController extends Controller
 
                         }
                         $leaves->save();
+                        $autheniticateduser = auth()->user()->emp_id;
+                        $auditLog = SysHelpers::AuditLog(2, "Leave application  by " . $autheniticateduser, $request);
+                
                         $leave_type = LeaveType::where('id', $nature)->first();
                         $type_name = $leave_type->type;
 
@@ -2566,6 +2593,9 @@ class AttendanceController extends Controller
                         }
 
                         $leaves->save();
+                        $autheniticateduser = auth()->user()->emp_id;
+                        $auditLog = SysHelpers::AuditLog(2, "Leave application  by " . $autheniticateduser, $request);
+                
 
                         //fetch Line manager data from employee table and send email
                         $linemanager = LeaveApproval::where('empID', $empID)->first();
@@ -2653,6 +2683,9 @@ class AttendanceController extends Controller
                         }
 
                         $leaves->save();
+                        $autheniticateduser = auth()->user()->emp_id;
+                        $auditLog = SysHelpers::AuditLog(2, "Leave application  by " . $autheniticateduser, $request);
+                
                         // dd($leaves->nature);
                         $condition = [
                             'emp_id' => $empID,
@@ -2748,6 +2781,9 @@ class AttendanceController extends Controller
                         }
 
                         $leaves->save();
+                        $autheniticateduser = auth()->user()->emp_id;
+                        $auditLog = SysHelpers::AuditLog(2, "Leave application  by " . $autheniticateduser, $request);
+                
                         // dd($leaves->nature);
                         $condition = [
                             'emp_id' => $empID,
@@ -2952,6 +2988,9 @@ class AttendanceController extends Controller
                 }
 
                 $leaves->save();
+                $autheniticateduser = auth()->user()->emp_id;
+                $auditLog = SysHelpers::AuditLog(2, "Leave application  by " . $autheniticateduser, $request);
+        
                 $leave_type = LeaveType::where('id', $nature)->first();
                 $type_name = $leave_type->type;
 
@@ -3117,6 +3156,11 @@ class AttendanceController extends Controller
 
             }
             $leaves->save();
+
+            $autheniticateduser = auth()->user()->emp_id;
+            $auditLog = SysHelpers::AuditLog(2, "Leave application  by " . $autheniticateduser, $request);
+    
+
             $condition = [
                 'emp_id' => $empID,
                 'appliedBy' => Auth::user()->emp_id,
@@ -3199,6 +3243,10 @@ class AttendanceController extends Controller
 
             }
             $leaves->save();
+            $autheniticateduser = auth()->user()->emp_id;
+            $auditLog = SysHelpers::AuditLog(2, "Leave application  by " . $autheniticateduser, $request);
+
+            
             $condition = [
                 'emp_id' => $empID,
                 'appliedBy' => Auth::user()->emp_id,

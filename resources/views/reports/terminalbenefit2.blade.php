@@ -23,13 +23,21 @@
 
     <link rel="stylesheet" href="{{ public_path('assets/bootstrap/b4css/bootstrap.css') }}">
 
+
+    @php
+    $brandSetting = \App\Models\BrandSetting::first();
+@endphp
+
+
     <style>
         body {
             background-color: #ffff;
             background-position: auto;
             background-repeat: no-repeat;
             background-size: cover;
-            background: url({{ public_path('img/bg2.png') }});
+            background-image: url('{{$brandSetting !=null && $brandSetting->body_background != null ? asset('storage/' . $brandSetting->body_background) : asset('img/bg2.png') }}');
+
+            /* background: url({{ public_path('img/bg2.png') }}); */
         }
 
         table {

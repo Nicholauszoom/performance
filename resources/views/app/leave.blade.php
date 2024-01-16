@@ -22,7 +22,6 @@
             </div>
         @endif
 
-        <div class="card border-top  border-top-width-3 border-top-main border-bottom-main rounded-0 col-lg-12 ">
             <div class="card-body">
                 <div class="col-6 tex-mdt-sucess text-secondary" id="remaining" style="display:none">
                     <code class="text-success">
@@ -51,7 +50,7 @@
                 {{-- include  revoked leave applications table  --}}
                 @include('app.revokedleave_applications')
                 @endcan
-               
+
 
                 @endif
 
@@ -86,7 +85,7 @@
 
             </div>
         </div>
-    </div>
+    {{-- </div> --}}
 @endsection
 
 

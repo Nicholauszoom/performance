@@ -1356,7 +1356,7 @@ class FlexPerformanceModel extends Model
     {
 
         // dd($empID);
-        $query = "SELECT e.*, bank.name as bankName, ctry.name as country, b.name as branch_name,  bb.name as bankBranch, d.name as deptname, c.name as CONTRACT, p.name as pName, (SELECT CONCAT(fname,' ', mname,' ', lname) from employee where  emp_id = e.line_manager) as LINEMANAGER from employee e, department d, contract c, country ctry, position p, bank, branch b, bank_branch bb WHERE d.id=e.department and p.id=e.position and e.contract_type = c.item_code AND e.bank_branch = bb.id and ctry.code = e.nationality AND e.bank = bank.id AND e.branch = b.id AND e.emp_id ='" . $empID . "'";
+        $query = "SELECT e.*, bank.name as bankName, ctry.description as country, b.name as branch_name,  bb.name as bankBranch, d.name as deptname, c.name as CONTRACT, p.name as pName, (SELECT CONCAT(fname,' ', mname,' ', lname) from employee where  emp_id = e.line_manager) as LINEMANAGER from employee e, department d, contract c, country ctry, position p, bank, branch b, bank_branch bb WHERE d.id=e.department and p.id=e.position and e.contract_type = c.item_code AND e.bank_branch = bb.id and ctry.item_code = e.nationality AND e.bank = bank.id AND e.branch = b.id AND e.emp_id ='" . $empID . "'";
 
         // dd($query);
         $row = DB::select(DB::raw($query));
@@ -1696,7 +1696,7 @@ class FlexPerformanceModel extends Model
     public function getallowancebyid($id)
     {
 
-      
+
         $query = "SELECT * FROM allowances WHERE id =" . $id . "";
 
         return DB::select(DB::raw($query));
@@ -2883,7 +2883,7 @@ last_paid_date='" . $date . "' WHERE  state = 1 and type = 3";
 
     public function countrydropdown()
     {
-        $query = "SELECT c.* FROM country_codes c";
+        $query = "SELECT c.* FROM country c";
 
         return DB::select(DB::raw($query));
     }
