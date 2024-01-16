@@ -4260,7 +4260,7 @@ public function authenticateUser($permissions)
         $rr = User::find(2);
 
 
-        dd(Role::where('id', $role->role_id)->first());
+        // dd(Role::where('id', $role->role_id)->first());
 
         // $api = url('/flex/chart-line-ajax');
         // $chart = new EmployeeLineChart;
@@ -8879,15 +8879,20 @@ public function authenticateUser($permissions)
         $terminate = Approvals::where('process_name', 'Termination Approval')->first();
         $roles = Role::where('id', $role_id)->first();
         $level = ApprovalLevel::where('role_id', $role_id)->where('approval_id', $terminate->id)->first();
+        // dd($level);
+
+
         if ($level) {
             $approval_id = $level->approval_id;
             $approval = Approvals::where('id', $approval_id)->first();
 
-            if ($approval->levels == $level->level_name) {
+            if ($approval->ApprLevels()->count() == $level->level_name) {
 
                 $termination = Termination::where('id', $id)->first();
+
                 $employeeID = $termination->employeeID;
                 $termination->status = 1;
+                $termination->approval_status= $termination->approval_status + 1;
                 $termination->update();
 
                 $this->flexperformance_model->update_employee_termination($id);
@@ -8898,73 +8903,13 @@ public function authenticateUser($permissions)
 
                 $position = Position::where('id', $employee)->first();
 
-                // chacking level 1
-                if ($approval->level1 == $employeeID) {
-                    $empID = $request->deligated;
-                    // For Deligation
-                    if ($request->deligated != null) {
-                        $id = Auth::user()->emp_id;
-
-                        $this->attendance_model->save_deligated($leave->empID);
-
-                        $level1 = DB::table('leave_approvals')->Where('level1', $empID)->update(['level1' => $leave->deligated]);
-                        $level2 = DB::table('leave_approvals')->Where('level2', $empID)->update(['level2' => $leave->deligated]);
-                        $level3 = DB::table('leave_approvals')->Where('level3', $empID)->update(['level3' => $leave->deligated]);
-                        // dd($request->deligate);
-
-                    }
-
-                    $leave->status = 3;
-                    $leave->state = 0;
-                    $leave->level1 = Auth()->user()->emp_id;
-                    $leave->position = 'Approved by ' . $position->name;
-                    $leave->updated_at = new DateTime();
-                    $leave->update();
-                } elseif ($approval->level2 == $approver) {
-
-                    // For Deligation
-                    if ($leave->deligated != null) {
-                        $id = Auth::user()->emp_id;
-                        $this->attendance_model->save_deligated($leave->empID);
-
-                        $level1 = DB::table('leave_approvals')->Where('level1', $id)->update(['level1' => $leave->deligated]);
-                        $level2 = DB::table('leave_approvals')->Where('level2', $id)->update(['level2' => $leave->deligated]);
-                        $level3 = DB::table('leave_approvals')->Where('level3', $id)->update(['level3' => $leave->deligated]);
-                        // dd($request->deligate);
-
-                    }
-                    $leave->status = 3;
-                    $leave->state = 0;
-                    $leave->level2 = Auth()->user()->emp_id;
-                    $leave->position = 'Approved by ' . $position->name;
-                    $leave->updated_at = new DateTime();
-                    $leave->update();
-                } elseif ($approval->level3 == $approver) {
-
-                    // For Deligation
-                    if ($leave->deligated != null) {
-                        $id = Auth::user()->emp_id;
-                        $this->attendance_model->save_deligated($leave->empID);
-
-                        $level1 = DB::table('leave_approvals')->Where('level1', $id)->update(['level1' => $leave->deligated]);
-                        $level2 = DB::table('leave_approvals')->Where('level2', $id)->update(['level2' => $leave->deligated]);
-                        $level3 = DB::table('leave_approvals')->Where('level3', $id)->update(['level3' => $leave->deligated]);
-                        // dd($request->deligate);
-
-                    }
-                    $leave->status = 3;
-                    $leave->state = 0;
-                    $leave->level3 = Auth()->user()->emp_id;
-                    $leave->position = $position->name;
-                    $leave->updated_at = new DateTime();
-                    $leave->update();
-                }
-
+               
                 $msg = 'Employee is Terminated Successfully !';
                 return redirect('flex/termination')->with(['success' => $msg]);
             } else {
                 // To be upgraded
                 $termination = Termination::where('id', $id)->first();
+                $termination->approval_status= $termination->approval_status + 1;
                 $termination->status = 'Approved By ' . $roles->name;
                 $termination->update();
 
