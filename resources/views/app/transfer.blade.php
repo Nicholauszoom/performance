@@ -175,9 +175,22 @@
                                         </a>
                                         <?php if($row->parameterID==5){
                                             // if(session('mng_paym')){  ?>
-                                                <a href="javascript:void(0)" onclick="approveRegistration(<?php echo $row->id; ?>)" title="Accept" class="icon-2 info-tooltip ms-2">
-                                                    <button type="button" class="btn btn-success btn-xs"><i class="ph-check"></i></button>
-                                                </a>
+                                            {{-- {{dd($row)}} --}}
+
+{{-- {{dd($level->level_name, $row->approval_status)}} --}}
+
+@if ($level)
+    
+@if ($level->level_name == $row->approval_status)
+<a href="javascript:void(0)" onclick="approveRegistration(<?php echo $row->id; ?>)" title="Accept" class="icon-2 info-tooltip ms-2">
+    <button type="button" class="btn btn-success btn-xs"><i class="ph-check"></i></button>
+</a>
+@endif
+@endif
+
+                                                
+
+
                                         <?php }  }?>
                                     </div>
                                 </td>
@@ -309,7 +322,7 @@
           });
       }
 
-  }
+  }e 
 
   function approveRegistration(id) {
       if (confirm("Are you sure you want to confirm this registration ") == true) {

@@ -56,6 +56,7 @@ class Employee extends Model
         'state' ,
         'national_id' ,
         'tin',
+        'approval_status',
     ];
 
     public function roles(){

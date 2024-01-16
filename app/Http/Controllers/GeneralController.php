@@ -3749,6 +3749,19 @@ public function authenticateUser($permissions)
         // if (session('mng_emp') || session('vw_emp') || session('appr_emp') || session('mng_roles_grp')) {
         $data['transfers'] = $this->flexperformance_model->employeeTransfers();
         $data['title'] = "Transfers";
+
+        $employee = Auth::User()->id;
+        $role = UserRole::where('user_id', $employee)->first();
+        $role_id = $role->role_id;
+
+        
+        $process = Approvals::where('process_name', 'Employee Approval')->first();
+        $level = ApprovalLevel::where('role_id', $role_id)->where('approval_id', $process->id)->first();
+        $data['level'] = ApprovalLevel::where('role_id', $role_id)->where('approval_id', $process->id)->first();
+        // dd($data);
+
+
+
         return view('app.transfer', $data);
         // } else {
         //     echo 'Unauthorized Access';
@@ -4241,6 +4254,13 @@ public function authenticateUser($permissions)
 
     public function home(Request $request)
     {
+        $employee = Auth::User()->id;
+        $role = UserRole::where('user_id', $employee)->first();
+        // $role_id = $role->role_id;
+        $rr = User::find(2);
+
+
+        dd(Role::where('id', $role->role_id)->first());
 
         // $api = url('/flex/chart-line-ajax');
         // $chart = new EmployeeLineChart;
@@ -8337,19 +8357,70 @@ public function authenticateUser($permissions)
         if ($id) {
             $transferID = $id;
             $transfers = $this->flexperformance_model->transfers($transferID);
+            $employee = Employee::find($transferID);
 
             // dd($transfers);
 
             if ($transfers) {
-                $emp_id = $transfers->empID;
-                $approver = auth()->user()->emp_id;
-                $date = date('Y-m-d');
-                $result = $this->flexperformance_model->approveRegistration($emp_id, $transferID, $approver, $date);
-                if ($result == true) {
-                    echo "<p class='alert alert-success text-center'>Registration Successfully!</p>";
+
+
+
+                $employee = Auth::User()->id;
+                $role = UserRole::where('user_id', $employee)->first();
+                $role_id = $role->role_id;
+            
+                $approval = Approvals::where('process_name', 'Employee Approval')->first();
+                $roles = Position::where('id', $role_id)->first();
+                $level = ApprovalLevel::where('role_id', $role_id)->where('approval_id', $approval->id)->first();
+
+                // dd($level);
+
+
+                if ($level) {
+                    $approval_id = $level->approval_id;
+                    $approval = Approvals::where('id', $approval_id)->first();
+        
+                    if ($approval->levels == $level->level_name) {
+                        // dd($approval->levels == $level->level_name);
+
+                        $emp_id = $transfers->empID;
+                        $approver = auth()->user()->emp_id;
+                        $date = date('Y-m-d');
+
+                        $result = $this->flexperformance_model->approveRegistration($emp_id, $transferID, $approver, $date);
+                        if ($result == true) {
+                            $emp  = Employee::where("emp_id", $transfers->empID)->first();
+                            $emp->approval_status = $emp->approval_status + 1;
+                            echo "<p class='alert alert-success text-center'>Registration Successfully!</p>";
+                        } else {
+                            echo "<p class='alert alert-danger text-center'>FAILED: Failed To Approve Registration, Please Try Again</p>";
+                        }
+        
+                    } else {
+                        // dd( $employee);
+                        $emp  = Employee::where("emp_id", $transfers->empID)->first();
+                        $emp->approval_status = $emp->approval_status + 1;
+                        $emp->save();
+                        $msg = 'Approved By ';
+                        return redirect('flex/promotion')->with('msg', $msg);
+                    } 
                 } else {
-                    echo "<p class='alert alert-danger text-center'>FAILED: Failed To Approve Registration, Please Try Again</p>";
+                    $msg = "Failed To Promote !";
+                    return redirect('flex/promotion')->with('msg', $msg);
                 }
+
+
+
+
+
+
+
+
+
+
+
+
+               
             }
         } else {
             echo "<p class='alert alert-danger text-center'>FAILED: Failed To Approve Registration, Please Try Again</p>";
