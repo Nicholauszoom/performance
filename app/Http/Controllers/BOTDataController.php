@@ -157,10 +157,7 @@ class BOTDataController extends Controller
                 throw new Exception('Error decoding JSON response');
             }
 
-            return (object) [
-                'response' => $resultCurlPost,
-                'http_status' => $httpStatus,
-            ];
+            return $resultCurlPost;
         } catch (\Exception $e) {
 
             Log::error('cURL Request Error: ' . $e->getMessage());
