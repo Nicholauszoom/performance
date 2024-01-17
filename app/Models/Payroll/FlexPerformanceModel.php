@@ -1355,9 +1355,9 @@ class FlexPerformanceModel extends Model
     public function userprofile($empID)
     {
 
-        
+
         $query = "SELECT e.*, bank.name as bankName, ctry.description as country, b.name as branch_name,  bb.name as bankBranch, d.name as deptname, c.name as CONTRACT, p.name as pName, (SELECT CONCAT(fname,' ', mname,' ', lname) from employee where  emp_id = e.line_manager) as LINEMANAGER from employee e, department d, contract c, country ctry, position p, bank, branch b, bank_branch bb WHERE d.id=e.department and p.id=e.position and e.contract_type = c.item_code AND e.bank_branch = bb.id and ctry.item_code = e.nationality AND e.bank = bank.id AND e.branch = b.id AND e.emp_id ='" . $empID . "'";
-        
+
         $row = DB::select(DB::raw($query));
 
         return $row;
@@ -1770,11 +1770,11 @@ class FlexPerformanceModel extends Model
 
         return $total_amount;
     }
-    public function get_pension_employee($salaryEnrollment, $leavePay, $arrears, $overtime_amount, $emp_id)
+    public function get_pension_employee($salaryEnrollment, $serevancePay, $exgracia, $leavePay, $noticePay, $arrears, $overtime_amount, $emp_id)
     {
 
         //$pesionable_amount =  $this->get_pensionable_allowance($emp_id);
-        $total_amount = $salaryEnrollment + $leavePay + $arrears + $overtime_amount;
+        $total_amount = $salaryEnrollment + $leavePay + $arrears + $overtime_amount + $serevancePay + $exgracia + $noticePay;
         // + $pesionable_amount;
 
         $query = "SELECT pf.amount_employee FROM employee e,pension_fund pf where e.pension_fund = pf.id AND  e.emp_id =" . $emp_id . " ";
@@ -1784,11 +1784,11 @@ class FlexPerformanceModel extends Model
         return $total_amount * $rate;
     }
 
-    public function get_pension_employer($salaryEnrollment, $leavePay, $arrears, $overtime_amount, $emp_id)
+    public function get_pension_employer($salaryEnrollment, $serevancePay, $exgracia, $leavePay, $noticePay, $arrears, $overtime_amount, $emp_id)
     {
 
         //$pesionable_amount =  $this->get_pensionable_allowance($emp_id);
-        $total_amount = $salaryEnrollment + $leavePay + $arrears + $overtime_amount;
+        $total_amount = $salaryEnrollment + $leavePay + $arrears + $overtime_amount + $serevancePay + $exgracia + $noticePay;
 
         //+ $pesionable_amount;
 
