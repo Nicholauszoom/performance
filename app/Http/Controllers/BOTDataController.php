@@ -236,13 +236,13 @@ class BOTDataController extends Controller
 
                 $response = $this->sendEmployeeData($data);
 
-                if ($response->status() === 200) {
-                    $responseData = $response->json();
-                } else {
-                    $statusCode = $response->status();
-                    $errorMessage = $response['error']['message'];
-                    // Handle error for the single employee request
-                }
+                // if ($response->status() === 200) {
+                //     $responseData = $response->json();
+                // } else {
+                //     $statusCode = $response->status();
+                //     $errorMessage = $response['error']['message'];
+                //     // Handle error for the single employee request
+                // }
 
                 return $response;
             }
