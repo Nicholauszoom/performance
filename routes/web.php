@@ -297,6 +297,9 @@ Route::middleware('verify-outgoing-requests')->group(function () {
             Route::any('/recommendpayrollByHr/{pdate}/{message}', 'recommendpayrollByHr')->name('payroll.recommendpayrollByHr');
             Route::any('/recommendpayrollByFinance/{pdate}/{message}', 'recommendpayrollByFinance')->name('payroll.recommendpayrollByFinance');
             Route::any('/runpayroll/{pdate}', 'runpayroll')->name('payroll.runpayroll');
+
+            Route::any('/approvepayroll/{pdate}', 'approvePayroll')->name('payroll.approvepayroll');
+
             Route::any('/partial_payment_manipulation', 'partial_payment_manipulation')->name('payroll.partial_payment_manipulation');
             Route::any('/generate_checklist', 'generate_checklist')->name('payroll.generate_checklist');
             Route::any('/arrearsPayment', 'arrearsPayment')->name('payroll.arrearsPayment');

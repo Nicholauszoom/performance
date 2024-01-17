@@ -14,6 +14,7 @@ class Payroll extends Model
     {
         $query = "SELECT DISTINCT e.emp_id as empID, CONCAT(e.fname,' ', IF(e.mname != null,e.mname,' '),' ', e.lname) as NAME FROM employee e WHERE  e.login_user != 1 ";
         return DB::select(DB::raw($query));
+        
     }
     public function customemployeeExit()
     {

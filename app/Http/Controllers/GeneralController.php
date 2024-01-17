@@ -2605,6 +2605,15 @@ public function authenticateUser($permissions)
         $data['parent'] = 'Payroll';
         $data['child'] = "pending-payments";
 
+        $employee = Auth::User()->id;
+        $role = UserRole::where('user_id', $employee)->first();
+        $role_id = $role->role_id;
+    
+        $approval = Approvals::where('process_name', 'Payroll Approval')->first();
+        $roles = Position::where('id', $role_id)->first();
+        $level = ApprovalLevel::where('role_id', $role_id)->where('approval_id', $approval->id)->first();
+        $data['level'] = $level;
+
         return view('app.financial_payment', $data);
 
         // }else{
