@@ -3759,14 +3759,10 @@ public function authenticateUser($permissions)
         $data['transfers'] = $this->flexperformance_model->employeeTransfers();
         $data['title'] = "Transfers";
 
-        $employee = Auth::User()->id;
-        $role = UserRole::where('user_id', $employee)->first();
-        $role_id = $role->role_id;
+        $data['level_check']  = SysHelpers::approvalCheck("Employee Approval", $data['transfers'][0]->approval_status);
 
+        // dd($data['level_check']);
         
-        $process = Approvals::where('process_name', 'Employee Approval')->first();
-        $level = ApprovalLevel::where('role_id', $role_id)->where('approval_id', $process->id)->first();
-        $data['level'] = ApprovalLevel::where('role_id', $role_id)->where('approval_id', $process->id)->first();
         // dd($data);
 
 
@@ -8484,7 +8480,14 @@ public function authenticateUser($permissions)
         $terminate = Approvals::where('process_name', 'Termination Approval')->first();
         $roles = Role::where('id', $role_id)->first();
         $data['level'] = ApprovalLevel::where('role_id', $role_id)->where('approval_id', $terminate->id)->first();
+      
+        if ($terminations->first()) {
+            $data['level_check'] = SysHelpers::approvalCheck("Termination Approval", $terminations->first()->approval_status);
 
+        } else {
+            $data['level_check'] = false;
+        }
+       
         $data['check'] = 'Approved By ' . $roles->name;
 
         $data['pendingPayroll'] = $this->payroll_model->pendingPayrollCheck();
@@ -10774,13 +10777,14 @@ public function authenticateUser($permissions)
     {
 
         $data['title'] = "Approval Settings";
-        $data['approvals'] = Approvals::orderBy('id', 'asc')->get();
+        $data['approvals'] = Approvals::latest()->get();
         $i = 1;
         $data['parent'] = 'Settings';
         $data['child'] = 'Approvals';
 
         return view('setting.approvals', $data, compact('i'));
     }
+
     // end of view email notification settings
 
     // start of add approval function
@@ -10811,13 +10815,31 @@ public function authenticateUser($permissions)
     // end of add approval function
 
     // start of view approval levels function
+    // public function viewApprovalLevels(Request $request, $id)
+    // {
+
+    //     $i = 1;
+    //     $did = base64_decode($id);
+
+    //     $data['roles'] = Role::all();
+    //     $data['approval'] = Approvals::where('id', $did)->first();
+    //     $approval = Approvals::where('id', $did)->first();
+    //     $data['levels'] = ApprovalLevel::where('approval_id', $did)->get();
+
+    //     $data['parent'] = 'Settings';
+
+    //     $data['child'] = $approval->process_name . '/Approval Levels';
+    //     return view('setting.view-approval', $data, compact('i'));
+    // }
+
+
     public function viewApprovalLevels(Request $request, $id)
     {
 
         $i = 1;
         $did = base64_decode($id);
 
-        $data['roles'] = Role::all();
+        $data['roles'] = Position::all();
         $data['approval'] = Approvals::where('id', $did)->first();
         $approval = Approvals::where('id', $did)->first();
         $data['levels'] = ApprovalLevel::where('approval_id', $did)->get();
@@ -10827,6 +10849,8 @@ public function authenticateUser($permissions)
         $data['child'] = $approval->process_name . '/Approval Levels';
         return view('setting.view-approval', $data, compact('i'));
     }
+    
+
     // end of view approval levels function
 
     // start of add approval level function

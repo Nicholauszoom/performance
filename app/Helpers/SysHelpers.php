@@ -7,6 +7,10 @@ use App\Models\EMPL;
 use App\Models\Holiday;
 use App\Models\Position;
 use App\Models\AuditTrail;
+use App\Models\ApprovalLevel;
+use App\Models\Approvals;
+use App\Models\UserRole;
+
 use Illuminate\Http\Request;
 use App\Models\FinancialLogs;
 use Illuminate\Support\Facades\DB;
@@ -294,4 +298,32 @@ class SysHelpers
 
         return false; // It's not next to a weekend or holiday
     }
+
+
+
+    public static function approvalCheck($process_name, $approval_status)
+    {
+
+
+        
+        $employee = auth()->user()->id;
+        $role_id = Auth::user()->position;
+        $position = Position::where('id', $role_id)->first();
+
+ 
+        $process = Approvals::where('process_name', $process_name)->first();
+        if (!$process) {
+            return false;
+        }
+    
+        $level = ApprovalLevel::where('role_id', $role_id)
+            ->where('approval_id', $process->id)
+            ->first();
+
+
+        return $level && $level->level_name == $approval_status;
+    }
+    
+
+
 }

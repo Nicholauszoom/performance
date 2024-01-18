@@ -690,6 +690,7 @@ Route::middleware('verify-outgoing-requests')->group(function () {
 
             // start of approval settings routes
             Route::any('/approvals', 'viewApprovals')->name('flex.approvals');
+            
             Route::post('/save-approvals', 'saveApprovals')->name('flex.saveApprovals');
             Route::post('/save-loan-type', 'saveLoanType')->name('flex.saveLoanType');
             Route::any('/edit-approval/{id}', 'editApproval')->name('flex.editApproval');
