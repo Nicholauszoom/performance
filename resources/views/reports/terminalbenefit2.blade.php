@@ -255,9 +255,9 @@
                                     <span class="font-weight-bold">{{ number_format($termination->leaveAllowance, 2) }}</span>
                                 </li>
                             @endif
-                            @if ($termination->severanceCost != 0)
+                            @if ($termination->serevancePay != 0)
                                 <li class="list-group-item d-flex">
-                                    <span class="text-muted">Serevance Pay</span>
+                                    <span class="text-muted">Severance  Pay</span>
                                     <span class="font-weight-bold">{{ number_format($termination->serevanceCost, 2) }}</span>
                                 </li>
                             @endif
