@@ -103,9 +103,9 @@ class BOTDataController extends Controller
             $endpoint = 'http://compliance.bancabc.co.tz/api/employeerecord';
 
             $headers = [
-                'Content-Type' => 'application/json',
-                'informationCode' => '1074',
-                'Authorization' => 'Bearer 14ee8c99777e78e8c94d0925b2dc0de267d82add43274233f21eeefacce39ecb',
+                'Content-Type : application/json',
+                'informationCode : 1074',
+                'Authorization : Bearer 14ee8c99777e78e8c94d0925b2dc0de267d82add43274233f21eeefacce39ecb',
             ];
 
             // $response = Http::withHeaders($headers)->post($endpoint, $data);
@@ -124,7 +124,7 @@ class BOTDataController extends Controller
             curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
             curl_setopt($ch, CURLOPT_POSTFIELDS, $json_string);
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-            curl_setopt($ch, CURLOPT_HTTPHEADER, json_encode($headers));
+            curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
 
             curl_setopt($ch, CURLOPT_TIMEOUT, 50);
             curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 50);
