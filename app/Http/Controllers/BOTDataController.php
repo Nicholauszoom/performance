@@ -98,7 +98,7 @@ class BOTDataController extends Controller
         return $cleanedString;
     }
 
-     private function sendEmployeeData($data)
+     public function sendEmployeeData($data)
         {
             $endpoint = 'http://compliance.bancabc.co.tz/api/employeerecord';
 
@@ -124,7 +124,7 @@ class BOTDataController extends Controller
             curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
             curl_setopt($ch, CURLOPT_POSTFIELDS, $json_string);
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-            curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+            curl_setopt($ch, CURLOPT_HTTPHEADER, json_encode($headers));
 
             curl_setopt($ch, CURLOPT_TIMEOUT, 50);
             curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 50);
