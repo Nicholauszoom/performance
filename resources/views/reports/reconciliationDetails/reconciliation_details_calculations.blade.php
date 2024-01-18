@@ -89,7 +89,7 @@ $column_count = 30;
 
                                     <td class="text-end">{{ $row->hire_date }}</td>
 
-                                    <td class="text-end">{{ number_format($column_count, 0) }}
+                                    <td class="text-end">{{ number_format(0, 0) }}
                                     </td>
 
 
@@ -203,7 +203,7 @@ $column_count = 30;
 
                                     <td class="text-end">{{ $row->hire_date }}</td>
 
-                                    <td class="text-end">{{ number_format($column_count, 0) }}
+                                    <td class="text-end">{{ number_format(0, 0) }}
                                     </td>
 
 
@@ -316,7 +316,7 @@ $column_count = 30;
 
                                     <td class="text-end">{{ $row->hire_date }}</td>
 
-                                    <td class="text-end">{{ number_format($column_count, 0) }}
+                                    <td class="text-end">{{ number_format(0, 0) }}
                                     </td>
 
 
@@ -430,7 +430,7 @@ $column_count = 30;
 
                                     <td class="text-end">{{ $row->hire_date }}</td>
 
-                                    <td class="text-end">{{ number_format($column_count, 0) }}
+                                    <td class="text-end">{{ number_format(0, 0) }}
                                     </td>
 
 
@@ -546,7 +546,7 @@ $column_count = 30;
 
                                     <td class="text-end">{{ $row->hire_date }}</td>
 
-                                    <td class="text-end">{{ number_format($column_count, 0) }}
+                                    <td class="text-end">{{ number_format(0, 0) }}
                                     </td>
 
 
@@ -593,7 +593,7 @@ $column_count = 30;
 
                             <td class="text-end">{{ $row->hire_date }}</td>
 
-                            <td class="text-end">{{ number_format($column_count, 0) }}
+                            <td class="text-end">{{ number_format(0, 0) }}
                             </td>
 
 
