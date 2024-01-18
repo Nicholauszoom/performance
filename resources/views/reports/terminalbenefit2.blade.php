@@ -35,7 +35,7 @@
             background-position: auto;
             background-repeat: no-repeat;
             background-size: cover;
-            background-image: url('{{$brandSetting !=null && $brandSetting->body_background != null ? asset('storage/' . $brandSetting->body_background) : asset('img/bg2.png') }}');
+            background-image: {{ url($brandSetting != null && $brandSetting->body_background != null ? asset('storage/' . $brandSetting->body_background) : asset('img/bg2.png')) }};
 
             /* background: url({{ public_path('img/bg2.png') }}); */
         }
