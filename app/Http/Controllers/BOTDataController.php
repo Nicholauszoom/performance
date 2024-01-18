@@ -199,14 +199,17 @@ class BOTDataController extends Controller
 
                     $response = $this->sendEmployeeData($data);
 
-                    if ($response->status() === 200) {
-                        $responseData = $response->json();
-                        $responses[] = $responseData; // Collect response data for all employees
-                    } else {
-                        $statusCode = $response->status();
-                        $errorMessage = $response['error']['message'];
-                        // Handle error if needed for each employee
-                    }
+                    // if ($response->status() === 200) {
+                    //     $responseData = $response->json();
+                    //     $responses[] = $responseData; // Collect response data for all employees
+                    // } else {
+                    //     $statusCode = $response->status();
+                    //     $errorMessage = $response['error']['message'];
+                    //     // Handle error if needed for each employee
+                    // }
+
+                    $response = $response->message;
+                    return view('bot.index', compact('response'));
                 }
 
                 return $responses; // Return array of responses for all employees
@@ -244,7 +247,10 @@ class BOTDataController extends Controller
                 //     // Handle error for the single employee request
                 // }
 
-                return $response;
+                $response = $this->sendEmployeeData($data);
+
+                    $response = $response->message;
+                    return view('bot.index', compact('response'));
             }
         }
 }
