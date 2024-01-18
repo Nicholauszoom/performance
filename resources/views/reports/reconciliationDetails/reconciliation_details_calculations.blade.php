@@ -6,7 +6,7 @@ $column_count = 30;
 @if(isset($employee_increase))
                 @if(count($employee_increase) > 0)
                 
-                @if($column_count>52)
+                @if($column_count < 0)
                                 
                                 
                 @php
@@ -56,7 +56,7 @@ $column_count = 30;
                                     $total_amount += ($row->current_amount - $row->previous_amount);
                                 @endphp
 
-                                 @if($column_count>52)
+                                 @if($column_count < 0)
                                 
                                 
                 @php
@@ -120,7 +120,7 @@ $column_count = 30;
                 @if(isset($employee_decrease))
                 @if(count($employee_decrease) > 0)
                 
-                @if($column_count>52)
+                @if($column_count < 0)
                                 
                                 
                 @php
@@ -170,7 +170,7 @@ $column_count = 30;
                                     $total_amount += ($row->current_amount - $row->previous_amount);
                                 @endphp
 
-                                 @if($column_count>52)
+                                 @if($column_count < 0)
                                 
                                 
                 @php
@@ -233,7 +233,7 @@ $column_count = 30;
                 @if(isset($basic_increase))
                 @if(count($basic_increase) > 0)
                 
-                @if($column_count>52)
+                @if($column_count < 0)
                                 
                                 
                 @php
@@ -283,7 +283,7 @@ $column_count = 30;
                                     $total_amount += ($row->current_amount - $row->previous_amount);
                                 @endphp
 
-                                 @if($column_count>52)
+                                 @if($column_count < 0)
                                 
                                 
                 @php
@@ -347,7 +347,7 @@ $column_count = 30;
                 @if(count($basic_decrease) > 0)
                 <br>
                 
-                @if($column_count>52)
+                @if($column_count < 0)
                                 
                                 
                 @php
@@ -397,7 +397,7 @@ $column_count = 30;
                                     $total_amount += ($row->current_amount - $row->previous_amount);
                                 @endphp
 
-                                 @if($column_count>52)
+                                 @if($column_count < 0)
                                 
                                 
                 @php
@@ -460,7 +460,7 @@ $column_count = 30;
                 @foreach($names as $name)
 
                 
-                @if($column_count>52)
+                @if($column_count < 0)
                                 
                                 
                 @php
@@ -513,7 +513,7 @@ $column_count = 30;
                                     $total_amount += ($row->current_amount - $row->previous_amount);
                                 @endphp
 
-                                 @if($column_count>52)
+                                 @if($column_count < 0)
                                 
                                 
                 @php
@@ -560,7 +560,7 @@ $column_count = 30;
                             $total_amount += ($row->current_amount - $row->previous_amount);
                              @endphp
 
-                             @if($column_count>52)
+                             @if($column_count < 0)
                                 
                                 
                 @php
