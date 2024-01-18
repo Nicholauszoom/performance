@@ -2784,7 +2784,25 @@ and e.branch = b.code and e.line_manager = el.emp_id and c.id = e.contract_type 
          (IF((SELECT SUM(public_overtime_amount)  FROM terminations WHERE tm.id = terminations.id and  terminations.terminationDate LIKE '" . $previous_termination . "') != 0,(SELECT SUM(public_overtime_amount)  FROM terminations WHERE tm.id = terminations.id and  terminations.terminationDate LIKE '" . $previous_termination . "'),0)) as previous_amount
          from terminations tm";
 
-        } elseif ($type == "leave_pay") {
+        } 
+        elseif ($type == "exgracia") {
+
+            $query = "SELECT CONCAT('Add/Less Ex-Gratia') as description,
+    (IF((SELECT SUM(exgracia)  FROM terminations WHERE   terminations.terminationDate LIKE '" . $current_termination . "') != 0,(SELECT SUM(exgracia)  FROM terminations WHERE   terminations.terminationDate LIKE '" . $current_termination . "'),0)) as current_amount,
+     (IF((SELECT SUM(exgracia)  FROM terminations WHERE   terminations.terminationDate LIKE '" . $previous_termination . "') != 0,(SELECT SUM(exgracia)  FROM terminations WHERE   terminations.terminationDate LIKE '" . $previous_termination . "'),0)) as previous_amount
+
+     from terminations tm";
+        }
+        elseif ($type == "serevancePay") {
+
+            $query = "SELECT CONCAT('Add/Less Severance Pay') as description,
+    (IF((SELECT SUM(serevancePay)  FROM terminations WHERE   terminations.terminationDate LIKE '" . $current_termination . "') != 0,(SELECT SUM(serevancePay)  FROM terminations WHERE   terminations.terminationDate LIKE '" . $current_termination . "'),0)) as current_amount,
+     (IF((SELECT SUM(serevancePay)  FROM terminations WHERE   terminations.terminationDate LIKE '" . $previous_termination . "') != 0,(SELECT SUM(serevancePay)  FROM terminations WHERE   terminations.terminationDate LIKE '" . $previous_termination . "'),0)) as previous_amount
+
+     from terminations tm";
+        }
+        
+        elseif ($type == "leave_pay") {
 
             $query = "SELECT CONCAT('Add/Less Leave Pay') as description,
     (IF((SELECT SUM(leavePay)  FROM terminations WHERE   terminations.terminationDate LIKE '" . $current_termination . "') != 0,(SELECT SUM(leavePay)  FROM terminations WHERE   terminations.terminationDate LIKE '" . $current_termination . "'),0)) as current_amount,
@@ -2883,6 +2901,20 @@ and e.branch = b.code and e.line_manager = el.emp_id and c.id = e.contract_type 
      from terminations tm";
         $row = DB::select(DB::raw($query));
          array_push($data,['description'=>$row[0]->description,'current_amount'=>$row[0]->current_amount,'previous_amount'=>$row[0]->previous_amount]);
+
+         $query = "SELECT CONCAT('Add/Less Severance Pay') as description,
+         SUM((IF((SELECT SUM(serevancePay)  FROM terminations WHERE tm.id = terminations.id and  terminations.terminationDate LIKE '" . $current_termination . "') != 0,(SELECT SUM(serevancePay)  FROM terminations WHERE tm.id = terminations.id and  terminations.terminationDate LIKE '" . $current_termination . "'),0))) as current_amount,
+          SUM((IF((SELECT SUM(serevancePay)  FROM terminations WHERE tm.id = terminations.id and  terminations.terminationDate LIKE '" . $previous_termination . "') != 0,(SELECT SUM(serevancePay)  FROM terminations WHERE tm.id = terminations.id and  terminations.terminationDate LIKE '" . $previous_termination . "'),0))) as previous_amount
+          from terminations tm";
+             $row = DB::select(DB::raw($query));
+              array_push($data,['description'=>$row[0]->description,'current_amount'=>$row[0]->current_amount,'previous_amount'=>$row[0]->previous_amount]);
+
+              $query = "SELECT CONCAT('Add/Less Ex-Gratia') as description,
+              SUM((IF((SELECT SUM(exgracia)  FROM terminations WHERE tm.id = terminations.id and  terminations.terminationDate LIKE '" . $current_termination . "') != 0,(SELECT SUM(exgracia)  FROM terminations WHERE tm.id = terminations.id and  terminations.terminationDate LIKE '" . $current_termination . "'),0))) as current_amount,
+               SUM((IF((SELECT SUM(exgracia)  FROM terminations WHERE tm.id = terminations.id and  terminations.terminationDate LIKE '" . $previous_termination . "') != 0,(SELECT SUM(exgracia)  FROM terminations WHERE tm.id = terminations.id and  terminations.terminationDate LIKE '" . $previous_termination . "'),0))) as previous_amount
+               from terminations tm";
+                  $row = DB::select(DB::raw($query));
+                   array_push($data,['description'=>$row[0]->description,'current_amount'=>$row[0]->current_amount,'previous_amount'=>$row[0]->previous_amount]);
 
             $query = "SELECT CONCAT('Add/Less House Rent') as description,
     SUM((IF((SELECT SUM(houseAllowance)  FROM terminations WHERE tm.id = terminations.id and  terminations.terminationDate LIKE '" . $current_termination . "') != 0,(SELECT SUM(houseAllowance)  FROM terminations WHERE tm.id = terminations.id and  terminations.terminationDate LIKE '" . $current_termination . "'),0))) as current_amount,
