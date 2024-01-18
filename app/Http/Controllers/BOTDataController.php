@@ -253,6 +253,8 @@ class BOTDataController extends Controller
                 $response = $this->sendEmployeeData($data);
 
                 $newres = json_encode($response);
+
+                dd($newres);
                     $employee =  Employee::all();
                     $data['employee'] = $employee;
                     return view('bot.index', compact('newres','data'));
