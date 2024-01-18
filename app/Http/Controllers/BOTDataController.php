@@ -208,8 +208,9 @@ class BOTDataController extends Controller
                     //     // Handle error if needed for each employee
                     // }
 
-                    $response = $response->message;
-                    return view('bot.index', compact('response'));
+                    $newres = json_encode($response);
+
+                    return view('bot.index', compact('newres'));
                 }
 
                 return $responses; // Return array of responses for all employees
