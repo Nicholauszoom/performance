@@ -240,7 +240,7 @@
                             @endforeach
 
                             <td classs="text-end">
-                                {{ number_format($row2->leavePay + $row2->leaveAllowance+$row2->transport_allowance+$row2->nightshift_allowance + $row2->longServing + $row2->exgracia+ $row2->serevancePay, 2) }}
+                                {{ number_format($row2->leavePay + $row2->leaveAllowance+$row2->transport_allowance+$row2->nightshift_allowance + $row2->longServing + $row2->exgracia+ $row2->serevancePay+$row2->noticePay, 2) }}
                             </td>
                             @php $gros = $row2->salaryEnrollment + $row2->leaveAllowance + $row2->leavePay+$row2->normal_days_overtime_amount+$row2->public_overtime_amount; @endphp
                             <td class=" {{$grossSalary_col }} text-end">
