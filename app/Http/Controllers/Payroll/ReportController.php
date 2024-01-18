@@ -3098,8 +3098,6 @@ EOD;
         $date = $request->payrolldate;
         $data['summary'] = $this->reports_model->get_payroll_summary($date,$request->payrollState);
 
-        // dd($data['summary']);
-        
         $data['termination'] = $this->reports_model->get_termination($date);
 
 
@@ -3122,7 +3120,7 @@ EOD;
 
     }
 
-    //For Payroll Checklist report 
+    //For Payroll Checklist report
     // dd($request->payrolldate);
 
 
@@ -3435,7 +3433,7 @@ public function processOneEmployee($employee, $request, $nature){
                     }
                 } else {
                     $_employees = Employee::where('emp_id', $request->leave_employee)->where('state', '=', 1)->get();
-            
+
                     //$employees = $this->flexperformance_model->userprofile($request->leave_employee);
                     foreach ($_employees  as $employee) {
                         $employees[] =  $this->gettingEmployeeAnnualLeavesReport($employee, $request, $_nature->id);

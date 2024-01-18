@@ -299,7 +299,7 @@
                     @endif
                             @if ($termination->longServing != 0)
                                 <li class="list-group-item d-flex">
-                                    <span class="text-muted">Long Serving</span>
+                                    <span class="text-muted">Long Service Award</span>
                                     <span class="font-weight-bold">{{ number_format($termination->longServing, 2) }}</span>
                                 </li>
                             @endif

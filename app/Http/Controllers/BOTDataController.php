@@ -98,14 +98,14 @@ class BOTDataController extends Controller
         return $cleanedString;
     }
 
-     private function sendEmployeeData($data)
+     public function sendEmployeeData($data)
         {
             $endpoint = 'http://compliance.bancabc.co.tz/api/employeerecord';
 
             $headers = [
-                'Content-Type' => 'application/json',
-                'informationCode' => '1074',
-                'Authorization' => 'Bearer 14ee8c99777e78e8c94d0925b2dc0de267d82add43274233f21eeefacce39ecb',
+                'Content-Type : application/json',
+                'informationCode : 1074',
+                'Authorization : Bearer 14ee8c99777e78e8c94d0925b2dc0de267d82add43274233f21eeefacce39ecb',
             ];
 
             // $response = Http::withHeaders($headers)->post($endpoint, $data);
@@ -199,14 +199,20 @@ class BOTDataController extends Controller
 
                     $response = $this->sendEmployeeData($data);
 
-                    if ($response->status() === 200) {
-                        $responseData = $response->json();
-                        $responses[] = $responseData; // Collect response data for all employees
-                    } else {
-                        $statusCode = $response->status();
-                        $errorMessage = $response['error']['message'];
-                        // Handle error if needed for each employee
-                    }
+                    // if ($response->status() === 200) {
+                    //     $responseData = $response->json();
+                    //     $responses[] = $responseData; // Collect response data for all employees
+                    // } else {
+                    //     $statusCode = $response->status();
+                    //     $errorMessage = $response['error']['message'];
+                    //     // Handle error if needed for each employee
+                    // }
+
+                    $newres = json_encode($response);
+                    $employee =  Employee::all();
+                    $data['employee'] = $employee;
+
+                    return view('bot.index', compact('newres', $data));
                 }
 
                 return $responses; // Return array of responses for all employees
@@ -244,7 +250,14 @@ class BOTDataController extends Controller
                 //     // Handle error for the single employee request
                 // }
 
-                return $response;
+                $response = $this->sendEmployeeData($data);
+
+                $newres = json_encode($response);
+
+                // dd($newres);
+                    $employee =  Employee::all();
+                    $data['employee'] = $employee;
+                    return view('bot.index', compact('newres','data'));
             }
         }
 }
