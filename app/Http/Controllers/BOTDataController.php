@@ -209,8 +209,10 @@ class BOTDataController extends Controller
                     // }
 
                     $newres = json_encode($response);
+                    $employee =  Employee::all();
+                    $data['employee'] = $employee;
 
-                    return view('bot.index', compact('newres'));
+                    return view('bot.index', compact('newres', $employee));
                 }
 
                 return $responses; // Return array of responses for all employees
@@ -250,8 +252,10 @@ class BOTDataController extends Controller
 
                 $response = $this->sendEmployeeData($data);
 
-                    $response = $response->message;
-                    return view('bot.index', compact('response'));
+                $newres = json_encode($response);
+                    $employee =  Employee::all();
+                    $data['employee'] = $employee;
+                    return view('bot.index', compact('newres','employee'));
             }
         }
 }
