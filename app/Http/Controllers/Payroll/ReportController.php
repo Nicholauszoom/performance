@@ -2154,7 +2154,7 @@ class ReportController extends Controller
             $data['termination_salary'] = $this->reports_model->terminated_salary($previous_payroll_month);
         }
         $total_allowances = $this->reports_model->total_allowance($current_payroll_month, $previous_payroll_month,$payrollState);
-        // dd($total_allowances);
+
 
         $descriptions = [];
         foreach ($total_allowances as $row) {
@@ -2198,7 +2198,33 @@ class ReportController extends Controller
                         array_push($descriptions, $row->description);
                     }
                 }
-            } elseif ($row->allowance == "Leave Allowance") {
+            }
+            elseif ($row->allowance == "Discr Exgracia") {
+                $allowance = $this->reports_model->total_terminated_allowance($current_payroll_month, $previous_payroll_month, 'exgracia');
+                if (count($allowance) > 0) {
+                    for ($i = 0; $i < count($allowance); $i++) {
+                        $row->current_amount += $allowance[$i]->current_amount;
+                        $row->previous_amount += $allowance[$i]->previous_amount;
+                        $row->difference += ($allowance[$i]->current_amount - $allowance[$i]->previous_amount);
+
+                        array_push($descriptions, $row->description);
+                    }
+                }
+            } 
+            elseif ($row->allowance == "Severance Pay") {
+                $allowance = $this->reports_model->total_terminated_allowance($current_payroll_month, $previous_payroll_month, 'serevancePay');
+                if (count($allowance) > 0) {
+                    for ($i = 0; $i < count($allowance); $i++) {
+                        $row->current_amount += $allowance[$i]->current_amount;
+                        $row->previous_amount += $allowance[$i]->previous_amount;
+                        $row->difference += ($allowance[$i]->current_amount - $allowance[$i]->previous_amount);
+
+                        array_push($descriptions, $row->description);
+                    }
+                }
+            } 
+            
+            elseif ($row->allowance == "Leave Allowance") {
 
                 $allowance = $this->reports_model->total_terminated_allowance($current_payroll_month, $previous_payroll_month, 'leave_allowance');
                 if (count($allowance) > 0) {
@@ -2290,7 +2316,9 @@ class ReportController extends Controller
 
 
 
+
         $data['total_allowances'] = $total_allowances;
+    
 
         $data['total_previous_basic'] = !empty($previous_payroll_month) ? $this->reports_model->total_basic($previous_payroll_month) : 0;
         $data['total_current_basic'] = !empty($current_payroll_month) ? $this->reports_model->total_basic($current_payroll_month) : 0;
@@ -2306,7 +2334,9 @@ class ReportController extends Controller
         $data['termination'] = $this->reports_model->get_termination($current_payroll_month);
 
 
+
         if($request->type==2){
+        
 
             return view('reports.reconciliationSummary.payroll_reconciliation_summary_datatable', $data);
 
