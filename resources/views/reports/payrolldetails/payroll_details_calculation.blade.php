@@ -272,7 +272,7 @@
                         </tr>
                         @php
                         $total_actual_salary += round($row2->actual_salary,2);
-                        $others += round($row2->loan_balance,2+$row2->otherDeductions,2);
+                        $others += round($row2->loan_balance +$row2->otherDeductions,2);
                         $total_salary += round($row2->salaryEnrollment,2);
                         $total_overtime +=round(($row2->normal_days_overtime_amount+$row2->public_overtime_amount),2);
 
