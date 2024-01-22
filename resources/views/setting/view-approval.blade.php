@@ -47,6 +47,8 @@
                         <th >Actions</th>
                     </thead>
                     <tbody>
+
+                        
                         @forelse ($levels as $item )
                             <tr>
                                 <td>{{ $i++}}</td>

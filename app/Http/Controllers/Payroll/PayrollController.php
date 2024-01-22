@@ -1386,21 +1386,15 @@ class PayrollController extends Controller
 
 
             $employee = Auth::User()->id;
-            $role = UserRole::where('user_id', $employee)->first();
-            $role_id = $role->role_id;
+            $posn = Auth::User()->position;
         
             $approval = Approvals::where('process_name', 'Payroll Approval')->first();
-            $roles = Position::where('id', $role_id)->first();
-            $level = ApprovalLevel::where('role_id', $role_id)->where('approval_id', $approval->id)->first();
+            $roles = Position::where('id', $posn)->first();
+   
+            if (SysHelpers::ApprovalLastLevel("Employee Approval")) {
 
-            // dd($level);
 
-
-            if ($level) {
-                $approval_id = $level->approval_id;
-                $approval = Approvals::where('id', $approval_id)->first();
-                if ($approval->levels == $level->level_name) {
-                    $this-> runpayroll2($pdate);
+                $this-> runpayroll2($pdate);
                     $payApprover = new PayrollApproval();
                     $payApprover->employee_id = $employee;
                     $payApprover->payroll_month_id = $payroll->id;
@@ -1443,7 +1437,7 @@ class PayrollController extends Controller
                 }
 
 
-        }}}
+        }}
 
 
         public function runpayroll2($pdate)

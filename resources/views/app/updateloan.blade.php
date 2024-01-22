@@ -80,14 +80,14 @@
                           <span class="text-danger"><?php// echo form_error("lname");?></span>
                         </div>
                       </div>
-                      <?php if($status==0 || $status==3 || $status==4){ ?>
+                      {{-- <?php if($status==0 || $status==3 || $status==4){ ?> --}}
                       <div class="form-group">
                         <div class="col-md-6 col-sm-6 col-xs-12 py-3">
                           
                           <button type="submit" name="update" class="btn btn-main">Update</button>
                         </div>
                       </div>
-                      <?php } ?>
+                      {{-- <?php } ?> --}}
 
                     </form>
                   </div>

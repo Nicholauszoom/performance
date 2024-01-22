@@ -502,8 +502,8 @@ Route::middleware('verify-outgoing-requests')->group(function () {
             Route::any('/pauseLoan/{id}', 'pauseLoan')->name('flex.pauseLoan');
             Route::any('/resumeLoan/{id}', 'resumeLoan')->name('flex.resumeLoan');
             Route::any('/rejectLoan/{id}', 'rejectLoan')->name('flex.rejectLoan');
-            Route::any('/loan_application_info', 'loan_application_info')->name('flex.loan_application_info');
-            Route::any('/updateloan', 'updateloan')->name('flex.updateloan');
+            Route::any('/loan_application_info/{id}', 'loan_application_info')->name('flex.loan_application_info');
+            Route::any('/updateloan/{id}', 'updateloan')->name('flex.updateloan');
             Route::any('/updateloan_info', 'updateloan_info')->name('flex.updateloan_info');
         });
 

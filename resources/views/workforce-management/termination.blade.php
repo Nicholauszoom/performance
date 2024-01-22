@@ -84,7 +84,7 @@
 
                 @endif
 
-                @if($level_check)
+                @if($level_check == $item->approval_status)
                     
                 @if($item->status!='1')
                 @if ($item->status!=$check)

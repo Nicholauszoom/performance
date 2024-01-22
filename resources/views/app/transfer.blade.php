@@ -179,7 +179,7 @@
 
 {{-- {{dd($level->level_name, $row->approval_status)}} --}}
 
-@if ($level_check)
+@if ($level_check == $row->approval_status)
     
 <a href="javascript:void(0)" onclick="approveRegistration(<?php echo $row->id; ?>)" title="Accept" class="icon-2 info-tooltip ms-2">
     <button type="button" class="btn btn-success btn-xs"><i class="ph-check"></i></button>

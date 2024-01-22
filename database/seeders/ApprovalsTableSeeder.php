@@ -13,7 +13,7 @@ class ApprovalsTableSeeder extends Seeder
             [
                 'id' => 4,
                 'process_name' => 'Termination Approval',
-                'levels' => 1,
+                'levels' => 0,
                 'escallation' => 0,
                 'escallation_time' => null,
                 'created_at' =>now(),
@@ -22,12 +22,40 @@ class ApprovalsTableSeeder extends Seeder
             [
                 'id' => 5,
                 'process_name' => 'Promotion Approval',
-                'levels' => 1,
+                'levels' => 0,
                 'escallation' => 0,
                 'escallation_time' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
+            [
+                'id' => 6,
+                'process_name' => 'Employee Approval',
+                'levels' => 0,
+                'escallation' => 0,
+                'escallation_time' => null,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'id' => 7,
+                'process_name' => 'Payroll Approval',
+                'levels' => 0,
+                'escallation' => 0,
+                'escallation_time' => null,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'id' => 8,
+                'process_name' => 'Loan Approval',
+                'levels' => 0,
+                'escallation' => 0,
+                'escallation_time' => null,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+          
             // Add more records if needed
         ]);
     }

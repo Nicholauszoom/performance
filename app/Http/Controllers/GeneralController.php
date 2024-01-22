@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 //use App\Http\Controllers\Controller;
 use App\Models\BrandSetting;
+use Doctrine\DBAL\Driver\OCI8\ConvertPositionalToNamedPlaceholders;
 use Illuminate\Support\Facades\Gate;
 use App\Charts\EmployeeLineChart;
 use App\Exports\LeaveApprovalsExport;
@@ -41,6 +42,7 @@ use App\Models\Holiday;
 use App\Models\InputSubmission;
 use App\Models\LeaveApproval;
 use App\Models\LeaveForfeiting;
+use App\Models\LoanApplication;
 
 //use PHPClamAV\Scanner;
 use App\Models\Leaves;
@@ -2577,6 +2579,9 @@ public function authenticateUser($permissions)
 
     public function approved_financial_payments(Request $request)
     {
+
+        // dd(Position::where('id', Auth::user()->position)->first());
+
         $this->authenticateUser('edit-payroll');
         // if(session('mng_paym')||session('recom_paym')||session('appr_paym')){
         $data['overtime'] = $this->flexperformance_model->approvedOvertimes();
@@ -2613,7 +2618,9 @@ public function authenticateUser($permissions)
         $roles = Position::where('id', $role_id)->first();
         $level = ApprovalLevel::where('role_id', $role_id)->where('approval_id', $approval->id)->first();
         $data['level'] = $level;
-
+        
+        $data['level_check']  = SysHelpers::approvalCheck("Payroll Approval");
+     
         return view('app.financial_payment', $data);
 
         // }else{
@@ -3759,7 +3766,7 @@ public function authenticateUser($permissions)
         $data['transfers'] = $this->flexperformance_model->employeeTransfers();
         $data['title'] = "Transfers";
 
-        $data['level_check']  = SysHelpers::approvalCheck("Employee Approval", $data['transfers'][0]->approval_status);
+        $data['level_check']  = SysHelpers::approvalCheck("Employee Approval");
 
         // dd($data['level_check']);
         
@@ -3780,6 +3787,8 @@ public function authenticateUser($permissions)
 
         $this->authenticateUser('view-loan');
 
+        // dd(Position::where('id', Auth::user()->position)->first()->name);
+
         // if(session('mng_paym') ||session('recom_paym') ||session('appr_paym')){
         $data['myloan'] = $this->flexperformance_model->mysalary_advance(auth()->user()->emp_id);
         // dd($data);
@@ -3799,6 +3808,14 @@ public function authenticateUser($permissions)
         $data['max_amount'] = $this->flexperformance_model->get_max_salary_advance(auth()->user()->emp_id);
         $data['title'] = "Loans and Salaries";
         $data['pendingPayroll'] = $this->payroll_model->pendingPayrollCheck();
+
+        $data['level_check'] = SysHelpers::approvalCheck("Loan Approval");
+
+       
+
+
+
+
         return view('app.salary_advance', $data);
         // }else{
         //    echo 'Unauthorized Access';
@@ -4049,25 +4066,40 @@ public function authenticateUser($permissions)
                 'notification' => 3,
             );
 
-            $this->flexperformance_model->update_loan($hrdata, $loanID);
+            if (SysHelpers::ApprovalLastLevel("Loan Approval")) {
 
-            $data = array(
-                'approved_date_finance' => date('Y-m-d'),
-                'approved_finance' => auth()->user()->emp_id,
-                // 'status' => 1,
-                // 'notification' => 3,
-            );
+                $this->flexperformance_model->update_loan($hrdata, $loanID);
 
-            $this->flexperformance_model->update_loan($data, $loanID);
+                $data = array(
+                    'approved_date_finance' => date('Y-m-d'),
+                    'approved_finance' => auth()->user()->emp_id,
+                    // 'status' => 1,
+                    // 'notification' => 3,
+                );
 
-            $todate = date('Y-m-d');
+                $this->flexperformance_model->update_loan($data, $loanID);
 
-            $result = $this->flexperformance_model->approve_loan($loanID, auth()->user()->emp_id, $todate);
-            if ($result == true) {
-                echo "<p class='alert alert-success text-center'>Loan Approved Successifully</p>";
+               $todate = date('Y-m-d');
+
+                $result = $this->flexperformance_model->approve_loan($loanID, auth()->user()->emp_id, $todate);
+
+                $loan  = LoanApplication::find($id);
+                $loan->approval_status = $loan->approval_status + 1;
+                $loan->save();
+
+                if ($result == true) {
+                    echo "<p class='alert alert-success text-center'>Loan Approved Successifully</p>";
+                } else {
+                    echo "<p class='alert alert-warning text-center'>Loan NOT Approved, Please Try Again</p>";
+                }
+
             } else {
-                echo "<p class='alert alert-warning text-center'>Loan NOT Approved, Please Try Again</p>";
+                $loan  = LoanApplication::find($id);
+                $loan->approval_status = $loan->approval_status + 1;
+                $loan->save();
+                echo "<p class='alert alert-success text-center'>You have Successfully approved this loan</p>";
             }
+
         }
     }
 
@@ -4122,37 +4154,36 @@ public function authenticateUser($permissions)
 
     ######################## END LOAN OPERATIONS##############################
 
-    public function loan_application_info(Request $request)
+    public function loan_application_info(Request $request, $id)
     {
-        $id = $request->input('id');
-
-        $data['data'] = $this->flexperformance_model->getloanbyid($id);
+        $data['data'] = $this->flexperformance_model->getLoanById($id);
         $data['title'] = "Loans and Salary Advance";
-        return view('app.loan_application_remarks', $data);
 
-        if (isset($_POST['add'])) {
-            if (session('recomloan') != 0 || 1) {
-                $data2 = array(
-                    'reason_hr' => $request->input("remarks"),
-                );
-            } elseif (session('appr_loan') != 0 || 1) {
-                $data2 = array(
-                    'reason_finance' => $request->input("remarks"),
-                );
-            }
-
-            $this->flexperformance_model->confirmloan($data2, $id);
-            $reload = '/flex/loan_application';
-            return redirect($reload);
+        if ($request->has('add')) {
+            $data2 = [];
+            $data2['reason_hr'] = $request->input('remarks');
+        
+            $this->flexperformance_model->confirmLoan($data2, $id);
+    
+            return redirect()->back()->with('success', 'Successfull updated.');
         }
-    }
+        
+    
+     return view('app.loan_application_remarks', $data)
+            ->with('id', $id); 
+    
+       
 
-    public function updateloan(Request $request)
+    
+    }
+    
+    public function updateloan(Request $request, $id)
     {
 
-        $loanID = $request->input('id');
-
+        $loanID = $id;
+        // dd(''.$loanID);
         $data['loan'] = $this->flexperformance_model->getloanbyid($loanID);
+        // dd(LoanApplication::all());
         $data['title'] = "Loan";
         return view('app.updateloan', $data);
     }
@@ -8371,21 +8402,8 @@ public function authenticateUser($permissions)
 
 
                 $employee = Auth::User()->id;
-                $role = UserRole::where('user_id', $employee)->first();
-                $role_id = $role->role_id;
-            
-                $approval = Approvals::where('process_name', 'Employee Approval')->first();
-                $roles = Position::where('id', $role_id)->first();
-                $level = ApprovalLevel::where('role_id', $role_id)->where('approval_id', $approval->id)->first();
-
-                // dd($level);
-
-
-                if ($level) {
-                    $approval_id = $level->approval_id;
-                    $approval = Approvals::where('id', $approval_id)->first();
-        
-                    if ($approval->levels == $level->level_name) {
+           
+                    if (SysHelpers::ApprovalLastLevel("Employee Approval")) {
                         // dd($approval->levels == $level->level_name);
 
                         $emp_id = $transfers->empID;
@@ -8409,23 +8427,7 @@ public function authenticateUser($permissions)
                         $msg = 'Approved By ';
                         return redirect('flex/promotion')->with('msg', $msg);
                     } 
-                } else {
-                    $msg = "Failed To Promote !";
-                    return redirect('flex/promotion')->with('msg', $msg);
-                }
-
-
-
-
-
-
-
-
-
-
-
-
-               
+                
             }
         } else {
             echo "<p class='alert alert-danger text-center'>FAILED: Failed To Approve Registration, Please Try Again</p>";
@@ -8478,15 +8480,11 @@ public function authenticateUser($permissions)
         $role = UserRole::where('user_id', $employee)->first();
         $role_id = $role->role_id;
         $terminate = Approvals::where('process_name', 'Termination Approval')->first();
-        $roles = Role::where('id', $role_id)->first();
+        $roles = Position::where('id', $role_id)->first();
         $data['level'] = ApprovalLevel::where('role_id', $role_id)->where('approval_id', $terminate->id)->first();
       
-        if ($terminations->first()) {
-            $data['level_check'] = SysHelpers::approvalCheck("Termination Approval", $terminations->first()->approval_status);
+        $data['level_check'] = SysHelpers::approvalCheck("Termination Approval");
 
-        } else {
-            $data['level_check'] = false;
-        }
        
         $data['check'] = 'Approved By ' . $roles->name;
 
@@ -9124,20 +9122,12 @@ public function authenticateUser($permissions)
 
         $this->authenticateUser('add-promotion');
 
-        $employee = Auth::User()->id;
-        $role = UserRole::where('user_id', $employee)->first();
-        $role_id = $role->role_id;
-        $terminate = Approvals::where('process_name', 'Promotion Approval')->first();
-        $roles = Role::where('id', $role_id)->first();
-        $level = ApprovalLevel::where('role_id', $role_id)->where('approval_id', $terminate->id)->first();
-        if ($level) {
-            $approval_id = $level->approval_id;
-            $approval = Approvals::where('id', $approval_id)->first();
-
-            if ($approval->levels == $level->level_name) {
+        $employee = Auth::User()->position;
+        $roles = Role::where('id', $employee)->first();
+      
+            if (SysHelpers::ApprovalLastLevel("Employee Approval")) {
 
                 $promotion = Promotion::where('id', $id)->first();
-
                 // dd($promotion);
                 $promotion->status = "Successful";
                 $promotion->update();
@@ -9157,10 +9147,7 @@ public function authenticateUser($permissions)
                 $msg = 'Approved By ' . $roles->name;
                 return redirect('flex/promotion')->with('msg', $msg);
             }
-        } else {
-            $msg = "Failed To Promote !";
-            return redirect('flex/promotion')->with('msg', $msg);
-        }
+        
     }
 
     // For Cancel Promotion

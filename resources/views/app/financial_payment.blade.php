@@ -127,8 +127,7 @@
                                             @if ($state == 1)
                                             {{-- start of pending payroll --}}
                                                 {{-- @if ($pendingPayroll == 1 && $payroll->state == 1) --}}
-                                                @if($level)
-                @if ($level->level_name == $payroll ->approval_status)
+                                                @if($level_check == $payroll->approval_status)
 
                                                     <div>
                                                         @can('approve-payroll')
@@ -153,7 +152,6 @@
                                                         @endcan
                                                     </div>
 
-                                                    @endif
                                                     @endif
                                                 {{-- / --}}
 
