@@ -27,9 +27,6 @@ class PushNotificationController extends Controller
     
             $employee = EMPL::where('emp_id', $params['id'])->first();
     
-        
-            // dd($params['id']);
-           
             $comment = new PushNotification();
             $comment->title = $params['title'] ?? null;
             $comment->body = $params['body'] ?? null;
@@ -40,9 +37,8 @@ class PushNotificationController extends Controller
             $comment->sender_emp_id=$user;
             $comment->save();
 
-
             $fcmServerKey = env('FCM_SERVER_KEY');
-            // $fcmServerKey = 'AAAAOqacTg8:APA91bHAbmLdf_oh9Wr_DaHhvznWVB4uLDloVvq0RKRfzXmXFlYSCX4ecsm4Dkb656XRo7PBa1mrkHkrQ1w9sfLsnni-y_KNYe-F7T9GeiIhC5qCg-3r1jwJLk8Z4xz5kvEK3VLOBzoQ';
+           
 
     $deviceTokens = [$employee->device_token];
     $new_title= NotificationTitle::where('id',$comment->title)->get()->first();
@@ -57,7 +53,7 @@ class PushNotificationController extends Controller
   
     $data = [
         'click_action' => 'FLUTTER_NOTIFICATION_CLICK',
-        'id' =>   $comment->receiver_emp_id,
+        'id' =>   $comment->id,
         'status' => 'done',
     ];
 
@@ -138,23 +134,73 @@ class PushNotificationController extends Controller
             ]);
           
     }
-    public function updateNotification(){
+    public function updateNotification(Request $request){
+       try{
         $user = auth()->user()->emp_id;
-        $push_notifications = PushNotification::orderBy('created_at', 'desc')->get();
-        $comment =  PushNotification::where('receiver_emp_id',$user)->orderBy('created_at','desc')->get();
-        $comment->status=1;
-        $comment->update();
+        $id = $request->id;
 
-        dd(PushNotification::where('receiver_emp_id',$user)->orderBy('created_at','desc')->get());
+        $push_notifications =  PushNotification::where('receiver_emp_id',$user)->get();
+
+        $comment =  PushNotification::where('receiver_emp_id',$user)->where('id',$id)->get()->first();
+    
+        $comment->status=1;
+       
+        $comment->save();
+        return response(["msg"=>"successful updated"],200);
+       }
+       catch(Exception $e){
+        return response(["msg"=>"Failed".$e],400);
+       }
+
+        // dd(PushNotification::where('receiver_emp_id',$user)->orderBy('created_at','desc')->get());
     }
     public function getNotifications()
     {
-        $push_notifications = PushNotification::orderBy('created_at', 'desc')->where('receiver_emp_id',auth->user()->emp_id)->get();
-        return response()->json($push_notifications, 200);
-     }
-
-    public function destroy(PushNotification $pushNotification)
-    {
-        //
+        $pushNotifications = PushNotification::orderBy('created_at', 'desc')
+            ->where('receiver_emp_id', auth()->user()->emp_id)
+            ->get();
+                 
+        foreach ($pushNotifications as $key => $notification) { 
+            $slipArray = json_decode(json_encode($notification), true);
+            $titles = NotificationTitle::where('id', $notification->title)->get();
+    
+            foreach ($titles as $title) {
+                $slipArray['title_name'] = $title['title'];
+            }
+    
+            $pushNotifications[$key] = (array) $slipArray; // Update the specific element in $pushNotifications
+        }
+    
+        return response()->json($pushNotifications, 200);
     }
+    
+
+     public function getNotificationTitles()
+     {
+         $push_notifications=NotificationTitle::get();
+         return response()->json($push_notifications, 200);
+      }
+
+      public function deleteNotification(Request $request)
+      {
+          $user = auth()->user()->emp_id;
+          $notifications = $request->notification;
+          $allNotFound = true;
+      
+          foreach ($notifications as $item) {
+              $comment = PushNotification::where('receiver_emp_id', $user)->where('id', $item)->first();
+      
+              if ($comment) {
+                  $comment->delete();
+                  $allNotFound = false; // Set flag to false if at least one notification is found
+              }
+          }
+      
+          if ($allNotFound) {
+              return response(['msg' => "None of the notifications exist"], 404);
+          }
+      
+          return response(['msg' => "Successful"], 200);
+      }
+      
 }

@@ -185,7 +185,7 @@
                                         id="">
                                 </div>
                                 <div class="col-md-3 form-group">
-                                    <label for="">Long Serving</label>
+                                    <label for="">Long Service Award</label>
                                     <input type="text" class="form-control" value="0" name="longServing"
                                         id="">
                                 </div>
