@@ -694,6 +694,7 @@ class GeneralController extends Controller
 
         public function SlipDetail($date)
         {
+          
             //dd($request->all());
             $empID = auth()->user()->emp_id;
 
@@ -745,19 +746,21 @@ class GeneralController extends Controller
                     $data['salary_advance_loan_remained'] = $this->reports_model->loansAmountRemained($empID, $payroll_date);
 
                     //
+                   
                     foreach ($data['slipinfo'] as &$slip) {
                         $slipArray = json_decode(json_encode($slip), true);
-    
+                      
                     
-                      foreach( $data['allowances'] as $alownce){
-                        $slipArray['allowances'] = [$alownce];
-                      }
+                     
+                        $slipArray['allowances'] = $data['allowances'] ;
+                        
+                    
                   
                         $slipArray['total_allowances'] =  $data['total_allowances'];
                 
-                      foreach( $data['deductions'] as $alownce){
-                        $slipArray['deductions'] = [$alownce];
-                      }
+                    
+                        $slipArray['deductions'] = $data['deductions'] ;
+                    
                         $slipArray['total_deductions'] =  $data['total_deductions'];
 
                         $slip = (array) $slipArray;
@@ -855,23 +858,24 @@ class GeneralController extends Controller
                         $data['paid_with_arrears_d'] = $this->reports_model->employeeArrearPaidAll($payroll_emp_id->empID, $payroll_date);
                         $data['salary_advance_loan_remained'] = $this->reports_model->loansAmountRemained($payroll_emp_id->empID, $payroll_month);
                         $data_all['dat'][$payroll_emp_id->empID] = $data;
+                     
                         foreach ($data['slipinfo'] as &$slip) {
                             $slipArray = json_decode(json_encode($slip), true);
-        
+                      
+                    
+                     
+                            $slipArray['allowances'] = $data['allowances'] ;
+                            
                         
-                          foreach( $data['allowances'] as $alownce){
-                            $slipArray['allowances'] = $alownce;
-                          }
                       
                             $slipArray['total_allowances'] =  $data['total_allowances'];
                     
-                          foreach( $data['deductions'] as $alownce){
-                            $slipArray['deductions'] = $alownce;
-                          }
+                        
+                            $slipArray['deductions'] = $data['deductions'] ;
+                        
                             $slipArray['total_deductions'] =  $data['total_deductions'];
     
-                            $slip = (array)[ $slipArray];
-                            // $slipArray = get_object_vars($slip);
+                            $slip = (array) $slipArray;
 
     
                            
