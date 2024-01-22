@@ -1,5 +1,5 @@
 <div class="card border-top  border-top-width-3 border-top-main rounded-0">
-    <div class="card-body">
+    <div class="card-header">
         <h5 class="text-warning">Approved Leave Applications</h5>
 
         @if (Session::has('note'))
@@ -7,6 +7,8 @@
         @endif
         <div id="resultfeed"></div>
     </div>
+
+    <div class="card-body">
 
     <table class="table table-striped table-bordered datatable-basic">
         <thead>
@@ -133,4 +135,5 @@
 
         </tbody>
     </table>
+    </div>
 </div>

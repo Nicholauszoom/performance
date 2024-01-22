@@ -35,7 +35,7 @@
             background-position: auto;
             background-repeat: no-repeat;
             background-size: cover;
-            background-image: url('{{$brandSetting !=null && $brandSetting->body_background != null ? asset('storage/' . $brandSetting->body_background) : asset('img/bg2.png') }}');
+            background-image: {{ url($brandSetting != null && $brandSetting->body_background != null ? asset('storage/' . $brandSetting->body_background) : asset('img/bg2.png')) }};
 
             /* background: url({{ public_path('img/bg2.png') }}); */
         }
@@ -231,10 +231,10 @@
                                     <span class="font-weight-bold">{{ number_format($termination->leavePay, 2) }}</span>
                                 </li>
                             @endif
-                            @if ($termination->serevanceCost != 0)
+                            @if ($termination->houseAllowance != 0)
                                 <li class="list-group-item d-flex">
                                     <span class="text-muted">House Allowance</span>
-                                    <span class="font-weight-bold">{{ number_format($termination->serevanceCost, 2) }}</span>
+                                    <span class="font-weight-bold">{{ number_format($termination->houseAllowance, 2) }}</span>
                                 </li>
                             @endif
                             @if ($termination->livingCost != 0)
@@ -255,10 +255,10 @@
                                     <span class="font-weight-bold">{{ number_format($termination->leaveAllowance, 2) }}</span>
                                 </li>
                             @endif
-                            @if ($termination->severanceCost != 0)
+                            @if ($termination->serevancePay != 0)
                                 <li class="list-group-item d-flex">
-                                    <span class="text-muted">Serevance Pay</span>
-                                    <span class="font-weight-bold">{{ number_format($termination->serevanceCost, 2) }}</span>
+                                    <span class="text-muted">Severance  Pay</span>
+                                    <span class="font-weight-bold">{{ number_format($termination->serevancePay, 2) }}</span>
                                 </li>
                             @endif
                             @if ($termination->tellerAllowance != 0)
@@ -299,7 +299,7 @@
                     @endif
                             @if ($termination->longServing != 0)
                                 <li class="list-group-item d-flex">
-                                    <span class="text-muted">Long Serving</span>
+                                    <span class="text-muted">Long Service Award</span>
                                     <span class="font-weight-bold">{{ number_format($termination->longServing, 2) }}</span>
                                 </li>
                             @endif

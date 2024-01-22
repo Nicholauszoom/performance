@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 use App\Models\Employee;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
+use Exception;
 use DateTime;
 
 use Illuminate\Http\Request;
@@ -96,20 +98,76 @@ class BOTDataController extends Controller
         return $cleanedString;
     }
 
-     private function sendEmployeeData($data)
+     public function sendEmployeeData($data)
         {
-            $endpoint = 'https://compliance.bancabc.co.tz/api/employeerecord';
+            $endpoint = 'http://compliance.bancabc.co.tz/api/employeerecord';
 
             $headers = [
-                'Content-Type' => 'application/json',
-                'informationCode' => '1074',
-                'Authorization' => 'Bearer 14ee8c99777e78e8c94d0925b2dc0de267d82add43274233f21eeefacce39ecb',
+                'Content-Type : application/json',
+                'informationCode : 1074',
+                'Authorization : Bearer 14ee8c99777e78e8c94d0925b2dc0de267d82add43274233f21eeefacce39ecb',
             ];
 
-            $response = Http::withHeaders($headers)->post($endpoint, $data);
+            // $response = Http::withHeaders($headers)->post($endpoint, $data);
+            $postDataJson = json_encode($data);
+
+              $response =  $this->performCurlPost($endpoint, $headers, $postDataJson );
 
             return $response;
         }
+
+        public function performCurlPost($endpoint, $headers, $json_string)
+    {
+        try {
+            $ch = curl_init($endpoint);
+            curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
+            curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $json_string);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+
+            curl_setopt($ch, CURLOPT_TIMEOUT, 50);
+            curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 50);
+
+            $resultCurlPost = curl_exec($ch);
+
+            if ($resultCurlPost === false || $resultCurlPost == null) {
+                $error = curl_error($ch);
+                Log::error('cURL request failed: ' . $error);
+                throw new Exception('cURL request failed: ' . $error);
+            }
+
+            // Get HTTP status code
+            $httpStatus = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+
+            curl_close($ch);
+
+            Log::info('<<<<<< Before decode curl >>>>>>');
+
+            Log::info($resultCurlPost);
+
+            // $resultCurlPost = json_decode($resultCurlPost);
+
+            // Log::info('<<<<<< After decode curl >>>>>>');
+
+            // Log::info($resultCurlPost);
+
+            if ($resultCurlPost === null && json_last_error() !== JSON_ERROR_NONE) {
+                Log::error('Error decoding JSON response: ' . json_last_error_msg());
+                throw new Exception('Error decoding JSON response');
+            }
+
+            return $resultCurlPost;
+        } catch (\Exception $e) {
+
+            Log::error('cURL Request Error: ' . $e->getMessage());
+
+            return (object) [
+                'response' => 'Error during cURL request: ' . $e->getMessage(),
+                'http_status' => 0, // You can set a default status code here or handle it as needed
+            ];
+        }
+    }
 
         public function postEmployeeData(Request $request)
         {
@@ -140,15 +198,23 @@ class BOTDataController extends Controller
                     ];
 
                     $response = $this->sendEmployeeData($data);
+                    dd($response);
+                    // if ($response->status() === 200) {
+                    //     $responseData = $response->json();
+                    //     $responses[] = $responseData; // Collect response data for all employees
+                    // } else {
+                    //     $statusCode = $response->status();
+                    //     $errorMessage = $response['error']['message'];
+                    //     // Handle error if needed for each employee
+                    // }
 
-                    if ($response->status() === 200) {
-                        $responseData = $response->json();
-                        $responses[] = $responseData; // Collect response data for all employees
-                    } else {
-                        $statusCode = $response->status();
-                        $errorMessage = $response['error']['message'];
-                        // Handle error if needed for each employee
-                    }
+                    $newres = json_encode($response);
+                   
+                    $employee =  Employee::all();
+                    $data['employee'] = $employee;
+                 
+
+                    return view('bot.index', compact('newres', $data));
                 }
 
                 return $responses; // Return array of responses for all employees
@@ -178,15 +244,22 @@ class BOTDataController extends Controller
 
                 $response = $this->sendEmployeeData($data);
 
-                if ($response->status() === 200) {
-                    $responseData = $response->json();
-                } else {
-                    $statusCode = $response->status();
-                    $errorMessage = $response['error']['message'];
-                    // Handle error for the single employee request
-                }
+                // if ($response->status() === 200) {
+                //     $responseData = $response->json();
+                // } else {
+                //     $statusCode = $response->status();
+                //     $errorMessage = $response['error']['message'];
+                //     // Handle error for the single employee request
+                // }
 
-                return $response;
+                $response = $this->sendEmployeeData($data);
+                dd($response);
+                $newres = json_encode($response);
+
+                // dd($newres);
+                    $employee =  Employee::all();
+                    $data['employee'] = $employee;
+                    return view('bot.index', compact('newres','data'));
             }
         }
 }

@@ -40,7 +40,7 @@
     @endif
 
     @can('view-termination')
-        
+
     <table class="table table-striped table-bordered  datatable-basic">
         <thead>
             <tr>
@@ -91,13 +91,13 @@
                 <br><br>
                 {{-- @can('confirm-termination') --}}
                 {{-- start of termination confirm button --}}
-                <a href="javascript:void(0)" title="Approve" class="me-2"
-                onclick="approveTermination(<?php echo $item->id; ?>)">
-                <button class="btn btn-main btn-xs">
-                    <i class="ph-check"></i>
-                    Confirm
-                </button>
-            </a>
+                        <a href="javascript:void(0)" title="Approve" class="me-2"
+                        onclick="approveTermination(<?php echo $item->id; ?>)">
+                        <button class="btn btn-main btn-xs">
+                            <i class="ph-check"></i>
+                            Confirm
+                        </button>
+                    </a>
                 {{-- / --}}
 
                 {{-- start of termination confirm button --}}
@@ -113,7 +113,7 @@
                 {{-- @endcan --}}
                 @endif
                 @endif
-                @endif
+                {{-- @endif --}}
              </td>
             </tr>
             @endforeach
