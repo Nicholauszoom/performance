@@ -198,7 +198,7 @@ class BOTDataController extends Controller
                     ];
 
                     $response = $this->sendEmployeeData($data);
-
+                    dd($response);
                     // if ($response->status() === 200) {
                     //     $responseData = $response->json();
                     //     $responses[] = $responseData; // Collect response data for all employees
@@ -209,7 +209,7 @@ class BOTDataController extends Controller
                     // }
 
                     $newres = json_encode($response);
-                    dd($newres);
+                   
                     $employee =  Employee::all();
                     $data['employee'] = $employee;
                  
