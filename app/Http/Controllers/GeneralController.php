@@ -4439,17 +4439,18 @@ public function authenticateUser($permissions)
     }
 
     public function bankBranchFetcher(Request $request)
-    {
-
-        if (!empty($request->input("bank"))) {
-            $queryBranch = $this->flexperformance_model->bankBranchFetcher($request->input("bank"));
-            foreach ($queryBranch as $rows) {
-                echo "<option value='" . $rows->id . "'>" . $rows->name . "</option>";
-            }
-        } else {
-            echo '<option value="">Branch Not Available</option>';
+{
+    if (!empty($request->input("bank"))) {
+        $queryBranch = $this->flexperformance_model->bankBranchFetcher($request->input("bank"));
+        foreach ($queryBranch as $rows) {
+            $selected = ($request->input("bankBranch") == $rows->id) ? 'selected' : '';
+            echo "<option value='" . $rows->id . "' $selected>" . $rows->name . "</option>";
         }
+    } else {
+        echo '<option value="">Branch Not Available</option>';
     }
+}
+
 
     public function addkin(Request $request, $id)
     {

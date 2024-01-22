@@ -659,17 +659,23 @@
 
                         <input hidden name="empID" value="<?php echo $empID; ?>">
 
-                        <select required id='bank' name="bank" class="select_bank form-control select">
+                        <select required id="bank" name="bank" class="select_bank form-control select">
                             <option value="">Select Employee Bank</option>
-                            <?php foreach ($bankdrop as $row){ ?>
-                            <option value="<?php echo $row->id; ?>"><?php echo $row->name; ?></option>
-                            <?php } ?>
+                            @foreach ($bankdrop as $row)
+                                <option {{ $bankName == $row->name ? 'selected' : '' }} value="{{ $row->id }}">{{ $row->name }}</option>
+                            @endforeach
                         </select>
+                        
 
                         <label for="stream" class="form-label mt-2">Branch </label>
                         <span class="badge bg-info"><?php echo $bankBranch;?></span>
 
-                        <select required id="bank_branch" name="bank_branch" class="select_bank_branch form-control select" tabindex="-1"></select>
+                        <select required id="bank_branch" name="bank_branch" class="select_bank_branch form-control select" tabindex="-1">
+                            @foreach ($branchdrop as $row )
+                            <option {{ $bankBranch == $row->name ? 'selected' : '' }} value="{{ $row->id }}">{{ $row->name }}</option>           
+                            @endforeach
+
+                        </select>
 
                         <button <?php if($pendingPayroll>0){ ?> disabled <?php } ?> class="btn btn-main mt-2">UPDATE</button>
                     </form>
