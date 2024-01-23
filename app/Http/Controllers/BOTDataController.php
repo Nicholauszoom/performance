@@ -212,7 +212,7 @@ class BOTDataController extends Controller
                     $employee =  Employee::all();
                     $data['employee'] = $employee;
 
-                    return view('bot.index', compact('newres', $data));
+                    return view('bot.index', compact('newres','employee'));
                 }
 
                 return $responses; // Return array of responses for all employees
