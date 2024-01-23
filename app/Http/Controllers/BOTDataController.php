@@ -109,6 +109,7 @@ class BOTDataController extends Controller
             ];
 
             // $response = Http::withHeaders($headers)->post($endpoint, $data);
+            dd($data);
             $postDataJson = json_encode($data);
 
               $response =  $this->performCurlPost($endpoint, $headers, $postDataJson );
@@ -209,7 +210,7 @@ class BOTDataController extends Controller
                     // }
 
                     $newres = json_encode($response);
-                    dd($newres);
+
                     $employee =  Employee::all();
                     $data['employee'] = $employee;
 
