@@ -463,7 +463,7 @@
                         <div class="input-group">
                             <select required="" name="nationality" class="select1_single form-control select" data-width="1%">
                                 <?php foreach ($countrydrop as $row){ ?>
-                                <option <?php if($nationality == $row->code){ ?> selected=""<?php } ?> value="<?php echo $row->code; ?>"><?php echo $row->name; ?></option>
+                                <option <?php if($nationality == $row->item_code){ ?> selected=""<?php } ?> value="<?php echo $row->item_code; ?>"><?php echo $row->description; ?></option>
                                 <?php } ?>
                             </select>
                             <button class="btn btn-main">UPDATE</button>
