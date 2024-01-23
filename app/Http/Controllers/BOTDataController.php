@@ -109,9 +109,9 @@ class BOTDataController extends Controller
             ];
 
             // $response = Http::withHeaders($headers)->post($endpoint, $data);
-            dd($data);
+           
             $postDataJson = json_encode($data);
-
+            dd($postDataJson);
               $response =  $this->performCurlPost($endpoint, $headers, $postDataJson );
 
             return $response;
