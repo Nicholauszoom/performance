@@ -209,6 +209,7 @@ class BOTDataController extends Controller
                     // }
 
                     $newres = json_encode($response);
+                    dd($newres);
                     $employee =  Employee::all();
                     $data['employee'] = $employee;
 
