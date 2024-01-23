@@ -1391,7 +1391,7 @@ class PayrollController extends Controller
             $approval = Approvals::where('process_name', 'Payroll Approval')->first();
             $roles = Position::where('id', $posn)->first();
    
-            if (SysHelpers::ApprovalLastLevel("Employee Approval")) {
+            if (SysHelpers::ApprovalLastLevel("Payroll Approval")) {
 
 
                 $this-> runpayroll2($pdate);
@@ -1653,7 +1653,7 @@ class PayrollController extends Controller
                 $result = $this->payroll_model->update_payroll_month_only($updates, $payrollMonth);
             }
             if ($result == true) {
-                $position_data = SysHelpers::position('Country Head: Human Capital');
+                $position_data = SysHelpers::position('Manager: HR');
 
                 $fullname = $position_data['full_name'];
                 $email_data = array(

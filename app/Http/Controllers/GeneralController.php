@@ -9126,7 +9126,7 @@ public function authenticateUser($permissions)
         $employee = Auth::User()->position;
         $roles = Role::where('id', $employee)->first();
       
-            if (SysHelpers::ApprovalLastLevel("Employee Approval")) {
+            if (SysHelpers::ApprovalLastLevel("Promotion Approval")) {
 
                 $promotion = Promotion::where('id', $id)->first();
                 // dd($promotion);
