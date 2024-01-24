@@ -2155,7 +2155,7 @@ class ReportController extends Controller
         }
         $total_allowances = $this->reports_model->total_allowance($current_payroll_month, $previous_payroll_month,$payrollState);
 
-
+        // dd($total_allowances);
         $descriptions = [];
         foreach ($total_allowances as $row) {
 
@@ -2285,7 +2285,7 @@ class ReportController extends Controller
                         array_push($descriptions, $row->description);
                     }
                 }
-            } elseif ($row->allowance == "Long Serving allowance") {
+            } elseif ($row->allowance == "LSA") {
                 $allowance = $this->reports_model->total_terminated_allowance($current_payroll_month, $previous_payroll_month, 'long_serving');
                 if (count($allowance) > 0) {
                     for ($i = 0; $i < count($allowance); $i++) {
@@ -2301,7 +2301,11 @@ class ReportController extends Controller
 
         $all_terminal_allowance = $this->reports_model->all_terminated_allowance($current_payroll_month, $previous_payroll_month);
 
+        // dd($descriptions);
+
         $result = $this->arrayRecursiveDiff($all_terminal_allowance, $descriptions);
+
+        // dd($result);
 
         foreach ($result as $row) {
 
@@ -2352,14 +2356,17 @@ class ReportController extends Controller
 
     function arrayRecursiveDiff($aArray1, $aArray2)
     {
-        $aReturn = array();;
-        //bool in_array( $val, $array_name, $mode );
-        for ($i = 0; $i < count($aArray1); $i++) {
-            if (in_array($aArray1[$i]['description'], $aArray2)) {
-                unset($aArray1[$i]);
-                // dd($row['description']);
+        $aReturn = array();
+
+        foreach ($aArray1 as $key => $item) {
+
+            if (in_array($item['description'], $aArray2)) {
+
+               
+              
+                unset($aArray1[$key]);
+
             } else {
-                // array_push($aRetur)
             }
         }
 
