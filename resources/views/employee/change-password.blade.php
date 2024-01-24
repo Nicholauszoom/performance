@@ -30,7 +30,8 @@
                     <div class="mb-3">
                         <label for="current_password" class="form-label">Current Password <span class="text-danger">*</span></label>
 
-                        <input
+                        <div class="form-control-feedback form-control-feedback-start">
+                            <input
                             type="password"
                             name="current_password"
                             id="current_password"
@@ -40,13 +41,21 @@
                             value="{{ old('current_password') }}"
                         >
 
+
+                        <div class="form-control-feedback-icon" id="showPass">
+                            <i class="ph-eye-closed text-muted toggle-password"></i>
+                        </div>
+
                         @error('current_password')
                         <p class="text-danger mt-1">{{ $message }}</p>
                         @enderror
+                        </div>
                     </div>
 
                     <div class="mb-3">
                         <label for="password" class="form-label">New Password <span class="text-danger">*</span></label>
+
+                        <div class="form-control-feedback form-control-feedback-start">
 
                         <input
                             type="password"
@@ -61,15 +70,22 @@
                         @error('password')
                         <p class="text-danger mt-1">{{ $message }}</p>
                         @enderror
+
+                        <div class="form-control-feedback-icon" id="showPass">
+                            <i class="ph-eye-closed text-muted toggle-password"></i>
+                        </div>
+                        </div>
                     </div>
 
                     <div class="mb-3">
                         <label for="password_confirmation" class="form-label">Confirm Password <span class="text-danger">*</span></label>
 
+                        <div class="form-control-feedback form-control-feedback-start">
+
                         <input
                             type="password"
                             name="password_confirmation"
-                            id="password_confirmation"
+                            id="password"
                             class="form-control @error('password', 'confirmed') is-invalid @enderror"
                             required
                             autocomplete="off"
@@ -79,6 +95,10 @@
                         @error('password', 'confirmed')
                         <p class="text-danger mt-1">{{ $message }}</p>
                         @enderror
+                        <div class="form-control-feedback-icon" id="password">
+                            <i class="ph-eye-closed text-muted toggle-password"></i>
+                        </div>
+                        </div>
                     </div>
 
                     <div class="mb-3">
@@ -92,6 +112,28 @@
 
     </div>
 </div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        var togglePasswords = document.querySelectorAll(".toggle-password");
+
+        togglePasswords.forEach(function(togglePassword) {
+            togglePassword.addEventListener("click", function() {
+                togglePassword.classList.toggle("ph-eye");
+                togglePassword.classList.toggle("ph-eye-closed");
+
+                var input = document.getElementById("password");
+                // var input = document.querySelector(targetInputId);
+
+                if (input.getAttribute("type") === "password") {
+                    input.setAttribute("type", "text");
+                } else {
+                    input.setAttribute("type", "password");
+                }
+            });
+        });
+    });
+</script>
 
 
 @endsection

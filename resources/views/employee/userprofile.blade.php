@@ -10,6 +10,9 @@
     <script src="{{ asset('assets/js/pages/datatables_basic.js') }}"></script>
     <script src="{{ asset('assets/js/pages/form_select2.js') }}"></script>
 @endpush
+@php
+$brandSetting = \App\Models\BrandSetting::firstOrCreate();
+@endphp
 
 @section('content')
 

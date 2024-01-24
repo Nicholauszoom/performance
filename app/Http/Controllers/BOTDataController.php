@@ -109,9 +109,10 @@ class BOTDataController extends Controller
             ];
 
             // $response = Http::withHeaders($headers)->post($endpoint, $data);
-            $postDataJson = json_encode($data);
-
-              $response =  $this->performCurlPost($endpoint, $headers, $postDataJson );
+           
+            // $postDataJson = json_encode($data);
+        
+              $response =  $this->performCurlPost($endpoint, $headers, $data );
 
             return $response;
         }
@@ -198,7 +199,7 @@ class BOTDataController extends Controller
                     ];
 
                     $response = $this->sendEmployeeData($data);
-                    dd($response);
+
                     // if ($response->status() === 200) {
                     //     $responseData = $response->json();
                     //     $responses[] = $responseData; // Collect response data for all employees
@@ -209,12 +210,11 @@ class BOTDataController extends Controller
                     // }
 
                     $newres = json_encode($response);
-                   
+
                     $employee =  Employee::all();
                     $data['employee'] = $employee;
-                 
 
-                    return view('bot.index', compact('newres', $data));
+                    return view('bot.index', compact('newres','employee'));
                 }
 
                 return $responses; // Return array of responses for all employees
@@ -253,13 +253,14 @@ class BOTDataController extends Controller
                 // }
 
                 $response = $this->sendEmployeeData($data);
-                dd($response);
+
                 $newres = json_encode($response);
 
                 // dd($newres);
                     $employee =  Employee::all();
                     $data['employee'] = $employee;
-                    return view('bot.index', compact('newres','data'));
+                    
+                    return view('bot.index', compact('newres','employee'));
             }
         }
 }
