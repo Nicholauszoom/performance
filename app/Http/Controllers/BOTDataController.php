@@ -117,7 +117,7 @@ class BOTDataController extends Controller
            
             // $postDataJson = json_encode($data);
         
-              $response =  $this->performCurlPost($endpoint, $headers, json_encode($data) );
+              $response =  $this->performCurlPost($endpoint, $headers, json_decode(json_encode($data)) );
 
             return $response;
         }
@@ -125,6 +125,7 @@ class BOTDataController extends Controller
         public function performCurlPost($endpoint, $headers, $json_string)
     {
         try {
+           
     
             $ch = curl_init($endpoint);
             curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
