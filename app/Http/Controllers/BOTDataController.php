@@ -107,12 +107,17 @@ class BOTDataController extends Controller
                 'informationCode : 1074',
                 'Authorization : Bearer 14ee8c99777e78e8c94d0925b2dc0de267d82add43274233f21eeefacce39ecb',
             ];
+            // $headers = [
+            //     'Authorization: key=' . $fcmServerKey,
+            //     'Content-Type: application/json',
+            // ];
+           
 
             // $response = Http::withHeaders($headers)->post($endpoint, $data);
            
             // $postDataJson = json_encode($data);
         
-              $response =  $this->performCurlPost($endpoint, $headers, $data );
+              $response =  $this->performCurlPost($endpoint, $headers, json_encode($data) );
 
             return $response;
         }
@@ -120,6 +125,7 @@ class BOTDataController extends Controller
         public function performCurlPost($endpoint, $headers, $json_string)
     {
         try {
+    
             $ch = curl_init($endpoint);
             curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
             curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
