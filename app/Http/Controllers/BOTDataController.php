@@ -117,7 +117,7 @@ class BOTDataController extends Controller
            
             // $postDataJson = json_encode($data);
         
-              $response =  $this->performCurlPost($endpoint, $headers, json_decode(json_encode($data)) );
+              $response =  $this->performCurlPost($endpoint, $headers, (json_encode($data)) );
 
             return $response;
         }
