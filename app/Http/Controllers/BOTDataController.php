@@ -210,9 +210,11 @@ class BOTDataController extends Controller
                     // }
 
                     $newres = json_encode($response);
+                    session()->flash('status', $newres);
 
                     $employee =  Employee::all();
                     $data['employee'] = $employee;
+                  
 
                     return view('bot.index', compact('newres','employee'));
                 }
@@ -254,8 +256,9 @@ class BOTDataController extends Controller
 
                 $response = $this->sendEmployeeData($data);
 
+            
                 $newres = json_encode($response);
-
+                session()->flash('status', $newres);
                 // dd($newres);
                     $employee =  Employee::all();
                     $data['employee'] = $employee;

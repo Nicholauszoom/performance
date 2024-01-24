@@ -17,6 +17,13 @@
     <div class="mb-3">
         <h4 class="text-main">Post Data To BOT</h4>
     </div>
+    @if(session('status'))
+    <div class="alert alert-success text-center">
+        {{ session('status') }}
+    </div>
+    @endif
+
+{{-- Your existing Blade code here --}}
 
     <div class="row">
 
