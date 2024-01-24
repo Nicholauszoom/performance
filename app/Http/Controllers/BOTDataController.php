@@ -169,7 +169,6 @@ class BOTDataController extends Controller
         } catch (\Exception $e) {
 
             Log::error('cURL Request Error: ' . $e->getTraceAsString());
-
             return (object) [
                 'response' => 'Error during cURL request: ' . $e->getMessage(),
                 'http_status' => 0, // You can set a default status code here or handle it as needed
