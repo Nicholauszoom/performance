@@ -27,9 +27,6 @@ class PushNotificationController extends Controller
     
             $employee = EMPL::where('emp_id', $params['id'])->first();
     
-        
-            // dd($params['id']);
-           
             $comment = new PushNotification();
             $comment->title = $params['title'] ?? null;
             $comment->body = $params['body'] ?? null;
@@ -40,11 +37,8 @@ class PushNotificationController extends Controller
             $comment->sender_emp_id=$user;
             $comment->save();
 
-         
-
-
             $fcmServerKey = env('FCM_SERVER_KEY');
-            // $fcmServerKey = 'AAAAOqacTg8:APA91bHAbmLdf_oh9Wr_DaHhvznWVB4uLDloVvq0RKRfzXmXFlYSCX4ecsm4Dkb656XRo7PBa1mrkHkrQ1w9sfLsnni-y_KNYe-F7T9GeiIhC5qCg-3r1jwJLk8Z4xz5kvEK3VLOBzoQ';
+           
 
     $deviceTokens = [$employee->device_token];
     $new_title= NotificationTitle::where('id',$comment->title)->get()->first();
