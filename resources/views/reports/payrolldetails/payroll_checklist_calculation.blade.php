@@ -13,12 +13,12 @@
                         <th class=" {{ $accountNumber_col }} text-center" style="margin-bottom: 30px;"><b>Account Number</b><br>
                         </th>
 
-                        <th class=" {{ $pensionNumber_col }} text-center" style="margin-bottom: 30px;"><b>Pension Number</b><br>
-                        </th>
+                        <!-- <th class=" {{ $pensionNumber_col }} text-center" style="margin-bottom: 30px;"><b>Pension Number</b><br>
+                        </th> -->
 
                         <th class=" {{ $currency_col }} text-center" style="margin-bottom: 30px;"><b>Currency</b><br>
                         </th>
-                        <th class=" {{ $department_col }} text-center" style="margin-bottom: 30px;"><b>Department</b><br>
+                        <!-- <th class=" {{ $department_col }} text-center" style="margin-bottom: 30px;"><b>Department</b><br>
                         </th>
                         <th class=" {{ $costCenter_col }} text-center" style="margin-bottom: 30px;"><b>Cost Center</b><br>
                         </th>
@@ -44,7 +44,7 @@
                         <th class=" {{ $wcf_col }} text-end" style="margin-bottom: 30px;"><b>WCF</b></th>
                         <th class=" {{ $loanBoard_col }} text-end" style="margin-bottom: 30px;"><b>Loan Board</b></th>
                         <th class=" {{ $advanceOthers_col }} text-end" style="margin-bottom: 30px;"><b>Advance/Others</b></th>
-                        <th class=" {{ $totalDeduction_col }} text-end" style="margin-bottom: 30px;"><b>Total Deduction</b></th>
+                        <th class=" {{ $totalDeduction_col }} text-end" style="margin-bottom: 30px;"><b>Total Deduction</b></th> -->
                         <th class=" {{ $amountPayable_col }} text-end" style="margin-bottom: 30px;"><b>Amount Payable</b></th>
 
                     </tr>
@@ -138,11 +138,11 @@
                                 </td>
                                 <td class=" {{ $accountNumber_col }} " style="margin-right: 0px" colspan="">{{ $row->account_no }}
                                 </td>
-                                <td class=" {{ $pensionNumber_col }} " style="margin-right: 0px" colspan="">{{ $row->pf_membership_no }}
-                                </td>
+                                <!-- <td class=" {{ $pensionNumber_col }} " style="margin-right: 0px" colspan="">{{ $row->pf_membership_no }}
+                                </td> -->
                                 <td class=" {{$currency_col }} " style="margin-right: 0px" colspan="">{{ $row->currency}}
                                 </td>
-                                <td class=" {{ $department_col }} " style="margin-right: 0px" colspan="">{{ $row->name}}
+                                <!-- <td class=" {{ $department_col }} " style="margin-right: 0px" colspan="">{{ $row->name}}
                                 </td>
                                 <td class=" {{ $costCenter_col }} " style="margin-right: 0px" colspan="">{{ $row->costCenterName}}
                                 </td>
@@ -191,7 +191,7 @@
 
 
                                     {{ number_format($row->salary + $row->allowances - $amount, 2) }}
-                                </td>
+                                </td> -->
                                 <td class=" {{ $amountPayable_col }} text-end">{{ number_format($amount/$row->rate, 2) }}</td>
 
 
@@ -313,11 +313,11 @@
                         </td>
                         <td class=" {{$accountNumber_col }} " style="margin-right: 0px" colspan="">
                         </td>
-                        <td class=" {{$pensionNumber_col }} " style="margin-right: 0px" colspan="">
-                        </td>
+                        <!-- <td class=" {{$pensionNumber_col }} " style="margin-right: 0px" colspan="">
+                        </td> -->
                         <td class=" {{$currency_col }} " style="margin-right: 0px" colspan="">
                         </td>
-                        <td class=" {{$department_col }} " style="margin-right: 0px" colspan="">
+                        <!-- <td class=" {{$department_col }} " style="margin-right: 0px" colspan="">
                         </td>
                         <td class=" {{$costCenter_col }} " style="margin-right: 0px" colspan="">
                         </td>
@@ -362,7 +362,7 @@
                         <td class=" {{ $wcf_col }} text-end"><b><b>{{ number_format($totalwcf, 2) }}</b></b></td>
                         <td class=" {{ $loanBoard_col }} text-end"><b><b>{{ number_format($total_loans, 2) }}</b></b></td>
                         <td class=" {{ $advanceOthers_col }} text-end"><b><b>{{ number_format($others, 2) }}</b></b></td>
-                        <td class=" {{ $totalDeduction_col }} text-end"><b><b>{{ number_format($total_deduction, 2) }}</b></b></td>
+                        <td class=" {{ $totalDeduction_col }} text-end"><b><b>{{ number_format($total_deduction, 2) }}</b></b></td> -->
                         <td class=" {{ $amountPayable_col }} text-end"><b><b>{{ number_format($total_netpay, 2) }}</b></b></td>
                     </tr>
                 </tfoot>
