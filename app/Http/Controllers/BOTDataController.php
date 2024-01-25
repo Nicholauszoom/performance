@@ -137,6 +137,7 @@ class BOTDataController extends Controller
         curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 50);
 
         $resultCurlPost = curl_exec($ch);
+        Log::error('Curl response: ' . $resultCurlPost);
 
         if ($resultCurlPost === false || $resultCurlPost == null) {
             $error = curl_error($ch);
