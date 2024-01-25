@@ -75,6 +75,7 @@ class PushNotificationController extends Controller
     curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($payload));
+    dd($ch);
     $result = curl_exec($ch);
     curl_close($ch);
    
