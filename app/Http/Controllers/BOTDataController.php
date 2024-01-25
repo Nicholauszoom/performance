@@ -1,6 +1,8 @@
 <?php
 
 namespace App\Http\Controllers;
+
+use App\Models\Contract;
 use App\Models\Employee;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
@@ -109,9 +111,9 @@ class BOTDataController extends Controller
             ];
 
             // $response = Http::withHeaders($headers)->post($endpoint, $data);
-           
+
             // $postDataJson = json_encode($data);
-        
+
               $response =  $this->performCurlPost($endpoint, $headers, $data );
 
             return $response;
@@ -170,6 +172,12 @@ class BOTDataController extends Controller
         }
     }
 
+
+    public function contractNameExtraction($contractType){
+      $contact_name = Contract::where('item_code', $contractType)->pluck('name');
+      return $contact_name;
+    }
+
         public function postEmployeeData(Request $request)
         {
             if ($request->emp_id === 'all') {
@@ -185,7 +193,7 @@ class BOTDataController extends Controller
                         "empDob" =>  $this->convertDate($employee->birthdate), // DDMMYYYYHHMM
                         "empNin" => $this->removeSpecialCharacters($employee->national_id),
                         "empPosition" =>  $this->removeSpecialCharacters($employee->positions->name),
-                        "empStatus" =>  $employee->contract_type,
+                        "empStatus" => $this->contractNameExtraction($employee->contract_type),
                         "empDepartment" =>  $this->removeSpecialCharacters($employee->departments->name),
                         "appointmentDate" =>$this->convertDate($employee->hire_date), // DDMMYYYYHHMM
                         "lastPromotionDate" =>$this->convertDate($employee->hire_date), // DDMMYYYYHHMM
@@ -259,7 +267,7 @@ class BOTDataController extends Controller
                 // dd($newres);
                     $employee =  Employee::all();
                     $data['employee'] = $employee;
-                    
+
                     return view('bot.index', compact('newres','employee'));
             }
         }
