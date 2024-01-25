@@ -139,7 +139,7 @@ class BOTDataController extends Controller
     
 
             $resultCurlPost = curl_exec($ch);
-             dd(curl_error(ch));
+             dd(curl_error($ch));
 
             if ($resultCurlPost === false || $resultCurlPost == null) {
                 $error = curl_error($ch);
