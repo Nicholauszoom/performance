@@ -220,7 +220,7 @@ class BOTDataController extends Controller
                         "basicSalary" => $employee->salary,
                         "snrMgtBenefits" => '0',
                         "otherEmpBenefits" => '0',
-                        "gender" => $this->convertGenderOutput($employee->gender),
+                        "gender" => $employee->gender,
                         "directorsName" => 'none',
                         "directorsAllowance" => '0',
                         "directorsCommittee" => 'none',
