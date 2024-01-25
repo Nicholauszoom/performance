@@ -262,16 +262,16 @@ class BOTDataController extends Controller
                     "empDob" =>  $this->convertDate($employee->birthdate), // DDMMYYYYHHMM
                     "empNin" => $this->removeSpecialCharacters($employee->national_id),
                     "empPosition" =>  $this->removeSpecialCharacters($employee->positions->name),
-                    "empStatus" =>  $employee->contract_type,
+                    "empStatus" =>  $this->contractNameExtraction($employee->contract_type),
                     "empDepartment" =>  $this->removeSpecialCharacters($employee->departments->name),
                     "appointmentDate" =>$this->convertDate($employee->hire_date), // DDMMYYYYHHMM
                     "lastPromotionDate" =>$this->convertDate($employee->hire_date), // DDMMYYYYHHMM
                     "basicSalary" => $employee->salary,
-                    "snrMgtBenefits" => 0,
-                    "otherEmpBenefits" => 0,
-                    "gender" => $this->convertGenderOutput($employee->gender),
+                    "snrMgtBenefits" => '0',
+                    "otherEmpBenefits" => '0',
+                    "gender" =>   $employee->gender,
                     "directorsName" => 'none',
-                    "directorsAllowance" => 100000,
+                    "directorsAllowance" => '0',
                     "directorsCommittee" => 'none',
                 ];
 
