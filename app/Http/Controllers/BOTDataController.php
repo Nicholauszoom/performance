@@ -5,6 +5,7 @@ use App\Models\Employee;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Http\Response;
+use App\Models\EMPL;
 use Illuminate\Support\Facades\Auth;
 use Exception;
 use DateTime;
@@ -195,11 +196,12 @@ class BOTDataController extends Controller
         public function postEmployeeData(Request $request)
         {
             if ($request->emp_id === 'all') {
-                $employees = Employee::all();
+               $employees= Employee::get();
+                
                 $responses = [];
 
                 foreach ($employees as $employee) {
-
+                     
                     $data = [
                         "reportingDate"=>$this->convertDate($employee->hire_date),
                         "branchCode" => $employee->branch,
@@ -232,16 +234,19 @@ class BOTDataController extends Controller
                     // }
 
                     $newres = json_encode($response);
+                    
                     session()->flash('status', $newres);
+                  
 
                     $employee =  Employee::all();
                     $data['employee'] = $employee;
                   
 
-                    return view('bot.index', compact('newres','employee'));
+                   
                 }
+                return view('bot.index', compact('newres','employee'));
 
-                return $responses; // Return array of responses for all employees
+                // return $responses; // Return array of responses for all employees
             } else {
                 $emp_id = $request->emp_id;
                 $employee = Employee::where('emp_id', $emp_id)->first();
