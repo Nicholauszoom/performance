@@ -218,11 +218,11 @@ class BOTDataController extends Controller
                         "appointmentDate" =>$this->convertDate($employee->hire_date), // DDMMYYYYHHMM
                         "lastPromotionDate" =>$this->convertDate($employee->hire_date), // DDMMYYYYHHMM
                         "basicSalary" => $employee->salary,
-                        "snrMgtBenefits" => 0,
-                        "otherEmpBenefits" => 0,
+                        "snrMgtBenefits" => '0',
+                        "otherEmpBenefits" => '0',
                         "gender" => $this->convertGenderOutput($employee->gender),
                         "directorsName" => 'none',
-                        "directorsAllowance" => 100000,
+                        "directorsAllowance" => '0',
                         "directorsCommittee" => 'none',
                     ];
 
