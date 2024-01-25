@@ -135,9 +135,11 @@ class BOTDataController extends Controller
             curl_setopt($ch, CURLOPT_POSTFIELDS, $json_string);
             curl_setopt($ch, CURLOPT_TIMEOUT, 50);
             curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 50);
+            
     
 
             $resultCurlPost = curl_exec($ch);
+             dd(curl_error(ch));
 
             if ($resultCurlPost === false || $resultCurlPost == null) {
                 $error = curl_error($ch);
