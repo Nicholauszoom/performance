@@ -1,6 +1,8 @@
 <?php
 
 namespace App\Http\Controllers;
+
+use App\Models\Contract;
 use App\Models\Employee;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
@@ -108,18 +110,20 @@ class BOTDataController extends Controller
 						'informationCode: 1074',  // Fixed the space before the colon
 					];
 
-            
+
             // $headers = [
             //     'Authorization: key=' . $fcmServerKey,
             //     'Content-Type: application/json',
             // ];
-           
+
 
             // $response = Http::withHeaders($headers)->post($endpoint, $data);
-           
+
             // $postDataJson = json_encode($data);
-        
+
               $response =  $this->performCurlPost($endpoint, $headers, (json_encode($data)) );
+
+              $response =  $this->performCurlPost($endpoint, $headers, $data );
 
             return $response;
         }
@@ -161,7 +165,7 @@ class BOTDataController extends Controller
                     'response' => 'Bad Request',
                     'http_status' => $httpStatus,
                 ];
-            case 404:	
+            case 404:
                 // Not Found
                 return (object) [
                     'response' => 'Resource Not Found',
@@ -198,11 +202,11 @@ class BOTDataController extends Controller
         {
             if ($request->emp_id === 'all') {
                $employees= Employee::get();
-                
+
                 $responses = [];
 
                 foreach ($employees as $employee) {
-                     
+
                     $data = [
                         "reportingDate"=>$this->convertDate($employee->hire_date),
                         "branchCode" => $employee->branch,
@@ -210,16 +214,16 @@ class BOTDataController extends Controller
                         "empDob" =>  $this->convertDate($employee->birthdate), // DDMMYYYYHHMM
                         "empNin" => $this->removeSpecialCharacters($employee->national_id),
                         "empPosition" =>  $this->removeSpecialCharacters($employee->positions->name),
-                        "empStatus" =>  $employee->contract_type,
+                        "empStatus" => $this->contractNameExtraction($employee->contract_type),
                         "empDepartment" =>  $this->removeSpecialCharacters($employee->departments->name),
                         "appointmentDate" =>$this->convertDate($employee->hire_date), // DDMMYYYYHHMM
                         "lastPromotionDate" =>$this->convertDate($employee->hire_date), // DDMMYYYYHHMM
                         "basicSalary" => $employee->salary,
-                        "snrMgtBenefits" => 0,
-                        "otherEmpBenefits" => 0,
+                        "snrMgtBenefits" => '0',
+                        "otherEmpBenefits" => '0',
                         "gender" => $this->convertGenderOutput($employee->gender),
                         "directorsName" => 'none',
-                        "directorsAllowance" => 100000,
+                        "directorsAllowance" => '0',
                         "directorsCommittee" => 'none',
                     ];
 
@@ -235,15 +239,15 @@ class BOTDataController extends Controller
                     // }
 
                     $newres = json_encode($response);
-                    
+
                     session()->flash('status', $newres);
-                  
+
 
                     $employee =  Employee::all();
                     $data['employee'] = $employee;
-                  
 
-                   
+
+
                 }
                 return view('bot.index', compact('newres','employee'));
 
@@ -284,13 +288,13 @@ class BOTDataController extends Controller
 
                 $response = $this->sendEmployeeData($data);
 
-            
+
                 $newres = json_encode($response);
                 session()->flash('status', $newres);
                 // dd($newres);
                     $employee =  Employee::all();
                     $data['employee'] = $employee;
-                    
+
                     return view('bot.index', compact('newres','employee'));
             }
         }
