@@ -198,6 +198,15 @@ class BOTDataController extends Controller
 }
 
 
+
+        public function contractNameExtraction($contractType){
+            $contractName = Contract::where('item_code', $contractType)->pluck('name');
+
+            return $contractName;
+
+        }
+
+
         public function postEmployeeData(Request $request)
         {
             if ($request->emp_id === 'all') {
