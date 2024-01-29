@@ -9082,6 +9082,8 @@ public function authenticateUser($permissions)
         $data['parent'] = 'Workforce';
         $data['child'] = 'Promotion|Increment';
 
+        $data['level_check']  = SysHelpers::approvalCheck("Promotion Approval");
+
         return view('workforce-management.promotion-increment', $data, compact('promotions', 'i'));
     }
 
@@ -9157,7 +9159,7 @@ public function authenticateUser($permissions)
         $this->authenticateUser('add-promotion');
 
         $employee = Auth::User()->position;
-        $roles = Role::where('id', $employee)->first();
+        $roles = Position::where('id', $employee)->first();
       
             if (SysHelpers::ApprovalLastLevel("Promotion Approval")) {
 
@@ -9170,12 +9172,15 @@ public function authenticateUser($permissions)
                 $increment->salary = $promotion->newSalary;
                 $increment->position = $promotion->newPosition;
                 $increment->emp_level = $promotion->newLevel;
+                $promotion->approval_status = $promotion->approval_status + 1;
+
                 $increment->update();
                 $msg = 'Employee Promotion is Confirmed Successfully !';
                 return redirect('flex/promotion')->with('msg', $msg);
             } else {
                 $promotion = Promotion::where('id', $id)->first();
                 $promotion->status = 'Approved By ' . $roles->name;
+                $promotion->approval_status = $promotion->approval_status + 1;
                 $promotion->update();
 
                 $msg = 'Approved By ' . $roles->name;
