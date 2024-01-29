@@ -40,7 +40,12 @@
                 <div class="col-md-12 col-sm-12 col-xs-12">
                     <h4 class="me-4 text-center">Payroll Checklist</h4>
 
-                    <div>
+
+                    <div id="currencyDiv">
+                    </div>
+
+
+                    {{-- <div>
                         <label for="currency-tzs">
                           <input type="radio" id="currency-tzs" name="currency" value="2">
                           TZS
@@ -49,7 +54,7 @@
                           <input type="radio" id="currency-usd" name="currency" value="3">
                           USD
                         </label>
-                      </div>
+                      </div> --}}
 {{--
                       <a id="pdf-link" href="#" target="_blank">
                         <button type="button" name="print" value="print" class="btn btn-main btn-sm">
@@ -103,6 +108,39 @@
 
         </table>
     </div>
+
+    <script>
+      document.addEventListener('DOMContentLoaded', function () {
+        // Get the URL parameters
+        const urlParams = new URLSearchParams(window.location.search);
+        
+        // Get the 'nature' parameter value
+        const nature = urlParams.get('nature');
+  
+        // Get the div element
+        const currencyDiv = document.getElementById('currencyDiv');
+  
+        // Clear the div content
+        currencyDiv.innerHTML = '';
+  
+        // Create the label and input elements based on the 'nature' parameter
+        if (nature === '2') {
+          currencyDiv.innerHTML = `
+            <label for="currency-tzs">
+              <input type="radio" checked id="currency-tzs" name="currency" value="2">
+              TZS
+            </label>
+          `;
+        } else if (nature === '3') {
+          currencyDiv.innerHTML = `
+            <label for="currency-usd">
+              <input type="radio" checked id="currency-usd" name="currency" value="3">
+              USD
+            </label>
+          `;
+        }
+      });
+    </script>
 
 
     <!-- /column selectors -->
