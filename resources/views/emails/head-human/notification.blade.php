@@ -465,7 +465,7 @@
 
                                                                                 
 <br><br>
-<h1 style="margin-top:0;margin-bottom:1.38em;font-size:1.953em;line-height:1.3;font-weight:bold;letter-spacing:-0.02em;">Payroll Run Notification</h1>
+<h1 style="margin-top:0;margin-bottom:1.38em;font-size:18px;line-height:1.3;font-weight:bold;letter-spacing:-0.02em;">Payroll Run Notification</h1>
 
                                                                             </div>
                                                                         </td>

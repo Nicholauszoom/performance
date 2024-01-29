@@ -4326,9 +4326,10 @@ public function authenticateUser($permissions)
         $role = UserRole::where('user_id', $employee)->first();
         // $role_id = $role->role_id;
         $rr = User::find(2);
+        $posn = Auth::User()->position;
+        // dd(Position::where('id', $posn)->first());
 
 
-        // dd(Role::where('id', $role->role_id)->first());
 
         // $api = url('/flex/chart-line-ajax');
         // $chart = new EmployeeLineChart;
