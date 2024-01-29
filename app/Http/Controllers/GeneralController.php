@@ -3919,8 +3919,40 @@ public function authenticateUser($permissions)
                 'application_date' => date('Y-m-d'),
             );
 
-            $result = $this->flexperformance_model->applyloan($data);
-            if ($result == true) {
+            $loanApplication = new LoanApplication;
+            $loanApplication->empID = $request->input("employee");
+            $loanApplication->amount = $request->input("amount");
+            $loanApplication->deduction_amount = $deduction;
+            $loanApplication->approved_hr = auth()->user()->emp_id;
+            $loanApplication->status = 1;
+            $loanApplication->notification = 3;
+            $loanApplication->approved_date_hr = date('Y-m-d');
+            $loanApplication->type = $type;
+            $loanApplication->form_four_index_no = $form_four_index_no;
+            $loanApplication->reason = $request->input("reason");
+            $loanApplication->application_date = date('Y-m-d');
+            $success = $loanApplication->save();
+
+            // dd(Approvals::where('process_name', 'Loan Approval')->first()->ApprLevels->count() < 1);
+
+            try {
+                if(Approvals::where('process_name', 'Loan Approval')->first()->ApprLevels->count() < 1) {
+                    $todate = date('Y-m-d');
+                    $result = $this->flexperformance_model->approve_loan($loanApplication->id, auth()->user()->emp_id, $todate);
+                }            
+            } catch (\Throwable $th) {
+                if ($success) {
+                    dd(''. $th->getMessage());
+                    echo "<p class='alert alert-successs text-center'>Loan Approval was not successfull, but was created</p>";
+
+                }else {
+                    echo "<p class='alert alert-warning text-center'>Loan application not created successful</p>";
+                }
+            }
+           
+
+            // $result = $this->flexperformance_model->applyloan($data);
+            if ($success == true) {
                 $autheniticateduser = auth()->user()->emp_id;
          $auditLog = SysHelpers::AuditLog(2, "Direct loan inserted by " . $autheniticateduser, $request);
                 echo "<p class='alert alert-success text-center'>Request Submitted Successifully</p>";
