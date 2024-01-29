@@ -127,10 +127,12 @@
 
             <tbody>
                 <?php
+                $i=1;
+
                     foreach ($payrollList as $row) { ?>
 
                     <tr id="domain<?php echo $row->id;?>">
-                        <td width="1px"><?php echo $row->SNo; ?></td>
+                        <td width="1px">{{ $i }}</td>
                         <td><?php //echo $row->payroll_date; ?><?php echo date('F, Y', strtotime($row->payroll_date));; ?></td>
                         <td>
                             <?php if($row->state==1 || $row->state==2 ){   ?>
@@ -236,7 +238,7 @@
                         </td>
                         <td hidden></td>
                     </tr>
-                <?php }  ?>
+                <?php $i++; }  ?>
                 </tbody>
             </table>
 

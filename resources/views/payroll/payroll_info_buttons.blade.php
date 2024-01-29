@@ -30,7 +30,7 @@
             href="{{ route('reports.payrollReportLogs', ['payrolldate' => $payroll_date, 'type' => 2, 'payrollState' => $payrollState]) }}"
             target="blank">
             <button type="button" name="print" value="print" class="btn btn-main btn-sm">
-                Payroll Changes
+                Payroll Input Changes
             </button>
         </a>
         {{-- <a class="ms-3"
