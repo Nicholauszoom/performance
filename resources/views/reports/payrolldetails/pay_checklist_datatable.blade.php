@@ -111,19 +111,11 @@
 
     <script>
       document.addEventListener('DOMContentLoaded', function () {
-        // Get the URL parameters
         const urlParams = new URLSearchParams(window.location.search);
-        
-        // Get the 'nature' parameter value
-        const nature = urlParams.get('nature');
+          const nature = urlParams.get('nature');
+          const currencyDiv = document.getElementById('currencyDiv');
+          currencyDiv.innerHTML = '';
   
-        // Get the div element
-        const currencyDiv = document.getElementById('currencyDiv');
-  
-        // Clear the div content
-        currencyDiv.innerHTML = '';
-  
-        // Create the label and input elements based on the 'nature' parameter
         if (nature === '2') {
           currencyDiv.innerHTML = `
             <label for="currency-tzs">
