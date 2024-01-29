@@ -68,13 +68,5 @@
                 <a class="dropdown-item" href="{{ route('reports.payrolldetails', ['payrolldate' => $payroll_date, 'nature' => 3, 'payrollState' => $payrollState, 'type' => 2]) }}" target="blank">USD Pay Checklist</a>
             </div>
         </div>
-        
-
-        <a class="ms-3" href="{{ route('reports.payrolldetails',['payrolldate' => $payroll_date,  'nature' => 2, 'payrollState' => $payrollState,'type' => 1]) }}"
-            target="blank">
-            <button type="button" name="print" value="print" class="btn btn-main btn-sm"> Export</button>
-        </a>
-
-
 
 </div>
