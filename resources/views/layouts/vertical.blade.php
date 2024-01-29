@@ -14,6 +14,20 @@
         $brandSetting = \App\Models\BrandSetting::first();
     @endphp
 
+
+<script>
+    $(document).ready(function() {
+        $("form").submit(function(e) {
+            // Disable the buttons and show the spinner
+            $("button[type='submit']").html("<i class='ph-spinner spinner me-2'></i> Saving ...").addClass('disabled');
+
+
+        });
+    });
+</script>
+
+
+
     {{-- {{dd($brandSetting->body_background)}} --}}
 
     <style>

@@ -2946,7 +2946,7 @@ and e.branch = b.code and e.line_manager = el.emp_id and c.id = e.contract_type 
 
          array_push($data,['description'=>$row[0]->description,'current_amount'=>$row[0]->current_amount,'previous_amount'=>$row[0]->previous_amount]);
 
-            $query = "SELECT CONCAT('Add/Less Long Serving allowance') as description,
+            $query = "SELECT CONCAT('Add/Less LSA') as description,
     SUM((IF((SELECT SUM(longServing)  FROM terminations WHERE tm.id = terminations.id and  terminations.terminationDate LIKE '" . $current_termination . "') != 0,(SELECT SUM(longServing)  FROM terminations WHERE tm.id = terminations.id and  terminations.terminationDate LIKE '" . $current_termination . "'),0))) as current_amount,
      SUM((IF((SELECT SUM(longServing)  FROM terminations WHERE tm.id = terminations.id and  terminations.terminationDate LIKE '" . $previous_termination . "') != 0,(SELECT SUM(longServing)  FROM terminations WHERE tm.id = terminations.id and  terminations.terminationDate LIKE '" . $previous_termination . "'),0))) as previous_amount
      from terminations tm";
