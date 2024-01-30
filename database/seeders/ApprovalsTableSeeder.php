@@ -9,7 +9,7 @@ class ApprovalsTableSeeder extends Seeder
 {
     public function run()
     {
-        DB::table('approvals')->insert([
+        DB::table('approvals')->updateOrInsert([
             [
                 'id' => 4,
                 'process_name' => 'Termination Approval',
