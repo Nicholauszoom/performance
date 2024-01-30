@@ -36,6 +36,7 @@ class BrandSetting extends Model
         'report_top_banner',
         'report_bottom_banner',
         'report_system_name',
+        'allowed_domain',
     ];
     
 }
