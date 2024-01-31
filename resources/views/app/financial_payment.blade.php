@@ -126,7 +126,9 @@
                                             </div>
                                             @if ($state == 1)
                                             {{-- start of pending payroll --}}
-                                                @if ($pendingPayroll == 1 && $payroll->state == 1)
+                                                {{-- @if ($pendingPayroll == 1 && $payroll->state == 1) --}}
+                                                @if($level_check == $payroll->approval_status)
+
                                                     <div>
                                                         @can('approve-payroll')
                                                         {{-- approve pending payroll button --}}
@@ -149,54 +151,14 @@
                                                         {{-- / --}}
                                                         @endcan
                                                     </div>
+
+                                                    @endif
                                                 {{-- / --}}
 
                                                 {{-- hr approval --}}
-                                                @elseif($pendingPayroll == 1 && $payroll->state == 2)
-                                                @can('hr-recommend-payroll')
-                                                    <div>
-                                                        <a href="javascript:void(0)" onclick="recomendPayrollByHr()"
-                                                            title="Approve Payroll" class="me-2">
-                                                            <button type="button" class="btn btn-success text-white">
-                                                                <i class="ph-check me-2"></i>
-                                                                APPROVE PENDING PAYROLL
-                                                            </button>
-                                                        </a>
+                                                
 
-                                                        <a href="javascript:void(0)" onclick="cancelPayroll('hr')"
-                                                            title="Cancel Payroll" class="icon-2 info-tooltip">
-                                                            <button type="button" class="btn btn-danger text-white">
-                                                                <i class="ph-x me-2"></i>
-                                                                CANCEL PENDING PAYROLL
-                                                            </button>
-                                                        </a>
-                                                    </div>
-                                                @endcan
-                                                {{-- / --}}
-
-                                                {{-- finance approval --}}
-                                                @elseif($pendingPayroll == 1 && $payroll->state == 3)
-                                                @can('finance-recommend-payroll')
-                                                    <div>
-                                                        <a href="javascript:void(0)" onclick="recomendPayrollByFinance()"
-                                                            title="Approve Payroll" class="me-2">
-                                                            <button type="button" class="btn btn-success text-white">
-                                                                <i class="ph-check me-2"></i>
-                                                                APPROVE PENDING PAYROLL
-                                                            </button>
-                                                        </a>
-
-                                                        <a href="javascript:void(0)" onclick="cancelPayroll('finance')"
-                                                            title="Cancel Payroll By Head of Finance"
-                                                            class="icon-2 info-tooltip">
-                                                            <button type="button" class="btn btn-danger text-white">
-                                                                <i class="ph-x me-2"></i>
-                                                                CANCEL PENDING PAYROLL
-                                                            </button>
-                                                        </a>
-                                                    </div>
-                                                @endcan
-                                                @endif
+                                               {{-- @endif --}}
                                                 {{-- / --}}
                                             @endif
                                         </div>
@@ -1418,13 +1380,17 @@
             const message = "Are you sure you want to approve this payroll?";
             const message1 = "Send payslip as email to employees?";
 
+            // var message = document.getElementById('comment').value;
+
             $('#delete').modal('show');
             $('#delete').find('.modal-body #message').text(message);
 
             $("#yes_delete").click(function() {
                 $('#hideList').hide();
                 $.ajax({
-                    url: "<?php echo url('flex/payroll/runpayroll'); ?>/<?php echo $pendingPayroll_month; ?>",
+                    // var url = "{{ route('payroll.approvepayroll', ['pdate' => $pendingPayroll_month]) }}" + "?message="Message comment;
+
+                    url: "<?php echo url('flex/payroll/approvepayroll'); ?>/<?php echo $pendingPayroll_month; ?>",
                     async: true,
                 beforeSend: function () {
                     $('.request__spinner').show() },
@@ -1544,6 +1510,10 @@
 
 
         }
+
+
+
+
 
         function recomendPayrollByFinance() {
 

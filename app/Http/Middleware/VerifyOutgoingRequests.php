@@ -4,6 +4,8 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
+use App\Models\BrandSetting;
+
 
 class VerifyOutgoingRequests
 {
@@ -16,11 +18,11 @@ class VerifyOutgoingRequests
      */
     public function handle($request, Closure $next)
     {
+
+        $brand = BrandSetting::first();
+
         $allowedDomains = [
-            'localhost',
-            'hc-hub.bancabc.co.tz',
-            'int.cits.co.tz',
-            'hc-uat.bancabc.co.tz'
+            $brand->allowed_domain,
             // Add more allowed domains here
         ];
 

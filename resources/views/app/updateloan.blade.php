@@ -60,7 +60,7 @@
                         <span class="required">*</span>
                         </label>
                         <div class="col-md-12 col-sm-6 col-xs-12">
-                          <input type="number" min='1000' max="10000000"  value="<?php echo $amount; ?>" name="amount" class="form-control col-md-7 col-xs-12">
+                          <input type="number" min='1000' max="10000000000000000"  value="<?php echo $amount; ?>" name="amount" class="form-control col-md-7 col-xs-12">
                           <span class="text-danger"><?php // echo form_error("rate_employer");?></span>
                         </div>
                       </div>
@@ -69,7 +69,7 @@
                         <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">Deduction Per Month
                         </label>
                         <div class="col-md-12 col-sm-6 col-xs-12">
-                          <input required="required" type="number" min="1" max="10000001" value = "<?php echo  $deduction_amount; ?>" name="deduction" class="form-control col-md-7 col-xs-12">
+                          <input required="required" type="number" min="1" max="1000000000000000" value = "<?php echo  $deduction_amount; ?>" name="deduction" class="form-control col-md-7 col-xs-12">
                         </div>
                       </div>
                       <div class="form-group">
@@ -80,14 +80,14 @@
                           <span class="text-danger"><?php// echo form_error("lname");?></span>
                         </div>
                       </div>
-                      <?php if($status==0 || $status==3 || $status==4){ ?>
+                      {{-- <?php if($status==0 || $status==3 || $status==4){ ?> --}}
                       <div class="form-group">
                         <div class="col-md-6 col-sm-6 col-xs-12 py-3">
                           
                           <button type="submit" name="update" class="btn btn-main">Update</button>
                         </div>
                       </div>
-                      <?php } ?>
+                      {{-- <?php } ?> --}}
 
                     </form>
                   </div>

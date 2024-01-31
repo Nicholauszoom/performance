@@ -1000,6 +1000,10 @@ class AttendanceController extends Controller
                             Notification::route('mail', $linemanager_data['email'])->notify(new EmailRequests($email_data));
 
                         } catch (Exception $exception) {
+
+                            dd($exception->getMessage());
+
+    
                             $leave_type = LeaveType::where('id', $nature)->first();
                             $type_name = $leave_type->type;
                             $msg = $type_name . " Leave Request is submitted successfully But Email not sent(SMTP Problem)!";
@@ -1208,6 +1212,7 @@ class AttendanceController extends Controller
                         Notification::route('mail', $linemanager_data['email'])->notify(new EmailRequests($email_data));
 
                     } catch (Exception $exception) {
+                        dd($exception->getMessage());
                         $msg = $type_name . " Leave Request is submitted successfully but email not sent(SMTP Problem)!";
                         return $url->with('msg', $msg);
                     }

@@ -93,9 +93,9 @@
             </td>
             @can('edit-promotion')
             <td>
-            @if($level)
-            @if($item->status!='Successful')
-            @if ($item->status!=$check)
+
+                @if($item->status!='Successful')
+          @if ($level_check == $item->approval_status)
            
                 {{-- start of termination confirm button --}}
          
@@ -112,7 +112,6 @@
                  </a>
                 {{-- / --}}
            
-                @endif
                 @endif
                 @endif
                 </td>

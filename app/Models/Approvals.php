@@ -16,4 +16,8 @@ class Approvals extends Model
         'escallation',
         'escallation_time',
     ];
+
+    public function ApprLevels(){
+        return $this->hasMany(ApprovalLevel::class, 'approval_id',);
+    }
 }

@@ -297,6 +297,9 @@ Route::middleware('verify-outgoing-requests')->group(function () {
             Route::any('/recommendpayrollByHr/{pdate}/{message}', 'recommendpayrollByHr')->name('payroll.recommendpayrollByHr');
             Route::any('/recommendpayrollByFinance/{pdate}/{message}', 'recommendpayrollByFinance')->name('payroll.recommendpayrollByFinance');
             Route::any('/runpayroll/{pdate}', 'runpayroll')->name('payroll.runpayroll');
+
+            Route::any('/approvepayroll/{pdate}', 'approvePayroll')->name('payroll.approvepayroll');
+
             Route::any('/partial_payment_manipulation', 'partial_payment_manipulation')->name('payroll.partial_payment_manipulation');
             Route::any('/generate_checklist', 'generate_checklist')->name('payroll.generate_checklist');
             Route::any('/arrearsPayment', 'arrearsPayment')->name('payroll.arrearsPayment');
@@ -499,8 +502,8 @@ Route::middleware('verify-outgoing-requests')->group(function () {
             Route::any('/pauseLoan/{id}', 'pauseLoan')->name('flex.pauseLoan');
             Route::any('/resumeLoan/{id}', 'resumeLoan')->name('flex.resumeLoan');
             Route::any('/rejectLoan/{id}', 'rejectLoan')->name('flex.rejectLoan');
-            Route::any('/loan_application_info', 'loan_application_info')->name('flex.loan_application_info');
-            Route::any('/updateloan', 'updateloan')->name('flex.updateloan');
+            Route::any('/loan_application_info/{id}', 'loan_application_info')->name('flex.loan_application_info');
+            Route::any('/updateloan/{id}', 'updateloan')->name('flex.updateloan');
             Route::any('/updateloan_info', 'updateloan_info')->name('flex.updateloan_info');
         });
 
@@ -687,6 +690,7 @@ Route::middleware('verify-outgoing-requests')->group(function () {
 
             // start of approval settings routes
             Route::any('/approvals', 'viewApprovals')->name('flex.approvals');
+            
             Route::post('/save-approvals', 'saveApprovals')->name('flex.saveApprovals');
             Route::post('/save-loan-type', 'saveLoanType')->name('flex.saveLoanType');
             Route::any('/edit-approval/{id}', 'editApproval')->name('flex.editApproval');

@@ -124,7 +124,7 @@
                             </td> --}}
 
                             <td class="options-width">
-                                <?php if($row->state==1 || $row->state==2){ ?>
+                                <?php if($row->state==5){ ?>
                                 <div class="d-flex">
                                     {{-- start of cancel payroll button --}}
                                     @can('cancel-payroll')
@@ -154,6 +154,8 @@
                                     @endcan
                                     {{-- / --}}
                                 </div>
+
+
 
                                 <?php } else {  ?>
 

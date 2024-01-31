@@ -57,6 +57,13 @@
                                     <input type="text" name="website_url" class="form-control" value="{{ $brandSetting->website_url }}">
                                 </div>
                             </div>
+                            <div class="col-md-3">
+                                <div class="form-group  m-2">
+                                    <label for="allowed_domain">Website URL</label>
+                                    <input type="text" name="allowed_domain" class="form-control" value="{{ $brandSetting->allowed_domain }}">
+                                </div>
+                            </div>
+                            
 
                         </div>
                         

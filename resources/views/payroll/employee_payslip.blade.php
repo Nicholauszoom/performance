@@ -125,13 +125,14 @@
             </tr>
             </thead>
 
-
             <tbody>
                 <?php
+                $i=1;
+
                     foreach ($payrollList as $row) { ?>
 
                     <tr id="domain<?php echo $row->id;?>">
-                        <td width="1px"><?php echo $row->SNo; ?></td>
+                        <td width="1px">{{ $i }}</td>
                         <td><?php //echo $row->payroll_date; ?><?php echo date('F, Y', strtotime($row->payroll_date));; ?></td>
                         <td>
                             <?php if($row->state==1 || $row->state==2 ){   ?>
@@ -178,6 +179,11 @@
                                     <button class="btn bg-secondary text-white btn-xs"> <i class="ph-info"></i></button>
                                 </a>
                                 @endcan
+
+                                <a href="javascript:void(0)" onclick="sendEmail('<?php echo $row->payroll_date; ?>')" title="Send Pay Slip as Email" class="me-2">
+                                    <button class="btn bg-main text-white btn-xs"> <i class="ph-envelope"></i></button>
+                                </a>
+                                
                                 {{-- / --}}
                             <?php } else {  ?>
 
@@ -186,6 +192,10 @@
                                     <button class="btn bg-main text-white btn-xs"> <i class="ph-info"></i></button>
                                 </a>
                                 {{-- / --}}
+                                <a href="javascript:void(0)" onclick="sendEmail('<?php echo $row->payroll_date; ?>')" title="Send Pay Slip as Email" class="me-2">
+                                    <button class="btn bg-main text-white btn-xs"> <i class="ph-envelope"></i></button>
+                                </a>
+
 
                                 <?php if($row->state==0){ ?>
                                     <?php if($row->pay_checklist==1){ ?>
@@ -205,11 +215,11 @@
                                     <?php if($row->email_status==0){ ?>
 
                                         {{-- send payslip mail button --}}
-                                        @can('mail-payroll')
+                                        {{-- @can('mail-payroll') --}}
                                         <a href="javascript:void(0)" onclick="sendEmail('<?php echo $row->payroll_date; ?>')" title="Send Pay Slip as Email" class="me-2">
                                             <button class="btn bg-main text-white btn-xs"> <i class="ph-envelope"></i></button>
                                         </a>
-                                        @endcan
+                                        {{-- @endcan --}}
                                         {{-- / --}}
                                         <?php } else { ?>
                                         {{-- re-send payslip email button --}}
@@ -228,7 +238,7 @@
                         </td>
                         <td hidden></td>
                     </tr>
-                <?php }  ?>
+                <?php $i++; }  ?>
                 </tbody>
             </table>
 

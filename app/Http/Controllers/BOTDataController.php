@@ -221,8 +221,9 @@ class BOTDataController extends Controller
                         "branchCode" => $employee->branch,
                         "empName" =>  $employee->fname.' '. $employee->mname.' `'. $employee->lname,
                         "empDob" =>  $this->convertDate($employee->birthdate), // DDMMYYYYHHMM
-                        "empNin" => $this->removeSpecialCharacters($employee->national_id),
+                        "empIdentificationNumber" => $this->removeSpecialCharacters($employee->national_id),
                         "empPosition" =>  $this->removeSpecialCharacters($employee->positions->name),
+                        "empIdentificationType"=>"NationalIdentityCard",
                         "empStatus" => $this->contractNameExtraction($employee->contract_type),
                         "empDepartment" =>  $this->removeSpecialCharacters($employee->departments->name),
                         "appointmentDate" =>$this->convertDate($employee->hire_date), // DDMMYYYYHHMM
@@ -270,7 +271,8 @@ class BOTDataController extends Controller
                     "branchCode" => $employee->branch,
                     "empName" =>  $employee->fname.' '. $employee->mname.' `'. $employee->lname,
                     "empDob" =>  $this->convertDate($employee->birthdate), // DDMMYYYYHHMM
-                    "empNin" => $this->removeSpecialCharacters($employee->national_id),
+                    "empIdentificationNumber" => $this->removeSpecialCharacters($employee->national_id),
+                    "empIdentificationType"=>"NationalIdentityCard",
                     "empPosition" =>  $this->removeSpecialCharacters($employee->positions->name),
                     "empStatus" =>  $this->contractNameExtraction($employee->contract_type),
                     "empDepartment" =>  $this->removeSpecialCharacters($employee->departments->name),

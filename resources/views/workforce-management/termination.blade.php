@@ -84,7 +84,8 @@
 
                 @endif
 
-                {{-- @if($level) --}}
+                @if($level_check == $item->approval_status)
+                    
                 @if($item->status!='1')
                 @if ($item->status!=$check)
                 <br><br>
@@ -110,6 +111,7 @@
                  </a>
                 {{-- / --}}
                 {{-- @endcan --}}
+                @endif
                 @endif
                 @endif
                 {{-- @endif --}}
