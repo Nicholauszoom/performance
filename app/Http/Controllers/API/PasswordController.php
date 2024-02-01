@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API;
 
 use App\Helpers\SysHelpers;
+use App\Models\EMPL;
 use App\Rules\CurrentPasswordCheck;
 use App\Rules\OldPasswordCheck;
 use Illuminate\Http\Request;
@@ -150,12 +151,12 @@ class PasswordController extends Controller
 
     public function passSave($empID, $employee, $userPass, Request $request)
     {
-        $query = DB::transaction(function () use($empID, $employee, $userPass, $request) {
+
+        $empl = EMPL::where('emp_id',$empID)->first();
+        $query = DB::transaction(function () use($empID, $employee, $userPass, $request,$empl) {
             DB::table('employee')->where('emp_id', $empID)->update($employee);
 
             DB::table('user_passwords')->insert($userPass);
-
-            SysHelpers::AuditLog(1, 'Password Updated by ' .$request->user()->fname. ' ' .$request->user()->lname, $request);
 
             return 1;
         });
