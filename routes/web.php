@@ -44,7 +44,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::middleware('verify-outgoing-requests')->group(function () {
 
-    Route::middleware('auth')->group(function () {
+    Route::middleware(['auth', 'password.expired'])->group(function () {
 
         /**
          * New view routes
