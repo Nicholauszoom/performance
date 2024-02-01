@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\API;
 
 use App\Helpers\SysHelpers;
+use App\Rules\CurrentPasswordCheck;
+use App\Rules\OldPasswordCheck;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
@@ -12,8 +14,8 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Routing;
 use App\Providers\RouteServiceProvider;
-use App\Rules\CheckOldPassword;
-use App\Rules\CurrentPassword;
+use App\Rules\API\CheckOldPassword;
+use App\Rules\API\CurrentPassword;
 use Illuminate\Support\Facades\Auth;
 // use Illuminate\Support\Facades\Password;
 use Illuminate\Validation\Rules\Password;
@@ -59,7 +61,7 @@ class PasswordController extends Controller
 
         if($result == 1){
             $request->session()->flush();
-            
+
             return redirect('/');
         }else{
             return back()->with('status', 'password not updated');
@@ -68,10 +70,12 @@ class PasswordController extends Controller
 
     public function updatePassword(Request $request)
     {
+        $emp_id=$request->emp_id;
         $inputs = $request->all();
+        $passCheck=  new CurrentPasswordCheck($emp_id);
         $validator = Validator::make($inputs, [
-            'current_password' => ['required', new CurrentPassword],
-            'new_password' => ['required', 'string', 'min:8', new CheckOldPassword],
+            'current_password' => ['required', $passCheck],
+            'new_password' => ['required', 'string', 'min:8', new OldPasswordCheck($emp_id)],
             // 'string', 'min:8', 'confirmed'
             'password_confirmation' => ['required', 'string', 'min:8', 'same:new_password'],
         ]);
@@ -90,23 +94,23 @@ class PasswordController extends Controller
                     'password' => Hash::make($request->new_password),
                 );
             $userPass = array(
-                        'empID' => $request->user()->emp_id,
+                        'empID' =>$emp_id,
                         'password' => Hash::make($request->new_password),
                         'time' => date('Y-m-d'),
                     );
-            
-            $result = $this->passSave($request->user()->emp_id, $employee, $userPass, $request);
+
+            $result = $this->passSave($emp_id, $employee, $userPass, $request);
             if ($result == 1) {
                 return response()->json([
                     'message' => 'Password Updated',
-                    'username' => $request->user()->emp_id,
+                    'username' => $emp_id,
                 ], 200);
             } else {
                 return response()->json('password not updated', 500);
             }
         }
         // if (Hash::check($request->old_password,$user->password)) {
-        
+
         // $curr = $request->input('current_password');
         // $new_password = $request->input('new_password');
 
