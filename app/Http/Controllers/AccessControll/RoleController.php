@@ -34,7 +34,8 @@ class RoleController extends Controller
     public function index()
     {
 
-        $this->authenticateUser('view-Roles');
+        $this->authenticateUser('view-roles');
+
         $roles = Role::all();
         $permissions = Permission::all();
         $modules = SystemModule::all();
@@ -96,6 +97,8 @@ class RoleController extends Controller
 
     public function destroy($id)
     {
+        $this->authenticateUser('delete-role');
+
         $role = Role::find($id);
         $role->delete();
         return redirect(route('roles.index'));

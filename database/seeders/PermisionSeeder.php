@@ -173,7 +173,12 @@ class PermisionSeeder extends Seeder
                 [84, 'view-setting', 7],
                 [85, 'view-financial-setting', 7],
                 [86, 'view-Banking-information', 7],
-                [87, 'view-Roles', 7],
+
+                [87, 'view-roles', 7],
+                [88, 'delete-role', 7],
+                [88, 'edit-role', 7],
+                [87, 'assign-permissions', 7],
+
                 [88, 'view-Permission', 7],
                 [89, 'view-audit-trail', 7],
                 [90, 'view-mail-configuration', 7],

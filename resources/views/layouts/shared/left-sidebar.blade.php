@@ -720,11 +720,15 @@
                             </li> --}}
                             @endif
 
+
+                            @can('view-roles')
+                                
                             <li class=" nav-item"><a
                                     class="nav-link {{ request()->routeIs('roles.index') ? 'active' : null }} "
                                     href="{{ url('roles') }}">
                                     <i class="ph-person-simple"></i> Roles</a>
                             </li>
+                            @endcan
 
 
 
