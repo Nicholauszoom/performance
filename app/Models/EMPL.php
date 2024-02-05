@@ -15,7 +15,9 @@ class EMPL extends Model
 
 
     // for relationship
-   public function position()
+
+
+    public function position()
    {
 	   return $this->belongsTo(Position::class, 'position','id');
    }

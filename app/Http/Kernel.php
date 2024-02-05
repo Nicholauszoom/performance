@@ -24,6 +24,8 @@ class Kernel extends HttpKernel
         //\Illuminate\Http\Middleware\EnsureHttpHeaders::class,
         \App\Http\Middleware\EnsureHttpHeaders::class,
         \App\Http\Middleware\SecureHeaders::class,
+
+
     ];
 
     /**
@@ -85,5 +87,8 @@ class Kernel extends HttpKernel
         'emptermination' => \App\Http\Middleware\EmployeeTermination::class, // For Employee Termination
         'promotion' => \App\Http\Middleware\Promotion::class, // For Employee Promotion
         'verify-outgoing-requests' => \App\Http\Middleware\VerifyOutgoingRequests::class,
+
+        'password.expired' => \App\Http\Middleware\PasswordExpireationMiddleware::class,
+
     ];
 }

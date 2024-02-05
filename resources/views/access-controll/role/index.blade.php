@@ -1,13 +1,13 @@
 @extends('layouts.vertical', ['title' => 'System Role'])
 
 @push('head-script')
-<script src="{{ asset('assets/js/components/tables/datatables/datatables.min.js') }}"></script>
-<script src="{{ asset('assets/js/components/forms/selects/select2.min.js') }}"></script>
+    <script src="{{ asset('assets/js/components/tables/datatables/datatables.min.js') }}"></script>
+    <script src="{{ asset('assets/js/components/forms/selects/select2.min.js') }}"></script>
 @endpush
 
 @push('head-scriptTwo')
-<script src="{{ asset('assets/js/pages/datatables_basic.js') }}"></script>
-<script src="{{ asset('assets/js/pages/form_select2.js') }}"></script>
+    <script src="{{ asset('assets/js/pages/datatables_basic.js') }}"></script>
+    <script src="{{ asset('assets/js/pages/form_select2.js') }}"></script>
 @endpush
 
 @section('content')
@@ -22,7 +22,8 @@
                             <h4 class="card-title text-warning">Roles</h4>
 
                             <div class="header-elements">
-                                <button type="button" class="btn btn-main float-end" data-bs-toggle="modal" data-bs-target="#addRoleModal">
+                                <button type="button" class="btn btn-main float-end" data-bs-toggle="modal"
+                                    data-bs-target="#addRoleModal">
                                     <i class="ph-plus me-2"></i>Add Role
                                 </button>
                             </div>
@@ -30,41 +31,61 @@
 
                         <div class="card-body">
                             <div class="tab-content tab-bordered" id="myTab3Content">
-                                <div class="tab-pane fade @if(empty($id)) active show @endif" id="home2" role="tabpanel" aria-labelledby="home-tab2">
+                                <div class="tab-pane fade @if (empty($id)) active show @endif"
+                                    id="home2" role="tabpanel" aria-labelledby="home-tab2">
                                     <div class="table-responsive">
                                         <table class="table datatable-basic table-striped" id="table-1">
                                             <thead>
                                                 <tr>
                                                     <th>S/N</th>
                                                     <th>Name</th>
-                                                    <th>Permissions</th>
+                                                    @can('assign-permissions')
+                                                        <th>Permissions</th>
+                                                    @endcan
+
+
                                                     <th>Actions</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                @foreach($roles as $role)
-
+                                                @foreach ($roles as $role)
                                                     <tr>
                                                         <th>{{ $loop->iteration }}</th>
                                                         <td>{{ $role->slug }}</td>
+
+                                                        @can('assign-permissions')
+                                                            <td>
+                                                                <a href="{{ route('roles.show', $role->id) }}"
+                                                                    class="btn btn-main btn-xs"><i
+                                                                        class="fas fa-plus-circle pr-1"></i> Assign </a>
+                                                            </td>
+                                                        @endcan
+
+
                                                         <td>
-                                                            <a href="{{ route('roles.show',$role->id) }}"
-                                                            class="btn btn-main btn-xs"><i class="fas fa-plus-circle pr-1"></i> Assign </a>
-                                                        </td>
-                                                        <td >
                                                             {!! Form::open(['route' => ['roles.destroy', $role->id], 'method' => 'delete']) !!}
-                                                           
+
+
+                                                            @can('edit-role')
+                                                                
                                                             <button type="button" class="btn btn-main btn-sm edit_role_btn mr-1"
-                                                                    data-bs-toggle="modal"
-                                                                    data-id="{{$role->id}}"
-                                                                    data-name="{{$role->name}}"
-                                                                    data-slug="{{$role->slug}}">
-                                                                <i class="ph-note-pencil"></i>
-                                                            </button>
+                                                            data-bs-toggle="modal"
+                                                            data-bs-target="#editRoleModal_{{ $role->id }}"
+                                                            data-id="{{ $role->id }}"
+                                                            data-name="{{ $role->name }}"
+                                                            data-slug="{{ $role->slug }}">
+                                                        <i class="ph-note-pencil"></i>
+                                                    </button>
+
                                                             {{ Form::button('<i class="ph-trash"></i>', ['type' => 'submit', 'class' => 'btn btn-danger btn-sm', 'onclick' => "return confirm('Are you sure?')"]) }}
                                                             {{ Form::close() }}
+
+                                                            @endcan
+
                                                         </td>
                                                     </tr>
+
+                                                    @include('access-controll.role.edit')
 
                                                 @endforeach
                                             </tbody>
@@ -74,7 +95,7 @@
                             </div>
                         </div>
                     </div>
-                    {{-- end of card border-top border-bottom border-bottom-width-3 border-top-width-3 border-top-main border-bottom-main rounded-0--}}
+                    {{-- end of card border-top border-bottom border-bottom-width-3 border-top-width-3 border-top-main border-bottom-main rounded-0 --}}
                 </div>
                 {{-- end of col --}}
             </div>
@@ -85,40 +106,53 @@
 
     @include('access-controll.role.add')
 
-    @include('access-controll.role.edit')
-
-
 @endsection
 
 @section('scripts')
     <script>
-       $('.datatable-basic').DataTable({
+        $('.datatable-basic').DataTable({
             autoWidth: false,
-            "columnDefs": [
-                {"targets": [1]}
-            ],
-           dom: '<"datatable-header"fl><"datatable-scroll"t><"datatable-footer"ip>',
+            "columnDefs": [{
+                "targets": [1]
+            }],
+            dom: '<"datatable-header"fl><"datatable-scroll"t><"datatable-footer"ip>',
             "language": {
-               search: '<span>Filter:</span> _INPUT_',
+                search: '<span>Filter:</span> _INPUT_',
                 searchPlaceholder: 'Type to filter...',
                 lengthMenu: '<span>Show:</span> _MENU_',
-             paginate: { 'first': 'First', 'last': 'Last', 'next': $('html').attr('dir') == 'rtl' ? '&larr;' : '&rarr;', 'previous': $('html').attr('dir') == 'rtl' ? '&rarr;' : '&larr;' }
+                paginate: {
+                    'first': 'First',
+                    'last': 'Last',
+                    'next': $('html').attr('dir') == 'rtl' ? '&larr;' : '&rarr;',
+                    'previous': $('html').attr('dir') == 'rtl' ? '&rarr;' : '&larr;'
+                }
             },
 
         });
     </script>
 
-    <script>
-        $(document).on('click', '.edit_role_btn', function () {
+<script>
+    $(document).ready(function () {
+        $('.edit_role_btn').on('click', function () {
             let id = $(this).data('id');
             let name = $(this).data('name');
             let slug = $(this).data('slug');
-            console.log("here");
-            $('#r-id_').val(id);
-            $('#r-slug_').val(slug);
-            $('#r-name_').val(name);
-            $('#editRoleModal').modal('show');
+
+            $('#r-id_' + id).val(id);
+            $('#r-slug_' + id).val(slug);
+            $('#r-name_' + id).val(name);
+
+            $('#editRoleModal_' + id).modal('show');
         });
 
-    </script>
+        // Function to handle the update action (adjust as needed)
+        function updateRole(roleId) {
+            // Add logic to handle updating the role here
+            // You may use Ajax to send the updated data to the server
+            $('#editRoleModal_' + roleId).modal('hide');
+        }
+    });
+</script>
+
+
 @endsection

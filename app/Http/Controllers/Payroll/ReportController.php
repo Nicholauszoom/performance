@@ -2210,7 +2210,7 @@ class ReportController extends Controller
                         array_push($descriptions, $row->description);
                     }
                 }
-            } 
+            }
             elseif ($row->allowance == "Severance Pay") {
                 $allowance = $this->reports_model->total_terminated_allowance($current_payroll_month, $previous_payroll_month, 'serevancePay');
                 if (count($allowance) > 0) {
@@ -2222,8 +2222,8 @@ class ReportController extends Controller
                         array_push($descriptions, $row->description);
                     }
                 }
-            } 
-            
+            }
+
             elseif ($row->allowance == "Leave Allowance") {
 
                 $allowance = $this->reports_model->total_terminated_allowance($current_payroll_month, $previous_payroll_month, 'leave_allowance');
@@ -2322,7 +2322,7 @@ class ReportController extends Controller
 
 
         $data['total_allowances'] = $total_allowances;
-    
+
 
         $data['total_previous_basic'] = !empty($previous_payroll_month) ? $this->reports_model->total_basic($previous_payroll_month) : 0;
         $data['total_current_basic'] = !empty($current_payroll_month) ? $this->reports_model->total_basic($current_payroll_month) : 0;
@@ -2340,7 +2340,7 @@ class ReportController extends Controller
 
 
         if($request->type==2){
-        
+
 
             return view('reports.reconciliationSummary.payroll_reconciliation_summary_datatable', $data);
 
@@ -2362,8 +2362,8 @@ class ReportController extends Controller
 
             if (in_array($item['description'], $aArray2)) {
 
-               
-              
+
+
                 unset($aArray1[$key]);
 
             } else {

@@ -276,15 +276,15 @@ class ReportController extends Controller
     {
         $reportType = 3;
         $payrolldate = $request->input('payrolldate');
-        $reportformat = $request->input('type'); 
-        $empID=$request->input('employee');
+        $reportformat =   1;
+        $empID = auth()->user()->emp_id;
         //Staff = 1, temporary = 2
         if ($reportType == 1) {
             $data['heslb'] = $this->reports_model->s_heslb($payrolldate);
             $data['total'] = $this->reports_model->s_totalheslb($payrolldate);
         } else {
             $data['heslb'] = $this->reports_model->v_heslb($payrolldate,$empID);
-          
+
             $data['total'] = array_reverse($this->reports_model->v_totalheslb($payrolldate,$empID));
       //dd($data);
         }
@@ -301,10 +301,10 @@ class ReportController extends Controller
      return view('reports/heslb', $data);
     }
 
-    function get_payroll_temp_summary(Request $requst)
+    function get_payroll_temp_summary(Request $request)
     {
 
-        $date = $requesr->date;
+        $date = $request->date;
         $data['summary'] = $this->reports_model->get_payroll_temp_summary($date);
 
         $payrollMonth = $request->date;
@@ -790,16 +790,17 @@ class ReportController extends Controller
     public function payslip(Request $request)
     {
         //dd($request->all());
-        $empID = $request->input("employee");
+        $empID = auth()->user()->emp_id;
 
-        if ($empID != auth()->user()->emp_id) {
-            $this->authenticateUser('view-report');
-        }
+//        if ($empID != auth()->user()->emp_id) {
+//            $this->authenticateUser('view-report');
+//        }
 
         if ($empID != "Select Employee") {
 
+
             // DATE MANIPULATION
-            $empID = $request->input("employee");
+
             $start = $request->input("payrolldate");
             $profile = $request->input("profile"); //For redirecting Purpose
             $date_separate = explode("-", $start);
@@ -814,6 +815,7 @@ class ReportController extends Controller
             $payroll_month = $yyyy . "-" . $mm;
 
             $check = $this->reports_model->payslipcheck($payroll_month, $empID);
+
 
             if ($check == 0) {
                 if ($profile == 0) {
@@ -1242,7 +1244,7 @@ class ReportController extends Controller
     //         }
     //     }
     // }
-    
+
 
     // function temp_payslip(Request $request)
     // {
@@ -1377,14 +1379,14 @@ class ReportController extends Controller
     }
     function employee_pension(Request $request)
     {
-        $id = $request->emp_id;
+        $id= auth()->user()->emp_id;
         $data['employee_pension'] = $this->reports_model->employee_pension($id);
         $data['years'] = $this->reports_model->get_pension_years($id);
 
         $pdf = Pdf::loadView('reports.employee_pension', $data)->setPaper('a4', 'potrait');
         return $pdf->download("employee_pension.pdf");
     }
-    
+
     function attendance(Request $request)
     {
 
