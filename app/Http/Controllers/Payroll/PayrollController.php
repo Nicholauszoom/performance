@@ -1457,8 +1457,6 @@ class PayrollController extends Controller
 
                 if ($check == 0) {
 
-                    dd(" i am here");
-
                     $this->flexperformance_model->updatePartialPayment($payroll_date);
 
 
@@ -1501,8 +1499,6 @@ class PayrollController extends Controller
                     return false;
                 }
             }
-
-            dd("end");
 
         }
 
