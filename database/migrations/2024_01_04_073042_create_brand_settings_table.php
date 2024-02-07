@@ -15,7 +15,6 @@ return new class extends Migration
     {
         Schema::create('brand_settings', function (Blueprint $table) {
             $table->id();
-
             $table->string('company_logo')->nullable();
             $table->string('report_logo')->nullable();
             $table->string('dashboard_logo')->nullable();

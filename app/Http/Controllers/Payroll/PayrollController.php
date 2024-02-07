@@ -1390,9 +1390,9 @@ class PayrollController extends Controller
         
             $approval = Approvals::where('process_name', 'Payroll Approval')->first();
             $roles = Position::where('id', $posn)->first();
+
    
             if (SysHelpers::ApprovalLastLevel("Payroll Approval")) {
-
 
                 $this-> runpayroll2($pdate);
                     $payApprover = new PayrollApproval();
@@ -1450,10 +1450,16 @@ class PayrollController extends Controller
                 $payroll_month = date('Y-m', strtotime($payrollMonth));
                 $todate = date('Y-m-d');
                 $empID = auth()->user()->emp_id;
+
+
     
                 $check = $this->payroll_model->payrollcheck($payroll_month);
-                if ($check > 0) {
+
+                if ($check == 0) {
+
                     $this->flexperformance_model->updatePartialPayment($payroll_date);
+
+
                     $result = $this->payroll_model->run_payroll($payroll_date, $payroll_month, $empID, $todate);
                     if ($result == true) {
                         //assignment task logs
@@ -1493,6 +1499,7 @@ class PayrollController extends Controller
                     return false;
                 }
             }
+
         }
 
         

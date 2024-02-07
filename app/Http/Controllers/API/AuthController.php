@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers\API;
 
+use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Models\User;
+use http\Env\Response;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
@@ -79,7 +81,7 @@ class AuthController extends Controller
     /**
      * Login The User
      * @param Request $request
-     * @return User
+     * @return \Illuminate\Http\JsonResponse
      */
     public function login(Request $request)
     {
@@ -105,7 +107,11 @@ class AuthController extends Controller
                     'message' => 'Email & Password does not match with our record.',
                 ], 401);
             }
-
+            $flexPerformance= new FlexPerformanceModel();
+            $authenticateCont= new AuthenticatedSessionController($flexPerformance);
+            $result=$authenticateCont->dateDiffCalculate();
+            session(['pass_age' => $result]);
+            $pass_age = session()->get('pass_age');
             $user = User::where('emp_id', $request->emp_id)->first();
 
             if ($user->tokens()->count() > 0) {
@@ -114,10 +120,6 @@ class AuthController extends Controller
 
 
 
-
-            $result=$this->dateDiffCalculate();
-            session(['pass_age' => $result]);
-            $pass_age = session()->get('pass_age');
             // $pass_age = session()->all();
              //  dd(session()->all());
 
@@ -138,15 +140,22 @@ class AuthController extends Controller
 
 
             $token = $user->createToken("API TOKEN");
-
-            return response()->json([
-                'employee'=>$myNewData,
-                'status' => true,
-                'message' => 'User Logged In Successfully',
-                'token' => $token->plainTextToken,
-                'tokenData' => $token
-                //'hashed' => Hash::make($token->plainTextToken),
-            ], 200);
+            if($pass_age>=90){
+                return response()->json([
+                    'pass_age'=>$pass_age,
+                    'emp_id'=>$request->emp_id,
+                    'message' => 'Password Expired',
+                ],200);
+            }else {
+                return response()->json([
+                    'employee' => $myNewData,
+                    'status' => true,
+                    'message' => 'User Logged In Successfully',
+                    'token' => $token->plainTextToken,
+                    'tokenData' => $token
+                    //'hashed' => Hash::make($token->plainTextToken),
+                ], 200);
+            }
 
         } catch (\Throwable $th) {
             return response()->json([

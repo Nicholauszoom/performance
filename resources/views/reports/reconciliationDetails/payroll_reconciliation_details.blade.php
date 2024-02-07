@@ -58,7 +58,7 @@
                                     </p>
                                     <p class="p-space">
                                         @if ($brandSetting->address_3)
-                                            {{ $$brandSetting->address_3 }}
+                                            {{ $brandSetting->address_3 }}
                                         @else
                                             P.O. Box 31, Dar es salaam
                                         @endif
@@ -90,9 +90,9 @@
                             <td colspan="4" class="w-50" style="">
                                 <div class="box-text text-end">
                                     @if ($brandSetting->report_logo)
-                                    <img src="{{ asset('storage/' . $brandSetting->report_logo) }}" alt="logo here" width="180px" height="150px" class="image-fluid">          
+                                    <img src="{{ asset('storage/' . $brandSetting->report_logo) }}" alt="logo here" width="180px" height="150px" class="image-fluid">
                                     @else
-                                    <img src="{{ public_path('assets/images/logo-dif2.png') }}" alt="logo here" width="180px" height="150px" class="image-fluid">          
+                                    <img src="{{ public_path('assets/images/logo-dif2.png') }}" alt="logo here" width="180px" height="150px" class="image-fluid">
                                     @endif                                </div>
                             </td>
                         </tr>
