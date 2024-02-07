@@ -9,6 +9,12 @@
     <link rel="stylesheet" href="{{ public_path('assets/bootstrap/css/bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ public_path('assets/css/report.css') }}">
 
+    <style>
+.page-break {
+    page-break-after: always;
+}
+</style>
+
 </head>
 
 <body>
