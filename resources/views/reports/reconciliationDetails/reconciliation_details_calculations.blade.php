@@ -1,26 +1,24 @@
 @php
 
-$column_count = 30;
+$column_count = 16;
 
 @endphp
 @if(isset($employee_increase))
                 @if(count($employee_increase) > 0)
                 
-                @if($column_count < 0)
+                @if($column_count % 54 == 1)
                                 
-                                
-                @php
 
-                $column_count=0;
+                <div class="page-break"><br><br></div>
 
-                @endphp
-
-                <br>
-                <br>
-                <br>
-                <br>
                 @endif
                 <h4>Add New Employee</h4>
+
+                @php
+
+$column_count = $column_count+4;
+
+@endphp
                 <table class="table" id="reports" style="font-size:9px; ">
                     <thead style="font-size:8px;">
                         <tr class="hdr" class="hdr" style="border-bottom:2px solid rgb(9, 5, 64);">
@@ -56,20 +54,12 @@ $column_count = 30;
                                     $total_amount += ($row->current_amount - $row->previous_amount);
                                 @endphp
 
-                                 @if($column_count < 0)
+                                @if($column_count % 54 == 1)
                                 
-                                
-                @php
 
-                $column_count=0;
+                                <div class="page-break"><br><br></div>
 
-                @endphp
-
-                <br>
-                <br>
-                <br>
-                <br>
-                @endif
+                                @endif
                                 <tr class="hdr"  class="hdr"  style="border-bottom:2px solid rgb(67, 67, 73)">
 
                                     <td class="text-end">{{ $row->emp_id }}</td>
@@ -89,7 +79,7 @@ $column_count = 30;
 
                                     <td class="text-end">{{ $row->hire_date }}</td>
 
-                                    <td class="text-end">{{ number_format(0, 0) }}
+                                    <td class="text-end">{{ number_format($column_count, 0) }}
                                     </td>
 
 
@@ -106,7 +96,7 @@ $column_count = 30;
                                 <td class="text-end" style="background-color:rgb(157, 157, 197); ">{{ number_format($total_amount, 2) }}</td>
 
                                 <td class="text-end"></td>
-                                <td class="text-end"></td>
+                                <td class="text-end">{{ number_format($column_count, 0) }}</td>
 
 
                             </tr>
@@ -120,21 +110,19 @@ $column_count = 30;
                 @if(isset($employee_decrease))
                 @if(count($employee_decrease) > 0)
                 
-                @if($column_count < 0)
+                @if($column_count % 54 == 1)
                                 
-                                
-                @php
 
-                $column_count=0;
+                <div class="page-break"><br><br></div>
 
-                @endphp
-
-                <br>
-                <br>
-                <br>
-                <br>
                 @endif
                 <h4>Less Terminated Employee</h4>
+
+                @php
+
+$column_count = $column_count+4;
+
+@endphp
                 <table class="table" id="reports" style="font-size:9px; ">
                     <thead style="font-size:8px;">
                         <tr class="hdr" style="border-bottom:2px solid rgb(9, 5, 64);">
@@ -170,19 +158,11 @@ $column_count = 30;
                                     $total_amount += ($row->current_amount - $row->previous_amount);
                                 @endphp
 
-                                 @if($column_count < 0)
+                                @if($column_count % 54 == 1)
                                 
-                                
-                @php
 
-                $column_count=0;
+                <div class="page-break"><br><br></div>
 
-                @endphp
-
-                <br>
-                <br>
-                <br>
-                <br>
                 @endif
                                 <tr class="hdr" style="border-bottom:2px solid rgb(67, 67, 73)">
 
@@ -203,7 +183,7 @@ $column_count = 30;
 
                                     <td class="text-end">{{ $row->hire_date }}</td>
 
-                                    <td class="text-end">{{ number_format(0, 0) }}
+                                    <td class="text-end">{{ number_format($column_count, 0) }}
                                     </td>
 
 
@@ -220,7 +200,7 @@ $column_count = 30;
                                 <td class="text-end" style="background-color:rgb(157, 157, 197); ">{{ number_format($total_amount, 2) }}</td>
 
                                 <td class="text-end"></td>
-                                <td class="text-end"></td>
+                                <td class="text-end">{{ number_format($column_count, 0) }}</td>
 
 
                             </tr>
@@ -233,21 +213,19 @@ $column_count = 30;
                 @if(isset($basic_increase))
                 @if(count($basic_increase) > 0)
                 
-                @if($column_count < 0)
+                @if($column_count % 54 == 1)
                                 
-                                
-                @php
 
-                $column_count=0;
+                <div class="page-break"><br><br></div>
 
-                @endphp
-
-                <br>
-                <br>
-                <br>
-                <br>
                 @endif
                 <h4>Add Increase in Basic Pay Comparison to Last M</h4>
+
+                @php
+
+$column_count = $column_count+4;
+
+@endphp
                 <table class="table" id="reports" style="font-size:9px; ">
                     <thead style="font-size:8px;">
                         <tr class="hdr" style="border-bottom:2px solid rgb(9, 5, 64);">
@@ -283,20 +261,12 @@ $column_count = 30;
                                     $total_amount += ($row->current_amount - $row->previous_amount);
                                 @endphp
 
-                                 @if($column_count < 0)
+                                @if($column_count % 54 == 1)
                                 
-                                
-                @php
 
-                $column_count=0;
+                                <div class="page-break"><br><br></div>
 
-                @endphp
-
-                <br>
-                <br>
-                <br>
-                <br>
-                @endif
+                                @endif
                                 <tr class="hdr" style="border-bottom:2px solid rgb(67, 67, 73)">
 
                                     <td class="text-end">{{ $row->emp_id }}</td>
@@ -316,7 +286,7 @@ $column_count = 30;
 
                                     <td class="text-end">{{ $row->hire_date }}</td>
 
-                                    <td class="text-end">{{ number_format(0, 0) }}
+                                    <td class="text-end">{{ number_format($column_count, 0) }}
                                     </td>
 
 
@@ -333,7 +303,7 @@ $column_count = 30;
                                 <td class="text-end" style="background-color:rgb(157, 157, 197); ">{{ number_format($total_amount, 2) }}</td>
 
                                 <td class="text-end"></td>
-                                <td class="text-end"></td>
+                                <td class="text-end">{{ number_format($column_count, 0) }}</td>
 
 
                             </tr>
@@ -347,21 +317,18 @@ $column_count = 30;
                 @if(count($basic_decrease) > 0)
                 <br>
                 
-                @if($column_count < 0)
+                @if($column_count % 54 == 1)
                                 
-                                
-                @php
 
-                $column_count=0;
+                <div class="page-break"><br><br></div>
 
-                @endphp
-
-                <br>
-                <br>
-                <br>
-                <br>
                 @endif
                 <h4>Less Decrease in Basic Pay Comparison to Last M</h4>
+                @php
+
+$column_count = $column_count+4;
+
+@endphp
                 <table class="table" id="reports" style="font-size:9px; ">
                     <thead style="font-size:8px;">
                         <tr class="hdr" style="border-bottom:2px solid rgb(9, 5, 64);">
@@ -397,19 +364,11 @@ $column_count = 30;
                                     $total_amount += ($row->current_amount - $row->previous_amount);
                                 @endphp
 
-                                 @if($column_count < 0)
+                                 @if($column_count % 54 == 1)
                                 
-                                
-                @php
 
-                $column_count=0;
+                <div class="page-break"><br><br></div>
 
-                @endphp
-
-                <br>
-                <br>
-                <br>
-                <br>
                 @endif
                                 <tr class="hdr" style="border-bottom:2px solid rgb(67, 67, 73)">
 
@@ -430,7 +389,7 @@ $column_count = 30;
 
                                     <td class="text-end">{{ $row->hire_date }}</td>
 
-                                    <td class="text-end">{{ number_format(0, 0) }}
+                                    <td class="text-end">{{ number_format($column_count, 0) }}
                                     </td>
 
 
@@ -447,7 +406,7 @@ $column_count = 30;
                                 <td class="text-end" style="background-color:rgb(157, 157, 197); ">{{ number_format($total_amount, 2) }}</td>
 
                                 <td class="text-end"></td>
-                                <td class="text-end"></td>
+                                <td class="text-end">{{ number_format($column_count, 0) }}</td>
 
 
                             </tr>
@@ -460,21 +419,18 @@ $column_count = 30;
                 @foreach($names as $name)
 
                 
-                @if($column_count < 0)
+                @if($column_count % 54 == 1)
                                 
-                                
+
+                                <div class="page-break"><br><br></div>
+
+                                @endif
+                <h4>{{ $name == 'Add/Less N-Overtime'? 'Add/Less Normal Day Overtime':($name == 'Add/Less S-Overtime' ? 'Add/Less Sunday Overtime':$name) }}</h4>
                 @php
 
-                $column_count=0;
+$column_count = $column_count+4;
 
-                @endphp
-
-                <br>
-                <br>
-                <br>
-                <br>
-                @endif
-                <h4>{{ $name == 'Add/Less N-Overtime'? 'Add/Less Normal Day Overtime':($name == 'Add/Less S-Overtime' ? 'Add/Less Sunday Overtime':$name) }}</h4>
+@endphp
         
                 <table class="table" id="reports" style="font-size:9px; ">
                     <thead>
@@ -513,20 +469,12 @@ $column_count = 30;
                                     $total_amount += ($row->current_amount - $row->previous_amount);
                                 @endphp
 
-                                 @if($column_count < 0)
+                                @if($column_count % 54 == 0)
                                 
-                                
-                @php
 
-                $column_count=0;
+                                <div class="page-break"><br><br></div>
 
-                @endphp
-
-                <br>
-                <br>
-                <br>
-                <br>
-                @endif
+                                @endif
                                 <tr class="hdr" style="border-bottom:2px solid rgb(67, 67, 73)">
 
                                     <td class="text-end">{{ $row->emp_id }}</td>
@@ -546,7 +494,7 @@ $column_count = 30;
 
                                     <td class="text-end">{{ $row->hire_date }}</td>
 
-                                    <td class="text-end">{{ number_format(0, 0) }}
+                                    <td class="text-end">{{ number_format($column_count, 0) }}
                                     </td>
 
 
@@ -560,19 +508,11 @@ $column_count = 30;
                             $total_amount += ($row->current_amount - $row->previous_amount);
                              @endphp
 
-                             @if($column_count < 0)
+                             @if($column_count % 54 == 1)
                                 
-                                
-                @php
 
-                $column_count=0;
+                <div class="page-break"><br><br></div>
 
-                @endphp
-
-                <br>
-                <br>
-                <br>
-                <br>
                 @endif
                         <tr class="hdr" style="border-bottom:2px solid rgb(67, 67, 73)">
 
@@ -593,7 +533,7 @@ $column_count = 30;
 
                             <td class="text-end">{{ $row->hire_date }}</td>
 
-                            <td class="text-end">{{ number_format(0, 0) }}
+                            <td class="text-end">{{ number_format($column_count, 0) }}
                             </td>
 
 
@@ -612,7 +552,7 @@ $column_count = 30;
                                 <td class="text-end" style="background-color:rgb(157, 157, 197); ">{{ number_format($total_amount, 2) }}</td>
 
                                 <td class="text-end"></td>
-                                <td class="text-end"></td>
+                                <td class="text-end">{{ number_format($column_count, 0) }}</td>
 
 
                             </tr>
