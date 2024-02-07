@@ -1909,7 +1909,7 @@ public function authenticateUser($permissions)
                 'organization_level' => $request->input('organization_level'),
                 'code' => strtoupper($request->input('code')),
                 'driving_licence' => $licence,
-                'minimum_qualification' => $request->input('qualification'),
+                'minimum_qualification' => "N/A",
                 'created_by' => auth()->user()->emp_id,
                 'position_code' => $this->code_generator(6),
                 'parent_code' => $parent_code,
