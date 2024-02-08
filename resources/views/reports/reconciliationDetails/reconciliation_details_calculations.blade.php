@@ -5,10 +5,10 @@ $column_count = 30;
 @endphp
 @if(isset($employee_increase))
                 @if(count($employee_increase) > 0)
-                
+
                 @if($column_count < 0)
-                                
-                                
+
+
                 @php
 
                 $column_count=0;
@@ -57,8 +57,8 @@ $column_count = 30;
                                 @endphp
 
                                  @if($column_count < 0)
-                                
-                                
+
+
                 @php
 
                 $column_count=0;
@@ -119,10 +119,10 @@ $column_count = 30;
 
                 @if(isset($employee_decrease))
                 @if(count($employee_decrease) > 0)
-                
+
                 @if($column_count < 0)
-                                
-                                
+
+
                 @php
 
                 $column_count=0;
@@ -171,8 +171,8 @@ $column_count = 30;
                                 @endphp
 
                                  @if($column_count < 0)
-                                
-                                
+
+
                 @php
 
                 $column_count=0;
@@ -232,10 +232,10 @@ $column_count = 30;
                 @endif
                 @if(isset($basic_increase))
                 @if(count($basic_increase) > 0)
-                
+
                 @if($column_count < 0)
-                                
-                                
+
+
                 @php
 
                 $column_count=0;
@@ -284,8 +284,8 @@ $column_count = 30;
                                 @endphp
 
                                  @if($column_count < 0)
-                                
-                                
+
+
                 @php
 
                 $column_count=0;
@@ -346,10 +346,10 @@ $column_count = 30;
                 @if(isset($basic_decrease))
                 @if(count($basic_decrease) > 0)
                 <br>
-                
+
                 @if($column_count < 0)
-                                
-                                
+
+
                 @php
 
                 $column_count=0;
@@ -398,8 +398,8 @@ $column_count = 30;
                                 @endphp
 
                                  @if($column_count < 0)
-                                
-                                
+
+
                 @php
 
                 $column_count=0;
@@ -459,10 +459,10 @@ $column_count = 30;
                 @endif
                 @foreach($names as $name)
 
-                
+
                 @if($column_count < 0)
-                                
-                                
+
+
                 @php
 
                 $column_count=0;
@@ -475,7 +475,7 @@ $column_count = 30;
                 <br>
                 @endif
                 <h4>{{ $name == 'Add/Less N-Overtime'? 'Add/Less Normal Day Overtime':($name == 'Add/Less S-Overtime' ? 'Add/Less Sunday Overtime':$name) }}</h4>
-        
+
                 <table class="table" id="reports" style="font-size:9px; ">
                     <thead>
                         <tr class="hdr" style="border-bottom:2px solid rgb(9, 5, 64);">
@@ -514,8 +514,8 @@ $column_count = 30;
                                 @endphp
 
                                  @if($column_count < 0)
-                                
-                                
+
+
                 @php
 
                 $column_count=0;
@@ -561,8 +561,8 @@ $column_count = 30;
                              @endphp
 
                              @if($column_count < 0)
-                                
-                                
+
+
                 @php
 
                 $column_count=0;
