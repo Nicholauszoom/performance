@@ -4,19 +4,20 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
+use App\Models\Approvals;
 
 class ApprovalsTableSeeder extends Seeder
 {
     public function run()
     {
-        DB::table('approvals')->insert([
+        $data =[
             [
                 'id' => 4,
                 'process_name' => 'Termination Approval',
                 'levels' => 0,
                 'escallation' => 0,
                 'escallation_time' => null,
-                'created_at' =>now(),
+                'created_at' => now(),
                 'updated_at' => now(),
             ],
             [
@@ -54,9 +55,11 @@ class ApprovalsTableSeeder extends Seeder
                 'escallation_time' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ],
-          
-            // Add more records if needed
-        ]);
+            ]
+            ];
+            foreach($data as $row){
+                Approvals::updateOrCreate($row);
+            }
     }
+
 }
