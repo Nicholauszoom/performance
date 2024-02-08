@@ -2094,14 +2094,15 @@ class ReportController extends Controller
         $required_allowance = [];
 
         foreach ($data['summary'] as $row) {
-
-
             if ($row->previous_amount + $row->current_amount != 0) {
-                array_push($raw_name, $row->description);
-                array_push($required_allowance, $row);
+                $raw_name[] = $row->description;
+                $required_allowance[] = $row;
             }
         }
         $names = array_unique($raw_name);
+
+        arsort($names); // Sort names in descending order
+
 
         $data['names'] = $names;
         $data['allowances'] = $required_allowance;
