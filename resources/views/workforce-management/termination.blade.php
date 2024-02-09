@@ -85,7 +85,7 @@
                 @endif
 
                 @if($level_check == $item->approval_status)
-                    
+
                 @if($item->status!='1')
                 @if ($item->status!=$check)
                 <br><br>
@@ -166,7 +166,7 @@
                         }, 2000);
                     })
                     .fail(function() {
-                        alert('Overtime Approval Failed!! ...');
+                        alert('Termination Approval Failed!! ...');
                     });
                 }
             });
