@@ -15,7 +15,7 @@
     @endphp
 
 
-<script>
+{{-- <script>
     $(document).ready(function() {
         $("form").submit(function(e) {
             // Disable the buttons and show the spinner
@@ -24,7 +24,7 @@
 
         });
     });
-</script>
+</script> --}}
 
 
 
