@@ -5,16 +5,10 @@ $column_count = 30;
 @endphp
 @if(isset($employee_increase))
                 @if(count($employee_increase) > 0)
-
                 @if($column_count < 0)
-
-
                 @php
-
                 $column_count=0;
-
                 @endphp
-
                 <br>
                 <br>
                 <br>
@@ -59,17 +53,17 @@ $column_count = 30;
                                  @if($column_count < 0)
 
 
-                @php
+                                @php
 
-                $column_count=0;
+                                $column_count=0;
 
-                @endphp
+                                @endphp
 
-                <br>
-                <br>
-                <br>
-                <br>
-                @endif
+                                <br>
+                                <br>
+                                <br>
+                                <br>
+                                @endif
                                 <tr class="hdr"  class="hdr"  style="border-bottom:2px solid rgb(67, 67, 73)">
 
                                     <td class="text-end">{{ $row->emp_id }}</td>
@@ -107,8 +101,6 @@ $column_count = 30;
 
                                 <td class="text-end"></td>
                                 <td class="text-end"></td>
-
-
                             </tr>
                         @endif
                     </tbody>
@@ -359,7 +351,6 @@ $column_count = 30;
                 <br>
                 <br>
                 <br>
-                <br>
                 @endif
                 <h4>Less Decrease in Basic Pay Comparison to Last M</h4>
                 <table class="table" id="reports" style="font-size:9px; ">
@@ -400,17 +391,16 @@ $column_count = 30;
                                  @if($column_count < 0)
 
 
-                @php
+                                    @php
 
-                $column_count=0;
+                                    $column_count=0;
 
-                @endphp
+                                    @endphp
 
-                <br>
-                <br>
-                <br>
-                <br>
-                @endif
+                                    <br>
+                                    <br>
+                                    <br>
+                                    @endif
                                 <tr class="hdr" style="border-bottom:2px solid rgb(67, 67, 73)">
 
                                     <td class="text-end">{{ $row->emp_id }}</td>
@@ -525,7 +515,6 @@ $column_count = 30;
                 <br>
                 <br>
                 <br>
-                <br>
                 @endif
                                 <tr class="hdr" style="border-bottom:2px solid rgb(67, 67, 73)">
 
@@ -569,7 +558,6 @@ $column_count = 30;
 
                 @endphp
 
-                <br>
                 <br>
                 <br>
                 <br>

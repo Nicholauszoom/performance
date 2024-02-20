@@ -2101,7 +2101,7 @@ class ReportController extends Controller
         }
         $names = array_unique($raw_name);
 
-        arsort($names); // Sort names in descending order
+        asort($names); // Sort names in descending order
 
 
         $data['names'] = $names;
