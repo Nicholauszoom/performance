@@ -351,6 +351,7 @@ $column_count = 30;
                 <br>
                 <br>
                 <br>
+                <br>
                 @endif
                 <h4>Less Decrease in Basic Pay Comparison to Last M</h4>
                 <table class="table" id="reports" style="font-size:9px; ">
@@ -397,6 +398,7 @@ $column_count = 30;
 
                                     @endphp
 
+                                    <br>
                                     <br>
                                     <br>
                                     <br>
