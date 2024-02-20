@@ -5756,7 +5756,7 @@ class GeneralController extends Controller
 
             // dd($employee->partialpayment);
             $data = array(
-                "name" => "arrears",
+                "name" => "Arrears",
                 "amount" => $employee->partialpayment, //The amount
                 "mode" => "1", //1 fixed value
                 "type" => "0",
