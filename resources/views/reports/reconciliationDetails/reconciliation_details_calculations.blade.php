@@ -515,6 +515,7 @@ $column_count = 30;
                 <br>
                 <br>
                 <br>
+                <br>
                 @endif
                                 <tr class="hdr" style="border-bottom:2px solid rgb(67, 67, 73)">
 
@@ -558,6 +559,7 @@ $column_count = 30;
 
                 @endphp
 
+                <br>
                 <br>
                 <br>
                 <br>
