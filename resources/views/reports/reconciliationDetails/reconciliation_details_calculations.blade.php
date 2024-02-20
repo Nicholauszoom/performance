@@ -466,6 +466,11 @@ $column_count = 30;
                 <br>
                 <br>
                 @endif
+
+
+                @if($name =="Add/Less Teller Allowance")
+                <br>
+                @endif
                 <h4>{{ $name == 'Add/Less N-Overtime'? 'Add/Less Normal Day Overtime':($name == 'Add/Less S-Overtime' ? 'Add/Less Sunday Overtime':$name) }}</h4>
 
                 <table class="table" id="reports" style="font-size:9px; ">
