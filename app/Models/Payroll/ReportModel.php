@@ -638,7 +638,7 @@ FROM payroll_logs pl, employee e WHERE e.emp_id = pl.empID and e.contract_type =
         $calendar = explode('-', $date);
         $date =  isset($calendar) && is_array($calendar) && count($calendar) >= 2 ? '%' . $calendar[0] . '-' . $calendar[1] . '%' : null;
 
-        $query  = "SELECT t.*,e.pf_membership_no,e.cost_center as costCenterName,e.account_no,de.name,e.emp_id,e.mname,e.fname,e.lname,CONCAT(e.fname,' ', IF(e.mname != null,e.mname,' '),' ', e.lname) as name from terminations t,employee e,department de where e.emp_id = t.employeeID and e.department = de.id and t.terminationDate LIKE '%" . $date . "%' ";
+        $query  = "SELECT t.*,e.pf_membership_no,e.cost_center as costCenterName,e.account_no,de.name as department_name,e.emp_id,e.mname,e.fname,e.lname,CONCAT(e.fname,' ', IF(e.mname != null,e.mname,' '),' ', e.lname) as name from terminations t,employee e,department de where e.emp_id = t.employeeID and e.department = de.id and t.terminationDate LIKE '%" . $date . "%' ";
         return (DB::select(DB::raw($query)));
     }
 

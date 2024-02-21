@@ -238,15 +238,15 @@
                             </td>
                             <td class=" {{ $name_col }} " style="margin-right: 0px" colspan=""> {{ $row2->lname }}
                             </td>
-                            <td class=" {{$bank_col }} " style="margin-right: 0px" colspan="">
+                            <td class=" {{$bank_col }} " style="margin-right: 0px" colspan="">{{$row->bank_name}}
                             </td>
                             <td class=" {{$accountNumber_col }} " style="margin-right: 0px" colspan="">{{ $row2->account_no }}
                             </td>
                             <td class=" {{$pensionNumber_col }} " style="margin-right: 0px" colspan="">{{ $row2->pf_membership_no }}
                             </td>
-                            <td class=" {{$currency_col }} " style="margin-right: 0px" colspan="">
+                            <td class=" {{$currency_col }} " style="margin-right: 0px" colspan="">{{$row->currency}}
                             </td>
-                             <td class=" {{$department_col }} " style="margin-right: 0px" colspan="">{{ $row2->name}}
+                             <td class=" {{$department_col }} " style="margin-right: 0px" colspan="">{{ $row2->department_name}}
                             </td>
                             <td class=" {{$costCenter_col }} " style="margin-right: 0px" colspan="">{{ $row2->costCenterName}}
                             </td>
