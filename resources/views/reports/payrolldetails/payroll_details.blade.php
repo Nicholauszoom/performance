@@ -13,8 +13,8 @@
 <body>
 
     @php
-    $brandSetting = \App\Models\BrandSetting::firstOrCreate();
-@endphp
+        $brandSetting = \App\Models\BrandSetting::firstOrCreate();
+    @endphp
 
 
     <main class="body-font p-1">
@@ -33,7 +33,7 @@
                                     <p class="p-space">
                                     <h5 style="font-weight:bolder;margin-top:15px;">
                                         @if ($brandSetting->report_system_name)
-                                            {{$brandSetting->report_system_name }}
+                                            {{ $brandSetting->report_system_name }}
                                         @else
                                             HC-HUB
                                         @endif
@@ -50,7 +50,7 @@
                                     </p>
                                     <p class="p-space">
                                         @if ($brandSetting->address_2)
-                                            {{ $brandSetting->address_2}}
+                                            {{ $brandSetting->address_2 }}
                                         @else
                                             Bibi Titi Mohammed Road
                                         @endif
@@ -88,11 +88,13 @@
 
                             <td colspan="4" class="w-50" style="">
                                 <div class="box-text text-end">
-                                     @if ($brandSetting->report_logo)
-                                        <img src="{{ asset('storage/' . $brandSetting->report_logo) }}" alt="logo here" width="180px" height="150px" class="image-fluid">          
-                                        @else
-                                        <img src="{{ public_path('assets/images/logo-dif2.png') }}" alt="logo here" width="180px" height="150px" class="image-fluid">          
-                                        @endif
+                                    @if ($brandSetting->report_logo)
+                                        <img src="{{ asset('storage/' . $brandSetting->report_logo) }}" alt="logo here"
+                                            width="180px" height="150px" class="image-fluid">
+                                    @else
+                                        <img src="{{ public_path('assets/images/logo-dif2.png') }}" alt="logo here"
+                                            width="180px" height="150px" class="image-fluid">
+                                    @endif
                                 </div>
                             </td>
                         </tr>
@@ -129,45 +131,48 @@
 
                     @php
 
-                    $payNo_col = "";
-                    $name_col = "";
-                    $bank_col="d-none";
-                    $branchCode_col="d-none";
-                    $accountNumber_col = "d-none";
-                    $pensionNumber_col = "d-none";
-                    $currency_col="d-none";
-                    $department_col = "d-none";
-                    $costCenter_col = "d-none";
-                    $basicSalary_col = "";
-                    $netBasic_col = "";
-                    $overtime_col = "";
-                    $allowanceCat_col="";
-                    $otherPayments_col="";
-                    $grossSalary_col = "";
-                    $taxBenefit_col = "";
-                    $taxableGross_col = "";
-                    $paye_col = "";
-                    $nssf="";
-                    $nssfEmployee_col = "d-none";
-                    $nssfEmployer_col = "d-none";
-                    $nssfPayable_col = "d-none";
-                    $sdl_col = "d-none";
-                    $wcf_col = "d-none";
-                    $loanBoard_col = "";
-                    $advanceOthers_col = "";
-                    $totalDeduction_col = "";
-                    $amountPayable_col = "";
-                    $colspan_col = "2";
-                    $show_terminations=true;
-                    $fitler_by_currency=false;
+                        $payNo_col = '';
+                        $name_col = '';
+                        $bank_col = 'd-none';
+                        $branchCode_col = 'd-none';
+                        $accountNumber_col = 'd-none';
+                        $pensionNumber_col = 'd-none';
+                        $currency_col = 'd-none';
+                        $department_col = 'd-none';
+                        $costCenter_col = 'd-none';
+                        $basicSalary_col = '';
+                        $netBasic_col = '';
+                        $overtime_col = '';
+                        $allowanceCat_col = '';
+                        $otherPayments_col = '';
+                        $grossSalary_col = '';
+                        $taxBenefit_col = '';
+                        $taxableGross_col = '';
+                        $paye_col = '';
+                        $nssf = '';
+                        $nssfEmployee_col = 'd-none';
+                        $nssfEmployer_col = 'd-none';
+                        $nssfPayable_col = 'd-none';
+                        $sdl_col = 'd-none';
+                        $wcf_col = 'd-none';
+                        $loanBoard_col = '';
+                        $advanceOthers_col = '';
+                        $totalDeduction_col = '';
+                        $amountPayable_col = '';
+                        $colspan_col = '2';
+                        $show_terminations = true;
+                        $fitler_by_currency = false;
 
-
+                        $nhifEmployee_col = '';
+                        $nhifEmployer_col = '';
+                        $nhif_col = '';
+                        $show_nhif = true;
 
                     @endphp
 
                     @include('reports.payrolldetails.payroll_details_calculation')
 
-                      
+
 
                     </tbody>
 

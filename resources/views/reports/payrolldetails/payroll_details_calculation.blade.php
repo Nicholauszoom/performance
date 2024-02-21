@@ -1,4 +1,11 @@
-                <thead style="font-size:8px;">
+               
+               <style>
+                .nhif-column{
+                    display: nkone;
+                }
+               </style>
+               
+               <thead style="font-size:8px;">
                     <tr class="hdr" style="border-bottom:2px solid rgb(9, 5, 64);">
 
                         <th class=" {{ $payNo_col }} " ><b>Pay No</b></th>
@@ -43,6 +50,16 @@
                         <th class=" {{ $nssfPayable_col }} text-end" style="margin-bottom: 30px;"><b>NSSF Payable</b></th>
                         <th class=" {{ $sdl_col }} text-end" style="margin-bottom: 30px;"><b>SDL</b></th>
                         <th class=" {{ $wcf_col }} text-end" style="margin-bottom: 30px;"><b>WCF</b></th>
+
+
+                        @if ($show_nhif)
+                        <th class=" {{ $nhifEmployee_col }} text-end nhif-column" style="margin-bottom: 30px;"><b>NHIF Employee</b></th>
+                        <th class=" {{ $nhifEmployer_col }} text-end nhif-column" style="margin-bottom: 30px;"><b>NHIF Employer</b></th>
+                        <th class=" {{ $nhif_col}} text-end nhif-column" style="margin-bottom: 30px;"><b>NHIF Payable</b></th>
+    
+                        @endif
+                       
+
                         <th class=" {{ $loanBoard_col }} text-end" style="margin-bottom: 30px;"><b>Loan Board</b></th>
                         <th class=" {{ $advanceOthers_col }} text-end" style="margin-bottom: 30px;"><b>Advance/Others</b></th>
                         <th class=" {{ $totalDeduction_col }} text-end" style="margin-bottom: 30px;"><b>Total Deduction</b></th>
@@ -60,6 +77,8 @@
                         $others = 0;
                         $totalsdl = 0;
                         $totalwcf = 0;
+                        $totalnhif = 0;
+
                         $total_actual_salary = 0;
                         $total_teller_allowance = 0;
                         $total_taxable_amount = 0;
@@ -73,6 +92,7 @@
                         $total_house_rent = 0;
                         $total_sdl = 0;
                         $total_wcf = 0;
+                        $total_nhif = 0;
                         $total_tax = 0;
                         $total_pension = 0;
                         $total_others_normal = 0;
@@ -109,6 +129,7 @@
                             $total_deduction += round(($row->salary + $row->allowances) - $amount, 2);
                             $total_sdl = round($total_sdl + $row->sdl, 2);
                             $total_wcf = round($total_wcf + $row->wcf, 2);
+                            $total_nhif  = round($total_nhif + $row->nhif, 2 );
                             $total_taxable_amount += round($row->salary + $row->allowances - $row->pension_employer, 2);
                             $total_loans = round($total_loans + $row->total_loans, 2);
                             // $total_teller_allowance += round($row->teller_allowance,2);
@@ -117,6 +138,8 @@
                             $others += round($row->deductions, 2);
                             $totalsdl  += round($row->sdl, 2);
                             $totalwcf  += round($row->wcf, 2);
+                            $totalnhif  += round($row->nhif, 2);
+
 
 
                     ?>
@@ -178,6 +201,15 @@
                                 <td class=" {{ $nssfPayable_col }} text-end">{{ number_format($row->pension_employer*2, 2) }}</td>
                                 <td class=" {{ $sdl_col }} text-end">{{ number_format($row->sdl, 2) }}</td>
                                 <td class=" {{ $wcf_col }} text-end">{{ number_format($row->wcf, 2) }}</td>
+
+                                @if ($show_nhif)
+                                <td class=" {{$nhifEmployee_col }} text-end nhif-column">{{ number_format($row->nhif, 2) }}
+                                </td>
+                                <td class=" {{$nhifEmployer_col }} text-end  nhif-column" >{{ number_format($row->nhif, 2) }} </td>
+                                <td class="{{ $nhif_col }} text-end nhif-column">{{ number_format($row->nhif * 2, 2) }}</td>
+                                @endif
+                               
+
                                 <td class=" {{ $loanBoard_col }} text-end">{{ number_format($row->loans, 2) }}</td>
 
                                 <td class=" {{ $advanceOthers_col }} text-end">{{ number_format($row->deductions, 2) }}</td>
@@ -261,6 +293,16 @@
                             </td>
                             <td class=" {{$sdl_col }} text-end">{{ number_format($row2->sdl, 2) }}</td>
                             <td class=" {{$wcf_col }} text-end">{{ number_format($row2->wcf, 2) }}</td>
+
+
+                            @if ($show_nhif)
+                            <td class=" {{$nhifEmployee_col }} text-end nhif-column">{{ number_format($row2->nhif, 2) }}
+                            </td>
+                            <td class=" {{$nhifEmployer_col }} text-end nhif-column">{{ number_format($row2->nhif, 2) }} </td>
+                            <td class=" {{$nhif_col }} text-end nhif-column">{{ number_format($row2->nhif, 2) }}</td>
+                            @endif
+                            
+
                             <td class=" {{$loanBoard_col }} text-end">{{ number_format(0, 2) }}</td>
                             <td class=" {{$advanceOthers_col }} text-end">{{ number_format($row2->loan_balance+$row2->otherDeductions, 2) }}</td>
                             <td class=" {{$totalDeduction_col }} text-end">
@@ -286,9 +328,7 @@
 
                         $totalsdl += round($row2->sdl,2);
                         $totalwcf += round($row2->wcf,2);
-
-
-
+                        $totalnhif += round($row2->nhif * 2, 2);
 
                         @endphp
                         @endif
@@ -355,6 +395,16 @@
                         <td class=" {{ $nssfPayable_col }} text-end"><b><b>{{ number_format($total_pension*2, 2) }}</b></b></td>
                         <td class=" {{ $sdl_col }} text-end"><b><b>{{ number_format($totalsdl, 2) }}</b></b></td>
                         <td class=" {{ $wcf_col }} text-end"><b><b>{{ number_format($totalwcf, 2) }}</b></b></td>
+
+
+                        @if ($show_nhif)
+                        <td class=" {{$nhifEmployee_col }} text-end nhif-column">{{ number_format($totalnhif, 2) }}
+                        </td>
+                        <td class=" {{$nhifEmployer_col }} text-end nhif-column">{{ number_format($totalnhif, 2) }}
+                        <td class=" {{ $nhif_col }} text-end nhif-column"><b><b>{{ number_format($totalnhif * 2, 2) }}</b></b></td>
+                        @endif
+                       
+
                         <td class=" {{ $loanBoard_col }} text-end"><b><b>{{ number_format($total_loans, 2) }}</b></b></td>
                         <td class=" {{ $advanceOthers_col }} text-end"><b><b>{{ number_format($others, 2) }}</b></b></td>
                         <td class=" {{ $totalDeduction_col }} text-end"><b><b>{{ number_format($total_deduction, 2) }}</b></b></td>
