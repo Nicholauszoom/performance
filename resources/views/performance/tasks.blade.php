@@ -80,7 +80,7 @@
                              {{-- for completion initiation --}}
                              @if ($item->status==0)
 
-                             <a href="{{ url('flex/completed_adhoctask/'.$item->id); }}" class="btn btn-sm bg-success text-light">
+                             <a href="{{ url('flex/completed_adhoctask/'.$item->id) }}" class="btn btn-sm bg-success text-light">
                                <i class="ph-check"></i>
                            </a>
                            @endif
@@ -89,7 +89,7 @@
                             {{-- <a href="" class="btn btn-sm bg-main">
                                  <i class="ph-pen"></i>
                              </a> --}}
-                             <a href="{{ url('flex/delete-task/'.$item->id); }}" class="btn btn-sm btn-danger">
+                             <a href="{{ url('flex/delete-task/'.$item->id) }}" class="btn btn-sm btn-danger">
                                  <i class="ph-trash"></i>
                              </a>
                            {{-- @endif --}}
@@ -98,7 +98,7 @@
                              @if ($item->status==1)
                                {{-- @if ($item->employee->line_manager == Auth()->user()->emp_id) --}}
                                <hr>
-                               <a href="{{ url('flex/assess-adhoctask/'.$item->id); }}" class="btn btn-sm bg-main">
+                               <a href="{{ url('flex/assess-adhoctask/'.$item->id) }}" class="btn btn-sm bg-main">
                                  Task Assessment
                                </a>
                                {{-- @endif --}}
