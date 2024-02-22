@@ -71,9 +71,9 @@ class PayrollController extends Controller
 
                     // DATE MANIPULATION
                     $calendar = $request->payrolldate;
-                    
+
                     $datewell = explode("-", $calendar);
-                  
+
                     $mm = $datewell[1];
                     $dd = $datewell[2];
                     $yyyy = $datewell[0];
@@ -1312,7 +1312,7 @@ class PayrollController extends Controller
                 $response_array['status'] = "ERR";
                 $response_array['message'] = "<p class='alert alert-warning text-center'>Sorry The Payroll for This Month is Already Procesed, Try another Month!</p>";
             }
-            
+
             header('Content-type: application/json');
             echo json_encode($response_array);
         }
@@ -1387,11 +1387,11 @@ class PayrollController extends Controller
 
             $employee = Auth::User()->id;
             $posn = Auth::User()->position;
-        
+
             $approval = Approvals::where('process_name', 'Payroll Approval')->first();
             $roles = Position::where('id', $posn)->first();
 
-   
+
             if (SysHelpers::ApprovalLastLevel("Payroll Approval")) {
 
                 $this-> runpayroll2($pdate);
@@ -1433,7 +1433,7 @@ class PayrollController extends Controller
                     header('Content-type: application/json');
                     echo json_encode($response_array);
 
-                    
+
                 }
 
 
@@ -1441,10 +1441,10 @@ class PayrollController extends Controller
 
 
         public function runpayroll2($pdate)
-        { 
+        {
             $payrollMonth = $pdate;
             if ($payrollMonth != "") {
-    
+
                 // DATE MANIPULATION
                 $payroll_date = $payrollMonth;
                 $payroll_month = date('Y-m', strtotime($payrollMonth));
@@ -1452,7 +1452,7 @@ class PayrollController extends Controller
                 $empID = auth()->user()->emp_id;
 
 
-    
+
                 $check = $this->payroll_model->payrollcheck($payroll_month);
 
                 if ($check == 0) {
@@ -1469,7 +1469,7 @@ class PayrollController extends Controller
                         //check for partial payments
                         $result = $this->partial_payment_manipulation($payroll_date);
                         if ($result) {
-    
+
                             $description = "Approved payment of payroll of date " . $payroll_date;
                             //SENDING EMAIL BACK TO PREVIOUS RECOMMENDED EMPLOYEES
                             $position1 = "Country Head: Finance & Procurement";
@@ -1489,8 +1489,8 @@ class PayrollController extends Controller
                                     Notification::route('mail', $email_data['email'])->notify(new EmailRequests($email_data));
                                 }
                             }
-    
-                        return true;  
+
+                        return true;
                         }
                     } else {
                        return  false;
@@ -1502,10 +1502,10 @@ class PayrollController extends Controller
 
         }
 
-        
+
 
     public function runpayroll($pdate)
-    { 
+    {
         $payrollMonth = $pdate;
         if ($payrollMonth != "") {
 
@@ -2056,7 +2056,7 @@ class PayrollController extends Controller
 
         $initial_delete = $this->payroll_model->deleteArrears($cancel_date);
         if ($initial_delete) {
-            $result = $this->payroll_model->cancel_payroll();
+            $result = $this->payroll_model->cancel_payroll($cancel_date);
             if ($type == 'none') {
 
                 return redirect(route('payroll.payroll'));

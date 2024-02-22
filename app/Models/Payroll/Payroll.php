@@ -7,6 +7,9 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 
+use App\Models\Employee;
+use Carbon\Carbon;
+
 
 class Payroll extends Model
 {
@@ -14,7 +17,7 @@ class Payroll extends Model
     {
         $query = "SELECT DISTINCT e.emp_id as empID, CONCAT(e.fname,' ', IF(e.mname != null,e.mname,' '),' ', e.lname) as NAME FROM employee e WHERE  e.login_user != 1 ";
         return DB::select(DB::raw($query));
-        
+
     }
     public function customemployeeExit()
     {
@@ -278,22 +281,22 @@ FROM employee e, emp_allowances ea,  allowances a WHERE e.emp_id = ea.empID AND 
 //                       ea.amount,
 //                       IF(a.type = 1,IF(DATEDIFF('" . $last_date . "',e.hire_date) < 365,
 //                       ((DATEDIFF('" . $last_date . "',e.hire_date)+1)/365)*e.salary,ea.percent*e.salary),
-            
+
 //                       (ea.percent*
 //                       IF((month(e.hire_date) = month('" . $payroll_date . "')) AND (year(e.hire_date) = year('" . $payroll_date . "')),
 //                       ((" . $days . " - (day(e.hire_date)+1))*e.salary/30),e.salary)
 //                        )
-            
+
 //                   )
 //                   )
-            
+
 //               ) AS action_to,
 
 //   'payroll_input' AS input_screen
 
 // FROM employee e, emp_allowances ea,  allowances a WHERE e.emp_id = ea.empID AND a.id = ea.allowance AND a.state = 1 AND e.state = 1 and e.login_user != 1";
 
-           
+
 //             DB::insert(DB::raw($query));
 
             //INSERT BONUS
@@ -410,33 +413,33 @@ FROM employee e, emp_allowances ea,  allowances a WHERE e.emp_id = ea.empID AND 
                 payroll_date,
                 years,
                 actual_salary
-    
+
                 )
-    
+
             SELECT
-    
-    
+
+
     (SELECT
-    
+
     /*TAXABLE AMOUNT  CALCULATIONS STARTS HERE*/
     /*SELECTING TAXABLE*/
-    
-    
+
+
     (/*Taxable Amount*/ (
     (
-    
+
     IF((month(e.hire_date) = month('" . $payroll_date . "')) AND (year(e.hire_date) = year('" . $payroll_date . "'))
              ,((" . $days . "- day(e.hire_date)+1)*e.salary/" . $days . "),e.salary)
-    
-    
-    
+
+
+
     +
-    
+
     /*all Allowances and Bonuses*/
     IF ((SELECT SUM(b.amount) FROM bonus b WHERE  b.state =  1 AND b.empID =  e.emp_id GROUP BY b.empID)>=0, (SELECT SUM(b.amount) FROM bonus b WHERE  b.state = 1 AND b.empID =  e.emp_id GROUP BY b.empID), 0) +
-    
+
     IF ((SELECT SUM(o.amount) FROM overtimes o WHERE  o.empID =  e.emp_id GROUP BY o.empID)>=0, (SELECT SUM(o.amount) FROM overtimes o WHERE  o.empID =  e.emp_id GROUP BY o.empID), 0) +
-    
+
     IF ((SELECT SUM(ea.amount) FROM emp_allowances ea, allowances a  WHERE  a.id = ea.allowance AND ea.empID =  e.emp_id AND a.taxable = 'YES' AND ea.mode=1 AND a.state= 1 GROUP BY ea.empID)>=0, ((SELECT SUM(ea.amount) FROM emp_allowances ea, allowances a  WHERE  a.id = ea.allowance AND ea.empID =  e.emp_id AND ea.mode=1 AND a.taxable = 'YES' AND a.state= 1 GROUP BY ea.empID)),0)
     +
     /* start add leave allowance to tax */
@@ -446,48 +449,48 @@ FROM employee e, emp_allowances ea,  allowances a WHERE e.emp_id = ea.empID AND 
     DATEDIFF('" . $last_date . "',e.hire_date) < 365,
     ((DATEDIFF('" . $last_date . "',e.hire_date)+1)/365)*e.salary,
     e.salary),
-    
+
     0
     )
-    
+
     /*end leave allowance to tax */
     +
     IF ((SELECT SUM(IF((month(e.hire_date) = month('" . $payroll_date . "')) AND (year(e.hire_date) = year('" . $payroll_date . "'))
              ,((" . $days . "- day(e.hire_date)+1)*e.salary/" . $days . "),e.salary)*ea.percent) FROM emp_allowances ea, allowances a  WHERE  a.id = ea.allowance AND ea.empID =  e.emp_id AND a.taxable = 'YES'  AND ea.mode=2 AND a.state= 1 AND a.type=0 GROUP BY ea.empID)>0, (SELECT SUM(IF((month(e.hire_date) = month('" . $payroll_date . "')) AND (year(e.hire_date) = year('" . $payroll_date . "'))
              ,((" . $days . "- day(e.hire_date)+1)*e.salary/" . $days . "),e.salary)*ea.percent) FROM emp_allowances ea, allowances a  WHERE  a.id = ea.allowance AND ea.empID =  e.emp_id AND ea.mode=2 AND a.taxable = 'YES' AND a.state= 1 AND a.type=0 GROUP BY ea.empID), 0)
-    
+
     /*End all Allowances and Bonuses*/
-    
+
     /*END OF TAXABLE AMOUNT CALCULATION */
-    
+
     )/*End Taxable Amount*/)
     ))
-    
+
     as gross,
-    
+
              /*TAXABLE AMOUNT  CALCULATIONS STARTS HERE*/
              /*SELECTING TAXABLE*/
-    
-    
+
+
              (/*Taxable Amount*/ (
             ( IF((month(e.hire_date) = month('" . $payroll_date . "')) AND (year(e.hire_date) = year('" . $payroll_date . "'))
                       ,((" . $days . "- day(e.hire_date)+1)*e.salary/" . $days . "),e.salary) -
-    
+
              /*pension*/
              IF(  (pf.deduction_from = 1), (IF((month(e.hire_date) = month('" . $payroll_date . "')) AND (year(e.hire_date) = year('" . $payroll_date . "'))
                     /*IF BASIC  */
                 ,((" . $days . "- day(e.hire_date)+1)*e.salary/" . $days . "),e.salary)*pf.amount_employee),
-    
+
                 /* IF GROSS */
                       (pf.amount_employee*(IF((month(e.hire_date) = month('" . $payroll_date . "')) AND (year(e.hire_date) = year('" . $payroll_date . "'))
                       ,((" . $days . "- day(e.hire_date)+1)*e.salary/" . $days . "),e.salary)
-    
+
             + IF ((SELECT SUM(b.amount) FROM bonus b WHERE  b.state =  1 AND b.empID =  e.emp_id GROUP BY b.empID)>=0, (SELECT SUM(b.amount) FROM bonus b WHERE  b.state = 1 AND b.empID =  e.emp_id GROUP BY b.empID), 0)
              +
-    
+
             IF ((SELECT SUM(o.amount) FROM overtimes o WHERE  o.empID =  e.emp_id GROUP BY o.empID)>=0, (SELECT SUM(o.amount) FROM overtimes o WHERE  o.empID =  e.emp_id GROUP BY o.empID), 0)
              +
-    
+
             IF ((SELECT SUM(ea.amount) FROM emp_allowances ea, allowances a  WHERE  a.id = ea.allowance AND ea.empID =  e.emp_id AND a.taxable = 'YES' AND ea.mode=1 AND a.state= 1  GROUP BY ea.empID)>=0,
             ((SELECT SUM(ea.amount) FROM emp_allowances ea, allowances a  WHERE  a.id = ea.allowance AND ea.empID =  e.emp_id AND a.taxable = 'YES' AND ea.mode=1 AND a.state= 1 GROUP BY ea.empID)),0)
             +
@@ -498,28 +501,28 @@ FROM employee e, emp_allowances ea,  allowances a WHERE e.emp_id = ea.empID AND 
       DATEDIFF('" . $last_date . "',e.hire_date) < 365,
       ((DATEDIFF('" . $last_date . "',e.hire_date)+1)/365)*e.salary,
     e.salary),
-    
+
     0
     )
-    
-    
-    
+
+
+
             /*end leave allowance to tax */
             +
              IF ((SELECT SUM(IF((month(e.hire_date) = month('" . $payroll_date . "')) AND (year(e.hire_date) = year('" . $payroll_date . "'))
                       ,((" . $days . "- day(e.hire_date)+1)*e.salary/" . $days . "),e.salary)*ea.percent) FROM emp_allowances ea, allowances a  WHERE  a.id = ea.allowance AND ea.empID =  e.emp_id AND a.taxable = 'YES' AND ea.mode=2 AND a.state= 1 AND a.type=0 GROUP BY ea.empID)>0, (SELECT SUM(IF((month(e.hire_date) = month('" . $payroll_date . "')) AND (year(e.hire_date) = year('" . $payroll_date . "'))
                       ,((" . $days . "- day(e.hire_date)+1)*e.salary/" . $days . "),e.salary)*ea.percent) FROM emp_allowances ea, allowances a  WHERE  a.id = ea.allowance AND ea.empID =  e.emp_id AND a.taxable = 'YES' AND ea.mode=2 AND a.state= 1 AND a.type=0 GROUP BY ea.empID), 0)))  )
-    
+
             )
             /* END OF PENSION CALCULATION */
-    
+
             +
-    
+
             /*all Allowances and Bonuses*/
             IF ((SELECT SUM(b.amount) FROM bonus b WHERE  b.state =  1 AND b.empID =  e.emp_id GROUP BY b.empID)>=0, (SELECT SUM(b.amount) FROM bonus b WHERE  b.state = 1 AND b.empID =  e.emp_id GROUP BY b.empID), 0) +
-    
+
             IF ((SELECT SUM(o.amount) FROM overtimes o WHERE  o.empID =  e.emp_id GROUP BY o.empID)>=0, (SELECT SUM(o.amount) FROM overtimes o WHERE  o.empID =  e.emp_id GROUP BY o.empID), 0) +
-    
+
             IF ((SELECT SUM(ea.amount) FROM emp_allowances ea, allowances a  WHERE  a.id = ea.allowance AND ea.empID =  e.emp_id AND a.taxable = 'YES' AND ea.mode=1 AND a.state= 1 GROUP BY ea.empID)>=0, ((SELECT SUM(ea.amount) FROM emp_allowances ea, allowances a  WHERE  a.id = ea.allowance AND ea.empID =  e.emp_id AND ea.mode=1 AND a.taxable = 'YES' AND a.state= 1 GROUP BY ea.empID)),0)
             +
             /* start add leave allowance to tax */
@@ -529,37 +532,37 @@ FROM employee e, emp_allowances ea,  allowances a WHERE e.emp_id = ea.empID AND 
       DATEDIFF('" . $last_date . "',e.hire_date) < 365,
       ((DATEDIFF('" . $last_date . "',e.hire_date)+1)/365)*e.salary,
     e.salary),
-    
+
     0
     )
-    
+
             /*end leave allowance to tax */
             +
              IF ((SELECT SUM(IF((month(e.hire_date) = month('" . $payroll_date . "')) AND (year(e.hire_date) = year('" . $payroll_date . "'))
                       ,((" . $days . "- day(e.hire_date)+1)*e.salary/" . $days . "),e.salary)*ea.percent) FROM emp_allowances ea, allowances a  WHERE  a.id = ea.allowance AND ea.empID =  e.emp_id AND a.taxable = 'YES'  AND ea.mode=2 AND a.state= 1 AND a.type=0 GROUP BY ea.empID)>0, (SELECT SUM(IF((month(e.hire_date) = month('" . $payroll_date . "')) AND (year(e.hire_date) = year('" . $payroll_date . "'))
                       ,((" . $days . "- day(e.hire_date)+1)*e.salary/" . $days . "),e.salary)*ea.percent) FROM emp_allowances ea, allowances a  WHERE  a.id = ea.allowance AND ea.empID =  e.emp_id AND ea.mode=2 AND a.taxable = 'YES' AND a.state= 1 AND a.type=0 GROUP BY ea.empID), 0)
-    
+
             /*End all Allowances and Bonuses*/
-    
+
             /*END OF TAXABLE AMOUNT CALCULATION */
-    
+
              )/*End Taxable Amount*/)
-    
-    
+
+
              as taxable_amount,
-    
-    
+
+
              (SELECT minimum FROM paye WHERE maximum > (/*Taxable Amount*/ (
                 ( IF((month(e.hire_date) = month('" . $payroll_date . "')) AND (year(e.hire_date) = year('" . $payroll_date . "'))
                           ,((" . $days . "- day(e.hire_date)+1)*e.salary/" . $days . "),e.salary) -
-    
+
                  /*pension*/
                  IF(  (pf.deduction_from = 1), (IF((month(e.hire_date) = month('" . $payroll_date . "')) AND (year(e.hire_date) = year('" . $payroll_date . "'))
                           ,((" . $days . "- day(e.hire_date)+1)*e.salary/" . $days . "),e.salary)*pf.amount_employee), (pf.amount_employee*(IF((month(e.hire_date) = month('" . $payroll_date . "')) AND (year(e.hire_date) = year('" . $payroll_date . "'))
                           ,((" . $days . "- day(e.hire_date)+1)*e.salary/" . $days . "),e.salary)+ IF ((SELECT SUM(b.amount) FROM bonus b WHERE  b.state =  1 AND b.empID =  e.emp_id GROUP BY b.empID)>=0, (SELECT SUM(b.amount) FROM bonus b WHERE  b.state = 1 AND b.empID =  e.emp_id GROUP BY b.empID), 0) +
-    
+
                 IF ((SELECT SUM(o.amount) FROM overtimes o WHERE  o.empID =  e.emp_id GROUP BY o.empID)>=0, (SELECT SUM(o.amount) FROM overtimes o WHERE  o.empID =  e.emp_id GROUP BY o.empID), 0) +
-    
+
                 IF ((SELECT SUM(ea.amount) FROM emp_allowances ea, allowances a  WHERE  a.id = ea.allowance AND ea.empID =  e.emp_id AND ea.mode=1 AND a.taxable = 'YES' AND a.state= 1 GROUP BY ea.empID)>=0, ((SELECT SUM(ea.amount) FROM emp_allowances ea, allowances a  WHERE  a.id = ea.allowance AND ea.empID =  e.emp_id AND a.taxable = 'YES' AND ea.mode=1 AND a.state= 1 GROUP BY ea.empID)),0)
                 +
                 /* start add leave allowance to tax */
@@ -569,23 +572,23 @@ FROM employee e, emp_allowances ea,  allowances a WHERE e.emp_id = ea.empID AND 
           DATEDIFF('" . $last_date . "',e.hire_date) < 365,
           ((DATEDIFF('" . $last_date . "',e.hire_date)+1)/365)*e.salary,
         e.salary),
-    
+
         0
         )
-    
+
                 /*end leave allowance to tax */
                 +
                  IF ((SELECT SUM(IF((month(e.hire_date) = month('" . $payroll_date . "')) AND (year(e.hire_date) = year('" . $payroll_date . "'))
                           ,((" . $days . "- day(e.hire_date)+1)*e.salary/" . $days . "),e.salary)*ea.percent) FROM emp_allowances ea, allowances a  WHERE  a.id = ea.allowance AND ea.empID =  e.emp_id AND ea.mode=2 AND a.taxable = 'YES' AND a.state= 1 AND a.type=0 GROUP BY ea.empID)>0, (SELECT SUM(IF((month(e.hire_date) = month('" . $payroll_date . "')) AND (year(e.hire_date) = year('" . $payroll_date . "'))
                           ,((" . $days . "- day(e.hire_date)+1)*e.salary/" . $days . "),e.salary)*ea.percent) FROM emp_allowances ea, allowances a  WHERE  a.id = ea.allowance AND ea.empID =  e.emp_id AND ea.mode=2 AND a.taxable = 'YES' AND a.state= 1 AND a.type=0 GROUP BY ea.empID), 0)))  )
                  /*End pension*/
-    
+
                 ) +
                 /*all Allowances and Bonuses*/
                 IF ((SELECT SUM(b.amount) FROM bonus b WHERE  b.state =  1 AND b.empID =  e.emp_id GROUP BY b.empID)>=0, (SELECT SUM(b.amount) FROM bonus b WHERE  b.state = 1 AND b.empID =  e.emp_id GROUP BY b.empID), 0) +
-    
+
                 IF ((SELECT SUM(o.amount) FROM overtimes o WHERE  o.empID =  e.emp_id GROUP BY o.empID)>=0, (SELECT SUM(o.amount) FROM overtimes o WHERE  o.empID =  e.emp_id GROUP BY o.empID), 0) +
-    
+
                 IF ((SELECT SUM(ea.amount) FROM emp_allowances ea, allowances a  WHERE  a.id = ea.allowance AND ea.empID =  e.emp_id AND ea.mode=1 AND a.taxable = 'YES' AND a.state= 1 GROUP BY ea.empID)>=0, ((SELECT SUM(ea.amount) FROM emp_allowances ea, allowances a  WHERE  a.id = ea.allowance AND ea.empID =  e.emp_id AND ea.mode=1 AND a.taxable = 'YES' AND a.state= 1 GROUP BY ea.empID)),0)
                 +
                 /* start add leave allowance to tax */
@@ -595,28 +598,28 @@ FROM employee e, emp_allowances ea,  allowances a WHERE e.emp_id = ea.empID AND 
           DATEDIFF('" . $last_date . "',e.hire_date) < 365,
           ((DATEDIFF('" . $last_date . "',e.hire_date)+1)/365)*e.salary,
         e.salary),
-    
+
         0
         )
-    
+
                 /*end leave allowance to tax */
                 +
                  IF ((SELECT SUM(IF((month(e.hire_date) = month('" . $payroll_date . "')) AND (year(e.hire_date) = year('" . $payroll_date . "'))
                           ,((" . $days . "- day(e.hire_date)+1)*e.salary/" . $days . "),e.salary)*ea.percent) FROM emp_allowances ea, allowances a  WHERE  a.id = ea.allowance AND ea.empID =  e.emp_id AND ea.mode=2 AND a.taxable = 'YES' AND a.state= 1 AND a.type=0 GROUP BY ea.empID)>0, (SELECT SUM(IF((month(e.hire_date) = month('" . $payroll_date . "')) AND (year(e.hire_date) = year('" . $payroll_date . "'))
                           ,((" . $days . "- day(e.hire_date)+1)*e.salary/" . $days . "),e.salary)*ea.percent) FROM emp_allowances ea, allowances a  WHERE  a.id = ea.allowance AND ea.empID =  e.emp_id AND ea.mode=2 AND a.taxable = 'YES' AND a.state= 1 AND a.type=0 GROUP BY ea.empID), 0)
-    
+
                 /*End all Allowances and Bonuses*/
                  )/*End Taxable Amount*/) AND minimum <= (/*Taxable Amount*/ (
                 ( IF((month(e.hire_date) = month('" . $payroll_date . "')) AND (year(e.hire_date) = year('" . $payroll_date . "'))
                           ,((" . $days . "- day(e.hire_date)+1)*e.salary/" . $days . "),e.salary) -
-    
+
                  /*pension*/
                  IF(  (pf.deduction_from = 1), (IF((month(e.hire_date) = month('" . $payroll_date . "')) AND (year(e.hire_date) = year('" . $payroll_date . "'))
                           ,((" . $days . "- day(e.hire_date)+1)*e.salary/" . $days . "),e.salary)*pf.amount_employee), (pf.amount_employee*(IF((month(e.hire_date) = month('" . $payroll_date . "')) AND (year(e.hire_date) = year('" . $payroll_date . "'))
                           ,((" . $days . "- day(e.hire_date)+1)*e.salary/" . $days . "),e.salary)+ IF ((SELECT SUM(b.amount) FROM bonus b WHERE  b.state =  1 AND b.empID =  e.emp_id GROUP BY b.empID)>=0, (SELECT SUM(b.amount) FROM bonus b WHERE  b.state = 1 AND b.empID =  e.emp_id GROUP BY b.empID), 0) +
-    
+
                 IF ((SELECT SUM(o.amount) FROM overtimes o WHERE  o.empID =  e.emp_id GROUP BY o.empID)>=0, (SELECT SUM(o.amount) FROM overtimes o WHERE  o.empID =  e.emp_id GROUP BY o.empID), 0) +
-    
+
                 IF ((SELECT SUM(ea.amount) FROM emp_allowances ea, allowances a  WHERE  a.id = ea.allowance AND ea.empID =  e.emp_id AND ea.mode=1 AND a.taxable = 'YES' AND a.state= 1 GROUP BY ea.empID)>=0, ((SELECT SUM(ea.amount) FROM emp_allowances ea, allowances a  WHERE  a.id = ea.allowance AND ea.empID =  e.emp_id AND ea.mode=1 AND a.taxable = 'YES' AND a.state= 1 GROUP BY ea.empID)),0)
                 +
                 /* start add leave allowance to tax */
@@ -626,23 +629,23 @@ FROM employee e, emp_allowances ea,  allowances a WHERE e.emp_id = ea.empID AND 
           DATEDIFF('" . $last_date . "',e.hire_date) < 365,
           ((DATEDIFF('" . $last_date . "',e.hire_date)+1)/365)*e.salary,
         e.salary),
-    
+
         0
         )
-    
+
                 /*end leave allowance to tax */
                 +
                  IF ((SELECT SUM(IF((month(e.hire_date) = month('" . $payroll_date . "')) AND (year(e.hire_date) = year('" . $payroll_date . "'))
                           ,((" . $days . "- day(e.hire_date)+1)*e.salary/" . $days . "),e.salary)*ea.percent) FROM emp_allowances ea, allowances a  WHERE  a.id = ea.allowance AND ea.empID =  e.emp_id AND ea.mode=2 AND a.taxable = 'YES' AND a.state= 1 AND a.type=0 GROUP BY ea.empID)>0, (SELECT SUM(IF((month(e.hire_date) = month('" . $payroll_date . "')) AND (year(e.hire_date) = year('" . $payroll_date . "'))
                           ,((" . $days . "- day(e.hire_date)+1)*e.salary/" . $days . "),e.salary)*ea.percent) FROM emp_allowances ea, allowances a  WHERE  a.id = ea.allowance AND ea.empID =  e.emp_id AND ea.mode=2 AND a.taxable = 'YES' AND a.state= 1 AND a.type=0 GROUP BY ea.empID), 0)))  )
                  /*End pension*/
-    
+
                 ) +
                 /*all Allowances and Bonuses*/
                 IF ((SELECT SUM(b.amount) FROM bonus b WHERE  b.state =  1 AND b.empID =  e.emp_id GROUP BY b.empID)>=0, (SELECT SUM(b.amount) FROM bonus b WHERE  b.state = 1 AND b.empID =  e.emp_id GROUP BY b.empID), 0) +
-    
+
                 IF ((SELECT SUM(o.amount) FROM overtimes o WHERE  o.empID =  e.emp_id GROUP BY o.empID)>=0, (SELECT SUM(o.amount) FROM overtimes o WHERE  o.empID =  e.emp_id GROUP BY o.empID), 0) +
-    
+
                 IF ((SELECT SUM(ea.amount) FROM emp_allowances ea, allowances a  WHERE  a.id = ea.allowance AND ea.empID =  e.emp_id AND ea.mode=1 AND a.taxable = 'YES' AND a.state= 1 GROUP BY ea.empID)>=0, ((SELECT SUM(ea.amount) FROM emp_allowances ea, allowances a  WHERE  a.id = ea.allowance AND ea.empID =  e.emp_id AND ea.mode=1 AND a.taxable = 'YES' AND a.state= 1 GROUP BY ea.empID)),0)
                 +
                 /* start add leave allowance to tax */
@@ -652,42 +655,42 @@ FROM employee e, emp_allowances ea,  allowances a WHERE e.emp_id = ea.empID AND 
           DATEDIFF('" . $last_date . "',e.hire_date) < 365,
           ((DATEDIFF('" . $last_date . "',e.hire_date)+1)/365)*e.salary,
         e.salary),
-    
+
         0
         )
-    
+
                 /*end leave allowance to tax */
                 +
                 IF ((SELECT SUM(IF((month(e.hire_date) = month('" . $payroll_date . "')) AND (year(e.hire_date) = year('" . $payroll_date . "'))
                           ,((" . $days . "- day(e.hire_date)+1)*e.salary/" . $days . "),e.salary)*ea.percent) FROM emp_allowances ea, allowances a  WHERE  a.id = ea.allowance AND ea.empID =  e.emp_id AND ea.mode=2 AND a.taxable = 'YES' AND a.state= 1 AND a.type=0 GROUP BY ea.empID)>0, (SELECT SUM(IF((month(e.hire_date) = month('" . $payroll_date . "')) AND (year(e.hire_date) = year('" . $payroll_date . "'))
                           ,((" . $days . "- day(e.hire_date)+1)*e.salary/" . $days . "),e.salary)*ea.percent) FROM emp_allowances ea, allowances a  WHERE  a.id = ea.allowance AND ea.empID =  e.emp_id AND ea.mode=2 AND a.taxable = 'YES' AND a.state= 1 AND a.type=0 GROUP BY ea.empID), 0)
-    
+
                 /*End all Allowances and Bonuses*/
                  )/*End Taxable Amount*/))
-    
-    
-    
+
+
+
                   AS
-    
-    
+
+
                 excess_added,
-    
-    
-    
-    
-    
-    
+
+
+
+
+
+
             e.emp_id AS empID,
-    
+
             IF((e.unpaid_leave = 0),0, IF((month(e.hire_date) = month('" . $payroll_date . "')) AND (year(e.hire_date) = year('" . $payroll_date . "'))
                       ,((" . $days . "- day(e.hire_date)+1)*e.salary/" . $days . "),e.salary)) AS salary,
-    
+
             /*Allowances and Bonuses*/ (
-    
+
             IF((e.unpaid_leave = 0),0,IF ((SELECT SUM(b.amount) FROM bonus b WHERE  b.state =  1 AND b.empID =  e.emp_id GROUP BY b.empID)>=0, (SELECT SUM(b.amount) FROM bonus b WHERE  b.state = 1 AND b.empID =  e.emp_id GROUP BY b.empID), 0) +
-    
+
             IF ((SELECT SUM(o.amount) FROM overtimes o WHERE  o.empID =  e.emp_id GROUP BY o.empID)>=0, (SELECT SUM(o.amount) FROM overtimes o WHERE  o.empID =  e.emp_id GROUP BY o.empID), 0) +
-    
+
             IF ((SELECT SUM(ea.amount) FROM emp_allowances ea, allowances a  WHERE  a.id = ea.allowance AND ea.empID =  e.emp_id AND ea.mode=1 AND a.state= 1 GROUP BY ea.empID)>=0, ((SELECT SUM(ea.amount) FROM emp_allowances ea, allowances a  WHERE  a.id = ea.allowance AND ea.empID =  e.emp_id AND ea.mode=1 AND a.state= 1 GROUP BY ea.empID)),0)
              +
              /*add Leave allowance */
@@ -705,20 +708,20 @@ FROM employee e, emp_allowances ea,  allowances a WHERE e.emp_id = ea.empID AND 
                       ,((" . $days . "- day(e.hire_date)+1)*e.salary/" . $days . "),e.salary)*ea.percent) FROM emp_allowances ea, allowances a  WHERE  a.id = ea.allowance AND ea.empID =  e.emp_id AND ea.mode=2 AND a.type = 0 AND a.state= 1 GROUP BY ea.empID)>0,
                        (SELECT SUM(IF((month(e.hire_date) = month('" . $payroll_date . "')) AND (year(e.hire_date) = year('" . $payroll_date . "')),
                         ((" . $days . "- day(e.hire_date)+1)*e.salary/" . $days . "),e.salary)*ea.percent) FROM emp_allowances ea, allowances a  WHERE  a.id = ea.allowance AND ea.empID =  e.emp_id AND ea.mode=2 AND a.type = 0 AND a.state= 1 GROUP BY ea.empID), 0)
-    
+
              ))
-    
+
              /*End Allowances and Bonuses*/ AS  allowances,
-    
+
              /*start of pension employee*/
              IF((e.unpaid_leave = 0),0,IF(e.retired !=2, IF((pf.deduction_from = 1), (IF((month(e.hire_date) = month('" . $payroll_date . "')) AND (year(e.hire_date) = year('" . $payroll_date . "'))
              ,((" . $days . "- day(e.hire_date)+1)*e.salary/" . $days . "),e.salary)*pf.amount_employee), (pf.amount_employee*(IF((month(e.hire_date) = month('" . $payroll_date . "')) AND (year(e.hire_date) = year('" . $payroll_date . "'))
              ,((" . $days . "- day(e.hire_date)+1)*e.salary/" . $days . "),e.salary)+ IF ((SELECT SUM(b.amount) FROM bonus b WHERE  b.state =  1 AND b.empID =  e.emp_id GROUP BY b.empID)>=0, (SELECT SUM(b.amount) FROM bonus b WHERE  b.state = 1 AND b.empID =  e.emp_id GROUP BY b.empID), 0)
              +
-    
+
              IF ((SELECT SUM(o.amount) FROM overtimes o WHERE  o.empID =  e.emp_id GROUP BY o.empID)>=0, (SELECT SUM(o.amount) FROM overtimes o WHERE  o.empID =  e.emp_id GROUP BY o.empID), 0)
              +
-    
+
              IF ((SELECT SUM(ea.amount) FROM emp_allowances ea, allowances a  WHERE  a.id = ea.allowance AND ea.empID =  e.emp_id AND ea.mode=1 And a.pensionable = 'YES' AND a.state= 1 GROUP BY ea.empID)>=0, ((SELECT SUM(ea.amount) FROM emp_allowances ea, allowances a  WHERE  a.id = ea.allowance AND ea.empID =  e.emp_id AND ea.mode=1 And a.pensionable = 'YES' AND a.state= 1 GROUP BY ea.empID)),0)
              +
              /* start add leave allowance to pension */
@@ -727,24 +730,24 @@ FROM employee e, emp_allowances ea,  allowances a WHERE e.emp_id = ea.empID AND 
              IF(
                 DATEDIFF('" . $last_date . "',e.hire_date) < 365,
                 ((DATEDIFF('" . $last_date . "',e.hire_date)+1)/365)*e.salary,
-    
+
                (
                 IF(
                     (SELECT SUM(IF((month(e.hire_date) = month('" . $payroll_date . "')) AND (year(e.hire_date) = year('" . $payroll_date . "')),((" . $days . "- day(e.hire_date)+1)*e.salary/" . $days . "),e.salary)*ea.percent) FROM emp_allowances ea, allowances a  WHERE  a.id = ea.allowance AND ea.empID =  e.emp_id AND ea.mode=2 And a.pensionable = 'YES' AND a.state= 1 AND a.type = 1 GROUP BY ea.empID)>0,
-    
+
                     (SELECT SUM(IF((month(e.hire_date) = month('" . $payroll_date . "')) AND (year(e.hire_date) = year('" . $payroll_date . "')),((" . $days . "- day(e.hire_date)+1)*e.salary/" . $days . "),e.salary)*ea.percent) FROM emp_allowances ea, allowances a  WHERE  a.id = ea.allowance AND ea.empID =  e.emp_id AND ea.mode=2 And a.pensionable = 'YES' AND a.state= 1 AND a.type = 1 GROUP BY ea.empID),
                     0)
                )
-    
+
                 ),
-    
+
              0
              )
-    
+
              /*end leave allowance to pension */
-    
+
              +
-    
+
              IF ((SELECT SUM(IF((month(e.hire_date) = month('" . $payroll_date . "')) AND (year(e.hire_date) = year('" . $payroll_date . "'))
              ,((" . $days . "- day(e.hire_date)+1)*e.salary/" . $days . "),e.salary)*ea.percent) FROM emp_allowances ea, allowances a  WHERE  a.id = ea.allowance AND ea.empID =  e.emp_id AND ea.mode=2 And a.pensionable = 'YES' AND a.state= 1 AND a.type = 0 GROUP BY ea.empID)>0,
               (SELECT SUM(IF((month(e.hire_date) = month('" . $payroll_date . "')) AND (year(e.hire_date) = year('" . $payroll_date . "'))
@@ -752,20 +755,20 @@ FROM employee e, emp_allowances ea,  allowances a WHERE e.emp_id = ea.empID AND 
               0)
             ))),
              '0')
-    
+
              ) AS pension_employee,
-    
+
                       /*End pension employee*/
-    
+
                       /*Start of pension employer*/
-    
+
     IF((e.unpaid_leave = 0),0,IF(e.retired !=2,IF((pf.deduction_from = 1), (IF((month(e.hire_date) = month('" . $payroll_date . "')) AND (year(e.hire_date) = year('" . $payroll_date . "'))
                       ,((" . $days . "- day(e.hire_date)+1)*e.salary/" . $days . "),e.salary)*pf.amount_employer), (pf.amount_employer*(IF((month(e.hire_date) = month('" . $payroll_date . "')) AND (year(e.hire_date) = year('" . $payroll_date . "'))
                       ,((" . $days . "- day(e.hire_date)+1)*e.salary/" . $days . "),e.salary)+ IF ((SELECT SUM(b.amount) FROM bonus b WHERE  b.state =  1 AND b.empID =  e.emp_id GROUP BY b.empID)>=0, (SELECT SUM(b.amount) FROM bonus b WHERE  b.state = 1 AND b.empID =  e.emp_id GROUP BY b.empID), 0) +
-    
+
     IF ((SELECT SUM(o.amount) FROM overtimes o WHERE  o.empID =  e.emp_id GROUP BY o.empID)>=0, (SELECT SUM(o.amount) FROM overtimes o WHERE  o.empID =  e.emp_id GROUP BY o.empID), 0)
      +
-    
+
     IF ((SELECT SUM(ea.amount) FROM emp_allowances ea, allowances a  WHERE  a.id = ea.allowance AND ea.empID =  e.emp_id AND ea.mode=1 AND a.state= 1 AND a.type = 0 And a.pensionable = 'YES' GROUP BY ea.empID)>=0, ((SELECT SUM(ea.amount) FROM emp_allowances ea, allowances a  WHERE  a.id = ea.allowance AND ea.empID =  e.emp_id AND ea.mode=1 AND a.type = 0 And a.pensionable = 'YES' AND a.state= 1 GROUP BY ea.empID)),0)
     +
     /* start add leave allowance to pension */
@@ -774,34 +777,34 @@ FROM employee e, emp_allowances ea,  allowances a WHERE e.emp_id = ea.empID AND 
     IF(
        DATEDIFF('" . $last_date . "',e.hire_date) < 365,
        ((DATEDIFF('" . $last_date . "',e.hire_date)+1)/365)*e.salary,
-    
+
       (
        IF(
            (SELECT SUM(IF((month(e.hire_date) = month('" . $payroll_date . "')) AND (year(e.hire_date) = year('" . $payroll_date . "')),((" . $days . "- day(e.hire_date)+1)*e.salary/" . $days . "),e.salary)*ea.percent) FROM emp_allowances ea, allowances a  WHERE  a.id = ea.allowance AND ea.empID =  e.emp_id AND ea.mode=2 And a.pensionable = 'YES' AND a.state= 1 AND a.type = 1 GROUP BY ea.empID)>0,
-    
+
            (SELECT SUM(IF((month(e.hire_date) = month('" . $payroll_date . "')) AND (year(e.hire_date) = year('" . $payroll_date . "')),((" . $days . "- day(e.hire_date)+1)*e.salary/" . $days . "),e.salary)*ea.percent) FROM emp_allowances ea, allowances a  WHERE  a.id = ea.allowance AND ea.empID =  e.emp_id AND ea.mode=2 And a.pensionable = 'YES' AND a.state= 1 AND a.type = 1 GROUP BY ea.empID),
            0)
       )
-    
+
        ),
-    
+
     0
     )
-    
+
     /*end leave allowance to pension */
     +
     IF ((SELECT SUM(IF((month(e.hire_date) = month('" . $payroll_date . "')) AND (year(e.hire_date) = year('" . $payroll_date . "'))
                       ,((" . $days . "- day(e.hire_date)+1)*e.salary/" . $days . "),e.salary)*ea.percent) FROM emp_allowances ea, allowances a  WHERE  a.id = ea.allowance AND ea.empID =  e.emp_id AND ea.mode=2 AND a.type = 0 And a.pensionable = 'YES' AND a.state= 1 GROUP BY ea.empID)>0, (SELECT SUM(IF((month(e.hire_date) = month('" . $payroll_date . "')) AND (year(e.hire_date) = year('" . $payroll_date . "'))
                       ,((" . $days . "- day(e.hire_date)+1)*e.salary/" . $days . "),e.salary)*ea.percent) FROM emp_allowances ea, allowances a  WHERE  a.id = ea.allowance AND ea.empID =  e.emp_id AND ea.mode=2 AND a.type = 0 And a.pensionable = 'YES' AND a.state= 1 GROUP BY ea.empID), 0)))),'0'  )) AS pension_employer,
-    
+
                       /*End of Pension employer*/
-    
+
     IF((e.unpaid_leave = 0),0,((SELECT rate_employee from deduction where id=9 )*(IF((month(e.hire_date) = month('" . $payroll_date . "')) AND (year(e.hire_date) = year('" . $payroll_date . "'))
                       ,((" . $days . "- day(e.hire_date)+1)*e.salary/" . $days . "),e.salary)))) as medical_employee,
-    
+
     IF((e.unpaid_leave = 0),0,((SELECT rate_employer from deduction where id=9 )*(IF((month(e.hire_date) = month('" . $payroll_date . "')) AND (year(e.hire_date) = year('" . $payroll_date . "'))
                       ,((" . $days . "- day(e.hire_date)+1)*e.salary/" . $days . "),e.salary)))) as medical_employer,
-    
+
                       /*PAYE AMOUNT CALCULATIONS STARTS HERE*/
                       /*SELECTING EXCESS*/
                       IF((e.unpaid_leave = 0),0,(
@@ -810,18 +813,18 @@ FROM employee e, emp_allowances ea,  allowances a WHERE e.emp_id = ea.empID AND 
                               (
                                   IF((month(e.hire_date) = month('" . $payroll_date . "')) AND (year(e.hire_date) = year('" . $payroll_date . "'))
                                         ,((" . $days . "- day(e.hire_date)+1)*e.salary/" . $days . "),e.salary)
-    
+
                                         -
-    
+
                                /*pension*/
-    
-    
+
+
                               IF(  (pf.deduction_from = 1), (IF((month(e.hire_date) = month('" . $payroll_date . "')) AND (year(e.hire_date) = year('" . $payroll_date . "'))
                                         ,((" . $days . "- day(e.hire_date)+1)*e.salary/" . $days . "),e.salary)*pf.amount_employee), (pf.amount_employee*(IF((month(e.hire_date) = month('" . $payroll_date . "')) AND (year(e.hire_date) = year('" . $payroll_date . "'))
                                         ,((" . $days . "- day(e.hire_date)+1)*e.salary/" . $days . "),e.salary)+ IF ((SELECT SUM(b.amount) FROM bonus b WHERE  b.state =  1 AND b.empID =  e.emp_id GROUP BY b.empID)>=0, (SELECT SUM(b.amount) FROM bonus b WHERE  b.state = 1 AND b.empID =  e.emp_id GROUP BY b.empID), 0) +
-    
+
                               IF ((SELECT SUM(o.amount) FROM overtimes o WHERE  o.empID =  e.emp_id GROUP BY o.empID)>=0, (SELECT SUM(o.amount) FROM overtimes o WHERE  o.empID =  e.emp_id GROUP BY o.empID), 0) +
-    
+
                               IF ((SELECT SUM(ea.amount) FROM emp_allowances ea, allowances a  WHERE  a.id = ea.allowance AND ea.empID =  e.emp_id AND a.taxable = 'YES' AND a.pensionable = 'YES' AND  ea.mode=1 AND a.state= 1 GROUP BY ea.empID)>=0, ((SELECT SUM(ea.amount) FROM emp_allowances ea, allowances a  WHERE  a.id = ea.allowance AND ea.empID =  e.emp_id AND ea.mode=1 AND a.taxable = 'YES' AND a.pensionable = 'YES' AND a.state= 1 GROUP BY ea.empID)),0)
                               +
                               /* start add leave allowance to tax */
@@ -832,25 +835,25 @@ FROM employee e, emp_allowances ea,  allowances a WHERE e.emp_id = ea.empID AND 
                         DATEDIFF('" . $last_date . "',e.hire_date) < 365,
                         ((DATEDIFF('" . $last_date . "',e.hire_date)+1)/365)*e.salary,
                       e.salary),
-    
+
                       0
                       )
-    
+
                               /*end leave allowance to tax */
-    
+
                               /*end leave allowance to tax */
                               +
                                IF ((SELECT SUM(IF((month(e.hire_date) = month('" . $payroll_date . "')) AND (year(e.hire_date) = year('" . $payroll_date . "'))
                                         ,((" . $days . "- day(e.hire_date)+1)*e.salary/" . $days . "),e.salary)*ea.percent) FROM emp_allowances ea, allowances a  WHERE  a.id = ea.allowance AND  ea.empID =  e.emp_id AND ea.mode=2 AND a.taxable = 'YES' AND a.pensionable = 'YES' AND a.state= 1 AND a.type = 0 GROUP BY ea.empID)>0, (SELECT SUM(IF((month(e.hire_date) = month('" . $payroll_date . "')) AND (year(e.hire_date) = year('" . $payroll_date . "'))
                                         ,((" . $days . "- day(e.hire_date)+1)*e.salary/" . $days . "),e.salary)*ea.percent) FROM emp_allowances ea, allowances a  WHERE  a.id = ea.allowance AND ea.empID =  e.emp_id AND ea.mode=2 AND a.state= 1 AND a.taxable = 'YES' AND a.pensionable = 'YES' AND a.type = 0 GROUP BY ea.empID), 0)))  )
                                  /* End pension*/
-    
+
                               ) +
                               /*all Allowances and Bonuses*/
                               IF ((SELECT SUM(b.amount) FROM bonus b WHERE  b.state =  1 AND b.empID =  e.emp_id GROUP BY b.empID)>=0, (SELECT SUM(b.amount) FROM bonus b WHERE  b.state = 1 AND b.empID =  e.emp_id GROUP BY b.empID), 0) +
-    
+
                               IF ((SELECT SUM(o.amount) FROM overtimes o WHERE  o.empID =  e.emp_id GROUP BY o.empID)>=0, (SELECT SUM(o.amount) FROM overtimes o WHERE  o.empID =  e.emp_id GROUP BY o.empID), 0) +
-    
+
                               IF ((SELECT SUM(ea.amount) FROM emp_allowances ea, allowances a  WHERE  a.id = ea.allowance AND ea.empID =  e.emp_id AND a.taxable = 'YES' AND ea.mode=1 AND a.state= 1 GROUP BY ea.empID)>=0, ((SELECT SUM(ea.amount) FROM emp_allowances ea, allowances a  WHERE  a.id = ea.allowance AND ea.empID =  e.emp_id AND ea.mode=1 AND a.taxable = 'YES' AND a.state= 1 GROUP BY ea.empID)),0)
                               +
                               /* start add leave allowance to tax */
@@ -860,32 +863,32 @@ FROM employee e, emp_allowances ea,  allowances a WHERE e.emp_id = ea.empID AND 
                         DATEDIFF('" . $last_date . "',e.hire_date) < 365,
                         ((DATEDIFF('" . $last_date . "',e.hire_date)+1)/365)*e.salary,
                       e.salary),
-    
+
                       0
                       )
-    
+
                               /*end leave allowance to tax */
                               +
                               IF ((SELECT SUM(IF((month(e.hire_date) = month('" . $payroll_date . "')) AND (year(e.hire_date) = year('" . $payroll_date . "'))
                                         ,((" . $days . "- day(e.hire_date)+1)*e.salary/" . $days . "),e.salary)*ea.percent) FROM emp_allowances ea, allowances a  WHERE  a.id = ea.allowance AND a.taxable = 'YES' AND ea.empID =  e.emp_id AND ea.mode=2 AND a.state= 1 AND a.type = 0 GROUP BY ea.empID)>0, (SELECT SUM(IF((month(e.hire_date) = month('" . $payroll_date . "')) AND (year(e.hire_date) = year('" . $payroll_date . "'))
                                         ,((" . $days . "- day(e.hire_date)+1)*e.salary/" . $days . "),e.salary)*ea.percent) FROM emp_allowances ea, allowances a  WHERE  a.id = ea.allowance AND a.taxable = 'YES' AND ea.empID =  e.emp_id AND ea.mode=2 AND a.state= 1 AND a.type = 0 GROUP BY ea.empID), 0)
-    
+
                               /*End all Allowances and Bonuses*/
                                )/*End Taxable Amount*/)  AND minimum <= (/*Taxable Amount*/ (
                               (
-    
+
                                   IF((month(e.hire_date) = month('" . $payroll_date . "')) AND (year(e.hire_date) = year('" . $payroll_date . "'))
                                         ,((" . $days . "- day(e.hire_date)+1)*e.salary/" . $days . "),e.salary) -
-    
+
                                /*pension*/
-    
-    
+
+
                               IF(  (pf.deduction_from = 1), (IF((month(e.hire_date) = month('" . $payroll_date . "')) AND (year(e.hire_date) = year('" . $payroll_date . "'))
                                         ,((" . $days . "- day(e.hire_date)+1)*e.salary/" . $days . "),e.salary)*pf.amount_employee), (pf.amount_employee*(IF((month(e.hire_date) = month('" . $payroll_date . "')) AND (year(e.hire_date) = year('" . $payroll_date . "'))
                                         ,((" . $days . "- day(e.hire_date)+1)*e.salary/" . $days . "),e.salary)+ IF ((SELECT SUM(b.amount) FROM bonus b WHERE  b.state =  1 AND b.empID =  e.emp_id GROUP BY b.empID)>=0, (SELECT SUM(b.amount) FROM bonus b WHERE  b.state = 1 AND b.empID =  e.emp_id GROUP BY b.empID), 0) +
-    
+
                               IF ((SELECT SUM(o.amount) FROM overtimes o WHERE  o.empID =  e.emp_id GROUP BY o.empID)>=0, (SELECT SUM(o.amount) FROM overtimes o WHERE  o.empID =  e.emp_id GROUP BY o.empID), 0) +
-    
+
                               IF ((SELECT SUM(ea.amount) FROM emp_allowances ea, allowances a  WHERE  a.id = ea.allowance AND a.taxable = 'YES' AND a.pensionable = 'YES' AND ea.empID =  e.emp_id AND ea.mode=1 AND a.state= 1 GROUP BY ea.empID)>=0, ((SELECT SUM(ea.amount) FROM emp_allowances ea, allowances a  WHERE  a.id = ea.allowance AND ea.empID =  e.emp_id AND a.taxable = 'YES' AND a.pensionable = 'YES' AND ea.mode=1 AND a.state= 1 GROUP BY ea.empID)),0)
                               +
                               /* start add leave allowance to tax */
@@ -895,25 +898,25 @@ FROM employee e, emp_allowances ea,  allowances a WHERE e.emp_id = ea.empID AND 
                         DATEDIFF('" . $last_date . "',e.hire_date) < 365,
                         ((DATEDIFF('" . $last_date . "',e.hire_date)+1)/365)*e.salary,
                       e.salary),
-    
+
                       0
                       )
-    
+
                               /*end leave allowance to tax */
                               +
                               IF ((SELECT SUM(IF((month(e.hire_date) = month('" . $payroll_date . "')) AND (year(e.hire_date) = year('" . $payroll_date . "'))
                                         ,((" . $days . "- day(e.hire_date)+1)*e.salary/" . $days . "),e.salary)*ea.percent) FROM emp_allowances ea, allowances a  WHERE  a.id = ea.allowance AND ea.empID =  e.emp_id AND a.taxable = 'YES' AND a.pensionable = 'YES' AND ea.mode=2 AND a.state= 1 AND a.type=0 GROUP BY ea.empID)>0, (SELECT SUM(IF((month(e.hire_date) = month('" . $payroll_date . "')) AND (year(e.hire_date) = year('" . $payroll_date . "'))
                                         ,((" . $days . "- day(e.hire_date)+1)*e.salary/" . $days . "),e.salary)*ea.percent) FROM emp_allowances ea, allowances a  WHERE  a.id = ea.allowance AND ea.empID =  e.emp_id AND ea.mode=2 AND a.taxable = 'YES' AND a.pensionable = 'YES' AND a.state= 1 AND a.type=0 GROUP BY ea.empID), 0)))  )
-    
-    
+
+
                                /*End pension*/
-    
+
                               ) +
                               /*all Allowances and Bonuses*/
                               IF ((SELECT SUM(b.amount) FROM bonus b WHERE  b.state =  1 AND b.empID =  e.emp_id GROUP BY b.empID)>=0, (SELECT SUM(b.amount) FROM bonus b WHERE  b.state = 1 AND b.empID =  e.emp_id GROUP BY b.empID), 0) +
-    
+
                               IF ((SELECT SUM(o.amount) FROM overtimes o WHERE  o.empID =  e.emp_id GROUP BY o.empID)>=0, (SELECT SUM(o.amount) FROM overtimes o WHERE  o.empID =  e.emp_id GROUP BY o.empID), 0) +
-    
+
                               IF ((SELECT SUM(ea.amount) FROM emp_allowances ea, allowances a  WHERE  a.id = ea.allowance AND ea.empID =  e.emp_id AND a.taxable = 'YES' AND ea.mode=1 AND a.state= 1 GROUP BY ea.empID)>=0, ((SELECT SUM(ea.amount) FROM emp_allowances ea, allowances a  WHERE  a.id = ea.allowance AND ea.empID =  e.emp_id AND ea.mode=1 AND a.taxable = 'YES' AND a.state= 1 GROUP BY ea.empID)),0)
                               +
                               /* start add leave allowance to tax */
@@ -923,35 +926,35 @@ FROM employee e, emp_allowances ea,  allowances a WHERE e.emp_id = ea.empID AND 
                         DATEDIFF('" . $last_date . "',e.hire_date) < 365,
                         ((DATEDIFF('" . $last_date . "',e.hire_date)+1)/365)*e.salary,
                       e.salary),
-    
+
                       0
                       )
-    
+
                               /*end leave allowance to tax */
                               +
                                IF ((SELECT SUM(IF((month(e.hire_date) = month('" . $payroll_date . "')) AND (year(e.hire_date) = year('" . $payroll_date . "'))
                                         ,((" . $days . "- day(e.hire_date)+1)*e.salary/" . $days . "),e.salary)*ea.percent) FROM emp_allowances ea, allowances a  WHERE  a.id = ea.allowance AND ea.empID =  e.emp_id AND ea.mode=2 AND a.taxable = 'YES' AND a.state= 1 AND a.type=0 GROUP BY ea.empID)>0, (SELECT SUM(IF((month(e.hire_date) = month('" . $payroll_date . "')) AND (year(e.hire_date) = year('" . $payroll_date . "'))
                                         ,((" . $days . "- day(e.hire_date)+1)*e.salary/" . $days . "),e.salary)*ea.percent) FROM emp_allowances ea, allowances a  WHERE  a.id = ea.allowance AND ea.empID =  e.emp_id AND a.taxable = 'YES' AND ea.mode=2 AND a.state= 1 AND a.type=0 GROUP BY ea.empID), 0)
-    
+
                               /*End all Allowances and Bonuses*/
                                )/*End Taxable Amount*/) )
-    
+
                                /*END OF EXCESS SELECTION */
                               +
                               /*RATE AMOUNT CALCULATIONS STARTS HERE*/
                               /*SELECTING RATE*/
-    
+
                               ( (SELECT rate FROM paye WHERE maximum > (/*Taxable Amount*/ (
                               ( IF((month(e.hire_date) = month('" . $payroll_date . "')) AND (year(e.hire_date) = year('" . $payroll_date . "'))
                                         ,((" . $days . "- day(e.hire_date)+1)*e.salary/" . $days . "),e.salary) -
-    
+
                                /*pension*/
                                IF(  (pf.deduction_from = 1), (IF((month(e.hire_date) = month('" . $payroll_date . "')) AND (year(e.hire_date) = year('" . $payroll_date . "'))
                                         ,((" . $days . "- day(e.hire_date)+1)*e.salary/" . $days . "),e.salary)*pf.amount_employee), (pf.amount_employee*(IF((month(e.hire_date) = month('" . $payroll_date . "')) AND (year(e.hire_date) = year('" . $payroll_date . "'))
                                         ,((" . $days . "- day(e.hire_date)+1)*e.salary/" . $days . "),e.salary)+ IF ((SELECT SUM(b.amount) FROM bonus b WHERE  b.state =  1 AND b.empID =  e.emp_id GROUP BY b.empID)>=0, (SELECT SUM(b.amount) FROM bonus b WHERE  b.state = 1 AND b.empID =  e.emp_id GROUP BY b.empID), 0) +
-    
+
                               IF ((SELECT SUM(o.amount) FROM overtimes o WHERE  o.empID =  e.emp_id GROUP BY o.empID)>=0, (SELECT SUM(o.amount) FROM overtimes o WHERE  o.empID =  e.emp_id GROUP BY o.empID), 0) +
-    
+
                               IF ((SELECT SUM(ea.amount) FROM emp_allowances ea, allowances a  WHERE  a.id = ea.allowance AND ea.empID =  e.emp_id AND ea.mode=1 AND a.taxable = 'YES' AND a.pensionable = 'YES' AND a.state= 1 GROUP BY ea.empID)>=0, ((SELECT SUM(ea.amount) FROM emp_allowances ea, allowances a  WHERE  a.id = ea.allowance AND ea.empID =  e.emp_id AND a.taxable = 'YES' AND a.pensionable = 'YES' AND ea.mode=1 AND a.state= 1 GROUP BY ea.empID)),0)
                               +
                               /* start add leave allowance to tax */
@@ -961,23 +964,23 @@ FROM employee e, emp_allowances ea,  allowances a WHERE e.emp_id = ea.empID AND 
                         DATEDIFF('" . $last_date . "',e.hire_date) < 365,
                         ((DATEDIFF('" . $last_date . "',e.hire_date)+1)/365)*e.salary,
                       e.salary),
-    
+
                       0
                       )
-    
+
                               /*end leave allowance to tax */
                               +
                                IF ((SELECT SUM(IF((month(e.hire_date) = month('" . $payroll_date . "')) AND (year(e.hire_date) = year('" . $payroll_date . "'))
                                         ,((" . $days . "- day(e.hire_date)+1)*e.salary/" . $days . "),e.salary)*ea.percent) FROM emp_allowances ea, allowances a  WHERE  a.id = ea.allowance AND ea.empID =  e.emp_id AND a.taxable = 'YES' AND a.pensionable = 'YES' AND ea.mode=2 AND a.state= 1 AND a.type=0 GROUP BY ea.empID)>0, (SELECT SUM(IF((month(e.hire_date) = month('" . $payroll_date . "')) AND (year(e.hire_date) = year('" . $payroll_date . "'))
                                         ,((" . $days . "- day(e.hire_date)+1)*e.salary/" . $days . "),e.salary)*ea.percent) FROM emp_allowances ea, allowances a  WHERE  a.id = ea.allowance AND ea.empID =  e.emp_id AND a.taxable = 'YES' AND a.pensionable = 'YES' AND ea.mode=2 AND a.state= 1 AND a.type=0 GROUP BY ea.empID), 0)))  )
                                /*End pension*/
-    
+
                               ) +
                               /*all Allowances and Bonuses*/
                               IF ((SELECT SUM(b.amount) FROM bonus b WHERE  b.state =  1 AND b.empID =  e.emp_id GROUP BY b.empID)>=0, (SELECT SUM(b.amount) FROM bonus b WHERE  b.state = 1 AND b.empID =  e.emp_id GROUP BY b.empID), 0) +
-    
+
                               IF ((SELECT SUM(o.amount) FROM overtimes o WHERE  o.empID =  e.emp_id GROUP BY o.empID)>=0, (SELECT SUM(o.amount) FROM overtimes o WHERE  o.empID =  e.emp_id GROUP BY o.empID), 0) +
-    
+
                               IF ((SELECT SUM(ea.amount) FROM emp_allowances ea, allowances a  WHERE  a.id = ea.allowance AND ea.empID =  e.emp_id AND ea.mode=1 AND a.taxable = 'YES' AND a.state= 1 GROUP BY ea.empID)>=0, ((SELECT SUM(ea.amount) FROM emp_allowances ea, allowances a  WHERE  a.id = ea.allowance AND ea.empID =  e.emp_id AND a.taxable = 'YES' AND ea.mode=1 AND a.state= 1 GROUP BY ea.empID)),0)
                               +
                               /* start add leave allowance to tax */
@@ -987,28 +990,28 @@ FROM employee e, emp_allowances ea,  allowances a WHERE e.emp_id = ea.empID AND 
                         DATEDIFF('" . $last_date . "',e.hire_date) < 365,
                         ((DATEDIFF('" . $last_date . "',e.hire_date)+1)/365)*e.salary,
                       e.salary),
-    
+
                       0
                       )
-    
+
                               /*end leave allowance to tax */
                               +
                                IF ((SELECT SUM(IF((month(e.hire_date) = month('" . $payroll_date . "')) AND (year(e.hire_date) = year('" . $payroll_date . "'))
                                         ,((" . $days . "- day(e.hire_date)+1)*e.salary/" . $days . "),e.salary)*ea.percent) FROM emp_allowances ea, allowances a  WHERE  a.id = ea.allowance AND ea.empID =  e.emp_id AND a.taxable = 'YES' AND ea.mode=2 AND a.state= 1 AND a.type=0 GROUP BY ea.empID)>0, (SELECT SUM(IF((month(e.hire_date) = month('" . $payroll_date . "')) AND (year(e.hire_date) = year('" . $payroll_date . "'))
                                         ,((" . $days . "- day(e.hire_date)+1)*e.salary/" . $days . "),e.salary)*ea.percent) FROM emp_allowances ea, allowances a  WHERE  a.id = ea.allowance AND ea.empID =  e.emp_id AND a.taxable = 'YES' AND ea.mode=2 AND a.state= 1 AND a.type=0 GROUP BY ea.empID), 0)
-    
+
                               /*End all Allowances and Bonuses*/
                                )/*End Taxable Amount*/)  AND minimum <= (/*Taxable Amount*/ (
                               ( IF((month(e.hire_date) = month('" . $payroll_date . "')) AND (year(e.hire_date) = year('" . $payroll_date . "'))
                                         ,((" . $days . "- day(e.hire_date)+1)*e.salary/" . $days . "),e.salary) -
-    
+
                                /*pension*/
                                IF(  (pf.deduction_from = 1), (IF((month(e.hire_date) = month('" . $payroll_date . "')) AND (year(e.hire_date) = year('" . $payroll_date . "'))
                                         ,((" . $days . "- day(e.hire_date)+1)*e.salary/" . $days . "),e.salary)*pf.amount_employee), (pf.amount_employee*(IF((month(e.hire_date) = month('" . $payroll_date . "')) AND (year(e.hire_date) = year('" . $payroll_date . "'))
                                         ,((" . $days . "- day(e.hire_date)+1)*e.salary/" . $days . "),e.salary)+ IF ((SELECT SUM(b.amount) FROM bonus b WHERE  b.state =  1 AND b.empID =  e.emp_id GROUP BY b.empID)>=0, (SELECT SUM(b.amount) FROM bonus b WHERE  b.state = 1 AND b.empID =  e.emp_id GROUP BY b.empID), 0) +
-    
+
                               IF ((SELECT SUM(o.amount) FROM overtimes o WHERE  o.empID =  e.emp_id GROUP BY o.empID)>=0, (SELECT SUM(o.amount) FROM overtimes o WHERE  o.empID =  e.emp_id GROUP BY o.empID), 0) +
-    
+
                               IF ((SELECT SUM(ea.amount) FROM emp_allowances ea, allowances a  WHERE  a.id = ea.allowance AND ea.empID =  e.emp_id AND a.taxable = 'YES' AND a.pensionable = 'YES' AND ea.mode=1 AND a.state= 1 GROUP BY ea.empID)>=0, ((SELECT SUM(ea.amount) FROM emp_allowances ea, allowances a  WHERE  a.id = ea.allowance AND ea.empID =  e.emp_id AND a.taxable = 'YES' AND a.pensionable = 'YES' AND ea.mode=1 AND a.state= 1 GROUP BY ea.empID)),0)
                               +
                               /* start add leave allowance to tax */
@@ -1018,23 +1021,23 @@ FROM employee e, emp_allowances ea,  allowances a WHERE e.emp_id = ea.empID AND 
                         DATEDIFF('" . $last_date . "',e.hire_date) < 365,
                         ((DATEDIFF('" . $last_date . "',e.hire_date)+1)/365)*e.salary,
                       e.salary),
-    
+
                       0
                       )
-    
+
                               /*end leave allowance to tax */
                               +
                                IF ((SELECT SUM(IF((month(e.hire_date) = month('" . $payroll_date . "')) AND (year(e.hire_date) = year('" . $payroll_date . "'))
                                         ,((" . $days . "- day(e.hire_date)+1)*e.salary/" . $days . "),e.salary)*ea.percent) FROM emp_allowances ea, allowances a  WHERE  a.id = ea.allowance AND ea.empID =  e.emp_id AND ea.mode=2 AND a.taxable = 'YES' AND a.pensionable = 'YES' AND a.state= 1 AND a.type=0 GROUP BY ea.empID)>0, (SELECT SUM(IF((month(e.hire_date) = month('" . $payroll_date . "')) AND (year(e.hire_date) = year('" . $payroll_date . "'))
                                         ,((" . $days . "- day(e.hire_date)+1)*e.salary/" . $days . "),e.salary)*ea.percent) FROM emp_allowances ea, allowances a  WHERE  a.id = ea.allowance AND ea.empID =  e.emp_id AND a.taxable = 'YES' AND a.pensionable = 'YES' AND ea.mode=2 AND a.state= 1 AND a.type=0 GROUP BY ea.empID), 0)))  )
                                /*End pension*/
-    
+
                               ) +
                               /*all Allowances and Bonuses*/
                               IF ((SELECT SUM(b.amount) FROM bonus b WHERE  b.state =  1 AND b.empID =  e.emp_id GROUP BY b.empID)>=0, (SELECT SUM(b.amount) FROM bonus b WHERE  b.state = 1 AND b.empID =  e.emp_id GROUP BY b.empID), 0) +
-    
+
                               IF ((SELECT SUM(o.amount) FROM overtimes o WHERE  o.empID =  e.emp_id GROUP BY o.empID)>=0, (SELECT SUM(o.amount) FROM overtimes o WHERE  o.empID =  e.emp_id GROUP BY o.empID), 0) +
-    
+
                               IF ((SELECT SUM(ea.amount) FROM emp_allowances ea, allowances a  WHERE  a.id = ea.allowance AND ea.empID =  e.emp_id AND a.taxable = 'YES' AND ea.mode=1 AND a.state= 1 GROUP BY ea.empID)>=0, ((SELECT SUM(ea.amount) FROM emp_allowances ea, allowances a  WHERE  a.id = ea.allowance AND ea.empID =  e.emp_id AND a.taxable = 'YES' AND ea.mode=1 AND a.state= 1 GROUP BY ea.empID)),0)
                               +
                               /* start add leave allowance to tax */
@@ -1044,46 +1047,46 @@ FROM employee e, emp_allowances ea,  allowances a WHERE e.emp_id = ea.empID AND 
                         DATEDIFF('" . $last_date . "',e.hire_date) < 365,
                         ((DATEDIFF('" . $last_date . "',e.hire_date)+1)/365)*e.salary,
                       e.salary),
-    
+
                       0
                       )
-    
+
                               /*end leave allowance to tax */
                               +
                                IF ((SELECT SUM(IF((month(e.hire_date) = month('" . $payroll_date . "')) AND (year(e.hire_date) = year('" . $payroll_date . "'))
                                         ,((" . $days . "- day(e.hire_date)+1)*e.salary/" . $days . "),e.salary)*ea.percent) FROM emp_allowances ea, allowances a  WHERE  a.id = ea.allowance AND ea.empID =  e.emp_id AND a.taxable = 'YES' AND ea.mode=2 AND a.state= 1 AND a.type=0 GROUP BY ea.empID)>0, (SELECT SUM(IF((month(e.hire_date) = month('" . $payroll_date . "')) AND (year(e.hire_date) = year('" . $payroll_date . "'))
                                         ,((" . $days . "- day(e.hire_date)+1)*e.salary/" . $days . "),e.salary)*ea.percent) FROM emp_allowances ea, allowances a  WHERE  a.id = ea.allowance AND ea.empID =  e.emp_id AND a.taxable = 'YES' AND ea.mode=2 AND a.state= 1 AND a.type=0 GROUP BY ea.empID), 0)
-    
+
                               /*End all Allowances and Bonuses*/
                                )/*End Taxable Amount*/))
-    
+
                                /*END OF RATE CALCUALTION */
-    
+
                                *
-    
+
                                /*TAXABLE AMOUNT  CALCULATIONS STARTS HERE*/
                                /*SELECTING TAXABLE*/
-    
-    
+
+
                                ((/*Taxable Amount*/ (
                               ( IF((month(e.hire_date) = month('" . $payroll_date . "')) AND (year(e.hire_date) = year('" . $payroll_date . "'))
                                         ,((" . $days . "- day(e.hire_date)+1)*e.salary/" . $days . "),e.salary) -
-    
+
                                /*pension*/
                                IF(  (pf.deduction_from = 1), (IF((month(e.hire_date) = month('" . $payroll_date . "')) AND (year(e.hire_date) = year('" . $payroll_date . "'))
                                       /*IF BASIC  */
                                   ,((" . $days . "- day(e.hire_date)+1)*e.salary/" . $days . "),e.salary)*pf.amount_employee),
-    
+
                                   /* IF GROSS */
                                         (pf.amount_employee*(IF((month(e.hire_date) = month('" . $payroll_date . "')) AND (year(e.hire_date) = year('" . $payroll_date . "'))
                                         ,((" . $days . "- day(e.hire_date)+1)*e.salary/" . $days . "),e.salary)
-    
+
                               + IF ((SELECT SUM(b.amount) FROM bonus b WHERE  b.state =  1 AND b.empID =  e.emp_id GROUP BY b.empID)>=0, (SELECT SUM(b.amount) FROM bonus b WHERE  b.state = 1 AND b.empID =  e.emp_id GROUP BY b.empID), 0)
                                +
-    
+
                               IF ((SELECT SUM(o.amount) FROM overtimes o WHERE  o.empID =  e.emp_id GROUP BY o.empID)>=0, (SELECT SUM(o.amount) FROM overtimes o WHERE  o.empID =  e.emp_id GROUP BY o.empID), 0)
                                +
-    
+
                               IF ((SELECT SUM(ea.amount) FROM emp_allowances ea, allowances a  WHERE  a.id = ea.allowance AND ea.empID =  e.emp_id AND a.taxable = 'YES' AND a.pensionable = 'YES' AND ea.mode=1 AND a.state= 1  AND a.type=0 GROUP BY ea.empID)>=0,
                               ((SELECT SUM(ea.amount) FROM emp_allowances ea, allowances a  WHERE  a.id = ea.allowance AND ea.empID =  e.emp_id AND a.taxable = 'YES' AND a.pensionable = 'YES' AND ea.mode=1 AND a.state= 1  AND a.type=0 GROUP BY ea.empID)),0)
                               +
@@ -1094,30 +1097,30 @@ FROM employee e, emp_allowances ea,  allowances a WHERE e.emp_id = ea.empID AND 
                         DATEDIFF('" . $last_date . "',e.hire_date) < 365,
                         ((DATEDIFF('" . $last_date . "',e.hire_date)+1)/365)*e.salary,
                       e.salary),
-    
+
                       0
                       )
-    
-    
-    
+
+
+
                               /*end leave allowance to tax */
                               +
                                IF ((SELECT SUM(IF((month(e.hire_date) = month('" . $payroll_date . "')) AND (year(e.hire_date) = year('" . $payroll_date . "'))
                                         ,((" . $days . "- day(e.hire_date)+1)*e.salary/" . $days . "),e.salary)*ea.percent) FROM emp_allowances ea, allowances a  WHERE  a.id = ea.allowance AND ea.empID =  e.emp_id AND a.taxable = 'YES' AND a.pensionable = 'YES' AND ea.mode=2 AND a.state= 1 AND a.type=0 GROUP BY ea.empID)>0, (SELECT SUM(IF((month(e.hire_date) = month('" . $payroll_date . "')) AND (year(e.hire_date) = year('" . $payroll_date . "'))
                                         ,((" . $days . "- day(e.hire_date)+1)*e.salary/" . $days . "),e.salary)*ea.percent) FROM emp_allowances ea, allowances a  WHERE  a.id = ea.allowance AND ea.empID =  e.emp_id AND a.taxable = 'YES' AND a.pensionable = 'YES' AND ea.mode=2 AND a.state= 1 AND a.type=0 GROUP BY ea.empID), 0)
-    
+
                                         ))  )
-    
+
                               )
                               /* END OF PENSION CALCULATION */
-    
+
                               +
-    
+
                               /*all Allowances and Bonuses*/
                               IF ((SELECT SUM(b.amount) FROM bonus b WHERE  b.state =  1 AND b.empID =  e.emp_id GROUP BY b.empID)>=0, (SELECT SUM(b.amount) FROM bonus b WHERE  b.state = 1 AND b.empID =  e.emp_id GROUP BY b.empID), 0) +
-    
+
                               IF ((SELECT SUM(o.amount) FROM overtimes o WHERE  o.empID =  e.emp_id GROUP BY o.empID)>=0, (SELECT SUM(o.amount) FROM overtimes o WHERE  o.empID =  e.emp_id GROUP BY o.empID), 0) +
-    
+
                               IF ((SELECT SUM(ea.amount) FROM emp_allowances ea, allowances a  WHERE  a.id = ea.allowance AND ea.empID =  e.emp_id AND a.taxable = 'YES' AND ea.mode=1 AND a.state= 1 GROUP BY ea.empID)>=0, ((SELECT SUM(ea.amount) FROM emp_allowances ea, allowances a  WHERE  a.id = ea.allowance AND ea.empID =  e.emp_id AND ea.mode=1 AND a.taxable = 'YES' AND a.state= 1 GROUP BY ea.empID)),0)
                               +
                               /* start add leave allowance to tax */
@@ -1127,34 +1130,34 @@ FROM employee e, emp_allowances ea,  allowances a WHERE e.emp_id = ea.empID AND 
                         DATEDIFF('" . $last_date . "',e.hire_date) < 365,
                         ((DATEDIFF('" . $last_date . "',e.hire_date)+1)/365)*e.salary,
                       e.salary),
-    
+
                       0
                       )
-    
+
                               /*end leave allowance to tax */
                               +
                                IF ((SELECT SUM(IF((month(e.hire_date) = month('" . $payroll_date . "')) AND (year(e.hire_date) = year('" . $payroll_date . "'))
                                         ,((" . $days . "- day(e.hire_date)+1)*e.salary/" . $days . "),e.salary)*ea.percent) FROM emp_allowances ea, allowances a  WHERE  a.id = ea.allowance AND ea.empID =  e.emp_id AND a.taxable = 'YES'  AND ea.mode=2 AND a.state= 1 AND a.type=0 GROUP BY ea.empID)>0, (SELECT SUM(IF((month(e.hire_date) = month('" . $payroll_date . "')) AND (year(e.hire_date) = year('" . $payroll_date . "'))
                                         ,((" . $days . "- day(e.hire_date)+1)*e.salary/" . $days . "),e.salary)*ea.percent) FROM emp_allowances ea, allowances a  WHERE  a.id = ea.allowance AND ea.empID =  e.emp_id AND ea.mode=2 AND a.taxable = 'YES' AND a.state= 1 AND a.type=0 GROUP BY ea.empID), 0)
-    
+
                               /*End all Allowances and Bonuses*/
-    
+
                               /*END OF TAXABLE AMOUNT CALCULATION */
-     
+
                                )/*End Taxable Amount*/)
-    
-    
+
+
                                - (SELECT minimum FROM paye WHERE maximum > (/*Taxable Amount*/ (
                               ( IF((month(e.hire_date) = month('" . $payroll_date . "')) AND (year(e.hire_date) = year('" . $payroll_date . "'))
                                         ,((" . $days . "- day(e.hire_date)+1)*e.salary/" . $days . "),e.salary) -
-    
+
                                /*pension*/
                                IF(  (pf.deduction_from = 1), (IF((month(e.hire_date) = month('" . $payroll_date . "')) AND (year(e.hire_date) = year('" . $payroll_date . "'))
                                         ,((" . $days . "- day(e.hire_date)+1)*e.salary/" . $days . "),e.salary)*pf.amount_employee), (pf.amount_employee*(IF((month(e.hire_date) = month('" . $payroll_date . "')) AND (year(e.hire_date) = year('" . $payroll_date . "'))
                                         ,((" . $days . "- day(e.hire_date)+1)*e.salary/" . $days . "),e.salary)+ IF ((SELECT SUM(b.amount) FROM bonus b WHERE  b.state =  1 AND b.empID =  e.emp_id GROUP BY b.empID)>=0, (SELECT SUM(b.amount) FROM bonus b WHERE  b.state = 1 AND b.empID =  e.emp_id GROUP BY b.empID), 0) +
-    
+
                               IF ((SELECT SUM(o.amount) FROM overtimes o WHERE  o.empID =  e.emp_id GROUP BY o.empID)>=0, (SELECT SUM(o.amount) FROM overtimes o WHERE  o.empID =  e.emp_id GROUP BY o.empID), 0) +
-    
+
                               IF ((SELECT SUM(ea.amount) FROM emp_allowances ea, allowances a  WHERE  a.id = ea.allowance AND ea.empID =  e.emp_id AND ea.mode=1 AND a.taxable = 'YES' AND a.pensionable = 'YES' AND a.state= 1 GROUP BY ea.empID)>=0, ((SELECT SUM(ea.amount) FROM emp_allowances ea, allowances a  WHERE  a.id = ea.allowance AND ea.empID =  e.emp_id AND a.taxable = 'YES' AND a.pensionable = 'YES' AND ea.mode=1 AND a.state= 1 GROUP BY ea.empID)),0)
                               +
                               /* start add leave allowance to tax */
@@ -1164,23 +1167,23 @@ FROM employee e, emp_allowances ea,  allowances a WHERE e.emp_id = ea.empID AND 
                         DATEDIFF('" . $last_date . "',e.hire_date) < 365,
                         ((DATEDIFF('" . $last_date . "',e.hire_date)+1)/365)*e.salary,
                       e.salary),
-    
+
                       0
                       )
-    
+
                               /*end leave allowance to tax */
                               +
                                IF ((SELECT SUM(IF((month(e.hire_date) = month('" . $payroll_date . "')) AND (year(e.hire_date) = year('" . $payroll_date . "'))
                                         ,((" . $days . "- day(e.hire_date)+1)*e.salary/" . $days . "),e.salary)*ea.percent) FROM emp_allowances ea, allowances a  WHERE  a.id = ea.allowance AND ea.empID =  e.emp_id AND ea.mode=2 AND a.taxable = 'YES' AND a.pensionable = 'YES' AND a.state= 1 AND a.type=0 GROUP BY ea.empID)>0, (SELECT SUM(IF((month(e.hire_date) = month('" . $payroll_date . "')) AND (year(e.hire_date) = year('" . $payroll_date . "'))
                                         ,((" . $days . "- day(e.hire_date)+1)*e.salary/" . $days . "),e.salary)*ea.percent) FROM emp_allowances ea, allowances a  WHERE  a.id = ea.allowance AND ea.empID =  e.emp_id AND ea.mode=2 AND a.taxable = 'YES' AND a.pensionable = 'YES' AND a.state= 1 AND a.type=0 GROUP BY ea.empID), 0)))  )
                                /*End pension*/
-    
+
                               ) +
                               /*all Allowances and Bonuses*/
                               IF ((SELECT SUM(b.amount) FROM bonus b WHERE  b.state =  1 AND b.empID =  e.emp_id GROUP BY b.empID)>=0, (SELECT SUM(b.amount) FROM bonus b WHERE  b.state = 1 AND b.empID =  e.emp_id GROUP BY b.empID), 0) +
-    
+
                               IF ((SELECT SUM(o.amount) FROM overtimes o WHERE  o.empID =  e.emp_id GROUP BY o.empID)>=0, (SELECT SUM(o.amount) FROM overtimes o WHERE  o.empID =  e.emp_id GROUP BY o.empID), 0) +
-    
+
                               IF ((SELECT SUM(ea.amount) FROM emp_allowances ea, allowances a  WHERE  a.id = ea.allowance AND ea.empID =  e.emp_id AND ea.mode=1 AND a.taxable = 'YES' AND a.state= 1 GROUP BY ea.empID)>=0, ((SELECT SUM(ea.amount) FROM emp_allowances ea, allowances a  WHERE  a.id = ea.allowance AND ea.empID =  e.emp_id AND ea.mode=1 AND a.taxable = 'YES' AND a.state= 1 GROUP BY ea.empID)),0)
                               +
                               /* start add leave allowance to tax */
@@ -1190,28 +1193,28 @@ FROM employee e, emp_allowances ea,  allowances a WHERE e.emp_id = ea.empID AND 
                         DATEDIFF('" . $last_date . "',e.hire_date) < 365,
                         ((DATEDIFF('" . $last_date . "',e.hire_date)+1)/365)*e.salary,
                       e.salary),
-    
+
                       0
                       )
-    
+
                               /*end leave allowance to tax */
                               +
                                IF ((SELECT SUM(IF((month(e.hire_date) = month('" . $payroll_date . "')) AND (year(e.hire_date) = year('" . $payroll_date . "'))
                                         ,((" . $days . "- day(e.hire_date)+1)*e.salary/" . $days . "),e.salary)*ea.percent) FROM emp_allowances ea, allowances a  WHERE  a.id = ea.allowance AND ea.empID =  e.emp_id AND ea.mode=2 AND a.taxable = 'YES' AND a.state= 1 AND a.type=0 GROUP BY ea.empID)>0, (SELECT SUM(IF((month(e.hire_date) = month('" . $payroll_date . "')) AND (year(e.hire_date) = year('" . $payroll_date . "'))
                                         ,((" . $days . "- day(e.hire_date)+1)*e.salary/" . $days . "),e.salary)*ea.percent) FROM emp_allowances ea, allowances a  WHERE  a.id = ea.allowance AND ea.empID =  e.emp_id AND ea.mode=2 AND a.taxable = 'YES' AND a.state= 1 AND a.type=0 GROUP BY ea.empID), 0)
-    
+
                               /*End all Allowances and Bonuses*/
                                )/*End Taxable Amount*/) AND minimum <= (/*Taxable Amount*/ (
                               ( IF((month(e.hire_date) = month('" . $payroll_date . "')) AND (year(e.hire_date) = year('" . $payroll_date . "'))
                                         ,((" . $days . "- day(e.hire_date)+1)*e.salary/" . $days . "),e.salary) -
-    
+
                                /*pension*/
                                IF(  (pf.deduction_from = 1), (IF((month(e.hire_date) = month('" . $payroll_date . "')) AND (year(e.hire_date) = year('" . $payroll_date . "'))
                                         ,((" . $days . "- day(e.hire_date)+1)*e.salary/" . $days . "),e.salary)*pf.amount_employee), (pf.amount_employee*(IF((month(e.hire_date) = month('" . $payroll_date . "')) AND (year(e.hire_date) = year('" . $payroll_date . "'))
                                         ,((" . $days . "- day(e.hire_date)+1)*e.salary/" . $days . "),e.salary)+ IF ((SELECT SUM(b.amount) FROM bonus b WHERE  b.state =  1 AND b.empID =  e.emp_id GROUP BY b.empID)>=0, (SELECT SUM(b.amount) FROM bonus b WHERE  b.state = 1 AND b.empID =  e.emp_id GROUP BY b.empID), 0) +
-    
+
                               IF ((SELECT SUM(o.amount) FROM overtimes o WHERE  o.empID =  e.emp_id GROUP BY o.empID)>=0, (SELECT SUM(o.amount) FROM overtimes o WHERE  o.empID =  e.emp_id GROUP BY o.empID), 0) +
-    
+
                               IF ((SELECT SUM(ea.amount) FROM emp_allowances ea, allowances a  WHERE  a.id = ea.allowance AND ea.empID =  e.emp_id AND ea.mode=1 AND a.taxable = 'YES' AND a.pensionable = 'YES' AND a.state= 1 GROUP BY ea.empID)>=0, ((SELECT SUM(ea.amount) FROM emp_allowances ea, allowances a  WHERE  a.id = ea.allowance AND ea.empID =  e.emp_id AND ea.mode=1 AND a.taxable = 'YES' AND a.pensionable = 'YES' AND a.state= 1 GROUP BY ea.empID)),0)
                               +
                               /* start add leave allowance to tax */
@@ -1221,23 +1224,23 @@ FROM employee e, emp_allowances ea,  allowances a WHERE e.emp_id = ea.empID AND 
                         DATEDIFF('" . $last_date . "',e.hire_date) < 365,
                         ((DATEDIFF('" . $last_date . "',e.hire_date)+1)/365)*e.salary,
                       e.salary),
-    
+
                       0
                       )
-    
+
                               /*end leave allowance to tax */
                               +
                                IF ((SELECT SUM(IF((month(e.hire_date) = month('" . $payroll_date . "')) AND (year(e.hire_date) = year('" . $payroll_date . "'))
                                         ,((" . $days . "- day(e.hire_date)+1)*e.salary/" . $days . "),e.salary)*ea.percent) FROM emp_allowances ea, allowances a  WHERE  a.id = ea.allowance AND ea.empID =  e.emp_id AND ea.mode=2 AND a.taxable = 'YES' AND a.pensionable = 'YES' AND a.state= 1 AND a.type=0 GROUP BY ea.empID)>0, (SELECT SUM(IF((month(e.hire_date) = month('" . $payroll_date . "')) AND (year(e.hire_date) = year('" . $payroll_date . "'))
                                         ,((" . $days . "- day(e.hire_date)+1)*e.salary/" . $days . "),e.salary)*ea.percent) FROM emp_allowances ea, allowances a  WHERE  a.id = ea.allowance AND ea.empID =  e.emp_id AND ea.mode=2 AND a.taxable = 'YES' AND a.pensionable = 'YES' AND a.state= 1 AND a.type=0 GROUP BY ea.empID), 0)))  )
                                /*End pension*/
-    
+
                               ) +
                               /*all Allowances and Bonuses*/
                               IF ((SELECT SUM(b.amount) FROM bonus b WHERE  b.state =  1 AND b.empID =  e.emp_id GROUP BY b.empID)>=0, (SELECT SUM(b.amount) FROM bonus b WHERE  b.state = 1 AND b.empID =  e.emp_id GROUP BY b.empID), 0) +
-    
+
                               IF ((SELECT SUM(o.amount) FROM overtimes o WHERE  o.empID =  e.emp_id GROUP BY o.empID)>=0, (SELECT SUM(o.amount) FROM overtimes o WHERE  o.empID =  e.emp_id GROUP BY o.empID), 0) +
-    
+
                               IF ((SELECT SUM(ea.amount) FROM emp_allowances ea, allowances a  WHERE  a.id = ea.allowance AND ea.empID =  e.emp_id AND ea.mode=1 AND a.taxable = 'YES' AND a.state= 1 GROUP BY ea.empID)>=0, ((SELECT SUM(ea.amount) FROM emp_allowances ea, allowances a  WHERE  a.id = ea.allowance AND ea.empID =  e.emp_id AND ea.mode=1 AND a.taxable = 'YES' AND a.state= 1 GROUP BY ea.empID)),0)
                               +
                               /* start add leave allowance to tax */
@@ -1247,61 +1250,61 @@ FROM employee e, emp_allowances ea,  allowances a WHERE e.emp_id = ea.empID AND 
                         DATEDIFF('" . $last_date . "',e.hire_date) < 365,
                         ((DATEDIFF('" . $last_date . "',e.hire_date)+1)/365)*e.salary,
                       e.salary),
-    
+
                       0
                       )
-    
+
                               /*end leave allowance to tax */
                               +
                               IF ((SELECT SUM(IF((month(e.hire_date) = month('" . $payroll_date . "')) AND (year(e.hire_date) = year('" . $payroll_date . "'))
                                         ,((" . $days . "- day(e.hire_date)+1)*e.salary/" . $days . "),e.salary)*ea.percent) FROM emp_allowances ea, allowances a  WHERE  a.id = ea.allowance AND ea.empID =  e.emp_id AND ea.mode=2 AND a.taxable = 'YES' AND a.state= 1 AND a.type=0 GROUP BY ea.empID)>0, (SELECT SUM(IF((month(e.hire_date) = month('" . $payroll_date . "')) AND (year(e.hire_date) = year('" . $payroll_date . "'))
                                         ,((" . $days . "- day(e.hire_date)+1)*e.salary/" . $days . "),e.salary)*ea.percent) FROM emp_allowances ea, allowances a  WHERE  a.id = ea.allowance AND ea.empID =  e.emp_id AND ea.mode=2 AND a.taxable = 'YES' AND a.state= 1 AND a.type=0 GROUP BY ea.empID), 0)
-    
+
                               /*End all Allowances and Bonuses*/
                                )/*End Taxable Amount*/))) )
-    
-    
-    
+
+
+
                               )) AS taxdue,
-    
-    
+
+
             IF((e.unpaid_leave = 0),0,IF(((IF((month(e.hire_date) = month('" . $payroll_date . "')) AND (year(e.hire_date) = year('" . $payroll_date . "'))
                       ,((" . $days . "- day(e.hire_date)+1)*e.salary/" . $days . "),e.salary) +
             /*all Allowances and Bonuses*/
             IF ((SELECT SUM(b.amount) FROM bonus b WHERE  b.state =  1 AND b.empID =  e.emp_id GROUP BY b.empID)>=0, (SELECT SUM(b.amount) FROM bonus b WHERE  b.state = 1 AND b.empID =  e.emp_id GROUP BY b.empID), 0) +
-    
+
             IF ((SELECT SUM(o.amount) FROM overtimes o WHERE  o.empID =  e.emp_id GROUP BY o.empID)>=0, (SELECT SUM(o.amount) FROM overtimes o WHERE  o.empID =  e.emp_id GROUP BY o.empID), 0) +
-    
+
             IF ((SELECT SUM(ea.amount) FROM emp_allowances ea, allowances a  WHERE  a.id = ea.allowance AND ea.empID =  e.emp_id AND ea.mode=1 AND a.state= 1 GROUP BY ea.empID)>=0, ((SELECT SUM(ea.amount) FROM emp_allowances ea, allowances a  WHERE  a.id = ea.allowance AND ea.empID =  e.emp_id AND ea.mode=1 AND a.state= 1 GROUP BY ea.empID)),0) + IF ((SELECT SUM(IF((month(e.hire_date) = month('" . $payroll_date . "')) AND (year(e.hire_date) = year('" . $payroll_date . "'))
                       ,((" . $days . "- day(e.hire_date)+1)*e.salary/" . $days . "),e.salary)*ea.percent) FROM emp_allowances ea, allowances a  WHERE  a.id = ea.allowance AND ea.empID =  e.emp_id AND ea.mode=2 AND a.state= 1 GROUP BY ea.empID)>0, (SELECT SUM(IF((month(e.hire_date) = month('" . $payroll_date . "')) AND (year(e.hire_date) = year('" . $payroll_date . "'))
                       ,((" . $days . "- day(e.hire_date)+1)*e.salary/" . $days . "),e.salary)*ea.percent) FROM emp_allowances ea, allowances a  WHERE  a.id = ea.allowance AND ea.empID =  e.emp_id AND ea.mode=2 AND a.state= 1 GROUP BY ea.empID), 0)
-    
+
             /*End all Allowances and Bonuses*/ )<(SELECT minimum_gross FROM meals_deduction WHERE id = 1)), (SELECT minimum_payment FROM meals_deduction WHERE id = 1), (SELECT maximum_payment FROM meals_deduction WHERE id = 1))) AS meals,
-    
-    
-    
+
+
+
              e.department AS department,
-    
+
              e.position AS position,
-    
+
              e.branch AS branch,
-    
+
              e.pension_fund AS pension_fund,
-    
+
              e.pf_membership_no as membership_no,
-    
+
              e.bank AS bank,
              e.bank_branch AS bank_branch,
              e.account_no AS account_no,
-    
+
              IF((e.unpaid_leave = 0),0,((SELECT rate_employer from deduction where id=4 )*(IF((month(e.hire_date) = month('" . $payroll_date . "')) AND (year(e.hire_date) = year('" . $payroll_date . "'))
                       ,((" . $days . "- day(e.hire_date)+1)*e.salary/" . $days . "),e.salary) +
-    
+
             /*all Allowances and Bonuses*/
             IF ((SELECT SUM(b.amount) FROM bonus b WHERE  b.state =  1 AND b.empID =  e.emp_id GROUP BY b.empID)>=0, (SELECT SUM(b.amount) FROM bonus b WHERE  b.state = 1 AND b.empID =  e.emp_id GROUP BY b.empID), 0) +
-    
+
             IF ((SELECT SUM(o.amount) FROM overtimes o WHERE  o.empID =  e.emp_id GROUP BY o.empID)>=0, (SELECT SUM(o.amount) FROM overtimes o WHERE  o.empID =  e.emp_id GROUP BY o.empID), 0) +
-    
+
             IF ((SELECT SUM(ea.amount) FROM emp_allowances ea, allowances a  WHERE  a.id = ea.allowance AND ea.empID =  e.emp_id AND ea.mode=1 AND a.state= 1 GROUP BY ea.empID)>=0, ((SELECT SUM(ea.amount) FROM emp_allowances ea, allowances a  WHERE  a.id = ea.allowance AND ea.empID =  e.emp_id AND ea.mode=1 AND a.state= 1 GROUP BY ea.empID)),0)
             +
             /* start add leave allowance to wcf */
@@ -1310,36 +1313,36 @@ FROM employee e, emp_allowances ea,  allowances a WHERE e.emp_id = ea.empID AND 
     IF(
       DATEDIFF('" . $last_date . "',e.hire_date) < 365,
       ((DATEDIFF('" . $last_date . "',e.hire_date)+1)/365)*e.salary,
-    
+
      (
       IF(
           (SELECT SUM(IF((month(e.hire_date) = month('" . $payroll_date . "')) AND (year(e.hire_date) = year('" . $payroll_date . "')),((" . $days . "- day(e.hire_date)+1)*e.salary/" . $days . "),e.salary)*ea.percent) FROM emp_allowances ea, allowances a  WHERE  a.id = ea.allowance AND ea.empID =  e.emp_id AND ea.mode=2 And a.pensionable = 'YES' AND a.state= 1 AND a.type = 1 GROUP BY ea.empID)>0,
-    
+
           (SELECT SUM(IF((month(e.hire_date) = month('" . $payroll_date . "')) AND (year(e.hire_date) = year('" . $payroll_date . "')),((" . $days . "- day(e.hire_date)+1)*e.salary/" . $days . "),e.salary)*ea.percent) FROM emp_allowances ea, allowances a  WHERE  a.id = ea.allowance AND ea.empID =  e.emp_id AND ea.mode=2 And a.pensionable = 'YES' AND a.state= 1 AND a.type = 1 GROUP BY ea.empID),
           0)
      )
-    
+
       ),
-    
+
     0
     )
-    
+
             /*end leave allowance to wcf */
             +
             IF ((SELECT SUM(IF((month(e.hire_date) = month('" . $payroll_date . "')) AND (year(e.hire_date) = year('" . $payroll_date . "'))
                       ,((" . $days . "- day(e.hire_date)+1)*e.salary/" . $days . "),e.salary)*ea.percent) FROM emp_allowances ea, allowances a  WHERE  a.id = ea.allowance AND ea.empID =  e.emp_id AND ea.mode=2 AND a.state= 1 AND a.type=0 GROUP BY ea.empID)>0, (SELECT SUM(IF((month(e.hire_date) = month('" . $payroll_date . "')) AND (year(e.hire_date) = year('" . $payroll_date . "'))
                       ,((" . $days . "- day(e.hire_date)+1)*e.salary/" . $days . "),e.salary)*ea.percent) FROM emp_allowances ea, allowances a  WHERE  a.id = ea.allowance AND ea.empID =  e.emp_id AND ea.mode=2 AND a.state= 1 AND a.type=0 GROUP BY ea.empID), 0)
-    
+
             /*End all Allowances and Bonuses*/  ))) as sdl,
-    
+
             IF((e.unpaid_leave = 0),0,((SELECT rate_employer from deduction where id=2 )*(IF((month(e.hire_date) = month('" . $payroll_date . "')) AND (year(e.hire_date) = year('" . $payroll_date . "'))
                       ,((" . $days . "- day(e.hire_date)+1)*e.salary/" . $days . "),e.salary) +
-    
+
             /*all Allowances and Bonuses*/
             IF ((SELECT SUM(b.amount) FROM bonus b WHERE  b.state =  1 AND b.empID =  e.emp_id GROUP BY b.empID)>=0, (SELECT SUM(b.amount) FROM bonus b WHERE  b.state = 1 AND b.empID =  e.emp_id GROUP BY b.empID), 0) +
-    
+
             IF ((SELECT SUM(o.amount) FROM overtimes o WHERE  o.empID =  e.emp_id GROUP BY o.empID)>=0, (SELECT SUM(o.amount) FROM overtimes o WHERE  o.empID =  e.emp_id GROUP BY o.empID), 0) +
-    
+
             IF ((SELECT SUM(ea.amount) FROM emp_allowances ea, allowances a  WHERE  a.id = ea.allowance AND ea.empID =  e.emp_id AND ea.mode=1 AND a.state= 1 GROUP BY ea.empID)>=0, ((SELECT SUM(ea.amount) FROM emp_allowances ea, allowances a  WHERE  a.id = ea.allowance AND ea.empID =  e.emp_id AND ea.mode=1 AND a.state= 1 GROUP BY ea.empID)),0)
             +
             /* start add leave allowance to WCF */
@@ -1348,32 +1351,32 @@ FROM employee e, emp_allowances ea,  allowances a WHERE e.emp_id = ea.empID AND 
     IF(
       DATEDIFF('" . $last_date . "',e.hire_date) < 365,
       ((DATEDIFF('" . $last_date . "',e.hire_date)+1)/365)*e.salary,
-    
+
      (
       IF(
           (SELECT SUM(IF((month(e.hire_date) = month('" . $payroll_date . "')) AND (year(e.hire_date) = year('" . $payroll_date . "')),((" . $days . "- day(e.hire_date)+1)*e.salary/" . $days . "),e.salary)*ea.percent) FROM emp_allowances ea, allowances a  WHERE  a.id = ea.allowance AND ea.empID =  e.emp_id AND ea.mode=2 And a.pensionable = 'YES' AND a.state= 1 AND a.type = 1 GROUP BY ea.empID)>0,
-    
+
           (SELECT SUM(IF((month(e.hire_date) = month('" . $payroll_date . "')) AND (year(e.hire_date) = year('" . $payroll_date . "')),((" . $days . "- day(e.hire_date)+1)*e.salary/" . $days . "),e.salary)*ea.percent) FROM emp_allowances ea, allowances a  WHERE  a.id = ea.allowance AND ea.empID =  e.emp_id AND ea.mode=2 And a.pensionable = 'YES' AND a.state= 1 AND a.type = 1 GROUP BY ea.empID),
           0)
      )
-    
+
       ),
-    
+
     0
     )
-    
+
             /*end leave allowance to WCF*/
                    +
              IF ((SELECT SUM(IF((month(e.hire_date) = month('" . $payroll_date . "')) AND (year(e.hire_date) = year('" . $payroll_date . "'))
                       ,((" . $days . "- day(e.hire_date)+1)*e.salary/" . $days . "),e.salary)*ea.percent) FROM emp_allowances ea, allowances a  WHERE  a.id = ea.allowance AND ea.empID =  e.emp_id AND ea.mode=2 AND a.state= 1 AND a.type=0 GROUP BY ea.empID)>0, (SELECT SUM(IF((month(e.hire_date) = month('" . $payroll_date . "')) AND (year(e.hire_date) = year('" . $payroll_date . "'))
                       ,((" . $days . "- day(e.hire_date)+1)*e.salary/" . $days . "),e.salary)*ea.percent) FROM emp_allowances ea, allowances a  WHERE  a.id = ea.allowance AND ea.empID =  e.emp_id AND ea.mode=2 AND a.state= 1 AND a.type=0 GROUP BY ea.empID), 0)
-    
+
             /*End all Allowances and Bonuses*/  ))) as wcf,
             e.rate as rate,
             e.currency AS currency,
-    
+
              '" . $payroll_date . "' as payroll_date,
-    
+
              '" . $year . "' as years,
              e.salary as actual_salary
              FROM employee e, pension_fund pf, bank bn, bank_branch bb WHERE e.pension_fund = pf.id AND  e.bank = bn.id AND bb.id = e.bank_branch AND e.state = 1 and e.login_user != 1";
@@ -1526,7 +1529,7 @@ e.salary),
         )/*End Taxable Amount*/)
 ";
 }
-    
+
     public function run_payroll($payroll_date, $payroll_month, $empID, $todate)
     {
 
@@ -2757,15 +2760,74 @@ as gross,
     DELETE FROM overtime_logs WHERE payment_date = "2019-06-05";
 
     */
-    public function cancel_payroll()
+
+    public function RemoveaddPrevMonthSalaryArrears($date)
     {
-        DB::transaction(function () {
+        // dd($date);
+        // $date="20-11-2023";
+
+        $previous_payroll_month_raw = date('Y-m', strtotime(date('d-m-Y', strtotime($date . "-1 month"))));
+
+        // dd($previous_payroll_month_raw);
+
+        $previous_payroll_month = $this->reports_model->prevPayrollMonth($previous_payroll_month_raw);
+
+        $previous_payroll_month = date('Y-m-d', strtotime($previous_payroll_month));
+
+        $last_day_of_month = date('Y-m-t', strtotime($previous_payroll_month));
+
+        $days = intval(date('t', strtotime($previous_payroll_month)));
+
+        $startDate = $previous_payroll_month;
+        $endDate = $last_day_of_month;
+        $daysInMonth = Carbon::parse($endDate)->daysInMonth; // Get the number of days in the month
+
+        $employees = Employee::select([
+            'emp_id',
+            DB::raw("({$daysInMonth} - DAY(hire_date) + 1) * salary / 30 as partialpayment"),
+
+        ])
+            ->where(function ($query) use ($startDate, $endDate) {
+                $query->where('hire_date', '>', $startDate,)
+                    ->where('hire_date', '<=', $endDate);
+            })
+            ->get();
+
+            foreach ($employees as $employee) {
+
+               // Get IDs of allowances that match the conditions
+                $allowances = DB::table('allowances')
+                ->where('created_on', $date)
+                ->where('name', 'Arrears')
+                ->where('amount', $employee->partialpayment)
+                ->pluck('id');
+
+                // Delete corresponding records from allowance_logs
+                DB::table('allowance_logs')
+                ->where('description', 'Arrears')
+                ->where('payment_date', $date)
+                ->where('amount', $employee->partialpayment)
+                ->delete();
+
+                // Delete corresponding records from emp_allowance
+                DB::table('emp_allowance')
+                ->whereIn('allowance', $allowances)
+                ->delete();
+            }
+
+    }
+    public function cancel_payroll($cancel_date)
+    {
+        $tarehefuta = $cancel_date;
+        DB::transaction(function () use ($tarehefuta) {
             DB::table('temp_allowance_logs')->delete();
             DB::table('temp_deduction_logs')->delete();
             DB::table('temp_loan_logs')->delete();
             DB::table('temp_payroll_logs')->delete();
             DB::table('temp_arrears')->delete();
             DB::table('payroll_months')->where('state', 1)->orWhere('state', 2)->delete();
+
+            $this->RemoveaddPrevMonthSalaryArrears($tarehefuta);
 
             $query = "SELECT created_at,id from input_submissions order by date desc";
             $row = DB::select(DB::raw($query));
@@ -2777,12 +2839,13 @@ as gross,
         });
         return true;
     }
+
     public function checkInputs($date)
     {
 
        // dd($date);
         // $calender = explode('/', $date);
-      
+
         // $date = $calender[2] . '-' . $calender[1];
         // $query = "SELECT COUNT(id) as total from financial_logs where created_at like '%".$date."%' and input_screen ='Payroll Input' and field_name NOT LIKE '%vertime%'";
 
@@ -2806,7 +2869,7 @@ as gross,
 
         $payroll_date = date($payroll_date);
 
-        $query = "SELECT 
+        $query = "SELECT
         ea.*,
         a.name,
         a.state,
@@ -2828,16 +2891,16 @@ as gross,
                     )
             )
         ) AS amount
-        
-     FROM 
-        employee e, 
-        emp_allowances ea,  
-        allowances a 
-     WHERE 
-        e.emp_id = ea.empID 
-        AND a.id = ea.allowance 
-        AND a.state = 1 
-        AND e.state = 1 
+
+     FROM
+        employee e,
+        emp_allowances ea,
+        allowances a
+     WHERE
+        e.emp_id = ea.empID
+        AND a.id = ea.allowance
+        AND a.state = 1
+        AND e.state = 1
         AND e.login_user != 1";
 
         // dd($query);
@@ -2893,7 +2956,7 @@ as gross,
     }
     public function deleteArrears($date)
     {
-        DB::table('arrears')->where('payroll_date', $date)->delete();
+        DB::table('allowance_logs')->where('payroll_date', $date)->delete();
         DB::table('employee_activity_grant_logs')->where('payroll_date', $date)->delete();
         DB::table('arrears_logs')->where('payroll_date', $date)->delete();
         return true;
@@ -2937,7 +3000,7 @@ as gross,
     public function payrollTotals($table, $payrollMonth)
     {
 
-        
+
         $query = "SELECT SUM(less_takehome) as takehome_less, SUM(salary) as salary, SUM(pension_employee) as pension_employee, SUM(pension_employer) as pension_employer,  SUM(medical_employer) as medical_employer, SUM(medical_employee) as medical_employee, SUM(allowances) as allowances, SUM(taxdue) as taxdue, SUM(meals) as meals, SUM(sdl) as sdl, SUM(wcf) as wcf FROM " . $table . " WHERE payroll_date = '" . $payrollMonth . "'";
 
         return DB::select(DB::raw($query));
@@ -2945,7 +3008,7 @@ as gross,
     public function staffPayrollTotals($table, $payrollMonth)
     {
 
-        
+
         $query = "SELECT SUM(pl.less_takehome) as takehome_less, SUM(pl.salary) as salary, SUM(pl.pension_employee) as pension_employee, SUM(pl.pension_employer) as pension_employer,  SUM(pl.medical_employer) as medical_employer, SUM(pl.medical_employee) as medical_employee, SUM(pl.allowances) as allowances, SUM(pl.taxdue) as taxdue, SUM(pl.meals) as meals, SUM(pl.sdl) as sdl, SUM(pl.wcf) as wcf
         FROM " . $table . " as pl, employee e where e.emp_id = pl.empID and e.contract_type != 2 and payroll_date = '" . $payrollMonth . "'";
         return DB::select(DB::raw($query));
@@ -2953,7 +3016,7 @@ as gross,
     public function temporaryPayrollTotals($table, $payrollMonth)
     {
 
-        
+
         $query = "SELECT SUM(pl.less_takehome) as takehome_less, SUM(pl.salary) as salary, SUM(pl.pension_employee) as pension_employee, SUM(pl.pension_employer) as pension_employer,  SUM(pl.medical_employer) as medical_employer, SUM(pl.medical_employee) as medical_employee, SUM(pl.allowances) as allowances, SUM(pl.taxdue) as taxdue, SUM(pl.meals) as meals, SUM(pl.sdl) as sdl, SUM(pl.wcf) as wcf
         FROM " . $table . " as pl, employee e where e.emp_id = pl.empID and e.contract_type = 2 and payroll_date = '" . $payrollMonth . "'";
         return DB::select(DB::raw($query));
@@ -2961,14 +3024,14 @@ as gross,
     public function temp_payrollTotals($table, $payrollMonth)
     {
 
-        
+
         $query = "SELECT SUM(salary) as salary, SUM(pension_employee) as pension_employee, SUM(pension_employer) as pension_employer,  SUM(medical_employer) as medical_employer, SUM(medical_employee) as medical_employee, SUM(allowances) as allowances, SUM(taxdue) as taxdue, SUM(meals) as meals, SUM(sdl) as sdl, SUM(wcf) as wcf FROM " . $table . " WHERE payroll_date = '" . $payrollMonth . "'";
         return DB::select(DB::raw($query));
     }
     public function total_allowances($table, $payrollMonth)
     {
 
-        
+
         $query = "SUM(amount) as amount";
         $row = DB::table($table)->where("payment_date", $payrollMonth)->select(DB::raw($query))->first();
         return $row->amount;
@@ -2976,28 +3039,28 @@ as gross,
     public function total_loans($table, $payrollMonth)
     {
 
-        
+
         $query = "SELECT SUM(paid) as paid, SUM(remained) as remained FROM  " . $table . " WHERE payment_date = '" . $payrollMonth . "'";
         return DB::select(DB::raw($query));
     }
     public function total_loans_separate($table, $payrollMonth)
     {
 
-        
+
         $query = "SELECT sum(tlg.paid) as paid, sum(tlg.remained) as remained, l.description
 FROM temp_loan_logs tlg, loan l WHERE l.id = tlg.loanID and payment_date = '" . $payrollMonth . "' group by l.description";
         return DB::select(DB::raw($query));
     }
     public function total_heslb($table, $payrollMonth)
     {
-        
+
         $query = "SELECT SUM(ll.paid) as paid FROM  " . $table . " ll, loan lo WHERE ll.payment_date = '" . $payrollMonth . "' AND ll.loanID = lo.id AND lo.type = 3";
         $row = DB::select(DB::raw($query));
         return $row[0]->paid;
     }
     public function total_deductions($table, $payrollMonth)
     {
-        
+
         $query = "SUM(paid) as paid";
         $row = DB::table($table)->where('payment_date', $payrollMonth)->select(DB::raw($query))->first();
         return $row->paid;
@@ -3005,7 +3068,7 @@ FROM temp_loan_logs tlg, loan l WHERE l.id = tlg.loanID and payment_date = '" . 
     public function total_bonuses($payrollMonth)
     {
 
-        
+
         $query = "SUM(amount) as amount";
         $row = DB::table('bonus_logs')->where('payment_date', $payrollMonth)->select(DB::raw($query))->first();
         return $row->amount;
@@ -3013,7 +3076,7 @@ FROM temp_loan_logs tlg, loan l WHERE l.id = tlg.loanID and payment_date = '" . 
     public function total_overtimes($payrollMonth)
     {
 
-        
+
         $query = "SUM(amount) as amount";
         $row = DB::table('overtime_logs')->where('payment_date', $payrollMonth)->select(DB::raw($query))->first();
         return $row->amount;
@@ -3021,42 +3084,42 @@ FROM temp_loan_logs tlg, loan l WHERE l.id = tlg.loanID and payment_date = '" . 
     public function payroll_month_info($payrollMonth)
     {
 
-        
+
         $query = "SELECT * FROM payroll_months WHERE payroll_date = '" . $payrollMonth . "'";
         return DB::select(DB::raw($query));
     }
     public function payroll_review($empID, $table, $payrollMonth)
     {
 
-        
+
         $query = "SELECT CONCAT(e.fname,' ', IF(e.mname != null,e.mname,' '),' ', e.lname) AS empName, b.name as bank, bb.name as branch, cbr.name as company_branch, bb.swiftcode, pf.name as pensionFundName, pf.*,  tpl.* FROM employee e, " . $table . " tpl,  bank_branch bb, bank b, pension_fund pf, branch cbr WHERE tpl.empID = e.emp_id and e.state = 1 AND bb.id= tpl.bank_branch AND b.id = tpl.bank AND tpl.pension_fund = pf.id  AND cbr.id = tpl.branch AND tpl.empID = '" . $empID . "' AND tpl.payroll_date = '" . $payrollMonth . "'";
         return DB::select(DB::raw($query));
     }
     public function allowances_review($empID, $table, $payrollMonth)
     {
 
-        
+
         $query = "SELECT @s:=@s+1 AS SNo,  tal.* FROM " . $table . " tal,(SELECT @s:=0) AS s WHERE tal.empID = '" . $empID . "' AND tal.payment_date = '" . $payrollMonth . "' ";
         return DB::select(DB::raw($query));
     }
     public function deductions_review($empID, $table, $payrollMonth)
     {
 
-        
+
         $query = "SELECT @s:=@s+1 AS SNo,  tdl.* FROM " . $table . " tdl,(SELECT @s:=0) AS s WHERE tdl.empID = '" . $empID . "' AND tdl.payment_date = '" . $payrollMonth . "'";
         return DB::select(DB::raw($query));
     }
     public function loans_review($empID, $table, $payrollMonth)
     {
 
-        
+
         $query = "SELECT @s:=@s+1 AS SNo, tll.paid as pre_paid,  tll.*, l.* FROM " . $table . " tll, loan l,(SELECT @s:=0) AS s WHERE tll.loanID = l.id AND l.empID = '" . $empID . "' AND tll.payment_date = '" . $payrollMonth . "'";
         return DB::select(DB::raw($query));
     }
     public function total_allowances_review($empID, $table, $payrollMonth)
     {
 
-        
+
         $query = "SUM(tal.amount) as total_al  WHERE tal.empID = '" . $empID . "' AND tal.payment_date = '" . $payrollMonth . "'";
         $table2 = $table . "as tal";
         $row = DB::table($table2)->select(DB::raw($query))->first();
@@ -3065,7 +3128,7 @@ FROM temp_loan_logs tlg, loan l WHERE l.id = tlg.loanID and payment_date = '" . 
     public function total_deductions_review($empID, $table, $payrollMonth)
     {
 
-        
+
         $query = "SUM(tdl.paid) as total_de WHERE tdl.empID = '" . $empID . "' AND tdl.payment_date = '" . $payrollMonth . "'";
         $table2 = $table . "as tdl";
         $row = DB::table($table2)->select(DB::raw($query))->first();
@@ -3074,14 +3137,14 @@ FROM temp_loan_logs tlg, loan l WHERE l.id = tlg.loanID and payment_date = '" . 
     public function total_loans_review($empID, $table, $payrollMonth)
     {
 
-        
+
         $query = "SELECT SUM(amount_last_paid) as total_last_paid, SUM(pre_paid) as total_paid_currently, SUM(amount) as total_loans, SUM(remained) as total_remained FROM (SELECT tll.paid as pre_paid,  tll.remained, l.amount, l.amount_last_paid  FROM " . $table . " tll, loan l WHERE tll.loanID = l.id AND l.empID = '" . $empID . "'  AND tll.payment_date = '" . $payrollMonth . "') AS parent_query ";
         return DB::select(DB::raw($query));
     }
     public function employeePayrollList($date, $table_allowance_logs, $table_deduction_logs, $table_loan_logs, $table_payroll_logs)
     {
 
-        
+
         $query = "SELECT @s:=@s+1 AS SNo, pl.empID,  CONCAT(e.fname,' ', IF(e.mname != null,e.mname,' '),' ', e.lname) AS empName,
 		IF((SELECT SUM(al.amount) FROM " . $table_allowance_logs . " al WHERE al.empID = e.emp_id AND al.payment_date = '" . $date . "' GROUP BY al.empID)>0, (SELECT SUM(al.amount) FROM " . $table_allowance_logs . " al WHERE al.empID = e.emp_id AND al.payment_date = '" . $date . "' GROUP BY al.empID), 0) AS allowances, p.name as position, d.name as department,
 		pl.salary, pl.meals, pl.pension_employee AS pension, pl.taxdue,
@@ -3304,7 +3367,7 @@ FROM temp_loan_logs tlg, loan l WHERE l.id = tlg.loanID and payment_date = '" . 
     public function arrearsMonth($payrollMonth)
     {
 
-        
+
         $query = "SELECT sum(amount) as arrear_payment from arrears where payroll_date = '" . $payrollMonth . "'";
         $row = DB::select(DB::raw($query));
         if ($row[0]) {
