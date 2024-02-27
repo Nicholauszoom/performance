@@ -66,7 +66,7 @@
 
                                         class="btn btn-danger btn-sm
                                         @if($item->level_name != $approval->levels)
-                                        disabled
+                                        {{-- disabled --}}
                                         @endif
                                         " aria-label="Edit">
                                         <i class="ph-trash"></i>
@@ -115,8 +115,8 @@
 
                     <div class="form-group">
                         <label class="col-form-label col-sm-3">Level: </label>
-                            <input type="number"   name="level_name"  value="{{ $approval->levels+1 }}" class="form-control @error('process_name') is-invalid @enderror">
-                            <input type="number"  name="level_name"  value="{{ $approval->levels+1 }}" class="form-control @error('process_name') is-invalid @enderror" hidden>
+                            {{-- <input type="number"   name="level_name"  value="{{ $approval->levels+1 }}" class="form-control @error('process_name') is-invalid @enderror"> --}}
+                            <input type="number"  name="level_name"  value="{{ $approval->levels+1 }}" class="form-control @error('process_name') is-invalid @enderror" >
                             <input type="hidden" name="approval_id" value="{{ $approval->id }}">
                             @error('process_name')
                                 <p class="text-danger mt-1"> Field Process Name has an error </p>
