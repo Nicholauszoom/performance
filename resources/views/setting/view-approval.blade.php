@@ -115,7 +115,7 @@
 
                     <div class="form-group">
                         <label class="col-form-label col-sm-3">Level: </label>
-                            <input type="number" disabled  name="level_name"  value="{{ $approval->levels+1 }}" class="form-control @error('process_name') is-invalid @enderror">
+                            <input type="number"   name="level_name"  value="{{ $approval->levels+1 }}" class="form-control @error('process_name') is-invalid @enderror">
                             <input type="number"  name="level_name"  value="{{ $approval->levels+1 }}" class="form-control @error('process_name') is-invalid @enderror" hidden>
                             <input type="hidden" name="approval_id" value="{{ $approval->id }}">
                             @error('process_name')
