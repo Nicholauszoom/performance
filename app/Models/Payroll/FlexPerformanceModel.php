@@ -2125,7 +2125,7 @@ IF(
         }
 
         if ($termination->longServing != 0) {
-            SysHelpers::FinancialLogs($termination->employeeID, 'Long Serving', 0.00, number_format($termination->longServing, 2), 'Termination');
+            SysHelpers::FinancialLogs($termination->employeeID, 'LSA', 0.00, number_format($termination->longServing, 2), 'Termination');
         }
 
         if ($termination->loanBalance != 0) {
