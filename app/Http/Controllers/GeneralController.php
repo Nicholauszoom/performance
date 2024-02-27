@@ -5721,7 +5721,6 @@ class GeneralController extends Controller
 
     public function addPrevMonthSalaryArrears($date)
     {
-
         // dd($date);
         // $date="20-11-2023";
 
