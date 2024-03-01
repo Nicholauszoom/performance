@@ -343,8 +343,9 @@ class SysHelpers
 
         // dd($level && $approval->ApprLevels()->count() == $level->level_name);
         // dd($level);
+        
 
-        return $level && $approval->ApprLevels()->count() == $level->level_name;
+        return $level && ($approval->ApprLevels()->count() == $level->level_name || $approval->ApprLevels()->last()->level_name == $level->level_name);
     }
 
 

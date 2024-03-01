@@ -5721,7 +5721,6 @@ class GeneralController extends Controller
 
     public function addPrevMonthSalaryArrears($date)
     {
-
         // dd($date);
         // $date="20-11-2023";
 
@@ -5756,7 +5755,7 @@ class GeneralController extends Controller
 
             // dd($employee->partialpayment);
             $data = array(
-                "name" => "arrears",
+                "name" => "Arrears",
                 "amount" => $employee->partialpayment, //The amount
                 "mode" => "1", //1 fixed value
                 "type" => "0",
@@ -8907,12 +8906,12 @@ class GeneralController extends Controller
         $this->authenticateUser('confirm-termination');
 
         $employee = Auth::User()->id;
-        $uid = Auth::User()->id;
+        $uid = Auth::User()->position;
 
-        $role = UserRole::where('user_id', $employee)->first();
+        // $role = UserRole::where('user_id', $employee)->first();
         $role = Position::where('id', $uid)->first();
 
-        $role_id = $role->role_id;
+        $role_id = $role->id;
 
         $terminate = Approvals::where('process_name', 'Termination Approval')->first();
         $roles = Role::where('id', $role_id)->first();

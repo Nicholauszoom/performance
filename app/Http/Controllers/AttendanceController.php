@@ -1328,6 +1328,7 @@ class AttendanceController extends Controller
             $leave->updated_at = new DateTime();
             $leave->update();
             $autheniticateduser = auth()->user()->emp_id;
+            $request = new Request();
             $auditLog = SysHelpers::AuditLog(2, "Leave approval  by " . $autheniticateduser, $request);
     
         } else {

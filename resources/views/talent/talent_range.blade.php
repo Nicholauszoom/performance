@@ -76,7 +76,7 @@
                             <a href="" class="btn btn-sm bg-main">
                                 <i class="ph-pen"></i>
                             </a>
-                            <a href="{{ url('flex/delete-target-ratio/'.$item->id); }}" class="btn btn-sm btn-danger">
+                            <a href="{{ url('flex/delete-target-ratio/'.$item->id) }}" class="btn btn-sm btn-danger">
                                 <i class="ph-trash"></i>
                             </a>
                         </td>
@@ -125,7 +125,7 @@
                             <a href="" class="btn btn-sm bg-main">
                                 <i class="ph-pen"></i>
                             </a>
-                            <a href="{{ url('flex/delete-behaviour-ratio/'.$item->id); }}" class="btn btn-sm btn-danger">
+                            <a href="{{ url('flex/delete-behaviour-ratio/'.$item->id) }}" class="btn btn-sm btn-danger">
                                 <i class="ph-trash"></i>
                             </a>
                         </td>
@@ -172,7 +172,7 @@
                             <a href="" class="btn btn-sm bg-main">
                                 <i class="ph-pen"></i>
                             </a>
-                            <a href="{{ url('flex/delete-time-ratio/'.$item->id); }}" class="btn btn-sm btn-danger">
+                            <a href="{{ url('flex/delete-time-ratio/'.$item->id) }}" class="btn btn-sm btn-danger">
                                 <i class="ph-trash"></i>
                             </a>
                         </td>
