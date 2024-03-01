@@ -540,7 +540,7 @@ class GeneralController extends Controller
     public function myLeaves(Request $request)
     {
      
-        $data['leaves'] = Leaves::whereNot('reason', 'Automatic applied!')->orderBy('id', 'desc')->get();
+        $data['leaves'] = Leaves::whereNot('reason', 'Automatic applied!')->whereNot('state',4)->orderBy('id', 'desc')->get();
         $data['revoked_leaves'] = Leaves::where('revoke_status', 0)->whereNot('reason', 'Automatic applied!')
         ->orWhere('revoke_status', 1)
         ->orderBy('id', 'DESC')->get();

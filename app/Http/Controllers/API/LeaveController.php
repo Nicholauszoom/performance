@@ -810,7 +810,8 @@ class LeaveController extends Controller
             ];
             $this->attendance_model->update_leave($data, $leaveID);
             $employee_data = SysHelpers::employeeData($leave->empID);
-            $fullname = $employee_data['full_name'];
+            $fullname = $employee_data['fname'] . ' ' . $employee_data['mname'] . ' ' . $employee_data['lname'];
+
             $email_data = [
                 'subject' => 'Employee Leave Disapproval',
                 'view' => 'emails.linemanager.leave-rejection',
@@ -878,7 +879,8 @@ class LeaveController extends Controller
                     $leave->revoke_reason = $info;
                     $leave->save();
                     $employee_data = SysHelpers::employeeData($leave->empID);
-                    $fullname = $employee_data['full_name'];
+                    $fullname = $employee_data['fname'] . ' ' . $employee_data['mname'] . ' ' . $employee_data['lname'];
+                    ;
 
                     $email_data = array(
                         'subject' => 'Employee Leave Disapproval',
@@ -1237,7 +1239,8 @@ class LeaveController extends Controller
                     $linemanager =  LeaveApproval::where('empID',$empID)->first();
                     $linemanager_data = SysHelpers::employeeData($linemanager->level1);
                     $employee_data = SysHelpers::employeeData($empID);
-                    $fullname = $linemanager_data['full_name'];
+                    $fullname = $linemanager_data['fname'] . ' ' . $linemanager_data['mname'] . ' ' . $linemanager_data['lname'];
+
                     $email_data = array(
                         'subject' => 'Employee Leave Approval',
                         'view' => 'emails.linemanager.leave-approval',
@@ -1445,14 +1448,15 @@ class LeaveController extends Controller
 
 
                     $leave->save();
-                    dd($leave);
+                   
                     $linemanager =  LeaveApproval::where('empID',$empID)->first();
                     $linemanager_data = SysHelpers::employeeData($linemanager->level1);
 
                     $employee_data = SysHelpers::employeeData($empID);
                     $leave_type = LeaveType::where('id', $nature)->first();
                     $type_name = $leave_type->type;
-                    $fullname = $linemanager_data['full_name'];
+                    $fullname = $linemanager_data['fname'] . ' ' . $linemanager_data['mname'] . ' ' . $linemanager_data['lname'];
+
                     $email_data = array(
                         'subject' => 'Employee Leave Approval',
                         'view' => 'emails.linemanager.leave-approval',
@@ -1659,7 +1663,8 @@ class LeaveController extends Controller
                     $linemanager =  LeaveApproval::where('empID',$empID)->first();
                     $linemanager_data = SysHelpers::employeeData($linemanager->level1);
                     $employee_data = SysHelpers::employeeData($empID);
-                    $fullname = $linemanager_data['full_name'];
+                    $fullname = $linemanager_data['fname'] . ' ' . $linemanager_data['mname'] . ' ' . $linemanager_data['lname'];
+
                     $email_data = array(
                         'subject' => 'Employee Leave Approval',
                         'view' => 'emails.linemanager.leave-approval',
@@ -1736,6 +1741,7 @@ class LeaveController extends Controller
         $data =Leaves::where('empID',Auth::user()->emp_id)->orderBy('id','desc')->get();
         $id = Auth::user()->emp_id;
         $data['deligate']=DB::table('leave_approvals')->Where('level1',$id)->orWhere('level2',$id)->orWhere('level3',$id)->count();
+   
         $data['deligates']=DB::table('leave_approvals')->Where('level1',$id)->orWhere('level2',$id)->orWhere('level3',$id)->get();
         $data['leave_types'] =LeaveType::all();
         $data['employees'] =EMPL::where('emp_id','!=',Auth::user()->emp_id)->whereNot('state',4)->get();
@@ -2006,7 +2012,8 @@ class LeaveController extends Controller
                         $linemanager = LeaveApproval::where('empID', $empID)->first();
                         $linemanager_data = SysHelpers::employeeData($linemanager->level1);
                         $employee_data = SysHelpers::employeeData($empID);
-                        $fullname = $linemanager_data['full_name'];
+                        $fullname = $linemanager_data['fname'] . ' ' . $linemanager_data['mname'] . ' ' . $linemanager_data['lname'];
+
                         $email_data = array(
                             'subject' => 'Employee Leave Approval',
                             'view' => 'emails.linemanager.leave-approval',
@@ -2233,7 +2240,8 @@ class LeaveController extends Controller
                         $linemanager = LeaveApproval::where('empID', $empID)->first();
                         $linemanager_data = SysHelpers::employeeData($linemanager->level1);
                         $employee_data = SysHelpers::employeeData($empID);
-                        $fullname = $linemanager_data['full_name'];
+                        $fullname = $linemanager_data['fname'] . ' ' . $linemanager_data['mname'] . ' ' . $linemanager_data['lname'];
+
                         $email_data = array(
                             'subject' => 'Employee Leave Approval',
                             'view' => 'emails.linemanager.leave-approval',
@@ -2476,7 +2484,8 @@ class LeaveController extends Controller
                     $linemanager = LeaveApproval::where('empID', $empID)->first();
                     $linemanager_data = SysHelpers::employeeData($linemanager->level1);
                     $employee_data = SysHelpers::employeeData($empID);
-                    $fullname = $linemanager_data['full_name'];
+                    $fullname = $linemanager_data['fname'] . ' ' . $linemanager_data['mname'] . ' ' . $linemanager_data['lname'];
+
                     $email_data = array(
                         'subject' => 'Employee Leave Approval',
                         'view' => 'emails.linemanager.leave-approval',
@@ -2533,11 +2542,17 @@ class LeaveController extends Controller
         $expectedDate = $request->input('expectedDate');
 
         $particularLeave = Leaves::where('id', $id)->first();
+       ;
         $linemanager = LeaveApproval::where('empID', $particularLeave->empID)->first();
+   
         $linemanager_position = EMPL::where('emp_id',$linemanager->level1)->value('position');
         $position = Position::where('id', $linemanager_position)->first();
-
         $positionName = $position->name;
+        $linemanager_data = EMPL::where('emp_id',$linemanager->level1)->first();
+        $employee_data =  EMPL::where('emp_id',$particularLeave->empID)->first();
+        $fullname = $linemanager_data['fname'] . ' ' . $linemanager_data['mname'] . ' ' . $linemanager_data['lname'];
+        
+        //send notification to line manager
 
         if( $particularLeave->state == '0'){
             if ($particularLeave) {
@@ -2557,9 +2572,7 @@ class LeaveController extends Controller
             $type_name = $leave_type->type;
 
             //fetch Line manager data from employee table and send email
-            $linemanager_data = EMPL::where('emp_id',$linemanager->level1)->first();
-            $employee_data =  EMPL::where('emp_id',$particularLeave->empID)->first();
-            $fullname = $linemanager_data['fname'];
+
             $email_data = array(
                 'subject' => 'Employee Leave Revoke',
                 'view' => 'emails.linemanager.leave-revoke',
@@ -2600,6 +2613,7 @@ class LeaveController extends Controller
     {
         $id=$request->id;
         $particularLeave = Leaves::where('id', $id)->first();
+
 
         if(   $particularLeave->state == '2' ){
             if ($particularLeave) {
