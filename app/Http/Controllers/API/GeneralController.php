@@ -656,7 +656,39 @@ class GeneralController extends Controller
         $numberOfLeaves2 = count($filteredLeaves1);
         $data['leaves']=$filteredLeaves;
         $data['revoked_leaves']=$filteredLeaves1;
+
         
+
+        foreach ($data['leaves'] as &$slip) {
+            $slipArray = json_decode(json_encode($slip), true);
+            $employee= EMPL::where("emp_id",$slipArray["empID"])->get()->first();
+
+      
+            $slipArray['empName'] = $employee['fname'].' '.$employee['lname'];
+            
+        
+      
+           
+            $slip = (array) $slipArray;
+
+            
+        }
+        foreach ($data['revoked_leaves'] as &$slip) {
+            $slipArray = json_decode(json_encode($slip), true);
+            $employee= EMPL::where("emp_id",$slipArray["empID"])->get()->first();
+
+      
+            $slipArray['empName'] = $employee['fname'].' '.$employee['lname'];
+            
+        
+      
+           
+            $slip = (array) $slipArray;
+
+            
+        }
+        
+
         return response( [ 'data'=>$data ],200);
 
     }
