@@ -752,7 +752,7 @@ FROM payroll_logs pl, employee e WHERE e.emp_id = pl.empID and e.contract_type =
     function v_pension($date, $pensionFund)
     {
         $query = "SELECT @s:=@s+1 as SNo, e.pf_membership_no , CONCAT(e.fname,' ', IF(e.mname != null,e.mname,' '),' ', e.lname) as name, pl.salary as salary, pl.allowances,pl.pension_employee, pl.pension_employer
-FROM employee e, payroll_logs pl, (SELECT @s:=0) s WHERE pl.empID = e.emp_id and e.contract_type = 2 AND pl.pension_fund = '" . $pensionFund . "' AND pl.payroll_date LIKE '%" . $date . "%'";
+        FROM employee e, payroll_logs pl, (SELECT @s:=0) s WHERE pl.empID = e.emp_id and e.contract_type = 2 AND pl.pension_fund = '" . $pensionFund . "' AND pl.payroll_date LIKE '%" . $date . "%'";
         return DB::select(DB::raw($query));
     }
 

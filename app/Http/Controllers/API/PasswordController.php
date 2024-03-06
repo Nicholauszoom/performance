@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\API;
 
 use App\Helpers\SysHelpers;
+use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Models\EMPL;
+use App\Models\Payroll\FlexPerformanceModel;
 use App\Rules\CurrentPasswordCheck;
 use App\Rules\OldPasswordCheck;
 use Illuminate\Http\Request;
@@ -82,26 +84,34 @@ class PasswordController extends Controller
         ]);
         if ($validator->fails()) {
             return response()->json([
-               'message'=>'validations fails',
-               'errors' =>$validator->errors()
+                'message'=>'validations fails',
+                'errors' =>$validator->errors()
             ],422);
-         }
-         else
-         {
+        }
+        else
+        {
             // $user = Auth::user()->emp_id;
             // return response()->json('success', 200);
 
             $employee = array(
-                    'password' => Hash::make($request->new_password),
-                );
+                'password' => Hash::make($request->new_password),
+            );
             $userPass = array(
-                        'empID' =>$emp_id,
-                        'password' => Hash::make($request->new_password),
-                        'time' => date('Y-m-d'),
-                    );
+                'empID' =>$emp_id,
+                'password' => Hash::make($request->new_password),
+                'time' => date('Y-m-d'),
+            );
 
             $result = $this->passSave($emp_id, $employee, $userPass, $request);
+            $flexPerformance= new FlexPerformanceModel();
+            $authenticateCont= new AuthenticatedSessionController($flexPerformance);
+            $resu=$authenticateCont->dateDiffCalculate2($emp_id);
+            session(['pass_age' => $resu]);
+
+            $pass_age = session()->get('pass_age');
+
             if ($result == 1) {
+                $request->session()->flush();
                 return response()->json([
                     'message' => 'Password Updated',
                     'username' => $emp_id,
@@ -152,8 +162,8 @@ class PasswordController extends Controller
     public function passSave($empID, $employee, $userPass, Request $request)
     {
 
-        $empl = EMPL::where('emp_id',$empID)->first();
-        $query = DB::transaction(function () use($empID, $employee, $userPass, $request,$empl) {
+
+        $query = DB::transaction(function () use($empID, $employee, $userPass, $request) {
             DB::table('employee')->where('emp_id', $empID)->update($employee);
 
             DB::table('user_passwords')->insert($userPass);

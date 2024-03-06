@@ -87,10 +87,6 @@
                 @if($level_check == $item->approval_status)
 
                 @if($item->status!='1')
-                @if ($item->status!=$check)
-                <br><br>
-                {{-- @can('confirm-termination') --}}
-                {{-- start of termination confirm button --}}
                         <a href="javascript:void(0)" title="Approve" class="me-2"
                         onclick="approveTermination(<?php echo $item->id; ?>)">
                         <button class="btn btn-main btn-xs">
@@ -98,9 +94,6 @@
                             Confirm
                         </button>
                     </a>
-                {{-- / --}}
-
-                {{-- start of termination confirm button --}}
 
                 <a href="javascript:void(0)" title="Cancel" class="icon-2 info-tooltip"
                 onclick="cancelTermination(<?php echo $item->id; ?>)">
@@ -109,9 +102,6 @@
                       Cancel
                 </button>
                  </a>
-                {{-- / --}}
-                {{-- @endcan --}}
-                @endif
                 @endif
                 @endif
                 {{-- @endif --}}

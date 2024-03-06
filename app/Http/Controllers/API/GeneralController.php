@@ -540,7 +540,7 @@ class GeneralController extends Controller
     public function myLeaves(Request $request)
     {
      
-        $data['leaves'] = Leaves::whereNot('reason', 'Automatic applied!')->orderBy('id', 'desc')->get();
+        $data['leaves'] = Leaves::whereNot('reason', 'Automatic applied!')->whereNot('state',4)->orderBy('id', 'desc')->get();
         $data['revoked_leaves'] = Leaves::where('revoke_status', 0)->whereNot('reason', 'Automatic applied!')
         ->orWhere('revoke_status', 1)
         ->orderBy('id', 'DESC')->get();
@@ -656,7 +656,39 @@ class GeneralController extends Controller
         $numberOfLeaves2 = count($filteredLeaves1);
         $data['leaves']=$filteredLeaves;
         $data['revoked_leaves']=$filteredLeaves1;
+
         
+
+        foreach ($data['leaves'] as &$slip) {
+            $slipArray = json_decode(json_encode($slip), true);
+            $employee= EMPL::where("emp_id",$slipArray["empID"])->get()->first();
+
+      
+            $slipArray['empName'] = $employee['fname'].' '.$employee['lname'];
+            
+        
+      
+           
+            $slip = (array) $slipArray;
+
+            
+        }
+        foreach ($data['revoked_leaves'] as &$slip) {
+            $slipArray = json_decode(json_encode($slip), true);
+            $employee= EMPL::where("emp_id",$slipArray["empID"])->get()->first();
+
+      
+            $slipArray['empName'] = $employee['fname'].' '.$employee['lname'];
+            
+        
+      
+           
+            $slip = (array) $slipArray;
+
+            
+        }
+        
+
         return response( [ 'data'=>$data ],200);
 
     }

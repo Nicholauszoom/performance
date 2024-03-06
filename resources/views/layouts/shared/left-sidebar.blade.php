@@ -158,22 +158,22 @@
                         </a>
 
                         <ul
-                            class="nav-group-sub collapse {{ request()->routeIs('flex.grievances') 
-                            || request()->routeIs('flex.addDisciplinary') 
-                            || request()->routeIs('flex.addPromotion') 
-                            || request()->routeIs('flex.addIncrement') 
-                            || request()->routeIs('flex.addTermination') 
-                            || request()->routeIs('flex.addEmployee') 
-                            || request()->routeIs('flex.employee') 
-                            || request()->routeIs('flex.grievancesCompain') 
-                            || request()->routeIs('flex.promotion') 
-                            || request()->routeIs('flex.termination') 
-                            || request()->routeIs('flex.inactive_employee') 
-                            || request()->routeIs('flex.overtime') 
-                            || request()->routeIs('imprest.imprest') 
-                            || request()->routeIs('flex.userprofile') 
-                            || request()->routeIs('flex.viewProfile') 
-                            || request()->routeIs('flex.updateEmployee') 
+                            class="nav-group-sub collapse {{ request()->routeIs('flex.grievances')
+                            || request()->routeIs('flex.addDisciplinary')
+                            || request()->routeIs('flex.addPromotion')
+                            || request()->routeIs('flex.addIncrement')
+                            || request()->routeIs('flex.addTermination')
+                            || request()->routeIs('flex.addEmployee')
+                            || request()->routeIs('flex.employee')
+                            || request()->routeIs('flex.grievancesCompain')
+                            || request()->routeIs('flex.promotion')
+                            || request()->routeIs('flex.termination')
+                            || request()->routeIs('flex.inactive_employee')
+                            || request()->routeIs('flex.overtime')
+                            || request()->routeIs('imprest.imprest')
+                            || request()->routeIs('flex.userprofile')
+                            || request()->routeIs('flex.viewProfile')
+                            || request()->routeIs('flex.updateEmployee')
                             || request()->routeIs('flex.transfers') ? 'show' : null }}">
                             {{-- start of active employee link --}}
                             @can('view-employee')
@@ -274,7 +274,7 @@
                     <li
                         class="nav-item nav-item-submenu {{ request()->routeIs('flex.submitInputs') ||
                         request()->routeIs('flex.non_statutory_deductions') ||
-                        request()->routeIs('flex.statutory_deductions') ||
+                        request()->routeIs('flex.statutor   y_deductions') ||
                         request()->routeIs('flex.allowance') ||
                         request()->routeIs('pension_receipt.index') ||
                         request()->routeIs('flex.financial_group') ||
@@ -666,20 +666,20 @@
                 @can('view-setting')
                     <li
                         class="nav-item nav-item-submenu {{ request()->routeIs('flex.companyInfo')
-                        || request()->routeIs('bot.botIndex') 
-                        || request()->routeIs('flex.updatecompanyInfo') 
-                        || request()->routeIs('flex.leave-approval') 
-                        || request()->routeIs('flex.approvals') 
-                        || request()->routeIs('users.index') 
-                        || request()->routeIs('permissions.index') 
-                        || request()->routeIs('flex.roles.index') 
-                        || request()->routeIs('flex.email-notifications') 
-                        || request()->routeIs('flex.holidays') 
-                        || request()->routeIs('flex.permissions') 
-                        || request()->routeIs('role') 
-                        || request()->routeIs('flex.bank') 
+                        || request()->routeIs('bot.botIndex')
+                        || request()->routeIs('flex.updatecompanyInfo')
+                        || request()->routeIs('flex.leave-approval')
+                        || request()->routeIs('flex.approvals')
+                        || request()->routeIs('users.index')
+                        || request()->routeIs('permissions.index')
+                        || request()->routeIs('flex.roles.index')
+                        || request()->routeIs('flex.email-notifications')
+                        || request()->routeIs('flex.holidays')
+                        || request()->routeIs('flex.permissions')
+                        || request()->routeIs('role')
+                        || request()->routeIs('flex.bank')
                         || request()->routeIs('flex.audit_logs')
-                        || request()->routeIs('flex.passwordAutogenerate') 
+                        || request()->routeIs('flex.passwordAutogenerate')
                         || request()->routeIs('payroll.mailConfiguration') ? 'nav-item-expand nav-item-open' : null }}">
                         <a href="#" class="nav-link">
                             <i class="ph-gear-six"></i>
@@ -687,21 +687,21 @@
                         </a>
 
                         <ul
-                            class="nav-group-sub collapse {{ request()->routeIs('flex.companyInfo') 
-                            || request()->routeIs('bot.botIndex') 
-                            || request()->routeIs('flex.companyInfo') 
-                            || request()->routeIs('flex.updatecompanyInfo') 
-                            || request()->routeIs('flex.leave-approval') 
-                            || request()->routeIs('flex.approvals') 
-                            || request()->routeIs('users.index') 
-                            || request()->routeIs('permissions.index') 
-                            || request()->routeIs('roles.index') 
-                            || request()->routeIs('flex.email-notifications') 
-                            || request()->routeIs('flex.holidays') 
-                            || request()->routeIs('flex.financial_group') 
-                            || request()->routeIs('flex.bank') 
-                            || request()->routeIs('flex.audit_logs') 
-                            || request()->routeIs('flex.passwordAutogenerate') 
+                            class="nav-group-sub collapse {{ request()->routeIs('flex.companyInfo')
+                            || request()->routeIs('bot.botIndex')
+                            || request()->routeIs('flex.companyInfo')
+                            || request()->routeIs('flex.updatecompanyInfo')
+                            || request()->routeIs('flex.leave-approval')
+                            || request()->routeIs('flex.approvals')
+                            || request()->routeIs('users.index')
+                            || request()->routeIs('permissions.index')
+                            || request()->routeIs('roles.index')
+                            || request()->routeIs('flex.email-notifications')
+                            || request()->routeIs('flex.holidays')
+                            || request()->routeIs('flex.financial_group')
+                            || request()->routeIs('flex.bank')
+                            || request()->routeIs('flex.audit_logs')
+                            || request()->routeIs('flex.passwordAutogenerate')
                             || request()->routeIs('payroll.mailConfiguration') ? 'show' : null }}">
                             @if (session('mng_roles_grp'))
                                 <li class="nav-item"><a
@@ -722,7 +722,7 @@
 
 
                             @can('view-roles')
-                                
+
                             <li class=" nav-item"><a
                                     class="nav-link {{ request()->routeIs('roles.index') ? 'active' : null }} "
                                     href="{{ url('roles') }}">

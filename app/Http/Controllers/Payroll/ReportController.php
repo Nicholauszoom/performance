@@ -28,6 +28,13 @@ use SebastianBergmann\Timer\Duration;
 class ReportController extends Controller
 {
 
+    protected $payroll_model;
+    protected $reports_model;
+    protected $attendance_model;
+    protected $flexperformance_model;
+    protected $project_model;
+
+
     public function authenticateUser($permissions)
     {
         if (!Auth::check()) {
@@ -834,7 +841,22 @@ class ReportController extends Controller
                 $data['paid_with_arrears'] = $this->reports_model->employeePaidWithArrear($empID, $payroll_date);
                 $data['paid_with_arrears_d'] = $this->reports_model->employeeArrearPaidAll($empID, $payroll_date);
                 $data['salary_advance_loan_remained'] = $this->reports_model->loansAmountRemained($empID, $payroll_date);
-                $data['leaveBalance'] = $this->attendance_model->getLeaveBalance($empID, $emp->hire_date, $payroll_month_end);
+
+                $today = date('Y-m-d');
+                $arryear = explode('-', $today);
+                $year = $arryear[0];
+
+                $employeeHiredate = explode('-', $emp->hire_date);
+                $employeeHireYear = $employeeHiredate[0];
+                $employeeDate = '';
+
+                if ($employeeHireYear == $year) {
+                    $employeeDate = Auth::user()->hire_date;
+
+                } else {
+                    $employeeDate = $year . ('-01-01');
+                }
+                $data['leaveBalance'] = $this->attendance_model->getLeaveBalance($empID,  $employeeDate, $payroll_month_end);
 
                 $slipinfo = $data['slipinfo'];
                 $leaves = $data['leaves'];
