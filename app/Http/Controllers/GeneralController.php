@@ -3764,6 +3764,8 @@ class GeneralController extends Controller
         // // $data['leave'] =  $this->attendance_model->leavereport();
         // if (session('mng_emp') || session('vw_emp') || session('appr_emp') || session('mng_roles_grp')) {
         $data['transfers'] = $this->flexperformance_model->employeeTransfers();
+
+        dd($data['transfers']);
         $data['title'] = "Transfers";
 
         $data['level_check']  = SysHelpers::approvalCheck("Employee Approval");
