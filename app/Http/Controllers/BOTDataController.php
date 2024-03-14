@@ -103,28 +103,15 @@ class BOTDataController extends Controller
 
      public function sendEmployeeData($data)
         {
+          
             $endpoint = 'http://compliance.bancabc.co.tz/api/employeerecord';
            $headers = [
 						'Content-Type: application/json',
 						'Authorization: Bearer 14ee8c99777e78e8c94d0925b2dc0de267d82add43274233f21eeefacce39ecb',
 						'informationCode: 1074',  // Fixed the space before the colon
 					];
-
-
-            // $headers = [
-            //     'Authorization: key=' . $fcmServerKey,
-            //     'Content-Type: application/json',
-            // ];
-
-
-            // $response = Http::withHeaders($headers)->post($endpoint, $data);
-
-            // $postDataJson = json_encode($data);
-
               $response =  $this->performCurlPost($endpoint, $headers, (json_encode($data)) );
-
-              $response =  $this->performCurlPost($endpoint, $headers, $data );
-
+          
             return $response;
         }
 
