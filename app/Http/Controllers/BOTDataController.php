@@ -103,7 +103,7 @@ class BOTDataController extends Controller
 
      public function sendEmployeeData($data)
         {
-          
+
             $endpoint = 'http://compliance.bancabc.co.tz/api/employeerecord';
            $headers = [
 						'Content-Type: application/json',
@@ -111,7 +111,7 @@ class BOTDataController extends Controller
 						'informationCode: 1074',  // Fixed the space before the colon
 					];
               $response =  $this->performCurlPost($endpoint, $headers, (json_encode($data)) );
-          
+
             return $response;
         }
 
@@ -256,6 +256,8 @@ class BOTDataController extends Controller
             } else {
                 $emp_id = $request->emp_id;
                 $employee = Employee::where('emp_id', $emp_id)->first();
+
+                dd($employee->id);
 
                 $data = [
                     "branchCode" => $employee->branch,
