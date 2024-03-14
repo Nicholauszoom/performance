@@ -217,24 +217,28 @@ class BOTDataController extends Controller
                 foreach ($employees as $employee) {
 
                     $data = [
-                        "reportingDate"=>$this->convertDate($employee->hire_date),
                         "branchCode" => $employee->branch,
+                        "empIdentificationType"=>"NationalIdentityCard",
+                        "empIdentificationNumber" => $this->removeSpecialCharacters($employee->national_id),
+                        "empPositionCategory"=>"0",
                         "empName" =>  $employee->fname.' '. $employee->mname.' `'. $employee->lname,
                         "empDob" =>  $this->convertDate($employee->birthdate), // DDMMYYYYHHMM
-                        "empIdentificationNumber" => $this->removeSpecialCharacters($employee->national_id),
+                        "empNin"=>"0",
                         "empPosition" =>  $this->removeSpecialCharacters($employee->positions->name),
-                        "empIdentificationType"=>"NationalIdentityCard",
                         "empStatus" => $this->contractNameExtraction($employee->contract_type),
                         "empDepartment" =>  $this->removeSpecialCharacters($employee->departments->name),
-                        "appointmentDate" =>$this->convertDate($employee->hire_date), // DDMMYYYYHHMM
+                        "appointmentDate" =>$this->convertDate($employee->hire_date),
+                        "empNationality"=>"Tanzanian",
                         "lastPromotionDate" =>$this->convertDate($employee->hire_date), // DDMMYYYYHHMM
                         "basicSalary" => $employee->salary,
                         "snrMgtBenefits" => '0',
                         "otherEmpBenefits" => '0',
                         "gender" => $employee->gender,
-                        "directorsName" => 'none',
-                        "directorsAllowance" => '0',
-                        "directorsCommittee" => 'none',
+                        // "reportingDate"=>$this->convertDate($employee->hire_date),
+
+                        // "directorsName" => 'none',
+                        // "directorsAllowance" => '0',
+                        // "directorsCommittee" => 'none',
                     ];
 
                     $response = $this->sendEmployeeData($data);
@@ -267,24 +271,23 @@ class BOTDataController extends Controller
                 $employee = Employee::where('emp_id', $emp_id)->first();
 
                 $data = [
-                    "reportingDate"=>$this->convertDate($employee->hire_date),
                     "branchCode" => $employee->branch,
-                    "empName" =>  $employee->fname.' '. $employee->mname.' `'. $employee->lname,
-                    "empDob" =>  $this->convertDate($employee->birthdate), // DDMMYYYYHHMM
-                    "empIdentificationNumber" => $this->removeSpecialCharacters($employee->national_id),
-                    "empIdentificationType"=>"NationalIdentityCard",
-                    "empPosition" =>  $this->removeSpecialCharacters($employee->positions->name),
-                    "empStatus" =>  $this->contractNameExtraction($employee->contract_type),
-                    "empDepartment" =>  $this->removeSpecialCharacters($employee->departments->name),
-                    "appointmentDate" =>$this->convertDate($employee->hire_date), // DDMMYYYYHHMM
-                    "lastPromotionDate" =>$this->convertDate($employee->hire_date), // DDMMYYYYHHMM
-                    "basicSalary" => $employee->salary,
-                    "snrMgtBenefits" => '0',
-                    "otherEmpBenefits" => '0',
-                    "gender" =>   $employee->gender,
-                    "directorsName" => 'none',
-                    "directorsAllowance" => '0',
-                    "directorsCommittee" => 'none',
+                        "empIdentificationType"=>"NationalIdentityCard",
+                        "empIdentificationNumber" => $this->removeSpecialCharacters($employee->national_id),
+                        "empPositionCategory"=>"0",
+                        "empName" =>  $employee->fname.' '. $employee->mname.' `'. $employee->lname,
+                        "empDob" =>  $this->convertDate($employee->birthdate), // DDMMYYYYHHMM
+                        "empNin"=>"0",
+                        "empPosition" =>  $this->removeSpecialCharacters($employee->positions->name),
+                        "empStatus" => $this->contractNameExtraction($employee->contract_type),
+                        "empDepartment" =>  $this->removeSpecialCharacters($employee->departments->name),
+                        "appointmentDate" =>$this->convertDate($employee->hire_date),
+                        "empNationality"=>"Tanzanian",
+                        "lastPromotionDate" =>$this->convertDate($employee->hire_date), // DDMMYYYYHHMM
+                        "basicSalary" => $employee->salary,
+                        "snrMgtBenefits" => '0',
+                        "otherEmpBenefits" => '0',
+                        "gender" => $employee->gender,
                 ];
 
                 $response = $this->sendEmployeeData($data);
