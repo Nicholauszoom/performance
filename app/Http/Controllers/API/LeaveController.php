@@ -97,7 +97,20 @@ class LeaveController extends Controller
         //  return response()->json($data);
 
 
+        foreach ($data as &$slip) {
+            $slipArray = json_decode(json_encode($slip), true);
+            $employee= EMPL::where("emp_id",$slipArray["empID"])->get()->first();
 
+      
+            $slipArray['empName'] = $employee['fname'].' '.$employee['lname'];
+            
+        
+      
+           
+            $slip = (array) $slipArray;
+
+            
+        }
 
         return response(
             [

@@ -296,10 +296,10 @@
 
 
                             @if ($show_nhif)
-                            <td class=" {{$nhifEmployee_col }} text-end nhif-column">{{ number_format($row2->nhif, 2) }}
+                            <td class=" {{$nhifEmployee_col }} text-end nhif-column">0
                             </td>
-                            <td class=" {{$nhifEmployer_col }} text-end nhif-column">{{ number_format($row2->nhif, 2) }} </td>
-                            <td class=" {{$nhif_col }} text-end nhif-column">{{ number_format($row2->nhif, 2) }}</td>
+                            <td class=" {{$nhifEmployer_col }} text-end nhif-column">0</td>
+                            <td class=" {{$nhif_col }} text-end nhif-column">0</td>
                             @endif
                             
 
@@ -328,7 +328,7 @@
 
                         $totalsdl += round($row2->sdl,2);
                         $totalwcf += round($row2->wcf,2);
-                        $totalnhif += round($row2->nhif * 2, 2);
+                        $totalnhif += 0;
 
                         @endphp
                         @endif
