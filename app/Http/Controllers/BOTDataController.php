@@ -334,8 +334,8 @@ private function postAllEmployeesData()
     }
 
     session()->flash('status', json_encode($responses));
-    $employees =  Employee::all();
-    return view('bot.index', compact('responses', 'employees'));
+    $employee =  Employee::all();
+    return view('bot.index', compact('responses', 'employee'));
 }
 
 private function postSingleEmployeeData($emp_id)
@@ -345,8 +345,8 @@ private function postSingleEmployeeData($emp_id)
     $response = $this->sendEmployeeData($data);
 
     session()->flash('status', json_encode($response));
-    $employees =  Employee::all();
-    return view('bot.index', compact('response', 'employees'));
+    $employee =  Employee::all();
+    return view('bot.index', compact('response', 'employee'));
 }
 
 private function prepareEmployeeData($employee)
