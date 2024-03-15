@@ -351,8 +351,8 @@ private function postSingleEmployeeData($emp_id)
 
 private function prepareEmployeeData($employee)
 {
-    $position_category = PositionCategory::where('item_code', $employee->positions->position_category)->item_value->first();
-    $nationality= Country::where('item_code',$employee->nationality)->item_value->first();
+    $position_category = PositionCategory::where('item_code', $employee->positions->position_category)->first()->item_value;
+    $nationality= Country::where('item_code',$employee->nationality)->first()->item_value;;
     return [
         "branchCode" => $employee->branch,
         "empIdentificationType" => "NationalIdentityCard",
