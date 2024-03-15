@@ -351,13 +351,13 @@ private function postSingleEmployeeData($emp_id)
 
 private function prepareEmployeeData($employee)
 {
-    $position_category = PositionCategory::where('item_code', $employee->positions->position_category)->first()->item_value;
-    $nationality= Country::where('item_code',$employee->nationality)->first()->item_value;;
+    $position_category = PositionCategory::where('item_code', $employee->positions->position_category)->first();
+    $nationality= Country::where('item_code',$employee->nationality)->first();
     return [
         "branchCode" => $employee->branch,
         "empIdentificationType" => "NationalIdentityCard",
         "empIdentificationNumber" => $this->removeSpecialCharacters($employee->national_id),
-        "empPositionCategory" => $position_category!=null?$position_category:"Non-Senior management",
+        "empPositionCategory" => $position_category!=null?$position_category->item_value:"Non-Senior management",
         "empName" => $employee->fname . ' ' . $employee->mname . ' ' . $employee->lname,
         "empDob" => $this->convertDate($employee->birthdate),
         "empNin" => "0",
@@ -365,7 +365,7 @@ private function prepareEmployeeData($employee)
         "empStatus" => $this->contractNameExtraction($employee->contract_type),
         "empDepartment" => $this->removeSpecialCharacters($employee->departments->name),
         "appointmentDate" => $this->convertDate($employee->hire_date),
-        "empNationality" => $nationality,
+        "empNationality" => $nationality->item_value,
         "lastPromotionDate" => $this->convertDate($employee->hire_date),
         "basicSalary" => $employee->salary,
         "empBenefits"=>  [],
