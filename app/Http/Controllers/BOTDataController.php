@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Contract;
 use App\Models\Employee;
+use App\Models\Country;
 use App\Models\PositionCategory;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
@@ -62,7 +63,7 @@ class BOTDataController extends Controller
     {
         $emp_id  =  $request->emp_id;
         $employee = Employee::where('emp_id',$emp_id)->first();
-        $position_category= PosPositionCategory::where('item_code',$employee->positions->position_category)->first()??"1";
+        $position_category= PositionCategory::where('item_code',$employee->positions->position_category)->first()??"1";
         $cleanedStringDepartment = str_replace('&', 'and', $employee->departments->name);
 
         $data = [
@@ -191,118 +192,185 @@ class BOTDataController extends Controller
 
         public function contractNameExtraction($contractType){
             $contractName = Contract::where('item_code', $contractType)->pluck('name');
-
-            return $contractName;
-
+            if($contractName=='Permanent'){
+                return "Permanent and pensionable";
+            }
+            else if($contractName=='Fixed Term'){
+                return "Contractual";
+            }else{
+                return "Temporary";
+            }
         }
+
+
+        // public function postEmployeeData(Request $request)
+        // {
+        //     if ($request->emp_id === 'all') {
+        //        $employees= Employee::get();
+        //        $position_category= PositionCategory::where('item_code',$employee->positions->position_category)->first();
+
+        //         $responses = [];
+
+        //         foreach ($employees as $employee) {
+
+        //             $data = [
+        //                 "branchCode" => $employee->branch,
+        //                 "empIdentificationType"=>"NationalIdentityCard",
+        //                 "empIdentificationNumber" => $this->removeSpecialCharacters($employee->national_id),
+        //                 "empPositionCategory"=> $position_category!=null?$position_category:"1",
+        //                 "empName" =>  $employee->fname.' '. $employee->mname.' `'. $employee->lname,
+        //                 "empDob" =>  $this->convertDate($employee->birthdate), // DDMMYYYYHHMM
+        //                 "empNin"=>"0",
+        //                 "empPosition" =>  $this->removeSpecialCharacters($employee->positions->name),
+        //                 "empStatus" => $this->contractNameExtraction($employee->contract_type),
+        //                 "empDepartment" =>  $this->removeSpecialCharacters($employee->departments->name),
+        //                 "appointmentDate" =>$this->convertDate($employee->hire_date),
+        //                 "empNationality"=>"Tanzanian",
+        //                 "lastPromotionDate" =>$this->convertDate($employee->hire_date), // DDMMYYYYHHMM
+        //                 "basicSalary" => $employee->salary,
+        //                 "snrMgtBenefits" => '0',
+        //                 "otherEmpBenefits" => '0',
+        //                 "gender" => $employee->gender,
+        //                 // "reportingDate"=>$this->convertDate($employee->hire_date),
+
+        //                 // "directorsName" => 'none',
+        //                 // "directorsAllowance" => '0',
+        //                 // "directorsCommittee" => 'none',
+        //             ];
+
+        //             $response = $this->sendEmployeeData($data);
+
+        //             // if ($response->status() === 200) {
+        //             //     $responseData = $response->json();
+        //             //     $responses[] = $responseData; // Collect response data for all employees
+        //             // } else {
+        //             //     $statusCode = $response->status();
+        //             //     $errorMessage = $response['error']['message'];
+        //             //     // Handle error if needed for each employee
+        //             // }
+
+        //             $newres = json_encode($response);
+
+        //             session()->flash('status', $newres);
+
+
+        //             $employee =  Employee::all();
+        //             $data['employee'] = $employee;
+
+
+
+        //         }
+        //         return view('bot.index', compact('newres','employee'));
+
+        //         // return $responses; // Return array of responses for all employees
+        //     } else {
+        //         $emp_id = $request->emp_id;
+        //         $employee = Employee::where('emp_id', $emp_id)->first();
+        //         $position_category= PositionCategory::where('item_code',$employee->positions->position_category)->first()??"1";
+               
+
+        //         $data = [
+        //             "branchCode" => $employee->branch,
+        //                 "empIdentificationType"=>"NationalIdentityCard",
+        //                 "empIdentificationNumber" => $this->removeSpecialCharacters($employee->national_id),
+        //                 "empPositionCategory"=> $position_category!=null?$position_category:"1",
+        //                 "empName" =>  $employee->fname.' '. $employee->mname.' `'. $employee->lname,
+        //                 "empDob" =>  $this->convertDate($employee->birthdate), // DDMMYYYYHHMM
+        //                 "empNin"=>"0",
+        //                 "empPosition" =>  $this->removeSpecialCharacters($employee->positions->name),
+        //                 "empStatus" => $this->contractNameExtraction($employee->contract_type),
+        //                 "empDepartment" =>  $this->removeSpecialCharacters($employee->departments->name),
+        //                 "appointmentDate" =>$this->convertDate($employee->hire_date),
+        //                 "empNationality"=>"Tanzanian",
+        //                 "lastPromotionDate" =>$this->convertDate($employee->hire_date), // DDMMYYYYHHMM
+        //                 "basicSalary" => $employee->salary,
+        //                 "snrMgtBenefits" => '0',
+        //                 "otherEmpBenefits" => '0',
+        //                 "gender" => $employee->gender,
+        //         ];
+
+        //         $response = $this->sendEmployeeData($data);
+
+        //         // if ($response->status() === 200) {
+        //         //     $responseData = $response->json();
+        //         // } else {
+        //         //     $statusCode = $response->status();
+        //         //     $errorMessage = $response['error']['message'];
+        //         //     // Handle error for the single employee request
+        //         // }
+
+        //         $response = $this->sendEmployeeData($data);
+
+
+        //         $newres = json_encode($response);
+        //         session()->flash('status', $newres);
+        //         // dd($newres);
+        //             $employee =  Employee::all();
+        //             $data['employee'] = $employee;
+
+        //             return view('bot.index', compact('newres','employee'));
+        //     }
+        // }
 
 
         public function postEmployeeData(Request $request)
-        {
-            if ($request->emp_id === 'all') {
-               $employees= Employee::get();
-               $position_category= PositionCategory::where('item_code',$employee->positions->position_category)->first()??"1";
+{
+    if ($request->emp_id === 'all') {
+        return $this->postAllEmployeesData();
+    } else {
+        return $this->postSingleEmployeeData($request->emp_id);
+    }
+}
 
-                $responses = [];
+private function postAllEmployeesData()
+{
+    $employees = Employee::get();
+    $responses = [];
 
-                foreach ($employees as $employee) {
+    foreach ($employees as $employee) {
+        $data = $this->prepareEmployeeData($employee);
+        $response = $this->sendEmployeeData($data);
+        $responses[] = $response->json(); // Collect response data for all employees
+    }
 
-                    $data = [
-                        "branchCode" => $employee->branch,
-                        "empIdentificationType"=>"NationalIdentityCard",
-                        "empIdentificationNumber" => $this->removeSpecialCharacters($employee->national_id),
-                        "empPositionCategory"=> $position_category,
-                        "empName" =>  $employee->fname.' '. $employee->mname.' `'. $employee->lname,
-                        "empDob" =>  $this->convertDate($employee->birthdate), // DDMMYYYYHHMM
-                        "empNin"=>"0",
-                        "empPosition" =>  $this->removeSpecialCharacters($employee->positions->name),
-                        "empStatus" => $this->contractNameExtraction($employee->contract_type),
-                        "empDepartment" =>  $this->removeSpecialCharacters($employee->departments->name),
-                        "appointmentDate" =>$this->convertDate($employee->hire_date),
-                        "empNationality"=>"Tanzanian",
-                        "lastPromotionDate" =>$this->convertDate($employee->hire_date), // DDMMYYYYHHMM
-                        "basicSalary" => $employee->salary,
-                        "snrMgtBenefits" => '0',
-                        "otherEmpBenefits" => '0',
-                        "gender" => $employee->gender,
-                        // "reportingDate"=>$this->convertDate($employee->hire_date),
+    session()->flash('status', json_encode($responses));
+    $employees =  Employee::all();
+    return view('bot.index', compact('responses', 'employees'));
+}
 
-                        // "directorsName" => 'none',
-                        // "directorsAllowance" => '0',
-                        // "directorsCommittee" => 'none',
-                    ];
+private function postSingleEmployeeData($emp_id)
+{
+    $employee = Employee::where('emp_id', $emp_id)->first();
+    $data = $this->prepareEmployeeData($employee);
+    $response = $this->sendEmployeeData($data);
 
-                    $response = $this->sendEmployeeData($data);
+    session()->flash('status', json_encode($response));
+    $employees =  Employee::all();
+    return view('bot.index', compact('response', 'employees'));
+}
 
-                    // if ($response->status() === 200) {
-                    //     $responseData = $response->json();
-                    //     $responses[] = $responseData; // Collect response data for all employees
-                    // } else {
-                    //     $statusCode = $response->status();
-                    //     $errorMessage = $response['error']['message'];
-                    //     // Handle error if needed for each employee
-                    // }
+private function prepareEmployeeData($employee)
+{
+    $position_category = PositionCategory::where('item_code', $employee->positions->position_category)->item_value->first();
+    $nationality= Country::where('item_code',$employee->nationality)->item_value->first();
+    return [
+        "branchCode" => $employee->branch,
+        "empIdentificationType" => "NationalIdentityCard",
+        "empIdentificationNumber" => $this->removeSpecialCharacters($employee->national_id),
+        "empPositionCategory" => $position_category!=null?$position_category:"Non-Senior management",
+        "empName" => $employee->fname . ' ' . $employee->mname . ' ' . $employee->lname,
+        "empDob" => $this->convertDate($employee->birthdate),
+        "empNin" => "0",
+        "empPosition" => $this->removeSpecialCharacters($employee->positions->name),
+        "empStatus" => $this->contractNameExtraction($employee->contract_type),
+        "empDepartment" => $this->removeSpecialCharacters($employee->departments->name),
+        "appointmentDate" => $this->convertDate($employee->hire_date),
+        "empNationality" => $nationality,
+        "lastPromotionDate" => $this->convertDate($employee->hire_date),
+        "basicSalary" => $employee->salary,
+        "empBenefits"=>  [],
+        "gender" => $employee->gender,
+    ];
+}
 
-                    $newres = json_encode($response);
-
-                    session()->flash('status', $newres);
-
-
-                    $employee =  Employee::all();
-                    $data['employee'] = $employee;
-
-
-
-                }
-                return view('bot.index', compact('newres','employee'));
-
-                // return $responses; // Return array of responses for all employees
-            } else {
-                $emp_id = $request->emp_id;
-                $employee = Employee::where('emp_id', $emp_id)->first();
-                $position_category= PositionCategory::where('item_code',$employee->positions->position_category)->first()??"1";
-               
-
-                $data = [
-                    "branchCode" => $employee->branch,
-                        "empIdentificationType"=>"NationalIdentityCard",
-                        "empIdentificationNumber" => $this->removeSpecialCharacters($employee->national_id),
-                        "empPositionCategory"=> $position_category,
-                        "empName" =>  $employee->fname.' '. $employee->mname.' `'. $employee->lname,
-                        "empDob" =>  $this->convertDate($employee->birthdate), // DDMMYYYYHHMM
-                        "empNin"=>"0",
-                        "empPosition" =>  $this->removeSpecialCharacters($employee->positions->name),
-                        "empStatus" => $this->contractNameExtraction($employee->contract_type),
-                        "empDepartment" =>  $this->removeSpecialCharacters($employee->departments->name),
-                        "appointmentDate" =>$this->convertDate($employee->hire_date),
-                        "empNationality"=>"Tanzanian",
-                        "lastPromotionDate" =>$this->convertDate($employee->hire_date), // DDMMYYYYHHMM
-                        "basicSalary" => $employee->salary,
-                        "snrMgtBenefits" => '0',
-                        "otherEmpBenefits" => '0',
-                        "gender" => $employee->gender,
-                ];
-
-                $response = $this->sendEmployeeData($data);
-
-                // if ($response->status() === 200) {
-                //     $responseData = $response->json();
-                // } else {
-                //     $statusCode = $response->status();
-                //     $errorMessage = $response['error']['message'];
-                //     // Handle error for the single employee request
-                // }
-
-                $response = $this->sendEmployeeData($data);
-
-
-                $newres = json_encode($response);
-                session()->flash('status', $newres);
-                // dd($newres);
-                    $employee =  Employee::all();
-                    $data['employee'] = $employee;
-
-                    return view('bot.index', compact('newres','employee'));
-            }
-        }
 }
