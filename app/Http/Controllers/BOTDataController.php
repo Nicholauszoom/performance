@@ -191,7 +191,7 @@ class BOTDataController extends Controller
 
 
         public function contractNameExtraction($contractType){
-            $contractName = Contract::where('item_code', $contractType)->first()->pluck('name');
+            $contractName = Contract::where('item_code', $contractType)->pluck('name')->first();
             dd($contractName);
             if($contractName=='Permanent'){
                 return "Permanent and pensionable";
