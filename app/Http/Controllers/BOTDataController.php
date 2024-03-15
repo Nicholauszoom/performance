@@ -61,6 +61,7 @@ class BOTDataController extends Controller
     {
         $emp_id  =  $request->emp_id;
         $employee = Employee::where('emp_id',$emp_id)->first();
+        $position_category= PosPositionCategory::where('item_code',$employee->positions->position_category)->first()??"1";
         $cleanedStringDepartment = str_replace('&', 'and', $employee->departments->name);
 
         $data = [
@@ -69,6 +70,7 @@ class BOTDataController extends Controller
             "empDob" =>  $employee->birthdate, // DDMMYYYYHHMM
             "empNin" =>  $employee->national_id,
             "empPosition" =>  $employee->positions->name,
+            "empPositionCategory"=> $position_category,
             "empStatus" =>  $employee->state == 1?'Active':'Inactive',
             "empDepartment" =>  $employee->departments->name,
             "appointmentDate" => $employee->hire_date, // DDMMYYYYHHMM
@@ -198,6 +200,7 @@ class BOTDataController extends Controller
         {
             if ($request->emp_id === 'all') {
                $employees= Employee::get();
+               $position_category= PosPositionCategory::where('item_code',$employee->positions->position_category)->first()??"1";
 
                 $responses = [];
 
@@ -207,7 +210,7 @@ class BOTDataController extends Controller
                         "branchCode" => $employee->branch,
                         "empIdentificationType"=>"NationalIdentityCard",
                         "empIdentificationNumber" => $this->removeSpecialCharacters($employee->national_id),
-                        "empPositionCategory"=>"0",
+                        "empPositionCategory"=> $position_category,
                         "empName" =>  $employee->fname.' '. $employee->mname.' `'. $employee->lname,
                         "empDob" =>  $this->convertDate($employee->birthdate), // DDMMYYYYHHMM
                         "empNin"=>"0",
@@ -256,14 +259,14 @@ class BOTDataController extends Controller
             } else {
                 $emp_id = $request->emp_id;
                 $employee = Employee::where('emp_id', $emp_id)->first();
-
-                dd($employee->id);
+                $position_category= PosPositionCategory::where('item_code',$employee->positions->position_category)->first()??"1";
+               
 
                 $data = [
                     "branchCode" => $employee->branch,
                         "empIdentificationType"=>"NationalIdentityCard",
                         "empIdentificationNumber" => $this->removeSpecialCharacters($employee->national_id),
-                        "empPositionCategory"=>"0",
+                        "empPositionCategory"=> $position_category,
                         "empName" =>  $employee->fname.' '. $employee->mname.' `'. $employee->lname,
                         "empDob" =>  $this->convertDate($employee->birthdate), // DDMMYYYYHHMM
                         "empNin"=>"0",
