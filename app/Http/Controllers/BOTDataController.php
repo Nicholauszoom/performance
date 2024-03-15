@@ -200,7 +200,7 @@ class BOTDataController extends Controller
         {
             if ($request->emp_id === 'all') {
                $employees= Employee::get();
-               $position_category= PosPositionCategory::where('item_code',$employee->positions->position_category)->first()??"1";
+               $position_category= PositionCategory::where('item_code',$employee->positions->position_category)->first()??"1";
 
                 $responses = [];
 
@@ -259,7 +259,7 @@ class BOTDataController extends Controller
             } else {
                 $emp_id = $request->emp_id;
                 $employee = Employee::where('emp_id', $emp_id)->first();
-                $position_category= PosPositionCategory::where('item_code',$employee->positions->position_category)->first()??"1";
+                $position_category= PositionCategory::where('item_code',$employee->positions->position_category)->first()??"1";
                
 
                 $data = [
