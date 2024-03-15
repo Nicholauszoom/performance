@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Contract;
 use App\Models\Employee;
-use App\Models\Country;
+use App\Models\CountryCode;
 use App\Models\PositionCategory;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
@@ -352,7 +352,7 @@ private function postSingleEmployeeData($emp_id)
 private function prepareEmployeeData($employee)
 {
     $position_category = PositionCategory::where('item_code', $employee->positions->position_category)->first();
-    $nationality= Country::where('item_code',$employee->nationality)->first();
+    $nationality= CountryCode::where('item_code',$employee->nationality)->first();
     return [
         "branchCode" => $employee->branch,
         "empIdentificationType" => "NationalIdentityCard",
