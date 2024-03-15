@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::table('position', function (Blueprint $table) {
             $table->string('position_category')->nullable();
-            $table->foreign('position_category')->references('id')->on('position_category')->onDelete('cascade');
+          
         });
         
     }
