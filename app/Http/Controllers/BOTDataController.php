@@ -107,7 +107,7 @@ class BOTDataController extends Controller
 
      public function sendEmployeeData($data)
         {
-
+           dd($data);
             $endpoint = 'http://compliance.bancabc.co.tz/api/employeerecord';
            $headers = [
 						'Content-Type: application/json',
