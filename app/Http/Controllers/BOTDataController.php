@@ -362,7 +362,25 @@ private function prepareEmployeeData($employee)
     $allowances = $reportModel->allowances($employee->emp_id, $month);
     dd($allowances);
   }
- 
+ $data =[
+    "Fuel Allowance",
+    "Car maintanance",
+    "Motor vehicle",
+    "Security allowance",
+    "Child and Education allowance",
+    "House keeping allowance",
+    "House rent allowance",
+    "Communication Device",
+    "Entertainment allowance",
+    "Responsibilities Allowance",
+    "Utilities Allowance",
+    "Furniture & Fittings",
+    "Spouse allowance",
+    "Meal Allowance ",
+    "Transport Allowance",
+    "Airtime ",
+    
+ ];
     $position_category = PositionCategory::where('item_code', $employee->positions->position_category)->first();
     $nationality= CountryCode::where('item_code',$employee->nationality)->first();
     return [
@@ -386,5 +404,7 @@ private function prepareEmployeeData($employee)
         "otherEmpBenefits" => "No senior Mamagement Benefits",
     ];
 }
+
+
 
 }
