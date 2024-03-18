@@ -23,13 +23,23 @@
 
     <link rel="stylesheet" href="{{ public_path('assets/bootstrap/b4css/bootstrap.css') }}">
 
+
+    @php
+        $brandSetting = \App\Models\BrandSetting::first();
+    @endphp
+
+
     <style>
         body {
             background-color: #ffff;
             background-position: auto;
             background-repeat: no-repeat;
             background-size: cover;
-            background: url({{ public_path('img/bg2.png') }});
+            background-image: {{ url($brandSetting != null && $brandSetting->body_background != null ? asset('storage/' . $brandSetting->body_background) : asset('img/bg2.png')) }};
+
+            /* background-image: url('{{ $brandSetting != null && $brandSetting->body_background != null ? asset('storage/' . $brandSetting->body_background) : asset('img/bg2.png') }}'); */
+
+            /* background: url({{ public_path('img/bg2.png') }}); */
         }
 
         table {
@@ -100,7 +110,7 @@
 
     <main>
         <?php
-
+        
         foreach ($slipinfo as $row) {
             $rate = $row->rate;
             $id = $row->empID;
@@ -127,32 +137,32 @@
             $meals = $row->meals / $row->rate;
             $taxdue = $row->taxdue / $row->rate;
         }
-
+        
         foreach ($companyinfo as $row) {
             $companyname = $row->cname;
         }
-
+        
         foreach ($total_pensions as $row) {
             $uptodate_pension_employee = $row->total_pension_employee / $row->rate;
             $uptodate_pension_employer = $row->total_pension_employer / $row->rate;
         }
-
+        
         $sum_allowances = $total_allowances / $rate;
         $sum_deductions = $total_deductions / $rate;
         $sum_loans = 0;
-
+        
         // DATE MANIPULATION
         $hire = date_create($hiredate);
         $today = date_create($payroll_month);
         $diff = date_diff($hire, $today);
         $accrued = (37 * $diff->format('%a%')) / 365;
         $totalAccrued = number_format((float) $accrued, 2, '.', ''); //3,04days
-
+        
         $balance = $totalAccrued - $annualLeaveSpent; //days
         if ($balance < 0) {
             $balance = 0;
         }
-
+        
         foreach ($loans as $row) {
             $paid = $row->paid;
             if ($row->remained == 0) {
@@ -168,10 +178,10 @@
             }
             $sum_loans = $sum_loans + $paid;
         }
-
+        
         // START TAKE HOME
         $amount_takehome = $sum_allowances + $salary - ($sum_loans + $pension_employee + $taxdue + $sum_deductions + $meals);
-
+        
         $paid_salary = $amount_takehome;
         foreach ($paid_with_arrears as $paid_with_arrear) {
             if ($paid_with_arrear->with_arrears) {
@@ -181,7 +191,7 @@
                 $with_arr = 0; //with held
             }
         }
-
+        
         foreach ($arrears_paid as $arrear_paid) {
             if ($arrear_paid->arrears_paid) {
                 $paid_salary = $amount_takehome + $arrear_paid->arrears_paid - $with_arr;
@@ -190,7 +200,7 @@
                 $paid_arr = 0;
             }
         }
-
+        
         foreach ($paid_with_arrears_d as $paid_with_arrear_d) {
             if ($paid_with_arrear_d->arrears_paid) {
                 $paid_arr_all = $paid_with_arrear_d->arrears_paid;
@@ -198,7 +208,7 @@
                 $paid_arr_all = 0;
             }
         }
-
+        
         if ($with_arr > 0) {
             foreach ($arrears_all as $arrear_all) {
                 if ($arrear_all->arrears_all) {
@@ -216,19 +226,22 @@
                 }
             }
         }
-
+        
         $sum_allowances = $total_allowances / $rate;
         $sum_deductions = $total_deductions / $rate;
-
+        
         ?>
+
+       
+
 
         <table class="table border-0">
             <thead style="border: none">
                 <tr>
                     <th style="text-align: left; padding: 0">
                         <div style="display: inline-block; vertical-align: middle;">
-                            <img src="{{ public_path('assets/images/hc-hub-logo3.png') }}" class="img-fluid" alt=""
-                                width="150px" height="150px" style="display: inline;">
+                            <img src="{{ public_path('assets/images/hc-hub-logo3.png') }}" class="img-fluid"
+                                alt="" width="150px" height="150px" style="display: inline;">
                             <h5 class="text-main" style="display: inline; margin: 0; vertical-align: middle;">Payslip
                             </h5>
                         </div>
@@ -424,67 +437,66 @@
                     <td style="width: 50%">
                         @if ($total_bank_loan > 0)
 
-                <li class="list-group-item d-flex">
-                    <span class="font-weight-bold">Bank Loans</span>
-                    <span class="font-weight-bold">.
-                    </span>
-                </li>
-
-                @foreach ($bank_loan as $row)
-                <li class="list-group-item d-flex">
-                    <span class="text-muted">{{ $row->product }}</span>
-                    <span class="font-weight-bold">{{ number_format($row->amount / $rate, 2) }}
-                    </span>
-                </li>
-
-                @endforeach
-                <li class="list-group-item d-flex">
-                    <span class="text-muted">Total</span>
-                    <span class="font-weight-bold"><?php echo number_format($total_bank_loan, 2); ?>
-                    </span>
-                </li>
-
-                @endif
-
-                <ul class="list-group list-group-flush ">
-                    <li class="list-group-item d-flex">
-                        <span class="text-muted">Total Income</span>
-                        <span class="font-weight-bold">{{ number_format($sum_allowances + $salary, 2) }}
-                        </span>
-                    </li>
-                    <li class="list-group-item d-flex">
-                        <span class="text-muted">Total Deduction</span>
-                        <span class="font-weight-bold">
-                            {{ number_format($pension_employee + $taxdue + $sum_deductions + $sum_loans + $meals, 2) }}
-                        </span>
-                    </li>
-                    <li class="list-group-item d-flex">
-                        <span class="text-muted">Net pay</span>
-                        <span class="font-weight-bold">{{ number_format($amount_takehome, 2) }}</span>
-                    </li>
-                    @if ($total_bank_loan > 0)
-                        <tr class="headers text-center">
-                            <td colspan="2"> Bank Loans</td>
-                        </tr>
-                        <li class="list-group-item d-flex">
-                            <span class="text-muted">Bank Loans</span>
-                            <span class="font-weight-bold">.</span>
-                        </li>
-                        @foreach ($bank_loan as $row)
                             <li class="list-group-item d-flex">
-                                <span class="text-muted">{{ $row->product }}</span>
-                                <span class="font-weight-bold">
-                                    {{ number_format($row->amount / $rate, 2) }}
+                                <span class="font-weight-bold">Bank Loans</span>
+                                <span class="font-weight-bold">.
                                 </span>
                             </li>
-                        @endforeach
-                        <li class="list-group-item d-flex">
-                            <span class="text-muted">Total Bank Loan</span>
-                            <span class="font-weight-bold">
-                                {{ number_format($total_bank_loan / $rate, 2) }}
-                            </span>
-                        </li>
-                    @endif
+
+                            @foreach ($bank_loan as $row)
+                                <li class="list-group-item d-flex">
+                                    <span class="text-muted">{{ $row->product }}</span>
+                                    <span class="font-weight-bold">{{ number_format($row->amount / $rate, 2) }}
+                                    </span>
+                                </li>
+                            @endforeach
+                            <li class="list-group-item d-flex">
+                                <span class="text-muted">Total</span>
+                                <span class="font-weight-bold"><?php echo number_format($total_bank_loan, 2); ?>
+                                </span>
+                            </li>
+
+                        @endif
+
+                        <ul class="list-group list-group-flush ">
+                            <li class="list-group-item d-flex">
+                                <span class="text-muted">Total Income</span>
+                                <span class="font-weight-bold">{{ number_format($sum_allowances + $salary, 2) }}
+                                </span>
+                            </li>
+                            <li class="list-group-item d-flex">
+                                <span class="text-muted">Total Deduction</span>
+                                <span class="font-weight-bold">
+                                    {{ number_format($pension_employee + $taxdue + $sum_deductions + $sum_loans + $meals, 2) }}
+                                </span>
+                            </li>
+                            <li class="list-group-item d-flex">
+                                <span class="text-muted">Net pay</span>
+                                <span class="font-weight-bold">{{ number_format($amount_takehome, 2) }}</span>
+                            </li>
+                            @if ($total_bank_loan > 0)
+                <tr class="headers text-center">
+                    <td colspan="2"> Bank Loans</td>
+                </tr>
+                <li class="list-group-item d-flex">
+                    <span class="text-muted">Bank Loans</span>
+                    <span class="font-weight-bold">.</span>
+                </li>
+                @foreach ($bank_loan as $row)
+                    <li class="list-group-item d-flex">
+                        <span class="text-muted">{{ $row->product }}</span>
+                        <span class="font-weight-bold">
+                            {{ number_format($row->amount / $rate, 2) }}
+                        </span>
+                    </li>
+                @endforeach
+                <li class="list-group-item d-flex">
+                    <span class="text-muted">Total Bank Loan</span>
+                    <span class="font-weight-bold">
+                        {{ number_format($total_bank_loan / $rate, 2) }}
+                    </span>
+                </li>
+                @endif
 
                 </ul>
                 </td>

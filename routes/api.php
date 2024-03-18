@@ -28,17 +28,26 @@ Route::controller(AuthController::class)->group(function(){
     Route::post('login', 'login');
 
 });
+Route::patch('update-password-employee', [PasswordController::class, 'updatePassword'])->name('password.profile');
 
-Route::get('/getNotification',[PushNotificationController::class,'index']);
 
 
-Route::get('/test', function (Request $request) {
-    return $request->header('apikey');
-});
 Route::middleware('auth:sanctum')->group( function () {
+
+    Route::get('/test', function (Request $request) {
+        return $request->header('apikey');
+    });
+    Route::post('/push',[PushNotificationController::class,'test']);
+    Route::get('/getNotification',[PushNotificationController::class,'getNotifications']);
+    Route::post('/deleteNotification',[PushNotificationController::class,'deleteNotification']);
+    Route::get('/getNotificationTitles',[PushNotificationController::class,'getNotificationTitles']);
+
+
+
  Route::post('/logout',[AuthController::class,'logout']);
       Route::post('/updateToken',[PushNotificationController::class,'updateDeviceToken']);
       Route::post('/send-bulk-notification',[PushNotificationController::class,'bulksend']);
+      Route::post('/updateNotification',[PushNotificationController::class,'updateNotification']);
 
       // For user details
       Route::get('/user',[AuthController::class,'user']);
@@ -61,6 +70,11 @@ Route::middleware('auth:sanctum')->group( function () {
        //for approving Leaves
        Route::post('/approveLeave',[LeaveController::class,'approveLeave']);
 
+       Route::post('/approveRevoke',[LeaveController::class,'revokeApprovedLeaveAdmin']);
+
+       Route::post('/denyRevoke',[LeaveController::class,'revokeCancelLeaveAdmin']);
+
+       Route::post('/revokeLeave',[LeaveController::class,'revokeApprovedLeave']);
 
        // For Saving Overtimes
       Route::post('/apply-overtime',[GeneralController::class,'applyOvertime']);
@@ -70,6 +84,10 @@ Route::middleware('auth:sanctum')->group( function () {
       // For Updating profile image
       Route::post('/update-image',[GeneralController::class,'updateImg']);
 
+      Route::post('/updateUserInfo',[GeneralController::class,'updateUserInfo']);
+
+
+      Route::post('/updateEmergencyInfo',[GeneralController::class,'employeeEmergency']);
       //for geting payslip
       Route::prefix('flex')->controller(ReportController::class)->group(function (){
       Route::any('/reports/payslip','payslip')->name('flex.employee_payslip');
@@ -87,8 +105,6 @@ Route::middleware('auth:sanctum')->group( function () {
       Route::prefix('flex')->controller(ReportController::class)->group(function (){
             Route::any('/reports/employee_pension','employee_pension')->name('flex.e');
             });
-      Route::patch('update-password-employee', [PasswordController::class, 'updatePassword'])->name('password.profile');
-
 
        //for approving overtimes
        Route::post('/approveOvertime',[GeneralController::class,'approveOvertime']);

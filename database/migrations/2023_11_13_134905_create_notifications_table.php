@@ -21,7 +21,6 @@ return new class extends Migration
             $table->string('recom_by', 110)->nullable();
             $table->id();
             $table->timestamps();
-
             $table->unique(['type', 'for'], 'unique_index');
         });
     }

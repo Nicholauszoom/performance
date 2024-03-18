@@ -1,81 +1,23 @@
-<!DOCTYPE html>
-<html lang="en">
+@php
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Payroll Details </title>
-    <link rel="stylesheet" href="{{ public_path('assets/bootstrap/css/bootstrap.min.css') }}">
-    <link rel="stylesheet" href="{{ public_path('assets/css/report.css') }}">
+$column_count = 30;
 
-</head>
-
-<body>
-
-    <main class="body-font p-1">
-        <div id="logo" style="margin-left: 7px; z-index: -10">
-            <img src="{{ public_path('assets/images/x-left.png') }}" width="100px;" height="50px;">
-        </div>
-
-        <div style="margin-top:20px;">
-            <div class="col-md-12">
-
-                <table class="table" id="img">
-                    <tfoot>
-                        <tr>
-                            <td class="">
-                                <div class="box-text text-right" style="text-align:left;">
-                                    <p class="p-space">
-                                        <h5 style="font-weight:bolder;margin-top:15px;">HC-HUB</h5>
-                                    </p>
-                                    <p class="p-space">5th & 6th Floor, Uhuru Heights</p>
-                                    <p class="p-space">Bibi Titi Mohammed Road</p>
-                                    <p class="p-space">P.O. Box 31, Dar es salaam </p>
-                                    <p class="p-space">+255 22 22119422/2111990 </p>
-                                    <p class="p-space"> web:<a href="www.bancabc.co.tz">www.bancabc.co.tz</a></p>
-                                </div>
-                            </td>
-                            <td> </td>
-                            <td>
-                                <div class="box-text"> </div>
-                            </td>
-
-                            <td colspan="4" class="w-50" style="">
-                                <div class="box-text text-end">
-                                    <img src="{{ public_path('assets/images/logo-dif2.png') }}" alt="logo here" width="180px" height="150px" class="image-fluid">
-                                </div>
-                            </td>
-                        </tr>
-                    </tfoot>
-                </table>
-
-                <hr>
-
-                <table class="table" style="background-color: #165384; color:white">
-                    <thead>
-                        <tr>
-                            <td class="">
-                                <div class="box-text">
-                                    <h5 style="font-weight:bolder;text-align: left;"> Payroll Reconciliation Details </h5>
-                                </div>
-                            </td>
-                            <td> <div class="box-text text-end"></div> </td>
-                            <td> <div class="box-text"> </div> </td>
-                            <td colspan="4" class="w-50" style="">
-                                <P class="mt-1" style="text-align: right; "> For the month of {{ date('M-Y', strtotime($payroll_date)) }}</p>
-                            </td>
-                        </tr>
-                    </thead>
-                </table>
-
-                <hr>
-                @if(isset($employee_increase))
+@endphp
+@if(isset($employee_increase))
                 @if(count($employee_increase) > 0)
+                @if($column_count < 0)
+                @php
+                $column_count=0;
+                @endphp
+                <br>
+                <br>
+                <br>
+                <br>
+                @endif
                 <h4>Add New Employee</h4>
                 <table class="table" id="reports" style="font-size:9px; ">
                     <thead style="font-size:8px;">
-                        <tr style="border-bottom:2px solid rgb(9, 5, 64);">
+                        <tr class="hdr" class="hdr" style="border-bottom:2px solid rgb(9, 5, 64);">
 
                             <th><b>Number</b></th>
 
@@ -93,21 +35,36 @@
                     <tbody>
                         @if (!empty($employee_increase))
                             @php
-
+                            $column_count = $column_count+1;
                             $total_previous = 0;
                             $total_current = 0;
                             $total_amount = 0;
 
                             @endphp
-                             @endphp
                             @foreach ($employee_increase as $row)
 
                                 @php
+                                $column_count = $column_count+1;
                                     $total_previous += $row->previous_amount;
                                     $total_current += $row->current_amount;
                                     $total_amount += ($row->current_amount - $row->previous_amount);
                                 @endphp
-                                <tr style="border-bottom:2px solid rgb(67, 67, 73)">
+
+                                 @if($column_count < 0)
+
+
+                                @php
+
+                                $column_count=0;
+
+                                @endphp
+
+                                <br>
+                                <br>
+                                <br>
+                                <br>
+                                @endif
+                                <tr class="hdr"  class="hdr"  style="border-bottom:2px solid rgb(67, 67, 73)">
 
                                     <td class="text-end">{{ $row->emp_id }}</td>
 
@@ -133,7 +90,7 @@
                                 </tr>
 
                             @endforeach
-                            <tr style="border-bottom:2px solid rgb(67, 67, 73)">
+                            <tr class="hdr" class="hdr"  style="border-bottom:2px solid rgb(67, 67, 73)">
 
                                 <td class="text-end" colspan="2"><b>TOTAL</b></td>
                                 <td></td>
@@ -144,8 +101,6 @@
 
                                 <td class="text-end"></td>
                                 <td class="text-end"></td>
-
-
                             </tr>
                         @endif
                     </tbody>
@@ -156,10 +111,25 @@
 
                 @if(isset($employee_decrease))
                 @if(count($employee_decrease) > 0)
+
+                @if($column_count < 0)
+
+
+                @php
+
+                $column_count=0;
+
+                @endphp
+
+                <br>
+                <br>
+                <br>
+                <br>
+                @endif
                 <h4>Less Terminated Employee</h4>
                 <table class="table" id="reports" style="font-size:9px; ">
                     <thead style="font-size:8px;">
-                        <tr style="border-bottom:2px solid rgb(9, 5, 64);">
+                        <tr class="hdr" style="border-bottom:2px solid rgb(9, 5, 64);">
 
                             <th><b>Number</b></th>
 
@@ -177,21 +147,36 @@
                     <tbody>
                         @if (!empty($employee_decrease))
                             @php
-
+                            $column_count = $column_count+1;
                             $total_previous = 0;
                             $total_current = 0;
                             $total_amount = 0;
 
                             @endphp
-                             @endphp
                             @foreach ($employee_decrease as $row)
 
                                 @php
+                                $column_count = $column_count+1;
                                     $total_previous += $row->previous_amount;
                                     $total_current += $row->current_amount;
                                     $total_amount += ($row->current_amount - $row->previous_amount);
                                 @endphp
-                                <tr style="border-bottom:2px solid rgb(67, 67, 73)">
+
+                                 @if($column_count < 0)
+
+
+                @php
+
+                $column_count=0;
+
+                @endphp
+
+                <br>
+                <br>
+                <br>
+                <br>
+                @endif
+                                <tr class="hdr" style="border-bottom:2px solid rgb(67, 67, 73)">
 
                                     <td class="text-end">{{ $row->emp_id }}</td>
 
@@ -217,7 +202,7 @@
                                 </tr>
 
                             @endforeach
-                            <tr style="border-bottom:2px solid rgb(67, 67, 73)">
+                            <tr class="hdr" style="border-bottom:2px solid rgb(67, 67, 73)">
 
                                 <td class="text-end" colspan="2"><b>TOTAL</b></td>
                                 <td></td>
@@ -239,10 +224,25 @@
                 @endif
                 @if(isset($basic_increase))
                 @if(count($basic_increase) > 0)
+
+                @if($column_count < 0)
+
+
+                @php
+
+                $column_count=0;
+
+                @endphp
+
+                <br>
+                <br>
+                <br>
+                <br>
+                @endif
                 <h4>Add Increase in Basic Pay Comparison to Last M</h4>
                 <table class="table" id="reports" style="font-size:9px; ">
                     <thead style="font-size:8px;">
-                        <tr style="border-bottom:2px solid rgb(9, 5, 64);">
+                        <tr class="hdr" style="border-bottom:2px solid rgb(9, 5, 64);">
 
                             <th><b>Number</b></th>
 
@@ -260,21 +260,36 @@
                     <tbody>
                         @if (!empty($basic_increase))
                             @php
-
+                            $column_count = $column_count+1;
                             $total_previous = 0;
                             $total_current = 0;
                             $total_amount = 0;
 
                             @endphp
-                             @endphp
                             @foreach ($basic_increase as $row)
 
                                 @php
+                                $column_count = $column_count+1;
                                     $total_previous += $row->previous_amount;
                                     $total_current += $row->current_amount;
                                     $total_amount += ($row->current_amount - $row->previous_amount);
                                 @endphp
-                                <tr style="border-bottom:2px solid rgb(67, 67, 73)">
+
+                                 @if($column_count < 0)
+
+
+                @php
+
+                $column_count=0;
+
+                @endphp
+
+                <br>
+                <br>
+                <br>
+                <br>
+                @endif
+                                <tr class="hdr" style="border-bottom:2px solid rgb(67, 67, 73)">
 
                                     <td class="text-end">{{ $row->emp_id }}</td>
 
@@ -300,7 +315,7 @@
                                 </tr>
 
                             @endforeach
-                            <tr style="border-bottom:2px solid rgb(67, 67, 73)">
+                            <tr class="hdr" style="border-bottom:2px solid rgb(67, 67, 73)">
 
                                 <td class="text-end" colspan="2"><b>TOTAL</b></td>
                                 <td></td>
@@ -323,10 +338,25 @@
                 @if(isset($basic_decrease))
                 @if(count($basic_decrease) > 0)
                 <br>
+
+                @if($column_count < 0)
+
+
+                @php
+
+                $column_count=0;
+
+                @endphp
+
+                <br>
+                <br>
+                <br>
+                <br>
+                @endif
                 <h4>Less Decrease in Basic Pay Comparison to Last M</h4>
                 <table class="table" id="reports" style="font-size:9px; ">
                     <thead style="font-size:8px;">
-                        <tr style="border-bottom:2px solid rgb(9, 5, 64);">
+                        <tr class="hdr" style="border-bottom:2px solid rgb(9, 5, 64);">
 
                             <th><b>Number</b></th>
 
@@ -344,21 +374,36 @@
                     <tbody>
                         @if (!empty($basic_decrease))
                             @php
-
+                            $column_count = $column_count+1;
                             $total_previous = 0;
                             $total_current = 0;
                             $total_amount = 0;
 
                             @endphp
-                             @endphp
                             @foreach ($basic_decrease as $row)
 
                                 @php
+                                $column_count = $column_count+1;
                                     $total_previous += $row->previous_amount;
                                     $total_current += $row->current_amount;
                                     $total_amount += ($row->current_amount - $row->previous_amount);
                                 @endphp
-                                <tr style="border-bottom:2px solid rgb(67, 67, 73)">
+
+                                 @if($column_count < 0)
+
+
+                                    @php
+
+                                    $column_count=0;
+
+                                    @endphp
+
+                                    <br>
+                                    <br>
+                                    <br>
+                                    <br>
+                                    @endif
+                                <tr class="hdr" style="border-bottom:2px solid rgb(67, 67, 73)">
 
                                     <td class="text-end">{{ $row->emp_id }}</td>
 
@@ -384,7 +429,7 @@
                                 </tr>
 
                             @endforeach
-                            <tr style="border-bottom:2px solid rgb(67, 67, 73)">
+                            <tr class="hdr" style="border-bottom:2px solid rgb(67, 67, 73)">
 
                                 <td class="text-end" colspan="2"><b>TOTAL</b></td>
                                 <td></td>
@@ -405,11 +450,32 @@
                 @endif
                 @endif
                 @foreach($names as $name)
+
+
+                @if($column_count < 0)
+
+
+                @php
+
+                $column_count=0;
+
+                @endphp
+
+                <br>
+                <br>
+                <br>
+                <br>
+                @endif
+
+
+                @if($name =="Add/Less Teller Allowance")
+                <br>
+                @endif
                 <h4>{{ $name == 'Add/Less N-Overtime'? 'Add/Less Normal Day Overtime':($name == 'Add/Less S-Overtime' ? 'Add/Less Sunday Overtime':$name) }}</h4>
 
                 <table class="table" id="reports" style="font-size:9px; ">
                     <thead>
-                        <tr style="border-bottom:2px solid rgb(9, 5, 64);">
+                        <tr class="hdr" style="border-bottom:2px solid rgb(9, 5, 64);">
 
                             <th><b>Number</b></th>
 
@@ -427,23 +493,38 @@
                     <tbody>
                         @if (!empty($allowances))
                             @php
-
+                            $column_count = $column_count+1;
                             $total_previous = 0;
                             $total_current = 0;
                             $total_amount = 0;
 
                             @endphp
-                             @endphp
                             @foreach ($allowances as $row)
                             @if($row->description == $name)
                             @if($row->description == "Add/Less S-Overtime")
                             @if($row->previous_amount != $row->current_amount)
                                 @php
+                                $column_count = $column_count+1;
                                     $total_previous += $row->previous_amount;
                                     $total_current += $row->current_amount;
                                     $total_amount += ($row->current_amount - $row->previous_amount);
                                 @endphp
-                                <tr style="border-bottom:2px solid rgb(67, 67, 73)">
+
+                                 @if($column_count < 0)
+
+
+                @php
+
+                $column_count=0;
+
+                @endphp
+
+                <br>
+                <br>
+                <br>
+                <br>
+                @endif
+                                <tr class="hdr" style="border-bottom:2px solid rgb(67, 67, 73)">
 
                                     <td class="text-end">{{ $row->emp_id }}</td>
 
@@ -470,11 +551,27 @@
                             @endif
                             @else
                             @php
+                            $column_count = $column_count+1;
                             $total_previous += $row->previous_amount;
                             $total_current += $row->current_amount;
                             $total_amount += ($row->current_amount - $row->previous_amount);
                              @endphp
-                        <tr style="border-bottom:2px solid rgb(67, 67, 73)">
+
+                             @if($column_count < 0)
+
+
+                @php
+
+                $column_count=0;
+
+                @endphp
+
+                <br>
+                <br>
+                <br>
+                <br>
+                @endif
+                        <tr class="hdr" style="border-bottom:2px solid rgb(67, 67, 73)">
 
                             <td class="text-end">{{ $row->emp_id }}</td>
 
@@ -502,7 +599,7 @@
                             @endif
                             @endif
                             @endforeach
-                            <tr style="border-bottom:2px solid rgb(67, 67, 73)">
+                            <tr class="hdr" style="border-bottom:2px solid rgb(67, 67, 73)">
 
                                 <td class="text-end" colspan="2"><b>TOTAL</b></td>
                                 <td></td>
@@ -521,50 +618,3 @@
 
                 </table>
                 @endforeach
-
-                <div id="logo2" style="margin-left: 7px; z-index: -10">
-                    <img src="{{ public_path('assets/images/x-right.png') }}" width="100px;" height="50px;">
-                </div>
-            </div>
-        </div>
-
-
-
-
-
-    </main>
-
-
-    <div class="footer">
-        <table class="table footer-font">
-            <tfoot>
-                <tr>
-                    <td class="">
-                        <div class="box-text"> {{ date('l jS \of F Y') }} </div>
-                    </td>
-                    <td>
-                        <div class="box-text text-end"> </div>
-                    </td>
-                    <td>
-                        <div class="box-text"> </div>
-                    </td>
-                    <td colspan="4" class="w-50" style="">
-                        <i> Page <span class="pagenum">.</span></i>
-                    </td>
-                </tr>
-            </tfoot>
-        </table>
-    </div>
-
-
-
-    <script src="{{ public_path('assets/js/jquery/jquery.min.js') }}"></script>
-    <script src="{{ public_path('assets/js/bootstrap/bootstrap.bundle.min.js') }}"></script>
-
-
-    <script src="{{ public_path('assets/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
-    <script src="{{ public_path('assets/js/jquery/jquery.min.js') }}"></script>
-
-</body>
-
-</html>

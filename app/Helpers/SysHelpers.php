@@ -7,6 +7,10 @@ use App\Models\EMPL;
 use App\Models\Holiday;
 use App\Models\Position;
 use App\Models\AuditTrail;
+use App\Models\ApprovalLevel;
+use App\Models\Approvals;
+use App\Models\UserRole;
+
 use Illuminate\Http\Request;
 use App\Models\FinancialLogs;
 use Illuminate\Support\Facades\DB;
@@ -38,7 +42,7 @@ class SysHelpers
             'emp_id' => Auth::user()->emp_id,
             'emp_name' => $employee,
             'action_performed' => $action,
-            'ip_address' =>  $request->ip(),
+            'ip_address' => $request->ip(),
             'user_agent' => $request->userAgent(),
             'risk' => $risk,
         ]);
@@ -83,14 +87,15 @@ class SysHelpers
     }
     public static function position($pos)
     {
-        $position=DB::table('position')->where('name',$pos)->first();
+        $position = DB::table('position')->where('name', $pos)->first();
         $details = EMPL::where('position', $position->id)->first();
         return $details;
     }
 
-    public static function getUserPosition($id){
+    public static function getUserPosition($id)
+    {
         // Takes in position ID returns name
-        return Position::where('id',$id)->get()->pluck('name')[0];
+        return Position::where('id', $id)->get()->pluck('name')[0];
     }
     public static function approvalEmp($position1, $position2)
     {
@@ -164,7 +169,7 @@ class SysHelpers
 
 
         // Return the number of working days
-        return $workingDays+1;
+        return $workingDays + 1;
     }
 
 
@@ -276,7 +281,8 @@ class SysHelpers
         return $workingDays;
     }
 
-    public static function isDateNextToWeekendOrHoliday($dateString) {
+    public static function isDateNextToWeekendOrHoliday($dateString)
+    {
         $parsedDate = Carbon::parse($dateString);
 
         // Check if the date is next to weekends (Friday or Monday)
@@ -286,12 +292,65 @@ class SysHelpers
 
         // Check if the date is a holiday or the day before/after a holiday
         $holidays = Holiday::pluck('date')->toArray();
-        if (in_array($parsedDate->toDateString(), $holidays) ||
+        if (
+            in_array($parsedDate->toDateString(), $holidays) ||
             in_array($parsedDate->copy()->addDay()->toDateString(), $holidays) ||
-            in_array($parsedDate->copy()->subDay()->toDateString(), $holidays)) {
+            in_array($parsedDate->copy()->subDay()->toDateString(), $holidays)
+        ) {
             return true; // It's next to a holiday
         }
 
         return false; // It's not next to a weekend or holiday
     }
+
+
+
+    public static function approvalCheck($process_name)
+    {
+        $employee = auth()->user()->id;
+        $role_id = Auth::user()->position;
+        $position = Position::where('id', $role_id)->first();
+
+
+        $process = Approvals::where('process_name', $process_name)->first();
+        if (!$process) {
+            return false;
+        }
+
+        $level = ApprovalLevel::where('role_id', $role_id)
+            ->where('approval_id', $process->id)
+            ->first();
+
+
+
+        return $level ? $level->level_name : 0;
+
+        // return $level && $level->level_name == $approval_status;
+    }
+
+
+    public static function ApprovalLastLevel($process_name)
+    {
+        $user = Auth::user();
+        if (!$user) {
+            return false; 
+        }
+        $employee = Auth()->user()->id;
+        $role_id = Auth::user()->position;
+        $approval = Approvals::where('process_name', $process_name)->first();
+        $position = Position::where('id', $role_id)->first();
+        $level = ApprovalLevel::where('role_id', $role_id)->where('approval_id', $approval->id)->first();
+
+        // dd($level && $approval->ApprLevels()->count() == $level->level_name);
+        // dd($level);
+        
+
+        // return $level && ($approval->ApprLevels()->count() == $level->level_name || $approval->ApprLevels()->last()->level_name == $level->level_name);
+
+           return $level && ($approval->ApprLevels()->count() == $level->level_name || ($lastApprovalLevel = $approval->ApprLevels()->orderBy('id', 'desc')->first()) && $lastApprovalLevel->level_name == $level->level_name);
+        
+    }
+
+
+
 }

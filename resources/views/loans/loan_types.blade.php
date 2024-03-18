@@ -21,7 +21,9 @@
         <div class="">
             <h6 class="mb-0 text-warning">Loan Types</h6>
 
+@can('add-loan-type')
             <button class="float-end btn btn-main" data-bs-toggle="modal" data-bs-target="#approval"> Add New Loan Type</button>
+            @endcan
         </div>
 
     </div>
@@ -33,6 +35,8 @@
             </div>
             @endif
             <div class="">
+
+                @can('view-loan-types')
                 <table class="table datatable-basic">
                     <thead>
                         <th>SN</th>
@@ -58,6 +62,7 @@
                         @endforeach
                     </tbody>
                 </table>
+                @endcan
             </div>
 
         </div>

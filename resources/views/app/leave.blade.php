@@ -22,7 +22,6 @@
             </div>
         @endif
 
-        <div class="card border-top  border-top-width-3 border-top-main border-bottom-main rounded-0 col-lg-12 ">
             <div class="card-body">
                 <div class="col-6 tex-mdt-sucess text-secondary" id="remaining" style="display:none">
                     <code class="text-success">
@@ -32,16 +31,27 @@
 
 
                 {{-- include  apply for behalf leave form --}}
+                @can('apply-leave-onbehalf')
                 @include('app.apply_leave_behalf')
+                @endcan
 
+
+                @can('view-new-leave-applications')
                 {{-- include  new leave applications table  --}}
                 @include('app.newleave_applications')
+                @endcan
 
+                @can('view-aproved-leave-applications')
                 {{-- include  approved leave applications table  --}}
                 @include('app.approvedleave_applications')
+                @endcan
 
+                @can('view-revoked-leave-application')
                 {{-- include  revoked leave applications table  --}}
                 @include('app.revokedleave_applications')
+                @endcan
+
+
                 @endif
 
     <div class="modal fade bd-example-modal-sm" data-backdrop="static" data-keyboard="false" id="delete" tabindex="-1"
@@ -75,7 +85,7 @@
 
             </div>
         </div>
-    </div>
+    {{-- </div> --}}
 @endsection
 
 

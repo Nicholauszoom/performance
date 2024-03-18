@@ -41,6 +41,8 @@
 
 
     <div class="col-md-12 col-sm-12 col-xs-12">
+
+      @can('add-position')
         <?php if(session('mng_org')|| 1){ ?>
             <div  class="col-md-12 col-lg-12 col-sm-12 col-xs-12 ">
 
@@ -129,7 +131,12 @@
                   </div>
                 </div>
             </div>
+
+
             <?php } ?>
+
+            @endcan
+
         <div class="card border-top   rounded-0 ">
           <div class="card-head p-2">
             <h2 class="text-warning">List of Positions   </h2> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -141,6 +148,8 @@
           <div class="card-body">
              <?php //echo $this->session->flashdata("note");  ?>
              <div id="feedBackTable"></div>
+                         @can('view-positions')
+
             <table id="datatable" class="table table-striped table-bordered datatable-basic">
               <thead>
                 <tr>
@@ -173,9 +182,13 @@
 
                     <?php if(session('mng_org') || 1){ ?>
                     <td class="options-width">
+                      @can('edit-position')
                         <a  href="{{ route('flex.position_info',$row->id) }}" title="Info and Details" class="icon-2 info-tooltip"><button type="button" class="btn btn-main btn-sm"><i class="ph-info"></i></button> </a>
+                        @endcan
                         <?php if($row->id!=1){ ?>
+                                                @can('delete-position')
                         <a href="javascript:void(0)" onclick="deletePosition(<?php echo $row->id; ?>)" title="Delete" class="icon-2 info-tooltip"><button type="button" class="btn btn-danger btn-sm"><i class="ph-trash"></i></button> </a>
+                        @endcan
                         <?php } ?>
                     </td>
                         <?php } ?>
@@ -183,6 +196,7 @@
                   <?php } //} ?>
               </tbody>
             </table>
+            @endcan
           </div>
         </div>
       </div>

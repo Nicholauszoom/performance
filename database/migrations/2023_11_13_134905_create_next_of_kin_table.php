@@ -21,7 +21,7 @@ return new class extends Migration
             $table->string('relationship', 100)->nullable();
             $table->string('postal_address', 100)->nullable();
             $table->string('mobile', 100)->nullable();
-            $table->string('employee_fk', 10)->index('employee_fk');
+            $table->string('employee_fk', 10);
             $table->string('physical_address', 100)->nullable();
             $table->string('office_no', 100)->nullable();
             $table->string('added_on', 12)->nullable();

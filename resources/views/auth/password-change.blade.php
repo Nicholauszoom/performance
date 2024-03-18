@@ -15,9 +15,16 @@
 
         <script src="{{ asset('assets/js/app.js') }}"></script>
     </head>
+
+    @php
+    $brandSetting = \App\Models\BrandSetting::first();
+@endphp
+
+
     <style>
         body {
-     background-image: url('{{ asset('img/bg.png') }}');
+     /* background-image: url('{{ asset('img/bg.png') }}'); */
+     background-image: url('{{$brandSetting !=null && $brandSetting->body_background != null ? asset('storage/' . $brandSetting->body_background) : asset('img/bg.png') }}');
      background-color: #cccccc;
      
     }
@@ -38,9 +45,22 @@
 
                                 <div class="card-body">
                                     <div class="text-center mb-3">
-                                        <div class="d-inline-flex align-items-center justify-content-center mb-4 mt-2">
+
+
+                                        {{-- <div class="d-inline-flex align-items-center justify-content-center mb-4 mt-2">
                                             <img src="{{ asset('assets/images/hc-hub-logo2.png') }}" class="img-fluid rounded-circle" style="height: 10em" alt="logo">
-                                        </div>
+                                        </div> --}}
+
+
+                                        @if ($brandSetting->dashboard_logo)
+                                        <img src="{{ asset('storage/' . $brandSetting->dashboard_logo) }}" alt="flex logo" style="height: 10em" class="img-fluid">
+                
+                                    @else
+                                    <img src="{{ asset('assets/images/hc-hub-logo2.png') }}" class="img-fluid rounded-circle" style="height: 10em" alt="logo">
+
+                
+                                    @endif
+
 
                                     </div>
 

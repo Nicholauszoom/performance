@@ -357,7 +357,7 @@ class FlexPerformanceModel extends Model
 
     public function contractdrop()
     {
-        $query = "SELECT c.* FROM contract c WHERE NOT c.id = 23";
+        $query = "SELECT c.* FROM contract c WHERE NOT c.item_code = 23";
 
         return DB::select(DB::raw($query));
     }
@@ -874,7 +874,7 @@ class FlexPerformanceModel extends Model
 
     public function employeeTransfers()
     {
-        $query = "SELECT @s:=@s+1 SNo, p.name as position_name, d.name as department_name, br.name as branch_name, tr.*, CONCAT(e.fname,'  ', e.lname) as empName FROM employee e, transfer tr, department d, position p, branch br, (SELECT @s:=0) as s WHERE tr.empID = e.emp_id AND e.branch = br.id AND  p.id=e.position AND d.id=e.department  ORDER BY tr.id DESC ";
+        $query = "SELECT @s:=@s+1 SNo, p.name as position_name, d.name as department_name, br.name as branch_name, tr.*, CONCAT(e.fname,'  ', e.lname) as empName , e.approval_status FROM employee e, transfer tr, department d, position p, branch br, (SELECT @s:=0) as s WHERE tr.empID = e.emp_id AND e.branch = br.id AND  p.id=e.position AND d.id=e.department  ORDER BY tr.id DESC ";
 
         return DB::select(DB::raw($query));
     }
@@ -1355,10 +1355,9 @@ class FlexPerformanceModel extends Model
     public function userprofile($empID)
     {
 
-        // dd($empID);
-        $query = "SELECT e.*, bank.name as bankName, ctry.name as country, b.name as branch_name,  bb.name as bankBranch, d.name as deptname, c.name as CONTRACT, p.name as pName, (SELECT CONCAT(fname,' ', mname,' ', lname) from employee where  emp_id = e.line_manager) as LINEMANAGER from employee e, department d, contract c, country ctry, position p, bank, branch b, bank_branch bb WHERE d.id=e.department and p.id=e.position and e.contract_type = c.item_code AND e.bank_branch = bb.id and ctry.code = e.nationality AND e.bank = bank.id AND e.branch = b.id AND e.emp_id ='" . $empID . "'";
 
-        // dd($query);
+        $query = "SELECT e.*, bank.name as bankName, ctry.description as country, b.name as branch_name,  bb.name as bankBranch, d.name as deptname, c.name as CONTRACT, p.name as pName, (SELECT CONCAT(fname,' ', mname,' ', lname) from employee where  emp_id = e.line_manager) as LINEMANAGER from employee e, department d, contract c, country ctry, position p, bank, branch b, bank_branch bb WHERE d.id=e.department and p.id=e.position and e.contract_type = c.item_code AND e.bank_branch = bb.id and ctry.item_code = e.nationality AND e.bank = bank.id AND e.branch = b.id AND e.emp_id ='" . $empID . "'";
+
         $row = DB::select(DB::raw($query));
 
         return $row;
@@ -1695,6 +1694,8 @@ class FlexPerformanceModel extends Model
 
     public function getallowancebyid($id)
     {
+
+
         $query = "SELECT * FROM allowances WHERE id =" . $id . "";
 
         return DB::select(DB::raw($query));
@@ -1737,7 +1738,7 @@ class FlexPerformanceModel extends Model
 
     public function allowance_membersCount($allowance)
     {
-        $query = "select COUNT(DISTINCT ea.empID) members from emp_allowances as ea  WHERE ea.allowance = " . $allowance . "  ";
+        $query = "select COUNT(DISTINCT ea.empID) members from emp_allowances as ea,employee e  WHERE e.emp_id=ea.empID AND e.state=1 AND ea.allowance = " . $allowance . "  ";
         $row = DB::select(DB::raw($query));
         return $row[0]->members;
     }
@@ -1769,11 +1770,11 @@ class FlexPerformanceModel extends Model
 
         return $total_amount;
     }
-    public function get_pension_employee($salaryEnrollment, $leavePay, $arrears, $overtime_amount, $emp_id)
+    public function get_pension_employee($salaryEnrollment, $serevancePay, $exgracia, $leavePay, $noticePay, $arrears, $overtime_amount, $emp_id)
     {
 
         //$pesionable_amount =  $this->get_pensionable_allowance($emp_id);
-        $total_amount = $salaryEnrollment + $leavePay + $arrears + $overtime_amount;
+        $total_amount = $salaryEnrollment + $leavePay + $arrears + $overtime_amount + $serevancePay + $exgracia + $noticePay;
         // + $pesionable_amount;
 
         $query = "SELECT pf.amount_employee FROM employee e,pension_fund pf where e.pension_fund = pf.id AND  e.emp_id =" . $emp_id . " ";
@@ -1783,11 +1784,11 @@ class FlexPerformanceModel extends Model
         return $total_amount * $rate;
     }
 
-    public function get_pension_employer($salaryEnrollment, $leavePay, $arrears, $overtime_amount, $emp_id)
+    public function get_pension_employer($salaryEnrollment, $serevancePay, $exgracia, $leavePay, $noticePay, $arrears, $overtime_amount, $emp_id)
     {
 
         //$pesionable_amount =  $this->get_pensionable_allowance($emp_id);
-        $total_amount = $salaryEnrollment + $leavePay + $arrears + $overtime_amount;
+        $total_amount = $salaryEnrollment + $leavePay + $arrears + $overtime_amount + $serevancePay + $exgracia + $noticePay;
 
         //+ $pesionable_amount;
 
@@ -2124,7 +2125,7 @@ IF(
         }
 
         if ($termination->longServing != 0) {
-            SysHelpers::FinancialLogs($termination->employeeID, 'Long Serving', 0.00, number_format($termination->longServing, 2), 'Termination');
+            SysHelpers::FinancialLogs($termination->employeeID, 'LSA', 0.00, number_format($termination->longServing, 2), 'Termination');
         }
 
         if ($termination->loanBalance != 0) {
@@ -2166,6 +2167,11 @@ IF(
     public function payroll_month_list()
     {
         $query = 'SELECT DISTINCT payroll_date FROM payroll_logs ORDER BY payroll_date DESC';
+        return DB::select(DB::raw($query));
+    }
+    public function payroll_month_list2($empId)
+    {
+        $query = 'SELECT DISTINCT payroll_date FROM payroll_logs WHERE empID = '.$empId.' ORDER BY payroll_date DESC';
         return DB::select(DB::raw($query));
     }
 
@@ -2876,7 +2882,7 @@ last_paid_date='" . $date . "' WHERE  state = 1 and type = 3";
 
     public function countrydropdown()
     {
-        $query = "SELECT c.* FROM country_codes c";
+        $query = "SELECT c.* FROM country c";
 
         return DB::select(DB::raw($query));
     }
@@ -3333,7 +3339,7 @@ d.department_pattern AS child_department, d.parent_pattern as parent_department 
     public function memberscount($id)
     {
 
-        $query = "SELECT count(id) as headcounts  FROM employee_group WHERE group_name =" . $id . "";
+        $query = "SELECT count(eg.id) as headcounts  FROM employee_group eg,employee e WHERE   eg.empID=e.emp_id and e.state=1 and  eg.group_name =" . $id . "";
         $row = DB::select(DB::raw($query));
 
         return $row[0]->headcounts;
@@ -3372,7 +3378,7 @@ d.department_pattern AS child_department, d.parent_pattern as parent_department 
     public function members_byid($id)
     {
 
-        $query = "SELECT DISTINCT @s:=@s+1 as SNo, eg.id as EGID,  e.emp_id as ID,  CONCAT(e.fname,' ',IF( e.mname != null,e.mname,' '),' ', e.lname) as NAME, d.name as DEPARTMENT, p.name as POSITION FROM employee e, position p, department d, employee_group eg,  (SELECT @s:=0) as s  where e.position = p.id and e.emp_id = eg.empID and e.department = d.id and eg.group_name = " . $id . "  and e.emp_id IN (SELECT empID from employee_group where group_name=" . $id . ")";
+        $query = "SELECT DISTINCT @s:=@s+1 as SNo, eg.id as EGID,  e.emp_id as ID,  CONCAT(e.fname,' ',IF( e.mname != null,e.mname,' '),' ', e.lname) as NAME, d.name as DEPARTMENT, p.name as POSITION FROM employee e, position p, department d, employee_group eg,  (SELECT @s:=0) as s  where e.position = p.id and e.emp_id = eg.empID and e.department = d.id and eg.group_name = " . $id . "  AND e.state =1 and e.emp_id IN (SELECT empID from employee_group where group_name=" . $id . ")";
 
         return DB::select(DB::raw($query));
     }

@@ -19,6 +19,10 @@
             <h5 class="mb-0">Pension Funds</h5>
         </div>
     </div>
+
+    @can('view-pension-funds')
+        
+  
     <table class="table datatable-basic">
         <thead>
             <tr>
@@ -62,6 +66,8 @@
             @endforeach
         </tbody>
     </table>
+    @endcan
+
 </div>
 
 <div class="card border-top  border-top-width-3 border-top-main rounded-0 p-2">
@@ -70,6 +76,8 @@
             <h5 class="mb-0">List of Deduction</h5>
         </div>
     </div>
+    @can('view-deduction-funds')
+
     <table class="table datatable-basic">
         <thead>
             <tr>
@@ -78,7 +86,11 @@
                 <th>Employee Amount(in %)</th>
                 <th>Employer Amonut(in %)</th>
                 @if ($pendingPayroll == 0)
+
+                @can('edit-deduction-funds')
                 <th class="text-center">Option</th>
+                @endcan
+
                 @endif
             </tr>
         </thead>
@@ -91,6 +103,8 @@
                     <td>{{ 100*($row->rate_employer) .'%' }}</td>
 
                     @if ($pendingPayroll == 0)
+                    @can('edit-deduction-funds')
+                    
                     <td class="options-width">
                         <a
 
@@ -98,22 +112,31 @@
                             <button type="button" class="btn btn-main btn-xs"><i class="ph-note-pencil"></i></button>
                         </a>
                     </td>
+                    @endcan
                     @endif
                 </tr>
             @endforeach
         </tbody>
     </table>
+    @endcan
 </div>
 
 <div class="card border-top  border-top-width-3 border-top-main rounded-0 p-2">
     <div class="card-header">
+
+        @can('add-payee-range')
+
         <div class="d-flex justify-content-between">
             <h5 class="mb-0">P .A .Y .E Ranges</h5>
             <button type="button" class="btn btn-perfrom" data-bs-toggle="modal" data-bs-target="#save_department">
                 <i class="ph-plus me-2"></i> Add New P.A.Y.E Range
             </button>
         </div>
+        @endcan
     </div>
+
+    @can('view-payee-ranges')
+        
 
     <table class="table datatable-basic">
         <thead>
@@ -147,6 +170,7 @@
             @endforeach
         </tbody>
     </table>
+    @endcan
 </div>
 
 

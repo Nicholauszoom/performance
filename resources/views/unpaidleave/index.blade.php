@@ -17,20 +17,21 @@
 @section('content')
 
 <div class="card  border-top  border-top-width-3 border-top-main rounded-0">
-    <div class="card-header border-0">
+    <div class="card-header">
         <div class="d-flex justify-content-between">
-            <h5 class="mb-0 ">Unpaid Leave Employee List</h5>
-
-                {{-- start of add unpaid leave button --}}
+            <h5 class="text-warning ">Unpaid Leave Employee List</h5>
                 @can('add-unpaid-leaves')
                 <a href="{{ route('flex.add_unpaid_leave') }}" class="btn btn-perfrom ">
                     <i class="ph-plus me-2"></i> Add Unpaid Leave
                 </a>
                 @endcan
-                {{-- / --}}
         </div>
          @if(Session::has('note'))      {{ session('note') }}  @endif
+         <div id="resultfeed"></div>
+
     </div>
+
+    <div class="card-body">
 
 
     <table class="table table-striped table-bordered datatable-basic">
@@ -83,6 +84,7 @@
             @endforeach
         </tbody>
     </table>
+</div>
 </div>
 
 @endsection

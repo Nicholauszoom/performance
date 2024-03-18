@@ -60,6 +60,7 @@ use App\Models\AccessControll\Departments;
 use App\Models\Helsb;
 use App\Models\Payroll\FlexPerformanceModel;
 use Illuminate\Support\Facades\Notification;
+use Symfony\Component\Mailer\Exception\TransportException;
 // use Barryvdh\DomPDF\Facade\Pdf;
 
 class GeneralController extends Controller
@@ -253,6 +254,7 @@ class GeneralController extends Controller
         $linemanager = $request->input('linemanager');
 
         $empID = auth()->user()->emp_id;
+        $employee_data =  EMPL::where('emp_id',$empID)->first();
 
 
 
@@ -311,7 +313,31 @@ class GeneralController extends Controller
                         $result = $this->flexperformance_model->apply_overtime($data);
 
                         if ($result == true) {
-
+                            $linemanager_data = SysHelpers::employeeData($linemanager);
+                            $fullname = $linemanager_data['full_name'];
+                            $email_data = array(
+                                'subject' => 'Employee Overtime Approval',
+                                'view' => 'emails.linemanager.overtime-approval',
+                                'email' => $linemanager_data['email'],
+                                'full_name' => $fullname,
+                            );
+                            try {
+                                PushNotificationController::bulksend([
+                                    'title' => '4',
+                                    'body' =>''.$employee_data['full_name'].' has an overtime request',
+                                    'img' => '',
+                                    'id' => $linemanager,
+                                    'leave_id' => '',
+                                    'overtime_id' => '',
+                                   
+                                    ]);
+    
+                                Notification::route('mail', $linemanager_data['email'])->notify(new EmailRequests($email_data));
+                            } catch (TransportException $exception) {
+                                // echo "<p class='alert alert-danger text-center'>Overtime Request  Sent, But Email not sent due to connectivity problem!</p>";
+                                $msg='Overtime Request  Sent, But Email not sent due to connectivity problem!';
+                                return response( [ 'msg'=>$msg ],200);
+                            }
                             $msg='Overtime Request Sent Successifully!';
                             return response( [ 'msg'=>$msg ],200);
                         } else {
@@ -338,7 +364,31 @@ class GeneralController extends Controller
                         $result = $this->flexperformance_model->apply_overtime($data);
 
                         if ($result == true) {
-
+                            $linemanager_data = SysHelpers::employeeData($linemanager);
+                            $fullname = $linemanager_data['full_name'];
+                            $email_data = array(
+                                'subject' => 'Employee Overtime Approval',
+                                'view' => 'emails.linemanager.overtime-approval',
+                                'email' => $linemanager_data['email'],
+                                'full_name' => $fullname,
+                            );
+                            try {
+                                PushNotificationController::bulksend([
+                                    'title' => '4',
+                                    'body' =>''.$employee_data['full_name'].' has an overtime request',
+                                    'img' => '',
+                                    'id' => $linemanager,
+                                    'leave_id' => '',
+                                    'overtime_id' => '',
+                                   
+                                    ]);
+    
+                                Notification::route('mail', $linemanager_data['email'])->notify(new EmailRequests($email_data));
+                            } catch (TransportException $exception) {
+                                // echo "<p class='alert alert-danger text-center'>Overtime Request  Sent, But Email not sent due to connectivity problem!</p>";
+                                $msg='Overtime Request  Sent, But Email not sent due to connectivity problem!';
+                                return response( [ 'msg'=>$msg ],200);
+                            }
                             $msg='Overtime Request Sent Successifully !';
                             return response( [ 'msg'=>$msg ],200);
                         } else {
@@ -374,7 +424,31 @@ class GeneralController extends Controller
                     );
                     $result = $this->flexperformance_model->apply_overtime($data);
                     if ($result == true) {
+                        $linemanager_data = SysHelpers::employeeData($linemanager);
+                        $fullname = $linemanager_data['full_name'];
+                        $email_data = array(
+                            'subject' => 'Employee Overtime Approval',
+                            'view' => 'emails.linemanager.overtime-approval',
+                            'email' => $linemanager_data['email'],
+                            'full_name' => $fullname,
+                        );
+                        try {
+                            PushNotificationController::bulksend([
+                                'title' => '4',
+                                'body' =>''.$employee_data['full_name'].' has an overtime request',
+                                'img' => '',
+                                'id' => $linemanager,
+                                'leave_id' => '',
+                                'overtime_id' => '',
+                               
+                                ]);
 
+                            Notification::route('mail', $linemanager_data['email'])->notify(new EmailRequests($email_data));
+                        } catch (TransportException $exception) {
+                            // echo "<p class='alert alert-danger text-center'>Overtime Request  Sent, But Email not sent due to connectivity problem!</p>";
+                           $msg='Overtime Request  Sent, But Email not sent due to connectivity problem!';
+                            return response( [ 'msg'=>$msg ],200);
+                        }
                         $msg='Overtime Request Sent Successifully!';
                         return response( [ 'msg'=>$msg ],200);
                     } else {
@@ -398,6 +472,33 @@ class GeneralController extends Controller
                     );
                     $result = $this->flexperformance_model->apply_overtime($data);
                     if ($result == true) {
+
+                        $linemanager_data = SysHelpers::employeeData($linemanager);
+                        $fullname = $linemanager_data['full_name'];
+                        $email_data = array(
+                            'subject' => 'Employee Overtime Approval',
+                            'view' => 'emails.linemanager.overtime-approval',
+                            'email' => $linemanager_data['email'],
+                            'full_name' => $fullname,
+                        );
+                        try {
+                            PushNotificationController::bulksend([
+                                'title' => '4',
+                                'body' =>''.$employee_data['full_name'].' has an overtime request',
+                                'img' => '',
+                                'id' => $linemanager,
+                                'leave_id' => '',
+                                'overtime_id' => '',
+                               
+                                ]);
+
+                            Notification::route('mail', $linemanager_data['email'])->notify(new EmailRequests($email_data));
+                        } catch (TransportException $exception) {
+                            // echo "<p class='alert alert-danger text-center'>Overtime Request  Sent, But Email not sent due to connectivity problem!</p>";
+                         $msg='Overtime Request  Sent, But Email not sent due to connectivity problem!';
+                            return response( [ 'msg'=>$msg ],200);
+                        }
+                        // echo "<p class='alert alert-success text-center'>Overtime Request Sent Successifully</p>";
 
                         $msg='Overtime Request Sent Successifully!';
                         return response( [ 'msg'=>$msg ],200);
@@ -439,9 +540,64 @@ class GeneralController extends Controller
     public function myLeaves(Request $request)
     {
      
-        $data['leaves'] = Leaves::whereNot('reason', 'Automatic applied!')->orderBy('id', 'asc')->get();
+        $data['leaves'] = Leaves::whereNot('reason', 'Automatic applied!')->whereNot('state',4)->orderBy('id', 'desc')->get();
+        $data['revoked_leaves'] = Leaves::where('revoke_status', 0)->whereNot('reason', 'Automatic applied!')
+        ->orWhere('revoke_status', 1)
+        ->orderBy('id', 'DESC')->get();
         $line_manager = auth()->user()->emp_id;
+        if ($data['leaves']->isNotEmpty()||$data['revoked_leaves']->isNotEmpty()) {
+            foreach ($data['leaves'] as $key => $leave) {
+                $uniqueLeaveID = $leave['id'];
+
+                // Fetch 'appliedBy' value from 'sick_leave_forfeit_days' based on the unique 'leaveID'
+                $appliedByValue = DB::table('sick_leave_forfeit_days')
+                    ->where('leaveID', $uniqueLeaveID)
+                    ->value('appliedBy');
+
+                // Fetch 'forfeit_days' value from 'sick_leave_forfeit_days' based on the unique 'leaveID'
+                $forfeitDaysValue = DB::table('sick_leave_forfeit_days')
+                    ->where('leaveID', $uniqueLeaveID)
+                    ->value('forfeit_days');
+
+                if ($appliedByValue !== null) {
+                    // Fetch 'full_name' from 'EMPL' model based on 'emp_id'
+                    $full_name = EMPL::where('emp_id', $appliedByValue)->value('full_name');
+
+                    // Add the 'appliedBy' attribute to the leave item
+                    $data['leaves'][$key]['appliedBy'] = $full_name;
+
+                    // Add the 'forfeit_days' attribute to the leave item
+                    $data['leaves'][$key]['forfeit_days'] = $forfeitDaysValue;
+                }
+            }
+            foreach ($data['revoked_leaves'] as $key => $leave) {
+                $uniqueLeaveID = $leave['id'];
+
+                // Fetch 'appliedBy' value from 'sick_leave_forfeit_days' based on the unique 'leaveID'
+                $appliedByValue = DB::table('sick_leave_forfeit_days')
+                    ->where('leaveID', $uniqueLeaveID)
+                    ->value('appliedBy');
+
+                // Fetch 'forfeit_days' value from 'sick_leave_forfeit_days' based on the unique 'leaveID'
+                $forfeitDaysValue = DB::table('sick_leave_forfeit_days')
+                    ->where('leaveID', $uniqueLeaveID)
+                    ->value('forfeit_days');
+
+                if ($appliedByValue !== null) {
+                    // Fetch 'full_name' from 'EMPL' model based on 'emp_id'
+                    $full_name = EMPL::where('emp_id', $appliedByValue)->value('full_name');
+
+                    // Add the 'appliedBy' attribute to the leave item
+                    $data['revoked_leaves'][$key]['appliedBy'] = $full_name;
+
+                    // Add the 'forfeit_days' attribute to the leave item
+                    $data['revoked_leaves'][$key]['forfeit_days'] = $forfeitDaysValue;
+                }
+            }
+        }
+
         $filteredLeaves = [];
+        $filteredLeaves1 = [];
         
         foreach ($data['leaves'] as $leave) {
             $level1 = LeaveApproval::where('empID', $leave->empID)
@@ -467,14 +623,72 @@ class GeneralController extends Controller
                 $filteredLeaves[] = $leave;
             }
         }
+        foreach ($data['revoked_leaves'] as $leave) {
+            $level1 = LeaveApproval::where('empID', $leave->empID)
+                ->where('level1', $line_manager)
+                ->first();
+           
+            $level2 = LeaveApproval::where('empID', $leave->empID)
+                ->where('level2', $line_manager)
+                ->first();
         
+            $level3 = LeaveApproval::where('empID', $leave->empID)
+                ->where('level3', $line_manager)
+                ->first();
+        
+            $approval = LeaveApproval::where('empID', $leave->empID)->first();
+        
+            if (
+                auth()->user()->emp_id == $approval->level1 ||
+                (auth()->user()->emp_id == $approval->level2 && $leave->status == 2) ||
+                (auth()->user()->emp_id == $approval->level3 && $leave->status == 3) ||
+                (auth()->user()->emp_id == $leave->deligated && $leave->status == 3)
+            ) {
+                $filteredLeaves1[] = $leave;
+            }
+        }
        
         
        
 
 
         $numberOfLeaves = count($filteredLeaves);
+        $numberOfLeaves2 = count($filteredLeaves1);
         $data['leaves']=$filteredLeaves;
+        $data['revoked_leaves']=$filteredLeaves1;
+
+        
+
+        foreach ($data['leaves'] as &$slip) {
+            $slipArray = json_decode(json_encode($slip), true);
+            $employee= EMPL::where("emp_id",$slipArray["empID"])->get()->first();
+
+      
+            $slipArray['empName'] = $employee['fname'].' '.$employee['lname'];
+            
+        
+      
+           
+            $slip = (array) $slipArray;
+
+            
+        }
+        foreach ($data['revoked_leaves'] as &$slip) {
+            $slipArray = json_decode(json_encode($slip), true);
+            $employee= EMPL::where("emp_id",$slipArray["empID"])->get()->first();
+
+      
+            $slipArray['empName'] = $employee['fname'].' '.$employee['lname'];
+            
+        
+      
+           
+            $slip = (array) $slipArray;
+
+            
+        }
+        
+
         return response( [ 'data'=>$data ],200);
 
     }
@@ -499,9 +713,8 @@ class GeneralController extends Controller
         //  start of employee Slips function
         public function mySlips(Request $request)
         {
-            // $empID = auth()->user()->emp_id;
-
-            $data['month_list'] = $this->flexperformance_model->payroll_month_list();
+            $empID = auth()->user()->emp_id;
+            $data['month_list'] = $this->flexperformance_model->payroll_month_list2($empID);
 
 
         return response( [ 'data'=>$data  ],200 );
@@ -513,6 +726,7 @@ class GeneralController extends Controller
 
         public function SlipDetail($date)
         {
+          
             //dd($request->all());
             $empID = auth()->user()->emp_id;
 
@@ -563,7 +777,30 @@ class GeneralController extends Controller
                     $data['paid_with_arrears_d'] = $this->reports_model->employeeArrearPaidAll($empID, $payroll_date);
                     $data['salary_advance_loan_remained'] = $this->reports_model->loansAmountRemained($empID, $payroll_date);
 
-                    $slipinfo = $data['slipinfo'];
+                    //
+                   
+                    foreach ($data['slipinfo'] as &$slip) {
+                        $slipArray = json_decode(json_encode($slip), true);
+                      
+                    
+                     
+                        $slipArray['allowances'] = $data['allowances'] ;
+                        
+                    
+                  
+                        $slipArray['total_allowances'] =  $data['total_allowances'];
+                
+                    
+                        $slipArray['deductions'] = $data['deductions'] ;
+                    
+                        $slipArray['total_deductions'] =  $data['total_deductions'];
+
+                        $slip = (array) $slipArray;
+
+                        
+                    }
+                    
+                    $slipinfo =$data['slipinfo'];
                     $leaves = $data['leaves'];
                     $annualLeaveSpent = $data['annualLeaveSpent'];
                     $allowances = $data['allowances'];
@@ -597,7 +834,7 @@ class GeneralController extends Controller
 
                     // return $pdf->download('payslip_for_'.$empID.'.pdf');
 
-        return response( [ 'data'=>$data  ],200 );
+                return response( [ 'data'=>$data  ],200 );
                 }
             } else {
                 // DATE MANIPULATION
@@ -653,8 +890,29 @@ class GeneralController extends Controller
                         $data['paid_with_arrears_d'] = $this->reports_model->employeeArrearPaidAll($payroll_emp_id->empID, $payroll_date);
                         $data['salary_advance_loan_remained'] = $this->reports_model->loansAmountRemained($payroll_emp_id->empID, $payroll_month);
                         $data_all['dat'][$payroll_emp_id->empID] = $data;
+                     
+                        foreach ($data['slipinfo'] as &$slip) {
+                            $slipArray = json_decode(json_encode($slip), true);
+                      
+                    
+                     
+                            $slipArray['allowances'] = $data['allowances'] ;
+                            
+                        
+                      
+                            $slipArray['total_allowances'] =  $data['total_allowances'];
+                    
+                        
+                            $slipArray['deductions'] = $data['deductions'] ;
+                        
+                            $slipArray['total_deductions'] =  $data['total_deductions'];
+    
+                            $slip = (array) $slipArray;
 
-                        $slipinfo = $data['slipinfo'];
+    
+                           
+                        }
+                        $slipinfo =$data['slipInfo'];
                         $leaves = $data['leaves'];
                         $annualLeaveSpent = $data['annualLeaveSpent'];
                         $allowances = $data['allowances'];
@@ -724,6 +982,63 @@ class GeneralController extends Controller
 
 
     }
+    public function employeeEmergency(Request $request)
+    {
+        $id = auth()->user()->emp_id;
+
+        $emergency = EmergencyContact::where('employeeID', $id)->first();
+
+        if ($emergency) {
+
+            $emergency->employeeID = $id;
+            $emergency->em_fname = $request->em_fname;
+            $emergency->em_mname = $request->em_mname;
+            $emergency->em_sname = $request->em_lname;
+            $emergency->em_relationship = $request->em_relationship;
+            $emergency->em_occupation = $request->em_occupation;
+            $emergency->em_phone = $request->em_phone;
+            $emergency->update();
+        } else {
+            $emergency = new EmergencyContact();
+            
+            $emergency->employeeID = $id;
+            $emergency->em_fname = $request->em_fname;
+            $emergency->em_mname = $request->em_mname;
+            $emergency->em_sname = $request->em_lname;
+            $emergency->em_relationship = $request->em_relationship;
+            $emergency->em_occupation = $request->em_occupation;
+            $emergency->em_phone = $request->em_phone;
+            $emergency->save();
+        }
+
+        $msg = "Employee Details Have Been Updated successfully";
+        return response(['msg'=>$msg],200);
+    }
+    public function updateUserInfo(Request $request)
+    {
+
+
+        $user = auth()->user()->emp_id;
+        // request()->validate([
+        //     'image' => 'required'
+        // ]);
+
+        $employee = EMPL::where('emp_id', $user)->first();
+
+            $employee->physical_address =$request->physical_address;
+            $employee->mobile=$request->mobile;
+            $employee->update();
+
+            $msg='Your Profile is updated Successfully !';
+            return response( [ 'msg'=>$msg  ],200 );
+
+        
+        
+
+
+
+    }
+     
 
     //Viewing leave attachment
     // public function leaveAttachment(Request $request)
@@ -809,7 +1124,7 @@ class GeneralController extends Controller
     public function approveOvertime(Request $request)
     {
 
-        $overtimeID =$request->$id;
+        $overtimeID =$request->id;
 
         // $status = $this->flexperformance_model->checkApprovedOvertime($overtimeID);
         // // $overtime_type = $this->flexperformance_model->get_overtime_type($overtimeID);
@@ -849,9 +1164,11 @@ class GeneralController extends Controller
 
         $status = $this->flexperformance_model->checkOvertimeStatus($overtimeID);
    //     dd($status);
-        // $overtime_type = $this->flexperformance_model->get_overtime_type($overtimeID);
+        $empID = $this->flexperformance_model->get_employee_overtimeID($overtimeID);
+        $approver=EMPL::where('emp_id',auth()->user()->emp_id)->first();
+        $employee_data =  EMPL::where('emp_id',$empID)->first();
         // $rate = $this->flexperformance_model->get_overtime_rate();
-      
+   
         if ($status == 0) {
             $signatory = session('emp_id');
           //  dd($signatory)
@@ -859,6 +1176,15 @@ class GeneralController extends Controller
             $result = $this->flexperformance_model->lineapproveOvertime($overtimeID, $time_approved);
 
             if ($result == true) {
+                       PushNotificationController::bulksend([
+                                    'title' => '5',
+                                    'body' =>'Dear '.$employee_data['full_name'].',  Your overtime request has been recommended by '.$approver['full_name'].'',
+                                    'img' => '',
+                                    'id' =>$empID,
+                                    'leave_id' => '',
+                                    'overtime_id' => '',
+                                   
+                                    ]);
                 return response()->json([
                 
                     'msg' => 'Overtime Recommended Successifully'],200);
@@ -900,7 +1226,8 @@ class GeneralController extends Controller
         // }
 
     }
-    public function dashboardData(){
+
+   public function dashboardData(){
         $id=auth()->user()->emp_id;
         $active_leaves=Leaves::where('empID',auth()->user()->emp_id)->with('type:id,type,max_days')->whereNot('reason', 'Automatic applied!')->get();
         $data=$active_leaves;
@@ -929,7 +1256,7 @@ class GeneralController extends Controller
         }
         else if($overtime->status =='1'){
    $count2++;
-        }else if($overtime->status =='3'){
+        }else if($overtime->status =='2'){
             $count3++;
         }
         else if($overtime->status =='4'){
@@ -1056,11 +1383,23 @@ class GeneralController extends Controller
     { //or disapprove
 
         $overtimeID = $request->id;
+        $empID = $this->flexperformance_model->get_employee_overtimeID($overtimeID);
+        $approver=EMPL::where('emp_id',auth()->user()->emp_id)->first();
+        $employee_data =  EMPL::where('emp_id',$empID)->first();
 
         $status = $this->flexperformance_model->checkOvertimeStatus($overtimeID);
         if($status===0){
         $result = $this->flexperformance_model->deny_overtime($overtimeID);
         if ($result == true) {
+            PushNotificationController::bulksend([
+                'title' => '9',
+                'body' =>'Dear '.$employee_data['full_name'].',  Your overtime request is denied by '.$approver['full_name'].'',
+                'img' => '',
+                'id' =>$empID,
+                'leave_id' => '',
+                'overtime_id' => '',
+               
+                ]);
             $msg="Overtime denied Successfully";
             return response([
                 'msg'=>$msg

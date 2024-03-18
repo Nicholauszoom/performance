@@ -13,6 +13,6 @@ class ApprovalLevel extends Model
     // for relationship
     public function roles()
     {
-        return $this->belongsTo(Role::class, 'role_id','id');
+        return $this->belongsTo(Position::class, 'role_id','id');
     }
 }

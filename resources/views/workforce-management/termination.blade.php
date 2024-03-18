@@ -39,6 +39,8 @@
     </div>
     @endif
 
+    @can('view-termination')
+
     <table class="table table-striped table-bordered  datatable-basic">
         <thead>
             <tr>
@@ -82,22 +84,16 @@
 
                 @endif
 
-                @if($level)
-                @if($item->status!='1')
-                @if ($item->status!=$check)
-                <br><br>
-                {{-- @can('confirm-termination') --}}
-                {{-- start of termination confirm button --}}
-                <a href="javascript:void(0)" title="Approve" class="me-2"
-                onclick="approveTermination(<?php echo $item->id; ?>)">
-                <button class="btn btn-main btn-xs">
-                    <i class="ph-check"></i>
-                    Confirm
-                </button>
-            </a>
-                {{-- / --}}
+                @if($level_check == $item->approval_status)
 
-                {{-- start of termination confirm button --}}
+                @if($item->status!='1')
+                        <a href="javascript:void(0)" title="Approve" class="me-2"
+                        onclick="approveTermination(<?php echo $item->id; ?>)">
+                        <button class="btn btn-main btn-xs">
+                            <i class="ph-check"></i>
+                            Confirm
+                        </button>
+                    </a>
 
                 <a href="javascript:void(0)" title="Cancel" class="icon-2 info-tooltip"
                 onclick="cancelTermination(<?php echo $item->id; ?>)">
@@ -106,16 +102,17 @@
                       Cancel
                 </button>
                  </a>
-                {{-- / --}}
-                {{-- @endcan --}}
                 @endif
                 @endif
-                @endif
+                {{-- @endif --}}
              </td>
             </tr>
             @endforeach
         </tbody>
     </table>
+
+    @endcan
+
 </div>
 
 @endsection
@@ -159,7 +156,7 @@
                         }, 2000);
                     })
                     .fail(function() {
-                        alert('Overtime Approval Failed!! ...');
+                        alert('Termination Approval Failed!! ...');
                     });
                 }
             });

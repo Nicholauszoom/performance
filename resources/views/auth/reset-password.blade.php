@@ -14,7 +14,11 @@
 </head>
 <style>
     body {
+        
+
  background-image: url('{{ asset('img/bg.png') }}');
+
+
  background-color: #cccccc;
  
 }

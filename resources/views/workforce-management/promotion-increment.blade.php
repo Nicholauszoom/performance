@@ -24,13 +24,13 @@
                     <h6 class="mb-0 text-warning text-start">Promotion| Increment</h6>
                 </div>
                 <div class="col-md-5">
-           
+
+                    @can('add-increment')
                         {{-- start of increment salary button --}}
-                        @can('add-increment')
                         <a href="{{ route('flex.addIncrement') }}" class="btn btn-perfrom btn-xs text-end mx-1 float-end">
                         <i class="ph-plus me-2"></i> Increment Salary
                         </a>
-                        @endcan
+                    @endcan
                         {{-- / --}}
 
                         {{--  start of perform promotion button --}}
@@ -93,9 +93,9 @@
             </td>
             @can('edit-promotion')
             <td>
-            @if($level)
-            @if($item->status!='Successful')
-            @if ($item->status!=$check)
+
+                @if($item->status!='Successful')
+          @if ($level_check == $item->approval_status)
            
                 {{-- start of termination confirm button --}}
          
@@ -112,7 +112,6 @@
                  </a>
                 {{-- / --}}
            
-                @endif
                 @endif
                 @endif
                 </td>

@@ -1,0 +1,33 @@
+<?php
+
+namespace Database\Seeders;
+
+use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
+
+class PositionTableSeeder extends Seeder
+{
+    public function run()
+    {
+        DB::table('position_category')->insert(
+            [
+               id=>1,
+
+               item_code => 1,
+               item_value =>"Senior management",
+
+
+            ],
+            [
+                id=>2,
+ 
+                item_code => 2,
+                item_value =>"Non-Senior management",
+ 
+
+         ]
+    
+    );
+    }
+}
+

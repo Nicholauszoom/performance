@@ -11,14 +11,14 @@ class ContractTableSeeder extends Seeder
     {
         DB::table('contract')->insert([
             [
-                'id' => 1,
+                'item_code' => 1,
                 'name' => 'Fixed Term',
                 'duration' => 0.5,
                 'reminder' => 2,
                 'state' => 1,
             ],
             [
-                'id' => 2,
+                'item_code' => 2,
                 'name' => 'Permanent',
                 'duration' => 60,
                 'reminder' => 6,

@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\BrandSetting;
 use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
@@ -26,6 +27,8 @@ class SecureHeaders
         //return $next($request);
         $response = $next($request);
 
+        $brand = BrandSetting::first();
+
         if (!($response instanceof BinaryFileResponse)) {
 
 
@@ -33,9 +36,7 @@ class SecureHeaders
         $response->header('X-Content-Type-Options', 'nosniff');
         $response->header('X-Frame-Options', 'SAMEORIGIN');
         $response->header('X-XSS-Protection', '1; mode=block');
-        $response->header('Content-Security-Policy', 'https://hc-uat.bancabc.co.tz');
-        $response->header('Content-Security-Policy', 'https://hc-hub.bancabc.co.tz');
-        $response->header('Content-Security-Policy', 'https://int.cits.co.tz');
+        $response->header('Content-Security-Policy', $brand->allowed_domain);
         $response->cookie('__Host-sess', $cookieValue, 0, $path, null, $secure, $httpOnly, $sameSite);
         }
 

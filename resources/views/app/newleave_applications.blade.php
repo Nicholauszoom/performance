@@ -1,5 +1,5 @@
 <div class="card border-top  border-top-width-3 border-top-main rounded-0">
-    <div class="card-body">
+    <div class="card-header">
         <h5 class="text-warning">New Leave Applications</h5>
 
         @if (Session::has('note'))
@@ -7,6 +7,9 @@
         @endif
         <div id="resultfeed"></div>
     </div>
+
+    <div class="card-body">
+
 
     <table class="table table-striped table-bordered datatable-basic">
         <thead>
@@ -21,12 +24,9 @@
                 <th>Action</th>
             </tr>
         </thead>
-
-{{-- {{ dd($leaves) }} --}}
         <tbody>
 
             @foreach ($leaves as $item)
-            {{-- {{ dd(Auth()->user()->emp_id, $item->deligated, $item->status )}} --}}
 
                 @if ($item->position != 'Default Apllication')
                     @php
@@ -152,4 +152,6 @@
 
         </tbody>
     </table>
+    </div>
 </div>
+

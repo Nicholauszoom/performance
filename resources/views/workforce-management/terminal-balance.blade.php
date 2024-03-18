@@ -28,8 +28,11 @@
                     <div class="col-md-7 col-7">
                         <div class="row">
                             <div class="col-md-3 col-3">
-                                <img src="{{ asset('assets/images/logo-dif2.png') }}" alt="logo here"
-                                    width="100%">
+                                @if ($brandSetting->report_logo)
+                                <img src="{{ asset('storage/' . $brandSetting->report_logo) }}" alt="logo here" width="180px" height="150px" class="image-fluid">          
+                                @else
+                                <img src="{{ public_path('assets/images/logo-dif2.png') }}" alt="logo here" width="180px" height="150px" class="image-fluid">          
+                                @endif
 
                             </div>
                             <div class="col-md-9 col-9">

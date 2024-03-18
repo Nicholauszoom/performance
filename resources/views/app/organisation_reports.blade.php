@@ -48,7 +48,7 @@
                                     <input type="radio" name="type" value="1" id="p9" required>
                                     <label class="ms-2" for="p9">PDF</label>
                                 </div>
-                                <div class="d-inline-flex align-items-center d-none">
+                                <div class="d-inline-flex align-items-center">
                                     <input type="radio" name="type" value="2" id="p9a" required>
                                     <label class="ms-2" for="p9a">Excel</label>
                                 </div>
@@ -88,7 +88,7 @@
                                     <input type="radio" name="type" value="1" id="p9" required>
                                     <label class="ms-2" for="p9">PDF</label>
                                 </div>
-                                <div  class="d-inline-flex align-items-center d-none">
+                                <div  class="d-inline-flex align-items-center">
                                     <input type="radio" name="type" value="2" id="p9a" required>
                                     <label class="ms-2" for="p9a">Excel</label>
                                 </div>
@@ -234,13 +234,13 @@
                 </div>
 
                 <form id="demo-form2" enctype="multipart/form-data" method="post"
-                    action="{{ route('reports.payroll_report1') }}" data-parsley-validate
+                    action="{{ route('reports.payrolldetails',[ 'payrollState' => 0]) }}" data-parsley-validate
                     class="form-horizontal form-label-left">
                     @csrf
 
                     <div class="card-body">
                         <div class="input-group">
-                            <select required  name="pdate" class="select_payroll_month form-control select"
+                            <select required  name="payrolldate" class="select_payroll_month form-control select"
                                 data-width="1%">
                                 <option selected disabled value="">Select Month</option>
                                 <?php foreach ($month_list as $row) { ?>
@@ -250,7 +250,7 @@
                             <button type="submit" class="btn btn-main"><i class="ph-printer me-2"></i> Print</button>
                         </div>
                         <div class="input-group py-2">
-                            <select required name="format" class="select_payroll_month form-control select" data-width="1%">
+                            <select required name="type" class="select_payroll_month form-control select" data-width="1%">
                                 <option selected disabled value="">Select doc format</option>
 
                                 <option value="1">PDF</option>
@@ -265,12 +265,12 @@
 
                             <div class="">
                                 <div class="d-inline-flex align-items-center me-3">
-                                    <input type="radio" name="type" value="1" id="p9" required>
+                                    <input type="radio" name="nature" value="2" id="p9" required>
                                     <label class="ms-2" for="p9">TZS</label>
                                 </div>
 
                                 <div class="d-inline-flex align-items-center">
-                                    <input type="radio" name="type" value="2" id="p9a" required>
+                                    <input type="radio" name="nature" value="3" id="p9a" required>
                                     <label class="ms-2" for="p9a">USD</label>
                                 </div>
                             </div>
@@ -331,7 +331,7 @@
                 </div>
 
                 <form id="demo-form2" enctype="multipart/form-data" method="post"
-                    action="{{ route('reports.payrolldetails') }}" data-parsley-validate
+                    action="{{ route('reports.payrolldetails', ['nature' => 1, 'payrollState' =>0]) }}" data-parsley-validate
                     class="form-horizontal form-label-left">
                     @csrf
 
@@ -353,16 +353,6 @@
                             </div>
                         </div>
 
-                        {{--
-                    <div class="row mt-3">
-                        <label class="col-form-label col-md-2">Select Date</label>
-                        <div class="col-md-10">
-                            <div class="input-group">
-                                <span class="input-group-text"><i class="ph-calendar"></i></span>
-                                <input type="text" class="form-control daterange-predefined" name="duration" placeholder="Select dates">
-                            </div>
-                        </div>
-                    </div> --}}
 
                         <div class="mt-2">
                             <label class="form-label">Report Format:</label>
@@ -383,7 +373,7 @@
                 </form>
             </div>
         </div>
-        <div class="col-md-6 d-none">
+        <div class="col-md-6">
             <div class="card border-top  border-top-width-3 border-top-main rounded-0 p-2">
                 <div class="card-header">
                     <h5 class="text-warning">Pension History</h5>

@@ -41,6 +41,7 @@
         $bankBranch = $row->bankBranch;
         $positionID = $row->position;
         $ctype = $row->contract_type;
+        $cost_center = $row->cost_center;
         $emp_shift = $row->shift;
         $line_managerID = $row->line_manager;
         $linemanager = $row->LINEMANAGER;
@@ -59,6 +60,7 @@
         $national_id = $row->national_id;
         $tin = $row->tin;
     }
+
  ?>
 
 
@@ -176,7 +178,7 @@
                 <div class="mb-3">
                     <form id="updateMeritalStatus">
                         <div id="feedBackMeritalStatus"></div>
-                        <label for="stream" class="form-label">Merital Status</label>
+                        <label for="stream" class="form-label">Marital Status</label>
 
                         <div class="input-group">
                             <select required name="merital_status" class="select_merital_status form-control" tabindex="-1">
@@ -242,6 +244,26 @@
         <div class="row">
             <div class="col-lg-4">
                 <div class="mb-3">
+                    <form id="updateCostCenter">
+                        <div id="feedBackCostCenter"></div>
+                        <label for="cost_center" class="form-label">Cost Center</label>
+
+                        <div class="input-group">
+                            <select required name="cost_center" class="select_merital_status form-control" tabindex="-1">
+                                <option <?php if($cost_center == "Management"){ ?> selected=""
+                                    <?php } ?> value="Management">Management</option>
+                                <option <?php if($merital_status == "Non Management"){ ?> selected=""
+                                    <?php } ?> value="Non Management">Non Mnagement</option>
+                            </select>
+                            <button class="btn btn-main">UPDATE</button>
+
+                        </div>
+                        <input hidden name="empID" value="<?php echo $empID; ?>">
+                    </form>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="mb-3">
                     <form id="updateContract">
                         <div id="feedBackContract"></div>
                         <label for="stream" class="form-label">Contract Type</label>
@@ -250,7 +272,7 @@
                             <select required name="contract" class="select_contract form-control" data-width="1%">
                                 <option> Select </option>
                                 <?php foreach ($contract as $row){ ?>
-                                <option <?php if($ctype == $row->id){ ?> selected="" <?php } ?>value="<?php echo $row->id; ?>"><?php echo $row->name; ?></option>
+                                <option <?php if($ctype == $row->item_code){ ?> selected="" <?php } ?>value="<?php echo $row->item_code; ?>"><?php echo $row->name; ?></option>
                                 <?php } ?>
                             </select>
                             <button class="btn btn-main">UPDATE</button>
@@ -441,7 +463,7 @@
                         <div class="input-group">
                             <select required="" name="nationality" class="select1_single form-control select" data-width="1%">
                                 <?php foreach ($countrydrop as $row){ ?>
-                                <option <?php if($nationality == $row->code){ ?> selected=""<?php } ?> value="<?php echo $row->code; ?>"><?php echo $row->name; ?></option>
+                                <option <?php if($nationality == $row->item_code){ ?> selected=""<?php } ?> value="<?php echo $row->item_code; ?>"><?php echo $row->description; ?></option>
                                 <?php } ?>
                             </select>
                             <button class="btn btn-main">UPDATE</button>
@@ -637,17 +659,23 @@
 
                         <input hidden name="empID" value="<?php echo $empID; ?>">
 
-                        <select required id='bank' name="bank" class="select_bank form-control select">
+                        <select required id="bank" name="bank" class="select_bank form-control select">
                             <option value="">Select Employee Bank</option>
-                            <?php foreach ($bankdrop as $row){ ?>
-                            <option value="<?php echo $row->id; ?>"><?php echo $row->name; ?></option>
-                            <?php } ?>
+                            @foreach ($bankdrop as $row)
+                                <option {{ $bankName == $row->name ? 'selected' : '' }} value="{{ $row->id }}">{{ $row->name }}</option>
+                            @endforeach
                         </select>
+                        
 
                         <label for="stream" class="form-label mt-2">Branch </label>
                         <span class="badge bg-info"><?php echo $bankBranch;?></span>
 
-                        <select required id="bank_branch" name="bank_branch" class="select_bank_branch form-control select" tabindex="-1"></select>
+                        <select required id="bank_branch" name="bank_branch" class="select_bank_branch form-control select" tabindex="-1">
+                            @foreach ($branchdrop as $row )
+                            <option {{ $bankBranch == $row->name ? 'selected' : '' }} value="{{ $row->id }}">{{ $row->name }}</option>           
+                            @endforeach
+
+                        </select>
 
                         <button <?php if($pendingPayroll>0){ ?> disabled <?php } ?> class="btn btn-main mt-2">UPDATE</button>
                     </form>

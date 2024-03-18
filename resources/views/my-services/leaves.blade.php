@@ -83,6 +83,8 @@
                             <span id="remain" class="text-success"></span>
                         </code>
                     </div>
+                    @can('apply-leave')
+
                     <form autocomplete="off" action="{{ url('flex/attendance/save_leave') }}" method="post"
                         enctype="multipart/form-data">
                         @csrf
@@ -190,6 +192,8 @@
                             </div>
                         </div>
                     </form>
+
+                    @endcan
                 </div>
 
             </div>
@@ -198,8 +202,11 @@
     </div>
 
 
+    @can('view-leaves')
+
     @include('my-services.employeeLeaves')
 
+    @endcan
 
 
 

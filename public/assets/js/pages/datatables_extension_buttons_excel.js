@@ -50,7 +50,8 @@ const DatatableButtonsExcel = function() {
                         extend: 'excelHtml5',
                         text: 'Export to Excel <i class="ph-file-xls ms-2"></i>',
                         autoFilter: true,
-                        sheetName: 'Exported data'
+                        sheetName: 'Exported data',
+                        footer: true
                     }
                 ]
             }

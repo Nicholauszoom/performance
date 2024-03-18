@@ -29,6 +29,9 @@
     <main>
 
 
+        @php
+        $brandSetting = \App\Models\BrandSetting::first();
+    @endphp
 
                 <table class="table">
                     <tfoot>
@@ -36,8 +39,16 @@
                         <tr>
                             <td class="">
                                 <div class="box-text">
+                                    @if ($brandSetting->report_logo)
                                     <img src="{{ public_path('assets/images/logo-dif2.png') }}" alt="logo here"
-                                        class="image-fluid"> <br>
+                                    class="image-fluid">
+                                    @else
+                                    <img src="{{ public_path('assets/images/logo-dif2.png') }}" alt="logo here"
+                                    class="image-fluid">
+                                    @endif
+                                    
+                                        
+                                        <br>
 
                                 </div>
                             </td>
