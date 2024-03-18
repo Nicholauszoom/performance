@@ -11,6 +11,8 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Http\Response;
 use App\Models\EMPL;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Payroll\ReportModel;
+use App\Models\Payroll\FlexPerformanceModel;
 use Exception;
 use DateTime;
 
@@ -352,6 +354,13 @@ private function postSingleEmployeeData($emp_id)
 
 private function prepareEmployeeData($employee)
 {
+   
+  $payrolMonths=  FlexPerformanceModel::payroll_month_list2($employee->emp_id);
+  foreach($payrolMonths as $month){
+    $allowances = ReportModel::allowances($employee->emp_id, $month);
+    dd($allowances);
+  }
+ 
     $position_category = PositionCategory::where('item_code', $employee->positions->position_category)->first();
     $nationality= CountryCode::where('item_code',$employee->nationality)->first();
     return [
