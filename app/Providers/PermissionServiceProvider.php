@@ -33,6 +33,7 @@ class PermissionServiceProvider extends ServiceProvider
 
         Permission::get()->map(function ($permission) {
             Gate::define($permission->slug, function ($user) use ($permission) {
+                // return true;
                 return $user->hasPermissionTo($permission);
             });
         });
@@ -43,6 +44,7 @@ class PermissionServiceProvider extends ServiceProvider
 
         SystemModule::get()->map(function ($module) {
             Gate::define($module->slug, function ($user) use ($module) {
+                // return true;
                 return $user->hasModuleTo($module);
             });
         });

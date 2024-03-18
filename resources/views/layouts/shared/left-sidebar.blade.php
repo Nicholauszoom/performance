@@ -721,7 +721,7 @@
                             @endif
 
 
-                            @can('view-roles')
+                            @can('view-Roles')
 
                             <li class=" nav-item"><a
                                     class="nav-link {{ request()->routeIs('roles.index') ? 'active' : null }} "

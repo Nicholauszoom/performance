@@ -185,6 +185,7 @@ class PermisionSeeder extends Seeder
                 [108, 'delete-logs', 7],
                 [109, 'view-password-reset', 7],
                 [110, 'view-endpoints', 7],
+                [230, 'edit-roles', 7],
 
                 // Module 8: Dashboard
                 [91, 'view-dashboard', 8],

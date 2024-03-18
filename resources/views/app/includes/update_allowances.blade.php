@@ -636,8 +636,9 @@ function deleteBonus(id)
                         location.reload(); // then reload the page.(3)
                     }, 3000);
                 })
-                .fail(function(){
-                    alert('Update Failed!! ...');
+                .fail(function(e){
+                    console.log(e);
+                    // alert('Update Failed!! ...');
                 });
             }
         });

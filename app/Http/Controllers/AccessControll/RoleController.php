@@ -34,7 +34,7 @@ class RoleController extends Controller
     public function index()
     {
 
-        $this->authenticateUser('view-roles');
+        // $this->authenticateUser('view-roles');
 
         $roles = Role::all();
         $permissions = Permission::all();
