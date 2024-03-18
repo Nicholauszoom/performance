@@ -371,8 +371,8 @@ private function prepareEmployeeData($employee)
         "basicSalary" => $employee->salary,
         // "empBenefits"=>  [],
         "gender" => $employee->gender,
-        "snrMgtBenefits" => [],
-        "otherEmpBenefits" => [],
+        "snrMgtBenefits" => "",
+        "otherEmpBenefits" => "",
     ];
 }
 
