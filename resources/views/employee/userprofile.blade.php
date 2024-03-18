@@ -30,6 +30,7 @@ $brandSetting = \App\Models\BrandSetting::firstOrCreate();
         $position = $row->pName;
         $ctype = $row->CONTRACT;
         $linemanager = $row->line_manager;
+        $last_updated = $row->updated_at;
 
         $pf_membership_no = $row->pf_membership_no;
         $account_no = $row->account_no;
@@ -135,7 +136,8 @@ $brandSetting = \App\Models\BrandSetting::firstOrCreate();
                         </tr>
                         <tr>
                             <td>Last Updated:</td>
-                            <td>{{ $hire_date[2] . '-' . $hire_date[1] . '-' . $hire_date[0] }}</td>
+                            <td>  {{ $last_updated }}</td>
+                            {{-- <td>{{ $hire_date[2] . '-' . $hire_date[1] . '-' . $hire_date[0] }}</td> --}}
                         </tr>
                     </tbody>
                 </table>

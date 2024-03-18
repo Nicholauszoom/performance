@@ -7414,6 +7414,8 @@ class GeneralController extends Controller
      */
     public function registerEmployee(EmployeeRequest $request)
     {
+
+
         // $validatedFields = $request->validate([
         //     'tin' => [
         //         'required',
@@ -7442,6 +7444,7 @@ class GeneralController extends Controller
 
         $currency = $request->currency;
         $rate = $this->flexperformance_model->get_rate($currency);
+
 
         if (($required / 365) > 16) {
 
@@ -9747,6 +9750,7 @@ class GeneralController extends Controller
             // updating employee data
             $employee = Employee::where('emp_id', $id)->first();
             $employee->line_manager = $request->line_manager;
+            $employee->updated_at = now();
             $employee->update();
 
             // Start of Employee Details
@@ -9797,6 +9801,7 @@ class GeneralController extends Controller
             $employee->fname = $request->fname;
             $employee->mname = $request->mname;
             $employee->lname = $request->lname;
+            $employee->updated_at = now();
             //$employee->mobile = $request->mobile;
             // $employee->line_manager = $request->line_manager;
             // $employee->job_title = $request->current_job;
@@ -9890,6 +9895,7 @@ class GeneralController extends Controller
             // $employee->form_4_index = $request->HELSB;
             // $employee->pension_fund = $request->pension_fund;
             $employee->physical_address = $request->physical_address;
+            $employee->updated_at = now();
             $employee->update();
 
             // Start of Employee Details
@@ -9967,6 +9973,8 @@ class GeneralController extends Controller
             $employee->tin = $request->TIN;
             $employee->pf_membership_no = $request->pension;
             $employee->form_4_index = $request->HESLB;
+            $employee->updated_at = now();
+
             //  $employee->physical_address = $request->physical_address;
             $employee->update();
 
@@ -10041,6 +10049,8 @@ class GeneralController extends Controller
             $employee->gender = $request->gender;
             $employee->birthdate = $request->birthdate;
             $employee->merital_status = $request->merital;
+            $employee->updated_at = now();
+
 
             // $employee->national_id = $request->NIDA;
             // $employee->form_4_index = $request->HELSB;
@@ -10141,6 +10151,7 @@ class GeneralController extends Controller
             $emergency->em_relationship = $request->em_relationship;
             $emergency->em_occupation = $request->em_occupation;
             $emergency->em_phone = $request->em_phone;
+
             $emergency->update();
         } else {
             $emergency = new EmergencyContact();

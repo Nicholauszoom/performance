@@ -88,9 +88,9 @@
                 @endcan
 
 
-                    <a href="<?php echo  url('') .'/flex/updateEmployee/'.$row->emp_id."|".$row->department; ?>" title="Update">
+                    {{-- <a href="<?php echo  url('') .'/flex/updateEmployee/'.$row->emp_id."|".$row->department; ?>" title="Update">
                         <button type="button" class="btn btn-warning btn-xs"><i class="ph-note-pencil"></i></button>
-                    </a>
+                    </a> --}}
 {{--
                     <a href="<?php echo  url('').'flex/project/evaluateEmployee/'.$row->emp_id.'|'.$row->department; ?>" title="Update">
                         <button type="button" class="btn btn-success btn-xs"><i class="">Evaluate</i></button>
