@@ -354,8 +354,8 @@ private function postSingleEmployeeData($emp_id)
 
 private function prepareEmployeeData($employee)
 {
-   
-  $payrolMonths=  FlexPerformanceModel::payroll_month_list2($employee->emp_id);
+     $flexPerformanceModel= new FlexPerformanceModel();
+  $payrolMonths=  flexPerformanceModel->payroll_month_list2($employee->emp_id);
   foreach($payrolMonths as $month){
     $allowances = ReportModel::allowances($employee->emp_id, $month);
     dd($allowances);
