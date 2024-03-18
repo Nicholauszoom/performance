@@ -361,9 +361,10 @@ private function prepareEmployeeData($employee)
   
   foreach($payrolMonths as &$month){
     $allowances = $reportModel->allowances($employee->emp_id, $month->payroll_date);
-   dd($allowances);
-  }
+    $data['allowances']=$allowances;
 
+  }
+dd($data);
 
  $datasd =[
     "Fuel Allowance",
