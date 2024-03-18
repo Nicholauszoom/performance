@@ -369,7 +369,7 @@ private function prepareEmployeeData($employee)
         "empNationality" => $nationality->item_value,
         "lastPromotionDate" => $this->convertDate($employee->hire_date),
         "basicSalary" => $employee->salary,
-        "empBenefits"=>  [],
+        // "empBenefits"=>  [],
         "gender" => $employee->gender,
     ];
 }
