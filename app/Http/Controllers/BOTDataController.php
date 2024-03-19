@@ -356,15 +356,17 @@ private function prepareEmployeeData($employee)
 {
      $flexPerformanceModel= new FlexPerformanceModel();
      $reportModel= new ReportModel();
-     $data=[];
-  $payrolMonths=  $flexPerformanceModel->payroll_month_list2($employee->emp_id);
-  
-  foreach($payrolMonths as &$month){
-    $allowances = $reportModel->allowances($employee->emp_id, $month->payroll_date);
-    $data['allowances']=$allowances;
+     $data = [];
+     $payrollMonths = $flexPerformanceModel->payroll_month_list2($employee->emp_id);
+     
+     foreach ($payrollMonths as $month) {
+         $allowances = $reportModel->allowances($employee->emp_id, $month->payroll_date);
+         $data[$month->payroll_date]['allowances'] = $allowances;
+     }
+     
+     dd($data);
+     
 
-  }
-dd($data);
 
  $datasd =[
     "Fuel Allowance",
