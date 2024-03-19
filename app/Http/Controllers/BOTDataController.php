@@ -47,11 +47,10 @@ class BOTDataController extends Controller
     }
 
     public function convertDate($date){
-        // dd($date);
         $date = new DateTime($date);
         // $formattedDate = $date->format('dmYHis');
 
-        return $formattedDate;
+        return $date;
     }
 
     public function convertGenderOutput($gender){
@@ -408,7 +407,7 @@ private function prepareEmployeeData($employee)
 //  ];
     $position_category = PositionCategory::where('item_code', $employee->positions->position_category)->first();
     $nationality= CountryCode::where('item_code',$employee->nationality)->first();
-
+    
     return [
         "branchCode" => $employee->branch,
         "empIdentificationType" => "NationalIdentityCard",
