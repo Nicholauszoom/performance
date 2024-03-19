@@ -76,9 +76,9 @@
                             $nssfPayable_col = '';
                             $sdl_col = '';
                             $wcf_col = '';
-                            $nhifEmployee_col = '';
-                            $nhifEmployer_col = '';
-                            $nhif_col = '';
+                            $nhifEmployee_col = 'd-none';
+                            $nhifEmployer_col = 'd-none';
+                            $nhif_col = 'd-none';
                             $loanBoard_col = '';
                             $advanceOthers_col = '';
                             $totalDeduction_col = '';
@@ -86,7 +86,7 @@
                             $colspan_col = '2';
                             $show_terminations = true;
                             $fitler_by_currency = false;
-                            $show_nhif = true
+                            $show_nhif = false;
 
                         @endphp
 

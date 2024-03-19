@@ -1,10 +1,10 @@
-               
+
                <style>
                 .nhif-column{
-                    display: nkone;
+                    display: none;
                 }
                </style>
-               
+
                <thead style="font-size:8px;">
                     <tr class="hdr" style="border-bottom:2px solid rgb(9, 5, 64);">
 
@@ -56,9 +56,9 @@
                         <th class=" {{ $nhifEmployee_col }} text-end nhif-column" style="margin-bottom: 30px;"><b>NHIF Employee</b></th>
                         <th class=" {{ $nhifEmployer_col }} text-end nhif-column" style="margin-bottom: 30px;"><b>NHIF Employer</b></th>
                         <th class=" {{ $nhif_col}} text-end nhif-column" style="margin-bottom: 30px;"><b>NHIF Payable</b></th>
-    
+
                         @endif
-                       
+
 
                         <th class=" {{ $loanBoard_col }} text-end" style="margin-bottom: 30px;"><b>Loan Board</b></th>
                         <th class=" {{ $advanceOthers_col }} text-end" style="margin-bottom: 30px;"><b>Advance/Others</b></th>
@@ -208,7 +208,7 @@
                                 <td class=" {{$nhifEmployer_col }} text-end  nhif-column" >{{ number_format($row->nhif, 2) }} </td>
                                 <td class="{{ $nhif_col }} text-end nhif-column">{{ number_format($row->nhif * 2, 2) }}</td>
                                 @endif
-                               
+
 
                                 <td class=" {{ $loanBoard_col }} text-end">{{ number_format($row->loans, 2) }}</td>
 
@@ -301,7 +301,7 @@
                             <td class=" {{$nhifEmployer_col }} text-end nhif-column">0</td>
                             <td class=" {{$nhif_col }} text-end nhif-column">0</td>
                             @endif
-                            
+
 
                             <td class=" {{$loanBoard_col }} text-end">{{ number_format(0, 2) }}</td>
                             <td class=" {{$advanceOthers_col }} text-end">{{ number_format($row2->loan_balance+$row2->otherDeductions, 2) }}</td>
@@ -403,7 +403,7 @@
                         <td class=" {{$nhifEmployer_col }} text-end nhif-column">{{ number_format($totalnhif, 2) }}
                         <td class=" {{ $nhif_col }} text-end nhif-column"><b><b>{{ number_format($totalnhif * 2, 2) }}</b></b></td>
                         @endif
-                       
+
 
                         <td class=" {{ $loanBoard_col }} text-end"><b><b>{{ number_format($total_loans, 2) }}</b></b></td>
                         <td class=" {{ $advanceOthers_col }} text-end"><b><b>{{ number_format($others, 2) }}</b></b></td>
