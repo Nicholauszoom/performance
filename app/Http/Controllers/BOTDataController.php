@@ -415,7 +415,7 @@ private function prepareEmployeeData($employee)
         "empPositionCategory" => $position_category!=null?$position_category->item_value:"Non-Senior management",
         "empName" => $employee->fname . ' ' . $employee->mname . ' ' . $employee->lname,
         "empDob" => ($employee->birthdate),
-        "empNin" => "0",
+        "empNin" => $this->removeSpecialCharacters($employee->national_id),
         "empPosition" => $this->removeSpecialCharacters($employee->positions->name),
         "empStatus" => $this->contractNameExtraction($employee->contract_type),
         "empDepartment" => $this->removeSpecialCharacters($employee->departments->name),
