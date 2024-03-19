@@ -163,10 +163,10 @@
                         $show_terminations = true;
                         $fitler_by_currency = false;
 
-                        $nhifEmployee_col = '';
-                        $nhifEmployer_col = '';
-                        $nhif_col = '';
-                        $show_nhif = true;
+                        $nhifEmployee_col = 'd-none';
+                        $nhifEmployer_col = 'd-none';
+                        $nhif_col = 'd-none';
+                        $show_nhif = false;
 
                     @endphp
 
