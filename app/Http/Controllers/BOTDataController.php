@@ -324,22 +324,35 @@ class BOTDataController extends Controller
         return $this->postSingleEmployeeData($request->emp_id);
     }
 }
-
 private function postAllEmployeesData()
 {
     $employees = Employee::get();
     $responses = [];
 
+    $commonResponse = null;
+
     foreach ($employees as $employee) {
         $data = $this->prepareEmployeeData($employee);
         $response = $this->sendEmployeeData($data);
-        $responses[] = $response->json(); // Collect response data for all employees
+        
+        // Always encode response as JSON before storing in $responses
+        $encodedResponse = json_encode($response);
+        $responses[] = $encodedResponse;
+
+        if ($commonResponse === null) {
+            $commonResponse = $encodedResponse; // Initialize common response with the first response
+        } elseif ($commonResponse !== $encodedResponse) {
+            $commonResponse = null; // Reset common response if current response differs
+        }
     }
 
-    session()->flash('status', json_encode($responses));
+    // Store either all responses or the single common response in the session
+    session()->flash('status', $commonResponse !== null ? $commonResponse : json_encode($responses));
+
     $employee =  Employee::all();
     return view('bot.index', compact('responses', 'employee'));
 }
+
 
 private function postSingleEmployeeData($emp_id)
 {
@@ -347,20 +360,51 @@ private function postSingleEmployeeData($emp_id)
     $data = $this->prepareEmployeeData($employee);
     $response = $this->sendEmployeeData($data);
 
+    // Always encode response as JSON before storing in session
     session()->flash('status', json_encode($response));
+    
     $employee =  Employee::all();
     return view('bot.index', compact('response', 'employee'));
 }
 
 private function prepareEmployeeData($employee)
 {
-   
-  $payrolMonths=  FlexPerformanceModel::payroll_month_list2($employee->emp_id);
-  foreach($payrolMonths as $month){
-    $allowances = ReportModel::allowances($employee->emp_id, $month);
-    dd($allowances);
-  }
- 
+     $flexPerformanceModel= new FlexPerformanceModel();
+     $reportModel= new ReportModel();
+    
+//      $data = [];
+//      $payrollMonths = $flexPerformanceModel->payroll_month_list2($employee->emp_id);
+     
+//      foreach ($payrollMonths as $month) {
+//          $allowances = $reportModel->allowances($employee->emp_id, $month->payroll_date);
+//          foreach ($allowances as $allowance) {
+//              $data[] = $allowance->description; // Accessing description property directly
+//          }
+//      }
+     
+
+     
+
+
+//  $datasd =[
+//     "Fuel Allowance",
+//     "Car maintanance",
+//     "Motor vehicle",
+//     "Security allowance",
+//     "Child and Education allowance",
+//     "House keeping allowance",
+//     "House rent allowance",
+//     "Communication Device",
+//     "Entertainment allowance",
+//     "Responsibilities Allowance",
+//     "Utilities Allowance",
+//     "Furniture & Fittings",
+//     "Spouse allowance",
+//     "Meal Allowance ",
+//     "Transport Allowance",
+//     "Airtime ",
+    
+//  ];
     $position_category = PositionCategory::where('item_code', $employee->positions->position_category)->first();
     $nationality= CountryCode::where('item_code',$employee->nationality)->first();
     return [
@@ -380,9 +424,11 @@ private function prepareEmployeeData($employee)
         "basicSalary" => $employee->salary,
         // "empBenefits"=>  [],
         "gender" => $employee->gender,
-        "snrMgtBenefits" => "No senior Mamagement Benefits",
-        "otherEmpBenefits" => "No senior Mamagement Benefits",
+        "snrMgtBenefits" => "Transport Allowance",
+        "otherEmpBenefits" => "Transport Allowance",
     ];
 }
+
+
 
 }
