@@ -222,19 +222,19 @@ class BOTDataController extends Controller
         //                 "empIdentificationNumber" => $this->removeSpecialCharacters($employee->national_id),
         //                 "empPositionCategory"=> $position_category!=null?$position_category:"1",
         //                 "empName" =>  $employee->fname.' '. $employee->mname.' `'. $employee->lname,
-        //                 "empDob" =>  $this->convertDate($employee->birthdate), // DDMMYYYYHHMM
+        //                 "empDob" =>  ($employee->birthdate), // DDMMYYYYHHMM
         //                 "empNin"=>"0",
         //                 "empPosition" =>  $this->removeSpecialCharacters($employee->positions->name),
         //                 "empStatus" => $this->contractNameExtraction($employee->contract_type),
         //                 "empDepartment" =>  $this->removeSpecialCharacters($employee->departments->name),
-        //                 "appointmentDate" =>$this->convertDate($employee->hire_date),
+        //                 "appointmentDate" =>($employee->hire_date),
         //                 "empNationality"=>"Tanzanian",
-        //                 "lastPromotionDate" =>$this->convertDate($employee->hire_date), // DDMMYYYYHHMM
+        //                 "lastPromotionDate" =>($employee->hire_date), // DDMMYYYYHHMM
         //                 "basicSalary" => $employee->salary,
         //                 "snrMgtBenefits" => '0',
         //                 "otherEmpBenefits" => '0',
         //                 "gender" => $employee->gender,
-        //                 // "reportingDate"=>$this->convertDate($employee->hire_date),
+        //                 // "reportingDate"=>($employee->hire_date),
 
         //                 // "directorsName" => 'none',
         //                 // "directorsAllowance" => '0',
@@ -278,14 +278,14 @@ class BOTDataController extends Controller
         //                 "empIdentificationNumber" => $this->removeSpecialCharacters($employee->national_id),
         //                 "empPositionCategory"=> $position_category!=null?$position_category:"1",
         //                 "empName" =>  $employee->fname.' '. $employee->mname.' `'. $employee->lname,
-        //                 "empDob" =>  $this->convertDate($employee->birthdate), // DDMMYYYYHHMM
+        //                 "empDob" =>  ($employee->birthdate), // DDMMYYYYHHMM
         //                 "empNin"=>"0",
         //                 "empPosition" =>  $this->removeSpecialCharacters($employee->positions->name),
         //                 "empStatus" => $this->contractNameExtraction($employee->contract_type),
         //                 "empDepartment" =>  $this->removeSpecialCharacters($employee->departments->name),
-        //                 "appointmentDate" =>$this->convertDate($employee->hire_date),
+        //                 "appointmentDate" =>($employee->hire_date),
         //                 "empNationality"=>"Tanzanian",
-        //                 "lastPromotionDate" =>$this->convertDate($employee->hire_date), // DDMMYYYYHHMM
+        //                 "lastPromotionDate" =>($employee->hire_date), // DDMMYYYYHHMM
         //                 "basicSalary" => $employee->salary,
         //                 "snrMgtBenefits" => '0',
         //                 "otherEmpBenefits" => '0',
@@ -407,21 +407,21 @@ private function prepareEmployeeData($employee)
 //  ];
     $position_category = PositionCategory::where('item_code', $employee->positions->position_category)->first();
     $nationality= CountryCode::where('item_code',$employee->nationality)->first();
-    
+
     return [
         "branchCode" => $employee->branch,
         "empIdentificationType" => "NationalIdentityCard",
         "empIdentificationNumber" => $this->removeSpecialCharacters($employee->national_id),
         "empPositionCategory" => $position_category!=null?$position_category->item_value:"Non-Senior management",
         "empName" => $employee->fname . ' ' . $employee->mname . ' ' . $employee->lname,
-        "empDob" => $this->convertDate($employee->birthdate),
+        "empDob" => ($employee->birthdate),
         "empNin" => "0",
         "empPosition" => $this->removeSpecialCharacters($employee->positions->name),
         "empStatus" => $this->contractNameExtraction($employee->contract_type),
         "empDepartment" => $this->removeSpecialCharacters($employee->departments->name),
-        "appointmentDate" => $this->convertDate($employee->hire_date),
+        "appointmentDate" => ($employee->hire_date),
         "empNationality" => $nationality->item_value,
-        "lastPromotionDate" => $this->convertDate($employee->hire_date),
+        "lastPromotionDate" => ($employee->hire_date),
         "basicSalary" => $employee->salary,
         // "empBenefits"=>  [],
         "gender" => $employee->gender,
