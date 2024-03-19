@@ -10993,7 +10993,7 @@ class GeneralController extends Controller
 
         $childs = EmployeeDependant::where('employeeID', $empID)->count();
         $data['qualifications'] = EducationQualification::where('employeeID', $id)->get();
-
+        
         $data['photo'] = "";
 
         $data['parent'] = "Employee Profile";

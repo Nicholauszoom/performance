@@ -32,7 +32,7 @@
 
                     <div class="card-body">
                         <div class="input-group">
-                            <select required name="payrolldate" class="select_payroll_month form-control select" required
+                            <select required naFme="payrolldate" class="select_payroll_month form-control select" required
                                 data-width="1%">
                                 <option selected disabled value="">Select Month</option>
                                 <?php foreach ($month_list as $row) { ?>

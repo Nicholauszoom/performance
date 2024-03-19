@@ -79,5 +79,10 @@ class Employee extends Model
         return $this->belongsTo('App\Models\Contract','contract_type');
     }
 
+    public function educations(){
+        return $this->belongsTo('App\Models\EducationQualification', 'emp_id', 'employeeID');
+    }
+
+
 
 }
