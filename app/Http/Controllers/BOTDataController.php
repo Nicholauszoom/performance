@@ -329,18 +329,30 @@ private function postAllEmployeesData()
     $employees = Employee::get();
     $responses = [];
 
+    $commonResponse = null;
+
     foreach ($employees as $employee) {
         $data = $this->prepareEmployeeData($employee);
         $response = $this->sendEmployeeData($data);
         
         // Always encode response as JSON before storing in $responses
-        $responses[] = json_encode($response);
+        $encodedResponse = json_encode($response);
+        $responses[] = $encodedResponse;
+
+        if ($commonResponse === null) {
+            $commonResponse = $encodedResponse; // Initialize common response with the first response
+        } elseif ($commonResponse !== $encodedResponse) {
+            $commonResponse = null; // Reset common response if current response differs
+        }
     }
 
-    session()->flash('status', json_encode($responses));
+    // Store either all responses or the single common response in the session
+    session()->flash('status', $commonResponse !== null ? $commonResponse : json_encode($responses));
+
     $employee =  Employee::all();
     return view('bot.index', compact('responses', 'employee'));
 }
+
 
 private function postSingleEmployeeData($emp_id)
 {

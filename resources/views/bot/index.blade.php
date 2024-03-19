@@ -25,14 +25,23 @@
                 }, 4000); // Adjust the duration in milliseconds
             });
         </script>
+@php
+    $statusData = json_decode(session('status'));
+@endphp
+<div class="alert alert-success text-center">
+    @if (is_object($statusData))
+        HTTP Status: {{ $statusData->http_status }} - Response: {{ $statusData->response }}
+    @elseif (is_array($statusData))
+        @foreach ($statusData as $status)
+        HTTP Status: {{ $status }}<br>
+        @endforeach
+    @else
+        {{ $statusData }}
+    @endif
+</div>
 
-        @php
-            $statusData = json_decode(session('status'));
-        @endphp
 
-        <div class="alert alert-success text-center">
-            HTTP Status: {{ $statusData->http_status }} - Response: {{ $statusData->response }}
-        </div>
+
     @endif
 
     <div class="row">
