@@ -75,7 +75,7 @@
                 </a>
 
                 @can('edit-employee')
-                <a  href="{{ route('flex.viewProfile', base64_encode($row->emp_id)) }}" class="btn btn-main  btn-sm"   title="Info and Details">
+                <a  href="{{ route('flex.viewProfile', base64_encode($row->emp_id)) }}" class="btn btn-main  btn-sm"   title="Edit Info and Details">
                     <i class="ph-pen"></i>
                 </a>
 
@@ -88,9 +88,9 @@
                 @endcan
 
 
-                    {{-- <a href="<?php echo  url('') .'/flex/updateEmployee/'.$row->emp_id."|".$row->department; ?>" title="Update">
+                    <a href="<?php echo  url('') .'/flex/updateEmployee/'.$row->emp_id."|".$row->department; ?>" title="Update Basic Info">
                         <button type="button" class="btn btn-warning btn-xs"><i class="ph-note-pencil"></i></button>
-                    </a> --}}
+                    </a>
 {{--
                     <a href="<?php echo  url('').'flex/project/evaluateEmployee/'.$row->emp_id.'|'.$row->department; ?>" title="Update">
                         <button type="button" class="btn btn-success btn-xs"><i class="">Evaluate</i></button>
