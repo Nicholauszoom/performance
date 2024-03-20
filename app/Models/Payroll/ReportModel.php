@@ -1236,6 +1236,12 @@ FROM payroll_logs pl, employee e, department d, position p  WHERE e.emp_id = pl.
         $query = "SELECT l.description, ll.paid, ll.remained, ll.policy FROM loan_logs ll, loan l WHERE ll.loanID = l.id AND l.empID =  '" . $empID . "' AND ll.payment_date like '%" . $payroll_month . "%'";
         return DB::select(DB::raw($query));
     }
+    function getALlLoanHistory($empID)
+    {
+        $query = "SELECT * FROM loan_logs ll, loan l WHERE ll.loanID = l.id AND l.empID = '" . $empID . "' ORDER BY ll.payment_date DESC";
+        return DB::select(DB::raw($query));
+        
+    }
 
     function temp_loans($empID, $payroll_month)
     {
