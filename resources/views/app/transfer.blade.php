@@ -10,6 +10,9 @@
 
 @section('content')
 
+{{-- {{ dd($transfers) }} --}}
+
+
 <div class="mb-3">
     <h4 class="text-main">Approvals</h4>
 </div>
@@ -63,9 +66,9 @@
 
                                 <td> <?php
                                     if($row->parameterID==1){
-                                        if(session('mng_paym') ){
+                                       
                                             echo "<b>FROM: </b> ".number_format($row->old,2)."/=<br><b>TO: </b>".number_format($row->new,2)."/=";
-                                        }
+                                    
                                     }elseif ($row->parameterID==2) {
                                         echo $this->flexperformance_model->newPositionTransfer($row->new);
                                     }elseif ($row->parameterID==3) {
