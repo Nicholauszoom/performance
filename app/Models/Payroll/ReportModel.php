@@ -655,12 +655,19 @@ FROM payroll_logs pl, employee e WHERE e.emp_id = pl.empID and e.contract_type =
         //dd(DB::select(DB::raw($query)));
         return DB::select(DB::raw($query));
     }
-
+   
     function v_heslb($payrolldate,$emp_id)
     {
         $query = "SELECT @s:=@s+1 as SNo, l.form_four_index_no , CONCAT(e.fname,' ', IF(e.mname != null,e.mname,' '),' ', e.lname) as name, ll.paid, ll.remained FROM employee e, loan_logs ll, loan l, (SELECT @s:=0) s WHERE e.emp_id=l.empID AND e.emp_id= '" . $emp_id . "' and e.contract_type != 2 AND ll.loanID = l.id AND l.type = 3 ";
         return DB::select(DB::raw($query));
     }
+ 
+    function v_heslb2($emp_id)
+    {
+        $query = "SELECT @s:=@s+1 as SNo, l.form_four_index_no, l.description, l.form_four_index_no, l.approved_hr, l.approved_finance, l.approved_date_hr, l.approved_date_finance, l.empID, CONCAT(e.fname,' ', IF(e.mname != null, e.mname, ' '), ' ', e.lname) as name, ll.paid, ll.remained, ll.payment_date FROM employee e, loan_logs ll, loan l, (SELECT @s:=0) s WHERE e.emp_id=l.empID AND e.emp_id= '" . $emp_id . "' and e.contract_type != 2 AND ll.loanID = l.id AND l.type = 3 ";
+        return DB::select(DB::raw($query));
+    }
+    
     function v_totalheslb($payrolldate,$emp_id)
     {
         $query = "SELECT if(SUM(ll.paid) IS NULL, 0, SUM(ll.paid)) as total_paid,MIN(ll.remained) as total_remained  FROM loan l, loan_logs ll, employee e  WHERE ll.loanID = l.id  AND l.type = 3 AND e.emp_id = l.empID  AND e.emp_id= '" . $emp_id . "' and e.contract_type !=2 ";
@@ -1236,12 +1243,20 @@ FROM payroll_logs pl, employee e, department d, position p  WHERE e.emp_id = pl.
         $query = "SELECT l.description, ll.paid, ll.remained, ll.policy FROM loan_logs ll, loan l WHERE ll.loanID = l.id AND l.empID =  '" . $empID . "' AND ll.payment_date like '%" . $payroll_month . "%'";
         return DB::select(DB::raw($query));
     }
-    function getALlLoanHistory($empID)
+    function getALlLoanHistory2($empID)
     {
         $query = "SELECT * FROM loan_logs ll, loan l WHERE ll.loanID = l.id AND l.empID = '" . $empID . "' ORDER BY ll.payment_date DESC";
         return DB::select(DB::raw($query));
         
+
     }
+    function getALlLoanHistory($empID)
+    {
+        $query = "SELECT * FROM loan_logs   ORDER BY payment_date DESC";
+        return DB::select(DB::raw($query));
+        
+    }
+
 
     function temp_loans($empID, $payroll_month)
     {

@@ -701,9 +701,12 @@ class GeneralController extends Controller
         public function myLoans(Request $request)
         {
             $empID = auth()->user()->emp_id;
-            $data['loans'] = $this->reports_model->getALlLoanHistory($empID);
+            // $data['loans'] = $this->reports_model->getALlLoanHistory($empID);
+            $data['loans'] = $this->reports_model->v_heslb2($empID);
+
+            // $data['total'] = array_reverse($this->reports_model->v_totalheslb($payrolldate,$empID));
             // For pending loans
-             $data['heslb'] =Helsb::where('empID',$empID)->get();
+            //  $data['heslb'] =Helsb::where('empID',$empID)->get();
 
 
         return response( [ 'data'=>$data  ],200 );
