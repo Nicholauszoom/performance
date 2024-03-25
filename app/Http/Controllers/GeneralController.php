@@ -3305,14 +3305,17 @@ class GeneralController extends Controller
             "new_position" => $request->input("position"),
         );
 
-        $result = $this->flexperformance_model->employeeTransfer($data);
+        $transferID = DB::table('transfer')->insertGetId($data);
+
+        $this->approveDeptPosTransfer($transferID);
+        
 
         $oldp = $this->flexperformance_model->getAttributeName("name", "position", "id", $request->input('oldPosition'));
         $newp = $this->flexperformance_model->getAttributeName("name", "position", "id", $request->input('position'));
         $oldd = $this->flexperformance_model->getAttributeName("name", "department", "id", $request->input('oldDepartment'));
         $newd = $this->flexperformance_model->getAttributeName("name", "department", "id", $request->input('department'));
 
-        if ($result == true) {
+        if ($transferID == true) {
             SysHelpers::AuditLog(2, "Requested Department Change For Employee with ID = " . $empID . " From " . $oldd . " To " . $newd . " and Position From " . $oldp . " To " . $newp . "", $request);
             echo "<p class='alert alert-success text-center'>Request For Department and Position Transfer Has Been Sent Successifully!</p>";
         } else {

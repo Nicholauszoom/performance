@@ -1104,7 +1104,9 @@ FROM payroll_logs pl, employee e, department d, position p  WHERE e.emp_id = pl.
     (SELECT SUM(plg.pension_employee) FROM  payroll_logs plg WHERE plg.empID = e.emp_id and e.emp_id = '" . $empID . "' and plg.payroll_date BETWEEN e.hire_date and '" . $payroll_month_end . "' ) as pension_employee_todate,
     (SELECT SUM(plg.pension_employer) FROM  payroll_logs plg WHERE plg.empID = e.emp_id and e.emp_id = '" . $empID . "' and plg.payroll_date BETWEEN e.hire_date and '" . $payroll_month_end . "' ) as pension_employer_todate,
     pl.*
-    FROM payroll_logs pl, employee e, department d, position p, bank bn, pension_fund pf, branch br  WHERE e.emp_id = pl.empID AND pl.branch = br.id AND pl.bank = bn.id AND pl.pension_fund = pf.id AND e.position = p.id AND d.id = e.department AND pl.payroll_date LIKE '%" . $payroll_month . "%' and pl.empID = '" . $empID . "'";
+    FROM payroll_logs pl, employee e, department d, position p, bank bn, pension_fund pf, branch br 
+     WHERE e.emp_id = pl.empID AND pl.branch = br.id AND pl.bank = bn.id AND pl.pension_fund = pf.id 
+     AND e.position = p.id AND d.id = e.department AND pl.payroll_date LIKE '%" . $payroll_month . "%' and pl.empID = '" . $empID . "'";
 
         return DB::select(DB::raw($query));
     }

@@ -140,15 +140,13 @@
         <div class="card border-top   rounded-0 ">
           <div class="card-head p-2">
             <h2 class="text-warning">List of Positions   </h2> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            <?php if(session('mng_org') || 1){ ?>
-            {{-- <a  href="#bottom"><button type="button"  class="btn btn-main float-end">ADD POSITION</button></a> --}}
-            <?php } ?>
+         
             <div class="clearfix"></div>
           </div>
           <div class="card-body">
              <?php //echo $this->session->flashdata("note");  ?>
              <div id="feedBackTable"></div>
-                         @can('view-positions')
+                         {{-- @can('view-positions') --}}
 
             <table id="datatable" class="table table-striped table-bordered datatable-basic">
               <thead>
@@ -196,7 +194,7 @@
                   <?php } //} ?>
               </tbody>
             </table>
-            @endcan
+            {{-- @endcan --}}
           </div>
         </div>
       </div>

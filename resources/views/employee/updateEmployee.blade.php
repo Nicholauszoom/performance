@@ -477,7 +477,7 @@
         <div class="row">
 
 
-            {{-- <div class="col-lg-4">
+            <div class="col-lg-4">
                 <div class="mb-3">
                     <form id="updateDeptPos">
                         <div id="feedBackDeptPos"></div>
@@ -495,7 +495,12 @@
                         <select required id='department' name="department" class="select3_single form-control select">
                             <option> Select Department </option>
                             <?php foreach ($ddrop as $row){ ?>
+                                @if ($row->name == $department)
+                                <option selected value="<?php echo $row->id; ?>"><?php echo $row->name; ?></option>
+                            @else
                             <option value="<?php echo $row->id; ?>"><?php echo $row->name; ?></option>
+
+                                @endif
                             <?php } ?>
                         </select>
 
@@ -511,7 +516,7 @@
                         <button <?php if($positionTransfer>0 || $departmentTransfer>0){ ?>disabled <?php } ?> class="btn btn-main mt-2">UPDATE</button>
                     </form>
                 </div>
-            </div> --}}
+            </div>
 
 
         </div>
