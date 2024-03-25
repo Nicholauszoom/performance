@@ -889,7 +889,6 @@ class ReportController extends Controller
 
                 //return view('payroll.payslip_details_pdf', $data);
                 // $pdf = Pdf::loadView('payroll.payslip', $data)->setPaper('a4', 'potrait');
-                dd("hhhhhh");
 
                 $pdf = Pdf::loadView('payroll.payslip_details_pdf', $data)->setPaper('a4', 'potrait');
 
