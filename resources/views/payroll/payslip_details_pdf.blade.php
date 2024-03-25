@@ -134,8 +134,10 @@
             $hiredate = $row->hire_date;
             $payroll_month = $row->payroll_date;
             $pension_employee = $row->pension_employee / $row->rate;
+            $nhif_deductions = $row->nhif;
             $meals = $row->meals / $row->rate;
             $taxdue = $row->taxdue / $row->rate;
+            $show_nhif = false;
         }
         
         foreach ($companyinfo as $row) {
@@ -370,6 +372,13 @@
                                 <span class="text-muted">NSSF</span>
                                 <span class="font-weight-bold"> {{ number_format($pension_employee, 2) }} </span>
                             </li>
+                            @if ($show_nhif)
+                            <li class="list-group-item d-flex">
+                                <span class="text-muted">NHIF</span>
+                                <span class="font-weight-bold"> {{ number_format($nhif_deductions, 2) }} </span>
+                            </li>
+                            @endif
+                           
                             @foreach ($deductions as $row)
                                 <li class="list-group-item d-flex">
                                     <span class="text-muted">{{ $row->description }}</span>
