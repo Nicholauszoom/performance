@@ -880,24 +880,33 @@ class FlexPerformanceModel extends Model
     }
 
     public function newDepartmentTransfer($id)
-    {
+{
+    $row = DB::table('department')
+        ->select('name')
+        ->where('id', $id)
+        ->first();
 
-        $query = "name WHERE id = '" . $id . "' ";
-        $row = DB::table('department')
-            ->select(DB::raw($query))
-            ->first();
+    if ($row) {
         return $row->name;
+    } else {
+        return 'Department not found'; // Or handle the case when department is not found
     }
+}
 
-    public function newPositionTransfer($id)
-    {
+public function newPositionTransfer($id)
+{
+    $row = DB::table('position')
+        ->select('name')
+        ->where('id', $id)
+        ->first();
 
-        $query = "name WHERE id = '" . $id . "'";
-        $row = DB::table('position')
-            ->select(DB::raw($query))
-            ->first();
+    if ($row) {
         return $row->name;
+    } else {
+        return 'Position not found'; // Or handle the case when position is not found
     }
+}
+
 
     public function newBranchTransfer($id)
     {

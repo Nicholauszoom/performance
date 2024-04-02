@@ -3768,21 +3768,13 @@ class GeneralController extends Controller
         // if (session('mng_emp') || session('vw_emp') || session('appr_emp') || session('mng_roles_grp')) {
         $data['transfers'] = $this->flexperformance_model->employeeTransfers();
 
-        // dd($data['transfers']);
+        $data['flexperformance_model'] =  $this->flexperformance_model;
+
         $data['title'] = "Transfers";
 
         $data['level_check']  = SysHelpers::approvalCheck("Employee Approval");
 
-        // dd($data['level_check']);
-
-        // dd($data);
-
-
-
         return view('app.transfer', $data);
-        // } else {
-        //     echo 'Unauthorized Access';
-        // }
     }
 
     // ###################LEAVE######################################
