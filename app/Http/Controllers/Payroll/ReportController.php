@@ -3616,7 +3616,20 @@ public function processOneEmployee($employee, $request, $nature){
 
         $employee->nature = $nature;
 
-        $employee->days_entitled = $this->attendance_model->days_entilted($nature);
+        // $employee->days_entitled = $this->attendance_model->days_entilted($nature);
+
+        if ($employee->leave_effective_date) {
+            if (date('Y-m-d') <= $employee->leave_effective_date) {
+                // If the current date is before or equal to the leave effective date
+                $employee->days_entitled = $employee->old_leave_days_entitled;
+            } else {
+                $employee->days_entitled = $employee->leave_days_entitled;
+            }
+        } else {
+            // If leave_effective_date is null
+            $employee->days_entitled = $employee->leave_days_entitled;
+        }
+
 
 
         $employee->days_spent = $this->attendance_model->days_spent3($employee->emp_id, $employee->hire_date, $request->duration, $nature);
@@ -3694,7 +3707,7 @@ public function processOneEmployee($employee, $request, $nature){
         if ($request->type == 1) {
 
             $pdf = Pdf::loadView('reports.leave_application', $data)->setPaper('a4', 'landscape');
-            return $pdf->download('Leave_apprication_report' . $request->duration . '.pdf');
+            return $pdf->download('Leave_apprilation_report' . $request->duration . '.pdf');
         } else {
 
             return view('reports.leave_application_datatable', $data);

@@ -165,6 +165,7 @@ class AttendanceController extends Controller
         $empID = Auth::user()->emp_id;
         $leaveforfeitings = LeaveForfeiting::all();
         $data['leaveForfeiting'] = LeaveForfeiting::all();
+        $data['employees'] = Employee::where('state', 1)->get();
 
         $today = date('Y-m-d');
         $arryear = explode('-', $today);
@@ -304,10 +305,10 @@ class AttendanceController extends Controller
     // For My Leaves
     public function myLeaves()
     {
-    
+
 
         $this->authenticateUser('view-leaves');
-        
+
         $data['myleave'] = Leaves::where('empID', Auth::user()->emp_id)->orderBy('id', 'desc')->get();
         $id = Auth::user()->emp_id;
         $employeee = Employee::where('emp_id', $id)->first();
@@ -367,7 +368,21 @@ class AttendanceController extends Controller
     {
 
         $data = [];
-        $data['Days Entitled'] = Employee::where('emp_id', Auth::user()->emp_id)->value('leave_days_entitled');
+        $employee = Employee::where('emp_id', Auth::user()->emp_id)->first();
+        if ($employee->leave_effective_date) {
+            if (date('Y-m-d') <= $employee->leave_effective_date) {
+                // If the current date is before or equal to the leave effective date
+                $data['Days Entitled'] = Employee::where('emp_id', Auth::user()->emp_id)->value('old_leave_days_entitled');
+            } else {
+                // If the current date is after the leave effective date
+                // You might want to handle this case differently
+                $data['Days Entitled'] = Employee::where('emp_id', Auth::user()->emp_id)->value('leave_days_entitled');
+            }
+        } else {
+            // If leave_effective_date is null
+            $data['Days Entitled'] = Employee::where('emp_id', Auth::user()->emp_id)->value('leave_days_entitled');
+        }
+
         $openingBalance = LeaveForfeiting::where('empID', Auth::user()->emp_id)->value('opening_balance');
         if ($year > date('Y')) {
             $forfeitDays = 0;
@@ -775,7 +790,7 @@ class AttendanceController extends Controller
                         $leaves->save();
                         $autheniticateduser = auth()->user()->emp_id;
                         $auditLog = SysHelpers::AuditLog(2, "Leave application  by " . $autheniticateduser, $request);
-                
+
                         $leave_type = LeaveType::where('id', $nature)->first();
                         $type_name = $leave_type->type;
 
@@ -819,7 +834,7 @@ class AttendanceController extends Controller
 
                         $leave_type = LeaveType::where('id', $nature)->first();
                         $type_name = $leave_type->type;
-                        $msg = "Sorry, You have Insufficient " . $type_name . " Leave Days Balance1";
+                        $msg = "Sorry, You have Insufficient " . $type_name . " Leave Days Balance";
 
                         return $url->with('msg', $msg);
                     }
@@ -972,7 +987,7 @@ class AttendanceController extends Controller
                         $leaves->save();
                         $autheniticateduser = auth()->user()->emp_id;
                         $auditLog = SysHelpers::AuditLog(2, "Leave application  by " . $autheniticateduser, $request);
-                
+
 
                         //fetch Line manager data from employee table and send email
                         $linemanager = LeaveApproval::where('empID', $empID)->first();
@@ -1003,7 +1018,7 @@ class AttendanceController extends Controller
 
                             dd($exception->getMessage());
 
-    
+
                             $leave_type = LeaveType::where('id', $nature)->first();
                             $type_name = $leave_type->type;
                             $msg = $type_name . " Leave Request is submitted successfully But Email not sent(SMTP Problem)!";
@@ -1182,7 +1197,7 @@ class AttendanceController extends Controller
                     $autheniticateduser = auth()->user()->emp_id;
                     $auditLog = SysHelpers::AuditLog(2, "Leave application  by " . $autheniticateduser, $request);
 
-                    
+
                     $leave_type = LeaveType::where('id', $nature)->first();
                     $type_name = $leave_type->type;
 
@@ -1276,7 +1291,7 @@ class AttendanceController extends Controller
 
             $autheniticateduser = auth()->user()->emp_id;
             $auditLog = SysHelpers::AuditLog(2, "Leave aproval  by " . $autheniticateduser, $request);
-    
+
 
         } elseif ($approval->level2 == $approver) {
 
@@ -1306,7 +1321,7 @@ class AttendanceController extends Controller
             $leave->update();
             $autheniticateduser = auth()->user()->emp_id;
             $auditLog = SysHelpers::AuditLog(2, "Leave approval  by " . $autheniticateduser, $request);
-    
+
         } elseif ($approval->level3 == $approver) {
 
             // For Deligation
@@ -1330,7 +1345,7 @@ class AttendanceController extends Controller
             $autheniticateduser = auth()->user()->emp_id;
             $request = new Request();
             $auditLog = SysHelpers::AuditLog(2, "Leave approval  by " . $autheniticateduser, $request);
-    
+
         } else {
 
             $msg = 'Sorry, You are Not Authorized';
@@ -1420,7 +1435,7 @@ class AttendanceController extends Controller
         $this->authenticateUser('apply-leave');
         // echo "<p class='alert alert-success text-center'>Record Added Successifully</p>";
 
-      
+
 
         if ($request->method() == "POST") {
 
@@ -1544,7 +1559,7 @@ class AttendanceController extends Controller
                         'id' =>$leave->empID,
                         'leave_id' => $leave->id,
                         'overtime_id' => '',
-                       
+
                         ]);
 
                     Notification::route('mail', $employee_data['email'])->notify(new EmailRequests($email_data));
@@ -1673,9 +1688,9 @@ class AttendanceController extends Controller
                 'id' => $linemanager->level1,
                 'leave_id' => $particularLeave->id,
                 'overtime_id' => '',
-               
+
                 ]);
-      
+
 
             Notification::route('mail', $linemanager_data['email'])->notify(new EmailRequests($email_data));
 
@@ -1730,7 +1745,7 @@ class AttendanceController extends Controller
                     'id' => $particularLeave->empID,
                     'leave_id' => $particularLeave->id,
                     'overtime_id' => '',
-                   
+
                     ]);
             } catch (Exception $exception) {
                 $msg = " Revoke Leave Request Has been Approved Successfully But Email is not sent(SMPT problem) !";
@@ -1772,11 +1787,11 @@ class AttendanceController extends Controller
                     'id' => $particularLeave->empID,
                     'leave_id' => $particularLeave->id,
                     'overtime_id' => '',
-                   
+
                     ]);
 
                 Notification::route('mail', $emp_data->email)->notify(new EmailRequests($email_data));
-           
+
 
             } catch (Exception $exception) {
                 $msg = " Revoke Leave Request Has been Cancel Successfully But Email is not sent(SMPT problem) !";
@@ -2412,7 +2427,7 @@ class AttendanceController extends Controller
                         $leaves->save();
                         $autheniticateduser = auth()->user()->emp_id;
                         $auditLog = SysHelpers::AuditLog(2, "Leave application  by " . $autheniticateduser, $request);
-                
+
                         $leave_type = LeaveType::where('id', $nature)->first();
                         $type_name = $leave_type->type;
 
@@ -2601,7 +2616,7 @@ class AttendanceController extends Controller
                         $leaves->save();
                         $autheniticateduser = auth()->user()->emp_id;
                         $auditLog = SysHelpers::AuditLog(2, "Leave application  by " . $autheniticateduser, $request);
-                
+
 
                         //fetch Line manager data from employee table and send email
                         $linemanager = LeaveApproval::where('empID', $empID)->first();
@@ -2691,7 +2706,7 @@ class AttendanceController extends Controller
                         $leaves->save();
                         $autheniticateduser = auth()->user()->emp_id;
                         $auditLog = SysHelpers::AuditLog(2, "Leave application  by " . $autheniticateduser, $request);
-                
+
                         // dd($leaves->nature);
                         $condition = [
                             'emp_id' => $empID,
@@ -2789,7 +2804,7 @@ class AttendanceController extends Controller
                         $leaves->save();
                         $autheniticateduser = auth()->user()->emp_id;
                         $auditLog = SysHelpers::AuditLog(2, "Leave application  by " . $autheniticateduser, $request);
-                
+
                         // dd($leaves->nature);
                         $condition = [
                             'emp_id' => $empID,
@@ -2996,7 +3011,7 @@ class AttendanceController extends Controller
                 $leaves->save();
                 $autheniticateduser = auth()->user()->emp_id;
                 $auditLog = SysHelpers::AuditLog(2, "Leave application  by " . $autheniticateduser, $request);
-        
+
                 $leave_type = LeaveType::where('id', $nature)->first();
                 $type_name = $leave_type->type;
 
@@ -3165,7 +3180,7 @@ class AttendanceController extends Controller
 
             $autheniticateduser = auth()->user()->emp_id;
             $auditLog = SysHelpers::AuditLog(2, "Leave application  by " . $autheniticateduser, $request);
-    
+
 
             $condition = [
                 'emp_id' => $empID,
@@ -3252,7 +3267,7 @@ class AttendanceController extends Controller
             $autheniticateduser = auth()->user()->emp_id;
             $auditLog = SysHelpers::AuditLog(2, "Leave application  by " . $autheniticateduser, $request);
 
-            
+
             $condition = [
                 'emp_id' => $empID,
                 'appliedBy' => Auth::user()->emp_id,

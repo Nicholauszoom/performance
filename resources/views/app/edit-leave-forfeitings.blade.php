@@ -48,7 +48,7 @@
                     <div class="form-group col-6">
                         <label class="form-label">Leave Entitled:</label>
                         <div class="form-control-feedback form-control-feedback-start">
-                            <input type="text" name="leave_days_entitled" value="{{ $leaveForfeitings->employee->leave_days_entitled }}" class="form-control" disabled />
+                            <input type="text" name="leave_days_entitled" value="{{ $Days_Entitled }}" class="form-control" disabled />
                         </div>
                     </div>
                     <div class="form-group col-6">

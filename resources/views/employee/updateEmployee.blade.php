@@ -670,14 +670,14 @@
                                 <option {{ $bankName == $row->name ? 'selected' : '' }} value="{{ $row->id }}">{{ $row->name }}</option>
                             @endforeach
                         </select>
-                        
+
 
                         <label for="stream" class="form-label mt-2">Branch </label>
                         <span class="badge bg-info"><?php echo $bankBranch;?></span>
 
                         <select required id="bank_branch" name="bank_branch" class="select_bank_branch form-control select" tabindex="-1">
                             @foreach ($branchdrop as $row )
-                            <option {{ $bankBranch == $row->name ? 'selected' : '' }} value="{{ $row->id }}">{{ $row->name }}</option>           
+                            <option {{ $bankBranch == $row->name ? 'selected' : '' }} value="{{ $row->id }}">{{ $row->name }}</option>
                             @endforeach
 
                         </select>
