@@ -701,8 +701,12 @@ class GeneralController extends Controller
         public function myLoans(Request $request)
         {
             $empID = auth()->user()->emp_id;
+            // $data['loans'] = $this->reports_model->getALlLoanHistory($empID);
+            $data['loans'] = $this->reports_model->v_heslb2($empID);
+
+            // $data['total'] = array_reverse($this->reports_model->v_totalheslb($payrolldate,$empID));
             // For pending loans
-            $data['loans'] =Helsb::where('empID',$empID)->get();
+            //  $data['heslb'] =Helsb::where('empID',$empID)->get();
 
 
         return response( [ 'data'=>$data  ],200 );
@@ -763,6 +767,7 @@ class GeneralController extends Controller
                     $data['annualLeaveSpent'] = $this->reports_model->annualLeaveSpent($empID, $payroll_month_end);
                     $data['allowances'] = $this->reports_model->allowances($empID, $payroll_month);
                     $data['deductions'] = $this->reports_model->deductions($empID, $payroll_month);
+              
                     $data['loans'] = $this->reports_model->loans($empID, $payroll_month);
                     $data['salary_advance_loan'] = $this->reports_model->loansPolicyAmount($empID, $payroll_month);
                     $data['total_allowances'] = $this->reports_model->total_allowances($empID, $payroll_month);
@@ -778,7 +783,9 @@ class GeneralController extends Controller
                     $data['salary_advance_loan_remained'] = $this->reports_model->loansAmountRemained($empID, $payroll_date);
 
                     //
-                   
+                         $data['loans'] = $this->reports_model->loans($empID, $payroll_month);
+                      
+                         
                     foreach ($data['slipinfo'] as &$slip) {
                         $slipArray = json_decode(json_encode($slip), true);
                       
@@ -789,8 +796,12 @@ class GeneralController extends Controller
                     
                   
                         $slipArray['total_allowances'] =  $data['total_allowances'];
-                
-                    
+                        
+                        foreach($data['loans'] as $loans){
+                            array_push( $data['deductions'],$loans);
+                        }
+                       
+                     
                         $slipArray['deductions'] = $data['deductions'] ;
                     
                         $slipArray['total_deductions'] =  $data['total_deductions'];
@@ -799,6 +810,7 @@ class GeneralController extends Controller
 
                         
                     }
+                    
                     
                     $slipinfo =$data['slipinfo'];
                     $leaves = $data['leaves'];
@@ -890,6 +902,7 @@ class GeneralController extends Controller
                         $data['paid_with_arrears_d'] = $this->reports_model->employeeArrearPaidAll($payroll_emp_id->empID, $payroll_date);
                         $data['salary_advance_loan_remained'] = $this->reports_model->loansAmountRemained($payroll_emp_id->empID, $payroll_month);
                         $data_all['dat'][$payroll_emp_id->empID] = $data;
+                        $data['loans'] = $this->reports_model->loans($empID, $payroll_month);
                      
                         foreach ($data['slipinfo'] as &$slip) {
                             $slipArray = json_decode(json_encode($slip), true);
@@ -904,6 +917,10 @@ class GeneralController extends Controller
                     
                         
                             $slipArray['deductions'] = $data['deductions'] ;
+                            foreach($data['loans'] as $loans){
+                                array_push( $data['deductions'],$loans);
+                            }
+                           
                         
                             $slipArray['total_deductions'] =  $data['total_deductions'];
     

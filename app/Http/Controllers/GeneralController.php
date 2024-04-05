@@ -2303,7 +2303,7 @@ class GeneralController extends Controller
 
             $amount = $days * ($employee_data->salary / 176) * $percent;
 
-            SysHelpers::FinancialLogs($empID, $overtime_name, '0.00', number_format($amount, 2), 'Payroll Input');
+            SysHelpers::FinancialLogs($empID, $overtime_name, '0.00', number_format($amount, 2)."TZS", 'Payroll Input');
 
             echo "<p class='alert alert-success text-center'>Overtime Request saved Successifully</p>";
         } else {
@@ -2699,7 +2699,7 @@ class GeneralController extends Controller
         $result = $this->flexperformance_model->approveOvertime($overtimeID, $signatory, $time_approved);
         if ($result == true) {
 
-            SysHelpers::FinancialLogs($emp_id, $overtime_name, '0.00', number_format($overtime, 2), 'Payroll Input');
+            SysHelpers::FinancialLogs($emp_id, $overtime_name, '0.00', number_format($overtime, 2).' '."TZS", 'Payroll Input');
 
             $request = new Request();
             $autheniticateduser = auth()->user()->emp_id;
@@ -3308,7 +3308,7 @@ class GeneralController extends Controller
         $transferID = DB::table('transfer')->insertGetId($data);
 
         $this->approveDeptPosTransfer($transferID);
-        
+
 
         $oldp = $this->flexperformance_model->getAttributeName("name", "position", "id", $request->input('oldPosition'));
         $newp = $this->flexperformance_model->getAttributeName("name", "position", "id", $request->input('position'));
@@ -3768,21 +3768,13 @@ class GeneralController extends Controller
         // if (session('mng_emp') || session('vw_emp') || session('appr_emp') || session('mng_roles_grp')) {
         $data['transfers'] = $this->flexperformance_model->employeeTransfers();
 
-        // dd($data['transfers']);
+        $data['flexperformance_model'] =  $this->flexperformance_model;
+
         $data['title'] = "Transfers";
 
         $data['level_check']  = SysHelpers::approvalCheck("Employee Approval");
 
-        // dd($data['level_check']);
-
-        // dd($data);
-
-
-
         return view('app.transfer', $data);
-        // } else {
-        //     echo 'Unauthorized Access';
-        // }
     }
 
     // ###################LEAVE######################################
@@ -5022,7 +5014,7 @@ class GeneralController extends Controller
 
                     $result = $this->flexperformance_model->remove_individual_deduction($empID, $deductionID);
 
-                    $deductionName = DB::table('deduction')->select('name')->where('id', $request->input('deductionID'))->limit(1)->first();
+                    $deductionName = DB::table('deductions')->select('name')->where('id', $request->input('deductionID'))->limit(1)->first();
 
                     SysHelpers::FinancialLogs($request->input('empID'), $deductionName->name, number_format($deductionName->amount / $deductionName->rate, 2) . ' ' . $deductionName->currency, '0.00', 'Payroll Input');
 
@@ -7540,7 +7532,7 @@ class GeneralController extends Controller
 
                 SysHelpers::FinancialLogs($id, 'Add Employee', '', '', 'Employee Registration');
 
-                SysHelpers::FinancialLogs($id, 'Salary', '0.00', number_format($request->input("salary"), 2), 'Employee Registration');
+                SysHelpers::FinancialLogs($id, 'Salary', '0.00', number_format($request->input("salary"), 2).' '. $currency, 'Employee Registration');
 
                 //register employee to leave approve maping
 
@@ -8421,6 +8413,9 @@ class GeneralController extends Controller
 
     public function approveRegistration($id)
     {
+        /**
+ * @return \Illuminate\Http\RedirectResponse
+ */
         /*
          * status 7 = cancelled
          * status 6 = accepted
@@ -9132,7 +9127,7 @@ class GeneralController extends Controller
         $old->save();
         // saving new employee data
 
-        SysHelpers::FinancialLogs($id, 'Salary', number_format($empl->salary * $empl->rate, 2), number_format($request->newSalary * $empl->rate, 2), 'Salary Increment');
+        SysHelpers::FinancialLogs($id, 'Salary', number_format($empl->salary * $empl->rate, 2), number_format($request->newSalary * $empl->rate, 2).' '.$empl->currency, 'Salary Increment');
 
         // $promotion =Employee::where('emp_id',$id)->first();
         // $promotion->position=$request->newPosition;
@@ -10996,7 +10991,7 @@ class GeneralController extends Controller
 
         $childs = EmployeeDependant::where('employeeID', $empID)->count();
         $data['qualifications'] = EducationQualification::where('employeeID', $id)->get();
-        
+
         $data['photo'] = "";
 
         $data['parent'] = "Employee Profile";

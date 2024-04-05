@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
+use  App\Models\Payroll\ReportModel;
 
 use App\Models\Employee;
 use Carbon\Carbon;
@@ -2844,12 +2845,13 @@ as gross,
     {
         // dd($date);
         // $date="20-11-2023";
+    
+        $reports_model= new ReportModel();
 
         $previous_payroll_month_raw = date('Y-m', strtotime(date('d-m-Y', strtotime($date . "-1 month"))));
 
-        // dd($previous_payroll_month_raw);
 
-        $previous_payroll_month = $this->reports_model->prevPayrollMonth($previous_payroll_month_raw);
+        $previous_payroll_month = $reports_model->prevPayrollMonth($previous_payroll_month_raw);
 
         $previous_payroll_month = date('Y-m-d', strtotime($previous_payroll_month));
 
@@ -3035,7 +3037,7 @@ as gross,
     }
     public function deleteArrears($date)
     {
-        DB::table('allowance_logs')->where('payroll_date', $date)->delete();
+        DB::table('allowance_logs')->where('payment_date', $date)->delete();
         DB::table('employee_activity_grant_logs')->where('payroll_date', $date)->delete();
         DB::table('arrears_logs')->where('payroll_date', $date)->delete();
         return true;
