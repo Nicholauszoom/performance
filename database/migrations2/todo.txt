@@ -1,0 +1,26 @@
+php artisan migrate --path=Module/FlexPerformance/database/migrations3/2023_11_13_171456_create_allowance_categories_table.php
+php artisan migrate --path=Module/FlexPerformance/database/migrations2/2023_09_09_193047_add_nightshift_allowance_to_terminations_table.php
+php artisan migrate --path=Modules/FlexPerformance/database/migrations2/2023_09_09_193047_add_nightshift_allowance_to_terminations_table.php
+php artisan migrate --path=Modules/FlexPerformance/database/migrations2/2023_09_09_193028_add_transport_allowance_to_terminations_table.php
+php artisan migrate --path=Modules/FlexPerformance/database/migrations2/2023_10_25_074839_add_gross_new.php
+php artisan migrate --path=Modules/FlexPerformance/database/migrations3/2023_11_13_134905_create_leave_forfeitings_table.php2023_10_25_074839_add_gross_new.php
+
+
+php artisan migrate --path=Modules/FlexPerformance/database/migrations3/2023_11_28_091012_changecolumntotablecontract.php
+php artisan migrate --path=Modules/FlexPerformance/database/migrations3/2023_11_23_115147_create_country_codes_table.php
+php artisan migrate --path=Modules/FlexPerformance/database/migrations3/2024_01_11_131357_add_missing_columns_to_table_country.php
+
+
+
+php artisan migrate --path=Modules/FlexPerformance/database/migrations3/2024_01_15_081105_add_new_column_to_employee_table.php
+php artisan migrate --path=Modules/FlexPerformance/database/migrations3/2024_01_16_122839_add_approval_status_to_terminations.php
+php artisan migrate --path=Modules/FlexPerformance/database/migrations3/2024_01_17_063147_create_payroll_approvals_table.php
+php artisan migrate --path=Modules/FlexPerformance/database/migrations3/2024_01_17_073813_add_approval_status_to_payroll_months.php
+php artisan migrate --path=Module/FlexPerformance/database/migrations3/2024_01_19_062053_add_approval_status_to_loan_applications.php
+php artisan migrate --path=Module/FlexPerformance/database/migrations3/2024_01_29_101754_add_approval_status_to_promotions_table.php
+php artisan migrate --path=Module/FlexPerformance/database/migrations3/2024_01_30_064046_add_allowed_domain_to_brand_settings_table.php
+
+
+
+
+php artisan migrate --path=Module/FlexPerformance/database/migrations/2024_01_08_071647_add_columns_to_brand_settings_table.php
