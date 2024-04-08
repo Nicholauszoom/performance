@@ -3552,6 +3552,9 @@ public function processOneEmployee($employee, $request, $nature){
             $other =  'Position : ' . $data['position_name'];
         $january = $calender[0] . '-01-01';
 
+
+
+
         $data['excelTitle'] = $leave_name . ' Leave Report | ' . $other . ' | Date : From ' . date('d-M-Y', strtotime($january)) . ' To ' . date('d-M-Y', strtotime($data['date']));
         if ($request->type == 1) {
             if ($nature == 1) {

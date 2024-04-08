@@ -200,7 +200,10 @@
                             <td><?php echo number_format($employee->opening_balance*0, 2); ?></td>
                             {{-- <td><?php echo number_format($employee->accrual_amount*0, 2); ?></td>
                             <td><?php echo number_format($employee->accrual_amount * $employee->opening_balance, 2); ?></td> --}}
-                            @if($nature == 1)<td><?php echo number_format($employee->accrual_days*0, 2); ?></td> @endif
+                            @if($nature == 1)<td>
+                                <?php echo number_format($employee->accrual_days*0, 2); ?></td>
+                                <?php echo number_format($employee->accrual_rate*0, 2); ?></td>
+                            @endif
                             <td><?php echo number_format(($employee->days_spent*0)) ?></td>
                             <td><?php echo number_format($employee->current_balance*0, 2); ?></td>
                             @if($nature == 1)   <td><?php echo number_format($employee->current_balance * $employee->accrual_amount*0, 2); ?></td> @endif
