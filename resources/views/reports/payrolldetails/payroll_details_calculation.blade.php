@@ -113,7 +113,7 @@
                         foreach ($summary as $row) {
 
                             $i++;
-                            $amount = $row->salary + $row->allowances - $row->pension_employer - $row->loans - $row->deductions - $row->taxdue;
+                            $amount = $row->salary + $row->allowances - $row->pension_employer - $row->loans - $row->deductions - $row->taxdue-$row->nhif;
                             $total_netpay +=  round($amount, 2);
 
                             $total_gross_salary += round(($row->salary + $row->allowances), 2);
@@ -217,7 +217,7 @@
                                 <td class=" {{ $totalDeduction_col }} text-end">
 
 
-                                    {{ number_format($row->salary + $row->allowances - $amount, 2) }}
+                                    {{ number_format($row->salary + $row->allowances - $amount-$row->nhif, 2) }}
                                 </td>
                                 <td class=" {{ $amountPayable_col }} text-end">{{ number_format($amount, 2) }}</td>
 
