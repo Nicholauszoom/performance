@@ -15,6 +15,7 @@ return new class extends Migration
     {
         Schema::table('employee', function (Blueprint $table) {
             $table->string('old_leave_days_entitled')->nullable();
+            $table->string('old_accrual_rate')->nullable();
             $table->string('leave_effective_date')->nullable();
         });
     }

@@ -3572,9 +3572,9 @@ public function processOneEmployee($employee, $request, $nature){
 
     public function gettingEmployeeAnnualLeavesReport($employee, $request, $nature)
     {
-        $d1 = new \DateTime(date($employee->hire_date));
+        $d1 = new DateTime(date($employee->hire_date));
 
-        $d2 = new \DateTime("now");
+        $d2 = new DateTime("now");
         $diff = $d1->diff($d2);
 
 
@@ -3622,12 +3622,18 @@ public function processOneEmployee($employee, $request, $nature){
             if (date('Y-m-d') <= $employee->leave_effective_date) {
                 // If the current date is before or equal to the leave effective date
                 $employee->days_entitled = $employee->old_leave_days_entitled;
+                $employee->accrual_rate = $employee->old_accrual_rate;
+
             } else {
+                $accrual_rate = $employee->accrual_rate;
                 $employee->days_entitled = $employee->leave_days_entitled;
+                $employee->accrual_rate = $accrual_rate;
             }
         } else {
             // If leave_effective_date is null
+            $accrual_rate = $employee->accrual_rate;
             $employee->days_entitled = $employee->leave_days_entitled;
+            $employee->accrual_rate = $accrual_rate;
         }
 
 

@@ -32,12 +32,15 @@ class LeaveController extends Controller
     {
         $emp_id = $request->employee_id;
         $leave_days_entitled = $request->leave_days_entitled;
+        $new_accrual_rate = ($request->leave_days_entitled)/12;
         $effective_date = $request->effective_date;
 
         $employee = Employee::where('emp_id', $emp_id)->first();
 
         if ($employee) {
             $employee->old_leave_days_entitled =  $employee->leave_days_entitled;
+            $employee->old_accrual_rate =  $employee->accrual_rate;
+            $employee->accrual_rate =  $new_accrual_rate;
             $employee->leave_days_entitled = $leave_days_entitled;
             $employee->leave_effective_date = $effective_date;
 
