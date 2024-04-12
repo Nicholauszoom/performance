@@ -1015,7 +1015,6 @@ class AttendanceController extends Controller
 
                         } catch (Exception $exception) {
 
-                            dd($exception->getMessage());
 
 
                             $leave_type = LeaveType::where('id', $nature)->first();
