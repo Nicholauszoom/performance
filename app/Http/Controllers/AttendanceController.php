@@ -712,7 +712,6 @@ class AttendanceController extends Controller
 
             // Annual leave accurated days
             $annualleaveBalance = $this->attendance_model->getLeaveBalance(Auth::user()->emp_id, $employeeDate, date('Y-m-d'));
-            // dd($annualleaveBalance);
             // For  Requested days
             if ($nature == 1) {
                 $holidays = SysHelpers::countHolidays($start, $end);

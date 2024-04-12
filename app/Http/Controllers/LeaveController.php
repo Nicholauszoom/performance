@@ -3,8 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Employee;
-
-use Illuminate\Support\Facades\Redirect;
+use DateTime;
 
 use Illuminate\Http\Request;
 
@@ -38,6 +37,10 @@ class LeaveController extends Controller
         $employee = Employee::where('emp_id', $emp_id)->first();
 
         if ($employee) {
+
+           $earlier_days_accrued = $this->getAccrualDays($employee);
+           $employee->earlier_accrual_days = $earlier_days_accrued;
+
             $employee->old_leave_days_entitled =  $employee->leave_days_entitled;
             $employee->old_accrual_rate =  $employee->accrual_rate;
             $employee->accrual_rate =  $new_accrual_rate;
@@ -53,6 +56,51 @@ class LeaveController extends Controller
         }
     }
 
+    public function getAccrualDays($employee){
+
+
+        $today = date('Y-m-d');
+        $arryear = explode('-', $today);
+        $year = $arryear[0];
+
+        $employeeHiredate = explode('-', $employee->hire_date);
+        $employeeHireYear = $employeeHiredate[0];
+        $employeeDate = '';
+
+        if ($employeeHireYear == $year) {
+            $employeeDate = $employee->hire_date;
+
+        } else {
+            $employeeDate = $year . ('-01-01');
+        }
+
+
+        $d1 = new DateTime($employeeDate);
+
+        $d2 = new DateTime($today);
+
+        $diff = $d1->diff($d2);
+
+        $years = $diff->y;
+        $months = $diff->m;
+        $days = $diff->d;
+
+        if ($employee->leave_effective_date) {
+            if (date('Y-m-d') <= $employee->leave_effective_date) {
+                // If the current date is before or equal to the leave effective date
+                $employee->accrual_rate = $employee->old_accrual_rate;
+                $accrual_days = (($days * $employee->accrual_rate) / 30) + $months * $employee->accrual_rate + $years * 12 * $employee->accrual_rate;
+
+            } else {
+                $accrual_days = (($days * $employee->accrual_rate) / 30) + $months * $employee->accrual_rate + $years * 12 * $employee->accrual_rate;
+            }
+        } else {
+            // If leave_effective_date is null
+            $accrual_days = (($days * $employee->accrual_rate) / 30) + $months * $employee->accrual_rate + $years * 12 * $employee->accrual_rate;
+        }
+
+        return $accrual_days;
+    }
 
 
 
