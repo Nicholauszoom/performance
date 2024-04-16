@@ -43,7 +43,7 @@
 
                 Refresh the page and try again.
                 Check your internet connection.
-                If the problem persists, please contact our support team at [support@cits.co.tz] .
+                If the problem persists, please contact our support team at [support@flex.co.tz] .
                 Thank you for your understanding, and we appreciate your patience.</p>
             </div>
           </div>
