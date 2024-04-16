@@ -13,7 +13,6 @@ class LoanApplication extends Model
 
     protected $fillable = [
         'approval_status',
-
     ] ;
 
 }
