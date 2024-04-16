@@ -21,6 +21,7 @@ use App\Http\Controllers\Import\BankLoanController;
 use App\Http\Controllers\Import\ImportEmployeeController;
 use App\Http\Controllers\Import\PensionPayslipController;
 use App\Http\Controllers\ImprestController;
+use App\Http\Controllers\LeaveController;
 use App\Http\Controllers\LearningDevelopment\SkillsController;
 use App\Http\Controllers\Payroll\PayrollController;
 use App\Http\Controllers\Payroll\ReportController;
@@ -443,6 +444,8 @@ Route::middleware('verify-outgoing-requests')->group(function () {
         });
         //end routes for all users
 
+
+
         // Routes 2
         Route::prefix('flex/attendance')->middleware([WorkForce::class])->controller(AttendanceController::class)->group(function () {
 
@@ -690,7 +693,7 @@ Route::middleware('verify-outgoing-requests')->group(function () {
 
             // start of approval settings routes
             Route::any('/approvals', 'viewApprovals')->name('flex.approvals');
-            
+
             Route::post('/save-approvals', 'saveApprovals')->name('flex.saveApprovals');
             Route::post('/save-loan-type', 'saveLoanType')->name('flex.saveLoanType');
             Route::any('/edit-approval/{id}', 'editApproval')->name('flex.editApproval');
@@ -1247,6 +1250,10 @@ Route::middleware('verify-outgoing-requests')->group(function () {
         });
     });
 });
+
+Route::get('/leave_days/{emp_id}', [LeaveController::class, 'get_leave_days'])->middleware([WorkForce::class])->name('leave_days');
+Route::post('/update_leave_days', [LeaveController::class, 'update_leave_days'])->middleware([WorkForce::class])->name('update_leave_days');
+
 
 Route::post('/password-reset', [NewPasswordController::class, 'store'])->middleware('guest')->name('password.new');
 require __DIR__ . '/auth.php';

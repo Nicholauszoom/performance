@@ -57,6 +57,10 @@ class Employee extends Model
         'national_id' ,
         'tin',
         'approval_status',
+        'old_leave_days_entitled',
+        'leave_effective_date',
+        'old_accrual_rate',
+        'earlier_accrual_days'
     ];
 
     public function roles(){

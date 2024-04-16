@@ -6,8 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Annual Leave Report</title>
-    <link rel="stylesheet" href="{{ asset('assets/bootstrap/css/bootstrap.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('assets/css/report.css') }}">
+    <link rel="stylesheet" href="{{ public_path('assets/bootstrap/css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ public_path('assets/css/report.css') }}">
 
 </head>
 
@@ -19,7 +19,7 @@
 
     <main class="body-font p-1">
         <div id="logo" style="margin-left: 7px; z-index: -10">
-            <img src="{{ asset('assets/images/x-left.png') }}" width="100px;" height="50px;">
+            <img src="{{ public_path('assets/images/x-left.png') }}" width="100px;" height="50px;">
         </div>
 
         <div style="margin-top:20px;">
@@ -89,9 +89,9 @@
                             <td colspan="4" class="w-50" style="">
                                 <div class="box-text text-end">
                                     @if ($brandSetting->report_logo)
-                                    <img src="{{ asset('storage/' . $brandSetting->report_logo) }}" alt="logo here" width="180px" height="150px" class="image-fluid">          
+                                    <img src="{{ public_path('storage/' . $brandSetting->report_logo) }}" alt="logo here" width="180px" height="150px" class="image-fluid">
                                     @else
-                                    <img src="{{ public_path('assets/images/logo-dif2.png') }}" alt="logo here" width="180px" height="150px" class="image-fluid">          
+                                    <img src="{{ public_path('assets/images/logo-dif2.png') }}" alt="logo here" width="180px" height="150px" class="image-fluid">
                                     @endif
                                 </div>
                             </td>
@@ -141,8 +141,11 @@
                             <th>Opening Balance</th>
                             {{-- <th>Rate</th>
                             <th>Amount</th> --}}
-                            @if($nature == 1) <th>Accrual Rate</th> @endif
-                            <th>Used Days</th>
+                            @if($nature == 1)
+                            <th>Accrual   Days</th>
+                            <th>Accrual   Rate</th>
+                            @endif
+                            <th>Used   Days</th>
                             <th>Current Balance</th>
                           @if($nature == 1)  <th>Amount</th> @endif
                         </tr>
@@ -178,7 +181,10 @@
                             <td><?php echo number_format($employee->opening_balance < 0?0:$employee->opening_balance, 2); ?></td>
                             {{-- <td><?php echo number_format($employee->accrual_amount, 2); ?></td>
                             <td><?php echo number_format($employee->accrual_amount * $employee->opening_balance, 2); ?></td> --}}
-                            @if($nature == 1)<td><?php echo number_format($employee->accrual_days, 2); ?></td> @endif
+                            @if($nature == 1)
+                            <td><?php echo number_format($employee->accrual_days, 2); ?></td>
+                            <td><?php echo number_format($employee->accrual_rate, 2); ?></td>
+                             @endif
                             <td><?php echo number_format(($employee->opening_balance < 0?($employee->days_spent +(-1*$employee->opening_balance)):$employee->days_spent),2) ?></td>
                             <td><?php echo number_format($employee->current_balance, 2); ?></td>
                             @if($nature == 1)   <td><?php echo number_format($employee->current_balance * $employee->accrual_amount, 2); ?></td> @endif
@@ -194,7 +200,10 @@
                             <td><?php echo number_format($employee->opening_balance*0, 2); ?></td>
                             {{-- <td><?php echo number_format($employee->accrual_amount*0, 2); ?></td>
                             <td><?php echo number_format($employee->accrual_amount * $employee->opening_balance, 2); ?></td> --}}
-                            @if($nature == 1)<td><?php echo number_format($employee->accrual_days*0, 2); ?></td> @endif
+                            @if($nature == 1)<td>
+                                <?php echo number_format($employee->accrual_days*0, 2); ?></td>
+                                <?php echo number_format($employee->accrual_rate*0, 2); ?></td>
+                            @endif
                             <td><?php echo number_format(($employee->days_spent*0)) ?></td>
                             <td><?php echo number_format($employee->current_balance*0, 2); ?></td>
                             @if($nature == 1)   <td><?php echo number_format($employee->current_balance * $employee->accrual_amount*0, 2); ?></td> @endif
@@ -215,7 +224,7 @@
 
 
         <div id="logo2" style="margin-left: 7px; z-index: -10">
-            <img src="{{ asset('assets/images/x-right.png') }}" width="100px;" height="50px;">
+            <img src="{{ public_path('assets/images/x-right.png') }}" width="100px;" height="50px;">
         </div>
 
     </main>
@@ -244,8 +253,8 @@
     <script src="{{ public_path('assets/js/bootstrap/bootstrap.bundle.min.js') }}"></script>
 
 
-    <script src="{{ asset('assets/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
-    <script src="{{ asset('assets/js/jquery/jquery.min.js') }}"></script>
+    <script src="{{ public_path('assets/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+    <script src="{{ public_path('assets/js/jquery/jquery.min.js') }}"></script>
 
 </body>
 

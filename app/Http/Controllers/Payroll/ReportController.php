@@ -3552,6 +3552,9 @@ public function processOneEmployee($employee, $request, $nature){
             $other =  'Position : ' . $data['position_name'];
         $january = $calender[0] . '-01-01';
 
+
+
+
         $data['excelTitle'] = $leave_name . ' Leave Report | ' . $other . ' | Date : From ' . date('d-M-Y', strtotime($january)) . ' To ' . date('d-M-Y', strtotime($data['date']));
         if ($request->type == 1) {
             if ($nature == 1) {
@@ -3572,9 +3575,9 @@ public function processOneEmployee($employee, $request, $nature){
 
     public function gettingEmployeeAnnualLeavesReport($employee, $request, $nature)
     {
-        $d1 = new \DateTime(date($employee->hire_date));
+        $d1 = new DateTime(date($employee->hire_date));
 
-        $d2 = new \DateTime("now");
+        $d2 = new DateTime("now");
         $diff = $d1->diff($d2);
 
 
@@ -3616,7 +3619,26 @@ public function processOneEmployee($employee, $request, $nature){
 
         $employee->nature = $nature;
 
-        $employee->days_entitled = $this->attendance_model->days_entilted($nature);
+        // $employee->days_entitled = $this->attendance_model->days_entilted($nature);
+
+        if ($employee->leave_effective_date) {
+            if (date('Y-m-d') <= $employee->leave_effective_date) {
+                // If the current date is before or equal to the leave effective date
+                $employee->days_entitled = $employee->old_leave_days_entitled;
+                $employee->accrual_rate = $employee->old_accrual_rate;
+
+            } else {
+                $accrual_rate = $employee->accrual_rate;
+                $employee->days_entitled = $employee->leave_days_entitled;
+                $employee->accrual_rate = $accrual_rate;
+            }
+        } else {
+            // If leave_effective_date is null
+            $accrual_rate = $employee->accrual_rate;
+            $employee->days_entitled = $employee->leave_days_entitled;
+            $employee->accrual_rate = $accrual_rate;
+        }
+
 
 
         $employee->days_spent = $this->attendance_model->days_spent3($employee->emp_id, $employee->hire_date, $request->duration, $nature);
@@ -3694,7 +3716,7 @@ public function processOneEmployee($employee, $request, $nature){
         if ($request->type == 1) {
 
             $pdf = Pdf::loadView('reports.leave_application', $data)->setPaper('a4', 'landscape');
-            return $pdf->download('Leave_apprication_report' . $request->duration . '.pdf');
+            return $pdf->download('Leave_apprilation_report' . $request->duration . '.pdf');
         } else {
 
             return view('reports.leave_application_datatable', $data);

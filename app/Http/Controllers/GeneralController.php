@@ -11101,6 +11101,22 @@ class GeneralController extends Controller
         // dd($id);
         $data['leaveForfeitings'] = LeaveForfeiting::with('employee')->where('empID', $id)->first();
         $data['employees'] = Employee::get();
+        $employee = Employee::where('emp_id', $id)->first();
+
+        if ($employee->leave_effective_date) {
+            if (date('Y-m-d') <= $employee->leave_effective_date) {
+                // If the current date is before or equal to the leave effective date
+                $data['Days_Entitled'] = Employee::where('emp_id', Auth::user()->emp_id)->value('old_leave_days_entitled');
+            } else {
+                // If the current date is after the leave effective date
+                // You might want to handle this case differently
+                $data['Days_Entitled'] = Employee::where('emp_id', Auth::user()->emp_id)->value('leave_days_entitled');
+            }
+        } else {
+            // If leave_effective_date is null
+            $data['Days_Entitled'] = Employee::where('emp_id', Auth::user()->emp_id)->value('leave_days_entitled');
+        }
+
         $data['parent'] = 'Leave Management';
         $data['child'] = 'Edit Leave Forfeiting';
         $today = date('Y-m-d');
