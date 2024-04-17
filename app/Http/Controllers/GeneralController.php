@@ -8649,9 +8649,9 @@ class GeneralController extends Controller
         // $total_gross = 0;
         $taxable = 0;
 
-        $pension_employer = $this->flexperformance_model->get_pension_employer($salaryEnrollment, $leavePay, $arrears, $overtime_amount, $employeeID);
+        $pension_employer = $this->flexperformance_model->get_pension_employer($salaryEnrollment, $leavePay, $arrears, $overtime_amount, $employeeID, $tellerAllowance);
 
-        $pension_employee = $this->flexperformance_model->get_pension_employee($salaryEnrollment, $leavePay, $arrears, $overtime_amount, $employeeID);
+        $pension_employee = $this->flexperformance_model->get_pension_employee($salaryEnrollment, $leavePay, $arrears, $overtime_amount, $employeeID, $tellerAllowance);
 
         $total_deductions = $salaryAdvance;
         //+ $otherDeductions
@@ -8855,9 +8855,9 @@ class GeneralController extends Controller
         // $total_gross = 0;
         $taxable = 0;
 
-        $pension_employer = $this->flexperformance_model->get_pension_employer($salaryEnrollment, $serevancePay, $exgracia, $leavePay, $noticePay, $arrears, $overtime_amount, $employeeID);
+        $pension_employer = $this->flexperformance_model->get_pension_employer($salaryEnrollment, $serevancePay, $exgracia, $leavePay, $noticePay, $arrears, $overtime_amount, $employeeID, $tellerAllowance);
 
-        $pension_employee = $this->flexperformance_model->get_pension_employee($salaryEnrollment, $serevancePay, $exgracia, $leavePay, $noticePay, $arrears, $overtime_amount, $employeeID);
+        $pension_employee = $this->flexperformance_model->get_pension_employee($salaryEnrollment, $serevancePay, $exgracia, $leavePay, $noticePay, $arrears, $overtime_amount, $employeeID, $tellerAllowance);
 
         $total_deductions = $salaryAdvance;
         //+ $otherDeductions

@@ -16,20 +16,16 @@
 
     <!-- page content -->
     <div class="right_col" role="main">
-        <div class="">
+        <div class="row">
 
-
-            <div class="clearfix"></div>
-
-            <div class="row">
-                <!--MY APPLICATIONS -->
-
-
-
+            @can('add-loan')
+                <?php if(session('recom_paym') || 1 ||  session('appr_paym')){ ?>
                 <div class="col-md-12 col-sm-12 col-xs-12">
                     <div class="card border-top  border-top-width-3 border-top-main rounded-0">
-                        <div class="card-head px-3 py-1">
-                            <h2>My Loans
+                        <div class="card-head px-2">
+                            <h2>Loans Aplication/Assignment(To Be Responded)
+
+
                             </h2>
 
                             <ul class="nav navbar-right panel_toolbox">
@@ -51,6 +47,8 @@
                                 <thead>
                                     <tr>
                                         <th>S/N</th>
+                                        <th>Name</th>
+                                        <th>Position</th>
                                         <th>Type</th>
                                         <th>Amount</th>
                                         <th>Application Date</th>
@@ -59,124 +57,8 @@
                                         <th>Remarks</th>
                                     </tr>
                                 </thead>
-
-
                                 <tbody>
-                                    <?php
-                          foreach ($myloan as $row) { ?>
-                                    <tr id="domain<?php echo $row->id; ?>">
-                                        <td width="1px"><?php echo $row->SNo; ?></td>
-                                        <td><?php echo $row->TYPE; ?></td>
-                                        <td><?php echo $row->amount; ?></td>
-                                        <td><?php $datewell = explode('-', $row->application_date);
-                                        //   $mm = $datewell[1];
-                                        //   $dd = $datewell[2];
-                                        //   $yyyy = $datewell[0];
-                                        //   $clear_date = $dd."-".$mm."-".$yyyy;
-                                        
-                                        echo $row->application_date;
-                                        //echo $clear_date;
-                                        ?>
-                                        </td>
-                                        <td>
-                                            <div id ="status<?php echo $row->id; ?>">
-                                                <?php if ($row->status==0){ ?>
-                                                <div class="col-md-12">
-                                                    <span class="label label-default">SENT</span>
-                                                </div><?php }
-                                    elseif($row->status==1){?>
-                                                <div class="col-md-12">
-                                                    <span class="label label-info">RECOMMENDED</span>
-                                                </div><?php }
-                                    elseif($row->status==2){  ?>
-                                                <div class="col-md-12">
-                                                    <span class="label label-success">APPROVED</span>
-                                                </div><?php }
-                                    elseif($row->status==3){?>
-                                                <div class="col-md-12">
-                                                    <span class="label label-warning">HELD</span>
-                                                </div><?php }
-                                    elseif($row->status==5){?>
-                                                <div class="col-md-12">
-                                                    <span class="label label-danger">DISAPPROVED</span>
-                                                </div><?php }  ?>
-                                            </div>
-                                        </td>
-
-                                        <td>
-
-                                            <?php   if($row->status==0 || $row->status==3){ ?>
-
-                                            <a href="javascript:void(0)" onclick="cancelLoan(<?php echo $row->id; ?>)">
-                                                <button class="btn btn-warning btn-xs">CANCEL</button></a>
-                                            <?php }  ?>
-
-                                            <a href="<?php echo url(''); ?>/flex/updateloan/{{ $row->id }}"
-                                                title="Info and Details" class="icon-2 info-tooltip"><button type="button"
-                                                    class="btn btn-main btn-xs"><i class="ph-info"></i> | <i
-                                                        class="ph-pencil"></i></button> </a>
-
-                                        </td>
-
-                                        <td>
-                                            <?php echo '<b>HR: </b>' . $row->reason_hr . '<br><b>Finance: </b>' . $row->reason_finance; ?>
-
-                                        </td>
-                                    </tr>
-                                    <?php }?>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-
-
-                <!--END MY APPLICATION-->
-
-                {{-- start of other loans application --}}
-
-                @can('add-loan')
-                    <?php if(session('recom_paym') || 1 ||  session('appr_paym')){ ?>
-                    <div class="col-md-12 col-sm-12 col-xs-12">
-                        <div class="card border-top  border-top-width-3 border-top-main rounded-0">
-                            <div class="card-head px-2">
-                                <h2>Loans Aplication/Assignment(To Be Responded)
-
-
-                                </h2>
-
-                                <ul class="nav navbar-right panel_toolbox">
-                                    <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
-                                    </li>
-                                    <li><a class="close-link"><i class="fa fa-close"></i></a>
-                                    </li>
-                                </ul>
-
-                                <div class="clearfix"></div>
-                            </div>
-                            <div class="card-body">
-                                <div id="resultfeed"></div>
-                                <div id="resultfeedCancel"></div>
-                                @if (Session::has('note'))
-                                    {{ session('note') }}
-                                @endif
-                                <table id="datatable" class="table table-striped table-bordered">
-                                    <thead>
-                                        <tr>
-                                            <th>S/N</th>
-                                            <th>Name</th>
-                                            <th>Position</th>
-                                            <th>Type</th>
-                                            <th>Amount</th>
-                                            <th>Application Date</th>
-                                            <th>Status</th>
-                                            <th>Option</th>
-                                            <th>Remarks</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                      @if ($otherloan)
-                                        
+                                    @if ($otherloan)
                                         <?php
                           foreach ($otherloan as $row) { ?>
                                         <?php if ($row->status == 2) {
@@ -221,7 +103,7 @@
 
                                             <!--Line Manager and HR -->
                                             <td>
-{{-- {{dd($level_check  ,  $row->approval_status)}} --}}
+                                                {{-- {{dd($level_check  ,  $row->approval_status)}} --}}
                                                 <a href="{{ url('/flex/updateloan', ['id' => $row->id]) }}"
                                                     title="Info and Details" class="icon-2 info-tooltip">
                                                     <button type="button" class="btn btn-main btn-xs">
@@ -229,15 +111,15 @@
                                                     </button>
                                                 </a>
                                                 @if ($level_check == $row->approval_status)
-                                                <a href="javascript:void(0)" onclick="approveLoan({{ $row->id }})">
-                                                  <button class="btn btn-main"><i class="ph-check"></i></button>
-                                              </a>
-                                                  @endif
+                                                    <a href="javascript:void(0)" onclick="approveLoan({{ $row->id }})">
+                                                        <button class="btn btn-main"><i class="ph-check"></i></button>
+                                                    </a>
+                                                @endif
 
                                                 {{-- @if ($level_check == $row->approval_status) --}}
-                                                    <a href="javascript:void(0)">
+                                                <a href="javascript:void(0)">
                                                     <?php }  ?>
-                                                {{-- @endif --}}
+                                                    {{-- @endif --}}
 
                                             </td>
 
@@ -246,134 +128,135 @@
                                                 <?php echo '<b>HR: </b>' . $row->reason_hr . '<br><b>Finance: </b>' . $row->reason_finance; ?>
                                                 <a href="{{ url('/flex/loan_application_info', ['id' => $row->id]) }}">
                                                     <br>
-                                                    <button type="submit" name="go" class="btn btn-main btn-xs">Add Remark</button></a> <?php //}
+                                                    <button type="submit" name="go" class="btn btn-main btn-xs">Add
+                                                        Remark</button></a> <?php //}
                                                         ?>
                                             </td>
                                         </tr>
                                         <?php ?>
-                                        @endif
+                                    @endif
 
-                                    </tbody>
-                                </table>
-                            </div>
+                                </tbody>
+                            </table>
                         </div>
                     </div>
-                    <?php }?>
-                    <!--END SALARY ADVANCES TO BE PROVED/RECOMMENDED-->
+                </div>
+                <?php }?>
+                <!--END SALARY ADVANCES TO BE PROVED/RECOMMENDED-->
 
 
-                    <!--APPLY SALARY ADVANCE-->
+                <!--APPLY SALARY ADVANCE-->
 
 
-                    <!--END APPLY SALARY ADVANCE-->
+                <!--END APPLY SALARY ADVANCE-->
 
 
 
-                    <!--INSERT DIRECT LOAN-->
-                    <?php if(session('mng_emp') || 1){ ?>
-                    <div id="insertDirectForm" class="col-md-12 col-sm-12 col-xs-12 mx-auto">
+                <!--INSERT DIRECT LOAN-->
+                <?php if(session('mng_emp') || 1){ ?>
+                <div id="insertDirectForm" class="col-md-12 col-sm-12 col-xs-12 mx-auto">
 
-                        <div class="card border-top  border-top-width-3 border-top-main rounded-0">
-                            <div class="card-head px-3 py-2">
-                                <h2><i class="fa fa-tasks"></i> Insert Direct Deduction (HESLB, Custom Deductions, etc..)</h2>
-                                <ul class="nav navbar-right panel_toolbox">
-                                    <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
-                                    </li>
-                                    <li><a class="close-link"><i class="fa fa-close"></i></a>
-                                    </li>
-                                </ul>
-                                <div class="clearfix"></div>
-                            </div>
-                            <div class="card-body">
-                                <div id ="resultfeedSubmissionDirect"></div>
-                                <form id="directLoan" autocomplete="off" method="post" data-parsley-validate
-                                    class="form-horizontal form-label-left">
-                                    <div class="row">
-                                        <!-- START -->
-                                        <div class="form-group col-12 mb-3">
-                                            <label class="control-label col-md-3  col-xs-6">Employee</label>
-                                            <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12">
-                                                <select name="employee" class="form-control select" required>
+                    <div class="card border-top  border-top-width-3 border-top-main rounded-0">
+                        <div class="card-head px-3 py-2">
+                            <h2><i class="fa fa-tasks"></i> Insert Direct Deduction (HESLB, Custom Deductions, etc..)</h2>
+                            <ul class="nav navbar-right panel_toolbox">
+                                <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                                </li>
+                                <li><a class="close-link"><i class="fa fa-close"></i></a>
+                                </li>
+                            </ul>
+                            <div class="clearfix"></div>
+                        </div>
+                        <div class="card-body">
+                            <div id ="resultfeedSubmissionDirect"></div>
+                            <form id="directLoan" autocomplete="off" method="post" data-parsley-validate
+                                class="form-horizontal form-label-left">
+                                <div class="row">
+                                    <!-- START -->
+                                    <div class="form-group col-12 mb-3">
+                                        <label class="control-label col-md-3  col-xs-6">Employee</label>
+                                        <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12">
+                                            <select name="employee" class="form-control select" required>
 
-                                                    <?php
+                                                <?php
                               foreach ($employee as $row) {
                                  # code... ?>
-                                                    <option value="<?php echo $row->empID; ?>"><?php echo $row->NAME; ?></option>
-                                                    <?php } ?>
-                                                </select>
-                                            </div>
-                                        </div>
-
-                                        <div class="form-group col-6 mb-3">
-                                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name"
-                                                for="stream">Type</label>
-                                            <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12">
-                                                <select name="type" class="select_type form-control" required
-                                                    tabindex="-1" id="type">
-                                                    <option value="">Select Loan</option>
-                                                    <option value=1>Other Company Debt</option>
-                                                    <option value=2>HESLB</option>
-                                                </select>
-                                            </div>
-                                        </div>
-
-
-                                        <div class="form-group col-6 mb-3">
-                                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">Amount
-                                            </label>
-                                            <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12">
-                                                <input required="required" type="number" min="1" max="100000001"
-                                                    step="0.01" name="amount" placeholder="Amount"
-                                                    class="form-control col-md-7 col-xs-12">
-                                            </div>
-                                        </div>
-                                        <div class="form-group col-6 mb-3" id="index_no">
-                                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">Form Four
-                                                Index No.
-                                            </label>
-                                            <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12">
-                                                <input type="text" id="index_nof" required min="1" max="100000001"
-                                                    placeholder="Form Four Index Number" name="index_no"
-                                                    class="form-control col-md-7 col-xs-12">
-                                            </div>
-                                        </div>
-                                        <div class="form-group col-6 mb-3" id="deduction">
-                                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">Deduction
-                                                Per Month
-                                            </label>
-                                            <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12">
-                                                <input required type="number" id="deductionf" min="1"
-                                                    max="100000001" name="deduction" placeholder="Deduction Per Month"
-                                                    class="form-control col-md-7 col-xs-12">
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">Other
-                                                Remarks
-                                            </label>
-                                            <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12">
-                                                <textarea maxlength="256" class="form-control col-md-7 col-xs-12" name="reason" placeholder="Reason(Optional)"
-                                                    rows="3"></textarea>
-                                                <span class="text-danger"></span>
-                                            </div>
-                                        </div>
-                                        <!-- END -->
-                                    </div>
-                                    <div class="form-group py-2">
-                                        <div class="col-md-12 col-sm-12 col-xs-12 ">
-                                            <button class="btn btn-main float-end">Insert</button>
+                                                <option value="<?php echo $row->empID; ?>"><?php echo $row->NAME; ?></option>
+                                                <?php } ?>
+                                            </select>
                                         </div>
                                     </div>
-                                </form>
 
-                            </div>
+                                    <div class="form-group col-6 mb-3">
+                                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name"
+                                            for="stream">Type</label>
+                                        <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12">
+                                            <select name="type" class="select_type form-control" required tabindex="-1"
+                                                id="type">
+                                                <option value="">Select Loan</option>
+                                                <option value=1>Other Company Debt</option>
+                                                <option value=2>HESLB</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+
+                                    <div class="form-group col-6 mb-3">
+                                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">Amount
+                                        </label>
+                                        <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12">
+                                            <input required="required" type="number" min="1" max="100000001"
+                                                step="0.01" name="amount" placeholder="Amount"
+                                                class="form-control col-md-7 col-xs-12">
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-6 mb-3" id="index_no">
+                                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">Form Four
+                                            Index No.
+                                        </label>
+                                        <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12">
+                                            <input type="text" id="index_nof" required min="1" max="100000001"
+                                                placeholder="Form Four Index Number" name="index_no"
+                                                class="form-control col-md-7 col-xs-12">
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-6 mb-3" id="deduction">
+                                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">Deduction
+                                            Per Month
+                                        </label>
+                                        <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12">
+                                            <input required type="number" id="deductionf" min="1" max="100000001"
+                                                name="deduction" placeholder="Deduction Per Month"
+                                                class="form-control col-md-7 col-xs-12">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">Other
+                                            Remarks
+                                        </label>
+                                        <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12">
+                                            <textarea maxlength="256" class="form-control col-md-7 col-xs-12" name="reason" placeholder="Reason(Optional)"
+                                                rows="3"></textarea>
+                                            <span class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                    <!-- END -->
+                                </div>
+                                <div class="form-group py-2">
+                                    <div class="col-md-12 col-sm-12 col-xs-12 ">
+                                        <button class="btn btn-main float-end">Insert</button>
+                                    </div>
+                                </div>
+                            </form>
+
                         </div>
                     </div>
+                </div>
 
-                    <?php } ?>
-                @endcan
-            </div>
+                <?php } ?>
+            @endcan
         </div>
+    </div>
     </div>
 
 
