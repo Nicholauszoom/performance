@@ -1779,11 +1779,11 @@ public function newPositionTransfer($id)
 
         return $total_amount;
     }
-    public function get_pension_employee($salaryEnrollment, $serevancePay, $exgracia, $leavePay, $noticePay, $arrears, $overtime_amount, $emp_id)
+    public function get_pension_employee($salaryEnrollment, $serevancePay, $exgracia, $leavePay, $noticePay, $arrears, $overtime_amount, $emp_id, $tellerAllowance)
     {
 
         //$pesionable_amount =  $this->get_pensionable_allowance($emp_id);
-        $total_amount = $salaryEnrollment + $leavePay + $arrears + $overtime_amount + $serevancePay + $exgracia + $noticePay;
+        $total_amount = $salaryEnrollment + $leavePay + $arrears + $overtime_amount + $serevancePay + $exgracia + $noticePay+$tellerAllowance;
         // + $pesionable_amount;
 
         $query = "SELECT pf.amount_employee FROM employee e,pension_fund pf where e.pension_fund = pf.id AND  e.emp_id =" . $emp_id . " ";
@@ -1793,11 +1793,11 @@ public function newPositionTransfer($id)
         return $total_amount * $rate;
     }
 
-    public function get_pension_employer($salaryEnrollment, $serevancePay, $exgracia, $leavePay, $noticePay, $arrears, $overtime_amount, $emp_id)
+    public function get_pension_employer($salaryEnrollment, $serevancePay, $exgracia, $leavePay, $noticePay, $arrears, $overtime_amount,$emp_id, $tellerAllowance)
     {
 
         //$pesionable_amount =  $this->get_pensionable_allowance($emp_id);
-        $total_amount = $salaryEnrollment + $leavePay + $arrears + $overtime_amount + $serevancePay + $exgracia + $noticePay;
+        $total_amount = $salaryEnrollment + $leavePay + $arrears + $overtime_amount + $serevancePay + $exgracia + $noticePay +$tellerAllowance;
 
         //+ $pesionable_amount;
 
