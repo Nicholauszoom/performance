@@ -272,7 +272,7 @@
                             @endforeach
 
                             <td classs="text-end">
-                                {{ number_format($row2->leavePay + $row2->leaveAllowance+$row2->transport_allowance+$row2->nightshift_allowance + $row2->longServing + $row2->exgracia+ $row2->serevancePay+$row2->noticePay, 2) }}
+                                {{ number_format($row2->leavePay + $row2->leaveAllowance+$row2->transport_allowance+$row2->nightshift_allowance + $row2->longServing + $row2->exgracia+ $row2->serevancePay+$row2->noticePay + $row2->tellerAllowance, 2) }}
                             </td>
                             @php $gros = $row2->salaryEnrollment + $row2->leaveAllowance + $row2->leavePay+$row2->normal_days_overtime_amount+$row2->public_overtime_amount; @endphp
                             <td class=" {{$grossSalary_col }} text-end">
@@ -318,7 +318,7 @@
                         $total_salary += round($row2->salaryEnrollment,2);
                         $total_overtime +=round(($row2->normal_days_overtime_amount+$row2->public_overtime_amount),2);
 
-                        $total_others_term += round($row2->leavePay + $row2->leaveAllowance+$row2->transport_allowance+$row2->nightshift_allowance + $row2->longServing + $row2->exgracia+ $row2->serevancePay+$row2->noticePay + $row2->tellerAllowance ,2);
+                        $total_others_term += round($row2->leavePay + $row2->leaveAllowance+$row2->transport_allowance+$row2->nightshift_allowance + $row2->longServing + $row2->exgracia+ $row2->serevancePay+$row2->noticePay+$row2->tellerAllowance,2);
                         $total_taxable_amount += round($row2->taxable,2);
                         $total_taxs += round($row2->paye,2);
                         //$total_netpay += ($row2->taxable -$row2->paye);
