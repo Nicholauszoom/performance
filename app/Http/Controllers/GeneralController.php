@@ -5811,12 +5811,12 @@ class GeneralController extends Controller
 
                         foreach ($allowances as $row) {
                             if ($row->state == 1) {
-                                SysHelpers::FinancialLogs($row->empID, $row->name, '0', ($row->amount != 0) ? number_format($row->amount, 2) . ' ' . $row->currency : $row->percent . '%', 'Payroll Input', $date);
+                                SysHelpers::FinancialLogs($row->empID, $row->name, '0.00', ($row->amount != 0) ? number_format($row->amount, 2) . ' ' . $row->currency : $row->percent . '%', 'Payroll Input', $date);
                             }
                         }
                         $deductions = $this->payroll_model->getAssignedDeduction();
                         foreach ($deductions as $row) {
-                            SysHelpers::FinancialLogs($row->empID, $row->name, '0', ($row->amount != 0) ? number_format($row->amount, 2) . ' ' . $row->currency : $row->percent . '%', 'Payroll Input', $date);
+                            SysHelpers::FinancialLogs($row->empID, $row->name, '0.00', ($row->amount != 0) ? number_format($row->amount, 2) . ' ' . $row->currency : $row->percent . '%', 'Payroll Input', $date);
                         }
                         InputSubmission::create(['empID' => auth()->user()->emp_id, 'date' => $date]);
                         echo "<p class='alert alert-success text-center'>Inputs  submitted Successfuly</p>";
@@ -9254,7 +9254,7 @@ class GeneralController extends Controller
 
         $old->save();
 
-        SysHelpers::FinancialLogs($id, 'Salary', number_format($oldSalary * $oldRate, 2), number_format($request->newSalary * $oldRate, 2), 'Salary Increment');
+        SysHelpers::FinancialLogs($id, 'Salary', number_format($oldSalary * $oldRate, 2).' '.'TZS', number_format($request->newSalary * $oldRate, 2).' '.'TZS', 'Salary Increment');
 
         $msg = "Employee Salary  Incremention has been requested successfully !";
         return redirect('flex/promotion')->with('msg', $msg);
