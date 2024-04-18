@@ -5727,6 +5727,11 @@ class GeneralController extends Controller
 
         $previous_payroll_month = $this->reports_model->prevPayrollMonth($previous_payroll_month_raw);
 
+        if(!$previous_payroll_month) {
+
+            return true;
+        }
+
         $previous_payroll_month = date('Y-m-d', strtotime($previous_payroll_month));
 
         $last_day_of_month = date('Y-m-t', strtotime($previous_payroll_month));
