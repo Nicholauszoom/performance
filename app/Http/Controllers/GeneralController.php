@@ -2301,9 +2301,9 @@ class GeneralController extends Controller
             $auditLog = SysHelpers::AuditLog(1, "Overtime on behalf applied  by " . $autheniticateduser, $request);
 
 
-            $amount = $days * ($employee_data->salary / 176) * $percent;
+            $amount = $days * ($employee_data->salary / 195) * $percent;
 
-            SysHelpers::FinancialLogs($empID, $overtime_name, '0.00', number_format($amount, 2)."TZS", 'Payroll Input');
+            SysHelpers::FinancialLogs($empID, $overtime_name, '0.00', number_format($amount, 2)." TZS", 'Payroll Input');
 
             echo "<p class='alert alert-success text-center'>Overtime Request saved Successifully</p>";
         } else {
@@ -8613,8 +8613,8 @@ class GeneralController extends Controller
         $empID = auth()->user()->emp_id;
         $today = date('Y-m-d');
 
-        $normal_days_overtime_amount = ($employee_actual_salary / 176) * 1.5 * $normalDays;
-        $public_overtime_amount = ($employee_actual_salary / 176) * 2.0 * $publicDays;
+        $normal_days_overtime_amount = ($employee_actual_salary / 195) * 1.5 * $normalDays;
+        $public_overtime_amount = ($employee_actual_salary / 195) * 2.0 * $publicDays;
 
         $total_gross = $salaryEnrollment +
             $normal_days_overtime_amount +
@@ -8819,8 +8819,8 @@ class GeneralController extends Controller
         $empID = auth()->user()->emp_id;
         $today = date('Y-m-d');
 
-        $normal_days_overtime_amount = ($employee_actual_salary / 176) * 1.5 * $normalDays;
-        $public_overtime_amount = ($employee_actual_salary / 176) * 2.0 * $publicDays;
+        $normal_days_overtime_amount = ($employee_actual_salary / 195) * 1.5 * $normalDays;
+        $public_overtime_amount = ($employee_actual_salary / 195) * 2.0 * $publicDays;
 
         $total_gross = $salaryEnrollment +
             $normal_days_overtime_amount +
@@ -9127,7 +9127,7 @@ class GeneralController extends Controller
         $old->save();
         // saving new employee data
 
-        SysHelpers::FinancialLogs($id, 'Salary', number_format($empl->salary * $empl->rate, 2), number_format($request->newSalary * $empl->rate, 2).' '.$empl->currency, 'Salary Increment');
+        SysHelpers::FinancialLogs($id, 'Salary', number_format($empl->salary * $empl->rate, 2), number_format($request->newSalary * $empl->rate, 2).' '.$empl->currency, 'Promotion');
 
         // $promotion =Employee::where('emp_id',$id)->first();
         // $promotion->position=$request->newPosition;
