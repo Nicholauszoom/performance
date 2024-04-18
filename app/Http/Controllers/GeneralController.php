@@ -2301,9 +2301,9 @@ class GeneralController extends Controller
             $auditLog = SysHelpers::AuditLog(1, "Overtime on behalf applied  by " . $autheniticateduser, $request);
 
 
-            $amount = $days * ($employee_data->salary / 176) * $percent;
+            $amount = $days * ($employee_data->salary / 195) * $percent;
 
-            SysHelpers::FinancialLogs($empID, $overtime_name, '0.00', number_format($amount, 2)."TZS", 'Payroll Input');
+            SysHelpers::FinancialLogs($empID, $overtime_name, '0.00', number_format($amount, 2)." TZS", 'Payroll Input');
 
             echo "<p class='alert alert-success text-center'>Overtime Request saved Successifully</p>";
         } else {
@@ -5816,12 +5816,12 @@ class GeneralController extends Controller
 
                         foreach ($allowances as $row) {
                             if ($row->state == 1) {
-                                SysHelpers::FinancialLogs($row->empID, $row->name, '0', ($row->amount != 0) ? number_format($row->amount, 2) . ' ' . $row->currency : $row->percent . '%', 'Payroll Input', $date);
+                                SysHelpers::FinancialLogs($row->empID, $row->name, '0.00', ($row->amount != 0) ? number_format($row->amount, 2) . ' ' . $row->currency : $row->percent . '%', 'Payroll Input', $date);
                             }
                         }
                         $deductions = $this->payroll_model->getAssignedDeduction();
                         foreach ($deductions as $row) {
-                            SysHelpers::FinancialLogs($row->empID, $row->name, '0', ($row->amount != 0) ? number_format($row->amount, 2) . ' ' . $row->currency : $row->percent . '%', 'Payroll Input', $date);
+                            SysHelpers::FinancialLogs($row->empID, $row->name, '0.00', ($row->amount != 0) ? number_format($row->amount, 2) . ' ' . $row->currency : $row->percent . '%', 'Payroll Input', $date);
                         }
                         InputSubmission::create(['empID' => auth()->user()->emp_id, 'date' => $date]);
                         echo "<p class='alert alert-success text-center'>Inputs  submitted Successfuly</p>";
@@ -8618,8 +8618,8 @@ class GeneralController extends Controller
         $empID = auth()->user()->emp_id;
         $today = date('Y-m-d');
 
-        $normal_days_overtime_amount = ($employee_actual_salary / 176) * 1.5 * $normalDays;
-        $public_overtime_amount = ($employee_actual_salary / 176) * 2.0 * $publicDays;
+        $normal_days_overtime_amount = ($employee_actual_salary / 195) * 1.5 * $normalDays;
+        $public_overtime_amount = ($employee_actual_salary / 195) * 2.0 * $publicDays;
 
         $total_gross = $salaryEnrollment +
             $normal_days_overtime_amount +
@@ -8824,8 +8824,8 @@ class GeneralController extends Controller
         $empID = auth()->user()->emp_id;
         $today = date('Y-m-d');
 
-        $normal_days_overtime_amount = ($employee_actual_salary / 176) * 1.5 * $normalDays;
-        $public_overtime_amount = ($employee_actual_salary / 176) * 2.0 * $publicDays;
+        $normal_days_overtime_amount = ($employee_actual_salary / 195) * 1.5 * $normalDays;
+        $public_overtime_amount = ($employee_actual_salary / 195) * 2.0 * $publicDays;
 
         $total_gross = $salaryEnrollment +
             $normal_days_overtime_amount +
@@ -9132,7 +9132,7 @@ class GeneralController extends Controller
         $old->save();
         // saving new employee data
 
-        SysHelpers::FinancialLogs($id, 'Salary', number_format($empl->salary * $empl->rate, 2), number_format($request->newSalary * $empl->rate, 2).' '.$empl->currency, 'Salary Increment');
+        SysHelpers::FinancialLogs($id, 'Salary', number_format($empl->salary * $empl->rate, 2), number_format($request->newSalary * $empl->rate, 2).' '.$empl->currency, 'Promotion');
 
         // $promotion =Employee::where('emp_id',$id)->first();
         // $promotion->position=$request->newPosition;
@@ -9259,7 +9259,7 @@ class GeneralController extends Controller
 
         $old->save();
 
-        SysHelpers::FinancialLogs($id, 'Salary', number_format($oldSalary * $oldRate, 2), number_format($request->newSalary * $oldRate, 2), 'Salary Increment');
+        SysHelpers::FinancialLogs($id, 'Salary', number_format($oldSalary * $oldRate, 2).' '.'TZS', number_format($request->newSalary * $oldRate, 2).' '.'TZS', 'Salary Increment');
 
         $msg = "Employee Salary  Incremention has been requested successfully !";
         return redirect('flex/promotion')->with('msg', $msg);

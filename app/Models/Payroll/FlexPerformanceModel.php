@@ -2083,70 +2083,70 @@ IF(
         //reason for termination
         SysHelpers::FinancialLogs($termination->employeeID, 'Reason For Termination', '0.00', $termination->reason, 'Termination');
         //salary
-        SysHelpers::FinancialLogs($termination->employeeID, 'Salary', number_format($termination->actual_salary, 2), number_format($termination->salaryEnrollment, 2), 'Termination');
+        SysHelpers::FinancialLogs($termination->employeeID, 'Salary', number_format($termination->actual_salary, 2). ' TZS', number_format($termination->salaryEnrollment, 2). ' TZS', 'Termination');
         //overtimes
         if ($termination->normalDays != 0) {
             // SysHelpers::FinancialLogs($termination->employeeID,'N-Overtime', 0.00 ,number_format($termination->normalDays,2), 'Termination');
-            SysHelpers::FinancialLogs($termination->employeeID, 'Normal Days Overtime', 0.00, number_format($termination->normal_days_overtime_amount, 2), 'Termination');
+            SysHelpers::FinancialLogs($termination->employeeID, 'Normal Days Overtime', 0.00, number_format($termination->normal_days_overtime_amount, 2). ' TZS', 'Termination');
         }
         if ($termination->publicDays != 0) {
             //SysHelpers::FinancialLogs($termination->employeeID,'S-Overtime', 0.00 ,number_format($termination->publicDays,2), 'Termination');
-            SysHelpers::FinancialLogs($termination->publicDays, 'Sunday Overtime', 0.00, number_format($termination->public_overtime_amount, 2), 'Termination');
+            SysHelpers::FinancialLogs($termination->publicDays, 'Sunday Overtime', 0.00, number_format($termination->public_overtime_amount, 2). ' TZS', 'Termination');
         }
         if ($termination->noticePay != 0) {
-            SysHelpers::FinancialLogs($termination->employeeID, 'Notice Pay', 0.00, number_format($termination->noticePay, 2), 'Termination');
+            SysHelpers::FinancialLogs($termination->employeeID, 'Notice Pay', 0.00, number_format($termination->noticePay, 2). ' TZS', 'Termination');
         }
 
         if ($termination->leavePay != 0) {
-            SysHelpers::FinancialLogs($termination->employeeID, 'Leave Pay', 0.00, number_format($termination->leavePay, 2), 'Termination');
+            SysHelpers::FinancialLogs($termination->employeeID, 'Leave Pay', 0.00, number_format($termination->leavePay, 2). ' TZS', 'Termination');
         }
 
         if ($termination->houseAllowance != 0) {
-            SysHelpers::FinancialLogs($termination->employeeID, 'House Allowance', 0.00, number_format($termination->houseAllowance, 2), 'Termination');
+            SysHelpers::FinancialLogs($termination->employeeID, 'House Allowance', 0.00, number_format($termination->houseAllowance, 2). ' TZS', 'Termination');
         }
 
         if ($termination->utilityAllowance != 0) {
-            SysHelpers::FinancialLogs($termination->employeeID, 'Utility Allowance', 0.00, number_format($termination->utilityAllowance, 2), 'Termination');
+            SysHelpers::FinancialLogs($termination->employeeID, 'Utility Allowance', 0.00, number_format($termination->utilityAllowance, 2). ' TZS', 'Termination');
         }
 
         if ($termination->leaveAllowance != 0) {
-            SysHelpers::FinancialLogs($termination->employeeID, 'Leave Allowance', 0.00, number_format($termination->leaveAllowance, 2), 'Termination');
+            SysHelpers::FinancialLogs($termination->employeeID, 'Leave Allowance', 0.00, number_format($termination->leaveAllowance, 2). ' TZS', 'Termination');
         }
 
         if ($termination->nightshift_allowance != 0) {
-            SysHelpers::FinancialLogs($termination->employeeID, 'Night Shift Allowance', 0.00, number_format($termination->nightshift_allowance, 2), 'Termination');
+            SysHelpers::FinancialLogs($termination->employeeID, 'Night Shift Allowance', 0.00, number_format($termination->nightshift_allowance, 2). ' TZS', 'Termination');
         }
 
         if ($termination->transport_allowance != 0) {
-            SysHelpers::FinancialLogs($termination->employeeID, 'Night Shift Allowance', 0.00, number_format($termination->transport_allowance, 2), 'Termination');
+            SysHelpers::FinancialLogs($termination->employeeID, 'Night Shift Allowance', 0.00, number_format($termination->transport_allowance, 2). ' TZS', 'Termination');
         }
 
         if ($termination->tellerAllowance != 0) {
-            SysHelpers::FinancialLogs($termination->employeeID, 'Teler Allowance', 0.00, number_format($termination->tellerAllowance, 2), 'Termination');
+            SysHelpers::FinancialLogs($termination->employeeID, 'Teler Allowance', 0.00, number_format($termination->tellerAllowance, 2). ' TZS', 'Termination');
         }
 
         if ($termination->leaveStand != 0) {
-            SysHelpers::FinancialLogs($termination->employeeID, 'Leave Stand', 0.00, number_format($termination->leaveStand, 2), 'Termination');
+            SysHelpers::FinancialLogs($termination->employeeID, 'Leave Stand', 0.00, number_format($termination->leaveStand, 2). ' TZS', 'Termination');
         }
 
         if ($termination->arrears != 0) {
-            SysHelpers::FinancialLogs($termination->employeeID, 'Arrears', 0.00, number_format($termination->arrears, 2), 'Termination');
+            SysHelpers::FinancialLogs($termination->employeeID, 'Arrears', 0.00, number_format($termination->arrears, 2). ' TZS', 'Termination');
         }
 
         if ($termination->longServing != 0) {
-            SysHelpers::FinancialLogs($termination->employeeID, 'LSA', 0.00, number_format($termination->longServing, 2), 'Termination');
+            SysHelpers::FinancialLogs($termination->employeeID, 'LSA', 0.00, number_format($termination->longServing, 2). ' TZS', 'Termination');
         }
 
         if ($termination->loanBalance != 0) {
-            SysHelpers::FinancialLogs($termination->employeeID, 'Loan Balance', 0.00, number_format($termination->loanBalance, 2), 'Termination');
+            SysHelpers::FinancialLogs($termination->employeeID, 'Loan Balance', 0.00, number_format($termination->loanBalance, 2). ' TZS', 'Termination');
         }
 
         if ($termination->otherPayments != 0) {
-            SysHelpers::FinancialLogs($termination->employeeID, 'Other Payments', 0.00, number_format($termination->otherPayments, 2), 'Termination');
+            SysHelpers::FinancialLogs($termination->employeeID, 'Other Payments', 0.00, number_format($termination->otherPayments, 2). ' TZS', 'Termination');
         }
 
         if ($termination->otherDeductions != 0) {
-            SysHelpers::FinancialLogs($termination->employeeID, 'Other Deductions', 0.00, number_format($termination->otherDeductions, 2), 'Termination');
+            SysHelpers::FinancialLogs($termination->employeeID, 'Other Deductions', 0.00, number_format($termination->otherDeductions, 2). ' TZS', 'Termination');
         }
 
         DB::table('employee')->where('emp_id', $termination->employeeID)->update(['state' => 4]);

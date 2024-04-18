@@ -234,7 +234,7 @@ class GeneralController extends Controller
 
         $emp_id=auth()->user()->emp_id;
 
-      
+
         $data['line_overtime'] = $this->flexperformance_model->lineOvertime($emp_id);
 
 
@@ -329,9 +329,9 @@ class GeneralController extends Controller
                                     'id' => $linemanager,
                                     'leave_id' => '',
                                     'overtime_id' => '',
-                                   
+
                                     ]);
-    
+
                                 Notification::route('mail', $linemanager_data['email'])->notify(new EmailRequests($email_data));
                             } catch (TransportException $exception) {
                                 // echo "<p class='alert alert-danger text-center'>Overtime Request  Sent, But Email not sent due to connectivity problem!</p>";
@@ -380,9 +380,9 @@ class GeneralController extends Controller
                                     'id' => $linemanager,
                                     'leave_id' => '',
                                     'overtime_id' => '',
-                                   
+
                                     ]);
-    
+
                                 Notification::route('mail', $linemanager_data['email'])->notify(new EmailRequests($email_data));
                             } catch (TransportException $exception) {
                                 // echo "<p class='alert alert-danger text-center'>Overtime Request  Sent, But Email not sent due to connectivity problem!</p>";
@@ -440,7 +440,7 @@ class GeneralController extends Controller
                                 'id' => $linemanager,
                                 'leave_id' => '',
                                 'overtime_id' => '',
-                               
+
                                 ]);
 
                             Notification::route('mail', $linemanager_data['email'])->notify(new EmailRequests($email_data));
@@ -489,7 +489,7 @@ class GeneralController extends Controller
                                 'id' => $linemanager,
                                 'leave_id' => '',
                                 'overtime_id' => '',
-                               
+
                                 ]);
 
                             Notification::route('mail', $linemanager_data['email'])->notify(new EmailRequests($email_data));
@@ -519,7 +519,7 @@ class GeneralController extends Controller
     public function myLeave1s(Request $request)
     {
      //  $data['leaves'] =Leaves::orderBy('id','desc')->get();
-      
+
         // $data['myleave'] = array_reverse($data['myleave']); // Reverse the order of leaves
 
         $emp_id=auth()->user()->emp_id;
@@ -532,14 +532,14 @@ class GeneralController extends Controller
 
 
         // Start of Escallation
-       
+
 
 
     return response( [ 'data'=>$data  ],200 );
     }
     public function myLeaves(Request $request)
     {
-     
+
         $data['leaves'] = Leaves::whereNot('reason', 'Automatic applied!')->whereNot('state',4)->orderBy('id', 'desc')->get();
         $data['revoked_leaves'] = Leaves::where('revoke_status', 0)->whereNot('reason', 'Automatic applied!')
         ->orWhere('revoke_status', 1)
@@ -598,22 +598,22 @@ class GeneralController extends Controller
 
         $filteredLeaves = [];
         $filteredLeaves1 = [];
-        
+
         foreach ($data['leaves'] as $leave) {
             $level1 = LeaveApproval::where('empID', $leave->empID)
                 ->where('level1', $line_manager)
                 ->first();
-           
+
             $level2 = LeaveApproval::where('empID', $leave->empID)
                 ->where('level2', $line_manager)
                 ->first();
-        
+
             $level3 = LeaveApproval::where('empID', $leave->empID)
                 ->where('level3', $line_manager)
                 ->first();
-        
+
             $approval = LeaveApproval::where('empID', $leave->empID)->first();
-        
+
             if (
                 auth()->user()->emp_id == $approval->level1 ||
                 (auth()->user()->emp_id == $approval->level2 && $leave->status == 2) ||
@@ -627,17 +627,17 @@ class GeneralController extends Controller
             $level1 = LeaveApproval::where('empID', $leave->empID)
                 ->where('level1', $line_manager)
                 ->first();
-           
+
             $level2 = LeaveApproval::where('empID', $leave->empID)
                 ->where('level2', $line_manager)
                 ->first();
-        
+
             $level3 = LeaveApproval::where('empID', $leave->empID)
                 ->where('level3', $line_manager)
                 ->first();
-        
+
             $approval = LeaveApproval::where('empID', $leave->empID)->first();
-        
+
             if (
                 auth()->user()->emp_id == $approval->level1 ||
                 (auth()->user()->emp_id == $approval->level2 && $leave->status == 2) ||
@@ -647,9 +647,9 @@ class GeneralController extends Controller
                 $filteredLeaves1[] = $leave;
             }
         }
-       
-        
-       
+
+
+
 
 
         $numberOfLeaves = count($filteredLeaves);
@@ -657,43 +657,43 @@ class GeneralController extends Controller
         $data['leaves']=$filteredLeaves;
         $data['revoked_leaves']=$filteredLeaves1;
 
-        
+
 
         foreach ($data['leaves'] as &$slip) {
             $slipArray = json_decode(json_encode($slip), true);
             $employee= EMPL::where("emp_id",$slipArray["empID"])->get()->first();
 
-      
+
             $slipArray['empName'] = $employee['fname'].' '.$employee['lname'];
-            
-        
-      
-           
+
+
+
+
             $slip = (array) $slipArray;
 
-            
+
         }
         foreach ($data['revoked_leaves'] as &$slip) {
             $slipArray = json_decode(json_encode($slip), true);
             $employee= EMPL::where("emp_id",$slipArray["empID"])->get()->first();
 
-      
+
             $slipArray['empName'] = $employee['fname'].' '.$employee['lname'];
-            
-        
-      
-           
+
+
+
+
             $slip = (array) $slipArray;
 
-            
+
         }
-        
+
 
         return response( [ 'data'=>$data ],200);
 
     }
-    
-    
+
+
     //  end of employee leaves function
 
 
@@ -730,7 +730,7 @@ class GeneralController extends Controller
 
         public function SlipDetail($date)
         {
-          
+
             //dd($request->all());
             $empID = auth()->user()->emp_id;
 
@@ -767,7 +767,7 @@ class GeneralController extends Controller
                     $data['annualLeaveSpent'] = $this->reports_model->annualLeaveSpent($empID, $payroll_month_end);
                     $data['allowances'] = $this->reports_model->allowances($empID, $payroll_month);
                     $data['deductions'] = $this->reports_model->deductions($empID, $payroll_month);
-              
+
                     $data['loans'] = $this->reports_model->loans($empID, $payroll_month);
                     $data['salary_advance_loan'] = $this->reports_model->loansPolicyAmount($empID, $payroll_month);
                     $data['total_allowances'] = $this->reports_model->total_allowances($empID, $payroll_month);
@@ -784,34 +784,34 @@ class GeneralController extends Controller
 
                     //
                          $data['loans'] = $this->reports_model->loans($empID, $payroll_month);
-                      
-                         
+
+
                     foreach ($data['slipinfo'] as &$slip) {
                         $slipArray = json_decode(json_encode($slip), true);
-                      
-                    
-                     
+
+
+
                         $slipArray['allowances'] = $data['allowances'] ;
-                        
-                    
-                  
+
+
+
                         $slipArray['total_allowances'] =  $data['total_allowances'];
-                        
+
                         foreach($data['loans'] as $loans){
                             array_push( $data['deductions'],$loans);
                         }
-                       
-                     
+
+
                         $slipArray['deductions'] = $data['deductions'] ;
-                    
+
                         $slipArray['total_deductions'] =  $data['total_deductions'];
 
                         $slip = (array) $slipArray;
 
-                        
+
                     }
-                    
-                    
+
+
                     $slipinfo =$data['slipinfo'];
                     $leaves = $data['leaves'];
                     $annualLeaveSpent = $data['annualLeaveSpent'];
@@ -903,31 +903,31 @@ class GeneralController extends Controller
                         $data['salary_advance_loan_remained'] = $this->reports_model->loansAmountRemained($payroll_emp_id->empID, $payroll_month);
                         $data_all['dat'][$payroll_emp_id->empID] = $data;
                         $data['loans'] = $this->reports_model->loans($empID, $payroll_month);
-                     
+
                         foreach ($data['slipinfo'] as &$slip) {
                             $slipArray = json_decode(json_encode($slip), true);
-                      
-                    
-                     
+
+
+
                             $slipArray['allowances'] = $data['allowances'] ;
-                            
-                        
-                      
+
+
+
                             $slipArray['total_allowances'] =  $data['total_allowances'];
-                    
-                        
+
+
                             $slipArray['deductions'] = $data['deductions'] ;
                             foreach($data['loans'] as $loans){
                                 array_push( $data['deductions'],$loans);
                             }
-                           
-                        
+
+
                             $slipArray['total_deductions'] =  $data['total_deductions'];
-    
+
                             $slip = (array) $slipArray;
 
-    
-                           
+
+
                         }
                         $slipinfo =$data['slipInfo'];
                         $leaves = $data['leaves'];
@@ -1017,7 +1017,7 @@ class GeneralController extends Controller
             $emergency->update();
         } else {
             $emergency = new EmergencyContact();
-            
+
             $emergency->employeeID = $id;
             $emergency->em_fname = $request->em_fname;
             $emergency->em_mname = $request->em_mname;
@@ -1049,13 +1049,13 @@ class GeneralController extends Controller
             $msg='Your Profile is updated Successfully !';
             return response( [ 'msg'=>$msg  ],200 );
 
-        
-        
+
+
 
 
 
     }
-     
+
 
     //Viewing leave attachment
     // public function leaveAttachment(Request $request)
@@ -1073,7 +1073,7 @@ class GeneralController extends Controller
 
     //         $newImageName = $image->hashName();
     //        $image->move(public_path('storage/profile'), $newImageName);
-       
+
 
     //         $msg='';
     //         return response( [ 'msg'=>$msg  ],200 );
@@ -1093,14 +1093,14 @@ class GeneralController extends Controller
         $user = auth()->user()->emp_id;
         $fileContent = $request->input('image');
         $storageDirectory = 'storage/leaves/';
-    
+
         $employee = EMPL::where('emp_id', $user)->first();
-    
+
         if ($fileContent !== "") {
             $fileName = hash('sha256', $fileContent);
             $filePath = $storageDirectory . $fileName;
             $bytesWritten = file_put_contents(public_path($filePath), $fileContent);
-    
+
             if ($bytesWritten !== false) {
                 $msg = 'File saved successfully.';
                 return response(['msg' => $msg], 200);
@@ -1113,7 +1113,7 @@ class GeneralController extends Controller
             return response(['msg' => $msg], 400);
         }
     }
-    
+
 
 
 
@@ -1162,7 +1162,7 @@ class GeneralController extends Controller
         if ($result == true) {
 
 
-            SysHelpers::FinancialLogs($emp_id, 'Assigned Overtime', '0', number_format($overtime, 2), 'Payroll Input');
+            SysHelpers::FinancialLogs($emp_id, 'Assigned Overtime', '0', number_format($overtime, 2).' '.'TZS', 'Payroll Input');
 
             echo "<p class='alert alert-success text-center'>Overtime Approved Successifully</p>";
         } else {
@@ -1185,7 +1185,7 @@ class GeneralController extends Controller
         $approver=EMPL::where('emp_id',auth()->user()->emp_id)->first();
         $employee_data =  EMPL::where('emp_id',$empID)->first();
         // $rate = $this->flexperformance_model->get_overtime_rate();
-   
+
         if ($status == 0) {
             $signatory = session('emp_id');
           //  dd($signatory)
@@ -1200,10 +1200,10 @@ class GeneralController extends Controller
                                     'id' =>$empID,
                                     'leave_id' => '',
                                     'overtime_id' => '',
-                                   
+
                                     ]);
                 return response()->json([
-                
+
                     'msg' => 'Overtime Recommended Successifully'],200);
             } else {
                  return response()->json([
@@ -1213,7 +1213,7 @@ class GeneralController extends Controller
             return response()->json([
                 'msg' => 'Overtime cannot be recommended '],400);
         }
-     
+
         else {
             return response()->json([
                 'msg' => "Overtime already recommended "],400);
@@ -1260,13 +1260,13 @@ class GeneralController extends Controller
     // $data['total leaves applied']=$data;
 
     $overtimes= $this->flexperformance_model->my_overtimes($id);
-  
-    
+
+
     $count = 0;
     $count2 =0;
     $count3 =0;
     $count4=0;
-    
+
     foreach ($overtimes as $overtime) {
         if ($overtime->status == '0') {
             $count++;
@@ -1280,7 +1280,7 @@ class GeneralController extends Controller
             $count4++;
         }
     }
-    
+
     $pending = $count;
     $recommended= $count2;
     $approved= $count3;
@@ -1294,7 +1294,7 @@ class GeneralController extends Controller
 
      $remaining = $total-$paid;
      $percentage= $paid/$total *100;
-     
+
      $pensions = $this->reports_model->employee_pension($id);
      $pension_employee =0;
      $pension_employer=0;
@@ -1309,8 +1309,8 @@ class GeneralController extends Controller
      $total_pension=$pension_employee+$pension_employee;
 
 
-    
-   
+
+
         return response([
            'total leaves applied'=>$data->count(),
            'pending leaves'=> $pending_leaves->count(),
@@ -1364,12 +1364,12 @@ class GeneralController extends Controller
             'total employee pension contribution'=>$pension_employee,
             'total employer pension contribution'=>$pension_employer,
             'total pension'=>$total_pension
-           
- 
+
+
            // 'approved overtimes'=>count($overtimes->where('status','0'))
          ],200);
     }
-    
+
     }
 
     public function fin_approveOvertime($id)
@@ -1415,7 +1415,7 @@ class GeneralController extends Controller
                 'id' =>$empID,
                 'leave_id' => '',
                 'overtime_id' => '',
-               
+
                 ]);
             $msg="Overtime denied Successfully";
             return response([
@@ -1443,7 +1443,7 @@ class GeneralController extends Controller
             }
         }
       //  dd($status);
-       
+
     }
 
     public function cancelOvertime(Request $request
@@ -1456,7 +1456,7 @@ class GeneralController extends Controller
         $status = $this->flexperformance_model->checkOvertimeStatus($id);
         if($overtimes==true){
 
-        if($status==0 || $status==4){ 
+        if($status==0 || $status==4){
         $result = $this->flexperformance_model->deleteOvertime($id);
 
         if ($result == true) {
@@ -1467,7 +1467,7 @@ class GeneralController extends Controller
             return response([
                 'msg'=>'Overtime not cancelled, Some Errors Occured Please Try Again!'
             ],400);
-   
+
         }
     }else{
        // if($status==1){
