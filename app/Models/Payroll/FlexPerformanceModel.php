@@ -769,7 +769,23 @@ class FlexPerformanceModel extends Model
     public function deleteApprovedOvertime($id)
     {
 
+        $overtime_yenyewe =  DB::table('overtimes')->where('id', $id)->select()->first();
+        $payroll_number = $overtime_yenyewe->empID;
+        $changed_by = $overtime_yenyewe->hr;
+        $overtime_category = $overtime_yenyewe->overtime_category;
+
+        $overtime_name = $this->get_overtime_name($overtime_category);
+
+        $amount = $overtime_yenyewe->amount;
         DB::table('overtimes')->where('id', $id)->delete();
+
+        DB::table('financial_logs')
+        ->where('payrollno',$payroll_number)
+        ->where('changed_by',$changed_by)
+        ->where('field_name',$overtime_name)
+        ->where('input_screen','Payroll Input')
+        ->where('action_to',$amount." TZS")
+        ->delete();
         return true;
     }
 
