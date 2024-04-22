@@ -13,10 +13,10 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('loan_application', function (Blueprint $table) {
-        $table->timestamps();
+        // Schema::table('loan_application', function (Blueprint $table) {
+        // $table->timestamps();
 
-        });
+        // });
 
     }
 
