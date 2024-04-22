@@ -701,7 +701,7 @@ class FlexPerformanceModel extends Model
 
         //     DB::transaction(function() use($id,$signatory, $time_approved)
         //   {
-        $query = "INSERT INTO overtimes(overtimeID, empID, time_start, time_end,overtime_category, amount, linemanager, hr, application_time, confirmation_time, approval_time,days) SELECT 1, '" . $empID . "', '" . $time_start . "','" . $time_end . "','" . $overtime_category . "', (('" . $days . "') * ((e.salary/176)*('" . $percent . "')))
+        $query = "INSERT INTO overtimes(overtimeID, empID, time_start, time_end,overtime_category, amount, linemanager, hr, application_time, confirmation_time, approval_time,days) SELECT 1, '" . $empID . "', '" . $time_start . "','" . $time_end . "','" . $overtime_category . "', (('" . $days . "') * ((e.salary/195)*('" . $percent . "')))
         AS amount,'" . $line_maager . "', '" . $signatory . "','" . $application_time . "','" . $time_confirmed_line . "', '" . $time_approved . "','" . $days . "' FROM employee e WHERE e.emp_id = '" . $empID . "'  ";
         DB::insert(DB::raw($query));
 

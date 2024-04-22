@@ -734,7 +734,7 @@
 
                             Swal.fire(
                                 'Cancelled!',
-                                'Request Cancelled Successifully1!!.',
+                                'Request Cancelled Successfully!',
                                 'success'
                             )
 

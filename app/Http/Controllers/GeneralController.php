@@ -2305,9 +2305,9 @@ class GeneralController extends Controller
 
             SysHelpers::FinancialLogs($empID, $overtime_name, '0.00', number_format($amount, 2)." TZS", 'Payroll Input');
 
-            echo "<p class='alert alert-success text-center'>Overtime Request saved Successifully</p>";
+            echo "<p class='alert alert-success text-center'>Overtime Request saved successfully</p>";
         } else {
-            echo "<p class='alert alert-danger text-center'>Overtime Request not saved Successifully</p>";
+            echo "<p class='alert alert-danger text-center'>Overtime Request not saved successfully</p>";
         }
 
         // $split_start = explode("  at  ", $start);
