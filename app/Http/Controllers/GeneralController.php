@@ -5695,6 +5695,7 @@ class GeneralController extends Controller
                 'percent' => $request->input('percent') / 100,
                 'currency' => $request->currency,
                 'rate' => $rate,
+                'created_at'=> now()
             );
 
             $result = $this->flexperformance_model->assign_allowance($data);
