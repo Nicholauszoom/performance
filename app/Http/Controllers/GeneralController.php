@@ -5528,6 +5528,10 @@ class GeneralController extends Controller
             $percent = 0.01 * ($request->rate);
         }
 
+        if($request->name != "Leave"){
+            $type = 0;
+        }
+
         $data = array(
             'name' => $request->name,
             'amount' => $amount,
@@ -5536,6 +5540,7 @@ class GeneralController extends Controller
             'pensionable' => $request->pensionable,
             'Isrecursive' => $request->Isrecursive,
             'Isbik' => $request->Isbik,
+            'type'=> $type,
             'allowance_category_id' => $request->allowanceCategory,
             'state' => 1,
             'percent' => $percent,
