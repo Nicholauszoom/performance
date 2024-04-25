@@ -3,6 +3,7 @@
 namespace App\Models\Payroll;
 
 use App\Helpers\SysHelpers;
+use App\Models\FinancialLogs;
 use App\Models\Termination;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
@@ -779,13 +780,8 @@ class FlexPerformanceModel extends Model
         $amount = $overtime_yenyewe->amount;
         DB::table('overtimes')->where('id', $id)->delete();
 
-        DB::table('financial_logs')
-        ->where('payrollno',$payroll_number)
-        ->where('changed_by',$changed_by)
-        ->where('field_name',$overtime_name)
-        ->where('input_screen','Payroll Input')
-        ->where('action_to',$amount." TZS")
-        ->delete();
+        SysHelpers::FinancialLogs($payroll_number, 'Cancelled '. $overtime_name, (number_format($amount, 2)." TZS"), "0.00", 'Payroll Input');
+
         return true;
     }
 
