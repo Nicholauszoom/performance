@@ -620,8 +620,8 @@ class AttendanceController extends Controller
                // start of name information validation
 
                 'mobile' => 'required|numeric',
-                'leave_address' => 'nullable|alpha',
-                'reason' => 'required|alpha',
+                'leave_address' => 'nullable',
+                'reason' => 'required',
 
             ]);
         $start = $request->start;
@@ -747,10 +747,14 @@ class AttendanceController extends Controller
                     $sub_cat = $request->sub_cat;
                     $sub = LeaveSubType::where('id', $sub_cat)->first();
 
+                    // dd($sub);
+
                     $total_leave_days = $leaves + $different_days;
+                    // dd($total_leave_days);
+
                     $maximum = $sub->max_days;
                     // Case hasnt used all days
-                    if ($total_leave_days < $maximum) {
+                    if ($total_leave_days <= $maximum) {
                         $leaves = new Leaves();
                         $empID = Auth::user()->emp_id;
                         $leaves->empID = $empID;
