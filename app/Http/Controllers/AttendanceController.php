@@ -713,7 +713,7 @@ class AttendanceController extends Controller
             // Annual leave accurated days
             $annualleaveBalance = $this->attendance_model->getLeaveBalance(Auth::user()->emp_id, $employeeDate, date('Y-m-d'));
             // For  Requested days
-            if ($nature == 1) {
+            if ($nature == 1 || $nature == 6 ) {
                 $holidays = SysHelpers::countHolidays($start, $end);
                 $different_days = SysHelpers::countWorkingDays($start, $end) - $holidays;
 
@@ -750,11 +750,11 @@ class AttendanceController extends Controller
                     // dd($sub);
 
                     $total_leave_days = $leaves + $different_days;
-                    // dd($total_leave_days);
+                    dd($total_leave_days);
 
                     $maximum = $sub->max_days;
                     // Case hasnt used all days
-                    if ($total_leave_days <= $maximum) {
+                    if ($total_leave_days < $maximum) {
                         $leaves = new Leaves();
                         $empID = Auth::user()->emp_id;
                         $leaves->empID = $empID;
