@@ -1163,7 +1163,7 @@ class LeaveController extends Controller
         $annualleaveBalance = $this->attendance_model->getLeaveBalance(auth()->user()->emp_id,auth()->user()->hire_date, date('Y-m-d'));
         // $annualleaveBalance =10;
         // dd($annualleaveBalance);
-        if ($nature == 1) {
+        if ($nature == 1 || $nature== 6) {
             $holidays = SysHelpers::countHolidays($start, $end);
             $different_days = SysHelpers::countWorkingDays($start, $end) - $holidays;
 
@@ -1188,7 +1188,7 @@ class LeaveController extends Controller
         $date2=date('d-m-Y', strtotime($end));
         $start_date = Carbon::createFromFormat('d-m-Y', $date1);
         $end_date = Carbon::createFromFormat('d-m-Y', $date2);
-        $different_days = $start_date->diffInDays($end_date);
+        // $different_days = $start_date->diffInDays($end_date);
 
         // dd( $different_days);
 
@@ -1215,7 +1215,7 @@ class LeaveController extends Controller
                 $total_leave_days=$leave_balance+$different_days;
                 $maximum=$sub->max_days;
                 // Case hasnt used all days
-                if ($total_leave_days < $maximum) {
+                if ($total_leave_days <= $maximum) {
                     $leave=new Leaves();
                     $empID=auth()->user()->emp_id;
                     $leave->empID = $empID;
@@ -1226,14 +1226,15 @@ class LeaveController extends Controller
                     $leave->nature = $request->nature;
 
                     // For Study Leave
-                    if ($request->nature == 6)
-                    {
-                        $leave->days = $different_days;
-                    }
-                    //For Compassionate
-                    else{
-                        $leave->days = $different_days;
-                    }
+                    // if ($request->nature == 6)
+                    // {
+                    //     $leave->days = $different_days;
+                    // }
+                    // //For Compassionate
+                    // else{
+                    //     $leave->days = $different_days;
+                    // }
+                    $leave->days = $different_days;
                     $leave->reason = $request->reason;
                     $leave->sub_category = $request->sub_cat;
                     $leave->remaining = $request->sub_cat;
@@ -1291,7 +1292,7 @@ class LeaveController extends Controller
 
                     $leave_type=LeaveType::where('id',$nature)->first();
                     $type_name=$leave_type->type;
-                    $msg="Sorry, You have Insufficient ".$type_name." Leave Days";
+                    $msg=" ".($maximum)." Sorry, You have Insufficient ".$type_name." Leave Days";
 
                     return response( [ 'msg'=>$msg ],202 );
                 }
@@ -1522,7 +1523,7 @@ class LeaveController extends Controller
             $total_leave_days=$leave_balance+$different_days;
 
 
-            if($total_leave_days<$max_leave_days)
+            if($total_leave_days<=$max_leave_days)
             {
                 $remaining=$max_leave_days-($leave_balance+$different_days);
                 $leave=new Leaves();
@@ -1633,7 +1634,7 @@ class LeaveController extends Controller
 
                                 $leave_type = LeaveType::where('id', $nature)->first();
                                 $type_name = $leave_type->type;
-                                $msg = "Sorry, You have Insufficient  " . $type_name . " Leave Days Balance";
+                                $msg = "Sorry, You have Insufficient  " . $type_name . " Leave Days Balance ";
                                 return response( [ 'msg'=>$msg ],202 );
 
                             }

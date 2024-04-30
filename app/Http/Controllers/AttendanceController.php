@@ -750,7 +750,7 @@ class AttendanceController extends Controller
                     // dd($sub);
 
                     $total_leave_days = $leaves + $different_days;
-                    dd($total_leave_days);
+                
 
                     $maximum = $sub->max_days;
                     // Case hasnt used all days
