@@ -2301,13 +2301,13 @@ class GeneralController extends Controller
             $auditLog = SysHelpers::AuditLog(1, "Overtime on behalf applied  by " . $autheniticateduser, $request);
 
 
-            $amount = $days * ($employee_data->salary / 176) * $percent;
+            $amount = $days * ($employee_data->salary / 195) * $percent;
 
-            SysHelpers::FinancialLogs($empID, $overtime_name, '0.00', number_format($amount, 2)."TZS", 'Payroll Input');
+            SysHelpers::FinancialLogs($empID, $overtime_name, '0.00', number_format($amount, 2)." TZS", 'Payroll Input');
 
-            echo "<p class='alert alert-success text-center'>Overtime Request saved Successifully</p>";
+            echo "<p class='alert alert-success text-center'>Overtime Request saved successfully</p>";
         } else {
-            echo "<p class='alert alert-danger text-center'>Overtime Request not saved Successifully</p>";
+            echo "<p class='alert alert-danger text-center'>Overtime Request not saved successfully</p>";
         }
 
         // $split_start = explode("  at  ", $start);
@@ -5016,7 +5016,7 @@ class GeneralController extends Controller
 
                     $deductionName = DB::table('deductions')->select('name')->where('id', $request->input('deductionID'))->limit(1)->first();
 
-                    SysHelpers::FinancialLogs($request->input('empID'), $deductionName->name, number_format($deductionName->amount / $deductionName->rate, 2) . ' ' . $deductionName->currency, '0.00', 'Payroll Input');
+                    SysHelpers::FinancialLogs($request->input('empID'), "Removed ". $deductionName->name, number_format($deductionName->amount / $deductionName->rate, 2) . ' ' . $deductionName->currency, '0.00', 'Payroll Input');
 
                     //SysHelpers::FinancialLogs($empID, 'Removed from deduction', $deductionName->name, '0', 'Payroll Input');
                 }
@@ -5528,6 +5528,10 @@ class GeneralController extends Controller
             $percent = 0.01 * ($request->rate);
         }
 
+        if($request->name != "Leave"){
+            $type = 0;
+        }
+
         $data = array(
             'name' => $request->name,
             'amount' => $amount,
@@ -5536,6 +5540,7 @@ class GeneralController extends Controller
             'pensionable' => $request->pensionable,
             'Isrecursive' => $request->Isrecursive,
             'Isbik' => $request->Isbik,
+            'type'=> $type,
             'allowance_category_id' => $request->allowanceCategory,
             'state' => 1,
             'percent' => $percent,
@@ -5595,18 +5600,16 @@ class GeneralController extends Controller
 
     public function addDeduction(Request $request)
     {
-        //dd($request->all());
+
         $name = $request->input('name');
         $code = $request->input('code');
         $amount = $request->input('amount');
         $percent = $request->input('rate') / 100;
-        $apply_to = $request->input('apply_to');
         $mode = $request->input('policy');
-        //$state = $request->input('state');
+        $currency = $request->input('currency');
         $state = 1;
-        $rate = $this->flexperformance_model->get_rate($request->currency);
+        $rate = $this->flexperformance_model->get_rate($currency);
 
-        // dd($rate);
 
         // FIXME I have commented column currency and rate but it need confirmation if it should available
         // FIXME data from code is missing for it to be able to save in the database
@@ -5616,10 +5619,9 @@ class GeneralController extends Controller
             'code' => $code,
             'amount' => $amount * $rate,
             'percent' => $percent,
-            'apply_to' => $apply_to,
             'mode' => $mode,
             'state' => $state,
-            'currency' => $request->currency,
+            'currency' => $currency,
             'rate' => $rate,
         );
 
@@ -5631,37 +5633,6 @@ class GeneralController extends Controller
 
         return redirect('flex/non_statutory_deductions');
     }
-    //     public function addDeduction(Request $request)   {
-
-    //       if ($request->method() == "POST") {
-    //         $policy = $request->input('policy');
-    //         if($policy==1){
-    //           $amount = $request->input('amount');
-    //           $percent = 0;
-    //         } else{
-    //           $amount = 0;
-    //           $percent = 0.01*($request->input('rate'));
-    //         }
-    //         $data = array(
-    //             'name' =>trim($request->input('name')),
-    //             'amount' =>$amount,
-    //             'mode' =>$request->input('policy'),
-    //             'state' =>1,
-    //             'apply_to' =>2,
-    //             'percent' =>$percent
-    //             );
-
-    //           $result = $this->flexperformance_model->addDeduction($data);
-    //           if($result==true){
-    //              $this->flexperformance_model->audit_log("Created New Deduction ");
-    //               echo "<p class='alert alert-success text-center'>Deduction Registered Successifully</p>";
-    //           } else {
-    //                echo "<p class='alert alert-warning text-center'>Deduction Registration FAILED, Please Try Again</p>";
-    //           }
-    //       }
-
-    //    }
-
     public function assign_allowance_employees(Request $request)
     {
         // Validate the uploaded file
@@ -5695,6 +5666,7 @@ class GeneralController extends Controller
                 'percent' => $request->input('percent') / 100,
                 'currency' => $request->currency,
                 'rate' => $rate,
+                'created_at'=> now()
             );
 
             $result = $this->flexperformance_model->assign_allowance($data);
@@ -5726,6 +5698,11 @@ class GeneralController extends Controller
         // dd($previous_payroll_month_raw);
 
         $previous_payroll_month = $this->reports_model->prevPayrollMonth($previous_payroll_month_raw);
+
+        if(!$previous_payroll_month) {
+
+            return true;
+        }
 
         $previous_payroll_month = date('Y-m-d', strtotime($previous_payroll_month));
 
@@ -5811,12 +5788,12 @@ class GeneralController extends Controller
 
                         foreach ($allowances as $row) {
                             if ($row->state == 1) {
-                                SysHelpers::FinancialLogs($row->empID, $row->name, '0', ($row->amount != 0) ? number_format($row->amount, 2) . ' ' . $row->currency : $row->percent . '%', 'Payroll Input', $date);
+                                SysHelpers::FinancialLogs($row->empID, $row->name, '0.00', ($row->amount != 0) ? number_format($row->amount, 2) . ' ' . $row->currency : $row->percent . '%', 'Payroll Input', $date);
                             }
                         }
                         $deductions = $this->payroll_model->getAssignedDeduction();
                         foreach ($deductions as $row) {
-                            SysHelpers::FinancialLogs($row->empID, $row->name, '0', ($row->amount != 0) ? number_format($row->amount, 2) . ' ' . $row->currency : $row->percent . '%', 'Payroll Input', $date);
+                            SysHelpers::FinancialLogs($row->empID, $row->name, '0.00', ($row->amount != 0) ? number_format($row->amount, 2) . ' ' . $row->currency : $row->percent . '%', 'Payroll Input', $date);
                         }
                         InputSubmission::create(['empID' => auth()->user()->emp_id, 'date' => $date]);
                         echo "<p class='alert alert-success text-center'>Inputs  submitted Successfuly</p>";
@@ -5890,20 +5867,17 @@ class GeneralController extends Controller
                 foreach ($arr as $employee) {
                     $empID = $employee;
 
-                    $allowanceName = DB::table('allowances')->select('name')->where('id', $allowanceID)->limit(1)->first();
+                    $allowance = DB::table('allowances')->where('id', $allowanceID)->limit(1)->first();
 
-                    $amount = $this->flexperformance_model->get_individual_from_allowance($empID, $allowanceID);
+                    $emp_allowance = $this->flexperformance_model->get_individual_from_allowance($empID, $allowanceID);
 
-                    // SysHelpers::FinancialLogs($row->empID, 'Removed from '.$allowanceName->name, '0', ($data['amount'] != 0)? $data['amount'].' '.$data['currency'] : $data['percent'].'%',  'Payroll Input');
-
-                    SysHelpers::FinancialLogs($empID, $allowanceName->name, $amount->percent != 0 ? ($amount->percent * 100) . '%' : number_format($amount->amount, 2) . ' ' . $amount->currency, '0.00', 'Payroll Input');
+                    SysHelpers::FinancialLogs($empID, "Remove employee from allowance " . $allowance->name, $emp_allowance->amount . ' ' . $emp_allowance->currency, '0.00', 'Payroll Input');
 
                     $result = $this->flexperformance_model->remove_individual_from_allowance($empID, $allowanceID);
                 }
                 if ($result == true) {
                     $autheniticateduser = auth()->user()->emp_id;
                     $auditLog = SysHelpers::AuditLog(2, "Employee was removed from allowance by " . $autheniticateduser, $request);
-                    //  $this->flexperformance_model->audit_log("Removed Employees of IDs = " . implode(',', $arr) . " From an allowance  with Id = " . $allowanceID . " ");
                     echo "<p class='alert alert-success text-center'>Added Successifully!</p>";
                 } else {
                     echo "<p class='alert alert-danger text-center'>Not Added, Try Again</p>";
@@ -8540,188 +8514,6 @@ class GeneralController extends Controller
     }
 
     // For Saving Termination
-    public function saveTermination122(Request $request)
-    {
-        if ($request->employeeID == $request->deligated) {
-            return redirect()->back()->with(['error' => 'Terminated and deligated should not be the same person']);
-        }
-
-        $this->authenticateUser('add-termination');
-        $employeeID = $request->employeeID;
-        $terminationDate = $request->terminationDate;
-        $reason = $request->reason;
-        $salaryEnrollment = $request->salaryEnrollment;
-        $normalDays = $request->normalDays;
-        $publicDays = $request->publicDays;
-        $noticePay = $request->noticePay;
-        $leavePay = $request->leavePay;
-        $livingCost = $request->livingCost;
-        $houseAllowance = $request->houseAllowance;
-        $utilityAllowance = $request->utilityAllowance;
-        $leaveAllowance = $request->leaveAllowance;
-        $tellerAllowance = $request->tellerAllowance;
-        $serevancePay = $request->serevancePay;
-        $leaveStand = $request->leaveStand;
-        $arrears = $request->arrears;
-        $exgracia = $request->exgracia;
-        $bonus = $request->bonus;
-        $longServing = $request->longServing;
-        $salaryAdvance = $request->salaryAdvance;
-        $otherDeductions = $request->otherDeductions;
-        $otherPayments = $request->otherPayments;
-        $employee_actual_salary = $request->employee_actual_salary;
-        $loan_balance = $request->loan_balance;
-        $nightshift_allowance = $request->nightshift_allowance;
-        $transport_allowance = $request->transport_allowance;
-
-        $termination = new Termination();
-        $termination->employeeID = $request->employeeID;
-        $termination->terminationDate = $request->terminationDate;
-        $termination->reason = $request->reason;
-        $termination->salaryEnrollment = $request->salaryEnrollment;
-        $termination->normalDays = $request->normalDays;
-        $termination->publicDays = $request->publicDays;
-        $termination->noticePay = $request->noticePay;
-        $termination->leavePay = $request->leavePay ?? 0;
-        $termination->livingCost = $request->livingCost ?? 0;
-        $termination->houseAllowance = $request->houseAllowance ?? 0;
-        $termination->utilityAllowance = $request->utilityAllowance ?? 0;
-        $termination->leaveAllowance = $request->leaveAllowance ?? 0;
-        $termination->tellerAllowance = $request->tellerAllowance ?? 0;
-        $termination->serevancePay = $request->serevancePay ?? 0;
-        $termination->leaveStand = $request->leaveStand ?? 0;
-        $termination->arrears = $request->arrears ?? 0;
-        $termination->exgracia = $request->exgracia ?? 0;
-        $termination->transport_allowance = $request->transport_allowance ?? 0;
-        $termination->nightshift_allowance = $request->nightshift_allowance ?? 0;
-        $termination->bonus = $request->bonus ?? 0;
-        $termination->actual_salary = $employee_actual_salary ?? 0;
-        $termination->longServing = $request->longServing ?? 0;
-        $termination->salaryAdvance = $request->salaryAdvance ?? 0;
-        $termination->otherDeductions = $request->otherDeductions ?? 0;
-        $termination->otherPayments = $request->otherPayments ?? 0;
-
-        $msg = "Employee Termination Benefits have been saved successfully";
-
-        $calendar = $request->terminationDate;
-        $datewell = explode("-", $calendar);
-        $mm = $datewell[1];
-        $dd = $datewell[0];
-        $yyyy = $datewell[2];
-        $payroll_date = $yyyy . "-" . $mm . "-" . $dd;
-        $payroll_month = $yyyy . "-" . $mm;
-        $empID = auth()->user()->emp_id;
-        $today = date('Y-m-d');
-
-        $normal_days_overtime_amount = ($employee_actual_salary / 176) * 1.5 * $normalDays;
-        $public_overtime_amount = ($employee_actual_salary / 176) * 2.0 * $publicDays;
-
-        $total_gross = $salaryEnrollment +
-            $normal_days_overtime_amount +
-            $public_overtime_amount +
-            $noticePay +
-            $leavePay +
-            $livingCost +
-            $houseAllowance +
-            $utilityAllowance +
-            $leaveAllowance +
-            $tellerAllowance +
-            $serevancePay +
-            $arrears +
-            $exgracia +
-            $bonus +
-            $longServing +
-            $transport_allowance +
-            $nightshift_allowance +
-            $otherPayments;
-
-        //overtime calculation
-
-        //check whether if is after payroll or before payroll
-        $check_termination_date = $this->flexperformance_model->check_termination_payroll_date($payroll_month);
-        //get employee basic salary
-        //$overtime_amount = $this->flexperformance_model->get_overtime($normalDays,$publicDays,$employeeID);
-        $overtime_amount = $normal_days_overtime_amount + $public_overtime_amount;
-
-        // if ($check_termination_date == false) {
-        $net_pay = 0;
-        $take_home = 0;
-        // $total_gross = 0;
-        $taxable = 0;
-
-        $pension_employer = $this->flexperformance_model->get_pension_employer($salaryEnrollment, $leavePay, $arrears, $overtime_amount, $employeeID);
-
-        $pension_employee = $this->flexperformance_model->get_pension_employee($salaryEnrollment, $leavePay, $arrears, $overtime_amount, $employeeID);
-
-        $total_deductions = $salaryAdvance;
-        //+ $otherDeductions
-
-        $net_pay = $total_gross - $total_deductions;
-
-        //$net_pay = $total_gross - $total_deductions;
-
-        // $taxable = ($net_pay - $pension_employee);
-        $taxable = ($total_gross - $pension_employee);
-        //$taxable = ($taxable < 0) ? -1*$taxable:$taxable;
-
-        $paye1 = DB::table('paye')->where('maximum', '>', $taxable)->where('minimum', '<=', $taxable)->first();
-
-        $deduction_rate = $this->flexperformance_model->get_deduction_rate();
-
-        if ($paye1) {
-            $paye = $paye1->excess_added + $paye1->rate * ($taxable - $paye1->minimum);
-        } else {
-            $paye = 0;
-        }
-
-        $take_home = $taxable - $paye;
-
-        $termination->total_gross = $total_gross;
-        //wcf and sdl
-        $termination->wcf = $total_gross * $deduction_rate['wcf'];
-        $termination->sdl = $total_gross * $deduction_rate['sdl'];
-
-        $termination->loan_balance = $loan_balance;
-
-        $termination->taxable = $taxable;
-        $termination->normal_days_overtime_amount = $normal_days_overtime_amount;
-        $termination->public_overtime_amount = $public_overtime_amount;
-        $termination->paye = $paye;
-        $termination->pension_employee = $pension_employee;
-        $termination->net_pay = $net_pay;
-        $termination->take_home = $take_home;
-        $termination->total_deductions = $total_deductions;
-        $termination->save();
-
-        $newTerminationId = $termination->id;
-        $empId = $request->employeeID;
-
-        $allowancees = $this->flexperformance_model->get_allowance_names_for_employee($empId);
-
-        // dd($request->input('empallowance_6'));
-        foreach ($allowancees as $allowance) {
-            $allowanceCode = $request->input('empallowance_' . $allowance->id);
-            $employeeTerminationAllowance = new EmployeeTerminationAllowance();
-            $employeeTerminationAllowance->termination_id = $newTerminationId;
-            $employeeTerminationAllowance->emp_id = $empId;
-            $employeeTerminationAllowance->allowance_id = $allowance->id; // Assign the correct allowance ID here
-            $employeeTerminationAllowance->amount = $allowanceCode;
-            $employeeTerminationAllowance->save();
-        }
-
-        // $employeeAllowanceLogs = new EmployeeTemporaryAllowance();
-        // $employeeAllowanceLogs->terminnationId = $terminationYenyewe->id;
-
-        // $pentionable_amount =$salaryEnrollment + $leavePay + $arrears + overtime_amount;
-        // } else {
-
-        //     dd('YES');
-        // }
-        return redirect('flex/termination')->with('status', $msg);
-    }
-
-
-    // For Saving Termination
     public function saveTermination(Request $request)
     {
         if ($request->employeeID == $request->deligated) {
@@ -8819,8 +8611,8 @@ class GeneralController extends Controller
         $empID = auth()->user()->emp_id;
         $today = date('Y-m-d');
 
-        $normal_days_overtime_amount = ($employee_actual_salary / 176) * 1.5 * $normalDays;
-        $public_overtime_amount = ($employee_actual_salary / 176) * 2.0 * $publicDays;
+        $normal_days_overtime_amount = ($employee_actual_salary / 195) * 1.5 * $normalDays;
+        $public_overtime_amount = ($employee_actual_salary / 195) * 2.0 * $publicDays;
 
         $total_gross = $salaryEnrollment +
             $normal_days_overtime_amount +
@@ -8855,9 +8647,9 @@ class GeneralController extends Controller
         // $total_gross = 0;
         $taxable = 0;
 
-        $pension_employer = $this->flexperformance_model->get_pension_employer($salaryEnrollment, $serevancePay, $exgracia, $leavePay, $noticePay, $arrears, $overtime_amount, $employeeID);
+        $pension_employer = $this->flexperformance_model->get_pension_employer($salaryEnrollment, $serevancePay, $exgracia, $leavePay, $noticePay, $arrears, $overtime_amount, $employeeID, $tellerAllowance);
 
-        $pension_employee = $this->flexperformance_model->get_pension_employee($salaryEnrollment, $serevancePay, $exgracia, $leavePay, $noticePay, $arrears, $overtime_amount, $employeeID);
+        $pension_employee = $this->flexperformance_model->get_pension_employee($salaryEnrollment, $serevancePay, $exgracia, $leavePay, $noticePay, $arrears, $overtime_amount, $employeeID, $tellerAllowance);
 
         $total_deductions = $salaryAdvance;
         //+ $otherDeductions
@@ -9127,7 +8919,7 @@ class GeneralController extends Controller
         $old->save();
         // saving new employee data
 
-        SysHelpers::FinancialLogs($id, 'Salary', number_format($empl->salary * $empl->rate, 2), number_format($request->newSalary * $empl->rate, 2).' '.$empl->currency, 'Salary Increment');
+        SysHelpers::FinancialLogs($id, 'Salary', number_format($empl->salary * $empl->rate, 2), number_format($request->newSalary * $empl->rate, 2).' '.$empl->currency, 'Promotion');
 
         // $promotion =Employee::where('emp_id',$id)->first();
         // $promotion->position=$request->newPosition;
@@ -9254,7 +9046,7 @@ class GeneralController extends Controller
 
         $old->save();
 
-        SysHelpers::FinancialLogs($id, 'Salary', number_format($oldSalary * $oldRate, 2), number_format($request->newSalary * $oldRate, 2), 'Salary Increment');
+        SysHelpers::FinancialLogs($id, 'Salary', number_format($oldSalary * $oldRate, 2).' '.'TZS', number_format($request->newSalary * $oldRate, 2).' '.'TZS', 'Salary Increment');
 
         $msg = "Employee Salary  Incremention has been requested successfully !";
         return redirect('flex/promotion')->with('msg', $msg);

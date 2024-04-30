@@ -3206,6 +3206,8 @@ EOD;
 
     public function payrollReportLogs(Request $request)
     {
+
+
         $query = "update financial_logs set action_from = '0.00' where action_from = '0'";
         DB::insert(DB::raw($query));
         $query = "update financial_logs set action_to = '0.00' where action_to = '0'";

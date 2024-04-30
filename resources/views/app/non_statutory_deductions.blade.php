@@ -106,6 +106,10 @@
                                             <label class="form-label" for="name">Deduction Name</label>
                                             <textarea required type="text" name="name" class="form-control"></textarea>
                                         </div>
+                                        <div class="mb-3">
+                                            <label class="form-label" for="name">Deduction Code</label>
+                                            <input required type="text" name="code" class="form-control"></input>
+                                        </div>
 
                                         <div class="mb-3">
                                             <label class="form-label" for="deduction_policy">Deduction Policy</label>
@@ -275,64 +279,7 @@
 
         });
     </script>
-    <script>
-        $('#addAllowance').submit(function(e) {
-            e.preventDefault();
-            $.ajax({
-                    url: "{{ route('flex.addAllowance') }}",
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    },
-                    type: "post",
-                    data: new FormData(this),
-                    processData: false,
-                    contentType: false,
-                    cache: false,
-                    async: false
-                })
-                .done(function(data) {
-                    //  $('#resultSubmission').fadeOut('fast', function(){
-                    //       $('#resultSubmission').fadeIn('fast').html(data);
-                    //     });
 
-                    //$('#addAllowance')[0].reset();
-                    setTimeout(function() { // wait for 5 secs(2)
-                        location.reload(); // then reload the page.(3)
-                    }, 1000);
-                })
-                .fail(function() {
-                    alert('FAILED, Check Your Network Connection and Try Again! ...');
-                });
-        });
-    </script>
-
-    <script>
-        $('#addOvertime').submit(function(e) {
-            e.preventDefault();
-            $.ajax({
-                    url: "{{ route('flex.addOvertimeCategory') }}",
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    },
-                    type: "post",
-                    data: new FormData(this),
-                    processData: false,
-                    contentType: false,
-                    cache: false,
-                    async: false
-                })
-                .done(function(data) {
-                    $('#resultOvertimeSubmission').fadeOut('fast', function() {
-                        $('#resultOvertimeSubmission').fadeIn('fast').html(data);
-                    });
-
-                    $('#addOvertime')[0].reset();
-                })
-                .fail(function() {
-                    alert('FAILED, Check Your Network Connection and Try Again! ...');
-                });
-        });
-    </script>
 
     {{-- Submiting non statutory deduction --}}
     <script>

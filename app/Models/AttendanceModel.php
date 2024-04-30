@@ -527,11 +527,11 @@ class AttendanceModel extends Model
          // Initialize accrued days
         $accrual_days = 0;
 
-
         if ($employee->leave_effective_date) {
             $dateeffective = $employee->leave_effective_date;
-            $year_effective = $dateeffective->y;
-            if($year_effective = $years){
+            $date = new DateTime($dateeffective);
+            $year_effective = $date->format('Y');
+            if($year_effective == date('Y')){
                 if (date('Y-m-d') <= $employee->leave_effective_date) {
                     // If the current date is before or equal to the leave effective date
                     $old_accrual_rate = $employee->old_accrual_rate;

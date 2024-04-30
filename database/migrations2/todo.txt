@@ -1,9 +1,9 @@
-php artisan migrate --path=Module/FlexPerformance/database/migrations3/2023_11_13_171456_create_allowance_categories_table.php
-php artisan migrate --path=Module/FlexPerformance/database/migrations2/2023_09_09_193047_add_nightshift_allowance_to_terminations_table.php
+php artisan migrate --path=Modules/FlexPerformance/database/migrations3/2023_11_13_171456_create_allowance_categories_table.php
+php artisan migrate --path=Modules/FlexPerformance/database/migrations2/2023_09_09_193047_add_nightshift_allowance_to_terminations_table.php
 php artisan migrate --path=Modules/FlexPerformance/database/migrations2/2023_09_09_193047_add_nightshift_allowance_to_terminations_table.php
 php artisan migrate --path=Modules/FlexPerformance/database/migrations2/2023_09_09_193028_add_transport_allowance_to_terminations_table.php
 php artisan migrate --path=Modules/FlexPerformance/database/migrations2/2023_10_25_074839_add_gross_new.php
-php artisan migrate --path=Modules/FlexPerformance/database/migrations3/2023_11_13_134905_create_leave_forfeitings_table.php2023_10_25_074839_add_gross_new.php
+php artisan migrate --path=Modules/FlexPerformance/database/migrations3/2023_11_13_134905_create_leave_forfeitings_table.php
 
 
 php artisan migrate --path=Modules/FlexPerformance/database/migrations3/2023_11_28_091012_changecolumntotablecontract.php
@@ -16,11 +16,61 @@ php artisan migrate --path=Modules/FlexPerformance/database/migrations3/2024_01_
 php artisan migrate --path=Modules/FlexPerformance/database/migrations3/2024_01_16_122839_add_approval_status_to_terminations.php
 php artisan migrate --path=Modules/FlexPerformance/database/migrations3/2024_01_17_063147_create_payroll_approvals_table.php
 php artisan migrate --path=Modules/FlexPerformance/database/migrations3/2024_01_17_073813_add_approval_status_to_payroll_months.php
-php artisan migrate --path=Module/FlexPerformance/database/migrations3/2024_01_19_062053_add_approval_status_to_loan_applications.php
-php artisan migrate --path=Module/FlexPerformance/database/migrations3/2024_01_29_101754_add_approval_status_to_promotions_table.php
-php artisan migrate --path=Module/FlexPerformance/database/migrations3/2024_01_30_064046_add_allowed_domain_to_brand_settings_table.php
+php artisan migrate --path=Modules/FlexPerformance/database/migrations3/2024_01_19_062053_add_approval_status_to_loan_applications.php
+php artisan migrate --path=Modules/FlexPerformance/database/migrations3/2024_01_29_101754_add_approval_status_to_promotions_table.php
+php artisan migrate --path=Modules/FlexPerformance/database/migrations3/2024_01_04_073042_create_brand_settings_table.php
+
+
+php artisan migrate --path=Modules/FlexPerformance/database/migrations3/2024_01_30_064046_add_allowed_domain_to_brand_settings_table.php
+php artisan migrate --path=Modules/FlexPerformance/database/migrations3/2024_01_08_071647_add_columns_to_brand_settings_table.php
 
 
 
 
-php artisan migrate --path=Module/FlexPerformance/database/migrations/2024_01_08_071647_add_columns_to_brand_settings_table.php
+
+php artisan migrate --path=Modules/FlexPerformance/database/migrations3/2023_11_13_134905_create_leave_forfeitings_table.php
+php artisan migrate --path=Modules/FlexPerformance/database/migrations3/2023_11_13_171456_create_allowance_categories_table.php
+php artisan migrate --path=Modules/FlexPerformance/database/migrations3/2023_11_14_075016_add_column_to_allowance_table.php
+php artisan migrate --path=Modules/FlexPerformance/database/migrations3/2023_11_14_080005_create_loan_type_table.php
+php artisan migrate --path=Modules/FlexPerformance/database/migrations3/2023_11_18_112408_create_employee_termination_allowances_table.php
+php artisan migrate --path=Modules/FlexPerformance/database/migrations3/2023_11_28_091012_changecolumntotablecontract.php
+php artisan migrate --path=Modules/FlexPerformance/database/migrations3/2023_11_23_115147_create_country_codes_table.php
+php artisan migrate --path=Modules/FlexPerformance/database/migrations3/2023_12_19_135821_update_audit_trails_table_nullable.php
+php artisan migrate --path=Modules/FlexPerformance/database/migrations3/2023_12_22_073150_add_device_token_to_employee.php
+php artisan migrate --path=Modules/FlexPerformance/database/migrations3/2023_12_22_075823_add_sender_emp_id_push_notifctn.php @@
+php artisan migrate --path=Modules/FlexPerformance/database/migrations3/2023_12_31_072941_create_notification_titles_table.php
+php artisan migrate --path=Modules/FlexPerformance/database/migrations3/2023_12_22_081232_add_receiver_emp_id_push_notifctn.php @@
+php artisan migrate --path=Modules/FlexPerformance/database/migrations3/2023_12_31_081806_add_leave_id_to_pushnotification_table.php @@
+php artisan migrate --path=Modules/FlexPerformance/database/migrations3/2023_12_31_084546_add_overtime_id_to_pushnotification_table.php @@
+php artisan migrate --path=Modules/FlexPerformance/database/migrations3/2024_01_02_134216_change_column_not_to_be_null_disciplinaries.php
+php artisan migrate --path=Modules/FlexPerformance/database/migrations3/2023_12_31_105508_id_autoincremen_to_push_notfctn_table.php @@
+php artisan migrate --path=Modules/FlexPerformance/database/migrations3/2024_01_08_071647_add_columns_to_brand_settings_table.php
+php artisan migrate --path=Modules/FlexPerformance/database/migrations3/2024_01_11_131357_add_missing_columns_to_table_country.php
+php artisan migrate --path=Modules/FlexPerformance/database/migrations3/2024_01_15_081105_add_new_column_to_employee_table.php
+php artisan migrate --path=Modules/FlexPerformance/database/migrations3/2024_01_16_122839_add_approval_status_to_terminations.php
+php artisan migrate --path=Modules/FlexPerformance/database/migrations3/2024_01_17_063147_create_payroll_approvals_table.php
+php artisan migrate --path=Modules/FlexPerformance/database/migrations3/2024_01_17_073813_add_approval_status_to_payroll_months.php
+php artisan migrate --path=Modules/FlexPerformance/database/migrations3/2024_01_19_062053_add_approval_status_to_loan_applications.php
+php artisan migrate --path=Modules/FlexPerformance/database/migrations3/2024_01_29_101754_add_approval_status_to_promotions_table.php
+php artisan migrate --path=Modules/FlexPerformance/database/migrations3/2024_01_30_064046_add_allowed_domain_to_brand_settings_table.php
+
+
+
+php artisan migrate --path=Modules/FlexPerformance/database/migrations3/2024_01_04_073042_create_brand_settings_table.php  
+php artisan migrate --path=Modules/FlexPerformance/database/migrations3/2024_01_08_071647_add_columns_to_brand_settings_table.php
+php artisan migrate --path=Modules/FlexPerformance/database/migrations3/2024_01_30_064046_add_allowed_domain_to_brand_settings_table.php
+php artisan migrate --path=Modules/FlexPerformance/database/migrations2/2023_10_25_074839_add_gross_new.php
+php artisan migrate --path=Modules/FlexPerformance/database/migrations/2024_02_06_161234_add_wu_to_temp_payroll_logs_table.php
+php artisan migrate --path=Modules/FlexPerformance/database/migrations/2024_02_06_161210_add_wu_to_payroll_logs_table.php
+php artisan migrate --path=Modules/FlexPerformance/database/migrations3/2024_01_17_073813_add_approval_status_to_payroll_months.php
+php artisan migrate --path=Modules/FlexPerformance/database/migrations3/2024_01_17_063147_create_payroll_approvals_table.php
+php artisan migrate --path=Modules/FlexPerformance/database/migrations3/2023_11_13_134905_create_leave_forfeitings_table.php
+php artisan migrate --path=Modules/FlexPerformance/database/migrations/2024_02_06_094544_add_amount_to_emp_deductions_table.php
+php artisan migrate --path=Modules/FlexPerformance/database/migrations/2024_02_06_142417_add_driving_licence_to_employee_table.php
+
+php artisan db:seed --class=Modules\\FlexPerformance\\database\\seeders\\DeductionSeeder
+
+php artisan migrate --path=Modules/FlexPerformance/database/migrations/2024_02_06_142417_add_driving_licence_to_employee_table.php
+
+php artisan migrate --path=Modules/FlexPerformance/database/migrations3/2023_11_14_075016_add_column_to_allowance_table.php
+

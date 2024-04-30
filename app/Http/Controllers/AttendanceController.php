@@ -620,8 +620,8 @@ class AttendanceController extends Controller
                // start of name information validation
 
                 'mobile' => 'required|numeric',
-                'leave_address' => 'nullable|alpha',
-                'reason' => 'required|alpha',
+                'leave_address' => 'nullable',
+                'reason' => 'required',
 
             ]);
         $start = $request->start;
@@ -713,7 +713,7 @@ class AttendanceController extends Controller
             // Annual leave accurated days
             $annualleaveBalance = $this->attendance_model->getLeaveBalance(Auth::user()->emp_id, $employeeDate, date('Y-m-d'));
             // For  Requested days
-            if ($nature == 1) {
+            if ($nature == 1 || $nature == 6 ) {
                 $holidays = SysHelpers::countHolidays($start, $end);
                 $different_days = SysHelpers::countWorkingDays($start, $end) - $holidays;
 
@@ -747,7 +747,11 @@ class AttendanceController extends Controller
                     $sub_cat = $request->sub_cat;
                     $sub = LeaveSubType::where('id', $sub_cat)->first();
 
+                    // dd($sub);
+
                     $total_leave_days = $leaves + $different_days;
+                    dd($total_leave_days);
+
                     $maximum = $sub->max_days;
                     // Case hasnt used all days
                     if ($total_leave_days < $maximum) {

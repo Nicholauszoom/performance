@@ -20,8 +20,8 @@
 
     {{-- @if (count($line_overtime) > 0) --}}
     @can('view-overtime')
-        
-   
+
+
         <div class="card border-top  border-top-width-3 border-top-main rounded-0">
             <div class="card-header">
                 <h4 class="text-warning">Overtime Requests</h4>
@@ -104,18 +104,10 @@
                         {{-- start of cancel overtime --}}
                         @can('cancel-overtime')
                         <td class="options-width">
-                            <?php //if($row->status==1 || $this->session->userdata('line') !=0 ){
-                            ?> <?php //}
-                            ?>
-                            <?php //if ($row->status==2) {
-                            ?>
                             {{-- start of cancel overtime button --}}
                             <a href="{{ route('flex.fetchOvertimeComment', $row->eoid) }}">
                                 <button class='btn btn-main btn-xs'>Comment</i></button>
                             </a>
-                            {{-- / --}}
-                            <?php //}
-                            ?>
                         </td>
                         @endcan
                         {{-- / --}}
