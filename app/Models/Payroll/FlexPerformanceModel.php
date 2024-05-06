@@ -2883,7 +2883,7 @@ last_paid_date='" . $date . "' WHERE  state = 1 and type = 3";
     public function linemanagerdropdown()
     {
         // $query = "SELECT DISTINCT er.userID as empID,  CONCAT(e.fname,' ',IF( e.mname != null,e.mname,' '),' ', e.lname) as NAME FROM employee e, emp_role er, role r WHERE er.role = r.id and er.userID = e.emp_id and  r.permissions like '%p%'";
-        $query = "SELECT DISTINCT e.emp_id as empID,  CONCAT(e.fname,' ',IF( e.mname != null,e.mname,' '),' ', e.lname) as NAME FROM employee e where emp_id not like '%JOB_%'";
+        $query = "SELECT DISTINCT e.emp_id as empID,  CONCAT(e.fname,' ',IF( e.mname != null,e.mname,' '),' ', e.lname) as NAME FROM employee e where e.state !=4 and emp_id not like '%JOB_%'";
         return DB::select(DB::raw($query));
     }
 
