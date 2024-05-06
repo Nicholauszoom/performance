@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\API;
 
+use App\Models\Termination;
 use DateTime;
 use Carbon\Carbon;
 use App\Models\EMPL;
@@ -101,15 +102,15 @@ class LeaveController extends Controller
             $slipArray = json_decode(json_encode($slip), true);
             $employee= EMPL::where("emp_id",$slipArray["empID"])->get()->first();
 
-      
+
             $slipArray['empName'] = $employee['fname'].' '.$employee['lname'];
-            
-        
-      
-           
+
+
+
+
             $slip = (array) $slipArray;
 
-            
+
         }
 
         return response(
@@ -649,6 +650,16 @@ class LeaveController extends Controller
     //approve leave
     public function approveLeave(Request $request)
     {
+        $terminationUser = Termination::where('employeeID',auth()->user()->emp_id)->first();
+
+        if ($terminationUser) {
+            // If the user exists in the Termination table, return a message
+            return response()->json(['msg' => 'You cant apply Leave'], 202);
+        }
+
+        if (auth()->user()->state == 4){
+            return response()->json(['msg' => 'You cant perform this action'], 202);
+        }
         $id=$request->id;
 
         // $employee=$request->employee;
@@ -859,6 +870,16 @@ class LeaveController extends Controller
 
 
     public function cancelLeave(Request $request)  {
+        $terminationUser = Termination::where('employeeID',auth()->user()->emp_id)->first();
+
+        if ($terminationUser) {
+            // If the user exists in the Termination table, return a message
+            return response()->json(['msg' => 'You cant perform this action'], 202);
+        }
+
+        if (auth()->user()->state == 4){
+            return response()->json(['msg' => 'You cant perform this action'], 202);
+        }
         $id=$request->id;
         $message = $request ->message;
 
@@ -1091,37 +1112,28 @@ class LeaveController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
 
 
 
     public function store(Request $request)
     {
+        $terminationUser = Termination::where('employeeID',auth()->user()->emp_id)->first();
 
+        if ($terminationUser) {
+            // If the user exists in the Termination table, return a message
+            return response()->json(['msg' => 'You cant apply Leave'], 202);
+        }
+
+        if (auth()->user()->state == 4){
+            return response()->json(['msg' => 'You cant perform this action'], 202);
+        }
         //For Gender
-        $gender=auth()->user()->gender;
-        $start = $request->start;
-        $end = $request->end;
-        if($gender=="Male"){$gender=1; }else { $gender=2;  }
-        // for checking balance
-        $today = date('Y-m-d');
-        $arryear = explode('-',$today);
-        $year = $arryear[0];
-        $nature  = $request->nature;
-        $empID  =auth()->user()->emp_id;
 
-        $pendingLeave = Leaves::where('empId', $empID)
-            ->where('state', 1)
-            ->whereDate('start', '<=', $start)
-            ->whereDate('end', '>=', $start)
-            ->first();
+        list($start, $end, $year, $nature, $empID) = $this->forGender($request);
 
-        $approvedLeave = Leaves::where('empId', $empID)
-            ->where('state', 0)
-            ->whereDate('start', '<=', $start)
-            ->whereDate('end', '>=', $start)
-            ->first();
+        list($pendingLeave, $approvedLeave) = $this->extracted($empID, $start);
 
 
         if ($pendingLeave || $approvedLeave) {
@@ -1141,17 +1153,7 @@ class LeaveController extends Controller
         }
 
         // Checking used leave days based on leave type and sub type
-        $leave_sum = Leaves::where('empID', $empID)->where('nature', $nature)->where('sub_category', $request->sub_cat)->whereNot('reason', 'Automatic applied!')->whereYear('created_at', date('Y'))->sum('days');
-        $leave_balance= $leave_sum;
-        // For Leave Nature days
-        $type=LeaveType::where('id',$nature)->first();
-        $type_name=$type->type;
-        $max_leave_days= $type->max_days;
-
-        // Annual leave accurated days
-        $employeeHiredate = explode('-', Auth::user()->hire_date);
-        $employeeHireYear = $employeeHiredate[0];
-        $employeeDate = '';
+        list($leave_balance, $type_name, $max_leave_days, $employeeHireYear, $employeeDate) = $this->checkingUsedLeaveDaysBasedOnLeaveTypeAndSubType($empID, $nature, $request);
 
         if ($employeeHireYear == $year) {
             $employeeDate = Auth::user()->hire_date;
@@ -1181,24 +1183,7 @@ class LeaveController extends Controller
         // For  Requested days
 
 
-
-
-
-        $date1=date('d-m-Y', strtotime($start));
-        $date2=date('d-m-Y', strtotime($end));
-        $start_date = Carbon::createFromFormat('d-m-Y', $date1);
-        $end_date = Carbon::createFromFormat('d-m-Y', $date2);
-        // $different_days = $start_date->diffInDays($end_date);
-
-        // dd( $different_days);
-
-        // For Total Leave days
-
-        // For Working days
-        $d1 = new DateTime ($employeeDate);
-        $d2 = new DateTime();
-        $interval = $d2->diff($d1);
-        $day = SysHelpers::countWorkingDays($d1, $d2);
+        list($d1, $d2, $interval, $day) = $this->forRequestedDays($start, $end, $employeeDate);
 
 
         // For Employees with less than 12 months of employement
@@ -1462,7 +1447,7 @@ class LeaveController extends Controller
 
 
                     $leave->save();
-                   
+
                     $linemanager =  LeaveApproval::where('empID',$empID)->first();
                     $linemanager_data = SysHelpers::employeeData($linemanager->level1);
 
@@ -1755,7 +1740,7 @@ class LeaveController extends Controller
         $data =Leaves::where('empID',Auth::user()->emp_id)->orderBy('id','desc')->get();
         $id = Auth::user()->emp_id;
         $data['deligate']=DB::table('leave_approvals')->Where('level1',$id)->orWhere('level2',$id)->orWhere('level3',$id)->count();
-   
+
         $data['deligates']=DB::table('leave_approvals')->Where('level1',$id)->orWhere('level2',$id)->orWhere('level3',$id)->get();
         $data['leave_types'] =LeaveType::all();
         $data['employees'] =EMPL::where('emp_id','!=',Auth::user()->emp_id)->whereNot('state',4)->get();
@@ -1887,17 +1872,7 @@ class LeaveController extends Controller
             //     ->where('state', 1)
             //     ->whereDate('end', '>=', $start)
             //     ->first();
-            $pendingLeave = Leaves::where('empId', $empID)
-                ->where('state', 1)
-                ->whereDate('start', '<=', $start)
-                ->whereDate('end', '>=', $start)
-                ->first();
-
-            $approvedLeave = Leaves::where('empId', $empID)
-                ->where('state', 0)
-                ->whereDate('start', '<=', $start)
-                ->whereDate('end', '>=', $start)
-                ->first();
+            list($pendingLeave, $approvedLeave) = $this->extracted($empID, $start);
 
 
             if ($pendingLeave || $approvedLeave) {
@@ -2551,6 +2526,16 @@ class LeaveController extends Controller
     }
     public function revokeApprovedLeave(Request $request)
     {
+        $terminationUser = Termination::where('employeeID',auth()->user()->emp_id)->first();
+
+        if ($terminationUser) {
+            // If the user exists in the Termination table, return a message
+            return response()->json(['msg' => 'You cant apply Leave'], 202);
+        }
+
+        if (auth()->user()->state == 4){
+            return response()->json(['msg' => 'You cant perform this action'], 202);
+        }
         $id = $request->input('terminationid');
         $message = $request->input('comment');
         $expectedDate = $request->input('expectedDate');
@@ -2558,14 +2543,14 @@ class LeaveController extends Controller
         $particularLeave = Leaves::where('id', $id)->first();
        ;
         $linemanager = LeaveApproval::where('empID', $particularLeave->empID)->first();
-   
+
         $linemanager_position = EMPL::where('emp_id',$linemanager->level1)->value('position');
         $position = Position::where('id', $linemanager_position)->first();
         $positionName = $position->name;
         $linemanager_data = EMPL::where('emp_id',$linemanager->level1)->first();
         $employee_data =  EMPL::where('emp_id',$particularLeave->empID)->first();
         $fullname = $linemanager_data['fname'] . ' ' . $linemanager_data['mname'] . ' ' . $linemanager_data['lname'];
-        
+
         //send notification to line manager
 
         if( $particularLeave->state == '0'){
@@ -2625,6 +2610,16 @@ class LeaveController extends Controller
     }
     public function revokeApprovedLeaveAdmin(Request $request)
     {
+        $terminationUser = Termination::where('employeeID',auth()->user()->emp_id)->first();
+
+        if ($terminationUser) {
+            // If the user exists in the Termination table, return a message
+            return response()->json(['msg' => 'You cant apply Leave'], 202);
+        }
+
+        if (auth()->user()->state == 4){
+            return response()->json(['msg' => 'You cant perform this action'], 202);
+        }
         $id=$request->id;
         $particularLeave = Leaves::where('id', $id)->first();
 
@@ -2689,6 +2684,16 @@ class LeaveController extends Controller
     }
     public function revokeCancelLeaveAdmin(Request $request)
     {
+        $terminationUser = Termination::where('employeeID',auth()->user()->emp_id)->first();
+
+        if ($terminationUser) {
+            // If the user exists in the Termination table, return a message
+            return response()->json(['msg' => 'You cant apply Leave'], 202);
+        }
+
+        if (auth()->user()->state == 4){
+            return response()->json(['msg' => 'You cant perform this action'], 202);
+        }
         $id=$request->id;
         $particularLeave = Leaves::where('id', $id)->first();
 
@@ -2821,6 +2826,101 @@ class LeaveController extends Controller
 
     }
 
+    /**
+     * @param Request $request
+     * @return array
+     */
+    public function forGender(Request $request): array
+    {
+
+
+        $gender = auth()->user()->gender;
+        $start = $request->start;
+        $end = $request->end;
+
+        if ($gender == "Male") {
+            $gender = 1;
+        } else {
+            $gender = 2;
+        }
+        // for checking balance
+        $today = date('Y-m-d');
+        $arryear = explode('-', $today);
+        $year = $arryear[0];
+        $nature = $request->nature;
+        $empID = auth()->user()->emp_id;
+        return array($start, $end, $year, $nature, $empID);
+    }
+
+    /**
+     * @param mixed $empID
+     * @param mixed $start
+     * @return array
+     */
+    public function extracted(mixed $empID, mixed $start): array
+    {
+        $pendingLeave = Leaves::where('empId', $empID)
+            ->where('state', 1)
+            ->whereDate('start', '<=', $start)
+            ->whereDate('end', '>=', $start)
+            ->first();
+
+        $approvedLeave = Leaves::where('empId', $empID)
+            ->where('state', 0)
+            ->whereDate('start', '<=', $start)
+            ->whereDate('end', '>=', $start)
+            ->first();
+        return array($pendingLeave, $approvedLeave);
+    }
+
+    /**
+     * @param mixed $empID
+     * @param mixed $nature
+     * @param Request $request
+     * @return array
+     */
+    public function checkingUsedLeaveDaysBasedOnLeaveTypeAndSubType(mixed $empID, mixed $nature, Request $request): array
+    {
+        $leave_sum = Leaves::where('empID', $empID)->where('nature', $nature)->where('sub_category', $request->sub_cat)->whereNot('reason', 'Automatic applied!')->whereYear('created_at', date('Y'))->sum('days');
+        $leave_balance = $leave_sum;
+        // For Leave Nature days
+        $type = LeaveType::where('id', $nature)->first();
+        $type_name = $type->type;
+        $max_leave_days = $type->max_days;
+
+        // Annual leave accurated days
+        $employeeHiredate = explode('-', Auth::user()->hire_date);
+        $employeeHireYear = $employeeHiredate[0];
+        $employeeDate = '';
+        return array($leave_balance, $type_name, $max_leave_days, $employeeHireYear, $employeeDate);
+    }
+
+    /**
+     * @param mixed $start
+     * @param mixed $end
+     * @param string $employeeDate
+     * @return array
+     * @throws \Exception
+     */
+    public function forRequestedDays(mixed $start, mixed $end, string $employeeDate): array
+    {
+        $date1 = date('d-m-Y', strtotime($start));
+        $date2 = date('d-m-Y', strtotime($end));
+        $start_date = Carbon::createFromFormat('d-m-Y', $date1);
+        $end_date = Carbon::createFromFormat('d-m-Y', $date2);
+        // $different_days = $start_date->diffInDays($end_date);
+
+        // dd( $different_days);
+
+        // For Total Leave days
+
+        // For Working days
+        $d1 = new DateTime ($employeeDate);
+        $d2 = new DateTime();
+        $interval = $d2->diff($d1);
+        $day = SysHelpers::countWorkingDays($d1, $d2);
+        return array($d1, $d2, $interval, $day);
+    }
 
 
 }

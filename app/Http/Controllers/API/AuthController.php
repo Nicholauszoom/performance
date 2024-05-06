@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
+use App\Models\Termination;
 use App\Models\User;
 use http\Env\Response;
 use Illuminate\Http\Request;
@@ -83,15 +84,14 @@ class AuthController extends Controller
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function login(Request $request)
+    public function login(Request $request): \Illuminate\Http\JsonResponse
     {
-
         try {
             $validateUser = Validator::make($request->all(),
-            [
-                'emp_id' => 'required',
-                'password' => 'required'
-            ]);
+                [
+                    'emp_id' => 'required',
+                    'password' => 'required'
+                ]);
 
             if($validateUser->fails()){
                 return response()->json([
@@ -107,37 +107,47 @@ class AuthController extends Controller
                     'message' => 'Email & Password does not match with our record.',
                 ], 401);
             }
+
+            $terminationUser = null;
+            $user = null;
+
+            // Check if the user exists in the Termination table
+            $terminationUser = Termination::where('employeeID', $request->emp_id)->first();
+
+            if ($terminationUser) {
+                // If the user exists in the Termination table, return a message
+                return response()->json(['message' => 'User does not exist'], 404);
+            } else {
+                // If the user does not exist in the Termination table, fetch the user object from the User model
+                $user = User::where('emp_id', $request->emp_id)->first();
+
+                // Check if the user exists in the User model
+                if (!$user) {
+                    // If the user does not exist in the User model, return an appropriate response
+                    return response()->json(['message' => 'User not found'], 404);
+                }
+            }
+
+            // The rest of your login function logic...
             $flexPerformance= new FlexPerformanceModel();
             $authenticateCont= new AuthenticatedSessionController($flexPerformance);
             $result=$authenticateCont->dateDiffCalculate();
             session(['pass_age' => $result]);
             $pass_age = session()->get('pass_age');
-            $user = User::where('emp_id', $request->emp_id)->first();
 
             if ($user->tokens()->count() > 0) {
                 $user->tokens()->delete();
             }
 
-
-
-            // $pass_age = session()->all();
-             //  dd(session()->all());
-
             $data['employee'] = $this->flexperformance_model->userprofile($request->emp_id);
-            // $data['emegerncy'] = EmergencyContact::where('employeeID', $request->emp_id)->first();
-            // dd($data['employee'],$request->emp_id);
-            //$annualleaveBalance = $this->attendance_model->getLeaveBalance($user->hire_date, date('Y-m-d'));
-            $annualleaveBalance = $this->attendance_model->getLeaveBalance(auth()->user()->emp_id,auth()->user()->hire_date, date('Y-m-d'));
-            //$annualleaveBalance = 12;
+            $annualleaveBalance = $this->attendance_model->getLeaveBalance(auth()->user()->emp_id, auth()->user()->hire_date, date('Y-m-d'));
+
             $myNewData = json_decode(json_encode($data['employee'][0]), true);
             $myNewData['accrued_days'] = $annualleaveBalance;
             $myNewData['pass_age'] = $pass_age;
-            $myNewData['emegerncy'] =EmergencyContact::where('employeeID', $request->emp_id)->first();
+            $myNewData['emegerncy'] = EmergencyContact::where('employeeID', $request->emp_id)->first();
             $referer = request()->header('referer');
             $myNewData['referer'] = $referer;
-             // $myNewDataJson = json_encode($myNewData);
-
-
 
             $token = $user->createToken("API TOKEN");
             if($pass_age>=90){
@@ -153,10 +163,8 @@ class AuthController extends Controller
                     'message' => 'User Logged In Successfully',
                     'token' => $token->plainTextToken,
                     'tokenData' => $token
-                    //'hashed' => Hash::make($token->plainTextToken),
                 ], 200);
             }
-
         } catch (\Throwable $th) {
             return response()->json([
                 'status' => false,
