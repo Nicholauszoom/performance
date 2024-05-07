@@ -212,11 +212,19 @@ class GeneralController extends Controller
     public function myOvetimes()
     {
 
+        if (auth()->user()->state == 4){
+//            dd(auth()->user()->emp_id);
+            $data['employees'] = [];
+        }else{
+            $data['employees'] = Employee::whereNot('emp_id',auth()->user()->emp_id)->get();
+        }
+
         $emp_id=auth()->user()->emp_id;
 
         $data['my_overtimes'] = $this->flexperformance_model->my_overtimes($emp_id);
         $data['overtimeCategory'] = $this->flexperformance_model->overtimeCategory();
-        $data['employees'] = $this->flexperformance_model->Employee();
+
+
 
         $data['overtime_total'] = $this->flexperformance_model->Overtime_total($emp_id);
 
@@ -246,7 +254,16 @@ class GeneralController extends Controller
     //  start of apply overtimes function
     public function applyOvertime(Request $request)
     {
+        $terminationUser = Termination::where('employeeID',auth()->user()->emp_id)->first();
 
+        if ($terminationUser) {
+            // If the user exists in the Termination table, return a message
+            return response()->json(['msg' => 'You cant perform this action'], 401);
+        }
+
+        if (auth()->user()->state == 4){
+            return response()->json(['msg' => 'You cant perform this action'], 202);
+        }
         $start = $request->input('time_start');
         $finish = $request->input('time_finish');
         $reason = $request->input('reason');
@@ -970,7 +987,16 @@ class GeneralController extends Controller
             // For updating profile image
     public function updateImg(Request $request)
     {
+        $terminationUser = Termination::where('employeeID',auth()->user()->emp_id)->first();
 
+        if ($terminationUser) {
+            // If the user exists in the Termination table, return a message
+            return response()->json(['msg' => 'You cant perform this action'], 202);
+        }
+
+        if (auth()->user()->state == 4){
+            return response()->json(['msg' => 'You cant perform this action'], 202);
+        }
 
         $user = auth()->user()->emp_id;
         request()->validate([
@@ -1001,6 +1027,16 @@ class GeneralController extends Controller
     }
     public function employeeEmergency(Request $request)
     {
+        $terminationUser = Termination::where('employeeID',auth()->user()->emp_id)->first();
+
+        if ($terminationUser) {
+            // If the user exists in the Termination table, return a message
+            return response()->json(['msg' => 'You cant perform this action'], 202);
+        }
+
+        if (auth()->user()->state == 4){
+            return response()->json(['msg' => 'You cant perform this action'], 202);
+        }
         $id = auth()->user()->emp_id;
 
         $emergency = EmergencyContact::where('employeeID', $id)->first();
@@ -1034,7 +1070,16 @@ class GeneralController extends Controller
     public function updateUserInfo(Request $request)
     {
 
+        $terminationUser = Termination::where('employeeID',auth()->user()->emp_id)->first();
 
+        if ($terminationUser) {
+            // If the user exists in the Termination table, return a message
+            return response()->json(['msg' => 'You cant perform this action'], 202);
+        }
+
+        if (auth()->user()->state == 4){
+            return response()->json(['msg' => 'You cant perform this action'], 202);
+        }
         $user = auth()->user()->emp_id;
         // request()->validate([
         //     'image' => 'required'
@@ -1090,6 +1135,16 @@ class GeneralController extends Controller
     // }
     public function leaveAttachment(Request $request)
     {
+        $terminationUser = Termination::where('employeeID',auth()->user()->emp_id)->first();
+
+        if ($terminationUser) {
+            // If the user exists in the Termination table, return a message
+            return response()->json(['msg' => 'You cant perform this action'], 202);
+        }
+
+        if (auth()->user()->state == 4){
+            return response()->json(['msg' => 'You cant perform this action'], 202);
+        }
         $user = auth()->user()->emp_id;
         $fileContent = $request->input('image');
         $storageDirectory = 'storage/leaves/';
@@ -1140,7 +1195,16 @@ class GeneralController extends Controller
 
     public function approveOvertime(Request $request)
     {
+        $terminationUser = Termination::where('employeeID',auth()->user()->emp_id)->first();
 
+        if ($terminationUser) {
+            // If the user exists in the Termination table, return a message
+            return response()->json(['msg' => 'You cant perform this action'], 202);
+        }
+
+        if (auth()->user()->state == 4){
+            return response()->json(['msg' => 'You cant perform this action'], 202);
+        }
         $overtimeID =$request->id;
 
         // $status = $this->flexperformance_model->checkApprovedOvertime($overtimeID);
@@ -1176,7 +1240,16 @@ class GeneralController extends Controller
 
     public function lineApproveOvertime(Request $request)
     {
+        $terminationUser = Termination::where('employeeID',auth()->user()->emp_id)->first();
 
+        if ($terminationUser) {
+            // If the user exists in the Termination table, return a message
+            return response()->json(['msg' => 'You cant perform this action'], 202);
+        }
+
+        if (auth()->user()->state == 4){
+            return response()->json(['msg' => 'You cant perform this action'], 202);
+        }
         $overtimeID = $request->id;
 
         $status = $this->flexperformance_model->checkOvertimeStatus($overtimeID);
@@ -1398,7 +1471,16 @@ class GeneralController extends Controller
 
     public function denyOvertime(Request $request)
     { //or disapprove
+        $terminationUser = Termination::where('employeeID',auth()->user()->emp_id)->first();
 
+        if ($terminationUser) {
+            // If the user exists in the Termination table, return a message
+            return response()->json(['msg' => 'You cant perform this action'], 202);
+        }
+
+        if (auth()->user()->state == 4){
+            return response()->json(['msg' => 'You cant perform this action'], 202);
+        }
         $overtimeID = $request->id;
         $empID = $this->flexperformance_model->get_employee_overtimeID($overtimeID);
         $approver=EMPL::where('emp_id',auth()->user()->emp_id)->first();
