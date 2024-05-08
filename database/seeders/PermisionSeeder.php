@@ -131,6 +131,10 @@ class PermisionSeeder extends Seeder
 
                 // Module 4: Loan Management
                 [71, 'view-loan', 4],
+                
+                [71, 'view-my-loans', 11],
+                [71, 'view-my-aproved-loans', 11],
+
                 [72, 'edit-loan', 4],
                 [73, 'add-loan', 4],
                 [74, 'delete-loan', 4],

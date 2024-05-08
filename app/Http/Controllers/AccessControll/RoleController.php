@@ -35,7 +35,6 @@ class RoleController extends Controller
     {
 
         // $this->authenticateUser('view-roles');
-
         $roles = Role::all();
         $permissions = Permission::all();
         $modules = SystemModule::all();
@@ -44,7 +43,7 @@ class RoleController extends Controller
 
     public function create(Request $request)
     {
-
+// dd("kk");
         $role = Role::find($request->role_id);
       //  if($role->added_by == auth()->user()->id){
         if (isset($request->permissions)) {
@@ -75,6 +74,7 @@ class RoleController extends Controller
 
     public function show($id)
     {
+
         $role = Role::find($id);
         $permissions = Permission::all();
         $modules = SystemModule::all();
