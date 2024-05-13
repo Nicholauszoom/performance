@@ -137,7 +137,7 @@
             $nhif_deductions = $row->nhif;
             $meals = $row->meals / $row->rate;
             $taxdue = $row->taxdue / $row->rate;
-            $show_nhif = true;
+            $show_nhif = false;
         }
         
         foreach ($companyinfo as $row) {
