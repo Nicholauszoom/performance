@@ -22,6 +22,7 @@ class RoleController extends Controller
     {
 
         $role = Role::find($request->role_id);
+        dd($role);
         if($role->added_by == auth()->user()->id){
         if (isset($request->permissions)) {
             $role->refreshPermissions($request->permissions);
@@ -52,6 +53,7 @@ class RoleController extends Controller
 
     public function show($id)
     {
+        dd("eee");
         $role = Role::find($id);
         $permissions = Permission::all();
         $modules = SystemModule::all();

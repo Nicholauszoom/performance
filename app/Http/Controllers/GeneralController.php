@@ -4315,8 +4315,8 @@ class GeneralController extends Controller
         $employee = Auth::User()->id;
         $role = UserRole::where('user_id', $employee)->first();
         // $role_id = $role->role_id;
-        $rr = User::find(2);
-        $posn = Auth::User()->position;
+        $posn = Auth::User()->roles;
+        // dd($posn);
         // dd(Position::where('id', $posn)->first());
 
 

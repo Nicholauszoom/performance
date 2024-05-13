@@ -3364,10 +3364,10 @@ EOD;
         if ($request->type == 1) {
             if ($nature == 1) {
                 $pdf = Pdf::loadView('reports.leave_balance', $data)->setPaper('a4', 'landscape');
-                return $pdf->download('Leave_report' . $request->duration . '.pdf');
+                return $pdf->download('Leave Report ' . $request->duration . '.pdf');
             } else {
                 $pdf = Pdf::loadView('reports.other_leave_balance', $data)->setPaper('a4', 'landscape');
-                return $pdf->download('Leave_report' . $request->duration . '.pdf');
+                return $pdf->download('Leave Report ' . $request->duration . '.pdf');
             }
         } else {
             if ($nature == 1) {
@@ -3561,10 +3561,10 @@ public function processOneEmployee($employee, $request, $nature){
         if ($request->type == 1) {
             if ($nature == 1) {
                 $pdf = Pdf::loadView('reports.leave_balance', $data)->setPaper('a4', 'landscape');
-                return $pdf->download('Leave_report' . $request->duration . '.pdf');
+                return $pdf->download('Leave Report ' . $request->duration . '.pdf');
             } else {
                 $pdf = Pdf::loadView('reports.other_leave_balance', $data)->setPaper('a4', 'landscape');
-                return $pdf->download('Leave_report' . $request->duration . '.pdf');
+                return $pdf->download('Leave Report ' . $request->duration . '.pdf');
             }
         } else {
             if ($nature == 1) {
@@ -3610,14 +3610,35 @@ public function processOneEmployee($employee, $request, $nature){
 
         $days_this_month = intval(date('t', strtotime($request->duration)));
 
-        $employee->accrual_amount = $employee->salary / 30;
+     //   $accrual_days = $days_this_year * $employee->leave_days_entitled / 365;
 
-        $employee->maximum_days = $this->attendance_model->getLeaveTaken2($employee->emp_id, $employee->hire_date, $request->duration, $nature);
+        $year = $today->format('Y');
 
+        $employeeHiredate = explode('-', $employee->hire_date);
+        $employeeHireYear = $employeeHiredate[0];
+        $employeeDate = '';
 
-        $accrual_days = $days_this_year * $employee->leave_days_entitled / 365;
+        if ($year > date('Y')) {
+            $daysAccrued = 0;
+            $outstandingLeaveBalance = 0;
+        } elseif ($year < date('Y')) {
+            if ($employeeHireYear == $year) {
+                $employeeDate = $employee->hire_date;
+            } else {
+                $employeeDate = $year . '-01-01';
+            }
+            $endDate = $year . '-12-31';
+            $daysAccrued = $this->attendance_model->getAccruedBalance(Auth::user()->emp_id, $employeeDate, $endDate);
+        } else {
+            if ($employeeHireYear == $year) {
+                $employeeDate = $employee->hire_date;
+            } else {
+                $employeeDate = $year . '-01-01';
+            }
+            $daysAccrued = $this->attendance_model->getAccruedBalance(Auth::user()->emp_id, $employeeDate, date('Y-m-d'));
+        }
 
-        $employee->accrual_days = $accrual_days;
+        $employee->accrual_days = $daysAccrued;
 
         $employee->nature = $nature;
 
@@ -3648,6 +3669,9 @@ public function processOneEmployee($employee, $request, $nature){
         $employee->opening_balance = $this->attendance_model->getLeaveBalance($employee->emp_id, $first_day_this_year,$first_day_this_year);
 
         $employee->current_balance = $this->attendance_model->getLeaveBalance($employee->emp_id, $first_day_this_year, $request->duration);
+        $employee->accrual_amount = $employee->salary / 30;
+
+        $employee->maximum_days = $this->attendance_model->getLeaveTaken2($employee->emp_id, $employee->hire_date, $request->duration, $nature);
 
         return $employee;
     }
@@ -3718,7 +3742,7 @@ public function processOneEmployee($employee, $request, $nature){
         if ($request->type == 1) {
 
             $pdf = Pdf::loadView('reports.leave_application', $data)->setPaper('a4', 'landscape');
-            return $pdf->download('Leave_apprilation_report' . $request->duration . '.pdf');
+            return $pdf->download('Leave_application_report' . $request->duration . '.pdf');
         } else {
 
             return view('reports.leave_application_datatable', $data);
@@ -3790,7 +3814,7 @@ public function processOneEmployee($employee, $request, $nature){
         if ($request->type == 1) {
 
             $pdf = Pdf::loadView('reports.leave_application', $data)->setPaper('a4', 'landscape');
-            return $pdf->download('Leave_apprication_report' . $request->duration . '.pdf');
+            return $pdf->download('Leave_application_report' . $request->duration . '.pdf');
         } else {
 
             return view('reports.leave_application_datatable', $data);
@@ -3864,7 +3888,7 @@ public function processOneEmployee($employee, $request, $nature){
         if ($request->type == 1) {
 
             $pdf = Pdf::loadView('reports.leave_application', $data)->setPaper('a4', 'landscape');
-            return $pdf->download('Leave_apprication_report' . $request->duration . '.pdf');
+            return $pdf->download('Leave_application_report' . $request->duration . '.pdf');
         } else {
 
             return view('reports.leave_application_datatable', $data);

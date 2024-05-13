@@ -24,7 +24,7 @@
 
 
                 <div class="col-md-12 col-sm-12 col-xs-12">
-                    @can('view-loans')
+                    @can('view-my-loans')
 
                         <div class="card border-top  border-top-width-3 border-top-main rounded-0">
                             <div class="card-head px-3 py-1">
@@ -132,7 +132,7 @@
 
                 <div class="col-md-12 col-sm-12 col-xs-12">
 
-                    @can('view-aproved-loans')
+                    @can('view-my-aproved-loans')
 
                         <div class="card border-top  border-top-width-3 border-top-main rounded-0">
                             <div class="card-head px-2">
