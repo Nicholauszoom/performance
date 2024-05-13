@@ -137,7 +137,7 @@
             $nhif_deductions = $row->nhif;
             $meals = $row->meals / $row->rate;
             $taxdue = $row->taxdue / $row->rate;
-            $show_nhif = false;
+            $show_nhif = true;
         }
         
         foreach ($companyinfo as $row) {
@@ -182,7 +182,9 @@
         }
         
         // START TAKE HOME
-        $amount_takehome = $sum_allowances + $salary - ($sum_loans + $pension_employee + $taxdue + $sum_deductions + $meals);
+
+                                $nhif_sum=$show_nhif?$nhif_deductions:0;
+        $amount_takehome = $sum_allowances + $salary - ($sum_loans + $pension_employee + $taxdue + $sum_deductions + $nhif_sum);
         
         $paid_salary = $amount_takehome;
         foreach ($paid_with_arrears as $paid_with_arrear) {
@@ -392,10 +394,12 @@
                                 </li>
                             @endforeach
 
+                           
+
                             <li class="list-group-item mt-5 bg-light">
                                 <span class="text-muted">Total Deduction</span>
                                 <span
-                                    class="font-weight-bold">{{ number_format($pension_employee + $taxdue + $sum_deductions + $sum_loans + $meals, 2) }}</span>
+                                    class="font-weight-bold">{{ number_format($pension_employee + $taxdue + $sum_deductions +$sum_loans +$nhif_sum+ $meals , 2) }}</span>
                             </li>
                         </ul>
                     </td>
@@ -476,7 +480,7 @@
                             <li class="list-group-item d-flex">
                                 <span class="text-muted">Total Deduction</span>
                                 <span class="font-weight-bold">
-                                    {{ number_format($pension_employee + $taxdue + $sum_deductions + $sum_loans + $meals, 2) }}
+                                    {{ number_format($pension_employee + $taxdue + $sum_deductions + $sum_loans + $nhif_sum, 2) }}
                                 </span>
                             </li>
                             <li class="list-group-item d-flex">
