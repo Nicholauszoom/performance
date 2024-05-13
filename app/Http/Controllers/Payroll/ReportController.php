@@ -3364,10 +3364,10 @@ EOD;
         if ($request->type == 1) {
             if ($nature == 1) {
                 $pdf = Pdf::loadView('reports.leave_balance', $data)->setPaper('a4', 'landscape');
-                return $pdf->download('Leave_report' . $request->duration . '.pdf');
+                return $pdf->download('Leave Report ' . $request->duration . '.pdf');
             } else {
                 $pdf = Pdf::loadView('reports.other_leave_balance', $data)->setPaper('a4', 'landscape');
-                return $pdf->download('Leave_report' . $request->duration . '.pdf');
+                return $pdf->download('Leave Report ' . $request->duration . '.pdf');
             }
         } else {
             if ($nature == 1) {
@@ -3561,10 +3561,10 @@ public function processOneEmployee($employee, $request, $nature){
         if ($request->type == 1) {
             if ($nature == 1) {
                 $pdf = Pdf::loadView('reports.leave_balance', $data)->setPaper('a4', 'landscape');
-                return $pdf->download('Leave_report' . $request->duration . '.pdf');
+                return $pdf->download('Leave Report ' . $request->duration . '.pdf');
             } else {
                 $pdf = Pdf::loadView('reports.other_leave_balance', $data)->setPaper('a4', 'landscape');
-                return $pdf->download('Leave_report' . $request->duration . '.pdf');
+                return $pdf->download('Leave Report ' . $request->duration . '.pdf');
             }
         } else {
             if ($nature == 1) {
