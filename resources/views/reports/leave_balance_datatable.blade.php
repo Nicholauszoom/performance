@@ -39,7 +39,7 @@
             <thead>
                 <tr>
                     <th>No</th>
-                    <th>EMP ID</th>
+                    <th>Payroll Number</th>
                     <th>First Name</th>
                     <th>Last Name</th>
                     <th>Leave Entitled</th>
@@ -88,12 +88,13 @@
                     {{-- <td><?php echo number_format($employee->accrual_amount, 2); ?></td>
                     <td><?php echo number_format($employee->accrual_amount * $employee->opening_balance, 2); ?></td> --}}
                     @if($nature == 1)
-                    <td><?php echo number_format($employee->accrual_days, 3); ?></td>
-                    <td><?php echo number_format($employee->accrual_rate, 3); ?></td>
+                    <td><?php echo number_format($employee->accrual_days, 2); ?></td>
+                    <td><?php echo number_format($employee->accrual_rate, 2); ?></td>
                      @endif
                     <td><?php echo number_format(($employee->opening_balance < 0?($employee->days_spent +(-1*$employee->opening_balance)):$employee->days_spent),2) ?></td>
-                    <td><?php echo number_format($employee->current_balance, 2); ?></td>
-                    @if($nature == 1)   <td><?php echo number_format($employee->current_balance * $employee->accrual_amount, 2); ?></td> @endif
+                    <td><?php echo number_format($employee->opening_balance+$employee->accrual_days-$employee->days_spent, 2); ?></td>
+                    @if($nature == 1)   <td><?php echo number_format(($employee->accrual_days * $employee->accrual_amount), 2); ?></td> @endif
+
 
                 </tr>
                 @else
@@ -111,8 +112,9 @@
                     <td><?php echo number_format($employee->accrual_rate*0, 2); ?></td>
                      @endif
                     <td><?php echo number_format(($employee->days_spent*0)) ?></td>
-                    <td><?php echo number_format($employee->current_balance*0, 2); ?></td>
-                    @if($nature == 1)   <td><?php echo number_format($employee->current_balance * $employee->accrual_amount*0, 2); ?></td> @endif
+                    <td><?php echo number_format($employee->opening_balance+$employee->accrual_days-$employee->days_spent, 2); ?></td>
+
+                    @if($nature == 1)   <td><?php echo number_format(($employee->accrual_days* $employee->accrual_amount), 2); ?></td> @endif
 
                 </tr>
                 @endif

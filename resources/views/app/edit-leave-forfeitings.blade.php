@@ -68,7 +68,7 @@
                     <div class="form-group col-6">
                         <label class="form-label">Fortfeit Days:</label>
                         <div class="form-control-feedback form-control-feedback-start">
-                            <input type="number" name="days" @isset($leaveForfeitings->days) value = "{{ $leaveForfeitings->days }}" @endisset class="form-control"/>
+                            <input type="number" step="0.001" name="days" @isset($leaveForfeitings->days) value = "{{ $leaveForfeitings->days }}" @endisset class="form-control"/>
                                 {{-- <div class="form-control-feedback-icon"><i class="ph-user-circle text-muted"></i></div> --}}
                         </div>
                     </div>
