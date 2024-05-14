@@ -54,7 +54,7 @@
                     <div class="form-group col-6">
                         <label class="form-label">Opening Balance:</label>
                         <div class="form-control-feedback form-control-feedback-start">
-                            <input type="number" name="opening_balance" value="{{ $leaveForfeitings->opening_balance ?? 0 }}" class="form-control" />
+                            <input type="number" step="0.001" name="opening_balance" value="{{ $leaveForfeitings->opening_balance ?? 0 }}" class="form-control" />
                         </div>
                     </div>
 
