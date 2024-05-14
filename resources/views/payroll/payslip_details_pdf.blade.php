@@ -152,7 +152,6 @@
         $sum_allowances = $total_allowances / $rate;
         $sum_deductions = $total_deductions / $rate;
         $sum_loans = 0;
-        
         // DATE MANIPULATION
         $hire = date_create($hiredate);
         $today = date_create($payroll_month);
@@ -242,8 +241,15 @@
                 <tr>
                     <th style="text-align: left; padding: 0">
                         <div style="display: inline-block; vertical-align: middle;">
+                            @if ($brandSetting->dashboard_logo)
+                            <img src="{{ asset('storage/' . $brandSetting->dashboard_logo) }}" class="img-fluid"
+                            alt="" width="150px" height="150px" style="display: inline;">
+                            @else
                             <img src="{{ public_path('assets/images/hc-hub-logo3.png') }}" class="img-fluid"
-                                alt="" width="150px" height="150px" style="display: inline;">
+                            alt="" width="150px" height="150px" style="display: inline;"> 
+                            @endif
+                           
+
                             <h5 class="text-main" style="display: inline; margin: 0; vertical-align: middle;">Payslip
                             </h5>
                         </div>
@@ -251,8 +257,17 @@
 
 
                     <th style="text-align: right;">
-                        <p><img src="{{ public_path('img/logo.png') }}" class="img-fluid" alt="" width="180px"
-                                height="150px"></p>
+                        <p>
+                            @if ($brandSetting->company_logo)
+                            <img src="{{ asset('storage/' . $brandSetting->company_logo) }}" class="img-fluid" alt="" width="180px"
+                            height="150px">
+                            @else
+                            <img src="{{ public_path('img/logo.png') }}" class="img-fluid" alt="" width="180px"
+                                height="150px">
+                            @endif
+                            
+                            
+                        </p>
                     </th>
                 </tr>
             </thead>
