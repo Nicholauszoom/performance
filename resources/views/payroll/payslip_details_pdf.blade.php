@@ -183,7 +183,7 @@
         
         // START TAKE HOME
 
-                                $nhif_sum=$show_nhif?$nhif_deductions:0;
+        $nhif_sum=$show_nhif?$nhif_deductions:0;
         $amount_takehome = $sum_allowances + $salary - ($sum_loans + $pension_employee + $taxdue + $sum_deductions + $nhif_sum);
         
         $paid_salary = $amount_takehome;
