@@ -3634,12 +3634,13 @@ public function processOneEmployee($employee, $request, $nature){
             $endDate = $year . '-12-31';
             $daysAccrued = $this->attendance_model->getAccruedBalance($employee->emp_id, $employeeDate, $endDate);
         } else {
-            if ($employeeHireYear == $year) {
+                if ($employeeHireYear == $year) {
                 $employeeDate = $employee->hire_date;
+                $daysAccrued = $this->attendance_model->getAccruedBalance($employee->emp_id, $employeeDate,$request->duration );
             } else {
                 $employeeDate = $year . '-01-01';
+                $daysAccrued = $this->attendance_model->getAccruedBalance($employee->emp_id, $employeeDate,$request->duration );
             }
-            $daysAccrued = $this->attendance_model->getAccruedBalance($employee->emp_id, $employeeDate,$request->duration );
         }
 
         $employee->accrual_days = $daysAccrued;
