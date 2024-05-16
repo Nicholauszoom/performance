@@ -12734,7 +12734,7 @@ class GeneralController extends Controller
 
             $brandSettings = $request->all();
 
-            foreach (['company_logo', 'report_logo', 'login_picture', 'dashboard_logo', 'body_background', 'report_top_banner', 'report_bottom_banner'] as $fileField) {
+            foreach (['company_logo', 'report_logo', 'login_picture', 'dashboard_logo', 'body_background', 'report_top_banner', 'report_bottom_banner', 'left_payslip_logo', 'right_payslip_logo'] as $fileField) {
                 if ($request->hasFile($fileField)) {
 
                     $existingFilePath = $brandSetting->$fileField;

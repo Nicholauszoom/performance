@@ -243,8 +243,8 @@
                 <tr>
                     <th style="text-align: left; padding: 0">
                         <div style="display: inline-block; vertical-align: middle;">
-                            @if ($brandSetting->dashboard_logo)
-                            <img src="{{ asset('storage/' . $brandSetting->dashboard_logo) }}" class="img-fluid"
+                            @if ($brandSetting->left_payslip_logo)
+                            <img src="{{ asset('storage/' . $brandSetting->left_payslip_logo) }}" class="img-fluid"
                             alt="" width="150px" height="150px" style="display: inline;">
                             @else
                             <img src="{{ public_path('assets/images/hc-hub-logo3.png') }}" class="img-fluid"
@@ -259,8 +259,8 @@
 
                     <th style="text-align: right;">
                         <p>
-                            @if ($brandSetting->company_logo)
-                            <img src="{{ asset('storage/' . $brandSetting->company_logo) }}" class="img-fluid" alt="" width="180px"
+                            @if ($brandSetting->right_payslip_logo)
+                            <img src="{{ asset('storage/' . $brandSetting->right_payslip_logo) }}" class="img-fluid" alt="" width="180px"
                             height="150px">
                             @else
                             <img src="{{ public_path('img/logo.png') }}" class="img-fluid" alt="" width="180px"

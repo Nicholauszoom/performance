@@ -37,6 +37,8 @@ class BrandSetting extends Model
         'report_bottom_banner',
         'report_system_name',
         'allowed_domain',
+        'left_payslip_logo',
+        'right_payslip_logo',
     ];
     
 }
