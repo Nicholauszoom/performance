@@ -57,7 +57,7 @@
                                     </p>
                                     <p class="p-space">
                                         @if ($brandSetting->address_3)
-                                            {{ $$brandSetting->address_3 }}
+                                            {{ $brandSetting->address_3 }}
                                         @else
                                             P.O. Box 31, Dar es salaam
                                         @endif
