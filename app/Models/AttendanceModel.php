@@ -544,7 +544,6 @@ class AttendanceModel extends Model
             }
         }
         else {
-            // If leave_effective_date is null
             $accrual_days = (($days * $employee->accrual_rate) / 30) + $months * $employee->accrual_rate + $years * 12 * $employee->accrual_rate;
         }
         return $accrual_days;

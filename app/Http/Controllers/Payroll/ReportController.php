@@ -3504,8 +3504,6 @@ public function processOneEmployee($employee, $request, $nature){
                     }
                 }
             }
-            //  dd( $employees);
-
         } else {
 
             if ($request->leave_employee == Null || $request->leave_employee == "All") {
@@ -3577,9 +3575,11 @@ public function processOneEmployee($employee, $request, $nature){
 
     public function gettingEmployeeAnnualLeavesReport($employee, $request, $nature)
     {
-        $d1 = new DateTime(date($employee->hire_date));
+            // Create DateTime objects for the hire date and the selected date in the request
+        $d1 = new DateTime($employee->hire_date);
+        $d2 = new DateTime($request->duration);
 
-        $d2 = new DateTime("now");
+        // Calculate the difference between hire date and the selected date
         $diff = $d1->diff($d2);
 
 
@@ -3587,18 +3587,21 @@ public function processOneEmployee($employee, $request, $nature){
         $months = $diff->m;
         $days = $diff->d;
 
+        // Reset the diff variable to 0 (not sure if this is needed, keeping as is)
         $diff = 0;
 
+        // Extract the year from the request duration
         $calender = explode('-', $request->duration);
-
         $december = ($calender[0] - 1) . '-12-31';
-         $first_day_this_year=($calender[0]) . '-01-01';
+        $first_day_this_year=($calender[0]) . '-01-01';
+
+        // Create DateTime objects for December last year, hire date, and today (selected date)
         $december_last_year = new DateTime($december);
         $hire_date = new DateTime($employee->hire_date);
         $today = new DateTime($request->duration);
 
+        // Calculate the days for the current year based on the selected date
         if ($december_last_year > $hire_date) {
-
             $diff = $today->diff($december_last_year);
         } else {
 
@@ -3610,13 +3613,14 @@ public function processOneEmployee($employee, $request, $nature){
 
         $days_this_month = intval(date('t', strtotime($request->duration)));
 
-     //   $accrual_days = $days_this_year * $employee->leave_days_entitled / 365;
 
+        // Extract the year from the selected date
         $year = $today->format('Y');
-
         $employeeHiredate = explode('-', $employee->hire_date);
         $employeeHireYear = $employeeHiredate[0];
+
         $employeeDate = '';
+
 
         if ($year > date('Y')) {
             $daysAccrued = 0;
@@ -3628,14 +3632,15 @@ public function processOneEmployee($employee, $request, $nature){
                 $employeeDate = $year . '-01-01';
             }
             $endDate = $year . '-12-31';
-            $daysAccrued = $this->attendance_model->getAccruedBalance(Auth::user()->emp_id, $employeeDate, $endDate);
+            $daysAccrued = $this->attendance_model->getAccruedBalance($employee->emp_id, $employeeDate, $endDate);
         } else {
-            if ($employeeHireYear == $year) {
+                if ($employeeHireYear == $year) {
                 $employeeDate = $employee->hire_date;
+                $daysAccrued = $this->attendance_model->getAccruedBalance($employee->emp_id, $employeeDate,$request->duration );
             } else {
                 $employeeDate = $year . '-01-01';
+                $daysAccrued = $this->attendance_model->getAccruedBalance($employee->emp_id, $employeeDate,$request->duration );
             }
-            $daysAccrued = $this->attendance_model->getAccruedBalance(Auth::user()->emp_id, $employeeDate, date('Y-m-d'));
         }
 
         $employee->accrual_days = $daysAccrued;
@@ -3646,7 +3651,6 @@ public function processOneEmployee($employee, $request, $nature){
 
         if ($employee->leave_effective_date) {
             if (date('Y-m-d') <= $employee->leave_effective_date) {
-                // If the current date is before or equal to the leave effective date
                 $employee->days_entitled = $employee->old_leave_days_entitled;
                 $employee->accrual_rate = $employee->old_accrual_rate;
 
@@ -3656,21 +3660,15 @@ public function processOneEmployee($employee, $request, $nature){
                 $employee->accrual_rate = $accrual_rate;
             }
         } else {
-            // If leave_effective_date is null
             $accrual_rate = $employee->accrual_rate;
             $employee->days_entitled = $employee->leave_days_entitled;
             $employee->accrual_rate = $accrual_rate;
         }
 
-
-
         $employee->days_spent = $this->attendance_model->days_spent3($employee->emp_id, $employee->hire_date, $request->duration, $nature);
-
         $employee->opening_balance = $this->attendance_model->getLeaveBalance($employee->emp_id, $first_day_this_year,$first_day_this_year);
-
         $employee->current_balance = $this->attendance_model->getLeaveBalance($employee->emp_id, $first_day_this_year, $request->duration);
         $employee->accrual_amount = $employee->salary / 30;
-
         $employee->maximum_days = $this->attendance_model->getLeaveTaken2($employee->emp_id, $employee->hire_date, $request->duration, $nature);
 
         return $employee;

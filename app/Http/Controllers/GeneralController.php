@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 //use App\Http\Controllers\Controller;
+use Carbon\Carbon;
 use App\Models\BrandSetting;
 use Doctrine\DBAL\Driver\OCI8\ConvertPositionalToNamedPlaceholders;
 use Illuminate\Support\Facades\Gate;
@@ -69,7 +70,6 @@ use App\Models\UserRole;
 use App\Notifications\EmailRequests;
 use App\Notifications\RegisteredUser;
 use Barryvdh\DomPDF\Facade\Pdf;
-use Carbon\Carbon;
 use DateTime;
 use Exception;
 use Illuminate\Http\File;
@@ -8803,6 +8803,12 @@ class GeneralController extends Controller
         $leave_entitled = Employee::where('emp_id', $employeeID)->first();
 
         $calendar = $request->terminationDate;
+        // Parse the date using Carbon
+        $carbonDate = Carbon::parse($calendar);
+
+        // Get the number of days in the month
+        $numDays = $carbonDate->daysInMonth;
+
         $datewell = explode("-", $calendar);
         $mm = $datewell[1];
         $dd = $datewell[2];
@@ -8823,6 +8829,7 @@ class GeneralController extends Controller
 
             $leave_allowance = $this->flexperformance_model->get_leave_allowance($employeeID, $termination_date, $january_date);
             $employee_salary = $this->flexperformance_model->get_employee_salary($employeeID, $termination_date, $dd);
+          
         } else {
 
             $leave_allowance = $this->flexperformance_model->get_leave_allowance($employeeID, $termination_date, $january_date);
@@ -8834,7 +8841,7 @@ class GeneralController extends Controller
         $data['employee_allowance'] = $employee_allowance;
         $data['employee_actual_salary'] = $employee_actual_salary;
         $data['leave_allowance'] = $leave_allowance;
-        $data['employee_salary'] = ($employee_actual_salary == $employee_salary) ? ($employee_salary * $dd / 30) : $employee_salary;
+        $data['employee_salary'] = ($employee_actual_salary == $employee_salary) ? ($employee_salary * $dd / $numDays) : $employee_salary;
         return json_encode($data);
     }
     // end of terminations functions
