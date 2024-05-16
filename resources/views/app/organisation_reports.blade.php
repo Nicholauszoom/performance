@@ -19,6 +19,8 @@
     </div>
 
     <div class="row">
+
+        @can('view-org-reconciliation-summary')   
         <div class="col-md-6">
             <div class="card border-top  border-top-width-3 border-top-main rounded-0 p-2">
                 <div class="card-header">
@@ -58,7 +60,10 @@
                 </form>
             </div>
         </div>
+        @endcan
 
+
+        @can('view-org-reconciliation-details')  
         <div class="col-md-6">
             <div class="card border-top  border-top-width-3 border-top-main rounded-0 p-2">
                 <div class="card-header">
@@ -98,7 +103,9 @@
                 </form>
             </div>
         </div>
+        @endcan
 
+        @can('view-org-journal-entry')  
         <div class="col-md-6">
             <div class="card border-top  border-top-width-3 border-top-main rounded-0 p-2">
                 <div class="card-header">
@@ -138,7 +145,9 @@
                 </form>
             </div>
         </div>
+        @endcan
 
+        @can('view-org-payroll-inputchange') 
         <div class="col-md-6">
             <div class="card border-top  border-top-width-3 border-top-main rounded-0 p-2">
                 <div class="card-header">
@@ -180,6 +189,7 @@
                 </form>
             </div>
         </div>
+        @endcan
 
         {{-- <div class="col-md-6">
         <div class="card">
@@ -226,7 +236,7 @@
             </form>
         </div>
     </div> --}}
-
+        @can('view-org-pay-checklist') 
         <div class="col-md-6">
             <div class="card border-top  border-top-width-3 border-top-main rounded-0 p-2">
                 <div class="card-header">
@@ -279,9 +289,10 @@
                 </form>
             </div>
         </div>
+        @endcan
 
 
-
+        @can('view-org-employee-biodata') 
         <div class="col-md-6">
             <div class="card border-top  border-top-width-3 border-top-main rounded-0 p-2">
                 <div class="card-header">
@@ -323,7 +334,10 @@
                 </form>
             </div>
         </div>
+        @endcan
 
+
+        @can('view-org-payroll-details') 
         <div class="col-md-6">
             <div class="card border-top  border-top-width-3 border-top-main rounded-0 p-2">
                 <div class="card-header">
@@ -373,6 +387,9 @@
                 </form>
             </div>
         </div>
+        @endcan
+
+        @can('view-org-pension-history') 
         <div class="col-md-6">
             <div class="card border-top  border-top-width-3 border-top-main rounded-0 p-2">
                 <div class="card-header">
@@ -423,7 +440,10 @@
                 </form>
             </div>
         </div>
+        @endcan
 
+
+        @can('view-org-leave-report-monthly') 
         <div class="col-md-6">
             <div class="card border-top  border-top-width-3 border-top-main rounded-0 p-2">
                 <div class="card-header">
@@ -524,7 +544,11 @@
                 </form>
             </div>
         </div>
+        @endcan
 
+
+
+        @can('view-org-leave-report-yearly') 
         <div class="col-md-6">
             <div class="card border-top  border-top-width-3 border-top-main rounded-0 p-2">
                 <div class="card-header">
@@ -624,8 +648,10 @@
                 </form>
             </div>
         </div>
+        @endcan
 
 
+        @can('view-org-approved-leave-monthly') 
         <div class="col-md-6">
             <div class="card border-top  border-top-width-3 border-top-main rounded-0 p-2">
                 <div class="card-header">
@@ -726,7 +752,10 @@
                 </form>
             </div>
         </div>
+        @endcan
 
+
+        @can('view-org-approved-leave-yearly') 
         <div class="col-md-6">
             <div class="card border-top  border-top-width-3 border-top-main rounded-0 p-2">
                 <div class="card-header">
@@ -827,7 +856,10 @@
                 </form>
             </div>
         </div>
+        @endcan
 
+
+        @can('view-org-pending-leave-monthly') 
         <div class="col-md-6">
             <div class="card border-top  border-top-width-3 border-top-main rounded-0 p-2">
                 <div class="card-header">
@@ -928,7 +960,10 @@
                 </form>
             </div>
         </div>
+        @endcan
 
+
+        @can('view-org-pending-leave-yearly') 
         <div class="col-md-6">
             <div class="card border-top  border-top-width-3 border-top-main rounded-0 p-2">
                 <div class="card-header">
@@ -1030,6 +1065,7 @@
                 </form>
             </div>
         </div>
+        @endcan
 
 
 

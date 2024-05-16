@@ -250,10 +250,9 @@
                             <img src="{{ public_path('assets/images/hc-hub-logo3.png') }}" class="img-fluid"
                             alt="" width="150px" height="150px" style="display: inline;"> 
                             @endif
-                           
-
                             <h5 class="text-main" style="display: inline; margin: 0; vertical-align: middle;">Payslip
                             </h5>
+                            
                         </div>
                     </th>
 

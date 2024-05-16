@@ -20,25 +20,22 @@
     </div>
 
     <div class="row">
+
+        @can('view-statutory-paye-report')
         <div class="col-md-6">
             <div class="card border-top  border-top-width-3 border-top-main rounded-0 p-2">
                 <div class="card-header">
                     <h5 class="text-warning">P9 (P.A.Y.E)</h5>
                 </div>
 
-                <form
-                    id="demo-form2"
-                    enctype="multipart/form-data"
-                    method="post"
-                    action="{{ route('reports.p9')}}" target="_blank"
-                    data-parsley-validate
-                    class="form-horizontal form-label-left"
-                >
+                <form id="demo-form2" enctype="multipart/form-data" method="post" action="{{ route('reports.p9') }}"
+                    target="_blank" data-parsley-validate class="form-horizontal form-label-left">
                     @csrf
 
                     <div class="card-body">
                         <div class="input-group">
-                            <select required name="payrolldate" class="select_payroll_month form-control select"  data-width="1%">
+                            <select required name="payrolldate" class="select_payroll_month form-control select"
+                                data-width="1%">
                                 <option selected disabled value="">Select Month</option>
                                 <?php foreach ($month_list as $row) { ?>
                                 <option value="<?php echo $row->payroll_date; ?>"> <?php echo date('F, Y', strtotime($row->payroll_date)); ?></option>
@@ -68,32 +65,30 @@
 
             </div>
         </div>
+        @endcan
 
+        @can('view-statutory-wcf-report')
         <div class="col-md-6">
             <div class="card border-top  border-top-width-3 border-top-main rounded-0 p-2">
                 <div class="card-header">
                     <h5 class="text-warning">Workers Compasation Fund:</h5>
                 </div>
 
-                <form
-                    id="demo-form2"
-                    enctype="multipart/form-data"
-                    method="post"
-                    action="{{ route('reports.wcf')}}"
-                    target="_blank"
-                    data-parsley-validate
-                >
+                <form id="demo-form2" enctype="multipart/form-data" method="post" action="{{ route('reports.wcf') }}"
+                    target="_blank" data-parsley-validate>
                     @csrf
 
                     <div class="card-body">
                         <div class="input-group">
-                            <select required name="payrolldate" class="select_payroll_month form-control select" data-width="1%">
+                            <select required name="payrolldate" class="select_payroll_month form-control select"
+                                data-width="1%">
                                 <option selected disabled value>Select Month</option>
                                 <?php foreach ($month_list as $row) { ?>
                                 <option value="<?php echo $row->payroll_date; ?>"> <?php echo date('F, Y', strtotime($row->payroll_date)); ?></option>
                                 <?php } ?>
                             </select>
-                            <button type="submit" class="btn btn-main" type="button"><i class="ph-printer me-2"></i> Print</button>
+                            <button type="submit" class="btn btn-main" type="button"><i class="ph-printer me-2"></i>
+                                Print</button>
                         </div>
 
                         <div class="mt-2">
@@ -117,34 +112,30 @@
 
             </div>
         </div>
+        @endcan
 
+        @can('view-statutory-pension-report')
         <div class="col-md-6">
-
             <div class="card border-top  border-top-width-3 border-top-main rounded-0 p-2">
                 <div class="card-header">
                     <h5 class="text-warning">Pension Fund</h5>
                 </div>
 
-                <form
-                    id="demo-form2"
-                    enctype="multipart/form-data"
-                    method="post"
-                    action="{{ route('reports.pension')}}"
-                    target="_blank"
-                    data-parsley-validate
-                    class="form-horizontal form-label-left"
-                >
+                <form id="demo-form2" enctype="multipart/form-data" method="post" action="{{ route('reports.pension') }}"
+                    target="_blank" data-parsley-validate class="form-horizontal form-label-left">
                     @csrf
 
                     <div class="card-body">
                         <div class="input-group">
-                            <select required name="payrolldate" class="select_payroll_month form-control select" data-width="1%">
+                            <select required name="payrolldate" class="select_payroll_month form-control select"
+                                data-width="1%">
                                 <option selected disabled value>Select Month</option>
                                 <?php foreach ($month_list as $row) { ?>
                                 <option value="<?php echo $row->payroll_date; ?>"><?php echo date('F, Y', strtotime($row->payroll_date)); ?></option>
                                 <?php } ?>
                             </select>
-                            <button type="submit" class="btn btn-main" type="button"><i class="ph-printer me-2"></i> Print</button>
+                            <button type="submit" class="btn btn-main" type="button"><i class="ph-printer me-2"></i>
+                                Print</button>
                         </div>
 
                         <div class="mt-2">
@@ -177,32 +168,30 @@
                 </form>
             </div>
         </div>
+        @endcan
 
+        @can('view-statutory-skilllevel-report')
         <div class="col-md-6">
             <div class="card border-top  border-top-width-3 border-top-main rounded-0 p-2">
                 <div class="card-header">
                     <h5 class="text-warning">Skills Development Levy SDL (P10)</h5>
                 </div>
 
-                <form
-                    id="demo-form2"
-                    enctype="multipart/form-data"
-                    method="post"
-                    action="{{ route('reports.p10')}}"
-                    target="_blank"
-                    data-parsley-validate
-                >
+                <form id="demo-form2" enctype="multipart/form-data" method="post" action="{{ route('reports.p10') }}"
+                    target="_blank" data-parsley-validate>
                     @csrf
 
                     <div class="card-body">
                         <div class="input-group">
-                            <select required name="payrolldate" class="select_payroll_month form-control select" data-width="1%">
+                            <select required name="payrolldate" class="select_payroll_month form-control select"
+                                data-width="1%">
                                 <option selected disabled value>Select Month</option>
                                 <?php foreach ($month_list as $row) {?>
-                                <option value="<?php echo $row->payroll_date; ?>"> <?php echo  date('F, Y', strtotime($row->payroll_date)); ?></option>
+                                <option value="<?php echo $row->payroll_date; ?>"> <?php echo date('F, Y', strtotime($row->payroll_date)); ?></option>
                                 <?php } ?>
                             </select>
-                            <button type="submit" class="btn btn-main" type="button"><i class="ph-printer me-2"></i> Print</button>
+                            <button type="submit" class="btn btn-main" type="button"><i class="ph-printer me-2"></i>
+                                Print</button>
                         </div>
 
                         <div class="mt-2">
@@ -240,32 +229,30 @@
                 </form>
             </div>
         </div>
+        @endcan
 
+        @can('view-statutory-hesbl-report')
         <div class="col-md-6">
             <div class="card border-top  border-top-width-3 border-top-main rounded-0 p-2">
                 <div class="card-header">
                     <h5 class="text-warning">HESLB:</h5>
                 </div>
 
-                <form
-                    id="demo-form2"
-                    enctype="multipart/form-data"
-                    method="post"
-                    action="{{ route('reports.heslb')}}"
-                    target="_blank"
-                    data-parsley-validate
-                >
+                <form id="demo-form2" enctype="multipart/form-data" method="post" action="{{ route('reports.heslb') }}"
+                    target="_blank" data-parsley-validate>
                     @csrf
 
                     <div class="card-body">
                         <div class="input-group">
-                            <select name="payrolldate" class="select_payroll_month form-control select" data-width="1%" required>
+                            <select name="payrolldate" class="select_payroll_month form-control select" data-width="1%"
+                                required>
                                 <option selected disabled value="">Select Month</option>
                                 <?php foreach ($month_list as $row) { ?>
                                 <option value="<?php echo $row->payroll_date; ?>"> <?php echo date('F, Y', strtotime($row->payroll_date)); ?></option>
                                 <?php } ?>
                             </select>
-                            <button type="submit" class="btn btn-main" type="button"><i class="ph-printer me-2"></i> Print</button>
+                            <button type="submit" class="btn btn-main" type="button"><i class="ph-printer me-2"></i>
+                                Print</button>
                         </div>
 
                         <div class="mt-2">
@@ -289,9 +276,8 @@
 
             </div>
         </div>
+        @endcan
 
 
     </div>
-
-
 @endsection

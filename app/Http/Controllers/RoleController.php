@@ -53,7 +53,6 @@ class RoleController extends Controller
 
     public function show($id)
     {
-        dd("eee");
         $role = Role::find($id);
         $permissions = Permission::all();
         $modules = SystemModule::all();
