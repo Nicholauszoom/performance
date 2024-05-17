@@ -326,8 +326,8 @@
                                     Payroll inputs </a></li>
                             @can('view-payslip')
                                 <li class="nav-item"><a
-                                        class="nav-link {{ request()->routeIs('flex.submitInputs') ? 'active' : null }}"
-                                        href="{{ route('flex.submitInputs') }}"><i class="ph-paper-plane-tilt"></i> Submit
+                                        class="nav-link {{ request()->routeIs('flex.submitInputsPage') ? 'active' : null }}"
+                                        href="{{ route('flex.submitInputsPage') }}"><i class="ph-paper-plane-tilt"></i> Submit
                                         Inputs </a></li>
                             @endcan
                             @can('view-payroll')

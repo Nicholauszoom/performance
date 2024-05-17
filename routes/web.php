@@ -488,6 +488,7 @@ Route::middleware('verify-outgoing-requests')->group(function () {
             Route::any('/companyInfo', 'companyInfo')->name('flex.companyInfo');
             Route::any('/updatecompanyInfo', 'updatecompanyInfo')->name('flex.updatecompanyInfo');
             Route::any('/submitInputs', 'submitInputs')->name('flex.submitInputs');
+            Route::any('/submitInputsPage', 'SubmitInputPage')->name('flex.submitInputsPage');
 
             Route::any('/salary_advance', 'salary_advance')->name('flex.salary_advance');
             Route::any('/loan_types', 'loan_types')->name('flex.loan_types');

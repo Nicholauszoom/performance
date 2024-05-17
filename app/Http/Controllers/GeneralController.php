@@ -5759,20 +5759,28 @@ class GeneralController extends Controller
         }
     }
 
+    public function SubmitInputPage(Request $request){
+        $lastEntry = DB::table('payroll_months')->select('state')->orderBy('id', 'desc')->first();
+
+        if ($lastEntry && $lastEntry->state == 2) {
+            $data['pending_payroll'] = 1;
+            return view('payroll.submit_inputs', $data);
+        } else {
+            $data['pending_payroll'] = 0;
+            return view('payroll.submit_inputs', $data);
+        }
+
+    }
+
     public function submitInputs(Request $request)
     {
-        $this->authenticateUser('edit-payroll');
 
-        $date = date_create_from_format('Y-m-d', $request->date);
+        $this->authenticateUser('edit-payroll');
+        $date = $request->date;
 
         $data['pending_payroll'] = 0;
 
         if ($date) {
-
-            $date = $date->format('m/d/Y');
-
-            $date = date("Y-m-d", strtotime($date));
-
             $query = "UPDATE allowances SET state = IF(month('" . $date . "') = 12,1,0) WHERE type = 1";  //Activate leave allowance
             DB::insert(DB::raw($query));
 
@@ -5788,12 +5796,13 @@ class GeneralController extends Controller
 
                         foreach ($allowances as $row) {
                             if ($row->state == 1) {
-                                SysHelpers::FinancialLogs($row->empID, $row->name, '0.00', ($row->amount != 0) ? number_format($row->amount, 2) . ' ' . $row->currency : $row->percent . '%', 'Payroll Input', $date);
+
+                                SysHelpers::FinancialLogs($row->empID, $row->name,  ($row->amount != 0) ? number_format($row->amount, 2) . ' ' . $row->currency : $row->percent . '%', ($row->amount != 0) ? number_format($row->amount, 2) . ' ' . $row->currency : $row->percent . '%', 'Payroll Input', $date);
                             }
                         }
                         $deductions = $this->payroll_model->getAssignedDeduction();
                         foreach ($deductions as $row) {
-                            SysHelpers::FinancialLogs($row->empID, $row->name, '0.00', ($row->amount != 0) ? number_format($row->amount, 2) . ' ' . $row->currency : $row->percent . '%', 'Payroll Input', $date);
+                            SysHelpers::FinancialLogs($row->empID, $row->name,  ($row->amount != 0) ? number_format($row->amount, 2) . ' ' . $row->currency : $row->percent . '%', ($row->amount != 0) ? number_format($row->amount, 2) . ' ' . $row->currency : $row->percent . '%', 'Payroll Input', $date);
                         }
                         InputSubmission::create(['empID' => auth()->user()->emp_id, 'date' => $date]);
                         echo "<p class='alert alert-success text-center'>Inputs  submitted Successfuly</p>";
@@ -8829,7 +8838,7 @@ class GeneralController extends Controller
 
             $leave_allowance = $this->flexperformance_model->get_leave_allowance($employeeID, $termination_date, $january_date);
             $employee_salary = $this->flexperformance_model->get_employee_salary($employeeID, $termination_date, $dd);
-          
+
         } else {
 
             $leave_allowance = $this->flexperformance_model->get_leave_allowance($employeeID, $termination_date, $january_date);

@@ -57,7 +57,7 @@ class SysHelpers
      * @param Request $request
      * @return void
      */
-    public static function FinancialLogs($empID, $fieldName, $from, $to, $inputScreen, $created_at = null)
+    public static function FinancialLogs($empID, $fieldName, $from, $to, $inputScreen, $created_at)
     {
         if (empty($created_at)) {
             FinancialLogs::create([
@@ -333,7 +333,7 @@ class SysHelpers
     {
         $user = Auth::user();
         if (!$user) {
-            return false; 
+            return false;
         }
         $employee = Auth()->user()->id;
         $role_id = Auth::user()->position;
@@ -343,12 +343,12 @@ class SysHelpers
 
         // dd($level && $approval->ApprLevels()->count() == $level->level_name);
         // dd($level);
-        
+
 
         // return $level && ($approval->ApprLevels()->count() == $level->level_name || $approval->ApprLevels()->last()->level_name == $level->level_name);
 
            return $level && ($approval->ApprLevels()->count() == $level->level_name || ($lastApprovalLevel = $approval->ApprLevels()->orderBy('id', 'desc')->first()) && $lastApprovalLevel->level_name == $level->level_name);
-        
+
     }
 
 
