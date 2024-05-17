@@ -151,6 +151,32 @@
                                     <input type="file" name="report_bottom_banner" class="form-control">
                                 </div>
                             </div>
+                            <div class="col-md-6">
+                                <div class="form-group m-2">
+                                    <label for="body_background">Left payslip Logo
+                                        {{-- {{ dd($brandSetting) }} --}}
+                                        <span>
+                                            @if ($brandSetting->left_payslip_logo)
+                                                <a href="{{ asset('storage/' . $brandSetting->left_payslip_logo) }}"> view</a>
+                                            @endif
+                                        </span>
+                                    </label>
+                                    <input type="file" name="left_payslip_logo" class="form-control">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group m-2">
+                                    <label for="body_background">Right payslip Logo  
+                                        <span>
+                                            @if ($brandSetting->right_payslip_logo)
+                                                <a href="{{ asset('storage/' . $brandSetting->right_payslip_logo) }}"> view</a>
+                                            @endif
+
+                                        </span>
+                                    </label>
+                                    <input type="file" name="right_payslip_logo" class="form-control">
+                                </div>
+                            </div>
 
 
                         </div>
