@@ -41,7 +41,7 @@
                                 @else
 
                                     <div class="d-flex justify-content-center align-items-center">
-                                        <p class='alert alert-warning text-center'>Note! There is Pending payroll</p>
+                                        <p class='alert alert-danger text-center'>Note! There is Pending payroll</p>
                                     </div>
                                 @endif
                             </div>
@@ -73,7 +73,7 @@
                 cache: false,
                 async: true,
             }).done(function(data) {
-                
+
 
                 $('#payrollFeedback').fadeOut('fast', function() {
                     $('#payrollFeedback').fadeIn('fast').html(data);
