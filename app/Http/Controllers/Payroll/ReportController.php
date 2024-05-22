@@ -3654,8 +3654,12 @@ EOD;
             $employee->accrual_rate = $accrual_rate;
         }
 
+        $openingBalance = DB::table('leave_forfeitings')
+        ->where('empID', $employee->emp_id)
+        ->value('opening_balance');
+
         $employee->days_spent = $this->attendance_model->days_spent3($employee->emp_id, $employee->hire_date, $request->duration, $nature);
-        $employee->opening_balance = $this->attendance_model->getLeaveBalance($employee->emp_id, $first_day_this_year, $first_day_this_year);
+        $employee->opening_balance = $openingBalance;
         $employee->current_balance = $this->attendance_model->getLeaveBalance($employee->emp_id, $first_day_this_year, $request->duration);
         $employee->accrual_amount = $employee->salary / 30;
         $employee->maximum_days = $this->attendance_model->getLeaveTaken2($employee->emp_id, $employee->hire_date, $request->duration, $nature);
