@@ -33,7 +33,7 @@ class PermissionServiceProvider extends ServiceProvider
 
         Permission::get()->map(function ($permission) {
             Gate::define($permission->slug, function ($user) use ($permission) {
-                return true;
+                // return true;
                 return $user->hasPermissionTo($permission);
             });
         });
