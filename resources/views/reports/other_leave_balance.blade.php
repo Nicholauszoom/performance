@@ -184,7 +184,7 @@
                                         <td><?= $employee->lname ?></td>
                                         <td><?= $employee->departments->name ?></td>
                                         <td><?= $employee->positions->name ?></td>
-                                        <td><?= number_format($employee->opening_balance < 0 ? $employee->days_spent + -1 * $employee->opening_balance : $employee->days_spent, 2) ?></td>
+                                        <td style="text-align: center;"><?= number_format($employee->opening_balance < 0 ? $employee->days_spent + -1 * $employee->opening_balance : $employee->days_spent, 2) ?></td>
                                     </tr>
                                 <?php } ?>
                             </tbody>
