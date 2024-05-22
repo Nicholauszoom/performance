@@ -1,3 +1,7 @@
+
+
+
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -14,8 +18,8 @@
 <body>
 
     @php
-    $brandSetting = \App\Models\BrandSetting::firstOrCreate();
-@endphp
+        $brandSetting = \App\Models\BrandSetting::firstOrCreate();
+    @endphp
 
 
     <main class="body-font p-1">
@@ -34,7 +38,7 @@
                                     <p class="p-space">
                                     <h5 style="font-weight:bolder;margin-top:15px;">
                                         @if ($brandSetting->report_system_name)
-                                            {{$brandSetting->report_system_name }}
+                                            {{ $brandSetting->report_system_name }}
                                         @else
                                             HC-HUB
                                         @endif
@@ -51,7 +55,7 @@
                                     </p>
                                     <p class="p-space">
                                         @if ($brandSetting->address_2)
-                                            {{ $brandSetting->address_2}}
+                                            {{ $brandSetting->address_2 }}
                                         @else
                                             Bibi Titi Mohammed Road
                                         @endif
@@ -90,9 +94,11 @@
                             <td colspan="4" class="w-50" style="">
                                 <div class="box-text text-end">
                                     @if ($brandSetting->report_logo)
-                                    <img src="{{ asset('storage/' . $brandSetting->report_logo) }}" alt="logo here" width="180px" height="150px" class="image-fluid">          
+                                        <img src="{{ asset('storage/' . $brandSetting->report_logo) }}" alt="logo here"
+                                            width="180px" height="150px" class="image-fluid">
                                     @else
-                                    <img src="{{ public_path('assets/images/logo-dif2.png') }}" alt="logo here" width="180px" height="150px" class="image-fluid">          
+                                        <img src="{{ public_path('assets/images/logo-dif2.png') }}" alt="logo here"
+                                            width="180px" height="150px" class="image-fluid">
                                     @endif
                                 </div>
                             </td>
@@ -128,69 +134,68 @@
                         </tr>
                     </thead>
                 </table>
-
                 <hr>
 
-                <table class="table" id="reports">
-                    <thead>
-                        <tr>
-                            <th>No</th>
-                            <th>EMP ID</th>
-                            <th>First Name</th>
-                            <th>Last Name</th>
-                            <th>department</th>
-                            <th>Position</th>
-                            <th>Leave Days Taken</th>
+                <?php
 
-                        </tr>
-                    </thead>
+                $i = 0;
+                
+                $natures = [
+                    1 => 'Annual Leave',
+                    2 => 'Sick Leave',
+                    3 => 'Compassionate Leave',
+                    4 => 'Maternity Leave',
+                    5 => 'Paternity Leave',
+                    6 => 'Study Leave'
+                ];
+                
+                // Convert $employees to a collection if it's not already one
+                $employees = is_array($employees) ? collect($employees) : $employees;
 
-                    <tbody>
-                        <?php
-                      $i=0;
-
-                        foreach ($employees as $employee) { $i++ ?>
-                       <?php
-                        $flag = true;
-                       if($employee->gender == 'Male' && $nature == 5){
-                         $flag = true;
-                        }elseif($employee->gender == 'Female' && $nature == 4){
-                            $flag  = true;
-                        } elseif($nature !=5 && $nature != 4){
-                            $flag  = true;
-                        }
-
-                        else{
-                            $flag = false;
-                        }
-
+                // dd($employees); 
+                
+                foreach ($natures as $natureKey => $natureValue) {
+                    $natureEmployees = $employees->filter(function ($employee) use ($natureKey) {
+                        return $employee->nature == $natureKey;
+                    });
+                
+                    if ($natureEmployees->isNotEmpty()) {
                         ?>
-                        @if($flag)
-                        <tr>
-                            <td><?php echo $i; ?></td>
-                            <td><?php echo $employee->emp_id; ?></td>
-                            <td><?php echo $employee->fname; ?></td>
-                            <td><?php echo $employee->lname; ?></td>
-                            <td><?php echo $employee->departments->name; ?></td>
-                            <td><?php echo $employee->positions->name; ?></td>
-                            <td><?php echo number_format(($employee->opening_balance < 0?($employee->days_spent +(-1*$employee->opening_balance)):$employee->days_spent),2) ?></td>
-                        </tr>
-                        @else
-                        <tr>
-                            <td><?php echo $i; ?></td>
-                            <td><?php echo $employee->emp_id; ?></td>
-                            <td><?php echo $employee->fname; ?></td>
-                            <td><?php echo $employee->lname; ?></td>
-                            <td><?php echo $employee->departments->name; ?></td>
-                            <td><?php echo $employee->positions->name; ?></td>
-                            <td><?php echo number_format(($employee->days_spent*0)) ?></td>
-                        </tr>
-                        @endif
+                        <h3><?= $natureValue ?></h3>
+                        <table class="table" id="reports">
+                            <thead>
+                                <tr>
+                                    <th>No</th>
+                                    <th>EMP ID</th>
+                                    <th>First Name</th>
+                                    <th>Last Name</th>
+                                    <th>Department</th>
+                                    <th>Position</th>
+                                    <th>Leave Days Taken</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php $i = 0; // Reset counter for each table
+                                foreach ($natureEmployees as $employee) { $i++; ?>
+                                    <tr>
+                                        <td><?= $i ?></td>
+                                        <td><?= $employee->emp_id ?></td>
+                                        <td><?= $employee->fname ?></td>
+                                        <td><?= $employee->lname ?></td>
+                                        <td><?= $employee->departments->name ?></td>
+                                        <td><?= $employee->positions->name ?></td>
+                                        <td><?= number_format($employee->opening_balance < 0 ? $employee->days_spent + -1 * $employee->opening_balance : $employee->days_spent, 2) ?></td>
+                                    </tr>
+                                <?php } ?>
+                            </tbody>
+                        </table>
+                        <?php
+                    }
+                }
+                ?>
+               
+                
 
-                        <?php } ?>
-                    </tbody>
-
-                </table>
                 <hr>
 
             </div>
@@ -226,7 +231,7 @@
     </div>
 
 
-    <script src="{{ public_path('assets/js/jquery/jquery.min.js') }}"> </script>
+    <script src="{{ public_path('assets/js/jquery/jquery.min.js') }}"></script>
 
     <script src="{{ public_path('assets/js/bootstrap/bootstrap.bundle.min.js') }}"></script>
 

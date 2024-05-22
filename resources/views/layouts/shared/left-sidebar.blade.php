@@ -709,10 +709,6 @@
                                         href="{{ route('flex.companyInfo') }}"><i class="ph-house-line"></i>Company
                                         Info</a></li>
                             @endif
-
-
-
-
                             @if (session('mng_bank_info'))
                                 {{-- <li class="nav-item"><a
                                     class="nav-link {{ request()->routeIs('flex.bank') ? 'active' : null }}"

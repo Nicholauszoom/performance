@@ -3782,7 +3782,6 @@ public function processOneEmployee($employee, $request, $nature){
         }
 
         $data['date'] = $today;
-        // dd($leave_data);
         //return view('reports.leave_application_datatable',$data);
 
         if ($department != 'All') {
