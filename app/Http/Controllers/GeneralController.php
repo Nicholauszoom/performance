@@ -10848,7 +10848,7 @@ class GeneralController extends Controller
 
         if ($request->isMethod('post')) {
             $export = new LeaveApprovalsExport(LeaveApproval::orderBy('created_at', 'asc')->get());
-            $fileName = 'leave_approvals.xlsx';
+            $fileName = 'Leave Approvals Mapping.xlsx';
 
             $autheniticateduser = auth()->user()->emp_id;
             $auditLog = SysHelpers::AuditLog(1, "Leave approval expoted  by " . $autheniticateduser, $request);

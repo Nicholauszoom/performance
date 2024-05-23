@@ -22,10 +22,11 @@ class LeaveApprovalsExport implements FromCollection, WithHeadings{
             // dd(Employee::where('emp_id', $approval->empID)->first()->fname ?? null);
             return [
                 'ID' => $approval->id,
-                'Employee Name' => Employee::where('emp_id', $approval->empID)->first()->fname ?? null,
-                'Level 1' =>  Employee::where('emp_id', $approval->level1)->first()->fname ?? null,
-                'Level 2' => Employee::where('emp_id', $approval->level2)->first()->fname ?? null,
-                'Level 3' => Employee::where('emp_id', $approval->level3)->first()->fname ?? null,
+                'Payroll Number' => Employee::where('emp_id', $approval->empID)->first()->emp_id ?? null,
+                'Employee Name' => Employee::where('emp_id', $approval->empID)->first()->full_name ?? null,
+                'Level 1' =>  Employee::where('emp_id', $approval->level1)->first()->full_name ?? null,
+                'Level 2' => Employee::where('emp_id', $approval->level2)->first()->full_name ?? null,
+                'Level 3' => Employee::where('emp_id', $approval->level3)->first()->full_name ?? null,
                 'Escallation Time' => $approval->escallation_time,
             ];
         });
@@ -35,8 +36,9 @@ class LeaveApprovalsExport implements FromCollection, WithHeadings{
     {
         // Column headers based on your leave_approvals table structure
         return [
-            'ID',
-            'Employee ID',
+            'SN',
+            'Payroll Number',
+            'Employee Name',
             'Level 1',
             'Level 2',
             'Level 3',
