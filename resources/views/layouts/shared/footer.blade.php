@@ -2,7 +2,7 @@
 <div class="navbar navbar-sm navbar-footer border-top">
     <div class="container-fluid">
         <span>&copy; {{ __(date("Y").' '. 'All rights reserved.')}} <a href="#">Fléx Performance</a> by
-            <a href="https://www.flex.co.tz/" target="_blank">FLÉX</a></span>
+            <a href="https://www.flex.co.tz/" target="_blank">Fléx</a></span>
 
         <ul class="nav">
             <li class="nav-item">
