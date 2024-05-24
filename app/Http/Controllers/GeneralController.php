@@ -8487,12 +8487,10 @@ class GeneralController extends Controller
 
         $i = 1;
         $employee = Auth::User()->id;
-
-        $role = UserRole::where('user_id', $employee)->first();
-        $role_id = $role->role_id;
+        $posn_id = Auth::User()->position;
         $terminate = Approvals::where('process_name', 'Termination Approval')->first();
-        $roles = Position::where('id', $role_id)->first();
-        $data['level'] = ApprovalLevel::where('role_id', $role_id)->where('approval_id', $terminate->id)->first();
+        $roles = Position::where('id', $posn_id)->first();
+        $data['level'] = ApprovalLevel::where('role_id', $posn_id)->where('approval_id', $terminate->id)->first();
 
         $data['level_check'] = SysHelpers::approvalCheck("Termination Approval");
 
