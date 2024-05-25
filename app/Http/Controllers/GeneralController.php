@@ -10840,9 +10840,12 @@ class GeneralController extends Controller
 
     public function LeaveApprovals(Request $request)
     {
-        $empID = Auth()->user()->emp_id;
         $data['employees'] = EMPL::get();
-        $data['approvals'] = LeaveApproval::orderBy('created_at', 'desc')->get();
+        $data['approvals'] = LeaveApproval::join('employee', 'leave_approvals.empID', '=', 'employee.emp_id')
+        ->where('employee.state', '!=', 4)
+        ->orderBy('leave_approvals.created_at', 'desc')
+        ->get(['leave_approvals.*']);
+
         $data['parent'] = 'Settings';
         $data['child'] = 'Leave Approval';
 
