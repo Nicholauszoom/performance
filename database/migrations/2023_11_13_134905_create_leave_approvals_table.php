@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::create('leave_approvals', function (Blueprint $table) {
-            $table->id();
+            $table->bigIncrements('id');
             $table->string('empID');
             $table->string('level1');
             $table->string('level2')->nullable();

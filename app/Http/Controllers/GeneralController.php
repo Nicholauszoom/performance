@@ -13,6 +13,7 @@ use App\Helpers\SysHelpers;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\EmployeeRequest;
 use App\Imports\HolidayDataImport;
+use App\Imports\LeaveApprovalMapping;
 use App\Imports\ImportEmployeeAllowance;
 use App\Imports\ImportSalaryIncrement;
 use App\Models\AccessControll\Departments;
@@ -10860,6 +10861,17 @@ class GeneralController extends Controller
         }
 
         return view('setting.leave-approval', $data);
+    }
+    public function UploadLeaveApprovals(Request $request)
+    {
+         // Validate the uploaded file
+         $request->validate([
+            'file' => 'required|mimes:xlsx,xls',
+        ]);
+        // Handle the file upload and data extraction
+        Excel::import(new LeaveApprovalMapping, $request->file('file'));
+
+        return redirect()->back()->with('success', 'File uploaded and data extracted successfully.');
     }
 
     // For Saving Leave Approvals
