@@ -8529,6 +8529,8 @@ class GeneralController extends Controller
         if ($request->employeeID == $request->deligated) {
             return redirect()->back()->with(['error' => 'Terminated and deligated should not be the sane person']);
         }
+        $deligate = $request->deligated;
+
         $this->authenticateUser('add-termination');
         // request()->validate(
         //     [
@@ -8694,6 +8696,7 @@ class GeneralController extends Controller
         $termination->net_pay = $net_pay;
         $termination->take_home = $take_home;
         $termination->total_deductions = $total_deductions;
+        $termination->deligate_empID = $deligate;
         $termination->save();
         // $pentionable_amount =$salaryEnrollment + $leavePay + $arrears + overtime_amount;
         // } else {
@@ -8729,17 +8732,18 @@ class GeneralController extends Controller
             $termination = Termination::where('id', $id)->first();
 
             $employeeID = $termination->employeeID;
+            $delegate = $termination->deligate_empID;
             $termination->status = 1;
             $termination->approval_status = $termination->approval_status + 1;
             $termination->update();
 
             $this->flexperformance_model->update_employee_termination($id);
 
-            $approval = LeaveApproval::where('empID', $employeeID)->first();
-            $approver = Auth()->user()->emp_id;
-            $employee = Auth()->user()->position;
-
-            $position = Position::where('id', $employee)->first();
+            if($delegate){
+                LeaveApproval::where('level1', $employeeID)->update(['level1' => $delegate]);
+                LeaveApproval::where('level2', $employeeID)->update(['level2' => $delegate]);
+                LeaveApproval::where('level3', $employeeID)->update(['level3' => $delegate]);
+            }
 
             $msg = 'Employee is Terminated Successfully !';
             return redirect('flex/termination')->with(['success' => $msg]);

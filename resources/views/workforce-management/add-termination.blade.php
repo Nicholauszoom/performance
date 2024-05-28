@@ -290,11 +290,6 @@
                     document.getElementById("employee_actual_salary").value = data.employee_actual_salary;
                     document.getElementById("leave_entitled").value = data.leave_entitled;
 
-
-
-
-
-
                 })
                 .fail(function() {
                     alert('Update Failed!! ...');

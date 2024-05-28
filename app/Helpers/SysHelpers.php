@@ -57,7 +57,7 @@ class SysHelpers
      * @param Request $request
      * @return void
      */
-    public static function FinancialLogs($empID, $fieldName, $from, $to, $inputScreen, $created_at)
+    public static function FinancialLogs($empID, $fieldName, $from, $to, $inputScreen, $created_at=null)
     {
         if (empty($created_at)) {
             FinancialLogs::create([
