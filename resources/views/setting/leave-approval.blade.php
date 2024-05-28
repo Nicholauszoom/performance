@@ -135,6 +135,10 @@
                                 </div>
                             </div>
                         </form>
+
+                        <a href="{{ asset('uploads/templates/Leave_Approvals_Mapping_Example_Document.xlsx') }}">
+                            Click here to download leave forfeitings excel template
+                        </a>
                     </div>
 
                 </div>
