@@ -38,13 +38,30 @@ class FlexPerformanceModel extends Model
         return DB::select(DB::raw($query));
     }
 
-    public function financialLogs($date)
+    public function financialLogs1($last_payroll_month_date, $payroll_date)
     {
-
         $query = "SELECT Date(fn.created_at),fn.*, CONCAT(e.fname,' ', IF(e.mname != null,e.mname,''),' ', e.lname) as empName, CONCAT(au.fname,' ', au.mname,' ', au.lname) as authName FROM financial_logs fn, employee e, employee au  WHERE Date(fn.created_at) Like '%" . $date . "%' and fn.payrollno = e.emp_id AND fn.changed_by = au.emp_id  ORDER BY fn.created_at DESC";
 
         return DB::select(DB::raw($query));
     }
+
+    public function financialLogs($start_date, $end_date)
+    {
+
+        // Calculate the date after the start_date
+        $next_day = date('Y-m-d', strtotime($start_date . ' +1 day'));
+        $query = "SELECT Date(fn.created_at) as created_date, fn.*,
+                        CONCAT(e.fname,' ', IF(e.mname IS NOT NULL, e.mname, ''),' ', e.lname) as empName,
+                        CONCAT(au.fname,' ', IF(au.mname IS NOT NULL, au.mname, ''),' ', au.lname) as authName
+                FROM financial_logs fn
+                JOIN employee e ON fn.payrollno = e.emp_id
+                JOIN employee au ON fn.changed_by = au.emp_id
+                WHERE Date(fn.created_at) BETWEEN :next_day AND :end_date
+                ORDER BY fn.created_at DESC";
+
+        return DB::select(DB::raw($query), ['next_day' => $next_day, 'end_date' => $end_date]);
+    }
+
 
     public function audit_purge_logs()
     {

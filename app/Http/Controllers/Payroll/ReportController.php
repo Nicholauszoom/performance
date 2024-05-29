@@ -19,6 +19,7 @@ use App\Models\AttendanceModel;
 use DateTime;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
+use Carbon\Carbon;
 
 use Barryvdh\DomPDF\Facade\Pdf;
 use SebastianBergmann\Timer\Duration;
@@ -3217,8 +3218,11 @@ EOD;
         $data['payroll_date'] = $request->payrolldate;
         $data['payrollMonth'] = $request->payrolldate;
 
+        $last_payroll_month_date = $this->getLastPayrollDateBefore($request->payrolldate);
+        $payroll_date = $request->payrolldate;
 
-        $data['logs'] = $this->flexperformance_model->financialLogs($month);
+
+        $data['logs'] = $this->flexperformance_model->financialLogs($last_payroll_month_date, $payroll_date);
 
         $data['title'] = 'Payroll Input Changes Approval Report';
         $data['parent'] = 'Payroll Log Report';
@@ -3236,13 +3240,26 @@ EOD;
 
     }
 
-    // public function annualleave1(Request $request)
-    // {
-    //     $data = $this->attendance_model->get_anual_leave_position($request->duration);
 
-    //     //dd($request->duration);
-    // }
+     function getLastPayrollDateBefore($payroll_date) {
+            // Ensure the date is in the correct format
+            $payroll_date = date('Y-m-d', strtotime($payroll_date));
 
+            $last_payroll_date = DB::table('payroll_months')
+                ->where('payroll_date', '<', $payroll_date)
+                ->orderBy('payroll_date', 'desc')
+                ->value('payroll_date');
+
+            $current_payroll_date = $last_payroll_date;
+            $lastdate  = 0;
+            if ($current_payroll_date == null) {
+                $lastdate = DB::table('financial_logs')->min('created_at');
+                if ($lastdate) {
+                    $current_payroll_date = Carbon::parse($lastdate)->format('Y-m-d');
+                }
+            }
+            return $current_payroll_date;
+    }
 
     public function annualleave(Request $request)
     {
