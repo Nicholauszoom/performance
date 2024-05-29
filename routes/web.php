@@ -625,7 +625,7 @@ Route::middleware('verify-outgoing-requests')->group(function () {
         });
 
         // start of report access permissions routes
-        Route::prefix('flex/')->middleware([WorkForce::class])->controller(GeneralController::class)->group(function () {
+        Route::prefix('flex/')->controller(GeneralController::class)->group(function () {
             Route::any('/financial_reports', 'financial_reports')->name('flex.financial_reports');
             Route::any('/organisation_reports', 'organisation_reports')->name('flex.organisation_reports');
         });

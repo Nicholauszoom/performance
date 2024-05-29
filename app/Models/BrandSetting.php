@@ -39,6 +39,7 @@ class BrandSetting extends Model
         'allowed_domain',
         'left_payslip_logo',
         'right_payslip_logo',
+        'organization_name',
     ];
     
 }

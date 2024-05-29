@@ -2,27 +2,30 @@
 
 namespace App\Http\Controllers\Payroll;
 
-use App\Http\Controllers\Controller;
-use App\Models\Payroll\FlexPerformanceModel;
-use App\Models\Payroll\Payroll;
-use App\Models\Payroll\ReportModel;
-use App\Models\ProjectModel;
-use Elibyy\TCPDF\Facades\TCPDF;
-use function GuzzleHttp\Promise\all;
-use Illuminate\Http\Request;
-use PhpOffice\PhpSpreadsheet\Spreadsheet;
-use PhpOffice\PhpSpreadsheet\Style\Border;
-use PhpOffice\PhpSpreadsheet\Style\Fill;
-use App\Models\Employee;
-use Illuminate\Support\Facades\DB;
-use App\Models\AttendanceModel;
 use DateTime;
+use App\Models\Employee;
+use App\Models\ProjectModel;
+use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 
+use App\Models\AttendanceModel;
+use App\Models\Payroll\Payroll;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Elibyy\TCPDF\Facades\TCPDF;
+use Illuminate\Support\Facades\DB;
+use App\Models\Payroll\ReportModel;
+use App\Http\Controllers\Controller;
+use function GuzzleHttp\Promise\all;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 use SebastianBergmann\Timer\Duration;
+use PhpOffice\PhpSpreadsheet\Style\Fill;
+
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Style\Border;
+use App\Models\Payroll\FlexPerformanceModel;
 
 // use PDF;
 // use App\Helpers\SysHelpers;
@@ -36,19 +39,24 @@ class ReportController extends Controller
     protected $project_model;
 
 
+
+
     public function authenticateUser($permissions)
     {
-        if (!Auth::check()) {
+        // Check if the user is not authenticated
+        if (!auth()->check()) {
+            // Redirect the user to the login page
             return redirect()->route('login');
         }
 
-
-
-        if (!Auth::user()->can($permissions)) {
-
-            abort(Response::HTTP_UNAUTHORIZED, '500|Page Not Found');
+        // Check if the authenticated user does not have the specified permissions
+        if (!Gate::allows($permissions)) {
+            // If not, abort the request with a 401 Unauthorized status code
+            abort(Response::HTTP_UNAUTHORIZED);
         }
     }
+
+
     public function __construct($payroll_model = null, $flexperformance_model = null, $reports_model = null)
     {
         $this->payroll_model = new Payroll();
@@ -265,6 +273,7 @@ class ReportController extends Controller
         $reportType = 1;
         $reportformat = $request->input('type');
 
+
         if (1) {
             $payrolldate = $request->input('payrolldate');
             $reportType = 1;
@@ -281,7 +290,7 @@ class ReportController extends Controller
             $data['info'] = $this->reports_model->company_info();
             $data['reportType'] = $reportType;
             $data['payroll_date'] = $payrolldate;
-            // dd("here");
+            // dd($data['paye']);
 
             $paye = $data['paye'];
             $total = $data['total'];
@@ -510,19 +519,13 @@ class ReportController extends Controller
     function employee_pension(Request $request)
     {
 
+        $this->authenticateUser('print-pension-summary');
 
         $id = $request->emp_id;
 
-
-        if ($id != auth()->user()->emp_id) {
-            $this->authenticateUser('edit-employee');
-        }
-
-
-
-
-        $data['employee_pension'] = $this->reports_model->employee_pension($id);
-        $data['years'] = $this->reports_model->get_pension_years($id);
+        $enid = base64_decode($id);
+        $data['employee_pension'] = $this->reports_model->employee_pension($enid);
+        $data['years'] = $this->reports_model->get_pension_years($enid);
 
         $pdf = Pdf::loadView('reports.employee_pension', $data)->setPaper('a4', 'landscape');
         return $pdf->download("employee_pension.pdf");
@@ -3464,121 +3467,236 @@ EOD;
 
         return $employee;
     }
+    // public function annualleave2(Request $request)
+    // {
+    //     $nature = $request->nature;
+    //     $calender = explode('-', $request->duration);
+    //     $position = $request->position;
+    //     $department = $request->department;
+    //     $no_days = $calender[2];
+
+
+    //     if ($nature == 'All') {
+    //         $natures = $this->attendance_model->getAllNatureValues($nature);
+    //         $data['nature'] = 'All';
+    //         $data['is_all'] = true;
+    //         $leave_name = 'All';
+    //         $employees = [];
+    //         // dd($natures);
+    //         foreach ($natures as $_nature) {
+    //             if ($request->leave_employee == Null || $request->leave_employee == "All") {
+    //                 if ($department != 'All' && $position != 'All') {
+    //                     $_employees = Employee::where('state', '=', 1)->where('department', $department)->where('position', $position)
+    //                         ->whereDate('hire_date', '<=', $request->duration)
+    //                         ->get();
+    //                 } elseif ($department != 'All' && $position == 'All') {
+    //                     $_employees = Employee::where('state', '=', 1)->where('department', $department)
+    //                         ->whereDate('hire_date', '<=', $request->duration)
+    //                         ->get();
+    //                 } elseif ($department == 'All') {
+    //                     $_employees = Employee::where('state', '=', 1)
+    //                         ->whereDate('hire_date', '<=', $request->duration)
+    //                         ->get();
+    //                 }
+    //                 foreach ($_employees  as $employee) {
+    //                     dd( $_nature);
+    //                     $employees[] =  $this->gettingEmployeeAnnualLeavesReport($employee, $request, $_nature->id);
+    //                 }
+    //             } else {
+    //                 $_employees = Employee::where('emp_id', $request->leave_employee)->where('state', '=', 1)
+    //                     ->whereDate('hire_date', '<=', $request->duration)
+
+    //                     ->get();
+
+    //                 //$employees = $this->flexperformance_model->userprofile($request->leave_employee);
+    //                 foreach ($_employees  as $employee) {
+    //                     $employees[] =  $this->gettingEmployeeAnnualLeavesReport($employee, $request, $_nature->id);
+    //                 }
+    //             }
+    //         }
+    //     } else {
+
+    //         if ($request->leave_employee == Null || $request->leave_employee == "All") {
+
+    //             if ($department != 'All' && $position != 'All') {
+    //                 $employees = Employee::where('state', '=', 1)->where('department', $department)->where('position', $position)
+    //                     ->whereDate('hire_date', '<=', $request->duration)
+    //                     ->get();
+    //             } elseif ($department != 'All' && $position == 'All') {
+    //                 $employees = Employee::where('state', '=', 1)->where('department', $department)
+    //                     ->whereDate('hire_date', '<=', $request->duration)
+    //                     ->get();
+    //             } elseif ($department == 'All') {
+    //                 $employees = Employee::where('state', '=', 1)
+    //                     ->whereDate('hire_date', '<=', $request->duration)
+    //                     ->get();
+    //             }
+
+    //             foreach ($employees  as $employee) {
+    //                 dd("kk");
+    //                 $this->gettingEmployeeAnnualLeavesReport($employee, $request, $nature);
+    //             }
+    //         } else {
+    //             $employees = Employee::where('emp_id', $request->leave_employee)->where('state', '=', 1)
+    //                 ->whereDate('hire_date', '<=', $request->duration)->get();
+    //             foreach ($employees  as $employee) {
+    //                 $this->gettingEmployeeAnnualLeavesReport($employee, $request, $nature);
+    //             }
+    //         }
+    //         $leave_name = $this->attendance_model->leave_name($nature);
+    //     }
+
+    //     if ($department != 'All') {
+    //         $data['department_name'] = $this->attendance_model->get_dept_name($department);
+    //     }
+    //     if ($position != 'All') {
+    //         $data['position_name'] = $this->attendance_model->get_position_name($department);
+    //     }
+
+    //     $data['employees'] =  $employees;
+
+    //     $data['nature'] =  $nature;
+    //     $data['leave_name'] = $leave_name;
+    //     $data['date'] = $request->duration;
+    //     $other = ' ';
+    //     if (!empty($data['department_name']))
+    //         $other = 'Department : ' . $data['department_name'];
+    //     elseif (!empty($data['position_name']))
+    //         $other =  'Position : ' . $data['position_name'];
+    //     $january = $calender[0] . '-01-01';
+
+
+
+    //     // dd($data);
+    //     $nts = [];
+    //     foreach($data['employees'] as $employee) {
+    //         $nts[] = [
+    //             'nature'=>$employee->nature,
+    //             'name'=>$employee->fname,
+    //             'accurated_days'=>$employee->accrual_days,
+    //             'spent_days'=>$employee->days_spent
+    //         ];
+    //     }
+
+    //     return json_decode(json_encode($nts));
+
+    //     dd($nts);
+
+
+    //     $data['excelTitle'] = $leave_name . ' Leave Report | ' . $other . ' | Date : From ' . date('d-M-Y', strtotime($january)) . ' To ' . date('d-M-Y', strtotime($data['date']));
+    //     if ($request->type == 1) {
+    //         if ($nature == 1) {
+    //             $pdf = Pdf::loadView('reports.leave_balance', $data)->setPaper('a4', 'landscape');
+    //             return $pdf->download('Leave Report ' . $request->duration . '.pdf');
+    //         } else {
+    //             $pdf = Pdf::loadView('reports.other_leave_balance', $data)->setPaper('a4', 'landscape');
+    //             return $pdf->download('Leave Report ' . $request->duration . '.pdf');
+    //         }
+    //     } else {
+    //         if ($nature == 1) {
+    //             return view('reports.leave_balance_datatable', $data);
+    //         } else {
+
+    //             return view('reports.other_leave_balance_datatable', $data);
+    //         }
+    //     }
+    // }
+
+
     public function annualleave2(Request $request)
-    {
-        $nature = $request->nature;
-        $calender = explode('-', $request->duration);
-        $position = $request->position;
-        $department = $request->department;
-        $no_days = $calender[2];
+{
+    $nature = $request->nature;
+    $calendar = explode('-', $request->duration);
+    $position = $request->position;
+    $department = $request->department;
+    $no_days = $calendar[2];
 
+    $data = [
+        'nature' => $nature,
+        'is_all' => ($nature == 'All'),
+        'date' => $request->duration
+    ];
 
-        if ($nature == 'All') {
-            $natures = $this->attendance_model->getAllNatureValues($nature);
-            $data['nature'] = 'All';
-            $data['is_all'] = true;
-            $leave_name = 'All';
-            $employees = [];
-            foreach ($natures as $_nature) {
-                if ($request->leave_employee == Null || $request->leave_employee == "All") {
-                    if ($department != 'All' && $position != 'All') {
-                        $_employees = Employee::where('state', '=', 1)->where('department', $department)->where('position', $position)
-                            ->whereDate('hire_date', '<=', $request->duration)
-                            ->get();
-                    } elseif ($department != 'All' && $position == 'All') {
-                        $_employees = Employee::where('state', '=', 1)->where('department', $department)
-                            ->whereDate('hire_date', '<=', $request->duration)
-                            ->get();
-                    } elseif ($department == 'All') {
-                        $_employees = Employee::where('state', '=', 1)
-                            ->whereDate('hire_date', '<=', $request->duration)
-                            ->get();
-                    }
-                    foreach ($_employees  as $employee) {
-                        $employees[] =  $this->gettingEmployeeAnnualLeavesReport($employee, $request, $_nature->id);
-                    }
-                } else {
-                    $_employees = Employee::where('emp_id', $request->leave_employee)->where('state', '=', 1)
-                        ->whereDate('hire_date', '<=', $request->duration)
+    $employees = [];
+    if ($nature == 'All') {
+        $natures = $this->attendance_model->getAllNatureValues($nature);
+        $data['nature'] = 'All';
+        $leave_name = 'All';
 
-                        ->get();
-
-                    //$employees = $this->flexperformance_model->userprofile($request->leave_employee);
-                    foreach ($_employees  as $employee) {
-                        $employees[] =  $this->gettingEmployeeAnnualLeavesReport($employee, $request, $_nature->id);
-                    }
-                }
+        foreach ($natures as $_nature) {
+            $natureEmployees = $this->getEmployeesBasedOnFilters($request, $department, $position, $_nature->id);
+            foreach ($natureEmployees as $employee) {
+                $employees[] = $this->gettingEmployeeAnnualLeavesReport($employee, $request, $_nature->id);
             }
-        } else {
-
-            if ($request->leave_employee == Null || $request->leave_employee == "All") {
-
-                if ($department != 'All' && $position != 'All') {
-                    $employees = Employee::where('state', '=', 1)->where('department', $department)->where('position', $position)
-                        ->whereDate('hire_date', '<=', $request->duration)
-                        ->get();
-                } elseif ($department != 'All' && $position == 'All') {
-                    $employees = Employee::where('state', '=', 1)->where('department', $department)
-                        ->whereDate('hire_date', '<=', $request->duration)
-                        ->get();
-                } elseif ($department == 'All') {
-                    $employees = Employee::where('state', '=', 1)
-                        ->whereDate('hire_date', '<=', $request->duration)
-                        ->get();
-                }
-
-                foreach ($employees  as $employee) {
-                    $this->gettingEmployeeAnnualLeavesReport($employee, $request, $nature);
-                }
-            } else {
-                $employees = Employee::where('emp_id', $request->leave_employee)->where('state', '=', 1)
-                    ->whereDate('hire_date', '<=', $request->duration)->get();
-                foreach ($employees  as $employee) {
-                    $this->gettingEmployeeAnnualLeavesReport($employee, $request, $nature);
-                }
-            }
-            $leave_name = $this->attendance_model->leave_name($nature);
         }
+    } else {
+        $leave_name = $this->attendance_model->leave_name($nature);
+        $employees = $this->getEmployeesBasedOnFilters($request, $department, $position, $nature);
+    }
+
+    $data['employees'] = $employees;
+    $data['leave_name'] = $leave_name;
+
+    if ($department != 'All') {
+        $data['department_name'] = $this->attendance_model->get_dept_name($department);
+    }
+    if ($position != 'All') {
+        $data['position_name'] = $this->attendance_model->get_position_name($position);
+    }
+
+    $other = '';
+    if (!empty($data['department_name'])) {
+        $other = 'Department : ' . $data['department_name'];
+    } elseif (!empty($data['position_name'])) {
+        $other = 'Position : ' . $data['position_name'];
+    }
+
+    $january = $calendar[0] . '-01-01';
+    $data['excelTitle'] = $leave_name . ' Leave Report | ' . $other . ' | Date : From ' . date('d-M-Y', strtotime($january)) . ' To ' . date('d-M-Y', strtotime($data['date']));
+
+    $nts = array_map(function($employee) {
+        return [
+            'nature' => $employee->nature,
+            'name' => $employee->fname,
+            'accurated_days' => $employee->accrual_days,
+            'spent_days' => $employee->days_spent
+        ];
+    }, $data['employees']);
+
+    if ($request->type == 1) {
+        $view = ($nature == 1) ? 'reports.leave_balance' : 'reports.other_leave_balance';
+        $pdf = Pdf::loadView($view, $data)->setPaper('a4', 'landscape');
+        return $pdf->download('Leave Report ' . $request->duration . '.pdf');
+    } else {
+        $view = ($nature == 1) ? 'reports.leave_balance_datatable' : 'reports.other_leave_balance_datatable';
+        return view($view, $data);
+    }
+}
+
+private function getEmployeesBasedOnFilters($request, $department, $position, $natureId)
+{
+    if (is_null($request->leave_employee) || $request->leave_employee == "All") {
+        $query = Employee::where('state', '=', 1)
+                         ->whereDate('hire_date', '<=', $request->duration);
 
         if ($department != 'All') {
-            $data['department_name'] = $this->attendance_model->get_dept_name($department);
+            $query->where('department', $department);
         }
         if ($position != 'All') {
-            $data['position_name'] = $this->attendance_model->get_position_name($department);
+            $query->where('position', $position);
         }
 
-        $data['employees'] =  $employees;
-
-        $data['nature'] =  $nature;
-        $data['leave_name'] = $leave_name;
-        $data['date'] = $request->duration;
-        $other = ' ';
-        if (!empty($data['department_name']))
-            $other = 'Department : ' . $data['department_name'];
-        elseif (!empty($data['position_name']))
-            $other =  'Position : ' . $data['position_name'];
-        $january = $calender[0] . '-01-01';
-
-
-
-
-        $data['excelTitle'] = $leave_name . ' Leave Report | ' . $other . ' | Date : From ' . date('d-M-Y', strtotime($january)) . ' To ' . date('d-M-Y', strtotime($data['date']));
-        if ($request->type == 1) {
-            if ($nature == 1) {
-                $pdf = Pdf::loadView('reports.leave_balance', $data)->setPaper('a4', 'landscape');
-                return $pdf->download('Leave Report ' . $request->duration . '.pdf');
-            } else {
-                $pdf = Pdf::loadView('reports.other_leave_balance', $data)->setPaper('a4', 'landscape');
-                return $pdf->download('Leave Report ' . $request->duration . '.pdf');
-            }
-        } else {
-            if ($nature == 1) {
-                return view('reports.leave_balance_datatable', $data);
-            } else {
-                return view('reports.other_leave_balance_datatable', $data);
-            }
-        }
+        return $query->get();
+    } else {
+        return Employee::where('emp_id', $request->leave_employee)
+                       ->where('state', '=', 1)
+                       ->whereDate('hire_date', '<=', $request->duration)
+                       ->get();
     }
+}
+
+
+
 
     public function gettingEmployeeAnnualLeavesReport($employee, $request, $nature)
     {

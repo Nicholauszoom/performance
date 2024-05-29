@@ -46,6 +46,12 @@
                         <div class="d-flex">
                             <div class="col-md-3">
                                 <div class="form-group  m-2">
+                                    <label for="report_system_name">Organization Name</label>
+                                    <input type="text" name="organization_name" class="form-control" value="{{ $brandSetting->organization_name }}">
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group  m-2">
                                     <label for="report_system_name">Report system Name</label>
                                     <input type="text" name="report_system_name" class="form-control" value="{{ $brandSetting->report_system_name }}">
                                 </div>
