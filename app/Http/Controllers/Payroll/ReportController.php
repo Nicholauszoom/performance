@@ -520,9 +520,9 @@ class ReportController extends Controller
 
         $id = $request->emp_id;
 
-
-        $data['employee_pension'] = $this->reports_model->employee_pension($id);
-        $data['years'] = $this->reports_model->get_pension_years($id);
+        $enid = base64_decode($id);
+        $data['employee_pension'] = $this->reports_model->employee_pension($enid);
+        $data['years'] = $this->reports_model->get_pension_years($enid);
 
         $pdf = Pdf::loadView('reports.employee_pension', $data)->setPaper('a4', 'landscape');
         return $pdf->download("employee_pension.pdf");

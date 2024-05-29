@@ -199,7 +199,7 @@
                         <div class="box-text">
                             <p> <strong>Employee :{{ $name }}</strong></p>
                             <p> <strong>Membership Number : {{ $pension_number }}</strong></p>
-                            <p> <strong>Name Of Employer :  {{  $brandSetting->report_system_name ?? "African banking Corporation" }}</strong></p>
+                            <p> <strong>Name Of Employer :  {{  $brandSetting->organization_name ?? "African banking Corporation" }}</strong></p>
 
                             <p> <strong>Contribution Date : {{ $contribution_date }}</strong></p>
                             <p> <strong>Date Of Leaving :______________________</strong></p>
