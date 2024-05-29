@@ -712,6 +712,7 @@ Route::middleware('verify-outgoing-requests')->group(function () {
 
             // Start of leave approvals
             Route::any('/leave-approvals', 'LeaveApprovals')->name('flex.leave-approval');
+            Route::any('/upload-leave-approvals', 'UploadLeaveApprovals')->name('flex.upload-leave-approvals');
             Route::post('/save-leave-approval', 'saveLeaveApproval')->name('flex.save-leave-approval');
             Route::any('/edit-leave-approval/{id}', 'editLeaveApproval')->name('flex.editLeaveApproval');
             Route::any('/edit-leave-forfeitings/{id}', 'editLeaveForfeitings')->name('flex.editLeaveForfeitings');

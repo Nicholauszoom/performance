@@ -13,6 +13,7 @@ use App\Helpers\SysHelpers;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\EmployeeRequest;
 use App\Imports\HolidayDataImport;
+use App\Imports\LeaveApprovalMapping;
 use App\Imports\ImportEmployeeAllowance;
 use App\Imports\ImportSalaryIncrement;
 use App\Models\AccessControll\Departments;
@@ -8526,6 +8527,8 @@ class GeneralController extends Controller
         if ($request->employeeID == $request->deligated) {
             return redirect()->back()->with(['error' => 'Terminated and deligated should not be the sane person']);
         }
+        $deligate = $request->deligated;
+
         $this->authenticateUser('add-termination');
         // request()->validate(
         //     [
@@ -8691,6 +8694,7 @@ class GeneralController extends Controller
         $termination->net_pay = $net_pay;
         $termination->take_home = $take_home;
         $termination->total_deductions = $total_deductions;
+        $termination->deligate_empID = $deligate;
         $termination->save();
         // $pentionable_amount =$salaryEnrollment + $leavePay + $arrears + overtime_amount;
         // } else {
@@ -8726,17 +8730,18 @@ class GeneralController extends Controller
             $termination = Termination::where('id', $id)->first();
 
             $employeeID = $termination->employeeID;
+            $delegate = $termination->deligate_empID;
             $termination->status = 1;
             $termination->approval_status = $termination->approval_status + 1;
             $termination->update();
 
             $this->flexperformance_model->update_employee_termination($id);
 
-            $approval = LeaveApproval::where('empID', $employeeID)->first();
-            $approver = Auth()->user()->emp_id;
-            $employee = Auth()->user()->position;
-
-            $position = Position::where('id', $employee)->first();
+            if($delegate){
+                LeaveApproval::where('level1', $employeeID)->update(['level1' => $delegate]);
+                LeaveApproval::where('level2', $employeeID)->update(['level2' => $delegate]);
+                LeaveApproval::where('level3', $employeeID)->update(['level3' => $delegate]);
+            }
 
             $msg = 'Employee is Terminated Successfully !';
             return redirect('flex/termination')->with(['success' => $msg]);
@@ -10838,15 +10843,18 @@ class GeneralController extends Controller
 
     public function LeaveApprovals(Request $request)
     {
-        $empID = Auth()->user()->emp_id;
         $data['employees'] = EMPL::get();
-        $data['approvals'] = LeaveApproval::orderBy('created_at', 'desc')->get();
+        $data['approvals'] = LeaveApproval::join('employee', 'leave_approvals.empID', '=', 'employee.emp_id')
+        ->where('employee.state', '!=', 4)
+        ->orderBy('leave_approvals.created_at', 'desc')
+        ->get(['leave_approvals.*']);
+
         $data['parent'] = 'Settings';
         $data['child'] = 'Leave Approval';
 
         if ($request->isMethod('post')) {
             $export = new LeaveApprovalsExport(LeaveApproval::orderBy('created_at', 'asc')->get());
-            $fileName = 'leave_approvals.xlsx';
+            $fileName = 'Leave Approvals Mapping.xlsx';
 
             $autheniticateduser = auth()->user()->emp_id;
             $auditLog = SysHelpers::AuditLog(1, "Leave approval expoted  by " . $autheniticateduser, $request);
@@ -10855,6 +10863,17 @@ class GeneralController extends Controller
         }
 
         return view('setting.leave-approval', $data);
+    }
+    public function UploadLeaveApprovals(Request $request)
+    {
+         // Validate the uploaded file
+         $request->validate([
+            'file' => 'required|mimes:xlsx,xls',
+        ]);
+        // Handle the file upload and data extraction
+        Excel::import(new LeaveApprovalMapping, $request->file('file'));
+
+        return redirect()->back()->with('success', 'File uploaded and data extracted successfully.');
     }
 
     // For Saving Leave Approvals
