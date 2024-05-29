@@ -314,7 +314,7 @@ FROM employee e, department dpt, position p, branch br, contract ct, pension_fun
     {
 
         $query = "SELECT @s:=@s+1 sNo, CONCAT(e.fname,' ', IF(e.mname != null,e.mname,' '),' ', e.lname) as name, e.tin as tin, e.national_id as national_id,e.emp_id, e.postal_address as postal_address, e.postal_city as postal_city, pl.*
-    FROM employee AS e, (SELECT @s:=0) AS s, payroll_logs pl WHERE pl.empID = e.emp_id AND e.branch = 1 AND e.state = 1 and e.contract_type != 2 AND pl.payroll_date = '" . $date . "' order by e.emp_id ASC
+    FROM employee AS e, (SELECT @s:=0) AS s, payroll_logs pl WHERE pl.empID = e.emp_id AND e.state = 1 and e.contract_type != 2 AND pl.payroll_date = '" . $date . "' order by e.emp_id ASC
     ";
 
 
