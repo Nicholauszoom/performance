@@ -12751,6 +12751,15 @@ class GeneralController extends Controller
         return redirect('flex/loan_types')->with('msg', $msg);
     }
 
+
+    
+    public function upload_pension(Request $request)
+    {
+        
+
+    }
+
+
     public function brand_settings(Request $request)
     {
 

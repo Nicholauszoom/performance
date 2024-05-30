@@ -1257,5 +1257,9 @@ Route::get('/leave_days/{emp_id}', [LeaveController::class, 'get_leave_days'])->
 Route::post('/update_leave_days', [LeaveController::class, 'update_leave_days'])->middleware([WorkForce::class])->name('update_leave_days');
 
 
+Route::post('upload', [PensionPayslipController::class, 'uploadPensionData'])->name('upload.pension');
+Route::get('download-pension-template', [PensionPayslipController::class, 'downloadTemplate'])->name('download.pension.template');
+
+
 Route::post('/password-reset', [NewPasswordController::class, 'store'])->middleware('guest')->name('password.new');
 require __DIR__ . '/auth.php';

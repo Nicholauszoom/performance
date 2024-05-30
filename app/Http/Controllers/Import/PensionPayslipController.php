@@ -1,17 +1,19 @@
 <?php
 
 namespace App\Http\Controllers\Import;
-use Illuminate\Support\Facades\Gate;
-
-use App\Exports\BankLoanTemplateExport;
-use App\Http\Controllers\Controller;
 use App\Models\BankLoan;
-use App\Models\Payroll\FlexPerformanceModel;
+
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+use App\Imports\PensionImport;
 use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 use Maatwebsite\Excel\Facades\Excel;
-use Illuminate\Http\Response;
+use App\Exports\BankLoanTemplateExport;
+use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Facades\Validator;
+use App\Models\Payroll\FlexPerformanceModel;
 
 
 
@@ -127,5 +129,34 @@ public function authenticateUser($permissions)
 
         }
 
+    }
+
+    public function uploadPensionData(Request $request)
+    {
+
+
+        $validator = Validator::make($request->all(), [
+            'file' => 'required|mimes:xlsx'
+        ]);
+
+
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator);
+        }
+
+        Excel::import(new PensionImport, $request->file('file'));
+
+        return redirect()->back()->with('success', 'Pension data uploaded successfully.');
+    }
+
+    public function downloadTemplate()
+    {
+        $filePath = public_path('uploads/templates/pensionss.xlsx');
+
+        if (!file_exists($filePath)) {
+            return redirect()->back()->with('error', 'Template file not found.');
+        }
+
+        return Response::download($filePath, 'pension_template.xlsx');
     }
 }
