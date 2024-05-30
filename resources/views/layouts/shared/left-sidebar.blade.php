@@ -486,10 +486,10 @@
                         </ul>
                     </li>
                 @endcan
-                {{-- <li
+                <li
                     class="nav-item nav-item-submenu {{ request()->routeIs('flex.performance') || request()->routeIs('flex.performance-report') || request()->routeIs('flex.projects') || request()->routeIs('flex.tasks') ? 'nav-item-expand nav-item-open' : null }}">
                     <a href="#" class="nav-link">
-                        <i class="ph-folder"></i>
+                        <i class="ph-hard-drives"></i>
                         <span>Performance Management</span>
                     </a>
                     <ul
@@ -542,7 +542,7 @@
                             </a>
                         </li>
                     </ul>
-                </li> --}}
+                </li>
 
                 {{-- / --}}
 
