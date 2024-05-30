@@ -9,7 +9,6 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
-
 use App\Models\AttendanceModel;
 use App\Models\Payroll\Payroll;
 use Barryvdh\DomPDF\Facade\Pdf;
@@ -18,7 +17,6 @@ use Illuminate\Support\Facades\DB;
 use App\Models\Payroll\ReportModel;
 use App\Http\Controllers\Controller;
 use function GuzzleHttp\Promise\all;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 use SebastianBergmann\Timer\Duration;
 use PhpOffice\PhpSpreadsheet\Style\Fill;

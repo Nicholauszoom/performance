@@ -31,35 +31,55 @@
         <div class="card-body">
 
             @can('add-loan')
-            <form action="{{ route('pension_receipt.import') }}" method="POST" enctype="multipart/form-data">
-                @csrf
-                <div class="row">
-                    <div class="col-md-3 mb-3">
-                        <label class="form-label" for="prl-date">Select Payroll Month</label>
-                        <select name="payroll_date" id="prl-date" class="select form-control select_payroll_month" required>
-                            <option>Select Month</option>
-                            @foreach ($month_list as $row)
-                            <option value="{{ $row->payroll_date }}">{{ date('F, Y', strtotime($row->payroll_date)) }}</option>
-                            @endforeach
-                        </select>
-                    </div>
+                <form action="{{ route('pension_receipt.import') }}" method="POST" enctype="multipart/form-data">
+                    @csrf
+                    <div class="row">
+                        <div class="col-md-3 mb-3">
+                            <label class="form-label" for="prl-date">Select Payroll Month</label>
+                            <select name="payroll_date" id="prl-date" class="select form-control select_payroll_month"
+                                required>
+                                <option>Select Month</option>
+                                @foreach ($month_list as $row)
+                                    <option value="{{ $row->payroll_date }}">{{ date('F, Y', strtotime($row->payroll_date)) }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
 
-                    <div class="col-md-3 mb-3">
-                        <label class="form-label" for="pay-date">Payment date</label>
-                        <input type="date" name="date" required class="form-control" id="pay-date">
-                    </div>
+                        <div class="col-md-3 mb-3">
+                            <label class="form-label" for="pay-date">Payment date</label>
+                            <input type="date" name="date" required class="form-control" id="pay-date">
+                        </div>
 
-                    <div class="col-md-3 mb-3">
-                        <label class="form-label" for="pen-receipt">Receipt No</label>
-                        <input type="text" placeholder="receipt no" name="receipt" required class="form-control" id="pen-receipt">
-                    </div>
+                        <div class="col-md-3 mb-3">
+                            <label class="form-label" for="pen-receipt">Receipt No</label>
+                            <input type="text" placeholder="receipt no" name="receipt" required class="form-control"
+                                id="pen-receipt">
+                        </div>
 
-                    <div class="col-md-3 pt-4 mb-3">
-                        <button type="submit" class="btn btn-sm btn-main">Update</button>
+                        <div class="col-md-3 pt-4 mb-3">
+                            <button type="submit" class="btn btn-sm btn-main">Update</button>
+                        </div>
                     </div>
-                </div>
-            </form>
+                </form>
             @endcan
+
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header">
+            <h4>Upload Pension Report</h4>
+            <a href="{{ route('download.pension.template') }}">Download Template</a>
+        </div>
+        <div class="card-body">
+
+            <form action="{{ route('upload.pension') }}" method="POST" enctype="multipart/form-data">
+                @csrf
+                <input type="file" class="form-control" name="file">
+                <br>
+                <button class="btn btn-dark" type="submit">Upload</button>
+            </form>
 
         </div>
     </div>
@@ -71,106 +91,98 @@
 
 {{-- //TODO Remove the unrelevant javascript files --}}
 @push('footer-script')
-<script type="text/javascript">
-    // check if form submitted is for creating or updating
+    <script type="text/javascript">
+        // check if form submitted is for creating or updating
 
-    $("#save-loan-btn").click(function(event ){
-        event.preventDefault();
+        $("#save-loan-btn").click(function(event) {
+            event.preventDefault();
 
-        if($("#update_id").val() == null || $("#update_id").val() == ""){
-            storeLoan();
-        } else {
-            updateLoan();
-        }
-     })
+            if ($("#update_id").val() == null || $("#update_id").val() == "") {
+                storeLoan();
+            } else {
+                updateLoan();
+            }
+        })
 
-                /*
-                    show modal for creating a record and
-                    empty the values of form and remove existing alerts
-                */
-                function createLoan()
-                {
-                    $("#alert-div").html("");
-                    $("#error-div").html("");
-                    $("#update_id").val("");
-                    $("#employee_d").val("");
-                    $("#product").val("");
-                    $("#created_at").val("");
-                    $("#form-modal").modal('show');
-                }
-
-
-                /*
-                    submit the form and will be stored to the database
-                */
-                function storeLoan()
-                {
-                    $("#save-loan-btn").prop('disabled', true);
-                    let url = $('meta[name=app-url]').attr("content") + "/admin/announcements";
-                    let data = {
-                        employee_id: $("employee_id").val(),
-                        product: $("#product").val(),
-                        amount: $("#amount").val(),
-                        created_at: $("#created_at").val(),
-                    };
-                    $.ajax({
-                        headers: {
-                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                        },
-                        url: url,
-                        type: "POST",
-                        data: data,
-                        success: function(response) {
-                            $("#save-announcement-btn").prop('disabled', false);
-                            let successHtml = '<div class="alert alert-success" role="alert">Announcement Was Created Successfully</div>';
-                            $("#alert-div").html(successHtml);
-                            $("#tite").val("");
-                            $("#body").val("");
-                            $("image").val("");
-                            showAllAnnouncements();
-                            $("#form-modal").modal('hide');
-                        },
-                        error: function(response) {
-                            $("#save-announcement-btn").prop('disabled', false);
-
-                            /*
-                show validation error
-                            */
-                            if (typeof response.responseJSON.errors !== 'undefined')
-                            {
-                let errors = response.responseJSON.errors;
-                let descriptionValidation = "";
-                if (typeof errors.description !== 'undefined')
-                                {
-                                    descriptionValidation = '<li>' + errors.description[0] + '</li>';
-                                }
-                let titleValidation = "";
-                if (typeof errors.title !== 'undefined')
-                                {
-                                    titleValidation = '<li>' + errors.title[0] + '</li>';
-                                }
-                let bodyValidation = "";
-                if (typeof errors.body !== 'undefined')
-                                {
-                                    bodyValidation = '<li>' + errors.body[0] + '</li>';
-                                }
-                          let fileValidation = "";
-                if (typeof errors.image !== 'undefined')
-                                {
-                                    fileValidation = '<li>' + errors.image[0] + '</li>';
-                                }
-
-                let errorHtml = '<div class="alert alert-danger" role="alert">' +
-                    '<b>Validation Error!</b>' +
-                    '<ul>' + titleValidation + bodyValidation + attachmentValidation + '</ul>' +
-                '</div>';
-                $("#error-div").html(errorHtml);
-            }
-                        }
-                    });
-                }
+        /*
+            show modal for creating a record and
+            empty the values of form and remove existing alerts
+        */
+        function createLoan() {
+            $("#alert-div").html("");
+            $("#error-div").html("");
+            $("#update_id").val("");
+            $("#employee_d").val("");
+            $("#product").val("");
+            $("#created_at").val("");
+            $("#form-modal").modal('show');
+        }
 
 
+        /*
+            submit the form and will be stored to the database
+        */
+        function storeLoan() {
+            $("#save-loan-btn").prop('disabled', true);
+            let url = $('meta[name=app-url]').attr("content") + "/admin/announcements";
+            let data = {
+                employee_id: $("employee_id").val(),
+                product: $("#product").val(),
+                amount: $("#amount").val(),
+                created_at: $("#created_at").val(),
+            };
+            $.ajax({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                url: url,
+                type: "POST",
+                data: data,
+                success: function(response) {
+                    $("#save-announcement-btn").prop('disabled', false);
+                    let successHtml =
+                        '<div class="alert alert-success" role="alert">Announcement Was Created Successfully</div>';
+                    $("#alert-div").html(successHtml);
+                    $("#tite").val("");
+                    $("#body").val("");
+                    $("image").val("");
+                    showAllAnnouncements();
+                    $("#form-modal").modal('hide');
+                },
+                error: function(response) {
+                    $("#save-announcement-btn").prop('disabled', false);
+
+                    /*
+                    show validation error
+                                */
+                    if (typeof response.responseJSON.errors !== 'undefined') {
+                        let errors = response.responseJSON.errors;
+                        let descriptionValidation = "";
+                        if (typeof errors.description !== 'undefined') {
+                            descriptionValidation = '<li>' + errors.description[0] + '</li>';
+                        }
+                        let titleValidation = "";
+                        if (typeof errors.title !== 'undefined') {
+                            titleValidation = '<li>' + errors.title[0] + '</li>';
+                        }
+                        let bodyValidation = "";
+                        if (typeof errors.body !== 'undefined') {
+                            bodyValidation = '<li>' + errors.body[0] + '</li>';
+                        }
+                        let fileValidation = "";
+                        if (typeof errors.image !== 'undefined') {
+                            fileValidation = '<li>' + errors.image[0] + '</li>';
+                        }
+
+                        let errorHtml = '<div class="alert alert-danger" role="alert">' +
+                            '<b>Validation Error!</b>' +
+                            '<ul>' + titleValidation + bodyValidation + attachmentValidation + '</ul>' +
+                            '</div>';
+                        $("#error-div").html(errorHtml);
+                    }
+                }
+            });
+        }
     </script>
     <script>
         jQuery(document).ready(function($) {
