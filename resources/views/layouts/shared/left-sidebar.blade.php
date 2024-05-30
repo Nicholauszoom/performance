@@ -486,66 +486,6 @@
                         </ul>
                     </li>
                 @endcan
-                <li
-                    class="nav-item nav-item-submenu {{ request()->routeIs('flex.performance') || request()->routeIs('flex.performance-report') || request()->routeIs('flex.projects') || request()->routeIs('flex.tasks') ? 'nav-item-expand nav-item-open' : null }}">
-                    <a href="#" class="nav-link">
-                        <i class="ph-hard-drives"></i>
-                        <span>Performance Management</span>
-                    </a>
-                    <ul
-                        class="nav-group-sub collapse {{ request()->routeIs('flex.performance') || request()->routeIs('flex.performance-report') || request()->routeIs('flex.tasks') || request()->routeIs('flex.projects') ? 'show' : null }}">
-                        <li class="nav-item">
-                            <a href="{{ route('flex.projects') }}"
-                                class="nav-link {{ request()->routeIs('flex.projects') ? 'active' : null }}">
-                                Projects
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="{{ route('flex.tasks') }}"
-                                class="nav-link {{ request()->routeIs('flex.tasks') ? 'active' : null }}">
-                                Adhoc Tasks
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="{{ route('flex.performance') }}"
-                                class="nav-link {{ request()->routeIs('flex.performance') ? 'active' : null }}">
-                                Performance Ratios
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="{{ route('flex.performance-report') }}"
-                                class="nav-link {{ request()->routeIs('flex.performance-report') ? 'active' : null }} ">
-                                Performance Matrix
-                            </a>
-                        </li>
-                    </ul>
-                </li>
-                <li
-                    class="nav-item nav-item-submenu {{ request()->routeIs('flex.acceleration') || request()->routeIs('flex.performance') || request()->routeIs('flex.performance-report') || request()->routeIs('flex.projects') || request()->routeIs('flex.tasks') ? 'nav-item-expand nav-item-open' : null }}">
-                    <a href="#" class="nav-link">
-                        <i class="ph-graph"></i>
-                        <span>Performance Acceleration</span>
-                    </a>
-                    <ul
-                        class="nav-group-sub collapse {{ request()->routeIs('flex.acceleration') || request()->routeIs('flex.acceleration-report') || request()->routeIs('flex.tasks') || request()->routeIs('flex.projects') ? 'show' : null }}">
-                        <li class="nav-item">
-                            <a href="{{ route('flex.acceleration') }}"
-                                class="nav-link {{ request()->routeIs('flex.acceleration') ? 'active' : null }}">
-                                Acceleration Programme
-                            </a>
-                        </li>
-
-                        <li class="nav-item">
-                            <a href="{{ route('flex.acceleration-report') }}"
-                                class="nav-link {{ request()->routeIs('flex.acceleration-report') ? 'active' : null }} ">
-                                Acceleration Matrix
-                            </a>
-                        </li>
-                    </ul>
-                </li>
-
-                {{-- / --}}
-
                 {{-- For Talent Management --}}
                 @can('view-Talent')
                     <li

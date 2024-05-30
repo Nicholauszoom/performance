@@ -442,8 +442,10 @@
 
 
     @include('app.includes.leave_operations')
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
     <script>
+         $(document).ready(function() {
         $('#docNo').change(function() {
             var id = $(this).val();
             const start = document.getElementById("start-date").value;
@@ -452,16 +454,7 @@
             var url = '{{ route('getSubs', ':id') }}';
             url = url.replace(':id', par);
 
-            // if (id == 1) {
-            //     $("#attachment").hide();
-            //     $("#attach").prop('required', false);
-            // } else {
-            //     $("#attachment").show();
-            //     $("#attach").prop('required', true);
-            // }
-
             $('#subs_cat').find('option').remove();
-            // $('#subs_cat').find('option').not(':first').remove();
 
             $.ajax({
                 url: url,
@@ -470,6 +463,7 @@
 
                 success: function(response) {
                     let days = response.days;
+                    if(response.data[0].category_id != 6){
                     let subs = response.data;
                     var status = "<span>" + response.days + " Days</span>"
                     $("#remaining").empty(status);
@@ -488,9 +482,8 @@
                         $("#subs_cat").append(option);
 
                         $("#sub").show();
-
                     }
-
+                    }
                     processAttachmentDisplay(days)
                 }
             });
@@ -525,6 +518,7 @@
                     $("#attachment").show();
                 }
             }
+        });
         });
     </script>
 
