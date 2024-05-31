@@ -493,6 +493,7 @@
                 if (id == 1 || id == 3 || id == 5) {
                     $("#attachment").hide();
                 } else if (id == 2) {
+                    console.log(id);
                     if (_days == 1) {
 
                         var validateUrl = '{{ route('attendance.validateSickLeave', ':date') }}'
@@ -504,18 +505,24 @@
                             success: function(response) {
                                 if (response.status) {
                                     $('#attachment').show()
-                                } else {
-                                    $('#attachment').hide()
-                                }
+                                    $('#attachment').addClass('required');
+                            } else {
+                                $('#attachment').hide();
+                                $('#attachment').removeClass('required');
+                            }
                             }
                         })
                     } else {
                         $('#attachment').hide()
+                        $('#attachment').removeClass('required');
+
 
                     }
 
                 } else {
                     $("#attachment").show();
+                    $('#attachment').addClass('required');
+
                 }
             }
         });

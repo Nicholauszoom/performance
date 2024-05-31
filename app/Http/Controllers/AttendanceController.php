@@ -618,7 +618,6 @@ class AttendanceController extends Controller
             [
 
                // start of name information validation
-
                 'mobile' => 'required|numeric',
                 'leave_address' => 'nullable',
                 'reason' => 'required',
@@ -750,7 +749,7 @@ class AttendanceController extends Controller
                     // dd($sub);
 
                     $total_leave_days = $leaves + $different_days;
-                
+
 
                     $maximum = $sub->max_days;
                     // Case hasnt used all days
@@ -786,7 +785,8 @@ class AttendanceController extends Controller
                                 'image' => 'mimes:jpg,png,jpeg,pdf|max:2048',
                             ]);
                             $newImageName = $request->image->hashName();
-                            $request->image->move(public_path('storage/leaves'), $newImageName);
+                              $request->image->move(public_path('storage\leaves'), $newImageName);
+
                             $leaves->attachment = $newImageName;
 
                         }

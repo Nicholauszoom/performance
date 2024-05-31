@@ -213,9 +213,17 @@
                     </div>
 
                 </td>
-                <td>
-                    {{-- start of cancel leave button --}}
+                <td class="text-center">
+                    @if ($row->attachment)
+                    <a href="{{ asset('storage/leaves/' . $row->attachment) }}"
+                        download="{{ asset('storage/leaves/' . $row->attachment) }}"
+                        class="btn bg-main btn-sm" title="Download Attachment">
+                        <i class="ph ph-download"></i> &nbsp;
+                        Attachment
+                    </a>
+                @endif
                     <?php if ($row->state == 1) { ?>
+                <div class="col-md-12 text-center mt-1">
                     <a href="javascript:void(0)" title="Cancel Leave" class="icon-2 info-tooltip disabled"
                         onclick="cancelRequest(<?php echo $row->id; ?>)">
                         <button class="btn btn-danger btn-sm">Cancel Leave Request <i class="ph-x"></i></button>
@@ -225,7 +233,9 @@
                             <button class="btn btn-main btn-sm">Initiate Revoke Request<i class="ph-prohibit"></i>
                         </button>
                     </a>
+                </div>
                     <?php } ?>
+
                 </td>
 
             </tr>
