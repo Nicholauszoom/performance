@@ -447,7 +447,7 @@ Route::middleware('verify-outgoing-requests')->group(function () {
 
 
         // Routes 2
-        Route::prefix('flex/attendance')->middleware([WorkForce::class])->controller(AttendanceController::class)->group(function () {
+        Route::prefix('flex/attendance')->controller(AttendanceController::class)->group(function () {
 
             Route::any('/attendance', 'attendance')->name('attendance.attendance');
             Route::any('/attendees', 'attendees')->name('attendance.attendees');

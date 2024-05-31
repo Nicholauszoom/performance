@@ -115,6 +115,14 @@
                                 @endif
                             </td>
                             <td class="text-center">
+                                @if ($item->attachment != null)
+                                <a href="{{ asset('storage/leaves/' . $item->attachment) }}"
+                                    download="{{ asset('storage/leaves/' . $item->attachment) }}"
+                                    class="btn bg-main btn-sm" title="Download Attachment">
+                                    <i class="ph ph-download"></i> &nbsp;
+                                    Attachment
+                                </a>
+                            @endif
 
                                 @if ((Auth()->user()->emp_id == $approval->level1) & ($item->state == 2 || $item->state == 0))
                                     <div class="col-md-12 text-center mt-1">

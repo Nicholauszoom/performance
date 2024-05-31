@@ -93,10 +93,15 @@
                             @endif
                         @endif
                         <div class="form-group py-2">
-                            <button class="float-end btn btn-main" type="button" data-bs-toggle="modal"
-                                data-bs-target="#approval">Revoke Approved Leave    </button>
+                            <button class="float-end btn btn-main" type="button" data-bs-toggle="modal" data-bs-target="#approval">
+                                Revoke Leave with Adjustment
+                            </button>
 
+                            <button class="float-end btn btn-danger me-2" type="button" onclick="approveLeaveRevoke(<?php echo $id; ?>)">
+                                Revoke Leave Complete
+                            </button>
                         </div>
+
                             @if($revoke_status = 0)
                                     <div id="approval" class="modal fade" tabindex="-1">
                                         <div class="modal-dialog modal-dialog-centered modal-md">
@@ -241,6 +246,13 @@
                         console.log(err.responseText);
                     }
                 });
+            }
+        </script>
+
+        <script>
+            function revokeLeaveCompetely(id){
+                console.log(id);
+
             }
         </script>
     @endpush
