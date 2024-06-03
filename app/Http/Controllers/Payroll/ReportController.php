@@ -2148,7 +2148,6 @@ class ReportController extends Controller
 
         $calendar = $request->payrolldate;
         $type = $request->type;
-        $payrollState = $request->payrollState;
 
 
         $current_payroll_month = $request->input('payrolldate');
