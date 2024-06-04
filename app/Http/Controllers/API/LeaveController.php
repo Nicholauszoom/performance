@@ -2538,7 +2538,8 @@ class LeaveController extends Controller
         }
         $id = $request->input('terminationid');
         $message = $request->input('comment');
-        $expectedDate = $request->input('expectedDate');
+        $expectedStartDate = $request->input('expectedStartDate');
+        $expectedEndDate = $request->input('expectedEndDate');
 
         $particularLeave = Leaves::where('id', $id)->first();
        ;
@@ -2557,7 +2558,8 @@ class LeaveController extends Controller
             if ($particularLeave) {
                 $particularLeave->state = 2;
                 $particularLeave->revoke_reason = $message;
-                $particularLeave->enddate_revoke = $expectedDate;
+                $particularLeave->enddate_revoke = $expectedEndDate;
+                $particularLeave->startdate_revoke=$expectedStartDate;
                 $particularLeave->revoke_status = 0;
                 $particularLeave->status = 4;
                 $particularLeave->revok_escalation_status = 1;
@@ -2629,12 +2631,25 @@ class LeaveController extends Controller
                 $particularLeave->state = 3;
                 $particularLeave->revoke_status = 1;
                 $particularLeave->status = 5;
-                if ($particularLeave->enddate_revoke) {
-                    $days = SysHelpers::countWorkingDays($particularLeave->start, $particularLeave->enddate_revoke);
+                if ($particularLeave->enddate_revoke&&$particularLeave->startdate_revoke) {
+                    $days = SysHelpers::countWorkingDays($particularLeave->startdate_revoke, $particularLeave->enddate_revoke);
 
                     $particularLeave->remaining = $particularLeave->remaining + $days;
+                    $particularLeave->days=$days;
 
                     $particularLeave->end = $particularLeave->enddate_revoke;
+                    $particularLeave->start = $particularLeave->startdate_revoke;
+
+                }
+                else{
+                    $days = 0;
+                    $particularLeave->days=$days;
+
+                    $particularLeave->remaining = $particularLeave->remaining + $days;
+                    $particularLeave->state = 5;
+
+                    // $particularLeave->end = $particularLeave->enddate_revoke;
+                    // $particularLeave->start = $particularLeave->startdate_revoke;
                 }
                 $position = Position::where('id', EMPL::where('emp_id', Auth()->user()->emp_id)->value('position'))->value('name');
                 $particularLeave->position = 'Leave Revoke Approved by ' . $position;
