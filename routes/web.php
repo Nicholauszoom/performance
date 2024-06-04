@@ -364,7 +364,9 @@ Route::middleware('verify-outgoing-requests')->group(function () {
             Route::any('/cancelRevokeLeave/{id}', 'cancelRevokeLeave')->name('attendance.cancelRevokeLeave');
             Route::post('/revokeApprovedLeave', 'revokeApprovedLeave')->name('attendance.revokeApprovedLeave');
             Route::any('/revokeApprovedLeaveAdmin/{id}', 'revokeApprovedLeaveAdmin')->name('attendance.revokeApprovedLeaveAdmin');
-            Route::any('/revokeCancelLeaveAdmin/{id}', 'revokeCancelLeaveAdmin')->name('attendance.revokeCancelLeaveAdmin');
+            Route::any('/approveTotalRevoke/{id}', 'approveTotalRevoke')->name('attendance.approveTotalRevoke');
+            Route::post('/totalRevokeInitiate', 'totalRevokeInitiate')->name('attendance.totalRevokeInitiate');
+            Route::put('/revokeCancelLeaveAdmin/{id}', 'revokeCancelLeaveAdmin')->name('attendance.revokeCancelLeaveAdmin');
             //for manager
             Route::any('/leave', 'leave')->name('attendance.leave');
             Route::any('/annualleavebalance/{year}', 'annuaLeaveSummary')->name('attendance.annualleavebalance');

@@ -1614,9 +1614,16 @@ class AttendanceController extends Controller
     }
 
     public function totalRevokeInitiate(Request $request){
+            // Get the first key of the parameters array, which is a JSON string
+        $keys = array_keys($request->request->all());
+        $jsonString = $keys[0];
 
-        $id = $request->input('terminationid');
-        $message = $request->input('comment');
+        // Decode the JSON string to get the actual values
+        $data = json_decode($jsonString, true);
+
+        // Access the values
+        $id = $data['terminationid'];
+        $message = $data['comment'];
         $particularLeave = Leaves::where('id', $id)->first();
         $linemanager = LeaveApproval::where('empID', $particularLeave->empID)->first();
         $linemanager_position = Employee::where('emp_id',$linemanager->level1)->value('position');
@@ -1812,6 +1819,53 @@ class AttendanceController extends Controller
                 PushNotificationController::bulksend([
                     'title' => '7',
                     'body' =>'Dear '.$emp_data->full_name.',Your leave Revoke is successful approved by '.$position.'',
+                    'img' => '',
+                    'id' => $particularLeave->empID,
+                    'leave_id' => $particularLeave->id,
+                    'overtime_id' => '',
+
+                    ]);
+            } catch (Exception $exception) {
+                $msg = " Revoke Leave Request Has been Approved Successfully But Email is not sent(SMPT problem) !";
+                // return redirect('flex/view-action/'.$emp,$data)->with('msg', $msg);
+                return redirect('flex/attendance/leave')->with('msg', $msg);
+            }
+        }
+
+        return response()->json(['status' => 'NOT OK']);
+    }
+    public function approveTotalRevoke($id)
+    {
+        $particularLeave = Leaves::where('id', $id)->first();
+
+        if ($particularLeave) {
+            $particularLeave->state = 6;
+            $particularLeave->revoke_status = 1;
+            $particularLeave->status = 5;
+            $days = SysHelpers::countWorkingDays($particularLeave->start, $particularLeave->end);
+            $particularLeave->remaining = $particularLeave->remaining + $days;
+
+            $position = Position::where('id', Employee::where('emp_id', Auth()->user()->emp_id)->value('position'))->value('name');
+            $particularLeave->position = 'Completely Leave Revoke Approved by ' . $position;
+            $particularLeave->level3 = Auth()->user()->emp_id;
+            $particularLeave->revoke_created_at = now();
+            $particularLeave->save();
+
+            $emp_data = SysHelpers::employeeData($particularLeave->empID);
+
+            $email_data = array(
+                'subject' => 'Employee Leave Revoke Approval',
+                'view' => 'emails.linemanager.approved_revoke_leave',
+                'email' => $emp_data->email,
+                'full_name' => $emp_data->fname, ' ' . $emp_data->mname . ' ' . $emp_data->lname,
+            );
+            try {
+
+                Notification::route('mail', $emp_data->email)->notify(new EmailRequests($email_data));
+
+                PushNotificationController::bulksend([
+                    'title' => '7',
+                    'body' =>'Dear '.$emp_data->full_name.',Your leave Revoke Of Completely Revoking is successful approved by '.$position.'',
                     'img' => '',
                     'id' => $particularLeave->empID,
                     'leave_id' => $particularLeave->id,

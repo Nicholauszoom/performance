@@ -756,6 +756,7 @@ FROM payroll_logs pl, employee e WHERE e.emp_id = pl.empID and e.contract_type =
  ";
 
 
+
         return DB::select(DB::raw($query));
     }
 

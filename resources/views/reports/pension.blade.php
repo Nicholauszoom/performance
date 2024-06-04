@@ -89,9 +89,9 @@
                             <td colspan="4" class="w-50" style="">
                                 <div class="box-text text-end">
                                     @if ($brandSetting->report_logo)
-                                    <img src="{{ asset('storage/' . $brandSetting->report_logo) }}" alt="logo here" width="180px" height="150px" class="image-fluid">          
+                                    <img src="{{ asset('storage/' . $brandSetting->report_logo) }}" alt="logo here" width="180px" height="150px" class="image-fluid">
                                     @else
-                                    <img src="{{ public_path('assets/images/logo-dif2.png') }}" alt="logo here" width="180px" height="150px" class="image-fluid">          
+                                    <img src="{{ public_path('assets/images/logo-dif2.png') }}" alt="logo here" width="180px" height="150px" class="image-fluid">
                                     @endif
                                 </div>
                             </td>
@@ -173,7 +173,7 @@
                             <td hidden>{{ $row->mname }}</td>
                             <td hidden>{{ $row->lname }}</td>
                             <td align="right">{{ number_format($salary,2) }}</td>
-                            <td align="right">{{ number_format($total_contribution,2) }}</td>
+                            <td align="right">{{ number_format($contribution,2) }}</td>
 
 
                         </tr>
