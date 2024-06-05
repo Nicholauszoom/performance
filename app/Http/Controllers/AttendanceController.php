@@ -613,10 +613,8 @@ class AttendanceController extends Controller
 
     public function saveLeave(Request $request)
     {
-
         request()->validate(
             [
-
                 'mobile' => 'required|numeric',
                 'leave_address' => 'nullable',
                 'reason' => 'required',
@@ -627,9 +625,7 @@ class AttendanceController extends Controller
 
         // For Redirection Url
         $url = redirect('flex/attendance/my-leaves');
-
         $employeee = Employee::where('emp_id', Auth::user()->emp_id)->first();
-
         $linemanager = $employeee->line_manager;
         $leaveApproval = new LeaveApproval();
         $leaveApproval = $leaveApproval::where('empID', Auth::user()->emp_id)->first();
@@ -1171,7 +1167,7 @@ class AttendanceController extends Controller
 
                                     $leave_type = LeaveType::where('id', $nature)->first();
                                     $type_name = $leave_type->type;
-                                    $msg = "Sorry, You have Insufficient  " . $type_name . " Leave Days Balance";
+                                    $msg = "Sorry, You have insufficient  " . $type_name . " Leave Days Balance";
                                     return $url->with('msg', $msg);
 
                                 }
@@ -1184,7 +1180,7 @@ class AttendanceController extends Controller
                                 if ($different_days < $max_days) {
                                     $leaves->days = $different_days;
                                 } else {
-                                    $msg = "Sorry, You have Insufficient  Leave Days Balance";
+                                    $msg = "Sorry, You have Insufficient LEAVE Days Balance";
                                     return $url->with('msg', $msg);
                                 }
 
