@@ -617,7 +617,6 @@ class AttendanceController extends Controller
         request()->validate(
             [
 
-               // start of name information validation
                 'mobile' => 'required|numeric',
                 'leave_address' => 'nullable',
                 'reason' => 'required',
@@ -688,15 +687,34 @@ class AttendanceController extends Controller
                 return $url->with('error', $message);
             }
 
-            // Checking used leave days based on leave type and sub type
-            $leaves = Leaves::where('empID', $empID)->where('nature', $nature)->where('sub_category', $request->sub_cat)->whereNot('reason', 'Automatic applied!')->whereYear('created_at', date('Y'))->sum('days');
+            // Checking used leave days based on leave type
+            $leaves = Leaves::where('empID', $empID)->where('nature', $nature)->where('state',[0,3])->where('sub_category', $request->sub_cat)->whereNot('reason', 'Automatic applied!')->whereYear('created_at', date('Y'))->sum('days');
 
             $leave_balance = $leaves;
             // For Leave Nature days
             $type = LeaveType::where('id', $nature)->first();
+
             $max_leave_days = $type->max_days;
 
-            //$max_leave_days = 10000;
+            if ($nature == 4) {
+                    // Parse the start date using Carbon
+                    $startDate = Carbon::parse($start);
+
+                    // Calculate the date 4 months from the start date
+                    $endDate = $startDate->copy()->addMonths(4);
+
+                    $end= $endDate->format('Y-m-d');
+
+                    // Calculate the number of days between the start date and the date 4 months later
+                    $daysToAdd = $startDate->diffInDays($endDate);
+
+                   if($max_leave_days < $daysToAdd){
+                    $type->max_days = $daysToAdd;
+                    $type->save();
+                   }
+
+                }
+                $max_leave_days = $type->max_days;
 
             $employeeHiredate = explode('-', Auth::user()->hire_date);
             $employeeHireYear = $employeeHiredate[0];
@@ -716,40 +734,32 @@ class AttendanceController extends Controller
                 $holidays = SysHelpers::countHolidays($start, $end);
                 $different_days = SysHelpers::countWorkingDays($start, $end) - $holidays;
 
-            } else {
-
-                // $holidays=SysHelpers::countHolidays($start,$end);
-                // $different_days = SysHelpers::countWorkingDays($start,$end)-$holidays;
+            }else if($nature == 4){
+                $different_days = $max_leave_days;
+            }
+            else {
                 $different_days = SysHelpers::countWorkingDaysForOtherLeaves($start, $end);
-
-                // $startDate = Carbon::parse($start);
-                // $endDate = Carbon::parse($end);
-                // $different_days = $endDate->diffInDays($startDate);
             }
 
             // For Total Leave days
             $total_remaining = $leaves + $different_days;
 
             // For Working days
-            $d1 = new DateTime($employeeDate);
+            $d1 = new DateTime($employeee->hire_date);
             $d2 = new DateTime();
             $interval = $d2->diff($d1);
             $day = SysHelpers::countWorkingDays($d1, $d2);
 
             // For Employees with less than 12 months of employement
-            if ($day <= 365) {
-
-                //  For Leaves with sub Category
+            if ($day <= 365){
+            //  For Leaves with sub Category
                 if ($request->sub_cat > 0) {
 
                     // For Sub Category details
                     $sub_cat = $request->sub_cat;
                     $sub = LeaveSubType::where('id', $sub_cat)->first();
 
-                    // dd($sub);
-
                     $total_leave_days = $leaves + $different_days;
-
 
                     $maximum = $sub->max_days;
                     // Case hasnt used all days
@@ -1045,10 +1055,16 @@ class AttendanceController extends Controller
             }
             // For Employee with more than 12 Month
             else {
-
                 $total_leave_days = $leaves + $different_days;
 
-                if ($total_leave_days < $max_leave_days) {
+                if($nature == 4){
+
+                    $total_leave_days = $max_leave_days;
+
+                }
+
+                if ($total_leave_days <= $max_leave_days) {
+
                     $remaining = $max_leave_days - ($leave_balance + $different_days);
                     $leaves = new Leaves();
                     $empID = Auth::user()->emp_id;
