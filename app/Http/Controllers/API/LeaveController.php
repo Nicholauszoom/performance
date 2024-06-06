@@ -1138,22 +1138,23 @@ class LeaveController extends Controller
 
         if ($pendingLeave || $approvedLeave) {
             $message = 'You have a ';
-
+        
             if ($pendingLeave) {
                 $message .= 'pending ' . $pendingLeave->type->type . ' application ';
             }
-
+        
             if ($approvedLeave) {
                 $message .= ($pendingLeave ? 'and ' : '') . 'approved ' . $approvedLeave->type->type . ' application ';
             }
-
+        
             $message .= 'within the requested leave time';
-F
-            return response([ 'msg'=>$message ],202);
+        
+            return response([ 'msg' => $message ], 202);
         }
-
+        
         // Checking used leave days based on leave type and sub type
-        list($leave_balance, $type_name, $max_leave_days, $employeeHireYear, $employeeDate) = $this->checkingUsedLeaveDaysBasedOnLeaveTypeAndSubType($empID, $nature, $request);
+        list($leave_balance, $type_name, $max_leave_days, $employeeHireYear, $employeeDate,$type) = $this->checkingUsedLeaveDaysBasedOnLeaveTypeAndSubType($empID, $nature, $request);
+        $max_leave_days = $type->max_days;
         if ($nature == 4) {
             // Parse the start date using Carbon
             $startDate = Carbon::parse($start);
@@ -1209,15 +1210,16 @@ F
         // For  Requested days
 
 
-        list($d1, $d2, $interval, $day) = $this->forRequestedDays($start, $end, $employeeDate);
+        list($d1, $d2, $interval, $day) = $this->forRequestedDays($start, $end, Auth::user()->hire_date);
 
 
         // For Employees with less than 12 months of employement
         if($day <= 365)
         {
-
+    ;
             //  For Leaves with sub Category
             if($request->sub_cat > 0){
+            
 
                 // For Sub Cart
                 $sub_cat=$request->sub_cat;
@@ -1265,6 +1267,7 @@ F
                     $linemanager_data = SysHelpers::employeeData($linemanager->level1);
                     $employee_data = SysHelpers::employeeData($empID);
                     $fullname = $linemanager_data['fname'] . ' ' . $linemanager_data['mname'] . ' ' . $linemanager_data['lname'];
+         
 
                     $email_data = array(
                         'subject' => 'Employee Leave Approval',
@@ -1372,9 +1375,10 @@ F
                     }
                     if ($request->nature==5)
                     {
+                        
 
                         // Incase the employee had already applied paternity before
-                        $paternity=Leaves::where('empID',$empID)->where('nature',$nature)->where('sub_category',$request->sub_cat)->first();
+                        $paternity=Leaves::where('empID',$empID)->where('nature',5)->where("state",[0,3])->first();
                         if ( $paternity) {
                             $d1 = $paternity->created_at;
                             $d2 = new DateTime();
@@ -1427,6 +1431,7 @@ F
                         }
                         // Incase an employee is applying for paternity for the first time
                         else {
+                          
                             // Checking if employee has less than 4 working months
                             if ($day < 112) {
                                 $max_days = 7;
@@ -1535,23 +1540,23 @@ F
         // For Employee with more than 12 Month
         else
         {
-
+           
             $total_leave_days=$leave_balance+$different_days;
             if($nature == 4){
 
                 $total_leave_days = $max_leave_days;
 
             }
-
+        //    dd(".$leave_balance. + .$different_days");
 
             if($total_leave_days<=$max_leave_days)
             {
-                $remaining=$max_leave_days-($leave_balance+$different_days);
+                $remaining=$max_leave_days-$total_leave_days;
                 $leave=new Leaves();
                 $empID=auth()->user()->emp_id;
                 $leave->empID = $empID;
-                $leave->start = $request->start;
-                $leave->end=$request->end;
+                $leave->start = $start;
+                $leave->end=$end;
                 $leave->leave_address=$request->address;
                 $leave->mobile = $request->mobile;
                 $leave->nature = $request->nature;
@@ -1583,10 +1588,12 @@ F
 
                     $leave->days = $different_days;
                 }
-                else
+                else if($request->nature == 5)
                 {
+                 
 
-                    $paternity=Leaves::where('empID',$empID)->where('nature',5)->where('sub_category',$request->sub_cat)->whereYear('created_at',date('Y'))->orderBy('created_at','desc')->first();
+
+                    $paternity=Leaves::where('empID',$empID)->where('nature',5)->where('state',[0,3])->whereYear('created_at',date('Y'))->orderBy('created_at','desc')->first();
 
                     if ($paternity) {
                         $d1 = $paternity->created_at;
@@ -1675,62 +1682,63 @@ F
                         }
                     }
 
-
-
-                    $leave->reason = $request->reason;
-                    $leave->remaining = $remaining;
-
-                    $leave->sub_category = $request->sub_cat;
-                    $leave->application_date = date('Y-m-d');
-                    // START
-                    if ($request->hasfile('image')) {
-
-                        $newImageName = $request->image->hashName();
-                        $request->image->move(public_path('storage/leaves'), $newImageName);
-                        $leave->attachment =  $newImageName;
-                    }
-
-
-                    $leave->save();
-
-                    $leave_type=LeaveType::where('id',$nature)->first();
-                    $type_name=$leave_type->type;
-                    $linemanager =  LeaveApproval::where('empID',$empID)->first();
-                    $linemanager_data = SysHelpers::employeeData($linemanager->level1);
-                    $employee_data = SysHelpers::employeeData($empID);
-                    $fullname = $linemanager_data['fname'] . ' ' . $linemanager_data['mname'] . ' ' . $linemanager_data['lname'];
-
-                    $email_data = array(
-                        'subject' => 'Employee Leave Approval',
-                        'view' => 'emails.linemanager.leave-approval',
-                        'email' => $linemanager_data['email'],
-                        'full_name' => $fullname,
-                        'employee_name'=>$employee_data['full_name'],
-                        'next' => parse_url(route('attendance.leave'), PHP_URL_PATH)
-                    );
-
-                    try {
-                        PushNotificationController::bulksend([
-                            'title' => '2',
-                            'body' => 'Dear '.$linemanager_data['full_name'].', You have a leave request to approve of ' . $employee_data['full_name'],
-                            'img' => '',
-                            'id' => $linemanager->level1,
-                            'leave_id' => $leave->id,
-                            'overtime_id' => '',
-                        ]);
-
-
-                        Notification::route('mail', $linemanager_data['email'])->notify(new EmailRequests($email_data));
-
-                    } catch (TransportException $exception) {
-                        $msg=$type_name." Leave Request  Has been Requested But Email is not sent(SMTP Problem)!";
-                        return response( [ 'msg'=>$msg ],202 );
-
-                    }
-
-                    $msg=$type_name." Leave Request is submitted successfully!";
-                    return response( [ 'msg'=>$msg ],202 );
                 }
+                
+
+
+                $leave->reason = $request->reason;
+                $leave->remaining = $remaining;
+
+                $leave->sub_category = $request->sub_cat;
+                $leave->application_date = date('Y-m-d');
+                // START
+                if ($request->hasfile('image')) {
+
+                    $newImageName = $request->image->hashName();
+                    $request->image->move(public_path('storage/leaves'), $newImageName);
+                    $leave->attachment =  $newImageName;
+                }
+
+
+                $leave->save();
+
+                $leave_type=LeaveType::where('id',$nature)->first();
+                $type_name=$leave_type->type;
+                $linemanager =  LeaveApproval::where('empID',$empID)->first();
+                $linemanager_data = SysHelpers::employeeData($linemanager->level1);
+                $employee_data = SysHelpers::employeeData($empID);
+                $fullname = $linemanager_data['fname'] . ' ' . $linemanager_data['mname'] . ' ' . $linemanager_data['lname'];
+
+                $email_data = array(
+                    'subject' => 'Employee Leave Approval',
+                    'view' => 'emails.linemanager.leave-approval',
+                    'email' => $linemanager_data['email'],
+                    'full_name' => $fullname,
+                    'employee_name'=>$employee_data['full_name'],
+                    'next' => parse_url(route('attendance.leave'), PHP_URL_PATH)
+                );
+
+                try {
+                    PushNotificationController::bulksend([
+                        'title' => '2',
+                        'body' => 'Dear '.$linemanager_data['full_name'].', You have a leave request to approve of ' . $employee_data['full_name'],
+                        'img' => '',
+                        'id' => $linemanager->level1,
+                        'leave_id' => $leave->id,
+                        'overtime_id' => '',
+                    ]);
+
+
+                    Notification::route('mail', $linemanager_data['email'])->notify(new EmailRequests($email_data));
+
+                } catch (TransportException $exception) {
+                    $msg=$type_name." Leave Request  Has been Requested But Email is not sent(SMTP Problem)!";
+                    return response( [ 'msg'=>$msg ],202 );
+
+                }
+
+                $msg=$type_name." Leave Request is submitted successfully!";
+                return response( [ 'msg'=>$msg ],202 );
 
 
 
@@ -2937,7 +2945,7 @@ F
      */
     public function checkingUsedLeaveDaysBasedOnLeaveTypeAndSubType(mixed $empID, mixed $nature, Request $request): array
     {
-        $leave_sum = Leaves::where('empID', $empID)->where('nature', $nature)->where('sub_category', $request->sub_cat)->whereNot('reason', 'Automatic applied!')->whereYear('created_at', date('Y'))->sum('days');
+        $leave_sum = Leaves::where('empID', $empID)->where('nature', $nature)->where('state',[0,3])->where('sub_category', $request->sub_cat)->whereNot('reason', 'Automatic applied!')->whereYear('created_at', date('Y'))->sum('days');
         $leave_balance = $leave_sum;
         // For Leave Nature days
         $type = LeaveType::where('id', $nature)->first();
@@ -2948,7 +2956,7 @@ F
         $employeeHiredate = explode('-', Auth::user()->hire_date);
         $employeeHireYear = $employeeHiredate[0];
         $employeeDate = '';
-        return array($leave_balance, $type_name, $max_leave_days, $employeeHireYear, $employeeDate);
+        return array($leave_balance, $type_name, $max_leave_days, $employeeHireYear, $employeeDate,$type);
     }
 
     /**
