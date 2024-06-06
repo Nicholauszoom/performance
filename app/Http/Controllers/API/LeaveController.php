@@ -1148,17 +1148,40 @@ class LeaveController extends Controller
             }
 
             $message .= 'within the requested leave time';
-
+F
             return response([ 'msg'=>$message ],202);
         }
 
         // Checking used leave days based on leave type and sub type
         list($leave_balance, $type_name, $max_leave_days, $employeeHireYear, $employeeDate) = $this->checkingUsedLeaveDaysBasedOnLeaveTypeAndSubType($empID, $nature, $request);
+        if ($nature == 4) {
+            // Parse the start date using Carbon
+            $startDate = Carbon::parse($start);
 
+            // Calculate the date 4 months from the start date
+            $endDate = $startDate->copy()->addMonths(4);
+
+            $end= $endDate->format('Y-m-d');
+
+            // Calculate the number of days between the start date and the date 4 months later
+            $daysToAdd = $startDate->diffInDays($endDate);
+
+           if($max_leave_days < $daysToAdd){
+            $type->max_days = $daysToAdd;
+            $type->save();
+           }
+
+        }
+        $max_leave_days = $type->max_days;
+        $employeeHiredate = explode('-', Auth::user()->hire_date);
+        $employeeHireYear = $employeeHiredate[0];
+        $employeeDate = '';
+       
         if ($employeeHireYear == $year) {
             $employeeDate = Auth::user()->hire_date;
 
-        } else {
+        } 
+        else {
             $employeeDate = $year . ('-01-01');
         }
 
@@ -1169,7 +1192,10 @@ class LeaveController extends Controller
             $holidays = SysHelpers::countHolidays($start, $end);
             $different_days = SysHelpers::countWorkingDays($start, $end) - $holidays;
 
-        } else {
+        }else if($nature == 4){
+            $different_days = $max_leave_days;
+        }
+        else {
 
             // $holidays=SysHelpers::countHolidays($start,$end);
             // $different_days = SysHelpers::countWorkingDays($start,$end)-$holidays;
@@ -1291,6 +1317,11 @@ class LeaveController extends Controller
                 // $days=$different_days;
 
                 $total_leave_days=$leave_balance+$different_days;
+                if($nature == 4){
+
+                    $total_leave_days = $max_leave_days;
+
+                }
 
 
                 if($total_leave_days<$max_leave_days || $request->nature==1)
@@ -1506,6 +1537,11 @@ class LeaveController extends Controller
         {
 
             $total_leave_days=$leave_balance+$different_days;
+            if($nature == 4){
+
+                $total_leave_days = $max_leave_days;
+
+            }
 
 
             if($total_leave_days<=$max_leave_days)
@@ -2637,6 +2673,9 @@ class LeaveController extends Controller
                     $particularLeave->remaining = $particularLeave->remaining + $days;
                     $particularLeave->days=$days;
 
+                    $position = Position::where('id', EMPL::where('emp_id', Auth()->user()->emp_id)->value('position'))->value('name');
+                    $particularLeave->position = 'Leave Revoke Approved by ' . $position;
+
                     $particularLeave->end = $particularLeave->enddate_revoke;
                     $particularLeave->start = $particularLeave->startdate_revoke;
 
@@ -2644,15 +2683,17 @@ class LeaveController extends Controller
                 else{
                     $days = 0;
                     $particularLeave->days=$days;
-
+                    $particularLeave->state = 6;
                     $particularLeave->remaining = $particularLeave->remaining + $days;
-                    $particularLeave->state = 5;
+                    $position = Position::where('id', EMPL::where('emp_id', Auth()->user()->emp_id)->value('position'))->value('name');
+                    $particularLeave->position = 'Completely Leave Revoke Approved by ' . $position;
+                
+                    // $particularLeave->state = 5;
 
                     // $particularLeave->end = $particularLeave->enddate_revoke;
                     // $particularLeave->start = $particularLeave->startdate_revoke;
                 }
-                $position = Position::where('id', EMPL::where('emp_id', Auth()->user()->emp_id)->value('position'))->value('name');
-                $particularLeave->position = 'Leave Revoke Approved by ' . $position;
+              
                 $particularLeave->level3 = Auth()->user()->emp_id;
                 $particularLeave->revoke_created_at = now();
                 $particularLeave->save();
