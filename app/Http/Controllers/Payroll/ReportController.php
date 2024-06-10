@@ -270,11 +270,11 @@ class ReportController extends Controller
     {
         $reportType = 1;
         $reportformat = $request->input('type');
+        $payrolldate = $request->input('payrolldate');
 
+         // Initialize data array
+        $data = [];
 
-        if (1) {
-            $payrolldate = $request->input('payrolldate');
-            $reportType = 1;
             //Staff = 1, temporary = 2
             if ($reportType == 1) {
                 $data['paye'] = $this->reports_model->s_p9($payrolldate);
@@ -284,22 +284,25 @@ class ReportController extends Controller
 
                 $data['paye'] = $this->reports_model->v_p9($payrolldate);
                 $data['total'] = $this->reports_model->v_totalp9($payrolldate);
+                $data['paye_termination'] = null; // Define it to avoid undefined variable issues
+
             }
             $data['info'] = $this->reports_model->company_info();
             $data['reportType'] = $reportType;
             $data['payroll_date'] = $payrolldate;
-            // dd($data['paye']);
 
             $paye = $data['paye'];
             $total = $data['total'];
             $info = $data['info'];
             $payroll_date = $data['payroll_date'];
+            $paye_termination = $data['paye_termination'];
 
-            if ($reportformat == 1)
-                include(app_path() . '/reports/p9.php');
-            else
-                return view('reports/p9', $data);
-        }
+
+          if($reportformat == 1){
+           include(app_path() . '/reports/p9.php');
+          }else{
+            return view('reports/p9', $data);
+          }
     }
 
     function p10(Request $request)

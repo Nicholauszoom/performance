@@ -28,6 +28,8 @@
 // require_once('tcpdf_include.php');
 
 // create new PDF document
+
+
 $pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
 
 // set document information
@@ -723,43 +725,89 @@ $html = <<<EOD
  				</tr></thead>
 EOD;
 $sNo = 1;
-
-	foreach($paye as $key){
-		$salary = $key->salary;
-		$gross = $key->salary + $key->allowances;
-		$name = $key->name;
-		$emp_id = $key->emp_id;
-		$deductions = $key->pension_employee;
-		$taxable = $key->salary + $key->allowances - $key->pension_employee;
-		$taxdue = $key->taxdue;
+$total_salary = 0;
+$total_gross = 0;
+$total_deductions = 0;
+$total_taxable = 0;
+$total_taxdue = 0;
 
 
-$html .= '<tr>
-          <td width="50">'.$sNo++.'</td>
-          <td align="left" width="180">'.$name.'</td>
-          <td align="center" width="120">'.$emp_id.'</td>
-          <td width="130" align="right">'.number_format($salary,2).'</td>
-          <td width="130" align="right">'.number_format($gross,2).'</td>
-          <td width="130" align="right">'.number_format($deductions,2).'</td>
-          <td width="140" align="right">'.number_format($taxable,2).'</td>
-          <td width="130" align="right">'.number_format($taxdue,2).'</td>
-       </tr>';
-}
-foreach($total as $key){
-		$salary = $key->sum_salary;
-		$gross = $key->sum_gross;
-		$deductions = $key->sum_deductions;
-		$taxable = $key->sum_taxable;
-		$taxdue = $key->sum_taxdue;
-$html .= '<tr>
-          <td colspan ="3" style="background-color:#FFFF00;">TOTAL</td>
-          <td align="right">'.number_format($salary,2).'</td>
-          <td align="right">'.number_format($gross,2).'</td>
-          <td align="right">'.number_format($deductions,2).'</td>
-          <td align="right">'.number_format($taxable,2).'</td>
-          <td align="right">'.number_format($taxdue,2).'</td>
-          </tr>';
-      }
+            foreach($paye as $key){
+                $salary = $key->salary;
+                $gross = $key->salary + $key->allowances;
+                $name = $key->name;
+                $emp_id = $key->emp_id;
+                $deductions = $key->pension_employee;
+                $taxable = $key->salary + $key->allowances - $key->pension_employee;
+                $taxdue = $key->taxdue;
+
+
+                   // Accumulate totals
+                $total_salary += $salary;
+                $total_gross += $gross;
+                $total_deductions += $deductions;
+                $total_taxable += $taxable;
+                $total_taxdue += $taxdue;
+
+
+        $html .= '<tr>
+                <td width="50">'.$sNo++.'</td>
+                <td align="left" width="180">'.$name.'</td>
+                <td align="center" width="120">'.$emp_id.'</td>
+                <td width="130" align="right">'.number_format($salary,2).'</td>
+                <td width="130" align="right">'.number_format($gross,2).'</td>
+                <td width="130" align="right">'.number_format($deductions,2).'</td>
+                <td width="140" align="right">'.number_format($taxable,2).'</td>
+                <td width="130" align="right">'.number_format($taxdue,2).'</td>
+            </tr>';
+        }
+
+        // Loop through $paye_termination if it exists
+
+        if(!empty($paye_termination)){
+        foreach($paye_termination as $key){
+        $salary = $key->salaryEnrollment;
+        $gross = $key->total_gross;
+        $name = $key->name;
+        $emp_id = $key->emp_id;
+        $deductions = $key->pension_employee;
+        $taxable = $key->taxable;
+        $taxdue = $key->paye;
+
+        $total_salary +=$salary;
+        $total_gross +=$gross;
+        $total_deductions +=$deductions;
+        $total_taxable +=$taxable;
+        $total_taxdue +=$taxdue;
+
+
+        $html .= '<tr>
+                <td width="50">'.$sNo++.'</td>
+                <td align="left" width="180">'.$name.'</td>
+                <td align="center" width="120">'.$emp_id.'</td>
+                <td width="130" align="right">'.number_format($salary,2).'</td>
+                <td width="130" align="right">'.number_format($gross,2).'</td>
+                <td width="130" align="right">'.number_format($deductions,2).'</td>
+                <td width="140" align="right">'.number_format($taxable,2).'</td>
+                <td width="130" align="right">'.number_format($taxdue,2).'</td>
+            </tr>';
+        }}
+
+        // foreach($total as $key){
+        //         $salary = $key->sum_salary;
+        //         $gross = $key->sum_gross;
+        //         $deductions = $key->sum_deductions;
+        //         $taxable = $key->sum_taxable;
+        //         $taxdue = $key->sum_taxdue;
+        $html .= '<tr>
+                <td colspan ="3" style="background-color:#FFFF00;">TOTAL</td>
+                <td align="right">'.number_format($total_salary,2).'</td>
+                <td align="right">'.number_format($total_gross,2).'</td>
+                <td align="right">'.number_format($total_deductions,2).'</td>
+                <td align="right">'.number_format($total_taxable,2).'</td>
+                <td align="right">'.number_format($total_taxdue,2).'</td>
+                </tr>';
+            // }
 
 $html .= '</table>';
 // MYSQL DATA
