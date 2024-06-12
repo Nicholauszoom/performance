@@ -70,13 +70,14 @@
              <td>
                 @can('end-unpaid-leaves')
                 <a  href="{{ route('flex.end_unpaid_leave',$row->emp_id) }}"  title="End Unpaid Leave">
-                    <button type="button" class="btn btn-info btn-xs" ><i class="ph-info"></i></button>
+                    <button type="button" class="btn btn-danger btn-xs" ><i class="ph-info"></i></button>
                 </a>
                 @endcan
+                @if($row->status != 1)
                 <a  href="{{ route('flex.confirm_unpaid_leave',$row->emp_id) }}"  title="Confirm Unpaid Leave">
                     <button type="button" class="btn btn-main btn-xs" ><i class="ph-check"></i></button>
                 </a>
-                {{-- / --}}
+                @endif
              </td>
 
 
