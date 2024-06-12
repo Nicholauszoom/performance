@@ -2159,6 +2159,7 @@ class ReportController extends Controller
         $previous_payroll_month_raw = date('Y-m', strtotime(date('Y-m-d', strtotime($current_payroll_month . "-1 month"))));
         $previous_payroll_month = $this->reports_model->prevPayrollMonth($previous_payroll_month_raw);
         $data['payroll_state'] = $request->payrollState;
+        $payrollState = $request->payrollState;
         $data['payroll_date'] = $request->payrolldate;
         $data['total_previous_gross'] = !empty($previous_payroll_month) ? $this->reports_model->s_grossMonthly($previous_payroll_month) : 0;
         $data['total_current_gross'] = $this->reports_model->s_grossMonthly($current_payroll_month, $payrollState);
