@@ -5653,8 +5653,8 @@ class GeneralController extends Controller
 
     public function assign_allowance_individual(Request $request)
     {
-        $method = $request->method();
 
+        $method = $request->method();
         if ($method == "POST") {
 
             $rate = $this->flexperformance_model->get_rate($request->currency);
@@ -5667,7 +5667,6 @@ class GeneralController extends Controller
                 'percent' => $request->input('percent') / 100,
                 'currency' => $request->currency,
                 'rate' => $rate,
-                'created_at'=> now()
             );
 
             $result = $this->flexperformance_model->assign_allowance($data);
@@ -5676,7 +5675,7 @@ class GeneralController extends Controller
 
 
 
-            // SysHelpers::FinancialLogs($data['empID'], 'Assign ' . $allowanceName->name, '0.00', ($data['amount'] != 0) ? $data['amount'] . ' ' . $data['currency'] : $data['percent'] . '%', 'Payroll Input');
+            SysHelpers::FinancialLogs($data['empID'], 'Assign ' . $allowanceName->name, '0.00', ($data['amount'] != 0) ? $data['amount'] . ' ' . $data['currency'] : $data['percent'] . '%', 'Payroll Input');
 
             if ($result == true) {
                 $autheniticateduser = auth()->user()->emp_id;
@@ -12752,10 +12751,10 @@ class GeneralController extends Controller
     }
 
 
-    
+
     public function upload_pension(Request $request)
     {
-        
+
 
     }
 

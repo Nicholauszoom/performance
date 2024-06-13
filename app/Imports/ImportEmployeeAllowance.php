@@ -5,7 +5,10 @@ namespace App\Imports;
 use Illuminate\Support\Collection;
 use Maatwebsite\Excel\Concerns\ToCollection;
 use App\Models\Payroll\FlexPerformanceModel;
-use Illuminate\Support\Facades\Log;
+use App\Helpers\SysHelpers;
+use Illuminate\Support\Facades\DB;
+
+
 
 
 
@@ -47,7 +50,11 @@ class ImportEmployeeAllowance implements ToCollection
              'rate' => $rate,
          );
 
-         Log::error($data);
+         $allowanceName = DB::table('allowances')->select('name')->where('id', $this->allowance)->first();
+
+         SysHelpers::FinancialLogs($data['empID'], 'Assign ' . $allowanceName->name, '0.00', ($data['amount'] != 0) ? $data['amount'] . ' ' . $data['currency'] : $data['percent'] . '%', 'Payroll Input');
+
+
          $result = $flexperformance_model->assign_allowance($data);
 
      }
