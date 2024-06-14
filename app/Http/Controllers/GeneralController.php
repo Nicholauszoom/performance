@@ -5659,13 +5659,21 @@ class GeneralController extends Controller
 
             $rate = $this->flexperformance_model->get_rate($request->currency);
 
+            $currency = "";
+            if($request->currency != 'TZS'){
+                $currency = 'TZS';
+
+            }else{
+                $currency = $request->currency;
+            }
+
             $data = array(
                 'empID' => $request->input('empID'),
                 'allowance' => $request->input('allowance'),
                 'amount' => $request->input('amount') * $rate,
                 'mode' => $request->input('mode'),
                 'percent' => $request->input('percent') / 100,
-                'currency' => $request->currency,
+                'currency' => $currency,
                 'rate' => $rate,
             );
 
