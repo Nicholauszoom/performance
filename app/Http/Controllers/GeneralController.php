@@ -3809,15 +3809,7 @@ class GeneralController extends Controller
 
         $data['level_check'] = SysHelpers::approvalCheck("Loan Approval");
 
-
-
-
-
-
         return view('app.salary_advance', $data);
-        // }else{
-        //    echo 'Unauthorized Access';
-        //}
 
     }
 
