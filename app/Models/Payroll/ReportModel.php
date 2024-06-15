@@ -578,62 +578,96 @@ FROM payroll_logs pl, employee e WHERE e.emp_id = pl.empID and e.contract_type =
         return $data;
     }
 
-    function get_payroll_summary($date, $payrollstate = null)
-    {
+        function get_payroll_summary($date, $payrollstate = null)
+        {
+            $payroll_table = "payroll_logs";
+            $allowance_table = "allowance_logs";
+            $deduction_table = "deduction_logs";
+            $loan_table = "loan_logs";
 
-        $payroll_table = "payroll_logs";
-        $allowance_table = "allowance_logs";
-        $deduction_table = "deduction_logs";
-        $loan_table = "loan_logs";
+            if ($payrollstate != 0) {  //Pending payroll
+                $payroll_table = "temp_payroll_logs";
+                $allowance_table = "temp_allowance_logs";
+                $deduction_table = "temp_deduction_logs";
+                $loan_table = "temp_loan_logs";
+            }
 
-        if ($payrollstate != 0) {  //Pending payroll
+            $query = 'SELECT @s:=@s+1 SNo, a.* FROM allowance_categories a , (SELECT @s:=0) as s ';
 
-            $payroll_table = "temp_payroll_logs";
-            $allowance_table = "temp_allowance_logs";
-            $deduction_table = "temp_deduction_logs";
-            $loan_table = "temp_loan_logs";
+            $categories = DB::select(DB::raw($query));
 
+            $allowance_categories_query = "";
+            foreach ($categories as $category) {
+                $allowance_categories_query .= "(IFNULL((SELECT SUM(al.amount)
+                    FROM {$allowance_table} al
+                    JOIN allowances ON allowances.id = al.allowanceID
+                    WHERE al.empID = e.emp_id
+                    AND allowances.allowance_category_id = {$category->id}
+                    AND al.payment_date = '{$date}'
+                    GROUP BY al.empID
+                    LIMIT 1), 0)) AS category{$category->id}, ";
+            }
+
+            $allowance_categories_query .= "(IFNULL((SELECT SUM(al.amount)
+                FROM {$allowance_table} al
+                JOIN allowances ON allowances.id = al.allowanceID
+                WHERE al.empID = e.emp_id
+                AND allowances.allowance_category_id IS NULL
+                AND al.payment_date = '{$date}'
+                GROUP BY al.empID
+                LIMIT 1), 0)) AS other_payments, ";
+
+            $query = "SELECT
+                pl.*,
+                e.fname, e.mname, e.lname, e.account_no, e.pf_membership_no, pl.sdl, pl.wcf, e.currency, de.name, e.cost_center as costCenterName, b.name as bank_name, e.branch as branch_code,
+                e.emp_id, e.rate,
+                0 as allowance_amount,
+                IFNULL((SELECT SUM(al.amount)
+                    FROM {$allowance_table} al
+                    WHERE al.empID = e.emp_id
+                    AND al.description LIKE '%Overtime%'
+                    AND al.payment_date = '{$date}'
+                    GROUP BY al.empID
+                    LIMIT 1), 0) AS overtime,
+                {$allowance_categories_query}
+                IFNULL((SELECT SUM(al.amount)
+                    FROM {$allowance_table} al
+                    WHERE al.empID = e.emp_id
+                    AND al.description = 'Arrears'
+                    AND al.payment_date = '{$date}'
+                    GROUP BY al.empID
+                    LIMIT 1), 0) AS arrears_allowance,
+                IFNULL((SELECT SUM(dl.paid)
+                    FROM {$deduction_table} dl
+                    WHERE dl.empID = e.emp_id
+                    AND dl.payment_date = '{$date}'
+                    GROUP BY dl.empID
+                    LIMIT 1), 0) AS deductions,
+                IFNULL((SELECT SUM(ll.paid)
+                    FROM {$loan_table} ll
+                    JOIN loan l ON ll.loanID = l.id
+                    WHERE e.emp_id = l.empID
+                    AND ll.payment_date = '{$date}'
+                    GROUP BY ll.loanID
+                    LIMIT 1), 0) AS loans,
+                IFNULL((SELECT SUM(ll.paid)
+                    FROM {$loan_table} ll
+                    JOIN loan l ON ll.loanID = l.id
+                    WHERE e.emp_id = l.empID
+                    AND ll.payment_date = '{$date}'
+                    GROUP BY ll.payment_date
+                    LIMIT 1), 0) AS total_loans
+                FROM {$payroll_table} pl
+                JOIN employee e ON e.emp_id = pl.empID
+                JOIN bank b ON b.id = e.bank
+                JOIN department de ON e.department = de.id
+                JOIN cost_center cc ON de.cost_center_id = cc.id
+                WHERE pl.payroll_date = '{$date}'
+                ORDER BY e.emp_id ASC";
+
+            return DB::select(DB::raw($query));
         }
 
-        $query = 'SELECT @s:=@s+1 SNo, a.* FROM allowance_categories a , (SELECT @s:=0) as s ';
-
-        $categories = DB::select(DB::raw($query));
-
-        $allowance_categories_query = "";
-        foreach ($categories as $category) {
-
-            $allowance_categories_query = $allowance_categories_query . "(IF((SELECT SUM(al.amount) FROM " . $allowance_table . " al join allowances on allowances.id=al.allowanceID WHERE  al.empID = e.emp_id AND allowances.allowance_category_id=" . $category->id . "  AND al.payment_date = '" . $date . "' GROUP BY al.empID >0),(SELECT SUM(al.amount) FROM " . $allowance_table . " al join allowances on allowances.id=al.allowanceID WHERE al.empID = e.emp_id AND allowances.allowance_category_id=" . $category->id . " AND al.payment_date = '" . $date . "' GROUP BY al.empID),0)) AS category" . $category->id . ",";
-
-        }
-        $allowance_categories_query = $allowance_categories_query . "(IF((SELECT SUM(al.amount) FROM " . $allowance_table . " al join allowances on allowances.id=al.allowanceID WHERE  al.empID = e.emp_id AND allowances.allowance_category_id is Null AND al.payment_date = '" . $date . "' GROUP BY al.empID >0),(SELECT SUM(al.amount) FROM " . $allowance_table . " al join allowances on allowances.id=al.allowanceID WHERE al.empID = e.emp_id AND allowances.allowance_category_id is Null AND al.payment_date = '" . $date . "' GROUP BY al.empID),0)) AS other_payments,";
-
-
-
-        $query = "SELECT
-        pl.*,
-        e.fname,e.mname,e.lname,e.account_no,e.pf_membership_no,pl.sdl,pl.wcf,e.currency,de.name,e.cost_center as costCenterName,b.name as bank_name,e.branch as branch_code,
-        e.emp_id,e.rate,
-        0 as allowance_amount,
-        (IF((SELECT SUM(al.amount) FROM " . $allowance_table . " al WHERE al.empID = e.emp_id AND al.description lIKE '%Overtime%' AND al.payment_date = '" . $date . "' GROUP BY al.empID >0),(SELECT SUM(al.amount) FROM " . $allowance_table . " al WHERE al.empID = e.emp_id AND al.description lIKE '%Overtime%' AND al.payment_date = '" . $date . "' GROUP BY al.empID),0)) AS overtime,
-
-            " . $allowance_categories_query . "
-
-
-         (IF((SELECT SUM(al.amount) FROM " . $allowance_table . " al WHERE al.empID = e.emp_id AND al.description = 'Arrears' AND al.payment_date = '" . $date . "' GROUP BY al.empID >0),(SELECT SUM(al.amount) FROM " . $allowance_table . " al WHERE al.empID = e.emp_id AND al.description = 'Arrears' AND al.payment_date = '" . $date . "' GROUP BY al.empID),0)) AS arrears_allowance,
-
-
-        IF((SELECT SUM(dl.paid) FROM " . $deduction_table . " dl WHERE dl.empID = e.emp_id AND dl.payment_date = '" . $date . "' GROUP BY dl.empID)>0,(SELECT SUM(dl.paid) FROM " . $deduction_table . " dl WHERE dl.empID = e.emp_id AND dl.payment_date = '" . $date . "' GROUP BY dl.empID),0) AS deductions,
-
-        (SELECT SUM(ll.paid) FROM " . $loan_table . " ll,loan l WHERE ll.loanID = l.id AND e.emp_id = l.empID AND  ll.payment_date = '" . $date . "' GROUP BY ll.loanID) AS loans,
-
-        (SELECT SUM(ll.paid) FROM " . $loan_table . " ll,loan l WHERE ll.loanID = l.id AND e.emp_id = l.empID AND  ll.payment_date = '" . $date . "' GROUP BY ll.payment_date) AS total_loans
-
-        from " . $payroll_table . " pl,employee e,bank b,department de,cost_center cc where b.id = e.bank and e.department = de.id and de.cost_center_id = cc.id and e.emp_id = pl.empID /* and e.state !=4 */  and pl.payroll_date='" . $date . "' ORDER BY e.emp_id ASC
-
-        ";
-
-        return DB::select(DB::raw($query));
-    }
     function get_termination($date)
     {
 
