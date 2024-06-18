@@ -5869,7 +5869,7 @@ class GeneralController extends Controller
             if ($request->method() == 'POST') {
                 $month = $this->payroll_model->checkPayrollMonth($date);
                 $submission = $this->payroll_model->checkInputMonth($date);
-                $this->insertLoanDetailsToFinancialLogs($date);
+               // $this->insertLoanDetailsToFinancialLogs($date);
 
 
                 if ($month < 1) {
