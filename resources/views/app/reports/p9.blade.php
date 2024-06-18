@@ -717,8 +717,9 @@ $html = <<<EOD
 		<thead>
 <tr>	<td width="50"><b>S/NO</b></td>
 				<th width="180"><b>NAME OF EMPLOYEE</b></th>
+				<th><b>PAYROLL NUMBER</b></th>
 				<th><b>TIN</b></th>
-				<th><b>NATIONAL ID</b></th>				
+				<th><b>NATIONAL ID</b></th>
  				<th><b>BASIC PAY</b></th>
  				<th><b>GROSS PAY</b></th>
  				<th><b>DEDUCTIONS</b></th>
@@ -794,7 +795,7 @@ $pdf->writeHTMLCell(0, 0, '', '', $html, 0, 1, 0, true, '', true);
 
 // dd("here");
 $pdf->Output('p9-' . date('d/m/Y') . '.pdf');
- 
+
 //============================================================+
 // END OF FILE
 //============================================================+

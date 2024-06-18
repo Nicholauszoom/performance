@@ -20,6 +20,7 @@ $total_gross = 0;
 $total_deductions = 0;
 $total_taxable = 0;
 $total_taxdue = 0;
+$sNo=1;
 @endphp
 <!-- Column selectors -->
 <div class="card">
@@ -32,7 +33,8 @@ $total_taxdue = 0;
             <tr>
                 <td width="50"><b>S/NO</b></td>
                 <th width="180"><b>NAME OF EMPLOYEE</b></th>
-                <th width="140"><b>BASIC PAY</b></th>
+                <th width="140"><b>PAYROLL NUMBER</b></th>
+                <th><b>BASIC PAY</b></th>
                 <th width="140"><b>GROSS PAY</b></th>
                 <th width="140"><b>DEDUCTIONS</b></th>
                 <th width="140"><b>TAXABLE AMOUNT</b></th>
@@ -57,8 +59,9 @@ $total_taxdue = 0;
 
             ?>
                 <tr>
-                    <td width="50">{{ $key->sNo }}</td>
+                    <td width="50">{{ $sNo++ }}</td>
                     <td align="left" width="180">{{ $name }}</td>
+                    <td>{{ $key->emp_id }}</td>
                     <td width="140" style="text-align: right;">{{ number_format($salary,2) }}</td>
                     <td width="140" style="text-align: right;">{{ number_format($gross,2) }}</td>
                     <td width="140" style="text-align: right;">{{ number_format($deductions,2) }}</td>
@@ -85,8 +88,9 @@ $total_taxdue = 0;
             $total_taxdue +=$taxdue;
             @endphp
             <tr>
-                <td width="50">{{ $key->sNo }}</td>
-                <td align="left" width="180">{{ $name }}</td>
+                <td width="50">{{ $sNo++ }}</td>
+                <td>{{ $name }}</td>
+                <td>{{ $key->emp_id }}</td>
                 <td width="140" style="text-align: right;">{{ number_format($salary,2) }}</td>
                 <td width="140" style="text-align: right;">{{ number_format($gross,2) }}</td>
                 <td width="140" style="text-align: right;">{{ number_format($deductions,2) }}</td>
@@ -98,6 +102,7 @@ $total_taxdue = 0;
         <tbody>
             <tr>
                 <td colspan="2">TOTAL</td>
+                <td colspan="1"></td>
 
                 <td width="140" style="text-align: right;">{{ number_format($total_salary,2) }}</td>
                 <td width="140" style="text-align: right;">{{ number_format($total_gross,2) }}</td>
@@ -108,6 +113,7 @@ $total_taxdue = 0;
         </tbody>
         <tfoot hidden>
             <tr>
+                <td colspan="1"></td>
                 <td colspan="1"></td>
                 <td colspan="1">TOTAL</td>
                 <td width="140" style="text-align: right;">{{ number_format($total_salary,2) }}</td>

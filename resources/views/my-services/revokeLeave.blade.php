@@ -78,7 +78,13 @@
                                 <label for="reason">Reason For a Leave Revoke <span class="text-danger">*</span></label>
                                 <textarea maxlength="256" class="form-control" required="required" rows="3">{{ $revoke_reason }}</textarea>
                             </div>
-
+                            @if($startdate_revoke)
+                            <div class="form-group col-md-6">
+                                <label for="end-date">Expected New Date <span class="text-danger">*</span></label>
+                                <input type="date" id="start-date" value="{{ $startdate_revoke }}" name="end"
+                                    class="form-control" required disabled>
+                            </div>
+                            @endif
                             <div class="form-group col-md-6">
                                 <label for="end-date">Expected Date Back <span class="text-danger">*</span></label>
                                 <input type="date" id="end-date" value="{{ $expectedDate }}" name="end"
@@ -96,11 +102,77 @@
                             <button class="float-end btn btn-main" type="button" data-bs-toggle="modal" data-bs-target="#approval">
                                 Revoke Leave with Adjustment
                             </button>
-
-                            <button class="float-end btn btn-danger me-2" type="button" onclick="approveLeaveRevoke(<?php echo $id; ?>)">
-                                Revoke Leave Complete
+                        </div>
+                        <div class="form-group py-2">
+                            <button class="float-end btn btn-danger" type="button" data-bs-toggle="modal" data-bs-target="#revokecompletely">
+                                Revoke this Leave Complete
                             </button>
                         </div>
+
+                        @if($revoke_status = 0)
+                        <div id="revokecompletely" class="modal fade" tabindex="-1">
+                            <div class="modal-dialog modal-dialog-centered modal-md">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="customModalLabel">Are you sure to Approve
+                                            this Leave Total Revoke</h5>
+                                        <button type="button" class="btn-close"
+                                            data-bs-dismiss="modal"></button>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn bg-main btn-sm px-4"
+                                            onclick="approveRevokeCompleteRevokeInitiate(<?php echo $id; ?>)">Yes I am</button>
+                                        <button type="button" class="btn bg-danger btn-sm px-4 text-light"
+                                            data-bs-dismiss="modal">Cancel</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        @elseif (Auth()->user()->emp_id == $particularLeave->level1)
+                        <div id="revokecompletely" class="modal fade" tabindex="-1">
+                            <div class="modal-dialog modal-dialog-centered modal-md">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="customModalLabel">Are you sure to approve
+                                            this Leave Total Revoke</h5>
+                                        <button type="button" class="btn-close"
+                                            data-bs-dismiss="modal"></button>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn bg-main btn-sm px-4"
+                                            onclick="approveRevokeCompleteRevokeInitiate(<?php echo $id; ?>)">Yes I am</button>
+                                        <button type="button" class="btn bg-danger btn-sm px-4 text-light"
+                                            data-bs-dismiss="modal">Cancel</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        @else
+                        <div id="revokecompletely" class="modal fade" tabindex="-1">
+                            <div class="modal-dialog modal-dialog-centered modal-md">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="customModalLabel">Are you sure To Revoke this Leave Completely</h5>
+                                        <button type="button" class="btn-close"
+                                            data-bs-dismiss="modal"></button>
+                                    </div>
+                                    <div class="modal-body p-4">
+                                        <label for="reason">State Reason of Leave Revoking<span
+                                                class="text-danger">*</span></label>
+                                        <textarea id="commentInput" name="commentInput" class="form-control" placeholder="Enter your reason here" required></textarea>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn bg-main btn-sm px-4"
+                                            onclick="revokeCompleteRevokeInitiate(<?php echo $id; ?>)">Yes, I do</button>
+                                        <button type="button" class="btn bg-danger btn-sm px-4 text-light"
+                                            data-bs-dismiss="modal">No, I don't</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        @endif
+
+
 
                             @if($revoke_status = 0)
                                     <div id="approval" class="modal fade" tabindex="-1">
@@ -114,7 +186,7 @@
                                                 </div>
                                                 <div class="modal-footer">
                                                     <button type="button" class="btn bg-main btn-sm px-4"
-                                                        onclick="approveLeaveRevoke(<?php echo $id; ?>)">Submit</button>
+                                                        onclick="approveLeaveRevoke(<?php echo $id; ?>)">Yes I am</button>
                                                     <button type="button" class="btn bg-danger btn-sm px-4 text-light"
                                                         data-bs-dismiss="modal">Cancel</button>
                                                 </div>
@@ -151,7 +223,7 @@
                                             <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                                         </div>
                                         <div class="modal-body p-4">
-                                            <label for="end-date">State Reason of Leave Revoking<span
+                                            <label for="reason">State Reason of Leave Revoking<span
                                                     class="text-danger">*</span></label>
                                             <textarea id="commentInput" class="form-control" placeholder="Enter your reason here" required></textarea>
                                             @if ($startDate <= date('Y-m-d'))
@@ -159,8 +231,23 @@
                                                     <label for="end-date">Date of Return <span
                                                             class="text-danger">*</span></label>
                                                     <input type="date" id="end-date" value="{{ $endDate }}"
-                                                        name="end" class="form-control" required>
+                                                        name="new_end" class="form-control" min="{{$startDate}}" max="{{$endDate}}">
                                                 </div>
+                                            @elseif($startDate > date('Y-m-d'))
+                                            <div class="row">
+                                                <div class="form-group col-md-6">
+                                                    <label for="start-date">New Date of Start <span
+                                                            class="text-danger">*</span></label>
+                                                    <input type="date" id="start-date" value="{{ $startDate }}"
+                                                        name="new_start" class="form-control" min="{{$startDate}}" max="{{$endDate}}">
+                                                </div>
+                                                <div class="form-group col-md-6">
+                                                    <label for="end-date">New Date of Return <span
+                                                            class="text-danger">*</span></label>
+                                                    <input type="date" id="end-date" value="{{ $endDate }}"
+                                                        name="new_end" class="form-control" min="{{$startDate}}" max="{{$endDate}}">
+                                                </div>
+                                            </div>
                                             @endif
                                         </div>
                                         <div class="modal-footer">
@@ -173,6 +260,7 @@
                                 </div>
                             </div>
                         @endif
+
                     </div>
 
                 </div>
@@ -185,17 +273,18 @@
     @push('footer-script')
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/js/bootstrap.min.js"></script>
-
         <script>
             function submitComment(id) {
                 const comment = $('#commentInput').val();
-                const expectedDate = $('#end-date').val();
+                const expectedDate = $('#new_end').val();
+                const expectedStartDate = $('#new_start').val();
                 if (comment) {
                     const terminationid = id;
                     const data = {
                         terminationid: terminationid,
                         comment: comment,
                         expectedDate: expectedDate,
+                        newStartDate: expectedStartDate,
                     };
 
                     $.ajax({
@@ -250,9 +339,58 @@
         </script>
 
         <script>
-            function revokeLeaveCompetely(id){
-                console.log(id);
-
-            }
+            function revokeCompleteRevokeInitiate(id){
+                const comment = $('#commentInput').val();
+                const terminationid = id;
+                if (comment) {
+                    const data = {
+                        terminationid: terminationid,
+                        comment: comment,
+                    };
+                var url = '{{ url('') }}/flex/attendance/totalRevokeInitiate';
+                $.ajax({
+                    url: url,
+                    type: 'post',
+                    data: JSON.stringify(data),
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    success: function(data) {
+                        console.log(data);
+                        // Close the modal
+                        $('#approval').modal('hide');
+                        // Redirect to the specified URL
+                        window.history.back();
+                    },
+                    error: function(err) {
+                        console.log(err.responseText);
+                    }
+                });
+         }
+        }
+        </script>
+        <script>
+            function approveRevokeCompleteRevokeInitiate(id){
+                const terminationid = id;
+                var url = '{{ url('') }}/flex/attendance/approveTotalRevoke/' + terminationid;
+                $.ajax({
+                    url: url,
+                    type: 'put', // Use 'POST' if you are sending a POST request
+                    dataType: "json",
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    success: function(data) {
+                        console.log(data);
+                        // Close the modal
+                        $('#approval').modal('hide');
+                        // Redirect to the specified URL
+                        window.history.back();
+                    },
+                    error: function(err) {
+                        console.log(err.responseText);
+                    }
+                });
+         }
         </script>
     @endpush

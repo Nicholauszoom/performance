@@ -80,26 +80,32 @@
                             <td>
                                 <div>
 
-                                    <?php if ($item->state == 1) { ?>
+                                    @if ($item->state == 1)
                                     <div class="col-md-12">
                                         <span
                                             class="label label-default badge bg-pending text-white">PENDING
                                             LEAVE REQUEST</span>
-                                    </div><?php } elseif ($item->state == 0) { ?>
+                                    </div>
+                                    @elseif ($item->state == 0)
                                     <div class="col-md-12">
                                         <span class="label badge bg-info text-whites label-info">APPROVED
                                             LEAVE REQUEST </span>
                                     </div>
-                                    <?php } elseif ($item->state == 2) { ?>
+                                    @elseif ($item->state == 2)
                                     <div class="col-md-12">
                                         <span class="label badge bg-pending text-white">PENDING APPROVAL OF
                                             LEAVE REVOKE</span>
                                     </div>
-                                    <?php } elseif ($item->state == 3) { ?>
+                                    @elseif ($item->state == 6)
+                                    <div class="col-md-12">
+                                            <span class="label badge bg-danger text-white">CANCELED APPROVED LEAVE</span>
+                                    </div>
+                                    @else
                                     <div class="col-md-12">
                                         <span class="label badge bg-info text-white">APPROVED LEAVE
                                             REVOKE</span>
-                                    </div><?php } ?>
+                                    </div>
+                                    @endif
                                 </div>
                             </td>
                             <td>
@@ -126,7 +132,7 @@
                                         <a href="{{ url('flex/attendance/cancelRevokeLeave/' . $item->id) }}"
                                             title="Cance Revoke Request"
                                             class="icon-2 info-tooltip disabled">
-                                            <button class="btn btn-warning btn-sm">Cancel Leave Revoke<i
+                                            <button class="btn btn-warning btn-sm">Cancel Leave Revoke Request<i
                                                     class="ph-x"></i></button>
                                         </a>
                                     </div>

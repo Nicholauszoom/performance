@@ -207,6 +207,9 @@
                   elseif($row->state==4){?>
                             <span class="label badge bg-secondary text-white">CANCELED</span>
                         <?php }
+                  elseif($row->state==6){?>
+                            <span class="label badge bg-danger text-white">CANCELED APPROVED LEAVE</span>
+                        <?php }
                   elseif($row->state==5){?>
                             <span class="label badge bg-danger text-white">DENIED</span>
                         <?php } ?>
@@ -229,10 +232,14 @@
                         <button class="btn btn-danger btn-sm">Cancel Leave Request <i class="ph-x"></i></button>
                     </a>
                     <?php } else if ($row->state == 0) { ?>
+                        @if($row->end <=  date('Y-m-d'))
+                        <span class="label badge bg-success text-white">Used Leave</span>
+                        @else
                         <a href="{{ url('flex/attendance/revokeLeave/' . $row->id) }}" title="Revoke Approved Leave" class="icon-2 info-tooltip disabled">
                             <button class="btn btn-main btn-sm">Initiate Revoke Request<i class="ph-prohibit"></i>
                         </button>
                     </a>
+                    @endif
                 </div>
                     <?php } ?>
 
