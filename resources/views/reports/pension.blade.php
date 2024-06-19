@@ -150,13 +150,18 @@
                         if(!empty($pension)){
                         foreach ($pension as $row){
                             $salary= $row->salary + $row->allowances;
-                            if($salary != 0){
+                            if($row->pension_employee != 0){
+
+                            if(!$salary){
+                                $salary=10*$row->pension_employee;
+
+                            }
                             $name = $row->name;
                             $member_no = $row->pf_membership_no;
 
                             //if($salary == 0)dd($row->emp_id);
-                            $rate1= ($row->pension_employee/$salary);
-                            $rate2= ($row->pension_employee/$salary);
+                            // $rate1= ($row->pension_employee/$salary);
+                            // $rate2= ($row->pension_employee/$salary);
                             $amount1= $row->pension_employee;
                             $amount2= $row->pension_employee;
                             $contribution= (2*$row->pension_employee);
