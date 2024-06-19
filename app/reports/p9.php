@@ -764,7 +764,7 @@ $total_taxdue = 0;
 
         // Loop through $paye_termination if it exists
 
-        if(!empty($paye_termination)){
+        if($paye_termination){
         foreach($paye_termination as $key){
         $salary = $key->salaryEnrollment;
         $gross = $key->total_gross;

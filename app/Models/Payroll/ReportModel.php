@@ -311,27 +311,49 @@ FROM employee e, department dpt, position p, branch br, contract ct, pension_fun
         return DB::select(DB::raw($query));
     }
 
-    function s_p9($date)
-    {
-
-        $query = "SELECT @s:=@s+1 sNo, CONCAT(e.fname,' ', IF(e.mname != null,e.mname,' '),' ', e.lname) as name, e.tin as tin, e.national_id as national_id,e.emp_id, e.postal_address as postal_address, e.postal_city as postal_city, pl.*
-    FROM employee AS e, (SELECT @s:=0) AS s, payroll_logs pl WHERE pl.empID = e.emp_id AND e.state = 1 and e.contract_type != 2 AND pl.payroll_date = '" . $date . "' order by e.emp_id ASC
-    ";
-
-
-        return DB::select(DB::raw($query));
-    }
-
     function s_p9_termination($date)
     {
         $raw_date = explode('-', $date);
         $terminationDate = $raw_date[0] . '-' . $raw_date[1];
-        //dd($terminationDate);
 
         $query = "SELECT @s:=@s+1 sNo, CONCAT(e.fname,' ', IF(e.mname != null,e.mname,' '),' ', e.lname) as name, e.tin as tin, e.national_id as national_id,e.emp_id, e.postal_address as postal_address, e.postal_city as postal_city, tm.*
         FROM employee AS e, (SELECT @s:=0) AS s, terminations tm WHERE tm.employeeID = e.emp_id AND e.state = 4 and e.contract_type != 2 AND tm.terminationDate LIKE '%" . $terminationDate . "%' order by e.emp_id ASC
      ";
 
+
+        return DB::select(DB::raw($query));
+    }
+
+    function s_p9($date) {
+        $raw_date = explode('-', $date);
+        $terminationMonth = $raw_date[0] . '-' . $raw_date[1];
+
+        $query = "
+            SELECT
+                CONCAT(e.fname, ' ', IF(e.mname IS NOT NULL, e.mname, ' '), ' ', e.lname) AS name,
+                e.tin AS tin,
+                e.national_id AS national_id,
+                e.emp_id,
+                e.postal_address AS postal_address,
+                e.postal_city AS postal_city,
+                pl.*
+            FROM
+                employee AS e
+            JOIN
+                payroll_logs pl ON pl.empID = e.emp_id
+            LEFT JOIN
+                (SELECT employeeID
+                 FROM terminations
+                 WHERE DATE_FORMAT(terminationDate, '%Y-%m') <= '" . $terminationMonth . "') AS tm
+                ON tm.employeeID = e.emp_id
+            WHERE
+                (e.state = 1 OR e.state = 4)
+                AND e.contract_type != 2
+                AND pl.payroll_date = '" . $date . "'
+                AND tm.employeeID IS NULL
+            ORDER BY
+                e.emp_id ASC
+        ";
 
         return DB::select(DB::raw($query));
     }
@@ -1878,6 +1900,7 @@ and e.branch = b.code and e.line_manager = el.emp_id and c.id = e.contract_type 
 
         $query = "SELECT SUM(pl.salary - pl.actual_salary) as amount from " . $payroll_log . " pl where pl.actual_salary < pl.salary and pl.salary != (SELECT salary from payroll_logs where pl.empID = payroll_logs.empID and payroll_logs.payroll_date = '" . $previous_payroll_month . "') and pl.payroll_date = '" . $current_payroll_month . "'";
         $row = DB::select(DB::raw($query));
+        //dd($row);
 
         $query = "SELECT SUM(pl.salary - (SELECT salary from payroll_logs where pl.empID = payroll_logs.empID and payroll_logs.payroll_date = '" . $previous_payroll_month . "')) as amount,SUM(pl.actual_salary) as actual_salary from " . $payroll_log . " pl where pl.actual_salary = pl.salary and pl.actual_salary > (SELECT salary from payroll_logs where pl.empID = payroll_logs.empID and payroll_logs.payroll_date = '" . $previous_payroll_month . "') and pl.payroll_date = '" . $current_payroll_month . "'";
         $row2 = DB::select(DB::raw($query));
