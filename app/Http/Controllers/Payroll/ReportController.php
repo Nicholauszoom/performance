@@ -857,11 +857,11 @@ class ReportController extends Controller
                 $employeeDate = '';
 
                 if ($employeeHireYear == $year) {
-                    $employeeDate = Auth::user()->hire_date;
+                    $employeeDate = $emp->hire_date;
                 } else {
                     $employeeDate = $year . ('-01-01');
                 }
-                $data['leaveBalance'] = $this->attendance_model->getLeaveBalance($empID,  $employeeDate, $payroll_month_end);
+                $data['leaveBalance'] = $this->attendance_model->getLeaveBalance($empID,  $employeeDate, $start);
 
                 $slipinfo = $data['slipinfo'];
                 $leaves = $data['leaves'];
@@ -897,7 +897,6 @@ class ReportController extends Controller
                 // dd("hhhhhh");
 
                 $pdf = Pdf::loadView('payroll.payslip_details_pdf', $data)->setPaper('a4', 'potrait');
-
 
                 return $pdf->download('payslip_for_' . $empID . '.pdf');
             }
