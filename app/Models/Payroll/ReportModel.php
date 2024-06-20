@@ -1976,6 +1976,8 @@ and e.branch = b.code and e.line_manager = el.emp_id and c.id = e.contract_type 
         //     return $data;
         // }
 
+
+
         $calendar1 = explode('-', $current_payroll_month);
         $calendar2 = explode('-', $previous_payroll_month);
 
@@ -2131,8 +2133,16 @@ and e.branch = b.code and e.line_manager = el.emp_id and c.id = e.contract_type 
         return $row;
     }
 
-    public function employee_basic_decrease($current_payroll_month, $previous_payroll_month)
+    public function employee_basic_decrease($current_payroll_month, $previous_payroll_month, $payrollstate = null)
     {
+
+        $payroll_log = "payroll_logs";
+
+        if ($payrollstate != 0) {  //Pending payroll
+
+            $payroll_log = "temp_payroll_logs";
+
+        }
 
         $calendar1 = explode('-', $current_payroll_month);
         $calendar2 = explode('-', $previous_payroll_month);
@@ -2152,7 +2162,7 @@ and e.branch = b.code and e.line_manager = el.emp_id and c.id = e.contract_type 
         $s = "
         SELECT tm.salaryEnrollment as current_amount,(SELECT salary from payroll_logs where tm.employeeID = payroll_logs.empID and payroll_logs.payroll_date = '" . $previous_payroll_month . "') as previous_amount,e.emp_id,e.hire_date,e.contract_end,e.fname,e.lname from terminations tm,employee e where tm.employeeID = e.emp_id and tm.salaryEnrollment < tm.actual_salary and tm.terminationDate like '%" . $current_terminationDate . "%'
         UNION
-        SELECT pl.salary as current_amount,(SELECT salary from payroll_logs where pl.empID = payroll_logs.empID and payroll_logs.payroll_date = '" . $previous_payroll_month . "') as previous_amount,e.emp_id,e.hire_date,e.contract_end,e.fname,e.lname from payroll_logs pl,employee e where pl.empID = e.emp_id and pl.actual_salary > pl.salary and pl.salary != (SELECT salary from payroll_logs where pl.empID = payroll_logs.empID and payroll_logs.payroll_date = '" . $previous_payroll_month . "') and pl.payroll_date = '" . $current_payroll_month . "'
+        SELECT pl.salary as current_amount,(SELECT salary from payroll_logs where pl.empID = payroll_logs.empID and payroll_logs.payroll_date = '" . $previous_payroll_month . "') as previous_amount,e.emp_id,e.hire_date,e.contract_end,e.fname,e.lname from ". $payroll_log. " pl,employee e where pl.empID = e.emp_id and pl.actual_salary > pl.salary and pl.salary != (SELECT salary from payroll_logs where pl.empID = payroll_logs.empID and payroll_logs.payroll_date = '" . $previous_payroll_month . "') and pl.payroll_date = '" . $current_payroll_month . "'
 
 
 
