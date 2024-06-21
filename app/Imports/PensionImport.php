@@ -40,6 +40,7 @@ class PensionImport implements ToModel, WithHeadingRow
                 'receipt_date' => $receiptDate,
                 'years' => $payrolldateObj->format('Y'),
                 'receipt_no' => $row['receipt_number'],
+                'pension_fund' => $row['pension_fund'],
             ]);
         } else {
             $payrollLog = new PayrollLog([
@@ -50,6 +51,7 @@ class PensionImport implements ToModel, WithHeadingRow
                 'receipt_date' => $receiptDate,
                 'years' => $payrolldateObj->format('Y'),
                 'receipt_no' => $row['receipt_number'],
+                'pension_fund' => $row['pension_fund'],
             ]);
         }
 
