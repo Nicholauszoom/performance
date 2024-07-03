@@ -19,12 +19,16 @@ class VerifyOutgoingRequests
     public function handle($request, Closure $next)
     {
 
-        $brand = BrandSetting::first();
+        $brands = BrandSetting::all();
 
-        $allowedDomains = [
-            $brand->allowed_domain,
-            // Add more allowed domains here
-        ];
+        foreach($brands as $brand){
+            $allowedDomains = [
+                $brand->allowed_domain,
+                // Add more allowed domains here
+            ];
+
+        }
+
 
         $url = $request->url();
         $domain = parse_url($url, PHP_URL_HOST);
