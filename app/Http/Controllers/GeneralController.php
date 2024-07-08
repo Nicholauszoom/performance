@@ -11376,11 +11376,8 @@ class GeneralController extends Controller
         $grievance->description = $request->description;
         $grievance->empID = Auth::user()->emp_id;
         if ($request->hasfile('attachment')) {
-            // $request->validate([
-            //     'attachment' => 'required|clamav',
-            // ]);
             $request->validate([
-                'attachment' => 'mimes:jpg,png,jpeg,pdf|max:2048',
+                'attachment' => 'mimes:png,pdf|max:2048',
             ]);
             $newAttachmentName = $request->attachment->hashName();
             $request->attachment->move(public_path('storage\grieavences-attachments'), $newAttachmentName);
