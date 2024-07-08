@@ -33,8 +33,8 @@ class LoginRequest extends FormRequest
     public function rules()
     {
         return [
-            'emp_id' => ['required'],
-            'password' => ['required', 'string'],
+            "emp_id" => ["required"],
+            "password" => ["required", "string"],
         ];
     }
 
@@ -47,36 +47,33 @@ class LoginRequest extends FormRequest
      */
     public function authenticate()
     {
+        $state = $this->activated($this->input("emp_id"));
 
-       $state = $this->activated($this->input('emp_id'));
-
-       if ($state == 0) {
-
-        throw ValidationException::withMessages([
-            'emp_id' => trans('auth.deactivated'),
-        ]);
-
-       } elseif($state === 'UNKNOWN' || $state == 4) {
-
+        if ($state == 0) {
             throw ValidationException::withMessages([
-                'emp_id' => trans('auth.failed'),
+                "emp_id" => trans("auth.deactivated"),
             ]);
-
-       } else {
-
+        } elseif ($state === "UNKNOWN" || $state == 4) {
+            throw ValidationException::withMessages([
+                "emp_id" => trans("auth.failed"),
+            ]);
+        } else {
             $this->ensureIsNotRateLimited();
 
-            if (! Auth::attempt($this->only('emp_id', 'password'))) {
+            if (!Auth::attempt($this->only("emp_id", "password"))) {
                 RateLimiter::hit($this->throttleKey());
 
                 throw ValidationException::withMessages([
-                    'emp_id' => trans('auth.failed'),
+                    "emp_id" => trans("auth.failed"),
                 ]);
             }
 
             RateLimiter::clear($this->throttleKey());
-       }
 
+            $password = $this->input("password");
+
+            Auth::logoutOtherDevices($password);
+        }
     }
 
     /**
@@ -88,24 +85,24 @@ class LoginRequest extends FormRequest
      */
     public function ensureIsNotRateLimited()
     {
-        if (! RateLimiter::tooManyAttempts($this->throttleKey(), 5)) {
+        if (!RateLimiter::tooManyAttempts($this->throttleKey(), 5)) {
             return;
         }
 
-        $empID = $this->input('emp_id');
+        $empID = $this->input("emp_id");
 
-        $datalog = array(
-            'state' => 0,
-            'empID' => $empID,
-            'author' => $empID,
-        );
+        $datalog = [
+            "state" => 0,
+            "empID" => $empID,
+            "author" => $empID,
+        ];
 
         $this->employeestatelog($datalog);
 
         event(new Lockout($this));
 
         throw ValidationException::withMessages([
-            'emp_id' => trans('auth.deactivated'),
+            "emp_id" => trans("auth.deactivated"),
         ]);
 
         // $seconds = RateLimiter::availableIn($this->throttleKey());
@@ -125,40 +122,45 @@ class LoginRequest extends FormRequest
      */
     public function throttleKey()
     {
-        return Str::transliterate(Str::lower($this->input('emp_id')).'|'.$this->ip());
+        return Str::transliterate(
+            Str::lower($this->input("emp_id")) . "|" . $this->ip()
+        );
     }
 
     public function activated($empID)
     {
-        $query = DB::table('employee')
-                ->select('state')
-                ->where('emp_id', $empID)
-                ->limit(1)
-                ->first();
+        $query = DB::table("employee")
+            ->select("state")
+            ->where("emp_id", $empID)
+            ->limit(1)
+            ->first();
 
-        if($query){
+        if ($query) {
             return $query->state;
-        }else{
-            return 'UNKNOWN';
+        } else {
+            return "UNKNOWN";
         }
     }
 
-    public function employeestatelog($data){
-
-        $query = DB::transaction(function()use($data){
-
-            $empID = $data['empID'];
-		    $state = $data['state'];
-		    $query = "UPDATE employee SET state = '".$state."' WHERE emp_id = '".$empID."'";
+    public function employeestatelog($data)
+    {
+        $query = DB::transaction(function () use ($data) {
+            $empID = $data["empID"];
+            $state = $data["state"];
+            $query =
+                "UPDATE employee SET state = '" .
+                $state .
+                "' WHERE emp_id = '" .
+                $empID .
+                "'";
 
             DB::insert(DB::raw($query));
 
-            DB::table('activation_deactivation')->insert($data);
+            DB::table("activation_deactivation")->insert($data);
 
             return true;
         });
 
-
         return $query;
-	}
+    }
 }
