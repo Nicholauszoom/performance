@@ -170,8 +170,7 @@ $brandSetting = \App\Models\BrandSetting::firstOrCreate();
                         <tr>
                         <tr>
                             <td>Line Manager:</td>
-                            <td>{{ App\Models\Employee::all()->where('emp_id',$linemanager)->first()->full_name;
-            }}</td>
+                            <td>{{ App\Models\Employee::all()->where('emp_id',$linemanager)->first()->full_name}}</td>
                         </tr>
                         <tr>
                             <td>Contract Type:</td>
