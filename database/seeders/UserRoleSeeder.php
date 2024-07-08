@@ -25,16 +25,24 @@ class UserRoleSeeder extends Seeder
             [
                 'user_id' => 2, // User ID of the employee
                 'role_id' => 2, // Role ID (e.g., role with ID 1)
+                'group_name' => '0',
+                'duedate' => '2023-11-28 20:19:04'
             ], [
                 'user_id' => 3, // User ID of the employee
                 'role_id' => 3, // Role ID (e.g., role with ID 1)
+                'group_name' => '0',
+                'duedate' => '2023-11-28 20:19:04'
             ], [
                 'user_id' => 4, // User ID of the employee
                 'role_id' => 4, // Role ID (e.g., role with ID 1)
+                'group_name' => '0',
+                'duedate' => '2023-11-28 20:19:04'
             ],
             [
                 'user_id' => 5, // User ID of the employee
                 'role_id' => 5, // Role ID (e.g., role with ID 1)
+                'group_name' => '0',
+                'duedate' => '2023-11-28 20:19:04'
             ],
         ];
 
