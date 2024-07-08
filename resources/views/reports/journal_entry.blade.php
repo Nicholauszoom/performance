@@ -20,6 +20,11 @@
 
 <body>
 
+    @php
+    $brandSetting = \App\Models\BrandSetting::firstOrCreate();
+@endphp
+
+
     <main class="body-font p-1">
         <div id="logo" style="margin-left: 7px; z-index: -10">
             <img src="{{ asset('assets/images/x-left.png') }}" width="100px;" height="50px;">
@@ -34,13 +39,54 @@
                             <td class="">
                                 <div class="box-text text-right" style="text-align:left;">
                                     <p class="p-space">
-                                        <h5 style="font-weight:bolder;margin-top:15px;">HC-HUB</h5>
+                                    <h5 style="font-weight:bolder;margin-top:15px;">
+                                        @if ($brandSetting->report_system_name)
+                                            {{$brandSetting->report_system_name }}
+                                        @else
+                                            HC-HUB
+                                        @endif
+
+                                    </h5>
                                     </p>
-                                    <p class="p-space">5th & 6th Floor, Uhuru Heights</p>
-                                    <p class="p-space">Bibi Titi Mohammed Road</p>
-                                    <p class="p-space">P.O. Box 31, Dar es salaam </p>
-                                    <p class="p-space">+255 22 22119422/2111990 </p>
-                                    <p class="p-space"> web:<a href="www.bancabc.co.tz">www.bancabc.co.tz</a></p>
+                                    <p class="p-space">
+                                        @if ($brandSetting->address_1)
+                                            {{ $brandSetting->address_1 }}
+                                        @else
+                                            5th & 6th Floor, Uhuru Heights
+                                        @endif
+
+                                    </p>
+                                    <p class="p-space">
+                                        @if ($brandSetting->address_2)
+                                            {{ $brandSetting->address_2}}
+                                        @else
+                                            Bibi Titi Mohammed Road
+                                        @endif
+                                    </p>
+                                    <p class="p-space">
+                                        @if ($brandSetting->address_3)
+                                            {{ $brandSetting->address_3 }}
+                                        @else
+                                            P.O. Box 31, Dar es salaam
+                                        @endif
+
+
+                                    </p>
+                                    <p class="p-space">
+                                        @if ($brandSetting->address_4)
+                                            {{ $brandSetting->address_4 }}
+                                        @else
+                                            +255 22 22119422/2111990
+                                        @endif
+                                    </p>
+                                    <p class="p-space"> web:<a href="www.bancabc.co.tz">
+                                            @if ($brandSetting->website_url)
+                                                {{ $brandSetting->website_url }}
+                                            @else
+                                                www.bancabc.co.tz
+                                            @endif
+
+                                        </a></p>
                                 </div>
                             </td>
                             <td> </td>
@@ -50,8 +96,11 @@
 
                             <td colspan="4" class="w-50" style="">
                                 <div class="box-text text-end">
-                                    <img src="{{ asset('assets/images/logo-dif2.png') }}" alt="logo here" width="180px" height="150px" class="image-fluid">
-                                </div>
+                                    @if ($brandSetting->report_logo)
+                                    <img src="{{ asset('storage/' . $brandSetting->report_logo) }}" alt="logo here" width="180px" height="150px" class="image-fluid">          
+                                    @else
+                                    <img src="{{ public_path('assets/images/logo-dif2.png') }}" alt="logo here" width="180px" height="150px" class="image-fluid">          
+                                    @endif                                </div>
                             </td>
                         </tr>
                     </tfoot>
@@ -85,7 +134,7 @@
                     <thead>
                         <tr style="border-bottom:2px solid rgb(9, 5, 64);">
                             <th><b>Item</b></th>
-                            <th><b></b></th>
+                            {{-- <th><b></b></th> --}}
                             <th class="text-end"><b>Amount</b></th>
                             <th class="text-end"><b>Key</b></th>
                             <th class="text-end"><b>Account Number</b></th>
@@ -100,7 +149,7 @@
                     <tbody>
                         <tr style="border-bottom:2px solid rgb(9, 5, 64);">
                             <td>Gross Pay</b></td>
-                            <td></b></td>
+                            {{-- <td></b></td> --}}
                             <td class="text-end">{{ number_format($gross_managent, 2) }}</td>
                             <td class="text-end">D</td>
                             <td class="text-end-left">E15201100</td>
@@ -117,7 +166,7 @@
 
                         <tr style="border-bottom:2px solid rgb(9, 5, 64);">
                             <td>Gross Pay</td>
-                            <td></td>
+                            {{-- <td></td> --}}
                             <td class="text-end">{{ number_format($gross_non_managent, 2) }}</td>
                             <td class="text-end">D</td>
                             <td class="text-end-left">E15201200</td>
@@ -136,7 +185,7 @@
                             @foreach ($benefits_allowances as $row)
                                 <tr style="border-bottom:2px solid rgb(9, 5, 64);">
                                     <td>{{ $row->description }}</td>
-                                    <td></td>
+                                    {{-- <td></td> --}}
                                     <td class="text-end">{{ number_format($row->amount, 2) }}</td>
                                     <td class="text-end">D</td>
                                     <td class="text-end-left">E15201200</td>
@@ -155,7 +204,7 @@
 
                         <tr style="border-bottom:2px solid rgb(9, 5, 64);">
                             <td>NSSF Company Cost</td>
-                            <td></td>
+                            {{-- <td></td> --}}
                             <td class="text-end">{{ number_format($contributions['nssf'], 2) }}</td>
                             <td class="text-end">D</td>
                             <td class="text-end-left">E15203000</td>
@@ -172,7 +221,7 @@
 
                         <tr style="border-bottom:2px solid rgb(9, 5, 64);">
                             <td>WCF Cost</td>
-                            <td></td>
+                            {{-- <td></td> --}}
                             <td class="text-end">{{ number_format($contributions['wcf'], 2) }}</td>
                             <td class="text-end">D</td>
                             <td class="text-end-left">E15202100</td>
@@ -188,7 +237,7 @@
 
                         <tr style="border-bottom:2px solid rgb(9, 5, 64);">
                             <td>SDL Cost</td>
-                            <td></td>
+                            {{-- <td></td> --}}
                             <td class="text-end">{{ number_format($contributions['sdl'], 2) }}</td>
                             <td class="text-end">D</td>
                             <td class="text-end-left">E15202100</td>
@@ -204,7 +253,7 @@
 
                         <tr style="border-bottom:2px solid rgb(9, 5, 64);">
                             <td>PAYE</td>
-                            <td></td>
+                            {{-- <td></td> --}}
                             <td class="text-end">{{ number_format($contributions['paye'], 2) }}</td>
                             <td class="text-end">C</td>
                             <td class="text-end-left">L30700000</td>
@@ -222,7 +271,7 @@
 
                         <tr style="border-bottom:2px solid rgb(9, 5, 64);">
                             <td>NSSF Payable</td>
-                            <td></td>
+                            {{-- <td></td> --}}
                             <td class="text-end">{{ number_format($contributions['nssf'] * 2, 2) }}</td>
                             <td class="text-end">C</td>
                             <td class="text-end-left">L20800000</td>
@@ -239,7 +288,7 @@
 
                         <tr style="border-bottom:2px solid rgb(9, 5, 64);">
                             <td>WCF Payable</td>
-                            <td></td>
+                            {{-- <td></td> --}}
                             <td class="text-end">{{ number_format($contributions['wcf'], 2) }}</td>
                             <td class="text-end">C</td>
                             <td class="text-end-left">L20800000</td>
@@ -255,7 +304,7 @@
 
                         <tr style="border-bottom:2px solid rgb(9, 5, 64);">
                             <td>SDL Payable</td>
-                            <td></td>
+                            {{-- <td></td> --}}
                             <td class="text-end">{{ number_format($contributions['sdl'], 2) }}</td>
                             <td class="text-end">C</td>
                             <td class="text-end-left">L20800000</td>
@@ -274,7 +323,7 @@
                             @foreach ($deductions as $row)
                                 <tr style="border-bottom:2px solid rgb(9, 5, 64);">
                                     <td>{{ $row->description }}</td>
-                                    <td></td>
+                                    {{-- <td></td> --}}
                                     <td class="text-end">{{ number_format($row->amount, 2) }}</td>
                                     <td class="text-end">C</td>
                                     <td class="text-end-left">A50106000</td>
@@ -292,7 +341,7 @@
 
                         <tr style="border-bottom:2px solid rgb(9, 5, 64);">
                             <td>HESLB</td>
-                            <td></td>
+                            {{-- <td></td> --}}
                             <td class="text-end">{{ number_format($heslb, 2) }}</td>
                             <td class="text-end">C</td>
                             <td class="text-end-left">L20800000</td>
@@ -310,7 +359,7 @@
                             @foreach ($net_terminal_benefit as $row)
                                 <tr style="border-bottom:2px solid rgb(9, 5, 64);">
                                     <td>Terminal Benefit</td>
-                                    <td></td>
+                                    {{-- <td></td> --}}
                                     <td class="text-end">{{ number_format($row->amount, 2) }}</td>
                                     <td class="text-end">C</td>
                                     <td class="text-end-left">L20800000</td>
@@ -328,7 +377,7 @@
 
                         <tr style="border-bottom:2px solid rgb(9, 5, 64);">
                             <td>Net pay</td>
-                            <td></td>
+                            {{-- <td></td> --}}
                             <td class="text-end">{{ number_format($net_pay, 2) }}</td>
                             <td class="text-end">C</td>
                             <td class="text-end-left">A50106000</td>
@@ -346,7 +395,7 @@
                     <tfoot>
                         <tr style="border-bottom:2px solid rgb(9, 5, 64);">
                             <td>Grand Total</td>
-                            <td></td>
+                            {{-- <td></td> --}}
                             <td class="text-end">{{ number_format($total_amount, 2) }}</td>
                             <td class="text-end"></td>
                             <td class="text-end-left"></td>

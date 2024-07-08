@@ -79,10 +79,10 @@ class AuthenticatedSessionController extends Controller
     public function password_set($empID)
     {
         $query = DB::table('employee')
-                ->select('password_set')
-                ->where('emp_id', $empID)
-                ->limit(1)
-                ->first();
+            ->select('password_set')
+            ->where('emp_id', $empID)
+            ->limit(1)
+            ->first();
 
         if($query){
             return $query->password_set;
@@ -115,32 +115,24 @@ class AuthenticatedSessionController extends Controller
 
     public function setPermissions($emp_id) {
 
-        $query =   "SELECT e.*,
-        d.name AS dname,
-        c.name AS contract,
-        d.id AS \"departmentID\",
-        p.id AS \"positionID\",
-        p.name AS \"pName\",
-        CONCAT(l.fname, ' ', l.mname, ' ', l.lname) AS \"lineManager\"
+        $query = "SELECT e.*, d.name AS dname, c.name AS CONTRACT, d.id AS departmentID, p.id AS positionID, p.name AS pName,
+        CONCAT(l.fname, ' ', l.mname, ' ', l.lname) AS lineManager
         FROM employee e
-        LEFT JOIN contract c ON e.contract_type::bigint = c.id
+        LEFT JOIN contract c ON e.contract_type = c.item_code
         LEFT JOIN department d ON d.id = e.department
         LEFT JOIN position p ON p.id = e.position
         LEFT JOIN employee l ON l.emp_id = e.line_manager
-        WHERE (e.state = '1' OR e.state = '3') AND e.emp_id = :emp_id"; // Use named placeholder
+        WHERE (e.state = '1' OR e.state = '3') AND e.emp_id = '".$emp_id."'";
 
-        $data = DB::select(DB::raw($query), ['emp_id' => $emp_id]);
-
-
-
+        $data = DB::select(DB::raw($query));
 
         // dd($data);
 
-		// if(count($row)>0) {
-		// 	return $row;
-		// }
-    //    $res= $this->dateDiffCalculate($data);
-    //    return $res;
+        // if(count($row)>0) {
+        // 	return $row;
+        // }
+        //    $res= $this->dateDiffCalculate($data);
+        //    return $res;
 
         $data = $data[0];
         $data = json_encode($data);
@@ -249,40 +241,40 @@ class AuthenticatedSessionController extends Controller
     }
 
     public function getpermission($empID, $permissionID)
-	{
-		// $query = "SELECT r.permissions as permission FROM emp_role er, role r WHERE er.role=r.id and er.userID='".$empID."'  and r.permissions like '%".$permissionID."%'";
-		// $results = DB::select(DB::raw($query));
-		// // ->count();
-		// if ($results > 0) {
-		// 	return true;
-		// }else{
-		// 	return false;
-		// }
+    {
+        // $query = "SELECT r.permissions as permission FROM emp_role er, role r WHERE er.role=r.id and er.userID='".$empID."'  and r.permissions like '%".$permissionID."%'";
+        // $results = DB::select(DB::raw($query));
+        // // ->count();
+        // if ($results > 0) {
+        // 	return true;
+        // }else{
+        // 	return false;
+        // }
 
         return true;
-	}
+    }
 
     public function insertAuditLog($logData)
-	{
-		DB::table('audit_logs')->insert($logData);
-		return true;
+    {
+        DB::table('audit_logs')->insert($logData);
+        return true;
 
-	}
+    }
 
     public function password_age($empID)
-	{
+    {
 
-        $query = DB::table('user_passwords')->select('time')->where('empID', Auth::user()->emp_id)
+        $query = DB::table('user_passwords')->select('time')->where('empID', $empID)
             ->limit(1)
             ->orderBy('id', 'desc')
             ->first();
 
-            return $query->time;
-	}
+        return $query->time;
+    }
 
     function getCurrentStrategy()
-	{
-		// $query = "id as strategyID  ORDER BY id DESC limit 1";
+    {
+        // $query = "id as strategyID  ORDER BY id DESC limit 1";
 
         $row =  DB::table('strategy')
             ->select('id as strategyID')
@@ -291,8 +283,8 @@ class AuthenticatedSessionController extends Controller
             ->first();
 
         // $row = DB::
-    	return $row;
-	}
+        return $row;
+    }
 
     /**
      * Destroy an authenticated session.
@@ -313,6 +305,18 @@ class AuthenticatedSessionController extends Controller
 
     public function dateDiffCalculate(){
         $from = $this->password_age(Auth::user()->emp_id);
+
+        $from = date_create($from);
+
+        $today=date_create(date('Y-m-d'));
+
+        $diff=date_diff($from, $today);
+
+        $accrued = $diff->format("%a%") + 1;
+        return $accrued;
+    }
+    public function dateDiffCalculate2($empID){
+        $from = $this->password_age($empID);
 
         $from = date_create($from);
 

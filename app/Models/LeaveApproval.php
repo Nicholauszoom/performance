@@ -7,7 +7,12 @@ use Illuminate\Database\Eloquent\Model;
 
 class LeaveApproval extends Model
 {
+
     use HasFactory;
+    protected $table= 'leave_approvals';
+
+    protected $fillable = ['empID','level1','level2', 'level3', 'escallation_time'];
+
 
     public function employee()
     {

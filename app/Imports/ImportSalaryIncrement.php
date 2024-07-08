@@ -81,7 +81,7 @@ class ImportSalaryIncrement implements ToCollection, WithHeadingRow
             $increment->emp_level = $promotion->newLevel;
             $increment->update();
 
-            SysHelpers::FinancialLogs($id, 'Salary Increment', $oldSalary * $oldRate, $new_salary * $oldRate, 'Salary Increment');
+            SysHelpers::FinancialLogs($id, 'Salary Increment', number_format($oldSalary * $oldRate, 2).' '.'TZS', number_format($new_salary * $oldRate,2).' '.'TZS', 'Salary Increment');
 
             //end iport increments
 

@@ -20,89 +20,96 @@
 
     <div class="row">
 
+
+
         {{-- For Organizaional Report --}}
-        <div class="col-md-6">
-            <div class="card border-top  border-top-width-3 border-top-main rounded-0 p-2">
-                <div class="card-header">
-                    <h5 class="text-warning"> Organisation Performance Report</h5>
-                </div>
 
-                <form id="demo-form2" enctype="multipart/form-data" method="post"
-                    action="{{ route('flex.organization-reports') }}" data-parsley-validate
-                    class="form-horizontal form-label-left">
-                    @csrf
 
-                    <div class="card-body">
-                        <div class="input-group row d-flex">
-                            <div class="col-6 col-md-6 mb-2">
-                                <label class="col-form-label ">Start Date <span class="text-danger">*</span>
-                                    :</label>
-                                <div class="col-sm-12">
-                                    <div class="input-group">
-                                        <span class="input-group-text"><i class="ph-calendar"></i></span>
-                                        <input type="date" required placeholder="Start Time" name="start_date"
-                                            id="time_start" class="form-control daterange-single">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-6 col-md-6 mb-2">
-                                <label class="col-form-label ">End Date <span class="text-danger">*</span>
-                                    :</label>
-                                <div class="col-sm-12">
-                                    <div class="input-group">
-                                        <span class="input-group-text"><i class="ph-calendar"></i></span>
-                                        <input type="date" required placeholder="Start Time" name="end_date"
-                                            id="time_start" class="form-control daterange-single">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="mt-2">
-                            {{-- <label class="form-label">Report Format:</label> --}}
-
-                            <div class="">
-
-                                <button type="submit" class="btn btn-main float-end">
-                                    {{-- <i class="ph-printer me-2"></i>Print --}}
-                                    View
-                                </button>
-                            </div>
-                        </div>
+        @can('view-org-performance')
+            <div class="col-md-6">
+                <div class="card border-top  border-top-width-3 border-top-main rounded-0 p-2">
+                    <div class="card-header">
+                        <h5 class="text-warning"> Organisation Performance Report</h5>
                     </div>
-                </form>
+
+                    <form id="demo-form2" enctype="multipart/form-data" method="post"
+                        action="{{ route('flex.organization-reports') }}" data-parsley-validate
+                        class="form-horizontal form-label-left">
+                        @csrf
+
+                        <div class="card-body">
+                            <div class="input-group row d-flex">
+                                <div class="col-6 col-md-6 mb-2">
+                                    <label class="col-form-label ">Start Date <span class="text-danger">*</span>
+                                        :</label>
+                                    <div class="col-sm-12">
+                                        <div class="input-group">
+                                            <span class="input-group-text"><i class="ph-calendar"></i></span>
+                                            <input type="date" required placeholder="Start Time" name="start_date"
+                                                id="time_start" class="form-control daterange-single">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-6 col-md-6 mb-2">
+                                    <label class="col-form-label ">End Date <span class="text-danger">*</span>
+                                        :</label>
+                                    <div class="col-sm-12">
+                                        <div class="input-group">
+                                            <span class="input-group-text"><i class="ph-calendar"></i></span>
+                                            <input type="date" required placeholder="Start Time" name="end_date"
+                                                id="time_start" class="form-control daterange-single">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mt-2">
+                                {{-- <label class="form-label">Report Format:</label> --}}
+
+                                <div class="">
+
+                                    <button type="submit" class="btn btn-main float-end">
+                                        {{-- <i class="ph-printer me-2"></i>Print --}}
+                                        View
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
             </div>
-        </div>
+        @endcan
         {{-- ./ --}}
 
         {{-- For Project Report --}}
-        <div class="col-md-6">
-            <div class="card border-top  border-top-width-3 border-top-main rounded-0 p-2">
-                <div class="card-header">
-                    <h5 class="text-warning"> Projects Performance Report</h5>
-                </div>
+        @can('view-projects-performance')
+            <div class="col-md-6">
+                <div class="card border-top  border-top-width-3 border-top-main rounded-0 p-2">
+                    <div class="card-header">
+                        <h5 class="text-warning"> Projects Performance Report</h5>
+                    </div>
 
-                <form id="demo-form2" enctype="multipart/form-data" method="post"
-                    action="{{ route('flex.project-report') }}" data-parsley-validate
-                    class="form-horizontal form-label-left">
-                    @csrf
+                    <form id="demo-form2" enctype="multipart/form-data" method="post"
+                        action="{{ route('flex.project-report') }}" data-parsley-validate
+                        class="form-horizontal form-label-left">
+                        @csrf
 
-                    <div class="card-body">
-                        <div class="col-12 col-md-12 mb-2">
-                            <label class="col-form-label col-sm-3">Select Project:</label>
-                            <select name="project_id" class="form-control select" id="">
-                                @php
-                                    $project = App\Models\Project::get();
-                                @endphp
+                        <div class="card-body">
+                            <div class="col-12 col-md-12 mb-2">
+                                <label class="col-form-label col-sm-3">Select Project:</label>
+                                <select name="project_id" class="form-control select" id="">
+                                    @php
+                                        $project = App\Models\Project::get();
+                                    @endphp
 
-                                @foreach ($project as $item)
-                                    <option value="{{ $item->id }}">{{ $item->name }}</option>
-                                @endforeach
+                                    @foreach ($project as $item)
+                                        <option value="{{ $item->id }}">{{ $item->name }}</option>
+                                    @endforeach
 
 
 
-                            </select>
-                        </div>
-                        {{-- 
+                                </select>
+                            </div>
+                            {{-- 
                         <div class="input-group row d-flex">
                             <div class="col-6 col-md-6 mb-2">
                                 <label class="col-form-label ">Start Date <span class="text-danger">*</span>
@@ -127,70 +134,72 @@
                                 </div>
                             </div>
                         </div> --}}
-                        <div class="mt-2">
-                            {{-- <label class="form-label">Report Format:</label> --}}
+                            <div class="mt-2">
+                                {{-- <label class="form-label">Report Format:</label> --}}
 
-                            <div class="">
+                                <div class="">
 
-                                <button type="submit" class="btn btn-main float-end">
-                                    {{-- <i class="ph-printer me-2"></i> --}}
+                                    <button type="submit" class="btn btn-main float-end">
+                                        {{-- <i class="ph-printer me-2"></i> --}}
                                         View
                                     </button>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                </form>
+                    </form>
+                </div>
             </div>
-        </div>
+        @endcan
         {{-- ./ --}}
 
 
-                {{-- For Project Report --}}
-                <div class="col-md-6">
-                    <div class="card border-top  border-top-width-3 border-top-main rounded-0 p-2">
-                        <div class="card-header">
-                            <h5 class="text-warning"> Department Performance Report</h5>
-                        </div>
-        
-                        <form id="demo-form2" enctype="multipart/form-data" method="post"
-                            action="{{ route('flex.department-report') }}" data-parsley-validate
-                            class="form-horizontal form-label-left">
-                            @csrf
-        
-                            <div class="card-body">
-                                <div class="col-12 col-md-12 mb-2">
-                                    <label class="col-form-label col-sm-3">Select Department:</label>
-                                    <select name="dept_id" class="form-control select" id="">
-                                        @php
-                                            $project = App\Models\Department::get();
-                                        @endphp
-        
-                                        @foreach ($project as $item)
-                                            <option value="{{ $item->id }}">{{ $item->name }}</option>
-                                        @endforeach
-        
-        
-        
-                                    </select>
-                                </div>
-        
-                                <div class="col-12 col-md-12 mb-2">
-                                    <label class="col-form-label col-sm-3">Select Project:</label>
-                                    <select name="project_id" class="form-control select" id="">
-                                        @php
-                                            $project = App\Models\Project::get();
-                                        @endphp
-        
-                                        @foreach ($project as $item)
-                                            <option value="{{ $item->id }}">{{ $item->name }}</option>
-                                        @endforeach
-        
-        
-        
-                                    </select>
-                                </div>
+        {{-- For Project Report --}}
+        @can('view-dep-performance-report')
+            <div class="col-md-6">
+                <div class="card border-top  border-top-width-3 border-top-main rounded-0 p-2">
+                    <div class="card-header">
+                        <h5 class="text-warning"> Department Performance Report</h5>
+                    </div>
 
-                                {{-- <div class="input-group row d-flex">
+                    <form id="demo-form2" enctype="multipart/form-data" method="post"
+                        action="{{ route('flex.department-report') }}" data-parsley-validate
+                        class="form-horizontal form-label-left">
+                        @csrf
+
+                        <div class="card-body">
+                            <div class="col-12 col-md-12 mb-2">
+                                <label class="col-form-label col-sm-3">Select Department:</label>
+                                <select name="dept_id" class="form-control select" id="">
+                                    @php
+                                        $project = App\Models\Department::get();
+                                    @endphp
+
+                                    @foreach ($project as $item)
+                                        <option value="{{ $item->id }}">{{ $item->name }}</option>
+                                    @endforeach
+
+
+
+                                </select>
+                            </div>
+
+                            <div class="col-12 col-md-12 mb-2">
+                                <label class="col-form-label col-sm-3">Select Project:</label>
+                                <select name="project_id" class="form-control select" id="">
+                                    @php
+                                        $project = App\Models\Project::get();
+                                    @endphp
+
+                                    @foreach ($project as $item)
+                                        <option value="{{ $item->id }}">{{ $item->name }}</option>
+                                    @endforeach
+
+
+
+                                </select>
+                            </div>
+
+                            {{-- <div class="input-group row d-flex">
                                     <div class="col-6 col-md-6 mb-2">
                                         <label class="col-form-label ">Start Date <span class="text-danger">*</span>
                                             :</label>
@@ -214,34 +223,36 @@
                                         </div>
                                     </div>
                                 </div> --}}
-                                <div class="mt-2">
-                                    {{-- <label class="form-label">Report Format:</label> --}}
-        
-                                    <div class="">
-        
-                                        <button type="submit" class="btn btn-main float-end">
-                                            {{-- <i class="ph-printer me-2"></i> --}}
-                                                View</button>
-                                    </div>
+                            <div class="mt-2">
+                                {{-- <label class="form-label">Report Format:</label> --}}
+
+                                <div class="">
+
+                                    <button type="submit" class="btn btn-main float-end">
+                                        {{-- <i class="ph-printer me-2"></i> --}}
+                                        View</button>
                                 </div>
                             </div>
-                        </form>
-                    </div>
+                        </div>
+                    </form>
                 </div>
-                {{-- ./ --}}
+            </div>
+        @endcan
+        {{-- ./ --}}
 
-             {{-- For Project Report --}}
-             <div class="col-md-6">
+        {{-- For Project Report --}}
+        @can('view-acceleration-report')
+            <div class="col-md-6">
                 <div class="card border-top  border-top-width-3 border-top-main rounded-0 p-2">
                     <div class="card-header">
-                        <h5 class="text-warning">  Performance Acceleration Report ~ PIP</h5>
+                        <h5 class="text-warning"> Performance Acceleration Report ~ PIP</h5>
                     </div>
-    
+
                     <form id="demo-form2" enctype="multipart/form-data" method="post"
                         action="{{ route('flex.acceleration-reports') }}" data-parsley-validate
                         class="form-horizontal form-label-left">
                         @csrf
-    
+
                         <div class="card-body">
                             <div class="col-12 col-md-12 mb-2">
                                 <label class="col-form-label col-sm-3">Select Programme:</label>
@@ -249,13 +260,13 @@
                                     @php
                                         $project = App\Models\Acceleration::get();
                                     @endphp
-    
+
                                     @foreach ($project as $item)
                                         <option value="{{ $item->id }}">{{ $item->name }}</option>
                                     @endforeach
-    
-    
-    
+
+
+
                                 </select>
                             </div>
                             {{-- 
@@ -285,20 +296,21 @@
                             </div> --}}
                             <div class="mt-2">
                                 {{-- <label class="form-label">Report Format:</label> --}}
-    
+
                                 <div class="">
-    
+
                                     <button type="submit" class="btn btn-main float-end">
                                         {{-- <i class="ph-printer me-2"></i> --}}
-                                            View
-                                        </button>
+                                        View
+                                    </button>
                                 </div>
                             </div>
                         </div>
                     </form>
                 </div>
             </div>
-            {{-- ./ --}}
+        @endcan
+        {{-- ./ --}}
 
 
 

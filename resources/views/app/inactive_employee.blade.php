@@ -14,13 +14,9 @@
 {{-- Deactivated Employess --}}
 <div class="card border-top  border-top-width-3 border-top-main rounded-0">
   <div class="card-header">
-    <h5 class="text-main mb-0">Employee</h5>
+    <h5 class="text-warning"> Deactivated Employees</h5>
   </div>
-
-  <div class="card-body text-warning">
-    Deactivated Employees
-  </div>
-
+<div class="card-body">
   <table id="datatable" class="table table-striped table-bordered datatable-basic">
     <thead>
       <tr>
@@ -75,7 +71,7 @@
       @endforeach
     </tbody>
   </table>
-
+</div>
 </div>
 {{-- /Deativated Employees --}}
 

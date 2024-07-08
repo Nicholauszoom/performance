@@ -4,13 +4,18 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Gate;
 
 //use App\Http\Controllers\Controller;
-
+use Carbon\Carbon;
+use App\Models\BrandSetting;
+use Doctrine\DBAL\Driver\OCI8\ConvertPositionalToNamedPlaceholders;
+use Illuminate\Support\Facades\Gate;
 use App\Charts\EmployeeLineChart;
 use App\Exports\LeaveApprovalsExport;
 use App\Helpers\SysHelpers;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\EmployeeRequest;
 use App\Imports\HolidayDataImport;
+use App\Imports\LeaveApprovalMapping;
+use App\Imports\ImportEmployeeAllowance;
 use App\Imports\ImportSalaryIncrement;
 use App\Models\AccessControll\Departments;
 use App\Models\AdhocTask;
@@ -32,6 +37,7 @@ use App\Models\EmployeeParent;
 use App\Models\EmployeePerformance;
 use App\Models\EmployeeSkills;
 use App\Models\EmployeeSpouse;
+use App\Models\EmployeeTerminationAllowance;
 use App\Models\EmploymentHistory;
 use App\Models\FinancialLogs;
 use App\Models\Grievance;
@@ -39,9 +45,7 @@ use App\Models\Holiday;
 use App\Models\InputSubmission;
 use App\Models\LeaveApproval;
 use App\Models\LeaveForfeiting;
-use App\Models\EmployeeTemporaryAllowance;
-use App\Models\Permission;
-
+use App\Models\LoanApplication;
 
 //use PHPClamAV\Scanner;
 use App\Models\Leaves;
@@ -68,7 +72,6 @@ use App\Models\UserRole;
 use App\Notifications\EmailRequests;
 use App\Notifications\RegisteredUser;
 use Barryvdh\DomPDF\Facade\Pdf;
-use Carbon\Carbon;
 use DateTime;
 use Exception;
 use Illuminate\Http\File;
@@ -107,17 +110,34 @@ class GeneralController extends Controller
         $this->payroll_model = new Payroll;
     }
 
+    // public function authenticateUser($permissions)
+    // {
+    //     if (!Auth::check()) {
+    //         return redirect()->route('login');
+    //     }
+
+    //     if (!Auth::user()->can($permissions)) {
+
+    //     abort(Response::HTTP_UNAUTHORIZED);
+    //     }
+    // }
+
+
     public function authenticateUser($permissions)
     {
-        if (!Auth::check()) {
+        // Check if the user is not authenticated
+        if (!auth()->check()) {
+            // Redirect the user to the login page
             return redirect()->route('login');
         }
 
-        if (!Auth::user()->can($permissions)) {
-
+        // Check if the authenticated user does not have the specified permissions
+        if (!Gate::allows($permissions)) {
+            // If not, abort the request with a 401 Unauthorized status code
             abort(Response::HTTP_UNAUTHORIZED);
         }
     }
+
 
     public function update_login_info(Request $request)
     {
@@ -352,6 +372,7 @@ class GeneralController extends Controller
 
     public function departmentCost()
     {
+        $this->authenticateUser('view-department-cost');
         $data['projects'] = $this->flexperformance_model->costProjects();
         $data['departments'] = $this->flexperformance_model->costDepartments();
         $data['parent'] = "Department";
@@ -362,6 +383,8 @@ class GeneralController extends Controller
 
     public function storeDepartmentCost(Request $request)
     {
+
+        $this->authenticateUser('add-department-cost');
 
         $type = $request->type;
 
@@ -457,6 +480,10 @@ class GeneralController extends Controller
             );
             $result = $this->flexperformance_model->updateOrganizationLevel($updates, $ID);
             if ($result == true) {
+
+                $autheniticateduser = auth()->user()->emp_id;
+                $auditLog = SysHelpers::AuditLog(2, "Organization level updated  by " . $autheniticateduser, $request);
+
                 return back()->with('success', 'Organization Level Updated Successifully!');
                 // echo "<p class='alert alert-success text-center'>Updated Successifully!</p>";
             } else {
@@ -588,6 +615,8 @@ class GeneralController extends Controller
             $result = $this->flexperformance_model->addCompanyInfo($data);
 
             if ($result == true) {
+                $autheniticateduser = auth()->user()->emp_id;
+                $auditLog = SysHelpers::AuditLog(2, "Company info updated by " . $autheniticateduser, $request);
                 return redirect()->route('flex.companyInfo');
                 echo "<p class='alert alert-success text-center'>Branch Added Successifully!</p>";
             } else {
@@ -608,6 +637,8 @@ class GeneralController extends Controller
         $data = $request->except('_token', '_method');
         $result = $this->flexperformance_model->updateCompanyInfo($data, $id);
         if ($result == true) {
+            $autheniticateduser = auth()->user()->emp_id;
+            $auditLog = SysHelpers::AuditLog(2, "Company info updated by " . $autheniticateduser, $request);
             return redirect()->back();
             // echo "<p class='alert alert-success text-center'>Branch Updated Successifully!</p>";
         } else {
@@ -637,6 +668,9 @@ class GeneralController extends Controller
                 'country' => $request->input('country'),
             );
             $branchID = $this->flexperformance_model->addCompanyBranch($data);
+            $autheniticateduser = auth()->user()->emp_id;
+            $auditLog = SysHelpers::AuditLog(2, "Company branch added by " . $autheniticateduser, $request);
+
             if ($branchID > 0) {
                 $code = sprintf("%03d", $branchID);
                 $updates = array(
@@ -668,6 +702,8 @@ class GeneralController extends Controller
             );
             $branchID = $this->flexperformance_model->addCostCenter($data);
             if ($branchID > 0) {
+                $autheniticateduser = auth()->user()->emp_id;
+                $auditLog = SysHelpers::AuditLog(2, "Const Center added  by " . $autheniticateduser, $request);
 
                 echo "<p class='alert alert-success text-center'>Cost Center Added Successifully!</p>";
             } else {
@@ -709,6 +745,8 @@ class GeneralController extends Controller
 
         $result = $this->flexperformance_model->updateCostCenter($updates, $branchID);
         if ($result) {
+            $autheniticateduser = auth()->user()->emp_id;
+            $auditLog = SysHelpers::AuditLog(2, "COnst center updated by " . $autheniticateduser, $request);
             session('note', "<p class='alert alert-success text-center'>Updated Successifully</p>");
             return redirect('/flex/costCenter/');
         } else {
@@ -752,6 +790,10 @@ class GeneralController extends Controller
             "bank_code" => $bank_code,
         );
         DB::table('bank')->insert($data);
+
+        $autheniticateduser = auth()->user()->emp_id;
+        $auditLog = SysHelpers::AuditLog(2, "Bank added by " . $autheniticateduser, $request);
+
         echo "Record inserted successfully.<br/>";
         return redirect('flex/bank');
     }
@@ -802,6 +844,10 @@ class GeneralController extends Controller
             );
             $result = $this->flexperformance_model->addBankBranch($data);
             if ($result) {
+
+                $autheniticateduser = auth()->user()->emp_id;
+                $auditLog = SysHelpers::AuditLog(2, "Bank branch added  by " . $autheniticateduser, $request);
+
                 $response_array['status'] = "OK";
                 $response_array['message'] = "<p class='alert alert-success text-center'>Branch Added Successifully</p>";
                 header('Content-type: application/json');
@@ -847,6 +893,8 @@ class GeneralController extends Controller
             );
             $result = $this->flexperformance_model->addBankBranch($data);
             if ($result) {
+                $autheniticateduser = auth()->user()->emp_id;
+                $auditLog = SysHelpers::AuditLog(2, "Bank branch name updated by " . $autheniticateduser, $request);
                 $response_array['status'] = "OK";
                 $response_array['message'] = "<p class='alert alert-success text-center'>Branch Added Successifully</p>";
                 header('Content-type: application/json');
@@ -869,6 +917,10 @@ class GeneralController extends Controller
             );
             $result = $this->flexperformance_model->updateBank($data, $bankID);
             if ($result) {
+
+                $autheniticateduser = auth()->user()->emp_id;
+                $auditLog = SysHelpers::AuditLog(2, "Bank name updated by " . $autheniticateduser, $request);
+
                 $response_array['status'] = "OK";
                 $response_array['message'] = "<p class='alert alert-success text-center'>Bank Name Updated Successifully</p>";
                 header('Content-type: application/json');
@@ -1057,7 +1109,6 @@ class GeneralController extends Controller
         }
     }
 
-
     public function deleteDepartment($id)
     {
 
@@ -1231,6 +1282,8 @@ class GeneralController extends Controller
             );
             $result = $this->flexperformance_model->updateBudget($data, $budgetID);
             if ($result == true) {
+                $autheniticateduser = auth()->user()->emp_id;
+                $auditLog = SysHelpers::AuditLog(2, "Budget uproved  by " . $autheniticateduser, $request);
                 echo "<p class='alert alert-success text-center'>Budget Approved Successifully</p>";
             } else {
                 echo "<p class='alert alert-danger text-center'>FAILED to Approve, Please Try Again!</p>";
@@ -1249,6 +1302,8 @@ class GeneralController extends Controller
             );
             $result = $this->flexperformance_model->updateBudget($data, $budgetID);
             if ($result == true) {
+                $autheniticateduser = auth()->user()->emp_id;
+                $auditLog = SysHelpers::AuditLog(2, "Budget disaproved by " . $autheniticateduser, $request);
                 echo "<p class='alert alert-success text-center'>Budget Disapproved Successifully</p>";
             } else {
                 echo "<p class='alert alert-danger text-center'>FAILED to Disapprove, Please Try Again!</p>";
@@ -1262,6 +1317,8 @@ class GeneralController extends Controller
             $budgetID = $this->uri->segment(3);
             $result = $this->flexperformance_model->deleteBudget($budgetID);
             if ($result == true) {
+                $autheniticateduser = auth()->user()->emp_id;
+                $auditLog = SysHelpers::AuditLog(2, "Budget deleted  by " . $autheniticateduser, $request);
                 echo "<p class='alert alert-success text-center'>Budget Deleted Successifully</p>";
             } else {
                 echo "<p class='alert alert-danger text-center'>FAILED to Delete, Please Try Again!</p>";
@@ -1675,6 +1732,8 @@ class GeneralController extends Controller
     public function addskills(Request $request)
     {
 
+
+
         if (isset($_POST['add'])) {
             $id = $request->input('positionID');
             if ($request->input('mandatory') == '1') {
@@ -1832,6 +1891,7 @@ class GeneralController extends Controller
     }
     public function addPosition(Request $request)
     {
+        $this->authenticateUser('add-position');
         if ($request->method() == "POST") {
 
             if ($request->input('driving_licence') == "") {
@@ -1851,7 +1911,7 @@ class GeneralController extends Controller
                 'organization_level' => $request->input('organization_level'),
                 'code' => strtoupper($request->input('code')),
                 'driving_licence' => $licence,
-                'minimum_qualification' => $request->input('qualification'),
+                'minimum_qualification' => "N/A",
                 'created_by' => auth()->user()->emp_id,
                 'position_code' => $this->code_generator(6),
                 'parent_code' => $parent_code,
@@ -1861,6 +1921,11 @@ class GeneralController extends Controller
 
             $result = $this->flexperformance_model->addposition($data);
             if ($result == true) {
+
+                $autheniticateduser = auth()->user()->emp_id;
+                $auditLog = SysHelpers::AuditLog(1, "Position added  by " . $autheniticateduser, $request);
+
+
                 return redirect()->back();
                 //$response_array['status'] = "OK";
                 // $response_array['message'] = "<p class='alert alert-success text-center'>Position Added Successifully!</p>";
@@ -1886,6 +1951,11 @@ class GeneralController extends Controller
             );
             $result = $this->flexperformance_model->addOrganizationLevel($data);
             if ($result == true) {
+
+                $autheniticateduser = auth()->user()->emp_id;
+                $auditLog = SysHelpers::AuditLog(1, "Organization level added  by " . $autheniticateduser, $request);
+
+
                 return redirect()->back();
                 $response_array['status'] = "OK";
                 $response_array['message'] = "<p class='alert alert-success text-center'>Organization Level Added Successifully!</p>";
@@ -1902,6 +1972,11 @@ class GeneralController extends Controller
     {
         $result = $this->flexperformance_model->deleteOrganizationLevel($id);
         if ($result == true) {
+
+            $request = new Request();
+            $autheniticateduser = auth()->user()->emp_id;
+            $auditLog = SysHelpers::AuditLog(1, "Organization level deleted  by " . $autheniticateduser, $request);
+
             $response_array['status'] = "OK";
             $response_array['message'] = "<p class='alert alert-success text-center'>Organization Level Deleted!</p>";
         } else {
@@ -1921,6 +1996,10 @@ class GeneralController extends Controller
         );
         $result = $this->flexperformance_model->updateposition($data, $id);
         if ($result == true) {
+            $autheniticateduser = auth()->user()->emp_id;
+            $auditLog = SysHelpers::AuditLog(1, "Position deleted  by " . $autheniticateduser, $request);
+
+
             $response_array['status'] = "OK";
             $response_array['message'] = "<p class='alert alert-success text-center'>Position Deleted!</p>";
         } else {
@@ -1940,6 +2019,11 @@ class GeneralController extends Controller
         );
         $result = $this->flexperformance_model->updateposition($data, $id);
         if ($result == true) {
+
+            $autheniticateduser = auth()->user()->emp_id;
+            $auditLog = SysHelpers::AuditLog(1, "Position activated  by " . $autheniticateduser, $request);
+
+
             $response_array['status'] = "OK";
             $response_array['message'] = "<p class='alert alert-success text-center'>Position Activated Successifully!</p>";
         } else {
@@ -1987,6 +2071,11 @@ class GeneralController extends Controller
 
     public function applyOvertime(Request $request)
     {
+
+        $this->authenticateUser('apply-overtime');
+
+        $autheniticateduser = auth()->user()->emp_id;
+
 
         request()->validate(
             [
@@ -2051,6 +2140,10 @@ class GeneralController extends Controller
                         $result = $this->flexperformance_model->apply_overtime($data);
 
                         if ($result == true) {
+
+                            $auditLog = SysHelpers::AuditLog(1, "Overtime application by Employee Id " . $autheniticateduser, $request);
+
+
                             echo "<p class='alert alert-success text-center'>Overtime Request Sent Successifully</p>";
                         } else {
                             echo "<p class='alert alert-danger text-center'>Overtime Request Not Sent, Please Try Again!</p>";
@@ -2076,6 +2169,8 @@ class GeneralController extends Controller
                         $result = $this->flexperformance_model->apply_overtime($data);
 
                         if ($result == true) {
+                            $auditLog = SysHelpers::AuditLog(1, "Overtime application by Employee Id " . $autheniticateduser, $request);
+
                             echo "<p class='alert alert-success text-center'>Overtime Request Sent Successifully</p>";
                         } else {
                             echo "<p class='alert alert-danger text-center'>Overtime Request Not Sent, Please Try Again!</p>";
@@ -2102,6 +2197,8 @@ class GeneralController extends Controller
                         $result = $this->flexperformance_model->apply_overtime($data);
 
                         if ($result == true) {
+                            $auditLog = SysHelpers::AuditLog(1, "Overtime application by Employee Id " . $autheniticateduser, $request);
+
                             echo "<p class='alert alert-success text-center'>Overtime Request Sent Successifully</p>";
                         } else {
                             echo "<p class='alert alert-danger text-center'>Overtime Request Not Sent, Please Try Again!</p>";
@@ -2132,6 +2229,8 @@ class GeneralController extends Controller
                     );
                     $result = $this->flexperformance_model->apply_overtime($data);
                     if ($result == true) {
+                        $auditLog = SysHelpers::AuditLog(1, "Overtime application by Employee Id " . $autheniticateduser, $request);
+
                         echo "<p class='alert alert-success text-center'>Overtime Request Sent Successifully</p>";
                     } else {
                         echo "<p class='alert alert-danger text-center'>Overtime Request Not Sent, Please Try Again!</p>";
@@ -2154,6 +2253,8 @@ class GeneralController extends Controller
                     );
                     $result = $this->flexperformance_model->apply_overtime($data);
                     if ($result == true) {
+                        $auditLog = SysHelpers::AuditLog(1, "Overtime application by Employee Id " . $autheniticateduser, $request);
+
                         //fetch Line manager data from employee table and send email
                         $linemanager_data = SysHelpers::employeeData($linemanager);
                         $fullname = $linemanager_data['full_name'];
@@ -2181,8 +2282,10 @@ class GeneralController extends Controller
     public function applyOvertimeOnbehalf(Request $request)
     {
 
-        $days = $request->input('days');
 
+        $this->authenticateUser('apply-overtime-onbehalf');
+
+        $days = $request->input('days');
         $overtime_category = $request->input('category');
         $empID = $request->empID;
         $signatory = auth()->user()->emp_id;
@@ -2195,13 +2298,18 @@ class GeneralController extends Controller
 
         $result = $this->flexperformance_model->direct_insert_overtime($empID, $signatory, $overtime_category, $date, $days, $percent, $line_maager);
         if ($result == true) {
-            $amount = $days * ($employee_data->salary / 176) * $percent;
 
-            SysHelpers::FinancialLogs($empID, $overtime_name, '0.00', number_format($amount, 2), 'Payroll Input');
+            $autheniticateduser = auth()->user()->emp_id;
+            $auditLog = SysHelpers::AuditLog(1, "Overtime on behalf applied  by " . $autheniticateduser, $request);
 
-            echo "<p class='alert alert-success text-center'>Overtime Request saved Successifully</p>";
+
+            $amount = $days * ($employee_data->salary / 195) * $percent;
+
+            SysHelpers::FinancialLogs($empID, $overtime_name, '0.00', number_format($amount, 2)." TZS", 'Payroll Input');
+
+            echo "<p class='alert alert-success text-center'>Overtime Request saved successfully</p>";
         } else {
-            echo "<p class='alert alert-danger text-center'>Overtime Request not saved Successifully</p>";
+            echo "<p class='alert alert-danger text-center'>Overtime Request not saved successfully</p>";
         }
 
         // $split_start = explode("  at  ", $start);
@@ -2419,6 +2527,10 @@ class GeneralController extends Controller
 
             $this->flexperformance_model->update_overtime($data, $overtimeID);
 
+            $autheniticateduser = auth()->user()->emp_id;
+            $auditLog = SysHelpers::AuditLog(1, "Overtime updated  by " . $autheniticateduser, $request);
+
+
             session('note', "<p class='alert alert-success text-center'>Your Overtime was Updated Successifully</p>");
 
             return redirect('/flex/overtime');
@@ -2440,6 +2552,12 @@ class GeneralController extends Controller
             'linemanager' => auth()->user()->emp_id,
         );
         $this->flexperformance_model->update_overtime($data, $overtimeID);
+
+        $request = new Request();
+        $autheniticateduser = auth()->user()->emp_id;
+        $auditLog = SysHelpers::AuditLog(1, "Overtime confirmed  by " . $autheniticateduser, $request);
+
+
         echo "<p class='alert alert-success text-center'>Overtime Confirmed Successifully</p>";
     }
 
@@ -2451,11 +2569,20 @@ class GeneralController extends Controller
             'time_recommended_line' => date('Y-m-d h:i:s'),
         );
         $this->flexperformance_model->update_overtime($data, $overtimeID);
+
+        $request = new Request();
+        $autheniticateduser = auth()->user()->emp_id;
+        $auditLog = SysHelpers::AuditLog(1, "Overtime reccomendation   by " . $autheniticateduser, $request);
+
+
+
         echo "<p class='alert alert-success text-center'>Overtime Recommended Successifully</p>";
     }
 
     public function approved_financial_payments(Request $request)
     {
+
+        // dd(Position::where('id', Auth::user()->position)->first());
 
         $this->authenticateUser('edit-payroll');
         // if(session('mng_paym')||session('recom_paym')||session('appr_paym')){
@@ -2484,6 +2611,17 @@ class GeneralController extends Controller
         $data['title'] = "Pending Payments";
         $data['parent'] = 'Payroll';
         $data['child'] = "pending-payments";
+
+        $employee = Auth::User()->id;
+        $role = UserRole::where('user_id', $employee)->first();
+        $role_id = $role->role_id;
+
+        $approval = Approvals::where('process_name', 'Payroll Approval')->first();
+        $roles = Position::where('id', $role_id)->first();
+        $level = ApprovalLevel::where('role_id', $role_id)->where('approval_id', $approval->id)->first();
+        $data['level'] = $level;
+
+        $data['level_check']  = SysHelpers::approvalCheck("Payroll Approval");
 
         return view('app.financial_payment', $data);
 
@@ -2533,6 +2671,9 @@ class GeneralController extends Controller
             'status' => 3,
         );
         $this->flexperformance_model->update_overtime($data, $overtimeID);
+        $request = new Request();
+        $autheniticateduser = auth()->user()->emp_id;
+        $auditLog = SysHelpers::AuditLog(2, "Overtime held by " . $autheniticateduser, $request);
         echo "<p class='alert alert-warning text-center'>Overtime Held</p>";
     }
 
@@ -2560,7 +2701,11 @@ class GeneralController extends Controller
         $result = $this->flexperformance_model->approveOvertime($overtimeID, $signatory, $time_approved);
         if ($result == true) {
 
-            SysHelpers::FinancialLogs($emp_id, $overtime_name, '0.00', number_format($overtime, 2), 'Payroll Input');
+            SysHelpers::FinancialLogs($emp_id, $overtime_name, '0.00', number_format($overtime, 2).' '."TZS", 'Payroll Input');
+
+            $request = new Request();
+            $autheniticateduser = auth()->user()->emp_id;
+            $auditLog = SysHelpers::AuditLog(2, "Overtime uproved by " . $autheniticateduser, $request);
 
             echo "<p class='alert alert-success text-center'>Overtime Approved Successifully</p>";
         } else {
@@ -2587,6 +2732,10 @@ class GeneralController extends Controller
             $result = $this->flexperformance_model->lineapproveOvertime($overtimeID, $time_approved);
 
             if ($result == true) {
+                $request = new Request();
+                $autheniticateduser = auth()->user()->emp_id;
+                $auditLog = SysHelpers::AuditLog(2, "Overtime approved by " . $autheniticateduser, $request);
+
                 echo "<p class='alert alert-success text-center'>Overtime Approved Successifully</p>";
             } else {
                 echo "<p class='alert alert-danger text-center'>Overtime Not Approved, Some Errors Occured Please Try Again!</p>";
@@ -2610,6 +2759,9 @@ class GeneralController extends Controller
         $time_approved = date('Y-m-d');
         $result = $this->flexperformance_model->hrapproveOvertime($overtimeID, $signatory, $time_approved);
         if ($result == true) {
+            $request = new Request();
+            $autheniticateduser = auth()->user()->emp_id;
+            $auditLog = SysHelpers::AuditLog(2, "Overtime approved by " . $autheniticateduser, $request);
             echo "<p class='alert alert-success text-center'>Overtime Approved Successifully</p>";
         } else {
             echo "<p class='alert alert-danger text-center'>Overtime Not Approved, Some Errors Occured Please Try Again!</p>";
@@ -2634,6 +2786,9 @@ class GeneralController extends Controller
         $time_approved = date('Y-m-d');
         $result = $this->flexperformance_model->fin_approveOvertime($overtimeID, $signatory, $time_approved);
         if ($result == true) {
+            $request = new Request();
+            $autheniticateduser = auth()->user()->emp_id;
+            $auditLog = SysHelpers::AuditLog(2, "Overtime final aproval by " . $autheniticateduser, $request);
             echo "<p class='alert alert-success text-center'>Overtime Approved Successifully</p>";
         } else {
             echo "<p class='alert alert-danger text-center'>Overtime Not Approved, Some Errors Occured Please Try Again!</p>";
@@ -2650,6 +2805,11 @@ class GeneralController extends Controller
         $overtimeID = $id;
         $result = $this->flexperformance_model->deny_overtime($overtimeID);
         if ($result == true) {
+
+            $autheniticateduser = auth()->user()->emp_id;
+            $request = new Request();
+            $auditLog = SysHelpers::AuditLog(2, "Overtime  denied by " . $autheniticateduser, $request);
+
             echo "<p class='alert alert-warning text-center'>Overtime DISSAPPROVED Successifully</p>";
         } else {
             echo "<p class='alert alert-danger text-center'>FAILED to Disapprove, Some Errors Occured Please Try Again!</p>";
@@ -2661,6 +2821,10 @@ class GeneralController extends Controller
         $result = $this->flexperformance_model->deleteOvertime($id);
 
         if ($result == true) {
+            $request = new Request();
+            $autheniticateduser = auth()->user()->emp_id;
+            $auditLog = SysHelpers::AuditLog(2, "Overtime  canceled by " . $autheniticateduser, $request);
+
             echo "<p class='alert alert-warning text-center'>Overtime DELETED Successifully</p>";
         } else {
             echo "<p class='alert alert-danger text-center'>FAILED to DELETE, Please Try Again!</p>";
@@ -2673,6 +2837,9 @@ class GeneralController extends Controller
         $result = $this->flexperformance_model->deleteApprovedOvertime($id);
 
         if ($result == true) {
+            $autheniticateduser = auth()->user()->emp_id;
+            $request = new Request();
+            $auditLog = SysHelpers::AuditLog(2, "Cancel Approved Overtimes by " . $autheniticateduser, $request);
 
             echo "<p class='alert alert-warning text-center'>Overtime DELETED Successifully</p>";
         } else {
@@ -2688,6 +2855,11 @@ class GeneralController extends Controller
             $overtimeID = $this->uri->segment(3);
             $result = $this->flexperformance_model->confirmOvertimePayment($overtimeID, 1);
             if ($result == true) {
+
+                $autheniticateduser = auth()->user()->emp_id;
+                $auditLog = SysHelpers::AuditLog(2, "Confirm Overtime Payment by " . $autheniticateduser, $request);
+
+
                 echo "<p class='alert alert-warning text-center'>Overtime Payment Confirmed Successifully</p>";
             } else {
                 echo "<p class='alert alert-danger text-center'>FAILED to Confirm, Please Try Again!</p>";
@@ -2703,6 +2875,11 @@ class GeneralController extends Controller
             $overtimeID = $this->uri->segment(3);
             $result = $this->flexperformance_model->confirmOvertimePayment($overtimeID, 0);
             if ($result == true) {
+
+                $autheniticateduser = auth()->user()->emp_id;
+                $auditLog = SysHelpers::AuditLog(2, "Unconfirm Overtime Payment by " . $autheniticateduser, $request);
+
+
                 echo "<p class='alert alert-warning text-center'>Overtime Payment Unconfirmed Successifully</p>";
             } else {
                 echo "<p class='alert alert-danger text-center'>FAILED to Unconfirm, Please Try Again!</p>";
@@ -2774,6 +2951,7 @@ class GeneralController extends Controller
             );
 
             $this->flexperformance_model->updatedepartment($data, $id);
+
             session('note', "<p class='alert alert-success text-center'>Department Updated Successifully</p>");
             return redirect('/flex/department');
         } elseif ($request->type == 'updatecenter') {
@@ -3019,6 +3197,8 @@ class GeneralController extends Controller
             );
             $result = $this->flexperformance_model->updateEmployee($updates, $empID);
             if ($result == true) {
+                $autheniticateduser = auth()->user()->emp_id;
+
                 echo "<p class='alert alert-success text-center'>Pension Fund Updated Successifully!</p>";
             } else {
                 echo "<p class='alert alert-danger text-center'>Update Failed</p>";
@@ -3127,14 +3307,17 @@ class GeneralController extends Controller
             "new_position" => $request->input("position"),
         );
 
-        $result = $this->flexperformance_model->employeeTransfer($data);
+        $transferID = DB::table('transfer')->insertGetId($data);
+
+        $this->approveDeptPosTransfer($transferID);
+
 
         $oldp = $this->flexperformance_model->getAttributeName("name", "position", "id", $request->input('oldPosition'));
         $newp = $this->flexperformance_model->getAttributeName("name", "position", "id", $request->input('position'));
         $oldd = $this->flexperformance_model->getAttributeName("name", "department", "id", $request->input('oldDepartment'));
         $newd = $this->flexperformance_model->getAttributeName("name", "department", "id", $request->input('department'));
 
-        if ($result == true) {
+        if ($transferID == true) {
             SysHelpers::AuditLog(2, "Requested Department Change For Employee with ID = " . $empID . " From " . $oldd . " To " . $newd . " and Position From " . $oldp . " To " . $newp . "", $request);
             echo "<p class='alert alert-success text-center'>Request For Department and Position Transfer Has Been Sent Successifully!</p>";
         } else {
@@ -3497,6 +3680,22 @@ class GeneralController extends Controller
             }
         }
     }
+    public function updateCostCenterEmployee(Request $request)
+    {
+        $empID = $request->input('empID');
+        if ($request->method() == "POST" && $empID != '') {
+            $updates = array(
+                'cost_center' => $request->input('cost_center'),
+                'last_updated' => date('Y-m-d'),
+            );
+            $result = $this->flexperformance_model->updateEmployee($updates, $empID);
+            if ($result == true) {
+                echo "<p class='alert alert-success text-center'>Cost Center Address Updated Successifully!</p>";
+            } else {
+                echo "<p class='alert alert-danger text-center'>Update Failed</p>";
+            }
+        }
+    }
 
     public function updatePensionFundNo(Request $request)
     {
@@ -3570,11 +3769,14 @@ class GeneralController extends Controller
         // // $data['leave'] =  $this->attendance_model->leavereport();
         // if (session('mng_emp') || session('vw_emp') || session('appr_emp') || session('mng_roles_grp')) {
         $data['transfers'] = $this->flexperformance_model->employeeTransfers();
+
+        $data['flexperformance_model'] =  $this->flexperformance_model;
+
         $data['title'] = "Transfers";
+
+        $data['level_check']  = SysHelpers::approvalCheck("Employee Approval");
+
         return view('app.transfer', $data);
-        // } else {
-        //     echo 'Unauthorized Access';
-        // }
     }
 
     // ###################LEAVE######################################
@@ -3583,6 +3785,8 @@ class GeneralController extends Controller
     {
 
         $this->authenticateUser('view-loan');
+
+        // dd(Position::where('id', Auth::user()->position)->first()->name);
 
         // if(session('mng_paym') ||session('recom_paym') ||session('appr_paym')){
         $data['myloan'] = $this->flexperformance_model->mysalary_advance(auth()->user()->emp_id);
@@ -3603,10 +3807,10 @@ class GeneralController extends Controller
         $data['max_amount'] = $this->flexperformance_model->get_max_salary_advance(auth()->user()->emp_id);
         $data['title'] = "Loans and Salaries";
         $data['pendingPayroll'] = $this->payroll_model->pendingPayrollCheck();
+
+        $data['level_check'] = SysHelpers::approvalCheck("Loan Approval");
+
         return view('app.salary_advance', $data);
-        // }else{
-        //    echo 'Unauthorized Access';
-        //}
 
     }
 
@@ -3664,6 +3868,9 @@ class GeneralController extends Controller
 
             $result = $this->flexperformance_model->applyloan($data);
             if ($result == true) {
+                $autheniticateduser = auth()->user()->emp_id;
+                $auditLog = SysHelpers::AuditLog(2, "Salary advance applied by " . $autheniticateduser, $request);
+
                 echo "<p class='alert alert-success text-center'>Request Submitted Successifully</p>";
             } else {
                 echo "<p class='alert alert-warning text-center'>Request FAILED, Please Try Again</p>";
@@ -3679,16 +3886,21 @@ class GeneralController extends Controller
         if ($request->method() == "POST") {
             $category = $request->input("type");
 
+            $reason = "";
             if ($category == 2) {
                 $type = 3;
                 $form_four_index_no = $request->input("index_no");
                 $deduction = 0;
+                $reason = "Add deduction HESLB loan";
             } elseif ($category == 1) {
                 $form_four_index_no = "0";
                 $type = 2;
                 $deduction = $request->input("deduction");
+                $reason = "Add deduction COMPANY Loan";
             }
 
+            $employeewithLoan = $request->input("employee");
+            $loan_amount = $request->input("amount");
             $data = array(
                 'empid' => $request->input("employee"),
                 'amount' => $request->input("amount"),
@@ -3703,8 +3915,41 @@ class GeneralController extends Controller
                 'application_date' => date('Y-m-d'),
             );
 
-            $result = $this->flexperformance_model->applyloan($data);
-            if ($result == true) {
+            $loanApplication = new LoanApplication;
+            $loanApplication->empID = $request->input("employee");
+            $loanApplication->amount = $request->input("amount");
+            $loanApplication->deduction_amount = $deduction;
+            $loanApplication->approved_hr = auth()->user()->emp_id;
+            $loanApplication->status = 1;
+            $loanApplication->notification = 3;
+            $loanApplication->approved_date_hr = date('Y-m-d');
+            $loanApplication->type = $type;
+            $loanApplication->form_four_index_no = $form_four_index_no;
+            $loanApplication->reason = $request->input("reason");
+            $loanApplication->application_date = date('Y-m-d');
+            $success = $loanApplication->save();
+
+            try {
+                if (Approvals::where('process_name', 'Loan Approval')->first()->ApprLevels->count() < 1) {
+                    $todate = date('Y-m-d');
+                    $result = $this->flexperformance_model->approve_loan($loanApplication->id, auth()->user()->emp_id, $todate);
+                    SysHelpers::FinancialLogs($employeewithLoan, $reason, '0.00',  $loan_amount, 'Insert Direct Deduction');
+
+                }
+            } catch (\Throwable $th) {
+                if ($success) {
+                    dd('' . $th->getMessage());
+                    echo "<p class='alert alert-successs text-center'>Loan Approval was not successfull, but was created</p>";
+                } else {
+                    echo "<p class='alert alert-warning text-center'>Loan application not created successful</p>";
+                }
+            }
+
+
+            // $result = $this->flexperformance_model->applyloan($data);
+            if ($success == true) {
+                $autheniticateduser = auth()->user()->emp_id;
+                $auditLog = SysHelpers::AuditLog(2, "Direct loan inserted by " . $autheniticateduser, $request);
                 echo "<p class='alert alert-success text-center'>Request Submitted Successifully</p>";
             } else {
                 echo "<p class='alert alert-warning text-center'>Request FAILED, Please Try Again</p>";
@@ -3716,7 +3961,7 @@ class GeneralController extends Controller
     {
         $empID = auth()->user()->emp_id;
 
-        $this->authenticateUser('view-loan');
+        $this->authenticateUser('view-aproved-loan');
 
         $data['my_loans'] = $this->flexperformance_model->my_confirmedloan($empID);
 
@@ -3757,7 +4002,7 @@ class GeneralController extends Controller
             $result = $this->flexperformance_model->updateLoan($data, $loanID);
             if ($result) {
                 $response_array['status'] = "OK";
-                $response_array['message'] = "<p class='alert alert-success text-center'>Updated Updated Successifully</p>";
+                $response_array['message'] = "<p class='alert alert-success text-center'> Updated Successifully</p>";
             } else {
                 $response_array['status'] = "ERR";
                 $response_array['message'] = "<p class='alert alert-danger text-center'>FAILED: Loan Not Updated, Please try again</p>";
@@ -3847,24 +4092,37 @@ class GeneralController extends Controller
                 'notification' => 3,
             );
 
-            $this->flexperformance_model->update_loan($hrdata, $loanID);
+            if (SysHelpers::ApprovalLastLevel("Loan Approval")) {
 
-            $data = array(
-                'approved_date_finance' => date('Y-m-d'),
-                'approved_finance' => auth()->user()->emp_id,
-                // 'status' => 1,
-                // 'notification' => 3,
-            );
+                $this->flexperformance_model->update_loan($hrdata, $loanID);
 
-            $this->flexperformance_model->update_loan($data, $loanID);
+                $data = array(
+                    'approved_date_finance' => date('Y-m-d'),
+                    'approved_finance' => auth()->user()->emp_id,
+                    // 'status' => 1,
+                    // 'notification' => 3,
+                );
 
-            $todate = date('Y-m-d');
+                $this->flexperformance_model->update_loan($data, $loanID);
 
-            $result = $this->flexperformance_model->approve_loan($loanID, auth()->user()->emp_id, $todate);
-            if ($result == true) {
-                echo "<p class='alert alert-success text-center'>Loan Approved Successifully</p>";
+                $todate = date('Y-m-d');
+
+                $result = $this->flexperformance_model->approve_loan($loanID, auth()->user()->emp_id, $todate);
+
+                $loan  = LoanApplication::find($id);
+                $loan->approval_status = $loan->approval_status + 1;
+                $loan->save();
+
+                if ($result == true) {
+                    echo "<p class='alert alert-success text-center'>Loan Approved Successifully</p>";
+                } else {
+                    echo "<p class='alert alert-warning text-center'>Loan NOT Approved, Please Try Again</p>";
+                }
             } else {
-                echo "<p class='alert alert-warning text-center'>Loan NOT Approved, Please Try Again</p>";
+                $loan  = LoanApplication::find($id);
+                $loan->approval_status = $loan->approval_status + 1;
+                $loan->save();
+                echo "<p class='alert alert-success text-center'>You have Successfully approved this loan</p>";
             }
         }
     }
@@ -3920,37 +4178,32 @@ class GeneralController extends Controller
 
     ######################## END LOAN OPERATIONS##############################
 
-    public function loan_application_info(Request $request)
+    public function loan_application_info(Request $request, $id)
     {
-        $id = $request->input('id');
-
-        $data['data'] = $this->flexperformance_model->getloanbyid($id);
+        $data['data'] = $this->flexperformance_model->getLoanById($id);
         $data['title'] = "Loans and Salary Advance";
-        return view('app.loan_application_remarks', $data);
 
-        if (isset($_POST['add'])) {
-            if (session('recomloan') != 0 || 1) {
-                $data2 = array(
-                    'reason_hr' => $request->input("remarks"),
-                );
-            } elseif (session('appr_loan') != 0 || 1) {
-                $data2 = array(
-                    'reason_finance' => $request->input("remarks"),
-                );
-            }
+        if ($request->has('add')) {
+            $data2 = [];
+            $data2['reason_hr'] = $request->input('remarks');
 
-            $this->flexperformance_model->confirmloan($data2, $id);
-            $reload = '/flex/loan_application';
-            return redirect($reload);
+            $this->flexperformance_model->confirmLoan($data2, $id);
+
+            return redirect()->back()->with('success', 'Successfull updated.');
         }
+
+
+        return view('app.loan_application_remarks', $data)
+            ->with('id', $id);
     }
 
-    public function updateloan(Request $request)
+    public function updateloan(Request $request, $id)
     {
 
-        $loanID = $request->input('id');
-
+        $loanID = $id;
+        // dd(''.$loanID);
         $data['loan'] = $this->flexperformance_model->getloanbyid($loanID);
+        // dd(LoanApplication::all());
         $data['title'] = "Loan";
         return view('app.updateloan', $data);
     }
@@ -3968,6 +4221,9 @@ class GeneralController extends Controller
 
             $result = $this->flexperformance_model->update_loan($updates, $loanID);
             if ($result == true) {
+                $autheniticateduser = auth()->user()->emp_id;
+                $auditLog = SysHelpers::AuditLog(2, "Loan info updated by " . $autheniticateduser, $request);
+
                 echo "<p class='alert alert-success text-center'>Application Updated Successifully</p>";
             } else {
                 echo "<p class='alert alert-warning text-center'>Application Update FAILED, Please Try Again</p>";
@@ -4054,7 +4310,12 @@ class GeneralController extends Controller
 
     public function home(Request $request)
     {
-
+        $employee = Auth::User()->id;
+        $role = UserRole::where('user_id', $employee)->first();
+        // $role_id = $role->role_id;
+        $posn = Auth::User()->roles;
+        // dd($posn);
+        // dd(Position::where('id', $posn)->first());
 
 
 
@@ -4200,16 +4461,17 @@ class GeneralController extends Controller
 
     public function bankBranchFetcher(Request $request)
     {
-
         if (!empty($request->input("bank"))) {
             $queryBranch = $this->flexperformance_model->bankBranchFetcher($request->input("bank"));
             foreach ($queryBranch as $rows) {
-                echo "<option value='" . $rows->id . "'>" . $rows->name . "</option>";
+                $selected = ($request->input("bankBranch") == $rows->id) ? 'selected' : '';
+                echo "<option value='" . $rows->id . "' $selected>" . $rows->name . "</option>";
             }
         } else {
             echo '<option value="">Branch Not Available</option>';
         }
     }
+
 
     public function addkin(Request $request, $id)
     {
@@ -4750,9 +5012,9 @@ class GeneralController extends Controller
 
                     $result = $this->flexperformance_model->remove_individual_deduction($empID, $deductionID);
 
-                    $deductionName = DB::table('deduction')->select('name')->where('id', $request->input('deductionID'))->limit(1)->first();
+                    $deductionName = DB::table('deductions')->select('name')->where('id', $request->input('deductionID'))->limit(1)->first();
 
-                    SysHelpers::FinancialLogs($request->input('empID'), $deductionName->name, number_format($deductionName->amount / $deductionName->rate, 2) . ' ' . $deductionName->currency, '0.00', 'Payroll Input');
+                    SysHelpers::FinancialLogs($request->input('empID'), "Removed ". $deductionName->name, number_format($deductionName->amount / $deductionName->rate, 2) . ' ' . $deductionName->currency, '0.00', 'Payroll Input');
 
                     //SysHelpers::FinancialLogs($empID, 'Removed from deduction', $deductionName->name, '0', 'Payroll Input');
                 }
@@ -4824,6 +5086,8 @@ class GeneralController extends Controller
                 );
                 $result = $this->flexperformance_model->addpaye($data);
                 if ($result) {
+                    $autheniticateduser = auth()->user()->emp_id;
+                    $auditLog = SysHelpers::AuditLog(2, "Paye added  by " . $autheniticateduser, $request);
                     $response_array['status'] = "OK";
                     $response_array['title'] = "SUCCESS";
                     $response_array['message'] = "<p class='alert alert-success text-center'>Branch Added Successifully</p>";
@@ -4881,6 +5145,8 @@ class GeneralController extends Controller
                 );
                 $result = $this->flexperformance_model->updatepaye($updates, $payeID);
                 if ($result) {
+                    $autheniticateduser = auth()->user()->emp_id;
+                    $auditLog = SysHelpers::AuditLog(2, "Payee updated by " . $autheniticateduser, $request);
                     // $this->flexperformance_model->audit_log("Updated PAYE Brackets");
                     $response_array['status'] = "OK";
                     $response_array['title'] = "SUCCESS";
@@ -4914,6 +5180,8 @@ class GeneralController extends Controller
             );
             $result = $this->flexperformance_model->updateCommonDeductions($updates, $allowanceID);
             if ($result == true) {
+                $autheniticateduser = auth()->user()->emp_id;
+                $auditLog = SysHelpers::AuditLog(2, "Overtime allowance updated by " . $autheniticateduser, $request);
                 echo "<p class='alert alert-success text-center'>Updated Successifully</p>";
             } else {
                 echo "<p class='alert alert-danger text-center'>Updation Failed, Please Try Again</p>";
@@ -5258,6 +5526,10 @@ class GeneralController extends Controller
             $percent = 0.01 * ($request->rate);
         }
 
+        if($request->name != "Leave"){
+            $type = 0;
+        }
+
         $data = array(
             'name' => $request->name,
             'amount' => $amount,
@@ -5266,6 +5538,7 @@ class GeneralController extends Controller
             'pensionable' => $request->pensionable,
             'Isrecursive' => $request->Isrecursive,
             'Isbik' => $request->Isbik,
+            'type'=> $type,
             'allowance_category_id' => $request->allowanceCategory,
             'state' => 1,
             'percent' => $percent,
@@ -5274,6 +5547,8 @@ class GeneralController extends Controller
         $result = $this->flexperformance_model->addAllowance($data);
 
         if ($result == true) {
+            $autheniticateduser = auth()->user()->emp_id;
+            $auditLog = SysHelpers::AuditLog(2, "New allowance created by " . $autheniticateduser, $request);
             // $this->flexperformance_model->audit_log("Created New Allowance ");
             return back()->with('success', 'Saved');
             // echo "<p class='alert alert-success text-center'>Allowance Registered Successifully</p>";
@@ -5311,6 +5586,8 @@ class GeneralController extends Controller
             );
             $result = $this->flexperformance_model->addOvertimeCategory($data);
             if ($result == true) {
+                $autheniticateduser = auth()->user()->emp_id;
+                $auditLog = SysHelpers::AuditLog(2, "Overtime category added by " . $autheniticateduser, $request);
                 // $this->flexperformance_model->audit_log("Created New Overtime ");
                 echo "<p class='alert alert-success text-center'>Overtime Registered Successifully</p>";
             } else {
@@ -5321,16 +5598,16 @@ class GeneralController extends Controller
 
     public function addDeduction(Request $request)
     {
-        //dd($request->all());
+
         $name = $request->input('name');
         $code = $request->input('code');
         $amount = $request->input('amount');
         $percent = $request->input('rate') / 100;
-        $apply_to = $request->input('apply_to');
         $mode = $request->input('policy');
-        //$state = $request->input('state');
+        $currency = $request->input('currency');
         $state = 1;
-        $rate = $this->flexperformance_model->get_rate($request->currency);
+        $rate = $this->flexperformance_model->get_rate($currency);
+
 
         // FIXME I have commented column currency and rate but it need confirmation if it should available
         // FIXME data from code is missing for it to be able to save in the database
@@ -5340,57 +5617,52 @@ class GeneralController extends Controller
             'code' => $code,
             'amount' => $amount * $rate,
             'percent' => $percent,
-            'apply_to' => $apply_to,
             'mode' => $mode,
             'state' => $state,
-            // 'currency' => $request->currency,
-            // 'rate' => $rate,
+            'currency' => $currency,
+            'rate' => $rate,
         );
 
         DB::table('deductions')->insert($data);
+        $autheniticateduser = auth()->user()->emp_id;
+        $auditLog = SysHelpers::AuditLog(2, "Deduction added by " . $autheniticateduser, $request);
 
         echo "Record inserted successfully.<br/>";
 
         return redirect('flex/non_statutory_deductions');
     }
-    //     public function addDeduction(Request $request)   {
+    public function assign_allowance_employees(Request $request)
+    {
+        // Validate the uploaded file
+        $request->validate([
+            'file' => 'required|mimes:xlsx,xls',
+        ]);
+        // Handle the file upload and data extraction
+        $allowance = $request->allowance;
 
-    //       if ($request->method() == "POST") {
-    //         $policy = $request->input('policy');
-    //         if($policy==1){
-    //           $amount = $request->input('amount');
-    //           $percent = 0;
-    //         } else{
-    //           $amount = 0;
-    //           $percent = 0.01*($request->input('rate'));
-    //         }
-    //         $data = array(
-    //             'name' =>trim($request->input('name')),
-    //             'amount' =>$amount,
-    //             'mode' =>$request->input('policy'),
-    //             'state' =>1,
-    //             'apply_to' =>2,
-    //             'percent' =>$percent
-    //             );
+        $file = $request->file('file');
+        Excel::import(new ImportEmployeeAllowance($allowance), $file);
 
-    //           $result = $this->flexperformance_model->addDeduction($data);
-    //           if($result==true){
-    //              $this->flexperformance_model->audit_log("Created New Deduction ");
-    //               echo "<p class='alert alert-success text-center'>Deduction Registered Successifully</p>";
-    //           } else {
-    //                echo "<p class='alert alert-warning text-center'>Deduction Registration FAILED, Please Try Again</p>";
-    //           }
-    //       }
+        return redirect()->back()->with('success', 'File uploaded and data extracted successfully.');
+    }
 
-    //    }
+
 
     public function assign_allowance_individual(Request $request)
     {
-        $method = $request->method();
 
+        $method = $request->method();
         if ($method == "POST") {
 
             $rate = $this->flexperformance_model->get_rate($request->currency);
+
+            $currency = "";
+            if($request->currency != 'TZS'){
+                $currency = 'TZS';
+
+            }else{
+                $currency = $request->currency;
+            }
 
             $data = array(
                 'empID' => $request->input('empID'),
@@ -5398,7 +5670,7 @@ class GeneralController extends Controller
                 'amount' => $request->input('amount') * $rate,
                 'mode' => $request->input('mode'),
                 'percent' => $request->input('percent') / 100,
-                'currency' => $request->currency,
+                'currency' => $currency,
                 'rate' => $rate,
             );
 
@@ -5406,9 +5678,13 @@ class GeneralController extends Controller
 
             $allowanceName = DB::table('allowances')->select('name')->where('id', $request->input('allowance'))->limit(1)->first();
 
-            SysHelpers::FinancialLogs($data['empID'], 'Assign ' . $allowanceName->name, '0.00', ($data['amount'] != 0) ? $data['amount'] . ' ' . $data['currency'] : $data['percent'] . '%',  'Payroll Input');
+
+
+            SysHelpers::FinancialLogs($data['empID'], 'Assign ' . $allowanceName->name, '0.00', ($data['amount'] != 0) ? $data['amount'] . ' ' . $data['currency'] : $data['percent'] . '%', 'Payroll Input');
 
             if ($result == true) {
+                $autheniticateduser = auth()->user()->emp_id;
+                $auditLog = SysHelpers::AuditLog(2, "Allowance assigned by " . $autheniticateduser, $request);
                 // $this->flexperformance_model->audit_log("Assigned an allowance to Employee with Id = " . $request->input('empID') . " ");
                 echo "<p class='alert alert-success text-center'>Added Successifully!</p>";
             } else {
@@ -5419,7 +5695,6 @@ class GeneralController extends Controller
 
     public function addPrevMonthSalaryArrears($date)
     {
-
         // dd($date);
         // $date="20-11-2023";
 
@@ -5428,6 +5703,11 @@ class GeneralController extends Controller
         // dd($previous_payroll_month_raw);
 
         $previous_payroll_month = $this->reports_model->prevPayrollMonth($previous_payroll_month_raw);
+
+        if(!$previous_payroll_month) {
+
+            return true;
+        }
 
         $previous_payroll_month = date('Y-m-d', strtotime($previous_payroll_month));
 
@@ -5454,7 +5734,7 @@ class GeneralController extends Controller
 
             // dd($employee->partialpayment);
             $data = array(
-                "name" => "arrears",
+                "name" => "Arrears",
                 "amount" => $employee->partialpayment, //The amount
                 "mode" => "1", //1 fixed value
                 "type" => "0",
@@ -5484,37 +5764,127 @@ class GeneralController extends Controller
         }
     }
 
+    public function SubmitInputPage(Request $request){
+        $lastEntry = DB::table('payroll_months')->select('state')->orderBy('id', 'desc')->first();
+
+        if ($lastEntry && $lastEntry->state == 2) {
+            $data['pending_payroll'] = 1;
+            return view('payroll.submit_inputs', $data);
+        } else {
+            $data['pending_payroll'] = 0;
+            return view('payroll.submit_inputs', $data);
+        }
+
+    }
+
+
+
+
+            public function insertLoanDetailsToFinancialLogs($payroll_date)
+            {
+                // Query to fetch HESLB loan details for all employees
+                $heslbQuery = "SELECT l.empID, l.id AS loanID, l.description, l.paid, l.amount, l.deduction_amount, l.amount_last_paid,
+                                    IF(deduction_amount = 0, (SELECT rate_employee FROM deduction WHERE id = 3), deduction_amount) AS policy,
+                                    IF((l.paid + l.deduction_amount) > l.amount, l.amount,
+                                        (SELECT rate_employee FROM deduction WHERE id = 3) *
+                                        (SELECT salary FROM employee WHERE emp_id = l.empID AND state != 4 AND login_user != 1)
+                                    ) AS paid,
+                                    (l.amount - IF((l.paid + l.deduction_amount) >= l.amount,
+                                                    l.amount - l.paid,
+                                                    (l.paid + ((SELECT rate_employee FROM deduction WHERE id = 3) *
+                                                                (SELECT salary FROM employee WHERE emp_id = l.empID AND state != 4 AND login_user != 1))
+                                                    )
+                                                )
+                                    ) AS remained,
+                                    '$payroll_date' AS payment_date,
+                                    e.currency,
+                                    (SELECT COUNT(*) FROM loan WHERE empID = l.empID AND type = l.type AND state = 1) AS loan_count
+                            FROM loan l
+                            JOIN employee e ON l.empID = e.emp_id
+                            WHERE l.state = 1 AND l.type = 3";
+
+                $heslbResults = DB::select(DB::raw($heslbQuery));
+
+                // Query to fetch other loan details for all employees
+                $otherLoansQuery = "SELECT l.empID, l.id AS loanID, l.description, l.paid, l.amount, l.deduction_amount, l.amount_last_paid,
+                                        IF(deduction_amount = 0, (SELECT rate_employee FROM deduction WHERE id = 3), deduction_amount) AS policy,
+                                        IF((l.paid + l.deduction_amount) > l.amount, l.amount, l.deduction_amount) AS paid,
+                                        (l.amount - IF((l.paid + l.deduction_amount) >= l.amount, l.amount - l.paid, (l.paid + l.deduction_amount))) AS remained,
+                                        '$payroll_date' AS payment_date,
+                                        e.currency,
+                                        (SELECT COUNT(*) FROM loan WHERE empID = l.empID AND type = l.type AND state = 1) AS loan_count
+                                    FROM loan l
+                                    JOIN employee e ON l.empID = e.emp_id
+                                    WHERE l.state = 1 AND l.type != 3";
+
+                $otherLoansResults = DB::select(DB::raw($otherLoansQuery));
+
+                // Function to insert financial logs
+                function insertFinancialLogs($results, $payroll_date) {
+                    foreach ($results as $row) {
+                        $empID = $row->empID;
+                        $description = $row->description;
+                        $paid = $row->paid;
+                        $amount_last_paid = $row->amount_last_paid;
+                        $isFirstPayment = $row->loan_count == 1;
+                        $isLastPayment = ($row->paid + $row->deduction_amount) >= $row->amount;
+                        SysHelpers::FinancialLogs($empID, $description, $paid.' '.'TZS', $paid.' '.'TZS', 'Payroll Input');
+
+
+                        // if ($isFirstPayment) {
+                        //     SysHelpers::FinancialLogs($empID, $description, '0.00', $amount_last_paid.' '.'TZS', 'Payroll Input');
+                        // } elseif ($isLastPayment) {
+                        // } else {
+                        //     SysHelpers::FinancialLogs($empID, $description, 0, $paid.' '.'TZS', 'Payroll Input');
+                        // }
+                    }
+                }
+
+                // Insert HESLB loan details into financial logs
+                insertFinancialLogs($heslbResults, $payroll_date);
+
+                // Insert other loan details into financial logs
+                insertFinancialLogs($otherLoansResults, $payroll_date);
+            }
+
+
+
+
+
+
     public function submitInputs(Request $request)
     {
-        $this->authenticateUser('edit-payroll');
 
-        $date = date_create_from_format('Y-m-d', $request->date);
+        $this->authenticateUser('edit-payroll');
+        $date = $request->date;
 
         $data['pending_payroll'] = 0;
 
         if ($date) {
-
-            $date = $date->format('m/d/Y');
-
-            $date = date("Y-m-d", strtotime($date));
+            $query = "UPDATE allowances SET state = IF(month('" . $date . "') = 12,1,0) WHERE type = 1";  //Activate leave allowance
+            DB::insert(DB::raw($query));
 
             $this->addPrevMonthSalaryArrears($date);
 
             if ($request->method() == 'POST') {
                 $month = $this->payroll_model->checkPayrollMonth($date);
                 $submission = $this->payroll_model->checkInputMonth($date);
+               // $this->insertLoanDetailsToFinancialLogs($date);
+
 
                 if ($month < 1) {
                     if ($submission < 1) {
-                        $allowances = $this->payroll_model->getAssignedAllowance();
+                        $allowances = $this->payroll_model->getAssignedAllowanceActive($date);
+
                         foreach ($allowances as $row) {
                             if ($row->state == 1) {
-                                SysHelpers::FinancialLogs($row->empID, $row->name, '0', ($row->amount != 0) ? number_format($row->amount, 2) . ' ' . $row->currency : $row->percent . '%', 'Payroll Input', $date);
+
+                                SysHelpers::FinancialLogs($row->empID, $row->name,  ($row->amount != 0) ? number_format($row->amount, 2) . ' ' . $row->currency : $row->percent . '%', ($row->amount != 0) ? number_format($row->amount, 2) . ' ' . $row->currency : $row->percent . '%', 'Payroll Input', $date);
                             }
                         }
                         $deductions = $this->payroll_model->getAssignedDeduction();
                         foreach ($deductions as $row) {
-                            SysHelpers::FinancialLogs($row->empID, $row->name, '0', ($row->amount != 0) ? number_format($row->amount, 2) . ' ' . $row->currency : $row->percent . '%', 'Payroll Input', $date);
+                            SysHelpers::FinancialLogs($row->empID, $row->name,  ($row->amount != 0) ? number_format($row->amount, 2) . ' ' . $row->currency : $row->percent . '%', ($row->amount != 0) ? number_format($row->amount, 2) . ' ' . $row->currency : $row->percent . '%', 'Payroll Input', $date);
                         }
                         InputSubmission::create(['empID' => auth()->user()->emp_id, 'date' => $date]);
                         echo "<p class='alert alert-success text-center'>Inputs  submitted Successfuly</p>";
@@ -5562,6 +5932,8 @@ class GeneralController extends Controller
 
             if ($result == true) {
                 // $this->flexperformance_model->audit_log("Assigned an allowance to Group with Id = " . $request->input('group') . " ");
+                $autheniticateduser = auth()->user()->emp_id;
+                $auditLog = SysHelpers::AuditLog(2, "Allowance group assigned by " . $autheniticateduser, $request);
                 echo "<p class='alert alert-success text-center'>Added Successifully!</p>";
             } else {
                 echo "<p class='alert alert-danger text-center'>Not Added, Try Again</p>";
@@ -5586,18 +5958,17 @@ class GeneralController extends Controller
                 foreach ($arr as $employee) {
                     $empID = $employee;
 
-                    $allowanceName = DB::table('allowances')->select('name')->where('id', $allowanceID)->limit(1)->first();
+                    $allowance = DB::table('allowances')->where('id', $allowanceID)->limit(1)->first();
 
-                    $amount = $this->flexperformance_model->get_individual_from_allowance($empID, $allowanceID);
+                    $emp_allowance = $this->flexperformance_model->get_individual_from_allowance($empID, $allowanceID);
 
-                    // SysHelpers::FinancialLogs($row->empID, 'Removed from '.$allowanceName->name, '0', ($data['amount'] != 0)? $data['amount'].' '.$data['currency'] : $data['percent'].'%',  'Payroll Input');
-
-                    SysHelpers::FinancialLogs($empID, $allowanceName->name, $amount->percent != 0 ? ($amount->percent * 100) . '%' : number_format($amount->amount, 2) . ' ' . $amount->currency, '0.00', 'Payroll Input');
+                    SysHelpers::FinancialLogs($empID, "Remove employee from allowance " . $allowance->name, $emp_allowance->amount . ' ' . $emp_allowance->currency, '0.00', 'Payroll Input');
 
                     $result = $this->flexperformance_model->remove_individual_from_allowance($empID, $allowanceID);
                 }
                 if ($result == true) {
-                    //  $this->flexperformance_model->audit_log("Removed Employees of IDs = " . implode(',', $arr) . " From an allowance  with Id = " . $allowanceID . " ");
+                    $autheniticateduser = auth()->user()->emp_id;
+                    $auditLog = SysHelpers::AuditLog(2, "Employee was removed from allowance by " . $autheniticateduser, $request);
                     echo "<p class='alert alert-success text-center'>Added Successifully!</p>";
                 } else {
                     echo "<p class='alert alert-danger text-center'>Not Added, Try Again</p>";
@@ -5624,6 +5995,8 @@ class GeneralController extends Controller
                     $result = $this->flexperformance_model->remove_group_from_allowance($groupID, $allowanceID);
                 }
                 if ($result == true) {
+                    $autheniticateduser = auth()->user()->emp_id;
+                    $auditLog = SysHelpers::AuditLog(2, "Allowance removed from group " . $autheniticateduser, $request);
                     // $this->flexperformance_model->audit_log("Removed Group of ID = " . implode(',', $arr) . " From Alowance with Id = " . $allowanceID . " ");
                     echo "<p class='alert alert-warning text-center'>Group Removed </p>";
                 } else {
@@ -6427,6 +6800,7 @@ class GeneralController extends Controller
     public function addEmployeeToGroup(Request $request)
     {
 
+
         $this->authenticateUser('add-payroll');
 
         $method = $request->method();
@@ -6447,18 +6821,27 @@ class GeneralController extends Controller
                     $empID = $value;
                     if (!empty($group_allowances)) {
                         foreach ($group_allowances as $key) {
-                            $allowance = $key->allowance;
+                            $allowance_id = $key->allowance;
+
+                            $allowance = DB::table('allowances')->where('id', $allowance_id)->limit(1)->first();
+
+                            // $rate = $this->flexperformance_model->get_rate($allowance->currency);
+
+
                             $data = array(
                                 'empID' => $empID,
-                                'allowance' => $allowance,
+                                'allowance' => $allowance->id,
                                 'group_name' => $groupID,
+                                'amount'    => $allowance->amount,
+                                'percent' => $allowance->percent,
+                                'rate'    => 1,
+                                'mode' => $allowance->mode,
                             );
 
-                            $allowanceName = DB::table('allowances')->select('name')->where('id', $allowance)->limit(1)->first();
 
                             $this->flexperformance_model->assign_allowance($data);
 
-                            if (empty($allowanceName)) {
+                            if (empty($allowance)) {
                                 //   SysHelpers::FinancialLogs($empID, 'Assigned allowance', '-', 'Allowance Not Found', 'Payroll Input');
                             } else {
                                 //  SysHelpers::FinancialLogs($empID, 'Assigned allowance', '-', $allowanceName->name, 'Payroll Input');
@@ -6928,6 +7311,7 @@ class GeneralController extends Controller
     {
         
         $this->authenticateUser('add-employee');
+
         $data['pdrop'] = $this->flexperformance_model->positiondropdown();
         $data['contract'] = $this->flexperformance_model->contractdrop();
         $data['ldrop'] = $this->flexperformance_model->linemanagerdropdown();
@@ -7079,6 +7463,8 @@ class GeneralController extends Controller
     public function download_payslip()
     {
 
+        $this->authenticateUser('print-pension-summary');
+
         $data['month_list'] = $this->flexperformance_model->payroll_month_list();
 
         return view('my-services.payslip', $data);
@@ -7090,6 +7476,8 @@ class GeneralController extends Controller
      */
     public function registerEmployee(EmployeeRequest $request)
     {
+
+
         // $validatedFields = $request->validate([
         //     'tin' => [
         //         'required',
@@ -7103,9 +7491,8 @@ class GeneralController extends Controller
 
         $validator = $request->validated($request->all());
 
-
-
         $calendar = str_replace('/', '-', $request->input('birthdate'));
+
         $contract_end = str_replace('/', '-', $request->input('contract_end'));
         $contract_start = str_replace('/', '-', $request->input('contract_start'));
 
@@ -7119,6 +7506,7 @@ class GeneralController extends Controller
 
         $currency = $request->currency;
         $rate = $this->flexperformance_model->get_rate($currency);
+
 
         if (($required / 365) > 16) {
 
@@ -7195,6 +7583,9 @@ class GeneralController extends Controller
 
             $recordID = $this->flexperformance_model->employeeAdd($employee, $newEmp);
 
+            $autheniticateduser = auth()->user()->emp_id;
+            $auditLog = SysHelpers::AuditLog(2, "New employee registed  by " . $autheniticateduser, $request);
+
             $id = $emp_id;
 
             if ($recordID > 0) {
@@ -7209,7 +7600,7 @@ class GeneralController extends Controller
 
                 SysHelpers::FinancialLogs($id, 'Add Employee', '', '', 'Employee Registration');
 
-                SysHelpers::FinancialLogs($id, 'Salary', '0.00', number_format($request->input("salary"), 2), 'Employee Registration');
+                SysHelpers::FinancialLogs($id, 'Salary', '0.00', number_format($request->input("salary"), 2).' '. $currency, 'Employee Registration');
 
                 //register employee to leave approve maping
 
@@ -7482,6 +7873,9 @@ class GeneralController extends Controller
 
     public function grievances(Request $request)
     {
+
+        $this->authenticateUser('view-grivance');
+
         $empID = auth()->user()->emp_id;
         $data['title'] = 'Grievances and Disciplinary';
         $data['my_grievances'] = $this->flexperformance_model->my_grievances($empID);
@@ -7525,6 +7919,8 @@ class GeneralController extends Controller
                 }
 
                 $this->flexperformance_model->add_grievance($data);
+                $autheniticateduser = auth()->user()->emp_id;
+                $auditLog = SysHelpers::AuditLog(2, "Grievance  added by " . $autheniticateduser, $request);
                 session('note', "<p class='alert alert-success text-center'>Your Grievance has been Submitted Successifully</p>");
                 return redirect('/flex/grievances');
             } else {
@@ -7550,6 +7946,8 @@ class GeneralController extends Controller
                 }
 
                 $this->flexperformance_model->add_grievance($data);
+                $autheniticateduser = auth()->user()->emp_id;
+                $auditLog = SysHelpers::AuditLog(2, "Grievance  added by " . $autheniticateduser, $request);
                 session('note', "<p class='alert alert-success text-center'>Your Grievance has been Submitted Successifully</p>");
                 return redirect('/flex/grievances');
             }
@@ -7564,7 +7962,7 @@ class GeneralController extends Controller
             $data['logs'] = $this->flexperformance_model->audit_logs();
 
             // selecting audit trail for someone who deleted all tha audit logs
-            $data['purge_logs'] = $this->flexperformance_model->audit_purge_logs();
+            // $data['purge_logs'] = $this->flexperformance_model->audit_purge_logs();
 
             $data['parent'] = "Settings";
             $data['child'] = "Audit Log";
@@ -8084,6 +8482,9 @@ class GeneralController extends Controller
 
     public function approveRegistration($id)
     {
+        /**
+ * @return \Illuminate\Http\RedirectResponse
+ */
         /*
          * status 7 = cancelled
          * status 6 = accepted
@@ -8091,18 +8492,38 @@ class GeneralController extends Controller
         if ($id) {
             $transferID = $id;
             $transfers = $this->flexperformance_model->transfers($transferID);
+            $employee = Employee::find($transferID);
 
             // dd($transfers);
 
             if ($transfers) {
-                $emp_id = $transfers->empID;
-                $approver = auth()->user()->emp_id;
-                $date = date('Y-m-d');
-                $result = $this->flexperformance_model->approveRegistration($emp_id, $transferID, $approver, $date);
-                if ($result == true) {
-                    echo "<p class='alert alert-success text-center'>Registration Successfully!</p>";
+
+
+
+                $employee = Auth::User()->id;
+
+                if (SysHelpers::ApprovalLastLevel("Employee Approval")) {
+                    // dd($approval->levels == $level->level_name);
+
+                    $emp_id = $transfers->empID;
+                    $approver = auth()->user()->emp_id;
+                    $date = date('Y-m-d');
+
+                    $result = $this->flexperformance_model->approveRegistration($emp_id, $transferID, $approver, $date);
+                    if ($result == true) {
+                        $emp  = Employee::where("emp_id", $transfers->empID)->first();
+                        $emp->approval_status = $emp->approval_status + 1;
+                        echo "<p class='alert alert-success text-center'>Registration Successfully!</p>";
+                    } else {
+                        echo "<p class='alert alert-danger text-center'>FAILED: Failed To Approve Registration, Please Try Again</p>";
+                    }
                 } else {
-                    echo "<p class='alert alert-danger text-center'>FAILED: Failed To Approve Registration, Please Try Again</p>";
+                    // dd( $employee);
+                    $emp  = Employee::where("emp_id", $transfers->empID)->first();
+                    $emp->approval_status = $emp->approval_status + 1;
+                    $emp->save();
+                    $msg = 'Approved By ';
+                    return redirect('flex/promotion')->with('msg', $msg);
                 }
             }
         } else {
@@ -8152,12 +8573,13 @@ class GeneralController extends Controller
 
         $i = 1;
         $employee = Auth::User()->id;
-
-        $role = UserRole::where('user_id', $employee)->first();
-        $role_id = $role->role_id;
+        $posn_id = Auth::User()->position;
         $terminate = Approvals::where('process_name', 'Termination Approval')->first();
-        $roles = Role::where('id', $role_id)->first();
-        $data['level'] = ApprovalLevel::where('role_id', $role_id)->where('approval_id', $terminate->id)->first();
+        $roles = Position::where('id', $posn_id)->first();
+        $data['level'] = ApprovalLevel::where('role_id', $posn_id)->where('approval_id', $terminate->id)->first();
+
+        $data['level_check'] = SysHelpers::approvalCheck("Termination Approval");
+
 
         $data['check'] = 'Approved By ' . $roles->name;
 
@@ -8175,7 +8597,7 @@ class GeneralController extends Controller
 
         $data['title'] = "Terminate Employee";
         $data['my_overtimes'] = $this->flexperformance_model->my_overtimes(auth()->user()->emp_id);
-        $data['employees'] = $this->flexperformance_model->Employee();
+        $data['employees'] = $this->flexperformance_model->employeeTerminatedPartial();
         $data['line_overtime'] = $this->flexperformance_model->lineOvertimes(auth()->user()->emp_id);
         $data['pendingPayroll'] = $this->payroll_model->pendingPayrollCheck();
         $data['parent'] = 'Workforce';
@@ -8188,9 +8610,36 @@ class GeneralController extends Controller
     public function saveTermination(Request $request)
     {
         if ($request->employeeID == $request->deligated) {
-            return redirect()->back()->with(['error' => 'Terminated and deligated should not be the same person']);
+            return redirect()->back()->with(['error' => 'Terminated and deligated should not be the sane person']);
         }
+        $deligate = $request->deligated;
+
         $this->authenticateUser('add-termination');
+        // request()->validate(
+        //     [
+        //         'employeeID' => 'required',
+        //         'terminationDate' => 'required',
+        //         'reason' => 'required',
+        //         'salaryEnrollment' => 'required',
+        //         'normalDays' => 'required',
+        //         'publicDays' => 'required',
+        //         'noticePay' => 'required',
+        //         'leavePay' => 'required',
+        //         'livingCost' => 'required',
+        //         'houseAllowance' => 'required',
+        //         'utilityAllowance' => 'required',
+        //         'tellerAllowance' => 'required',
+        //         'serevancePay' => 'required',
+        //         'leaveStand' => 'required',
+        //         'arrears' => 'required',
+        //         'exgracia' => 'required',
+        //         'bonus' => 'required',
+        //         'longServing' => 'required',
+        //         'salaryAdvance' => 'required',
+        //         'otherDeductions' => 'nullable',
+        //         'otherPayments' => 'nullable',
+        //     ]
+        // );
         $employeeID = $request->employeeID;
         $terminationDate = $request->terminationDate;
         $reason = $request->reason;
@@ -8217,8 +8666,6 @@ class GeneralController extends Controller
         $loan_balance = $request->loan_balance;
         $nightshift_allowance = $request->nightshift_allowance;
         $transport_allowance = $request->transport_allowance;
-
-
 
         $termination = new Termination();
         $termination->employeeID = $request->employeeID;
@@ -8259,8 +8706,8 @@ class GeneralController extends Controller
         $empID = auth()->user()->emp_id;
         $today = date('Y-m-d');
 
-        $normal_days_overtime_amount = ($employee_actual_salary / 176) * 1.5 * $normalDays;
-        $public_overtime_amount = ($employee_actual_salary / 176) * 2.0 * $publicDays;
+        $normal_days_overtime_amount = ($employee_actual_salary / 195) * 1.5 * $normalDays;
+        $public_overtime_amount = ($employee_actual_salary / 195) * 2.0 * $publicDays;
 
         $total_gross = $salaryEnrollment +
             $normal_days_overtime_amount +
@@ -8295,9 +8742,9 @@ class GeneralController extends Controller
         // $total_gross = 0;
         $taxable = 0;
 
-        $pension_employer = $this->flexperformance_model->get_pension_employer($salaryEnrollment, $leavePay, $arrears, $overtime_amount, $employeeID);
+        $pension_employer = $this->flexperformance_model->get_pension_employer($salaryEnrollment, $serevancePay, $exgracia, $leavePay, $noticePay, $arrears, $overtime_amount, $employeeID, $tellerAllowance);
 
-        $pension_employee = $this->flexperformance_model->get_pension_employee($salaryEnrollment, $leavePay, $arrears, $overtime_amount, $employeeID);
+        $pension_employee = $this->flexperformance_model->get_pension_employee($salaryEnrollment, $serevancePay, $exgracia, $leavePay, $noticePay, $arrears, $overtime_amount, $employeeID, $tellerAllowance);
 
         $total_deductions = $salaryAdvance;
         //+ $otherDeductions
@@ -8332,12 +8779,8 @@ class GeneralController extends Controller
         $termination->net_pay = $net_pay;
         $termination->take_home = $take_home;
         $termination->total_deductions = $total_deductions;
+        $termination->deligate_empID = $deligate;
         $termination->save();
-
-        // $employeeAllowanceLogs = new EmployeeTemporaryAllowance();
-        // $employeeAllowanceLogs->terminnationId = $terminationYenyewe->id;
-
-
         // $pentionable_amount =$salaryEnrollment + $leavePay + $arrears + overtime_amount;
         // } else {
 
@@ -8346,113 +8789,56 @@ class GeneralController extends Controller
         return redirect('flex/termination')->with('status', $msg);
     }
 
+
+
     // For Aprroving termination
     public function approveTermination($id)
     {
         $this->authenticateUser('confirm-termination');
 
         $employee = Auth::User()->id;
+        $uid = Auth::User()->position;
 
-        $role = UserRole::where('user_id', $employee)->first();
-        $role_id = $role->role_id;
+        // $role = UserRole::where('user_id', $employee)->first();
+        $role = Position::where('id', $uid)->first();
+
+        $role_id = $role->id;
+
         $terminate = Approvals::where('process_name', 'Termination Approval')->first();
         $roles = Role::where('id', $role_id)->first();
         $level = ApprovalLevel::where('role_id', $role_id)->where('approval_id', $terminate->id)->first();
-        if ($level) {
-            $approval_id = $level->approval_id;
-            $approval = Approvals::where('id', $approval_id)->first();
+        // dd($level);
 
-            if ($approval->levels == $level->level_name) {
 
-                $termination = Termination::where('id', $id)->first();
-                $employeeID = $termination->employeeID;
-                $termination->status = 1;
-                $termination->update();
+        if (SysHelpers::ApprovalLastLevel("Termination Approval")) {
 
-                $this->flexperformance_model->update_employee_termination($id);
+            $termination = Termination::where('id', $id)->first();
 
-                $approval = LeaveApproval::where('empID', $employeeID)->first();
-                $approver = Auth()->user()->emp_id;
-                $employee = Auth()->user()->position;
+            $employeeID = $termination->employeeID;
+            $delegate = $termination->deligate_empID;
+            $termination->status = 1;
+            $termination->approval_status = $termination->approval_status + 1;
+            $termination->update();
 
-                $position = Position::where('id', $employee)->first();
+            $this->flexperformance_model->update_employee_termination($id);
 
-                // chacking level 1
-                if ($approval->level1 == $employeeID) {
-                    $empID = $request->deligated;
-                    // For Deligation
-                    if ($request->deligated != null) {
-                        $id = Auth::user()->emp_id;
-
-                        $this->attendance_model->save_deligated($leave->empID);
-
-                        $level1 = DB::table('leave_approvals')->Where('level1', $empID)->update(['level1' => $leave->deligated]);
-                        $level2 = DB::table('leave_approvals')->Where('level2', $empID)->update(['level2' => $leave->deligated]);
-                        $level3 = DB::table('leave_approvals')->Where('level3', $empID)->update(['level3' => $leave->deligated]);
-                        // dd($request->deligate);
-
-                    }
-
-                    $leave->status = 3;
-                    $leave->state = 0;
-                    $leave->level1 = Auth()->user()->emp_id;
-                    $leave->position = 'Approved by ' . $position->name;
-                    $leave->updated_at = new DateTime();
-                    $leave->update();
-                } elseif ($approval->level2 == $approver) {
-
-                    // For Deligation
-                    if ($leave->deligated != null) {
-                        $id = Auth::user()->emp_id;
-                        $this->attendance_model->save_deligated($leave->empID);
-
-                        $level1 = DB::table('leave_approvals')->Where('level1', $id)->update(['level1' => $leave->deligated]);
-                        $level2 = DB::table('leave_approvals')->Where('level2', $id)->update(['level2' => $leave->deligated]);
-                        $level3 = DB::table('leave_approvals')->Where('level3', $id)->update(['level3' => $leave->deligated]);
-                        // dd($request->deligate);
-
-                    }
-                    $leave->status = 3;
-                    $leave->state = 0;
-                    $leave->level2 = Auth()->user()->emp_id;
-                    $leave->position = 'Approved by ' . $position->name;
-                    $leave->updated_at = new DateTime();
-                    $leave->update();
-                } elseif ($approval->level3 == $approver) {
-
-                    // For Deligation
-                    if ($leave->deligated != null) {
-                        $id = Auth::user()->emp_id;
-                        $this->attendance_model->save_deligated($leave->empID);
-
-                        $level1 = DB::table('leave_approvals')->Where('level1', $id)->update(['level1' => $leave->deligated]);
-                        $level2 = DB::table('leave_approvals')->Where('level2', $id)->update(['level2' => $leave->deligated]);
-                        $level3 = DB::table('leave_approvals')->Where('level3', $id)->update(['level3' => $leave->deligated]);
-                        // dd($request->deligate);
-
-                    }
-                    $leave->status = 3;
-                    $leave->state = 0;
-                    $leave->level3 = Auth()->user()->emp_id;
-                    $leave->position = $position->name;
-                    $leave->updated_at = new DateTime();
-                    $leave->update();
-                }
-
-                $msg = 'Employee is Terminated Successfully !';
-                return redirect('flex/termination')->with(['success' => $msg]);
-            } else {
-                // To be upgraded
-                $termination = Termination::where('id', $id)->first();
-                $termination->status = 'Approved By ' . $roles->name;
-                $termination->update();
-
-                $msg = 'Approved By ' . $roles->name;
-                return redirect('flex/termination')->with(['success' => $msg]);
+            if($delegate){
+                LeaveApproval::where('level1', $employeeID)->update(['level1' => $delegate]);
+                LeaveApproval::where('level2', $employeeID)->update(['level2' => $delegate]);
+                LeaveApproval::where('level3', $employeeID)->update(['level3' => $delegate]);
             }
+
+            $msg = 'Employee is Terminated Successfully !';
+            return redirect('flex/termination')->with(['success' => $msg]);
         } else {
-            $msg = "Failed To Terminate !";
-            return redirect('flex/termination')->with(['error' => $msg]);
+
+            $termination = Termination::where('id', $id)->first();
+            $termination->approval_status = $termination->approval_status + 1;
+            $termination->status = 'Approved By ' . $roles->name;
+            $termination->update();
+
+            $msg = 'Approved By ' . $roles->name;
+            return redirect('flex/termination')->with(['success' => $msg]);
         }
     }
 
@@ -8514,6 +8900,12 @@ class GeneralController extends Controller
         $leave_entitled = Employee::where('emp_id', $employeeID)->first();
 
         $calendar = $request->terminationDate;
+        // Parse the date using Carbon
+        $carbonDate = Carbon::parse($calendar);
+
+        // Get the number of days in the month
+        $numDays = $carbonDate->daysInMonth;
+
         $datewell = explode("-", $calendar);
         $mm = $datewell[1];
         $dd = $datewell[2];
@@ -8529,12 +8921,12 @@ class GeneralController extends Controller
 
         $employee_allowance = $this->flexperformance_model->get_allowance_names_for_employee($employeeID);
 
-
         $check_termination_date = $this->flexperformance_model->check_termination_payroll_date($termination_month);
         if ($check_termination_date == true) {
 
             $leave_allowance = $this->flexperformance_model->get_leave_allowance($employeeID, $termination_date, $january_date);
             $employee_salary = $this->flexperformance_model->get_employee_salary($employeeID, $termination_date, $dd);
+
         } else {
 
             $leave_allowance = $this->flexperformance_model->get_leave_allowance($employeeID, $termination_date, $january_date);
@@ -8546,7 +8938,7 @@ class GeneralController extends Controller
         $data['employee_allowance'] = $employee_allowance;
         $data['employee_actual_salary'] = $employee_actual_salary;
         $data['leave_allowance'] = $leave_allowance;
-        $data['employee_salary'] = ($employee_actual_salary == $employee_salary) ? ($employee_salary * $dd / 30) : $employee_salary;
+        $data['employee_salary'] = ($employee_actual_salary == $employee_salary) ? ($employee_salary * $dd / $numDays) : $employee_salary;
         return json_encode($data);
     }
     // end of terminations functions
@@ -8572,6 +8964,8 @@ class GeneralController extends Controller
         $data['check'] = 'Approved By ' . $roles->name;
         $data['parent'] = 'Workforce';
         $data['child'] = 'Promotion|Increment';
+
+        $data['level_check']  = SysHelpers::approvalCheck("Promotion Approval");
 
         return view('workforce-management.promotion-increment', $data, compact('promotions', 'i'));
     }
@@ -8629,7 +9023,7 @@ class GeneralController extends Controller
         $old->save();
         // saving new employee data
 
-        SysHelpers::FinancialLogs($id, 'Salary', number_format($empl->salary * $empl->rate, 2), number_format($request->newSalary * $empl->rate, 2), 'Salary Increment');
+        SysHelpers::FinancialLogs($id, 'Salary', number_format($empl->salary * $empl->rate, 2), number_format($request->newSalary * $empl->rate, 2).' '.$empl->currency, 'Promotion');
 
         // $promotion =Employee::where('emp_id',$id)->first();
         // $promotion->position=$request->newPosition;
@@ -8647,41 +9041,32 @@ class GeneralController extends Controller
 
         $this->authenticateUser('add-promotion');
 
-        $employee = Auth::User()->id;
-        $role = UserRole::where('user_id', $employee)->first();
-        $role_id = $role->role_id;
-        $terminate = Approvals::where('process_name', 'Promotion Approval')->first();
-        $roles = Role::where('id', $role_id)->first();
-        $level = ApprovalLevel::where('role_id', $role_id)->where('approval_id', $terminate->id)->first();
-        if ($level) {
-            $approval_id = $level->approval_id;
-            $approval = Approvals::where('id', $approval_id)->first();
+        $employee = Auth::User()->position;
+        $roles = Position::where('id', $employee)->first();
 
-            if ($approval->levels == $level->level_name) {
+        if (SysHelpers::ApprovalLastLevel("Promotion Approval")) {
 
-                $promotion = Promotion::where('id', $id)->first();
+            $promotion = Promotion::where('id', $id)->first();
+            // dd($promotion);
+            $promotion->status = "Successful";
+            $promotion->update();
 
-                // dd($promotion);
-                $promotion->status = "Successful";
-                $promotion->update();
+            $increment = Employee::where('emp_id', $promotion->employeeID)->first();
+            $increment->salary = $promotion->newSalary;
+            $increment->position = $promotion->newPosition;
+            $increment->emp_level = $promotion->newLevel;
+            $promotion->approval_status = $promotion->approval_status + 1;
 
-                $increment = Employee::where('emp_id', $promotion->employeeID)->first();
-                $increment->salary = $promotion->newSalary;
-                $increment->position = $promotion->newPosition;
-                $increment->emp_level = $promotion->newLevel;
-                $increment->update();
-                $msg = 'Employee Promotion is Confirmed Successfully !';
-                return redirect('flex/promotion')->with('msg', $msg);
-            } else {
-                $promotion = Promotion::where('id', $id)->first();
-                $promotion->status = 'Approved By ' . $roles->name;
-                $promotion->update();
-
-                $msg = 'Approved By ' . $roles->name;
-                return redirect('flex/promotion')->with('msg', $msg);
-            }
+            $increment->update();
+            $msg = 'Employee Promotion is Confirmed Successfully !';
+            return redirect('flex/promotion')->with('msg', $msg);
         } else {
-            $msg = "Failed To Promote !";
+            $promotion = Promotion::where('id', $id)->first();
+            $promotion->status = 'Approved By ' . $roles->name;
+            $promotion->approval_status = $promotion->approval_status + 1;
+            $promotion->update();
+
+            $msg = 'Approved By ' . $roles->name;
             return redirect('flex/promotion')->with('msg', $msg);
         }
     }
@@ -8765,7 +9150,7 @@ class GeneralController extends Controller
 
         $old->save();
 
-        SysHelpers::FinancialLogs($id, 'Salary', number_format($oldSalary * $oldRate, 2), number_format($request->newSalary * $oldRate, 2), 'Salary Increment');
+        SysHelpers::FinancialLogs($id, 'Salary', number_format($oldSalary * $oldRate, 2).' '.'TZS', number_format($request->newSalary * $oldRate, 2).' '.'TZS', 'Salary Increment');
 
         $msg = "Employee Salary  Incremention has been requested successfully !";
         return redirect('flex/promotion')->with('msg', $msg);
@@ -8860,7 +9245,7 @@ class GeneralController extends Controller
 
         $this->authenticateUser('view-grivance');
         // $id=Auth::user()->emp_id;
-        $data['employees'] = EMPL::all();
+        $data['employees'] = Employee::orderBy('emp_id', 'asc')->get();
 
         return view('workforce-management.add-disciplinary', $data);
     }
@@ -9259,6 +9644,7 @@ class GeneralController extends Controller
             // updating employee data
             $employee = Employee::where('emp_id', $id)->first();
             $employee->line_manager = $request->line_manager;
+            $employee->updated_at = now();
             $employee->update();
 
             // Start of Employee Details
@@ -9309,6 +9695,7 @@ class GeneralController extends Controller
             $employee->fname = $request->fname;
             $employee->mname = $request->mname;
             $employee->lname = $request->lname;
+            $employee->updated_at = now();
             //$employee->mobile = $request->mobile;
             // $employee->line_manager = $request->line_manager;
             // $employee->job_title = $request->current_job;
@@ -9402,6 +9789,7 @@ class GeneralController extends Controller
             // $employee->form_4_index = $request->HELSB;
             // $employee->pension_fund = $request->pension_fund;
             $employee->physical_address = $request->physical_address;
+            $employee->updated_at = now();
             $employee->update();
 
             // Start of Employee Details
@@ -9479,6 +9867,8 @@ class GeneralController extends Controller
             $employee->tin = $request->TIN;
             $employee->pf_membership_no = $request->pension;
             $employee->form_4_index = $request->HESLB;
+            $employee->updated_at = now();
+
             //  $employee->physical_address = $request->physical_address;
             $employee->update();
 
@@ -9553,6 +9943,8 @@ class GeneralController extends Controller
             $employee->gender = $request->gender;
             $employee->birthdate = $request->birthdate;
             $employee->merital_status = $request->merital;
+            $employee->updated_at = now();
+
 
             // $employee->national_id = $request->NIDA;
             // $employee->form_4_index = $request->HELSB;
@@ -9653,6 +10045,7 @@ class GeneralController extends Controller
             $emergency->em_relationship = $request->em_relationship;
             $emergency->em_occupation = $request->em_occupation;
             $emergency->em_phone = $request->em_phone;
+
             $emergency->update();
         } else {
             $emergency = new EmergencyContact();
@@ -10092,6 +10485,10 @@ class GeneralController extends Controller
         $holiday->recurring = $request->recurring == true ? '1' : '0';
         $holiday->save();
 
+        $autheniticateduser = auth()->user()->emp_id;
+        $auditLog = SysHelpers::AuditLog(1, "New holyday added  by " . $autheniticateduser, $request);
+
+
         $msg = "Holiday has been save Successfully !";
         return redirect('flex/holidays')->with('msg', $msg);
     }
@@ -10108,6 +10505,10 @@ class GeneralController extends Controller
         $file = $request->file('file');
         $import = new HolidayDataImport;
         Excel::import($import, $file);
+
+        $autheniticateduser = auth()->user()->emp_id;
+        $auditLog = SysHelpers::AuditLog(1, "Holiday from exel added   by " . $autheniticateduser, $request);
+
 
         return redirect()->back()->with('success', 'File uploaded and data extracted successfully.');
     }
@@ -10142,6 +10543,9 @@ class GeneralController extends Controller
         $holiday->date = $request->date;
         $holiday->recurring = $request->recurring == true ? '1' : '0';
         $holiday->update();
+        $autheniticateduser = auth()->user()->emp_id;
+        $auditLog = SysHelpers::AuditLog(1, "Holiday updated  by " . $autheniticateduser, $request);
+
 
         $msg = "Holiday has been save Successfully !";
         return redirect('flex/holidays')->with('msg', $msg);
@@ -10150,15 +10554,23 @@ class GeneralController extends Controller
     {
         request()->validate(
             [
-                'emp_id' => 'required'
+                'emp_id' => 'required',
             ]
         );
+
+        $year = date('Y');
 
         $emp_id = $request->emp_id;
         $leaveForfeiting = LeaveForfeiting::where('empID', $emp_id)->first();
         $leaveForfeiting->opening_balance = $request->opening_balance;
         $leaveForfeiting->days = $request->days;
+        $leaveForfeiting->adjusted_days = $request->opening_balance -  $request->days;
+        $leaveForfeiting->forfeiting_year = $year;
         $leaveForfeiting->update();
+
+        $autheniticateduser = auth()->user()->emp_id;
+        $auditLog = SysHelpers::AuditLog(1, "Leave forteight updated  by " . $autheniticateduser, $request);
+
 
         $msg = "Employee Leave Forfeiting has been save Successfully !";
         return back()->with('msg', $msg);
@@ -10185,7 +10597,9 @@ class GeneralController extends Controller
         $employees = Employee::get();
 
         $today = date('Y-m-d');
-        $year = date('Y');
+        $month = date('m');
+        $year = date('Y') - 1;
+
         $employeeHiredate = explode('-', Auth::user()->hire_date);
         $employeeHireYear = $employeeHiredate[0];
         $employeeDate = '';
@@ -10196,6 +10610,8 @@ class GeneralController extends Controller
             $employeeDate = $year . '-01-01';
         }
 
+
+
         foreach ($employees as $value) {
             $opening_balance = $this->attendance_model->getLeaveBalance($value->emp_id, $employeeDate, $year . '-12-31');
 
@@ -10203,7 +10619,7 @@ class GeneralController extends Controller
             $leave_forfeit = LeaveForfeiting::firstOrNew(['empID' => $value->emp_id]);
             $leave_forfeit->opening_balance = $opening_balance;
             $leave_forfeit->nature = 1; // Replace attribute1 with your actual attribute names
-            $leave_forfeit->opening_balance_year = $year;
+            $leave_forfeit->opening_balance_year = $year + 1;
             $leave_forfeit->save();
         }
 
@@ -10216,6 +10632,11 @@ class GeneralController extends Controller
         $holiday = Holiday::find($id);
 
         $holiday->delete();
+        $request = new Request();
+
+        $autheniticateduser = auth()->user()->emp_id;
+        $auditLog = SysHelpers::AuditLog(1, "Holiday deleted  by " . $autheniticateduser, $request);
+
 
         return redirect('flex/holidays/')->with('msg', 'Holiday was Deleted successfully !');
     }
@@ -10272,13 +10693,14 @@ class GeneralController extends Controller
     {
 
         $data['title'] = "Approval Settings";
-        $data['approvals'] = Approvals::orderBy('id', 'asc')->get();
+        $data['approvals'] = Approvals::latest()->get();
         $i = 1;
         $data['parent'] = 'Settings';
         $data['child'] = 'Approvals';
 
         return view('setting.approvals', $data, compact('i'));
     }
+
     // end of view email notification settings
 
     // start of add approval function
@@ -10299,19 +10721,41 @@ class GeneralController extends Controller
         $approval->escallation_time = $request->escallation_time;
         $approval->save();
 
+        $autheniticateduser = auth()->user()->emp_id;
+        $auditLog = SysHelpers::AuditLog(1, "New aproval added   by " . $autheniticateduser, $request);
+
+
         $msg = "Approval has been added Successfully !";
         return redirect('flex/approvals')->with('msg', $msg);
     }
     // end of add approval function
 
     // start of view approval levels function
+    // public function viewApprovalLevels(Request $request, $id)
+    // {
+
+    //     $i = 1;
+    //     $did = base64_decode($id);
+
+    //     $data['roles'] = Role::all();
+    //     $data['approval'] = Approvals::where('id', $did)->first();
+    //     $approval = Approvals::where('id', $did)->first();
+    //     $data['levels'] = ApprovalLevel::where('approval_id', $did)->get();
+
+    //     $data['parent'] = 'Settings';
+
+    //     $data['child'] = $approval->process_name . '/Approval Levels';
+    //     return view('setting.view-approval', $data, compact('i'));
+    // }
+
+
     public function viewApprovalLevels(Request $request, $id)
     {
 
         $i = 1;
         $did = base64_decode($id);
 
-        $data['roles'] = Role::all();
+        $data['roles'] = Position::all();
         $data['approval'] = Approvals::where('id', $did)->first();
         $approval = Approvals::where('id', $did)->first();
         $data['levels'] = ApprovalLevel::where('approval_id', $did)->get();
@@ -10321,6 +10765,8 @@ class GeneralController extends Controller
         $data['child'] = $approval->process_name . '/Approval Levels';
         return view('setting.view-approval', $data, compact('i'));
     }
+
+
     // end of view approval levels function
 
     // start of add approval level function
@@ -10350,7 +10796,11 @@ class GeneralController extends Controller
         $approval->levels = $approval->levels + 1;
         $approval->update();
 
+
         $Level->save();
+        $autheniticateduser = auth()->user()->emp_id;
+        $auditLog = SysHelpers::AuditLog(1, "Aproval level updated  by " . $autheniticateduser, $request);
+
 
         $msg = "Approval has been added Successfully !";
         return redirect('flex/approval_levels/' . base64_encode($appID))->with('msg', $msg);
@@ -10362,6 +10812,11 @@ class GeneralController extends Controller
     {
         $approval = Approvals::where('id', $id)->first();
         $approval->delete();
+
+        $request = new Request();
+        $autheniticateduser = auth()->user()->emp_id;
+        $auditLog = SysHelpers::AuditLog(1, "Approval deleted  by " . $autheniticateduser, $request);
+
 
         return redirect('flex/approvals')->with('msg', "Approval role was deleted successfully!");
     }
@@ -10451,8 +10906,6 @@ class GeneralController extends Controller
 
     // Start of leave approvals
 
-
-
     // public function LeaveApprovals(Request $request)
     // {
 
@@ -10470,27 +10923,43 @@ class GeneralController extends Controller
     //         return Excel::download(new LeaveApprovalsExport($data['approvals']), 'leave_approvals.xlsx');
     //     }
 
-
     //     return view('setting.leave-approval', $data);
     // }
 
     public function LeaveApprovals(Request $request)
     {
-        $empID = Auth()->user()->emp_id;
         $data['employees'] = EMPL::get();
-        $data['approvals'] = LeaveApproval::orderBy('created_at', 'desc')->get();
+        $data['approvals'] = LeaveApproval::join('employee', 'leave_approvals.empID', '=', 'employee.emp_id')
+        ->where('employee.state', '!=', 4)
+        ->orderBy('leave_approvals.created_at', 'desc')
+        ->get(['leave_approvals.*']);
+
         $data['parent'] = 'Settings';
         $data['child'] = 'Leave Approval';
 
         if ($request->isMethod('post')) {
             $export = new LeaveApprovalsExport(LeaveApproval::orderBy('created_at', 'asc')->get());
-            $fileName = 'leave_approvals.xlsx';
+            $fileName = 'Leave Approvals Mapping.xlsx';
+
+            $autheniticateduser = auth()->user()->emp_id;
+            $auditLog = SysHelpers::AuditLog(1, "Leave approval expoted  by " . $autheniticateduser, $request);
+
             return Excel::download($export, $fileName);
         }
 
         return view('setting.leave-approval', $data);
     }
+    public function UploadLeaveApprovals(Request $request)
+    {
+         // Validate the uploaded file
+         $request->validate([
+            'file' => 'required|mimes:xlsx,xls',
+        ]);
+        // Handle the file upload and data extraction
+        Excel::import(new LeaveApprovalMapping, $request->file('file'));
 
+        return redirect()->back()->with('success', 'File uploaded and data extracted successfully.');
+    }
 
     // For Saving Leave Approvals
     public function saveLeaveApproval(Request $request)
@@ -10514,7 +10983,12 @@ class GeneralController extends Controller
         $approval->escallation_time = $request->escallation_time;
         $approval->save();
 
+
         $msg = "Leave Approval has been added Successfully !";
+
+        $autheniticateduser = auth()->user()->emp_id;
+        $auditLog = SysHelpers::AuditLog(1, "New Leave approval with id" . $approval->id . "by " . $autheniticateduser, $request);
+
         return redirect('flex/leave-approvals')->with('msg', $msg);
     }
 
@@ -10537,7 +11011,23 @@ class GeneralController extends Controller
         // dd($id);
         $data['leaveForfeitings'] = LeaveForfeiting::with('employee')->where('empID', $id)->first();
         $data['employees'] = Employee::get();
-        $data['parent'] = 'Settings';
+        $employee = Employee::where('emp_id', $id)->first();
+
+        if ($employee->leave_effective_date) {
+            if (date('Y-m-d') <= $employee->leave_effective_date) {
+                // If the current date is before or equal to the leave effective date
+                $data['Days_Entitled'] = Employee::where('emp_id', Auth::user()->emp_id)->value('old_leave_days_entitled');
+            } else {
+                // If the current date is after the leave effective date
+                // You might want to handle this case differently
+                $data['Days_Entitled'] = Employee::where('emp_id', Auth::user()->emp_id)->value('leave_days_entitled');
+            }
+        } else {
+            // If leave_effective_date is null
+            $data['Days_Entitled'] = Employee::where('emp_id', Auth::user()->emp_id)->value('leave_days_entitled');
+        }
+
+        $data['parent'] = 'Leave Management';
         $data['child'] = 'Edit Leave Forfeiting';
         $today = date('Y-m-d');
         $arryear = explode('-', $today);
@@ -10566,6 +11056,10 @@ class GeneralController extends Controller
         $approval = LeaveApproval::find($id);
 
         $approval->delete();
+        $request = new Request();
+        $autheniticateduser = auth()->user()->emp_id;
+        $auditLog = SysHelpers::AuditLog(1, "Leave approval deleted by " . $autheniticateduser, $request);
+
 
         return redirect('flex/leave-approvals');
     }
@@ -10581,6 +11075,10 @@ class GeneralController extends Controller
         $approval->level3 = $request->level_3;
         $approval->escallation_time = $request->escallation_time;
         $approval->update();
+
+        $autheniticateduser = auth()->user()->emp_id;
+        $auditLog = SysHelpers::AuditLog(1, "Leave approval updated  by " . $autheniticateduser, $request);
+
 
         $msg = "Leave Approval has been Updated Successfully !";
         return redirect('flex/leave-approvals')->with('msg', $msg);
@@ -10707,6 +11205,10 @@ class GeneralController extends Controller
             $this->authenticateUser('edit-employee');
         }
         $project->delete();
+        $request = new Request();
+        $autheniticateduser = auth()->user()->emp_id;
+        $auditLog = SysHelpers::AuditLog(2, "Grievance canceled by " . $autheniticateduser, $request);
+
 
         return redirect('flex/my-grievences');
     }
@@ -10721,6 +11223,9 @@ class GeneralController extends Controller
 
         $grievance->status = 1;
         $grievance->update();
+        $request = new Request();
+        $autheniticateduser = auth()->user()->emp_id;
+        $auditLog = SysHelpers::AuditLog(2, "Grievance resolved by " . $autheniticateduser, $request);
 
         $msg = "Grievance is resolved successfully!";
 
@@ -10737,6 +11242,9 @@ class GeneralController extends Controller
 
         $grievance->status = 0;
         $grievance->update();
+        $autheniticateduser = auth()->user()->emp_id;
+        $request = new Request();
+        $auditLog = SysHelpers::AuditLog(2, "Grievance unresolved by " . $autheniticateduser, $request);
 
         $msg = "Grievance is un-resolved successfully!";
 
@@ -10768,6 +11276,8 @@ class GeneralController extends Controller
         }
         $grievance->status = 1;
         $grievance->update();
+        $autheniticateduser = auth()->user()->emp_id;
+        $auditLog = SysHelpers::AuditLog(2, "Grievance updated by " . $autheniticateduser, $request);
 
         $msg = "Grievance Feedback was Added successfully!";
 
@@ -10856,6 +11366,8 @@ class GeneralController extends Controller
     public function save_grievance(Request $request)
     {
 
+        $this->authenticateUser('add-grivance');
+
         request()->validate(
             [
 
@@ -10883,6 +11395,10 @@ class GeneralController extends Controller
         }
         $grievance->anonymous = $request->anonymous == true ? '1' : '0';
         $grievance->save();
+
+        $autheniticateduser = auth()->user()->emp_id;
+        $auditLog = SysHelpers::AuditLog(2, "Grievance  added by " . $autheniticateduser, $request);
+
 
         return redirect('flex/my-grievences');
     }
@@ -10966,6 +11482,10 @@ class GeneralController extends Controller
         $project->end_date = $request->end_date;
         $project->save();
 
+        $autheniticateduser = auth()->user()->emp_id;
+        $auditLog = SysHelpers::AuditLog(1, "New project saved by " . $autheniticateduser, $request);
+
+
         return redirect('flex/projects');
     }
 
@@ -10984,6 +11504,11 @@ class GeneralController extends Controller
         $project->start_date = $request->start_date;
         $project->end_date = $request->end_date;
         $project->update();
+
+        $autheniticateduser = auth()->user()->emp_id;
+        $auditLog = SysHelpers::AuditLog(1, "Project updated  by " . $autheniticateduser, $request);
+
+
         return redirect('flex/projects')->with('msg', 'Project was updated Successfully !');
     }
 
@@ -10994,6 +11519,12 @@ class GeneralController extends Controller
         $project = Project::where('id', $id)->first();
         $project->status = 1;
         $project->update();
+
+        $request = new Request();
+        $autheniticateduser = auth()->user()->emp_id;
+        $auditLog = SysHelpers::AuditLog(1, "Project marked completed  by " . $autheniticateduser, $request);
+
+
         return back()->with('msg', 'Project was Completed Successfully !');
     }
     // View single project
@@ -12084,6 +12615,7 @@ class GeneralController extends Controller
     public function employee_profiles()
     {
 
+        $this->authenticateUser('view-Talent');
         $data['employees'] = EMPL::where('state', '1')->get();
         return view('talent.profiling', $data);
     }
@@ -12270,9 +12802,10 @@ class GeneralController extends Controller
         return view('talent.talent_matrix', $data);
     }
 
-
     public function loan_types()
     {
+        $this->authenticateUser('view-loan-types');
+
         $data['loan_types'] = LoanType::all();
         // dd($data);
         return view('loans.loan_types', $data);
@@ -12280,6 +12813,10 @@ class GeneralController extends Controller
 
     public function saveLoanType(Request $request)
     {
+
+        $this->authenticateUser('add-loan-type');
+
+
         request()->validate(
             [
                 'name' => 'required',
@@ -12292,7 +12829,59 @@ class GeneralController extends Controller
         $loan_types->code = $request->code;
         $loan_types->save();
 
+        $autheniticateduser = auth()->user()->emp_id;
+        $auditLog = SysHelpers::AuditLog(1, "New loan type added by " . $autheniticateduser, $request);
+
+
+
+
         $msg = "Loan Type has been added Successfully !";
         return redirect('flex/loan_types')->with('msg', $msg);
+    }
+
+
+
+    public function upload_pension(Request $request)
+    {
+
+
+    }
+
+
+    public function brand_settings(Request $request)
+    {
+
+        $brandSetting = BrandSetting::firstOrCreate();
+
+        if ($request->isMethod('post')) {
+
+            $brandSettings = $request->all();
+
+            foreach (['company_logo', 'report_logo', 'login_picture', 'dashboard_logo', 'body_background', 'report_top_banner', 'report_bottom_banner', 'left_payslip_logo', 'right_payslip_logo'] as $fileField) {
+                if ($request->hasFile($fileField)) {
+
+                    $existingFilePath = $brandSetting->$fileField;
+
+                    if ($existingFilePath) {
+                        Storage::disk('public')->delete($existingFilePath);
+                    }
+
+
+                    $file = $request->file($fileField);
+                    $path = $file->storeAs('brand_settings', $fileField . '.' . $file->getClientOriginalExtension(), 'public');
+                    $brandSettings[$fileField] = $path;
+                }
+            }
+            $brandSetting->update($brandSettings);
+            $autheniticateduser = auth()->user()->emp_id;
+            $auditLog = SysHelpers::AuditLog(1, "Brand settings updated  by " . $autheniticateduser, $request);
+
+
+            $msg = 'Brand settings updated successful';
+            return redirect('flex/brand_settings')->with('msg', $msg);
+        }
+
+        $data = ['brandSetting' => $brandSetting];
+        return view('setting.brand-settings', $data);
     }
 }

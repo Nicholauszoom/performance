@@ -6,8 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Payroll Details </title>
-    <link rel="stylesheet" href="{{ asset('assets/bootstrap/css/bootstrap.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('assets/css/report.css') }}">
+    <link rel="stylesheet" href="{{ public_path('assets/bootstrap/css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ public_path('assets/css/report.css') }}">
 </head>
 
 <body>
@@ -19,7 +19,7 @@
 
     <main class="body-font p-1">
         <div id="logo" style="margin-left: 7px; z-index: -10">
-            <img src="{{ asset('assets/images/x-left.png') }}" width="100px;" height="50px;">
+            <img src="{{ public_path('assets/images/x-left.png') }}" width="100px;" height="50px;">
         </div>
 
         <div style="margin-top:20px;">
@@ -57,7 +57,7 @@
                                     </p>
                                     <p class="p-space">
                                         @if ($brandSetting->address_3)
-                                            {{ $$brandSetting->address_3 }}
+                                            {{ $brandSetting->address_3 }}
                                         @else
                                             P.O. Box 31, Dar es salaam
                                         @endif
@@ -88,8 +88,11 @@
 
                             <td colspan="4" class="w-50" style="">
                                 <div class="box-text text-end">
-                                    <img src="{{ asset('assets/images/logo-dif2.png') }}" alt="logo here" width="180px"
-                                        height="150px" class="image-fluid">
+                                    @if ($brandSetting->report_logo)
+                                    <img src="{{ public_path('storage/' . $brandSetting->report_logo) }}" alt="logo here" width="180px" height="150px" class="image-fluid">
+                                    @else
+                                    <img src="{{ public_path('assets/images/logo-dif2.png') }}" alt="logo here" width="180px" height="150px" class="image-fluid">
+                                    @endif
                                 </div>
                             </td>
                         </tr>
@@ -224,7 +227,7 @@
 
 
         <div id="logo2" style="margin-left: 7px; z-index: -10">
-            <img src="{{ asset('assets/images/x-right.png') }}" width="100px;" height="50px;">
+            <img src="{{ public_path('assets/images/x-right.png') }}" width="100px;" height="50px;">
         </div>
     </main>
     <div class="footer">
@@ -257,8 +260,8 @@
     <script src="{{ public_path('assets/js/bootstrap/bootstrap.bundle.min.js') }}"></script>
 
 
-    <script src="{{ asset('assets/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
-    <script src="{{ asset('assets/js/jquery/jquery.min.js') }}"></script>
+    <script src="{{ public_path('assets/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+    <script src="{{ public_path('assets/js/jquery/jquery.min.js') }}"></script>
 
 </body>
 

@@ -202,10 +202,13 @@
                             <span class="label badge bg-warning text-whites label-info">PENDING APPROVAL OF LEAVE REVOKE</span>
                         <?php }
                   elseif($row->state==3){?>
-                            <span class="label badge bg-success text-whites label-info">APPROVED LEAVE REVOKE </span>
+                            <span class="label badge bg-success text-whites label-info">APPROVED LEAVE REVOKED </span>
                         <?php }
                   elseif($row->state==4){?>
                             <span class="label badge bg-secondary text-white">CANCELED</span>
+                        <?php }
+                  elseif($row->state==6){?>
+                            <span class="label badge bg-danger text-white">CANCELED APPROVED LEAVE</span>
                         <?php }
                   elseif($row->state==5){?>
                             <span class="label badge bg-danger text-white">DENIED</span>
@@ -213,19 +216,33 @@
                     </div>
 
                 </td>
-                <td>
-                    {{-- start of cancel leave button --}}
+                <td class="text-center">
+                    @if ($row->attachment)
+                    <a href="{{ asset('storage/leaves/' . $row->attachment) }}"
+                        download="{{ asset('storage/leaves/' . $row->attachment) }}"
+                        class="btn bg-main btn-sm" title="Download Attachment">
+                        <i class="ph ph-download"></i> &nbsp;
+                        Attachment
+                    </a>
+                @endif
                     <?php if ($row->state == 1) { ?>
+                <div class="col-md-12 text-center mt-1">
                     <a href="javascript:void(0)" title="Cancel Leave" class="icon-2 info-tooltip disabled"
                         onclick="cancelRequest(<?php echo $row->id; ?>)">
                         <button class="btn btn-danger btn-sm">Cancel Leave Request <i class="ph-x"></i></button>
                     </a>
                     <?php } else if ($row->state == 0) { ?>
+                        @if($row->end <=  date('Y-m-d'))
+                        <span class="label badge bg-success text-white">Used Leave</span>
+                        @else
                         <a href="{{ url('flex/attendance/revokeLeave/' . $row->id) }}" title="Revoke Approved Leave" class="icon-2 info-tooltip disabled">
                             <button class="btn btn-main btn-sm">Initiate Revoke Request<i class="ph-prohibit"></i>
                         </button>
                     </a>
+                    @endif
+                </div>
                     <?php } ?>
+
                 </td>
 
             </tr>

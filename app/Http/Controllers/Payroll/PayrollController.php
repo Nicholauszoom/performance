@@ -6,8 +6,17 @@ use App\Helpers\SysHelpers;
 use App\Http\Controllers\Controller;
 use App\Models\AttendanceModel;
 use App\models\Employee;
+use App\Models\payPayrollMonth;
+use App\Models\PayrollApproval;
 use App\Models\Payroll\FlexPerformanceModel;
 use App\Models\Payroll\Payroll;
+use App\Models\Approvals;
+use App\Models\ApprovalLevel;
+use App\Models\PayrollMonth;
+use App\Models\UserRole;
+use App\Models\Position;
+
+
 use App\Models\Payroll\ReportModel;
 use App\Notifications\EmailPayslip;
 use App\Notifications\EmailRequests;
@@ -62,9 +71,9 @@ class PayrollController extends Controller
 
                     // DATE MANIPULATION
                     $calendar = $request->payrolldate;
-                    
+
                     $datewell = explode("-", $calendar);
-                  
+
                     $mm = $datewell[1];
                     $dd = $datewell[2];
                     $yyyy = $datewell[0];
@@ -1303,6 +1312,7 @@ class PayrollController extends Controller
                 $response_array['status'] = "ERR";
                 $response_array['message'] = "<p class='alert alert-warning text-center'>Sorry The Payroll for This Month is Already Procesed, Try another Month!</p>";
             }
+
             header('Content-type: application/json');
             echo json_encode($response_array);
         }
@@ -1354,20 +1364,148 @@ class PayrollController extends Controller
         }
     }
 
+    public function approvePayroll($pdate)
+    {
+
+        $payrollMonth = $pdate;
+        if ($payrollMonth != "") {
+
+
+            // DATE MANIPULATION
+            $payroll_date = $payrollMonth;
+            $payroll_month = date('Y-m', strtotime($payrollMonth));
+            $todate = date('Y-m-d');
+            $empID = auth()->user()->emp_id;
+
+            // dd(PayrollMonth::where('payroll_date', $payroll_date));
+
+            $check = $this->payroll_model->payrollcheck($payroll_month);
+            // dd($check);
+            $payroll = PayrollMonth::where('payroll_date', $payroll_date)->first();
+
+
+
+            $employee = Auth::User()->id;
+            $posn = Auth::User()->position;
+
+            $approval = Approvals::where('process_name', 'Payroll Approval')->first();
+            $roles = Position::where('id', $posn)->first();
+
+
+            if (SysHelpers::ApprovalLastLevel("Payroll Approval")) {
+
+                $this-> runpayroll2($pdate);
+                    $payApprover = new PayrollApproval();
+                    $payApprover->employee_id = $employee;
+                    $payApprover->payroll_month_id = $payroll->id;
+                    $payApprover->save();
+
+                    $payroll->state = 0;
+                    $payroll ->approval_status = $payroll->approval_status + 1;
+                    $payroll->save();
+
+                    $response_array['status'] = "OK";
+                    $response_array['message'] = "<p class='alert alert-success text-center'>Payroll was Run and Approved Successifully</p>";
+                    header('Content-type: application/json');
+                    echo json_encode($response_array);
+
+                }
+                else {
+
+                    $state = '';
+                    if ($approval->levels == 1) {
+                        $state = 1;
+                    }else {
+                        $state = $approval->state;
+                    }
+                    // $message = "Payroll aproval message";
+                    // $result = $this->payroll_model->recommendPayroll($empID, $todate, $state, $message);
+
+                    $payApprover = new PayrollApproval();
+                    $payApprover->employee_id = $employee;
+                    $payApprover->payroll_month_id = $payroll->id;
+                    $payApprover->save();
+                    $payroll ->approval_status = $payroll->approval_status + 1;
+                    $payroll->save();
+
+                    $response_array['status'] = "OK";
+                    $response_array['message'] = "<p class='alert alert-success text-center'>Payroll was Run and Approved Successifully </p>";
+                    header('Content-type: application/json');
+                    echo json_encode($response_array);
+
+
+                }
+
+
+        }}
+
+
+        public function runpayroll2($pdate)
+        {
+            $payrollMonth = $pdate;
+            if ($payrollMonth != "") {
+
+                // DATE MANIPULATION
+                $payroll_date = $payrollMonth;
+                $payroll_month = date('Y-m', strtotime($payrollMonth));
+                $todate = date('Y-m-d');
+                $empID = auth()->user()->emp_id;
+
+
+
+                $check = $this->payroll_model->payrollcheck($payroll_month);
+
+                if ($check == 0) {
+
+                    $this->flexperformance_model->updatePartialPayment($payroll_date);
+
+
+                    $result = $this->payroll_model->run_payroll($payroll_date, $payroll_month, $empID, $todate);
+                    if ($result == true) {
+                        //assignment task logs
+                        $this->flexperformance_model->assignment_task_log($payroll_date);
+                        //deduct the grant
+                        /*code*/
+                        //check for partial payments
+                        $result = $this->partial_payment_manipulation($payroll_date);
+                        if ($result) {
+
+                            $description = "Approved payment of payroll of date " . $payroll_date;
+                            //SENDING EMAIL BACK TO PREVIOUS RECOMMENDED EMPLOYEES
+                            $position1 = "Country Head: Finance & Procurement";
+                            $position2 = "Human Capital";
+                            $position_data = SysHelpers::approvalEmp($position1, $position2);
+                            // dd($position_data[3]->employees[0]);
+                            foreach ($position_data as $position) {
+                                # code...
+                                foreach ($position->employees as $employee) {
+                                    $fullname = $employee->full_name;
+                                    $email_data = array(
+                                        'subject' => 'Payroll Approval Notification',
+                                        'view' => 'emails.payroll-approval',
+                                        'email' => $employee->email,
+                                        'full_name' => $fullname,
+                                    );
+                                    Notification::route('mail', $email_data['email'])->notify(new EmailRequests($email_data));
+                                }
+                            }
+
+                        return true;
+                        }
+                    } else {
+                       return  false;
+                    }
+                } else {
+                    return false;
+                }
+            }
+
+        }
+
+
+
     public function runpayroll($pdate)
-    { //
-        // return false;
-        // $fullname = $position_data['full_name'];
-        // $email_data = array(
-        //     'subject' => 'Payroll Run Notification',
-        //     'view' => 'emails.head-human.notification',
-        //     'email' => $position_data['email'],
-        //     'full_name' => $fullname,
-        // );
-
-        //kmarealle@bancabc.co.tz
-        // Notification::route('mail', $email_data['email'])->notify(new EmailRequests($email_data));
-
+    {
         $payrollMonth = $pdate;
         if ($payrollMonth != "") {
 
@@ -1522,7 +1660,7 @@ class PayrollController extends Controller
                 $result = $this->payroll_model->update_payroll_month_only($updates, $payrollMonth);
             }
             if ($result == true) {
-                $position_data = SysHelpers::position('Country Head: Human Capital');
+                $position_data = SysHelpers::position('Manager: HR');
 
                 $fullname = $position_data['full_name'];
                 $email_data = array(
@@ -1899,11 +2037,16 @@ class PayrollController extends Controller
 
     public function cancelpayroll($type)
     {
+
+
+        // dd("I am here");
         //dd($type);
         /*get the payroll month*/
         $result_month = $this->payroll_model->getPayrollMonth1();
         $this_payroll = $this->payroll_model->payrollMonthListpending();
         $payroll_id = $this_payroll[0]->id;
+
+        $cancel_date='';
         foreach ($result_month as $item) {
             $cancel_date = $item->payroll_date;
         }
@@ -1913,14 +2056,14 @@ class PayrollController extends Controller
 
         $initial_delete = $this->payroll_model->deleteArrears($cancel_date);
         if ($initial_delete) {
-            $result = $this->payroll_model->cancel_payroll();
+            $result = $this->payroll_model->cancel_payroll($cancel_date);
             if ($type == 'none') {
 
                 return redirect(route('payroll.payroll'));
             }
             if ($result == true) {
                 $response_array['status'] = "OK";
-                $response_array['message'] = "<p class='alert alert-success text-center'>Payroll CANCELLED Successifully</p>";
+                $response_array['message'] = "<p class='alert alert-success text-center'>Payroll CANCELLED Successfully</p>";
                 header('Content-type: application/json');
                 echo json_encode($response_array);
             } else {

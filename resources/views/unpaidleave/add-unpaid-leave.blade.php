@@ -16,7 +16,7 @@
 
 @section('content')
 
-<div class="card  border-top  border-top-width-3 border-top-main rounded-0">
+<div class="card border-top  border-top-width-3 border-top-main rounded-0">
     <div class="card-header border-0">
         <div class="d-flex justify-content-between">
             <h5 class="mb-0 ">Add Employee To Unpaid Leave</h5>
@@ -27,14 +27,16 @@
                 </a>
                 {{-- / --}}
         </div>
-    <hr>
     </div>
+    <div class="card-body">
 
 
             <div id="save_termination" class="" tabindex="-1">
                 <div class="p-2">
                     <div class="modal-content">
 
+
+                        @can('add-unpaid-leaves')
 
                         <form
                             action="{{ route('flex.save_unpaid_leave') }}"
@@ -93,11 +95,6 @@
                                         @enderror
                                     </div>
                                 </div>
-
-
-
-
-
                             </div>
 
                             <div class="modal-footer">
@@ -106,11 +103,13 @@
                                 <button type="submit" class="btn btn-perfrom mb-2 mt-2">Save</button>
                             </div>
                         </form>
+
+                        @endcan
                     </div>
                 </div>
             </div>
 
-
+    </div>
 </div>
 
 @endsection

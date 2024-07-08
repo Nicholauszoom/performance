@@ -2,39 +2,42 @@
 
 namespace App\Http\Controllers\AccessControll;
 
-use App\Http\Controllers\Controller;
-
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
 use App\Models\User;
+
+use App\Models\CompanyRoles;
+use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use App\Models\AccessControll\Role;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Hash;
 use App\Models\AccessControll\Region;
+use App\Models\Payroll\EmployeePayroll;
 use App\Models\AccessControll\Departments;
 use App\Models\AccessControll\Designation;
-use App\Models\Payroll\EmployeePayroll;
-use App\Models\CompanyRoles;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Http\Response;
 
 
 class UsersController extends Controller
 {
 
+    
     public function authenticateUser($permissions)
     {
-        if (!Auth::check()) {
+        // Check if the user is not authenticated
+        if (!auth()->check()) {
+            // Redirect the user to the login page
             return redirect()->route('login');
         }
 
-
-
-        if(!Auth::user()->can($permissions)){
-
-          abort(Response::HTTP_UNAUTHORIZED,'500|Page Not Found');
-
-         }
-
+        // Check if the authenticated user does not have the specified permissions
+        if (!Gate::allows($permissions)) {
+            // If not, abort the request with a 401 Unauthorized status code
+            abort(Response::HTTP_UNAUTHORIZED);
+        }
     }
+
+
     /**
      * Display a listing of the resource.
      *
@@ -42,9 +45,8 @@ class UsersController extends Controller
      */
     public function index()
     {
-
-
         $this->authenticateUser('edit-roles');
+
         return view('access-controll.users.index', [
             'users' => User::all(),
             'parent' => 'Organisation',
@@ -89,7 +91,6 @@ class UsersController extends Controller
         //
         $user = User::create([
             'name' => $request['name'],
-
             'email' => $request['email'],
             'address' => $request['address'],
             'password' => Hash::make($request['password']),

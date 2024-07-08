@@ -83,21 +83,21 @@ class AttendanceModel extends Model
     }
 
 
-    function myLeaves($empId)
-    {
-        $query = "SELECT l.*, la.level1, la.level2, la.level3
+        function myLeaves($empId)
+        {
+            $query = "SELECT l.*, la.level1, la.level2, la.level3
                   FROM leaves AS l
                   JOIN leave_approvals AS la ON l.empID = la.empID
                   WHERE :empId IN (la.level1, la.level2, la.level3)
                   ORDER BY l.id DESC";
 
-        $bindings = ['empId' => $empId];
-        $results = DB::select(DB::raw($query), $bindings);
-        return $results;
-    }
-    public function getFilteredLeaves($emp_id)
-    {
-        $leaveApprovals = LeaveApproval::where('empID', $emp_id)->first();
+            $bindings = ['empId' => $empId];
+            $results = DB::select(DB::raw($query), $bindings);
+            return $results;
+        }
+        public function getFilteredLeaves($emp_id)
+{
+    $leaveApprovals = LeaveApproval::where('empID', $emp_id)->first();
 
         $leaves = Leaves::where(function ($query) use ($emp_id, $leaveApprovals) {
             $query->where(function ($q) use ($emp_id, $leaveApprovals) {
@@ -126,7 +126,12 @@ class AttendanceModel extends Model
     }
 
 
-    public function leave_line($empID)
+
+
+
+
+
+    function leave_line($empID)
     {
         $results = DB::table('leave_application as l')
             ->selectRaw('ROW_NUMBER() OVER () AS SNo, lt.type AS TYPE, CONCAT(e.fname, \' \', COALESCE(e.mname, \'\'), \' \', e.lname) AS NAME, l.*')
@@ -395,7 +400,7 @@ class AttendanceModel extends Model
     }
 
 
-    function days_entilted($nature)
+  public  function days_entilted($nature)
     {
 
         $query = "SELECT max_days FROM leave_type WHERE id = '" . $nature . "' limit 1";
@@ -443,10 +448,13 @@ class AttendanceModel extends Model
         $last_month_date = date('Y-m-t', strtotime($prev_month));
 
         $query = "SELECT
-        CASE
-            WHEN (SELECT COUNT(id) FROM leaves WHERE nature::integer = " . $nature . " AND \"empid\" = '" . $empID . "') = 0 THEN 0
-            ELSE (SELECT SUM(days) FROM leaves WHERE nature::integer = " . $nature . " AND state::integer = 0 AND  \"empid\" = '" . $empID . "' AND start <= '" . $today . "' AND leave_address != 'auto' AND start BETWEEN '" . $hireDate . "' AND '" . $today . "' GROUP BY nature) END as days_spent,  (SELECT EXTRACT(EPOCH FROM ('" . $today . "'::timestamp - '" . $hireDate . "'::timestamp)) / 86400) as days_accrued";
-
+                IF(
+                    (SELECT COUNT(id) FROM leaves WHERE nature = '" . $nature . "' AND empID = '" . $empID . "') = 0,
+                    0,
+                    (SELECT SUM(days) FROM leaves WHERE nature = '" . $nature . "' AND state = 0  AND state = 3
+                    AND empID = '" . $empID . "' AND start <= '" . $today . "' AND leave_address != 'auto' AND start BETWEEN '" . $hireDate . "' AND '" . $today . "' GROUP BY nature)
+                ) as days_spent,
+                DATEDIFF('" . $today . "','" . $hireDate . "') as days_accrued";
 
 
         $row = DB::select(DB::raw($query));
@@ -470,8 +478,30 @@ class AttendanceModel extends Model
         $remaining_after_forfeitDays = LeaveForfeiting::where('empid', $empID)->value('days') ?? 0;
         $broughtFowardDays = LeaveForfeiting::where('empid', $empID)->value('opening_balance') ?? 0;
 
+        if ($employee->leave_effective_date) {
+             $dateeffective = $employee->leave_effective_date;
+             $date = new DateTime($dateeffective);
+             $year_effective = $date->format('Y');
+             if($year_effective == date('Y')){
+                 if (date('Y-m-d') <= $employee->leave_effective_date) {
+                     // If the current date is before or equal to the leave effective date
+                     $old_accrual_rate = $employee->old_accrual_rate;
+                  //   $accrual_days = (($days * $old_accrual_rate``) / 30) + $months * $old_accrual_rate + $years * 12 * $old_accrual_rate;
+                     $accrual_days = $this->calculate($old_accrual_rate, $hireDate, $today);
+                 } else {
+                     $accrual_days = (($days * $employee->accrual_rate) / 30) + $employee->earlier_accrual_days;
+                 }
+             }else{
+                 $accrual_rate =  $employee->accrual_rate;
+                 $accrual_days = $this->calculate($accrual_rate, $hireDate, $today);
+             }
+         }
+         else {
+            $accrual_rate =  $employee->accrual_rate;
+            $accrual_days = $this->calculate($accrual_rate, $hireDate, $today);
+         }
 
-        $accrual_days = (($days * $employee->accrual_rate) / 30) + $months * $employee->accrual_rate + $years * 12 * $employee->accrual_rate;
+
 
         $interval = $d1->diff($d2);
 
@@ -492,6 +522,98 @@ class AttendanceModel extends Model
         return $maximum_days;
     }
 
+    public function calculate($accrual_rate, $hiredate,  $enddate)
+    {
+        $startDate = $hiredate;
+        $endDate = $enddate;
+        $accrualRate = $accrual_rate;
+
+        $dateValue =  explode('-', $startDate);
+
+        $startdatevalueNumber = $dateValue[2];
+        $startmonthvalueNumber = $dateValue[1];
+
+        $dateValue =  explode('-', $endDate);
+        $enddateValueNumber =  $dateValue[2];
+        $endmonthValueNumber =  $dateValue[1];
+
+        $d1 = new DateTime($startDate);
+        $d2 = new DateTime($endDate);
+
+                // Get the end of the start month
+        $endOfStartMonth = (clone $d1)->modify('last day of this month');
+
+        // Calculate days from start date to the end of the start month
+        $daysInStartMonth = $d1->diff($endOfStartMonth)->days + 1;
+
+        $calendar = $startDate;
+        $calendar2 = $endDate;
+        // Parse the date using Carbon
+        $carbonDate = Carbon::parse($calendar);
+        $carbonDate2 = Carbon::parse($calendar2);
+
+        // Get the number of days in the month
+        $start_date_month_numDays = $carbonDate->daysInMonth;
+        $end_date_month_numDays = $carbonDate2->daysInMonth;
+
+
+        if($startmonthvalueNumber == $endmonthValueNumber){
+            $days  = ($enddateValueNumber - $startdatevalueNumber)+1;
+            $Formula_part_A =  ($days *  $accrualRate) / $start_date_month_numDays;
+            $Formula_part_B = 0;
+            $Formula_part_C = 0;
+            return $Formula_part_A;
+           }else{
+            $days  = ($start_date_month_numDays - $startdatevalueNumber)+1;
+            $Formula_part_A =  ($days *  $accrualRate) / $start_date_month_numDays;
+           }
+
+        $startDateTime = new DateTime($startDate);
+
+        $endDateTime = new DateTime($endDate);
+
+        $startOfEndMonth = (clone $endDateTime)->modify('first day of this month');
+        $daysInEndMonth = ($startOfEndMonth->diff($endDateTime)->days)+1;
+
+        $Formula_part_C =    ($daysInEndMonth *  $accrualRate) / $end_date_month_numDays;
+
+
+         // Get the end of the start month
+         $endOfStartMonth = (clone $startDateTime)->modify('last day of this month');
+
+         // Calculate full months in between
+         $startOfNextMonth = (clone $endOfStartMonth)->modify('first day of next month');
+         $endOfPreviousMonth = (clone $endDateTime)->modify('first day of this month')->modify('last day of previous month');
+
+
+
+                // Calculate the month and year differences
+        $startMonth = (int)$startDateTime->format('m');
+        $startYear = (int)$startDateTime->format('Y');
+        $endMonth = (int)$endDateTime->format('m');
+        $endYear = (int)$endDateTime->format('Y');
+
+        // Determine if the dates are consecutive months
+        $isConsecutiveMonths = false;
+
+        if ($endYear === $startYear && $endMonth === $startMonth + 1) {
+            $isConsecutiveMonths = true;
+        } elseif ($endYear === $startYear + 1 && $startMonth === 12 && $endMonth === 1) {
+            $isConsecutiveMonths = true;
+        }
+
+        if ($isConsecutiveMonths) {
+            $Formula_part_B  = 0;
+        } else {
+
+            $fullMonths = ($startOfNextMonth->diff($endOfPreviousMonth)->m)+1;
+            $Formula_part_B =  $fullMonths * $accrualRate;
+
+        }
+        $totalAccruedDays =  $Formula_part_A + $Formula_part_B +  $Formula_part_C;
+        return $totalAccruedDays;
+    }
+
     function getAccruedBalance($empID, $hireDate, $today)
     {
 
@@ -503,7 +625,6 @@ class AttendanceModel extends Model
 
 
         $d1 = new DateTime($hireDate);
-
         $d2 = new DateTime($today);
 
         $diff = $d1->diff($d2);
@@ -512,9 +633,33 @@ class AttendanceModel extends Model
         $months = $diff->m;
         $days = $diff->d;
 
-        $accrual_days = (($days * $employee->accrual_rate) / 30) + $months * $employee->accrual_rate + $years * 12 * $employee->accrual_rate;
 
 
+         // Initialize accrued days
+        $accrual_days = 0;
+
+        if ($employee->leave_effective_date) {
+            $dateeffective = $employee->leave_effective_date;
+            $date = new DateTime($dateeffective);
+            $year_effective = $date->format('Y');
+            if($year_effective == date('Y')){
+                if (date('Y-m-d') <= $employee->leave_effective_date) {
+                    // If the current date is before or equal to the leave effective date
+                    $old_accrual_rate = $employee->old_accrual_rate;
+                 //   $accrual_days = (($days * $old_accrual_rate``) / 30) + $months * $old_accrual_rate + $years * 12 * $old_accrual_rate;
+                    $accrual_days = $this->calculate($old_accrual_rate, $hireDate, $today);
+                } else {
+                    $accrual_days = (($days * $employee->accrual_rate) / 30) + $employee->earlier_accrual_days;
+                }
+            }else{
+                $accrual_rate =  $employee->accrual_rate;
+                $accrual_days = $this->calculate($accrual_rate, $hireDate, $today);
+            }
+        }
+        else {
+           $accrual_rate =  $employee->accrual_rate;
+           $accrual_days = $this->calculate($accrual_rate, $hireDate, $today);
+        }
         return $accrual_days;
     }
 
@@ -560,7 +705,21 @@ $row = DB::select(DB::raw($query));
         $forfeitDays = LeaveForfeiting::where('empid', $empID)->value('days') ?? 0;
         $broughtFowardDays = LeaveForfeiting::where('empid', $empID)->value('opening_balance') ?? 0;
 
-        $accrual_days = (($days * $employee->accrual_rate) / 30) + $months * $employee->accrual_rate + $years * 12 * $employee->accrual_rate;
+
+        if ($employee->leave_effective_date) {
+            if (date('Y-m-d') <= $employee->leave_effective_date) {
+                // If the current date is before or equal to the leave effective date
+                $employee->accrual_rate = $employee->old_accrual_rate;
+                $accrual_days = (($days * $employee->accrual_rate) / 30) + $months * $employee->accrual_rate + $years * 12 * $employee->accrual_rate;
+
+            } else {
+                $accrual_days = (($days * $employee->accrual_rate) / 30) + $months * $employee->accrual_rate + $years * 12 * $employee->accrual_rate;
+            }
+        } else {
+            // If leave_effective_date is null
+            $accrual_days = (($days * $employee->accrual_rate) / 30) + $months * $employee->accrual_rate + $years * 12 * $employee->accrual_rate;
+        }
+
 
         $interval = $d1->diff($d2);
 
@@ -606,7 +765,21 @@ $row = DB::select(DB::raw($query));
         $days = $diff->d;
 
         $days_this_month = intval(date('t', strtotime($last_month_date)));
-        $accrual_days = (($days * $employee->accrual_rate) / 30) + $months * $employee->accrual_rate + $years * 12 * $employee->accrual_rate;
+
+
+        if ($employee->leave_effective_date) {
+            if (date('Y-m-d') <= $employee->leave_effective_date) {
+                // If the current date is before or equal to the leave effective date
+                $employee->accrual_rate = $employee->old_accrual_rate;
+                $accrual_days = (($days * $employee->accrual_rate) / 30) + $months * $employee->accrual_rate + $years * 12 * $employee->accrual_rate;
+
+            } else {
+                $accrual_days = (($days * $employee->accrual_rate) / 30) + $months * $employee->accrual_rate + $years * 12 * $employee->accrual_rate;
+            }
+        } else {
+            // If leave_effective_date is null
+            $accrual_days = (($days * $employee->accrual_rate) / 30) + $months * $employee->accrual_rate + $years * 12 * $employee->accrual_rate;
+        }
         //$days * $employee->accrual_rate / $days_this_month +
         $interval = $d1->diff($d2);
         $diffInMonths  = $interval->m;
@@ -666,7 +839,21 @@ $row = DB::select(DB::raw($query));
         $days = $diff->d;
 
         $days_this_month = intval(date('t', strtotime($last_month_date)));
-        $accrual_days = (($days * $employee->accrual_rate) / 30) + $months * $employee->accrual_rate + $years * 12 * $employee->accrual_rate;
+
+
+        if ($employee->leave_effective_date) {
+            if (date('Y-m-d') <= $employee->leave_effective_date) {
+                // If the current date is before or equal to the leave effective date
+                $employee->accrual_rate = $employee->old_accrual_rate;
+                $accrual_days = (($days * $employee->accrual_rate) / 30) + $months * $employee->accrual_rate + $years * 12 * $employee->accrual_rate;
+
+            } else {
+                $accrual_days = (($days * $employee->accrual_rate) / 30) + $months * $employee->accrual_rate + $years * 12 * $employee->accrual_rate;
+            }
+        } else {
+            // If leave_effective_date is null
+            $accrual_days = (($days * $employee->accrual_rate) / 30) + $months * $employee->accrual_rate + $years * 12 * $employee->accrual_rate;
+        }
         //$days * $employee->accrual_rate / $days_this_month +
         $interval = $d1->diff($d2);
         $diffInMonths  = $interval->m;
@@ -730,7 +917,21 @@ $row = DB::select(DB::raw($query));
         $days = $diff->d;
 
         $days_this_month = intval(date('t', strtotime($last_month_date)));
-        $accrual_days = (($days * $employee->accrual_rate) / 30) + $months * $employee->accrual_rate + $years * 12 * $employee->accrual_rate;
+
+
+        if ($employee->leave_effective_date) {
+            if (date('Y-m-d') <= $employee->leave_effective_date) {
+                // If the current date is before or equal to the leave effective date
+                $employee->accrual_rate = $employee->old_accrual_rate;
+                $accrual_days = (($days * $employee->accrual_rate) / 30) + $months * $employee->accrual_rate + $years * 12 * $employee->accrual_rate;
+
+            } else {
+                $accrual_days = (($days * $employee->accrual_rate) / 30) + $months * $employee->accrual_rate + $years * 12 * $employee->accrual_rate;
+            }
+        } else {
+            // If leave_effective_date is null
+            $accrual_days = (($days * $employee->accrual_rate) / 30) + $months * $employee->accrual_rate + $years * 12 * $employee->accrual_rate;
+        }
         //$days * $employee->accrual_rate / $days_this_month +
         // dd($accrual_days);
         $interval = $d1->diff($d2);
@@ -952,8 +1153,6 @@ $row = DB::select(DB::raw($query));
 
         $last_month_date = date('Y-m-t', strtotime($prev_month));
 
-        //dd($today);
-
         //opening balance
         $query = "SELECT  IF( (SELECT COUNT(id)  FROM leaves WHERE nature= '" . $nature . "' AND empID = '" . $empID . "')=0, 0, (SELECT SUM(days)  FROM leaves WHERE nature= '" . $nature . "' and empID = '" . $empID . "' and start >= '" . $last_month_date . "' and start <= '" . $today . "'  GROUP BY nature )) as days_spent, DATEDIFF('" . $today . "','" . $hireDate . "') as days_accrued limit 1";
         $row = DB::select(DB::raw($query));
@@ -961,7 +1160,6 @@ $row = DB::select(DB::raw($query));
 
         $days_spent = $row[0]->days_spent;
 
-        //dd($nature,$last_month_date,$today);
 
         return $days_spent;
     }
@@ -1069,7 +1267,20 @@ $row = DB::select(DB::raw($query));
         $days = $diff->d;
 
         $days_this_month = intval(date('t', strtotime($last_month_date)));
-        $accrual_days = (($days * $employee->accrual_rate) / 30) + $months * $employee->accrual_rate + $years * 12 * $employee->accrual_rate;
+
+        if ($employee->leave_effective_date) {
+            if (date('Y-m-d') <= $employee->leave_effective_date) {
+                // If the current date is before or equal to the leave effective date
+                $employee->accrual_rate = $employee->old_accrual_rate;
+                $accrual_days = (($days * $employee->accrual_rate) / 30) + $months * $employee->accrual_rate + $years * 12 * $employee->accrual_rate;
+
+            } else {
+                $accrual_days = (($days * $employee->accrual_rate) / 30) + $months * $employee->accrual_rate + $years * 12 * $employee->accrual_rate;
+            }
+        } else {
+            // If leave_effective_date is null
+            $accrual_days = (($days * $employee->accrual_rate) / 30) + $months * $employee->accrual_rate + $years * 12 * $employee->accrual_rate;
+        }
         //$days * $employee->accrual_rate / $days_this_month +
         $interval = $d1->diff($d2);
         $diffInMonths  = $interval->m;
@@ -1130,7 +1341,20 @@ $row = DB::select(DB::raw($query));
         $days = $diff->d;
 
         $days_this_month = intval(date('t', strtotime($last_month_date)));
-        $accrual_days = (($days * $employee->accrual_rate) / 30) + $months * $employee->accrual_rate + $years * 12 * $employee->accrual_rate;
+
+        if ($employee->leave_effective_date) {
+            if (date('Y-m-d') <= $employee->leave_effective_date) {
+                // If the current date is before or equal to the leave effective date
+                $employee->accrual_rate = $employee->old_accrual_rate;
+                $accrual_days = (($days * $employee->accrual_rate) / 30) + $months * $employee->accrual_rate + $years * 12 * $employee->accrual_rate;
+
+            } else {
+                $accrual_days = (($days * $employee->accrual_rate) / 30) + $months * $employee->accrual_rate + $years * 12 * $employee->accrual_rate;
+            }
+        } else {
+            // If leave_effective_date is null
+            $accrual_days = (($days * $employee->accrual_rate) / 30) + $months * $employee->accrual_rate + $years * 12 * $employee->accrual_rate;
+        }
         //$days * $employee->accrual_rate / $days_this_month +
         $interval = $d1->diff($d2);
         $diffInMonths  = $interval->m;

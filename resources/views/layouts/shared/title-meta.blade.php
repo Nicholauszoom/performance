@@ -15,8 +15,6 @@
 <meta name="csrf-token" content="{{ csrf_token() }}">
 
 <meta content="A fully featured fléx performance system" name="description" />
-<meta content="CITS" name="author" />
+<meta content="Flex" name="author" />
 
-
-{{-- App favicon --}}
-<link rel="shortcut icon" href="{{asset('assets/images/favicon.ico')}}">
+<link rel="shortcut icon" href="{{asset('assets/images/favicon_io/favicon.ico')}}">

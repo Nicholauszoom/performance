@@ -17,6 +17,32 @@
     <div class="mb-3">
         <h4 class="text-main">Post Data To BOT</h4>
     </div>
+    @if(session('status'))
+        <script>
+            $(document).ready(function () {
+                setTimeout(function () {
+                    $('.alert-success').fadeOut();
+                }, 4000); // Adjust the duration in milliseconds
+            });
+        </script>
+@php
+    $statusData = json_decode(session('status'));
+@endphp
+<div class="alert alert-success text-center">
+    @if (is_object($statusData))
+        HTTP Status: {{ $statusData->http_status }} - Response: {{ $statusData->response }}
+    @elseif (is_array($statusData))
+        @foreach ($statusData as $status)
+        HTTP Status: {{ $status }}<br>
+        @endforeach
+    @else
+        {{ $statusData }}
+    @endif
+</div>
+
+
+
+    @endif
 
     <div class="row">
 

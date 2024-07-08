@@ -44,13 +44,14 @@ use Illuminate\Notifications\Notification;
      */
     public function toMail($notifiable)
     {
+        $appName= env('APP_NAME', 'Flex Performance');
         return (new MailMessage)
             ->subject('HC HUB User Credentials')
             // ->to($this->arr['email'])
             // ->to($this->arr['email'])
             // ->greeting('Dear ' . $this->arr['username'])
             ->greeting('Dear '. $this->arr['fname'] . ' ' . $this->arr['lname'])
-            ->line('Your  HC-HUB Account login credentials are: ')
+            ->line('Your '.$appName.' Account login credentials are: ')
             ->line('Username: ' . $this->arr['username'])
             ->line('Password: ' . $this->arr['password'])
             ->line('You are advised not to share your password with anyone. If you don\'t know this activity or you received this email by accident, please report this incident to the system administrator')

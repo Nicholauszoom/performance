@@ -48,13 +48,13 @@
                     <div class="form-group col-6">
                         <label class="form-label">Leave Entitled:</label>
                         <div class="form-control-feedback form-control-feedback-start">
-                            <input type="text" name="leave_days_entitled" value="{{ $leaveForfeitings->employee->leave_days_entitled }}" class="form-control" disabled />
+                            <input type="text" name="leave_days_entitled" value="{{ $Days_Entitled }}" class="form-control" disabled />
                         </div>
                     </div>
                     <div class="form-group col-6">
                         <label class="form-label">Opening Balance:</label>
                         <div class="form-control-feedback form-control-feedback-start">
-                            <input type="text" name="opening_balance" value="{{ $leaveForfeitings->opening_balance ?? 0 }}" class="form-control" />
+                            <input type="number" step="0.001" name="opening_balance" value="{{ $leaveForfeitings->opening_balance ?? 0 }}" class="form-control" />
                         </div>
                     </div>
 
@@ -68,7 +68,7 @@
                     <div class="form-group col-6">
                         <label class="form-label">Fortfeit Days:</label>
                         <div class="form-control-feedback form-control-feedback-start">
-                            <input type="text" name="days" @isset($leaveForfeitings->days) value = "{{ $leaveForfeitings->days }}" @endisset class="form-control"/>
+                            <input type="number" step="0.001" name="days" @isset($leaveForfeitings->days) value = "{{ $leaveForfeitings->days }}" @endisset class="form-control"/>
                                 {{-- <div class="form-control-feedback-icon"><i class="ph-user-circle text-muted"></i></div> --}}
                         </div>
                     </div>

@@ -16,15 +16,15 @@
 
 @section('content')
 
-<div class="card border-top  border-top-width-3 border-top-main rounded-0 p-2">
+<div class="card  border-top  border-top-width-3 border-top-black rounded-0">
     <div class="card-header border-0">
         <div class="">
             <h6 class="mb-0 text-muted">Approval Level</h6>
-            <a href="{{ url('flex/approvals') }}" class=" float-end btn-main btn mx-1">
+            <a href="{{ url('settings/approvals') }}" class=" float-end btn-secondary btn-sm btn mx-1">
             <i class="ph-list"></i>
             All Approval Roles
             </a>
-            <button class="float-end btn btn-main" data-bs-toggle="modal" data-bs-target="#approval"> Add Approval Level</button>
+            <button class="float-end btn btn-secondary btn-sm" data-bs-toggle="modal" data-bs-target="#approval"> Add Approval Level</button>
         </div>
 
     </div>
@@ -41,26 +41,34 @@
                         <th>SN</th>
                         <th >Approval Level</th>
                         <th >Approval Role</th>
-                        <th >Label Name</th>
+                        <th >Level Name</th>
                         <th >Rank</th>
                         <th >Status</th>
                         <th >Actions</th>
                     </thead>
                     <tbody>
+
+                        
                         @forelse ($levels as $item )
                             <tr>
                                 <td>{{ $i++}}</td>
                                 <td >{{ $item->level_name}}</td>
-                                <td >{{ $item->roles->name}}</td>
+                                <td >{{ $item->roles->name??'N/A'}}</td>
                                 <td >{{ $item->label_name}}</td>
                                 <td >{{ $item->rank}}</td>
                                 <td >{{ $item->escallation=='1'? 'Yes':'No' }}</td>
 
                                 <td>
-                                    <a href="" class="btn btn-main btn-sm" aria-label="Edit">
+                                    {{-- <a href="" class="btn btn-secondary btn-sm" aria-label="Edit">
                                         <i class="ph-pen"></i>
-                                    </a>
-                                    <a href="{{ route('flex.deleteApprovalLevel', $item->id) }}" class="btn btn-danger btn-sm" aria-label="Edit">
+                                    </a> --}}
+                                    <a href="{{ route('flex.deleteApprovalLevel', $item->id) }}"
+
+                                        class="btn btn-danger btn-sm
+                                        @if($item->level_name != $approval->levels)
+                                        {{-- disabled --}}
+                                        @endif
+                                        " aria-label="Edit">
                                         <i class="ph-trash"></i>
                                     </a>
                                 </td>
@@ -85,11 +93,11 @@
 {{-- start of add approval modal --}}
 
 <div id="approval" class="modal fade" tabindex="-1">
-    <div class="modal-dialog modal-md">
+    <div class="modal-dialog modal-dialog-centered modal-md">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">Approval Level Form</h5>
-                <button type="button" class="btn-close " data-bs-dismiss="modal">
+                <button type="button" class="btn-close btn-danger " data-bs-dismiss="modal">
 
                 </button>
             </div>
@@ -97,6 +105,7 @@
             <form
                 action="{{ route('flex.saveApprovalLevel') }}"
                 method="POST"
+                id="add_approval_form"
                 class="form-horizontal"
             >
                 @csrf
@@ -106,7 +115,8 @@
 
                     <div class="form-group">
                         <label class="col-form-label col-sm-3">Level: </label>
-                            <input type="text"  name="level_name"  value="{{ old('process_name') }}" placeholder="Enter Process Name" class="form-control @error('process_name') is-invalid @enderror">
+                            {{-- <input type="number"   name="level_name"  value="{{ $approval->levels+1 }}" class="form-control @error('process_name') is-invalid @enderror"> --}}
+                            <input type="number"  name="level_name"  value="{{ $approval->levels+1 }}" class="form-control @error('process_name') is-invalid @enderror" >
                             <input type="hidden" name="approval_id" value="{{ $approval->id }}">
                             @error('process_name')
                                 <p class="text-danger mt-1"> Field Process Name has an error </p>
@@ -115,7 +125,7 @@
 
 
                     <div class="form-group">
-                        <label class="col-form-label col-sm-3">Label Name </label>
+                        <label class="col-form-label col-sm-3">Level Name </label>
                             <input type="text"  name="label_name"  value="{{ old('process_name') }}" placeholder="Enter Button Label Name" class="form-control @error('process_name') is-invalid @enderror">
 
                             @error('process_name')
@@ -134,7 +144,7 @@
                                 <p class="text-danger mt-1"> Field Process Name has an error </p>
                             @enderror
                     </div>
-                    <div class="form-group col-9">
+                    <div class="form-group col-9" hidden>
                         <label class="col-form-label col-sm-3">Level Rank </label>
                             <select name="rank" class="form-control ">
                                 <option value="Not Final">Not Final</option>
@@ -144,7 +154,7 @@
                                 <p class="text-danger mt-1"> Field Escallation Time has an error </p>
                             @enderror
                     </div>
-                    <div class="form-group col-3 py-4">
+                    <div class="form-group col-3 py-4 " hidden>
                         <label class="col-form-label" for="escallation">Level Status</label>
                             <input type="checkbox" name="escallation" id="escallation">
                             @error('escallation')
@@ -157,8 +167,8 @@
                 </div>
 
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-link" data-bs-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-perfrom">Save Approval Level</button>
+                    {{-- <button type="button" class="btn btn-link" data-bs-dismiss="modal">Close</button> --}}
+                    <button type="submit" id="add_approval_btn" class="btn btn-secondary">Save Approval Level</button>
                 </div>
             </form>
         </div>
@@ -166,7 +176,22 @@
 </div>
 
 {{-- end of add approval modal --}}
+<script>
 
+    $(document).ready(function() {
+        $('.select').each(function() {
+            $(this).select2({ dropdownParent: $(this).parent()});
+        })
+    });
+</script>
+    {{--For Assign Driver --}}
+    <script>
+        $("#add_approval_form").submit(function(e) {
+            // e.preventDefault();
+            $("#add_approval_btn").html("<i class='ph-spinner spinner me-2'></i> Saving ...").addClass('disabled');
+
+        });
+    </script>
 @endsection
 
 

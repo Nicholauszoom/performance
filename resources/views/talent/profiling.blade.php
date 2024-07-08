@@ -17,7 +17,7 @@
       <h5 class="text-main">Employees Talent Profiling</h5>
     </div>
 
-
+@can('view-Talent')
     <table id="datatable" class="table table-striped table-bordered datatable-basic">
       <thead>
         <tr>
@@ -77,6 +77,7 @@
         @endforeach
       </tbody>
     </table>
+    @endcan
   </div>
   @endif
 

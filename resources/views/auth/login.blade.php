@@ -14,38 +14,44 @@
     <script src="{{ asset('assets/js/bootstrap/bootstrap.bundle.min.js') }}"></script>
 
     <script src="{{ asset('assets/js/app.js') }}"></script>
-    <style>
 
-.btn-main {
-  width: 130px;
-  height: 40px;
-  color: #fff;
-  border-radius: 5px;
-  padding: 10px 25px;
-  font-family: 'Lato', sans-serif;
-  font-weight: 500;
-  background: transparent;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  position: relative;
-  display: inline-block;
-   box-shadow:inset 2px 2px 2px 0px rgba(255,255,255,.5),
-   7px 7px 20px 0px rgba(0,0,0,.1),
-   4px 4px 5px 0px rgba(0,0,0,.1);
-  outline: none;
-}
+    @php
+        $brandSetting = \App\Models\BrandSetting::firstOrCreate();
+    @endphp
+
+    <style>
+        .btn-main {
+            width: 130px;
+            height: 40px;
+            color: #fff;
+            border-radius: 5px;
+            padding: 10px 25px;
+            font-family: 'Lato', sans-serif;
+            font-weight: 500;
+            background: transparent;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            display: inline-block;
+            box-shadow: inset 2px 2px 2px 0px rgba(255, 255, 255, .5),
+                7px 7px 20px 0px rgba(0, 0, 0, .1),
+                4px 4px 5px 0px rgba(0, 0, 0, .1);
+            outline: none;
+        }
 
         .btn-main {
-        border: none;
-        background: rgb(251,33,117);
-            background: linear-gradient(0deg, rgba(251,33,117,1) 0%, rgba(234,76,137,1) 100%);
+            border: none;
+            background: rgb(251, 33, 117);
+            background: linear-gradient(0deg, rgba(251, 33, 117, 1) 0%, rgba(234, 76, 137, 1) 100%);
             color: #fff;
             overflow: hidden;
         }
+
         .btn-main:hover {
             text-decoration: none;
             color: #fff;
         }
+
         .btn-main:before {
             position: absolute;
             content: '';
@@ -57,32 +63,54 @@
             background-color: #fff;
             animation: shiny-btn1 3s ease-in-out infinite;
         }
-        .btn-main:hover{
-        opacity: .7;
+
+        .btn-main:hover {
+            opacity: .7;
         }
-        .btn-main:active{
-        box-shadow:  4px 4px 6px 0 rgba(255,255,255,.3),
-                    -4px -4px 6px 0 rgba(116, 125, 136, .2), 
-            inset -4px -4px 6px 0 rgba(255,255,255,.2),
-            inset 4px 4px 6px 0 rgba(0, 0, 0, .2);
+
+        .btn-main:active {
+            box-shadow: 4px 4px 6px 0 rgba(255, 255, 255, .3),
+                -4px -4px 6px 0 rgba(116, 125, 136, .2),
+                inset -4px -4px 6px 0 rgba(255, 255, 255, .2),
+                inset 4px 4px 6px 0 rgba(0, 0, 0, .2);
         }
+
         @-webkit-keyframes shiny-btn1 {
-    0% { -webkit-transform: scale(0) rotate(45deg); opacity: 0; }
-    80% { -webkit-transform: scale(0) rotate(45deg); opacity: 0.5; }
-    81% { -webkit-transform: scale(4) rotate(45deg); opacity: 1; }
-    100% { -webkit-transform: scale(50) rotate(45deg); opacity: 0; }
-}
+            0% {
+                -webkit-transform: scale(0) rotate(45deg);
+                opacity: 0;
+            }
+
+            80% {
+                -webkit-transform: scale(0) rotate(45deg);
+                opacity: 0.5;
+            }
+
+            81% {
+                -webkit-transform: scale(4) rotate(45deg);
+                opacity: 1;
+            }
+
+            100% {
+                -webkit-transform: scale(50) rotate(45deg);
+                opacity: 0;
+            }
+        }
 
 
-    .login-cover {
-        background-image: url('{{ asset('img/s-1.jpg') }}');
-        min-height: 500px;
-        /* background-color: #cccccc; */
-        /* background-position:center; */
-        background-repeat: no-repeat;
-        background-size: cover;
-        /* background-attachment: fixed; */
-    }
+
+        .login-cover {
+         
+
+         background-image: url('{{$brandSetting !=null && $brandSetting->login_picture != null ? asset('storage/' . $brandSetting->login_picture) : asset('img/s-1.jpg') }}'); */
+
+            min-height: 500px;
+            /* background-color: #cccccc; */
+            /* background-position:center; */
+            background-repeat: no-repeat;
+            background-size: cover;
+            /* background-attachment: fixed; */
+        }
     </style>
 </head>
 
@@ -100,14 +128,16 @@
                         <div class="rounded-0 mb-0">
                             <div class="row">
 
-                                <div  class="col-md-5 offset-8  border-top  border-top-width-3 border-bottom border-bottom-main  border-bottom-width-3 border-top-main rounded-0" style="background: #ffffff8e">
-                                    <form action="{{ route('login') }}" method="POST" class="" autocomplete="off">
+                                <div class="col-md-5 offset-8  border-top  border-top-width-3 border-bottom border-bottom-main  border-bottom-width-3 border-top-main rounded-0"
+                                    style="background: #ffffff8e">
+                                    <form action="{{ route('login') }}" method="POST" class=""
+                                        autocomplete="off">
                                         @csrf
 
                                         <div class=" border-bottom-main mb-0 pt-4">
                                             <div class="">
                                                 {{-- <div class="text-center  mb-2 mt-1"> --}}
-                                                    {{-- <div class="d-inline-flex align-items-center justify-content-center mb-4 mt-2">
+                                                {{-- <div class="d-inline-flex align-items-center justify-content-center mb-4 mt-2">
                                                         <img src="{{ asset('img/performance.png') }}" class="img-fluid" style="height: 13.2em" alt="logo">
                                                     </div> --}}
                                                 {{-- </div> --}}
@@ -117,44 +147,45 @@
                                                         <p>{{ Session::get('password_set') }}</p>
                                                     </div>
                                                     @endif --}}
-                                                @if (session()->has('password_set'))
-                                                <div
-                                                    class="alert alert-success border-0 alert-dismissible fade show mb-3">
-                                                    <span class="fw-semibold">Success!!!</span>
-                                                    {{ session('password_set') }}.
-
-                                                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                                                </div>
+                                                @if (session()->has('password_set') && session('password_set'))
+                                                    <div
+                                                        class="alert alert-success border-0 alert-dismissible fade show mb-3">
+                                                        <span class="fw-semibold">Login to Continue</span>
+                                                        <button type="button" class="btn-close"
+                                                            data-bs-dismiss="alert"></button>
+                                                    </div>
                                                 @endif
 
                                                 @if (session()->has('status'))
-                                                <div
-                                                    class="alert alert-danger border-0 alert-dismissible fade show mb-3">
-                                                    <span class="fw-semibold">Oh snap!</span>
-                                                    {{ session('status') }}.
+                                                    <div
+                                                        class="alert alert-danger border-0 alert-dismissible fade show mb-3">
+                                                        <span class="fw-semibold">Oh snap!</span>
+                                                        {{ session('status') }}.
 
-                                                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                                                </div>
+                                                        <button type="button" class="btn-close"
+                                                            data-bs-dismiss="alert"></button>
+                                                    </div>
                                                 @else
+                                                    @if ($errors->any())
+                                                        <div
+                                                            class="alert alert-danger border-0 alert-dismissible fade show mb-3">
+                                                            <ul>
+                                                                @foreach ($errors->all() as $error)
+                                                                    <li> {{ $error }}</li>
+                                                                @endforeach
+                                                            </ul>
 
-                                                @if ($errors->any())
-                                                <div
-                                                    class="alert alert-danger border-0 alert-dismissible fade show mb-3">
-                                                    <ul>
-                                                        @foreach ($errors->all() as $error)
-                                                        <li> {{ $error }}</li>
-                                                        @endforeach
-                                                    </ul>
-
-                                                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                                                </div>
-                                                @endif
+                                                            <button type="button" class="btn-close"
+                                                                data-bs-dismiss="alert"></button>
+                                                        </div>
+                                                    @endif
                                                 @endif
                                                 @if ($next)
                                                     <input name="next" type="hidden" value="{{ $next }}">
                                                 @endif
                                                 <div class="mb-3">
-                                                    <label class="form-label text-main font-weight-bold">Payroll Number</label>
+                                                    <label class="form-label text-main font-weight-bold">Payroll
+                                                        Number</label>
 
                                                     <div class="form-control-feedback form-control-feedback-start">
                                                         <input
@@ -163,7 +194,8 @@
                                                             placeholder="username" autocomplete="off">
 
                                                         <div class="form-control-feedback-icon">
-                                                            <i toggle="#password-field" class="ph-user-circle text-muted"></i>
+                                                            <i toggle="#password-field"
+                                                                class="ph-user-circle text-muted"></i>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -184,15 +216,30 @@
                                                 </div>
 
                                                 <div class="mb-1 mt-3">
-                                                    <button type="submit" class="btn btn-main  w-100 border-0" style="background: #00204e">Log In</button>
+                                                    <button type="submit" class="btn btn-main  w-100 border-0"
+                                                        style="background: #00204e">Log In</button>
                                                 </div>
 
                                                 <div class="text-center mt-2">
-                                                    <a href="{{ url('forgot-password') }}" class="ms-auto text-main">Forgot password?</a>
+                                                    <a href="{{ url('forgot-password') }}"
+                                                        class="ms-auto text-main">Forgot password?</a>
                                                 </div>
 
                                                 <div class="">
-                                                    <div class="d-flex justify-content-end"><img src="{{ asset('assets/images/hc-hub-logo3.png') }}" alt="HC-HUB logo" height="100px" width="100px" class="img-fluid"></div>
+                                                    <div class="d-flex justify-content-end">
+                                                        {{-- {{dd($brandSetting->dashboard_logo)}} --}}
+                                                        @if ($brandSetting->dashboard_logo)
+                                                            <img src="{{ asset('storage/' . $brandSetting->dashboard_logo) }}"
+                                                                alt="HC-HUB logo" height="100px" width="100px"
+                                                                class="img-fluid">
+                                                        @else
+                                                            <img src="{{ asset('assets/images/hc-hub-logo3.png') }}"
+                                                                alt="HC-HUB logo" height="100px" width="100px"
+                                                                class="img-fluid">
+                                                        @endif
+
+
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -219,7 +266,7 @@
     </div> -->
 
     <script>
-       document.addEventListener("DOMContentLoaded", function() {
+        document.addEventListener("DOMContentLoaded", function() {
             var togglePasswords = document.querySelectorAll(".toggle-password");
 
             togglePasswords.forEach(function(togglePassword) {

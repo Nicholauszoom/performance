@@ -63,9 +63,7 @@
 									{{-- <td hidden>{{ $row->mname }}</td>
                                     <td hidden>{{ $row->lname }}</td> --}}
                                     <td >{{ number_format($salary,2) }}</td>
-									<td>{{ number_format($total_contribution,2) }}</td>
-
-
+									<td>{{ number_format($contribution,2) }}</td>
 								</tr>
                                 <?php }}} ?>
 
@@ -98,8 +96,6 @@
                                     <td hidden>{{ $row2->lname }}</td> --}}
                                     <td>{{ number_format($salary,2) }}</td>
 									<td>{{ number_format($contribution,2) }}</td>
-
-
 								</tr>
                                 <?php }}} ?>
                             </tbody>
@@ -111,8 +107,6 @@
                                     <td><b>TOTAL</b></td>
                                     <td><b>{{ number_format($total_salary,2) }}</b></td>
 									<td><b>{{ number_format($total_contribution,2) }}</b></td>
-
-                                    
 								</tr>
                             </tfoot>
 						</table>

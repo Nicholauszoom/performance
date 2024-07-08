@@ -90,7 +90,7 @@
                                 required>
                                 <option selected disabled> Select </option>
                                 @foreach ($countrydrop as $row)
-                                    <option value="{{ $row->code }}">{{ $row->name }}</option>
+                                    <option value="{{ $row->item_code }}">{{ $row->description }}</option>
                                 @endforeach
                             </select>
                             <span id="nationality-error" class="text-danger error-message"></span>
@@ -110,7 +110,7 @@
                         </div>
                     </div>
 
-                    <div class="col-md-4 col-lg-4">
+                    {{-- <div class="col-md-4 col-lg-4">
                         <div class="mb-3">
                             <label class="form-label" for="bithdate">Birthdate <span class="text-danger">*<span></label>
                             <input type="date" placeholder="Date of Birth" class="form-control" name="bithdate"
@@ -118,7 +118,18 @@
                             <span id="age" class="text-danger"></span>
                             <span id="bithdate-error" class="text-danger error-message"></span>
                         </div>
+                    </div> --}}
+
+                    <div class="col-md-4 col-lg-4">
+                        <div class="mb-3">
+                            <label class="form-label" for="bithdate">Birthdate<span
+                                    class="text-danger">*<span></label>
+                            <input type="date" class="form-control daterange-single" name="bithdate"
+                                id="bithdate">
+                            <span id="bithdate-error" class="text-danger error-message"></span>
+                        </div>
                     </div>
+
                 </div>
             </div>
             {{-- /Personal details section --}}
@@ -196,15 +207,13 @@
 
                     <div class="col-md-4 col-lg-4">
                         <div class="mb-3">
-                            <label class="form-label" for="ctype">Contract Type <span
-                                    class="text-danger">*<span></label>
-                            <select class="form-select select" name="ctype" id="ctype" required>
+                            <label class="form-label">Contract Type:</label>
+                            <select class="form-control select" name="ctype" id="contractType" required>
                                 <option value="" selected disabled>Select type</option>
                                 @foreach ($contract as $row)
-                                    <option value="{{ $row->id }}">{{ $row->name }}</option>
+                                <option value="{{ $row->item_code }}">{{ $row->name }}</option>
                                 @endforeach
                             </select>
-                            <span id="ctype-error" class="text-danger error-message"></span>
                         </div>
                     </div>
 
@@ -259,13 +268,12 @@
                         </div>
                     </div>
 
-                    <div class="col-md-4 col-lg-4">
+                    <div class="col-md-4 col-lg-4" id="contractEndDiv" style="display: none;">
                         <div class="mb-3">
-                            <label class="form-label" for="contract_end">Contract End <span
-                                    class="text-danger">*<span></label>
+                            <label class="form-label">Contract End:</label>
                             <input type="date" class="form-control daterange-single" name="contract_end"
-                                id="contract_end">
-                            <span id="contract_end-error" class="text-danger error-message"></span>
+                            id="contract_start">
+                        <span id="contract_start-error" class="text-danger error-message"></span>
                         </div>
                     </div>
 
@@ -804,7 +812,7 @@
             })
         });
     </script>
-
+{{-- 
     <script>
         $(function() {
             var today = new Date();
@@ -854,10 +862,52 @@
                 $(this).val('');
             });
         });
-    </script>
+    </script> --}}
 
     <script>
         $(function() {
+
+
+            var today = new Date();
+            var dd = today.getDate();
+            var mm = today.getMonth() + 1; //January is 0!
+
+            var startYear = today.getFullYear() - 18;
+            var endYear = today.getFullYear() - 60;
+            if (dd < 10) {
+                dd = '0' + dd;
+            }
+            if (mm < 10) {
+                mm = '0' + mm;
+            }
+
+
+            var dateStart = dd + '/' + mm + '/' + startYear;
+            var dateEnd = dd + '/' + mm + '/' + endYear;
+            $('#birthdate').daterangepicker({
+                drops: 'up',
+                singleDatePicker: true,
+                autoUpdateInput: false,
+                showDropdowns: true,
+                maxYear: parseInt(moment().format('YYYY'), 100),
+                minDate: dateEnd,
+                startDate: moment(),
+                locale: {
+                    format 'DD/MM/YYYY'
+                },
+                singleClasses: "picker_2"
+            }, function(start, end, label) {
+
+            });
+            $('#birthdate').on('apply.daterangepicker', function(ev, picker) {
+                $(this).val(picker.startDate.format('DD/MM/YYYY'));
+            });
+            $('#birthdate').on('cancel.daterangepicker', function(ev, picker) {
+                $(this).val('');
+            });
+        });
+
+
             var today = new Date();
             var dd = today.getDate();
             var mm = today.getMonth() + 1; //January is 0!
@@ -937,4 +987,21 @@
             });
         });
     </script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+
+    <script>
+    $('#contractType').change(function() {
+        console.log("tumefika");
+        var contractType = $(this).val();
+        var contractEndDiv = $('#contractEndDiv');
+
+        // Check if the selected contract type is 'permanent'
+        if (contractType === '3') { // Assuming '3' is the value for 'permanent'
+            contractEndDiv.hide(); // Hide the Contract End div
+        } else {
+            contractEndDiv.show(); // Show the Contract End div
+        }
+    });
+</script>
 @endpush

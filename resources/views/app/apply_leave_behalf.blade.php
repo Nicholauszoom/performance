@@ -1,4 +1,16 @@
-<form autocomplete="off" action="{{ url('flex/attendance/saveLeaveOnBehalf') }}" method="post"
+<div class="card border-top  border-top-width-3 border-top-main rounded-0">
+    <div class="card-header">
+        <h5 class="text-warning">Apply on Behalf</h5>
+
+        @if (Session::has('note'))
+            {{ session('note') }}
+        @endif
+        <div id="resultfeed"></div>
+    </div>
+
+    <div class="card-body">
+        <form autocomplete="off" action="{{ url('flex/attendance/saveLeaveOnBehalf') }}" method="post"
+
                     enctype="multipart/form-data">
                     @csrf
 
@@ -124,3 +136,5 @@
                         </div>
                     </div>
                 </form>
+    </div>
+</div>

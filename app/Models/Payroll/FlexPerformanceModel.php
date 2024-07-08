@@ -3,6 +3,7 @@
 namespace App\Models\Payroll;
 
 use App\Helpers\SysHelpers;
+use App\Models\FinancialLogs;
 use App\Models\Termination;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
@@ -43,17 +44,29 @@ class FlexPerformanceModel extends Model
 }
 
 
-public function financialLogs($date)
-{
-    $query = "SELECT DATE(fn.created_at), fn.*, CONCAT(e.fname,' ', COALESCE(e.mname, ''),' ', e.lname) as empName, CONCAT(au.fname,' ', au.mname,' ', au.lname) as authName
-              FROM financial_logs fn
-              JOIN employee e ON fn.payrollno = e.emp_id
-              JOIN employee au ON fn.changed_by = au.emp_id
-              WHERE DATE(fn.created_at) LIKE '%" . $date . "%'
-              ORDER BY fn.created_at DESC";
+    public function financialLogs1($last_payroll_month_date, $payroll_date)
+    {
+        $query = "SELECT Date(fn.created_at),fn.*, CONCAT(e.fname,' ', IF(e.mname != null,e.mname,''),' ', e.lname) as empName, CONCAT(au.fname,' ', au.mname,' ', au.lname) as authName FROM financial_logs fn, employee e, employee au  WHERE Date(fn.created_at) Like '%" . $date . "%' and fn.payrollno = e.emp_id AND fn.changed_by = au.emp_id  ORDER BY fn.created_at DESC";
 
-    return DB::select(DB::raw($query));
-}
+        return DB::select(DB::raw($query));
+    }
+
+    public function financialLogs($start_date, $end_date)
+    {
+
+        // Calculate the date after the start_date
+        $next_day = date('Y-m-d', strtotime($start_date . ' +1 day'));
+        $query = "SELECT Date(fn.created_at) as created_date, fn.*,
+                        CONCAT(e.fname,' ', IF(e.mname IS NOT NULL, e.mname, ''),' ', e.lname) as empName,
+                        CONCAT(au.fname,' ', IF(au.mname IS NOT NULL, au.mname, ''),' ', au.lname) as authName
+                FROM financial_logs fn
+                JOIN employee e ON fn.payrollno = e.emp_id
+                JOIN employee au ON fn.changed_by = au.emp_id
+                WHERE Date(fn.created_at) BETWEEN :next_day AND :end_date
+                ORDER BY fn.created_at DESC";
+
+        return DB::select(DB::raw($query), ['next_day' => $next_day, 'end_date' => $end_date]);
+    }
 
 
 public function audit_purge_logs()
@@ -108,27 +121,31 @@ public function getCurrentStrategy()
 
 
     public function employee()
-{
-    $query = DB::table('employee as e')
-        ->selectRaw('p.name as "POSITION", d.name as "DEPARTMENT", e.*,
-            CONCAT(e.fname, \' \', COALESCE(e.mname, \'\'), \' \', e.lname) as "NAME",
-            (SELECT CONCAT(el.fname, \' \', el.mname, \' \', el.lname)
-             FROM employee el
-             WHERE el.emp_id = e.line_manager
-             LIMIT 1) as "LINEMANAGER",
-            COALESCE(
-                (SELECT SUM(days)
-                 FROM leaves
-                 WHERE nature::integer = 1 AND "empid" = e.emp_id
-                 GROUP BY nature), 0) as "ACCRUED"')
-        ->addSelect(DB::raw('ROW_NUMBER() OVER () as "sno"'))
-        ->join('department as d', 'd.id', '=', 'e.department')
-        ->join('position as p', 'p.id', '=', 'e.position')
-        ->where('e.state', '=', 1)
-        ->get();
+    {
+        $query = "SELECT @s:=@s+1 SNo, p.name as POSITION, d.name as DEPARTMENT, e.*, CONCAT(e.fname,' ',IF( e.mname != null,e.mname,' '),' ', e.lname) as NAME, (SELECT CONCAT(el.fname,' ', el.mname,' ', el.lname) FROM employee el where el.emp_id = e.line_manager limit 1 ) as LINEMANAGER, IF((( SELECT sum(days)  FROM `leaves` where nature=1 and empID=e.emp_id GROUP by nature)>0), (SELECT sum(days)  FROM `leaves` where nature=1 and empID=e.emp_id  GROUP by nature),0) as ACCRUED FROM employee e, department d, position p , (select @s:=0) as s WHERE  p.id=e.position and d.id=e.department and e.state=1";
 
-    return $query;
-}
+        return DB::select(DB::raw($query));
+    }
+    public function employeeTerminatedPartial()
+    {
+        $query = "SELECT @s:=@s+1 SNo, p.name as POSITION, d.name as DEPARTMENT, e.*,
+                  CONCAT(e.fname,' ',IF(e.mname != null,e.mname,' '),' ', e.lname) as NAME,
+                  (SELECT CONCAT(el.fname,' ', el.mname,' ', el.lname)
+                   FROM employee el
+                   WHERE el.emp_id = e.line_manager LIMIT 1) as LINEMANAGER,
+                   IF(((SELECT sum(days) FROM `leaves` WHERE nature=1 and empID=e.emp_id GROUP by nature)>0),
+                   (SELECT sum(days) FROM `leaves` WHERE nature=1 and empID=e.emp_id GROUP by nature),0) as ACCRUED,
+                   IF(t.employeeID IS NOT NULL, 1, 0) AS termination_flag
+                  FROM employee e
+                  JOIN department d ON d.id = e.department
+                  JOIN position p ON p.id = e.position
+                  LEFT JOIN terminations t ON t.employeeID = e.emp_id
+                  WHERE t.employeeID IS NULL AND e.state=1";
+
+        return DB::select(DB::raw($query));
+    }
+
+
 
     public function employeelinemanager($id)
     {
@@ -392,7 +409,7 @@ public function getCurrentStrategy()
 
     public function contractdrop()
     {
-        $query = "SELECT c.* FROM contract c WHERE NOT c.id = 23";
+        $query = "SELECT c.* FROM contract c WHERE NOT c.item_code = 23";
 
         return DB::select(DB::raw($query));
     }
@@ -819,7 +836,7 @@ public function getCurrentStrategy()
 
         //     DB::transaction(function() use($id,$signatory, $time_approved)
         //   {
-        $query = "INSERT INTO overtimes(overtimeID, empID, time_start, time_end,overtime_category, amount, linemanager, hr, application_time, confirmation_time, approval_time,days) SELECT 1, '" . $empID . "', '" . $time_start . "','" . $time_end . "','" . $overtime_category . "', (('" . $days . "') * ((e.salary/176)*('" . $percent . "')))
+        $query = "INSERT INTO overtimes(overtimeID, empID, time_start, time_end,overtime_category, amount, linemanager, hr, application_time, confirmation_time, approval_time,days) SELECT 1, '" . $empID . "', '" . $time_start . "','" . $time_end . "','" . $overtime_category . "', (('" . $days . "') * ((e.salary/195)*('" . $percent . "')))
         AS amount,'" . $line_maager . "', '" . $signatory . "','" . $application_time . "','" . $time_confirmed_line . "', '" . $time_approved . "','" . $days . "' FROM employee e WHERE e.emp_id = '" . $empID . "'  ";
         DB::insert(DB::raw($query));
 
@@ -887,7 +904,18 @@ public function getCurrentStrategy()
     public function deleteApprovedOvertime($id)
     {
 
+        $overtime_yenyewe =  DB::table('overtimes')->where('id', $id)->select()->first();
+        $payroll_number = $overtime_yenyewe->empID;
+        $changed_by = $overtime_yenyewe->hr;
+        $overtime_category = $overtime_yenyewe->overtime_category;
+
+        $overtime_name = $this->get_overtime_name($overtime_category);
+
+        $amount = $overtime_yenyewe->amount;
         DB::table('overtimes')->where('id', $id)->delete();
+
+        SysHelpers::FinancialLogs($payroll_number, 'Cancelled '. $overtime_name, (number_format($amount, 2)." TZS"), "0.00", 'Payroll Input');
+
         return true;
     }
 
@@ -1059,21 +1087,7 @@ public function getCurrentStrategy()
 
     public function employeeTransfers()
     {
-        $result = DB::table('employee as e')
-            ->select(
-                DB::raw('ROW_NUMBER() OVER () as SNo'),
-                'p.name as position_name',
-                'd.name as department_name',
-                'br.name as branch_name',
-                'tr.*',
-                DB::raw("CONCAT(e.fname, ' ', e.lname) as empName")
-            )
-            ->join('transfer as tr', 'tr.empid', '=', 'e.emp_id')
-            ->join('department as d', 'd.id', '=', 'e.department')
-            ->join('position as p', 'p.id', '=', 'e.position')
-            ->join('branch as br', 'br.id', '=', DB::raw('CAST(e.branch AS bigint)'))
-            ->orderBy('tr.id', 'DESC')
-            ->get();
+        $query = "SELECT @s:=@s+1 SNo, p.name as position_name, d.name as department_name, br.name as branch_name, tr.*, CONCAT(e.fname,'  ', e.lname) as empName , e.approval_status FROM employee e, transfer tr, department d, position p, branch br, (SELECT @s:=0) as s WHERE tr.empID = e.emp_id AND e.branch = br.id AND  p.id=e.position AND d.id=e.department  ORDER BY tr.id DESC ";
 
         return $result;
     }
@@ -1081,24 +1095,33 @@ public function getCurrentStrategy()
 
 
     public function newDepartmentTransfer($id)
-    {
+{
+    $row = DB::table('department')
+        ->select('name')
+        ->where('id', $id)
+        ->first();
 
-        $query = "name WHERE id = '" . $id . "' ";
-        $row = DB::table('department')
-            ->select(DB::raw($query))
-            ->first();
+    if ($row) {
         return $row->name;
+    } else {
+        return 'Department not found'; // Or handle the case when department is not found
     }
+}
 
-    public function newPositionTransfer($id)
-    {
+public function newPositionTransfer($id)
+{
+    $row = DB::table('position')
+        ->select('name')
+        ->where('id', $id)
+        ->first();
 
-        $query = "name WHERE id = '" . $id . "'";
-        $row = DB::table('position')
-            ->select(DB::raw($query))
-            ->first();
+    if ($row) {
         return $row->name;
+    } else {
+        return 'Position not found'; // Or handle the case when position is not found
     }
+}
+
 
     public function newBranchTransfer($id)
     {
@@ -1590,67 +1613,9 @@ public function skills_missing($empID)
     {
 
 
-            $query = DB::table('employee as e')
-                ->select(
-                    'e.*',
-                    'bank.name AS bankName',
-                    'ctry.name AS country',
-                    'b.name AS branch_name',
-                    // 'bb.name AS bankBranch',
-                    'd.name AS deptname',
-                    'c.name AS CONTRACT',
-                    'p.name AS pName',
-                    DB::raw("CONCAT(fname, ' ', COALESCE(mname, ''), ' ', lname) AS \"LINEMANAGER\"")
-                )
-                ->join('department as d', 'd.id', '=', 'e.department')
-                ->join('contract as c', 'c.id', '=', DB::raw('CAST(e.contract_type AS bigint)'))
-                ->join('country as ctry', 'ctry.code', '=', DB::raw('CAST(e.nationality AS bigint)'))
-                ->join('position as p', 'p.id', '=', 'e.position')
-                ->join('bank', 'e.bank', '=', 'bank.id')
-                ->join('branch as b', 'e.branch', '=', DB::raw('CAST(b.id AS text)'))
-                // ->join('bank_branch as bb', 'e.bank_branch', '=', 'bb.id')
-                ->where('e.emp_id', '=', $empID)
-                ->get();
+        $query = "SELECT e.*, bank.name as bankName, ctry.description as country, b.name as branch_name,  bb.name as bankBranch, d.name as deptname, c.name as CONTRACT, p.name as pName, (SELECT CONCAT(fname,' ', mname,' ', lname) from employee where  emp_id = e.line_manager) as LINEMANAGER from employee e, department d, contract c, country ctry, position p, bank, branch b, bank_branch bb WHERE d.id=e.department and p.id=e.position and e.contract_type = c.item_code AND e.bank_branch = bb.id and ctry.item_code = e.nationality AND e.bank = bank.id AND e.branch = b.id AND e.emp_id ='" . $empID . "'";
 
-            return $query;
-       return DB::select(DB::raw($query));
-
-//         $query =
-//          "SELECT
-//          e.*,
-//          bank.name AS bankName,
-//          ctry.name AS country,
-//          b.name AS branch_name,
-//         --  bb.name AS bankBranch,
-//          d.name AS deptname,
-//          c.name AS CONTRACT,
-//          p.name AS pName,
-//          (
-//              SELECT CONCAT(fname, ' ', COALESCE(mname, ''), ' ', lname)
-//              FROM employee
-//              WHERE emp_id = e.line_manager
-//          ) AS LINEMANAGER
-//      FROM
-//          employee e
-//      JOIN
-//          department d ON d.id = e.department
-//      JOIN
-//          contract c ON e.contract_type = c.id::text -- Casting e.contract_type to bigint
-//      JOIN
-//          country ctry ON ctry.code::text = e.nationality::text
-//      JOIN
-//          position p ON p.id = e.position
-//      JOIN
-//          bank ON e.bank = bank.id
-//      JOIN
-//          branch b ON e.branch::text = b.id::text
-//     --  JOIN
-//     --      bank_branch bb ON e.bank_branch = bb.id
-//      WHERE
-//          e.emp_id = '$empID';
-//      ";
-
-//         $row = DB::select(DB::raw($query));
+        $row = DB::select(DB::raw($query));
 
 // return $row;
 
@@ -2042,6 +2007,8 @@ public function getpropertyexit($id)
 
     public function getallowancebyid($id)
     {
+
+
         $query = "SELECT * FROM allowances WHERE id =" . $id . "";
 
         return DB::select(DB::raw($query));
@@ -2084,7 +2051,7 @@ public function getpropertyexit($id)
 
     public function allowance_membersCount($allowance)
     {
-        $query = "select COUNT(DISTINCT ea.empID) members from emp_allowances as ea  WHERE ea.allowance = " . $allowance . "  ";
+        $query = "select COUNT(DISTINCT ea.empID) members from emp_allowances as ea,employee e  WHERE e.emp_id=ea.empID AND e.state=1 AND ea.allowance = " . $allowance . "  ";
         $row = DB::select(DB::raw($query));
         return $row[0]->members;
     }
@@ -2116,11 +2083,11 @@ public function getpropertyexit($id)
 
         return $total_amount;
     }
-    public function get_pension_employee($salaryEnrollment, $leavePay, $arrears, $overtime_amount, $emp_id)
+    public function get_pension_employee($salaryEnrollment, $serevancePay, $exgracia, $leavePay, $noticePay, $arrears, $overtime_amount, $emp_id, $tellerAllowance)
     {
 
         //$pesionable_amount =  $this->get_pensionable_allowance($emp_id);
-        $total_amount = $salaryEnrollment + $leavePay + $arrears + $overtime_amount;
+        $total_amount = $salaryEnrollment + $leavePay + $arrears + $overtime_amount + $serevancePay + $exgracia + $noticePay+$tellerAllowance;
         // + $pesionable_amount;
 
         $query = "SELECT pf.amount_employee FROM employee e,pension_fund pf where e.pension_fund = pf.id AND  e.emp_id =" . $emp_id . " ";
@@ -2130,11 +2097,11 @@ public function getpropertyexit($id)
         return $total_amount * $rate;
     }
 
-    public function get_pension_employer($salaryEnrollment, $leavePay, $arrears, $overtime_amount, $emp_id)
+    public function get_pension_employer($salaryEnrollment, $serevancePay, $exgracia, $leavePay, $noticePay, $arrears, $overtime_amount,$emp_id, $tellerAllowance)
     {
 
         //$pesionable_amount =  $this->get_pensionable_allowance($emp_id);
-        $total_amount = $salaryEnrollment + $leavePay + $arrears + $overtime_amount;
+        $total_amount = $salaryEnrollment + $leavePay + $arrears + $overtime_amount + $serevancePay + $exgracia + $noticePay +$tellerAllowance;
 
         //+ $pesionable_amount;
 
@@ -2167,19 +2134,14 @@ public function getpropertyexit($id)
 
     public function get_allowance_names_for_employee($empID)
     {
-        $query = "SELECT a.name
-                        FROM emp_allowances ea
-                        JOIN allowances a ON a.id = ea.allowance
-                        WHERE ea.empID = {$empID}";
+
+        $query = "SELECT a.id, a.name, ea.amount
+        FROM emp_allowances ea
+        JOIN allowances a ON a.id = ea.allowance
+        WHERE ea.empID = {$empID}";
 
         $rows = DB::select(DB::raw($query));
-
-        $allowanceNames = [];
-        foreach ($rows as $row) {
-            $allowanceNames[] = $row->name;
-        }
-
-        return $allowanceNames;
+        return $rows;
     }
 
 
@@ -2427,70 +2389,70 @@ IF(
         //reason for termination
         SysHelpers::FinancialLogs($termination->employeeID, 'Reason For Termination', '0.00', $termination->reason, 'Termination');
         //salary
-        SysHelpers::FinancialLogs($termination->employeeID, 'Salary', number_format($termination->actual_salary, 2), number_format($termination->salaryEnrollment, 2), 'Termination');
+        SysHelpers::FinancialLogs($termination->employeeID, 'Salary', number_format($termination->actual_salary, 2). ' TZS', number_format($termination->salaryEnrollment, 2). ' TZS', 'Termination');
         //overtimes
         if ($termination->normalDays != 0) {
             // SysHelpers::FinancialLogs($termination->employeeID,'N-Overtime', 0.00 ,number_format($termination->normalDays,2), 'Termination');
-            SysHelpers::FinancialLogs($termination->employeeID, 'Normal Days Overtime', 0.00, number_format($termination->normal_days_overtime_amount, 2), 'Termination');
+            SysHelpers::FinancialLogs($termination->employeeID, 'Normal Days Overtime', 0.00, number_format($termination->normal_days_overtime_amount, 2). ' TZS', 'Termination');
         }
         if ($termination->publicDays != 0) {
             //SysHelpers::FinancialLogs($termination->employeeID,'S-Overtime', 0.00 ,number_format($termination->publicDays,2), 'Termination');
-            SysHelpers::FinancialLogs($termination->publicDays, 'Sunday Overtime', 0.00, number_format($termination->public_overtime_amount, 2), 'Termination');
+            SysHelpers::FinancialLogs($termination->publicDays, 'Sunday Overtime', 0.00, number_format($termination->public_overtime_amount, 2). ' TZS', 'Termination');
         }
         if ($termination->noticePay != 0) {
-            SysHelpers::FinancialLogs($termination->employeeID, 'Notice Pay', 0.00, number_format($termination->noticePay, 2), 'Termination');
+            SysHelpers::FinancialLogs($termination->employeeID, 'Notice Pay', 0.00, number_format($termination->noticePay, 2). ' TZS', 'Termination');
         }
 
         if ($termination->leavePay != 0) {
-            SysHelpers::FinancialLogs($termination->employeeID, 'Leave Pay', 0.00, number_format($termination->leavePay, 2), 'Termination');
+            SysHelpers::FinancialLogs($termination->employeeID, 'Leave Pay', 0.00, number_format($termination->leavePay, 2). ' TZS', 'Termination');
         }
 
         if ($termination->houseAllowance != 0) {
-            SysHelpers::FinancialLogs($termination->employeeID, 'House Allowance', 0.00, number_format($termination->houseAllowance, 2), 'Termination');
+            SysHelpers::FinancialLogs($termination->employeeID, 'House Allowance', 0.00, number_format($termination->houseAllowance, 2). ' TZS', 'Termination');
         }
 
         if ($termination->utilityAllowance != 0) {
-            SysHelpers::FinancialLogs($termination->employeeID, 'Utility Allowance', 0.00, number_format($termination->utilityAllowance, 2), 'Termination');
+            SysHelpers::FinancialLogs($termination->employeeID, 'Utility Allowance', 0.00, number_format($termination->utilityAllowance, 2). ' TZS', 'Termination');
         }
 
         if ($termination->leaveAllowance != 0) {
-            SysHelpers::FinancialLogs($termination->employeeID, 'Leave Allowance', 0.00, number_format($termination->leaveAllowance, 2), 'Termination');
+            SysHelpers::FinancialLogs($termination->employeeID, 'Leave Allowance', 0.00, number_format($termination->leaveAllowance, 2). ' TZS', 'Termination');
         }
 
         if ($termination->nightshift_allowance != 0) {
-            SysHelpers::FinancialLogs($termination->employeeID, 'Night Shift Allowance', 0.00, number_format($termination->nightshift_allowance, 2), 'Termination');
+            SysHelpers::FinancialLogs($termination->employeeID, 'Night Shift Allowance', 0.00, number_format($termination->nightshift_allowance, 2). ' TZS', 'Termination');
         }
 
         if ($termination->transport_allowance != 0) {
-            SysHelpers::FinancialLogs($termination->employeeID, 'Night Shift Allowance', 0.00, number_format($termination->transport_allowance, 2), 'Termination');
+            SysHelpers::FinancialLogs($termination->employeeID, 'Night Shift Allowance', 0.00, number_format($termination->transport_allowance, 2). ' TZS', 'Termination');
         }
 
         if ($termination->tellerAllowance != 0) {
-            SysHelpers::FinancialLogs($termination->employeeID, 'Teler Allowance', 0.00, number_format($termination->tellerAllowance, 2), 'Termination');
+            SysHelpers::FinancialLogs($termination->employeeID, 'Teler Allowance', 0.00, number_format($termination->tellerAllowance, 2). ' TZS', 'Termination');
         }
 
         if ($termination->leaveStand != 0) {
-            SysHelpers::FinancialLogs($termination->employeeID, 'Leave Stand', 0.00, number_format($termination->leaveStand, 2), 'Termination');
+            SysHelpers::FinancialLogs($termination->employeeID, 'Leave Stand', 0.00, number_format($termination->leaveStand, 2). ' TZS', 'Termination');
         }
 
         if ($termination->arrears != 0) {
-            SysHelpers::FinancialLogs($termination->employeeID, 'Arrears', 0.00, number_format($termination->arrears, 2), 'Termination');
+            SysHelpers::FinancialLogs($termination->employeeID, 'Arrears', 0.00, number_format($termination->arrears, 2). ' TZS', 'Termination');
         }
 
         if ($termination->longServing != 0) {
-            SysHelpers::FinancialLogs($termination->employeeID, 'Long Serving', 0.00, number_format($termination->longServing, 2), 'Termination');
+            SysHelpers::FinancialLogs($termination->employeeID, 'LSA', 0.00, number_format($termination->longServing, 2). ' TZS', 'Termination');
         }
 
         if ($termination->loanBalance != 0) {
-            SysHelpers::FinancialLogs($termination->employeeID, 'Loan Balance', 0.00, number_format($termination->loanBalance, 2), 'Termination');
+            SysHelpers::FinancialLogs($termination->employeeID, 'Loan Balance', 0.00, number_format($termination->loanBalance, 2). ' TZS', 'Termination');
         }
 
         if ($termination->otherPayments != 0) {
-            SysHelpers::FinancialLogs($termination->employeeID, 'Other Payments', 0.00, number_format($termination->otherPayments, 2), 'Termination');
+            SysHelpers::FinancialLogs($termination->employeeID, 'Other Payments', 0.00, number_format($termination->otherPayments, 2). ' TZS', 'Termination');
         }
 
         if ($termination->otherDeductions != 0) {
-            SysHelpers::FinancialLogs($termination->employeeID, 'Other Deductions', 0.00, number_format($termination->otherDeductions, 2), 'Termination');
+            SysHelpers::FinancialLogs($termination->employeeID, 'Other Deductions', 0.00, number_format($termination->otherDeductions, 2). ' TZS', 'Termination');
         }
 
         DB::table('employee')->where('emp_id', $termination->employeeID)->update(['state' => 4]);
@@ -2520,6 +2482,11 @@ IF(
     public function payroll_month_list()
     {
         $query = 'SELECT DISTINCT payroll_date FROM payroll_logs ORDER BY payroll_date DESC';
+        return DB::select(DB::raw($query));
+    }
+    public function payroll_month_list2($empId)
+    {
+        $query = 'SELECT DISTINCT payroll_date FROM payroll_logs WHERE empID = '.$empId.' ORDER BY payroll_date DESC';
         return DB::select(DB::raw($query));
     }
 
@@ -3262,14 +3229,11 @@ last_paid_date='" . $date . "' WHERE  state = 1 and type = 3";
  
 
     public function linemanagerdropdown()
-{
-    $query = "SELECT DISTINCT e.emp_id as empID, CONCAT(e.fname, ' ', COALESCE(e.mname, ' '), ' ', e.lname) as NAME 
-              FROM employee e 
-              WHERE e.emp_id NOT LIKE '%JOB_%'";
-
-    return DB::select(DB::raw($query));
-}
-
+    {
+        // $query = "SELECT DISTINCT er.userID as empID,  CONCAT(e.fname,' ',IF( e.mname != null,e.mname,' '),' ', e.lname) as NAME FROM employee e, emp_role er, role r WHERE er.role = r.id and er.userID = e.emp_id and  r.permissions like '%p%'";
+        $query = "SELECT DISTINCT e.emp_id as empID,  CONCAT(e.fname,' ',IF( e.mname != null,e.mname,' '),' ', e.lname) as NAME FROM employee e where e.state !=4 and emp_id not like '%JOB_%'";
+        return DB::select(DB::raw($query));
+    }
 
     public function departmentdropdown()
     {
@@ -3801,7 +3765,7 @@ public function group_byid($id)
     public function memberscount($id)
     {
 
-        $query = "SELECT count(id) as headcounts  FROM employee_group WHERE group_name =" . $id . "";
+        $query = "SELECT count(eg.id) as headcounts  FROM employee_group eg,employee e WHERE   eg.empID=e.emp_id and e.state=1 and  eg.group_name =" . $id . "";
         $row = DB::select(DB::raw($query));
 
         return $row[0]->headcounts;
@@ -3876,37 +3840,7 @@ $results = DB::table('employee as e')
     public function members_byid($id)
     {
 
-        // $query = "SELECT DISTINCT @s:=@s+1 as SNo, eg.id as EGID,  e.emp_id as ID,  CONCAT(e.fname,' ',IF( e.mname != null,e.mname,' '),' ', e.lname) as NAME, d.name as DEPARTMENT, p.name as POSITION FROM employee e, position p, department d, employee_group eg,  (SELECT @s:=0) as s  where e.position = p.id and e.emp_id = eg.empID and e.department = d.id and eg.group_name = " . $id . "  and e.emp_id IN (SELECT empID from employee_group where group_name=" . $id . ")";
-
-        $query = " SELECT
-        DISTINCT ROW_NUMBER() OVER (ORDER BY eg.id) + 1 AS SNo,
-        eg.id AS EGID,
-        e.emp_id AS ID,
-        CONCAT(
-          e.fname,
-          ' ',
-          COALESCE(e.mname, ' '), -- Using COALESCE instead of IF for NULL check
-          ' ',
-          e.lname
-        ) AS NAME,
-        d.name AS DEPARTMENT,
-        p.name AS POSITION
-      FROM
-        employee e
-        JOIN position p ON e.position = p.id
-        JOIN department d ON e.department = d.id
-        JOIN employee_group eg ON e.emp_id = eg.empID
-      WHERE
-        eg.group_name = 1
-        AND e.emp_id IN (
-          SELECT
-            empID
-          FROM
-            employee_group
-          WHERE
-            group_name = 1
-        );
-      ";
+        $query = "SELECT DISTINCT @s:=@s+1 as SNo, eg.id as EGID,  e.emp_id as ID,  CONCAT(e.fname,' ',IF( e.mname != null,e.mname,' '),' ', e.lname) as NAME, d.name as DEPARTMENT, p.name as POSITION FROM employee e, position p, department d, employee_group eg,  (SELECT @s:=0) as s  where e.position = p.id and e.emp_id = eg.empID and e.department = d.id and eg.group_name = " . $id . "  AND e.state =1 and e.emp_id IN (SELECT empID from employee_group where group_name=" . $id . ")";
 
         return DB::select(DB::raw($query));
     }

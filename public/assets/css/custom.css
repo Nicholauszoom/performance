@@ -1,26 +1,29 @@
+
+
+
 .bg-main {
-    background: #00204e;
+    background: var(--primary-color);
     color: #fff;
 }
 
 .border-main {
     --border-opacity: 1;
-    border-top-color: (#00204e, var(--border-opacity)) !important;
+    border-top-color: (var(--primary-color), var(--border-opacity)) !important;
 }
 
 .border-top-main {
     --border-opacity: 1;
-    border-top-color: (#00204e, var(--border-opacity)) !important;
+    border-top-color: (var(--primary-color), var(--border-opacity)) !important;
 }
 
 .border-bottom-main {
     --border-opacity: 1;
-    border-bottom-color: (#00204e, var(--border-opacity)) !important;
+    border-bottom-color: (var(--primary-color), var(--border-opacity)) !important;
 }
 
 .bg-main-light {
     --bg-opacity: 1;
-    background-color: rgba(#00204e, var(--bg-opacity)) !important;
+    background-color: rgba(var(--primary-color), var(--bg-opacity)) !important;
 }
 
 .logout-btn {
@@ -32,11 +35,11 @@
 }
 
 .text-main {
-    color: #00204e;
+    color: var(--primary-color);
 }
 
 .bg-default {
-    background-color: #00204e;
+    background-color: var(--primary-color);
 }
 
 .bg-danger {
@@ -44,12 +47,12 @@
 }
 
 .bg-warning {
-    background: #f0ab00 !important;
+    background: var(--secondary-color) !important;
 }
 
 .border-top-warnin {
     --border-opacity: 1;
-    border-bottom-color: (#f0ab00, var(--border-opacity)) !important;
+    border-bottom-color: (var(--secondary-color), var(--border-opacity)) !important;
 }
 
 .bg-pending {
@@ -57,11 +60,11 @@
 }
 
 .border-warning {
-    border-bottom: 3px solid #f0ab00 !important;
+    border-bottom: 3px solid var(--secondary-color) !important;
 }
 
 button.swal2-confirm {
-    background-color: #00204e !important;
+    background-color: var(--primary-color) !important;
     color: #fff;
     border: none !important;
     border-radius: 2% !important;
@@ -69,7 +72,7 @@ button.swal2-confirm {
     font-size: 15px !important;
 }
 /* .swal2-confirm:hover{
-    background-image: linear-gradient(180deg, #f0ab00 10%, #f7c341 100%);
+    background-image: linear-gradient(180deg, var(--secondary-color) 10%, var(--hover-color-two) 100%);
     background-size: cover;
     color:#c20430!important;
     border: none !important;
@@ -87,7 +90,7 @@ button.swal2-cancel {
 }
 
 /* button.swal2-cancel:hover{
-    background-image: linear-gradient(180deg, #f0ab00 10%, #f7c341 100%);
+    background-image: linear-gradient(180deg, var(--secondary-color) 10%, var(--hover-color-two) 100%);
     background-size: cover;
     color:#fff!important;
     border: none !important;
@@ -96,17 +99,17 @@ button.swal2-cancel {
 } */
 
 .bg-main-gradient {
-    background-image: linear-gradient(180deg, #0a1330 95%, #f0ab00 10%);
+    background-image: linear-gradient(180deg, #0a1330 95%, var(--secondary-color) 10%);
     background-size: cover;
 }
 
 thead {
-    background-color: #00204e !important;
+    background-color: var(--primary-color) !important;
     border: none !important;
     color: #fff;
 }
 .text-warning {
-    color: #f0ab00 !important;
+    color: var(--secondary-color) !important;
     /* font-weight: 600; */
     font-style: normal;
     font-variant-caps: normal;
@@ -124,7 +127,7 @@ thead {
 }
 
 h5 {
-    /* color: #f0ab00 !important; */
+    /* color: var(--secondary-color) !important; */
     /* font-weight: 600; */
     font-style: normal;
     font-variant-caps: normal;
@@ -142,7 +145,7 @@ h5 {
 }
 
 h2 {
-    /* color: #f0ab00 !important; */
+    /* color: var(--secondary-color) !important; */
     /* font-weight: 600; */
     font-style: normal;
     font-variant-caps: normal;
@@ -176,12 +179,12 @@ h2 {
 
 .panel-footer:hover {
     font-size: 13px !important;
-    color: #f0ab00 !important;
+    color: var(--secondary-color) !important;
     text-transform: uppercase;
 }
 
 .btn-icon {
-    background-color: #00204e !important;
+    background-color: var(--primary-color) !important;
     color: #fff;
     visibility: visible;
     opacity: 1;
@@ -189,34 +192,41 @@ h2 {
 .swal2-title {
     font-size: 14px !important;
     text-transform: none;
-    color: #00204e !important;
+    color: var(--primary-color) !important;
     font-weight: 600;
 }
 
 .active > .page-link {
-    background-color: #00204e !important;
+    background-color: var(--primary-color) !important;
     border: none !important;
 }
 
 .active.page-link:hover {
-    /* background-color:#f0ab00 !important; */
-    background-image: linear-gradient(180deg, #f0ab00 10%, #f7c341 100%);
+    /* background-color:var(--secondary-color) !important; */
+    background-image: linear-gradient(180deg, var(--secondary-color, #f58646) 10%, var(--hover-color, #f58646) 100%);
     background-size: cover;
 }
 .nav-link:hover {
-    background-image: linear-gradient(180deg, #f0ab00 10%, #f7c341 100%);
+    background-image: linear-gradient(180deg, var(--secondary-color) 10%, var(--hover-color) 100%);
     background-size: cover;
     color: #c20430 !important;
 }
 
+.nav-link.active {
+    background-color: var(--primary-color, #f58646) !important;
+    background-size: cover;
+    color: #ffffff !important;
+}
+
+
 .btn:hover {
-    background-color: #f0ab00 !important;
-    color: #00204e !important;
+    background-color: var(--secondary-color) !important;
+    color: var(--primary-color) !important;
 }
 .nav-tabs-highlight,
 .nav-tabs-overline,
 .nav-tabs-underline {
-    --nav-tabs-underline-color: #00204e;
+    --nav-tabs-underline-color: var(--primary-color);
 }
 
 bg-extra {
@@ -224,27 +234,27 @@ bg-extra {
 }
 
 .btn-default {
-    border: 2px solid #00204e;
-    color: #00204e;
+    border: 2px solid var(--primary-color);
+    color: var(--primary-color);
     background-color: #fff;
     font-weight: 600;
 }
 
 .btn-default:hover {
-    border: 2px solid #00204e;
-    color: #00204e;
+    border: 2px solid var(--primary-color);
+    color: var(--primary-color);
     background-color: #fff;
     font-weight: 500;
 }
 
 .btn-main {
-    background: #00204e;
+    background: var(--primary-color);
     color: #fff;
     font-weight: 600;
 }
 
 .btn-main:hover {
-    background: #00204e;
+    background: var(--primary-color);
     color: #fff;
     font-weight: 600;
 }
@@ -256,23 +266,23 @@ bg-extra {
 }
 
 .btn-perfrom {
-    background-color: #00204e;
+    background-color: var(--primary-color);
     color: #fff;
     font-weight: 500;
 }
 
 .btn-perfrom:hover {
-    background-color: #00204e;
+    background-color: var(--primary-color);
     color: #fff;
     font-weight: 500;
 }
 
 .nav-sidebar .nav-link {
-    color: #00204e;
+    color: var(--primary-color);
 }
 
 .nav-sidebar .nav-link.active {
-    background-color: #00204e;
+    background-color: var(--primary-color);
     color: #fff;
 }
 /* .card-layout{

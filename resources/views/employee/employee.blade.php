@@ -13,13 +13,9 @@
 
 @can('view-employee')
   <div class="card border-top  border-top-width-3 border-top-main rounded-0">
-    <div class="card-header  mb-0">
-      <h5 class="text-main">Employees</h5>
-    </div>
-
-    <div class="card-body ">
+    <div class="card-header">
       <div class="d-flex justify-content-between">
-        <h4 class="lead text-warning ">List of Employees</h4>
+        <h5 class="text-warning ">List of Employees</h5>
 
 
         @can('add-employee')
@@ -31,10 +27,11 @@
       </div>
     </div>
 
+    <div class="card-body">
     <table id="datatable" class="table table-striped table-bordered datatable-basic">
       <thead>
         <tr>
-          <th>No.</th>
+          <th>Payroll No</th>
           <th>Name</th>
           <th>Gender</th>
           <th>Position</th>
@@ -50,7 +47,7 @@
       <tbody>
         @foreach ($employee as $row)
         <tr>
-            <td width="1px">{{ $row->id }}</td>
+            <td width="1px">{{ $row->emp_id }}</td>
 
             <td><a title="More Details"  href="{{ route('flex.userprofile', base64_encode($row->emp_id)) }}"> {{ $row->NAME }} </a></td>
             <td>{{ $row->gender }}</td>
@@ -78,15 +75,20 @@
                 </a>
 
                 @can('edit-employee')
-                <a  href="{{ route('flex.viewProfile', base64_encode($row->emp_id)) }}" class="btn btn-main  btn-sm"   title="Info and Details">
+                <a  href="{{ route('flex.viewProfile', base64_encode($row->emp_id)) }}" class="btn btn-main  btn-sm"   title="Edit Info and Details">
                     <i class="ph-pen"></i>
                 </a>
+
+
+                @can('deactivate-employee')
 
                 <a href="javascript:void(0)" onclick="requestDeactivation('<?php echo $row->emp_id; ?>')"  class="btn btn-danger btn-sm"  title="Deactivate">
                 <i class="ph-prohibit"></i>
                 </a>
+                @endcan
 
-                    <a href="<?php echo  url('') .'/flex/updateEmployee/'.$row->emp_id."|".$row->department; ?>" title="Update">
+
+                    <a href="<?php echo  url('') .'/flex/updateEmployee/'.$row->emp_id."|".$row->department; ?>" title="Update Basic Info">
                         <button type="button" class="btn btn-warning btn-xs"><i class="ph-note-pencil"></i></button>
                     </a>
 {{--
@@ -125,6 +127,7 @@
             </div>
         </div>
     </div>
+</div>
 </div>
 
 @endsection

@@ -83,6 +83,8 @@
                             <span id="remain" class="text-success"></span>
                         </code>
                     </div>
+                    @can('apply-leave')
+
                     <form autocomplete="off" action="{{ url('flex/attendance/save_leave') }}" method="post"
                         enctype="multipart/form-data">
                         @csrf
@@ -190,6 +192,8 @@
                             </div>
                         </div>
                     </form>
+
+                    @endcan
                 </div>
 
             </div>
@@ -198,8 +202,11 @@
     </div>
 
 
+    @can('view-leaves')
+
     @include('my-services.employeeLeaves')
 
+    @endcan
 
 
 
@@ -435,8 +442,10 @@
 
 
     @include('app.includes.leave_operations')
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
     <script>
+         $(document).ready(function() {
         $('#docNo').change(function() {
             var id = $(this).val();
             const start = document.getElementById("start-date").value;
@@ -445,16 +454,7 @@
             var url = '{{ route('getSubs', ':id') }}';
             url = url.replace(':id', par);
 
-            // if (id == 1) {
-            //     $("#attachment").hide();
-            //     $("#attach").prop('required', false);
-            // } else {
-            //     $("#attachment").show();
-            //     $("#attach").prop('required', true);
-            // }
-
             $('#subs_cat').find('option').remove();
-            // $('#subs_cat').find('option').not(':first').remove();
 
             $.ajax({
                 url: url,
@@ -463,6 +463,7 @@
 
                 success: function(response) {
                     let days = response.days;
+                    if(response.data[0].category_id != 6){
                     let subs = response.data;
                     var status = "<span>" + response.days + " Days</span>"
                     $("#remaining").empty(status);
@@ -481,9 +482,8 @@
                         $("#subs_cat").append(option);
 
                         $("#sub").show();
-
                     }
-
+                    }
                     processAttachmentDisplay(days)
                 }
             });
@@ -493,6 +493,7 @@
                 if (id == 1 || id == 3 || id == 5) {
                     $("#attachment").hide();
                 } else if (id == 2) {
+                    console.log(id);
                     if (_days == 1) {
 
                         var validateUrl = '{{ route('attendance.validateSickLeave', ':date') }}'
@@ -504,20 +505,27 @@
                             success: function(response) {
                                 if (response.status) {
                                     $('#attachment').show()
-                                } else {
-                                    $('#attachment').hide()
-                                }
+                                    $('#attachment').addClass('required');
+                            } else {
+                                $('#attachment').hide();
+                                $('#attachment').removeClass('required');
+                            }
                             }
                         })
                     } else {
                         $('#attachment').hide()
+                        $('#attachment').removeClass('required');
+
 
                     }
 
                 } else {
                     $("#attachment").show();
+                    $('#attachment').addClass('required');
+
                 }
             }
+        });
         });
     </script>
 

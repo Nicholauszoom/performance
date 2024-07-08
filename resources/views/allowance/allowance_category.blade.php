@@ -15,7 +15,10 @@
         @include('app.headers_payroll_input')
 
         <div class="row">
-            <div class="col-md-7">
+                @can('view-allowance-category')
+                <div class="col-md-7">
+
+                
                 <div class="card border-top  border-top-width-3 border-top-main rounded-0 p-2">
                     <div class="card-header">
                         <h5 class="h5 text-warning">Allowance Categories</h5>
@@ -61,11 +64,15 @@
                     </div>
 
                 </div>
+               
             </div>
+            @endcan
 
             <div class="col-md-5">
                 <div class="card border-top  border-top-width-3 border-top-main rounded-0 p-2">
-
+                    @can('add-allowance-category')
+                        
+                 
                     <div class="card-body">
                         <h4 class="text-main">Add Allowance Category</h4>
 
@@ -81,6 +88,8 @@
                             </div>
                         </form>
                     </div>
+                    @endcan
+
                 </div>
             </div>
 

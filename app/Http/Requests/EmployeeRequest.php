@@ -41,7 +41,7 @@ class EmployeeRequest extends FormRequest
             "currency" => ["required"],
             "cost_center" => ["required"],
             "contract_start" => ["required"],
-            "contract_end" => ["required"],
+            // "contract_end" => ["required"],
             "leave_day" => ["required", "numeric"],
             // "pension_fund" => "1",
             // "pf_membership_no" => "8337238237283782",

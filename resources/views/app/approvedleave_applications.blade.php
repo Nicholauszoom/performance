@@ -1,5 +1,5 @@
 <div class="card border-top  border-top-width-3 border-top-main rounded-0">
-    <div class="card-body">
+    <div class="card-header">
         <h5 class="text-warning">Approved Leave Applications</h5>
 
         @if (Session::has('note'))
@@ -7,6 +7,8 @@
         @endif
         <div id="resultfeed"></div>
     </div>
+
+    <div class="card-body">
 
     <table class="table table-striped table-bordered datatable-basic">
         <thead>
@@ -113,17 +115,14 @@
                                 @endif
                             </td>
                             <td class="text-center">
-
-                                @if ((Auth()->user()->emp_id == $approval->level1) & ($item->state == 2 || $item->state == 0))
-                                    <div class="col-md-12 text-center mt-1">
-                                        <a href="{{ url('flex/attendance/revokeLeave/' . $item->id) }}"
-                                            title="Revoke Approved Leave"
-                                            class="icon-2 info-tooltip disabled">
-                                            <button class="btn btn-secondary btn-sm">Revoke Approved
-                                                Leave<i class="ph-prohibit"></i></button>
-                                        </a>
-                                    </div>
-                                @endif
+                                @if ($item->attachment != null)
+                                <a href="{{ asset('storage/leaves/' . $item->attachment) }}"
+                                    download="{{ asset('storage/leaves/' . $item->attachment) }}"
+                                    class="btn bg-main btn-sm" title="Download Attachment">
+                                    <i class="ph ph-download"></i> &nbsp;
+                                    Attachment
+                                </a>
+                            @endif
                             </td>
 
                         </tr>
@@ -133,4 +132,5 @@
 
         </tbody>
     </table>
+    </div>
 </div>

@@ -19,6 +19,7 @@
 
             <div class="row">
                 <div class="col-md-12 col-sm-12 col-xs-12">
+                   
                     <div class="card border-top  border-top-width-3 border-top-main rounded-0">
                         <div class="card-head py-3 px-3">
                             <h2>Cost Center
@@ -28,6 +29,8 @@
                             <div class="clearfix"></div>
                         </div>
                         <div class="card-body">
+                            @can('view-department-cost')
+
 
                             <table id="datatable" class="table table-striped table-bordered datatable-basic">
                                 <thead>
@@ -112,6 +115,7 @@
                                     <?php } //} ?>
                                 </tbody>
                             </table>
+                            @endcan
                         </div>
                     </div>
                 </div>
@@ -132,6 +136,7 @@
                         </div>
                         <div class="card-body">
                             <div id="feedBack"></div>
+                           @can('add-department-cost')
                             <form autocomplete="off" id="addCostCenter" enctype="multipart/form-data" method="post"
                                 data-parsley-validate class="form-horizontal form-label-left">
                                 <div class="row">
@@ -155,7 +160,7 @@
 
                         </div>
                         </form>
-
+@endcan
                     </div>
                 </div>
                 <?php //}

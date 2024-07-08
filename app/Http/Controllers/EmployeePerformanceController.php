@@ -140,7 +140,7 @@ class EmployeePerformanceController extends Controller
     {
         $evaluation=new EmployeeEvaluation();
         $evaluation->empID=$id;
-        $evaluation->name= now();
+        // $evaluation->name= now();
         $evaluation->save();
 
         return redirect('flex/add-evaluation/'.$evaluation->id);

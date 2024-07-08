@@ -7,6 +7,9 @@ use Illuminate\Http\Request;
 use Closure;
 use App\Models\UserRole;
 use App\Models\Permission;
+use App\Models\BrandSetting;
+
+
 
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
@@ -42,11 +45,15 @@ class TrustProxies extends Middleware
 
             $response = $next($request);
 
+            $brands = BrandSetting::all();
+
+
             if (!($response instanceof BinaryFileResponse)) {
 
-            $response->header('Content-Security-Policy', 'https://hc-uat.bancabc.co.tz');
-            $response->header('Content-Security-Policy', 'https://hc-hub.bancabc.co.tz');
-            $response->header('Content-Security-Policy', 'https://int.cits.co.tz');
+            foreach($brands as $brand){
+                $response->header('Content-Security-Policy', $brand->allowed_domain);
+            }
+
             $response->header('X-Frame-Options', 'DENY');
             $response->header('Strict-Transport-Security', 'max-age=31536000; includeSubDomains');
             $response->header('X-Content-Type-Options', 'nosniff');
@@ -55,9 +62,6 @@ class TrustProxies extends Middleware
             $response->header('Permissions-Policy', 'geolocation=(), microphone=(), camera=()');
             $response->cookie('__Host-sess', $cookieValue, 0, $path, null, $secure, $httpOnly, $sameSite);
             }
-
-
-
 
 
             return $response;

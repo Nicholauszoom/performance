@@ -24,6 +24,10 @@
 
     
     ?>
+    @php
+    $brandSetting = \App\Models\BrandSetting::first();
+@endphp
+
 
 
     <div class="row">
@@ -31,7 +35,19 @@
             <div class="card bg-success bg-opacity-10 border-success rounded-0">
                 <div class="card-body d-flex justify-content-between align-items-center">
                     {{-- <p class="text-main">Welcome to Fléx Performance! <strong> --}}
-                        <img src="{{ asset('assets/images/hc-hub-logo3.png') }}" alt="flex logo" height="150px" width="150px" class="img-fluid">
+
+
+                        @if ($brandSetting->dashboard_logo)
+                        <img src="{{ asset('storage/' . $brandSetting->dashboard_logo) }}" alt="flex logo" height="150px" width="150px" class="img-fluid">
+
+                    @else
+
+                    <img src="{{ asset('assets/images/hc-hub-logo3.png') }}" alt="flex logo" height="150px" width="150px" class="img-fluid">
+
+                    @endif
+
+
+
                           <p class="text-main">Welcome<strong>
                             {{ session('fname') . ' ' . session('lname') }} </strong></p>
 

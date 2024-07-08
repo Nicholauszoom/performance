@@ -144,9 +144,9 @@
                                         <td><?php echo $row->amount; ?></td>
 
 
-                                        <td> <a href="javascript:void(0)" title="Approve" class="me-2"
+                                        <td> <a href="javascript:void(0)"  title="Approve" class="me-2"
                                                 onclick="cancelOvertime(<?php echo $row->id; ?>)">
-                                                <button class="btn btn-danger btn-xs"><i class="ph-x"></i></button>
+                                                <button type="button" class="btn btn-danger btn-xs"><i class="ph-x"></i></button>
                                             </a></td>
                                     </tr>
 
@@ -734,7 +734,7 @@
 
                             Swal.fire(
                                 'Cancelled!',
-                                'Request Cancelled Successifully1!!.',
+                                'Request Cancelled Successfully!',
                                 'success'
                             )
 
@@ -748,8 +748,6 @@
                                 'Overtime Cancellation Failed!! ....',
                                 'success'
                             )
-
-                            alert('Overtime Cancellation Failed!! ...');
                         });
                 }
             });

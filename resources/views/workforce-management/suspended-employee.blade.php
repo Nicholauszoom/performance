@@ -22,7 +22,7 @@
             <thead>
                 <tr>
                     <th></th>
-                    <th>No.</th>
+                    <th>Payroll No.</th>
                     <th>Name</th>
                     <th>Gender</th>
                     {{-- <th hidden>empID</th> --}}
@@ -38,7 +38,7 @@
                 @foreach ($employee1 as $row)
                    <tr>
                         <td></td>
-                        <td>{{ $row->SNo }}</td>
+                        <td>{{ $row->emp_id }}</td>
                         <td><a href="{{ route('employee.profile') }}">{{ $row->NAME }}</a></td>
                         <td>{{ $row->gender }}</td>
                         {{-- <td hidden>{{ $row->emp_id }}</td> --}}
@@ -86,7 +86,7 @@
             <thead>
                 <tr>
                     <tr>
-                        <th>No.</th>
+                        <th>Payroll No.</th>
                         <th>Name</th>
                         <th>Gender</th>
                         <th>Position</th>
@@ -102,7 +102,7 @@
 
                 @foreach ($employee2 as $row)
                     <tr id="{{ "activeRecord".$row->logID }}">
-                        <td width="1px">{{ $row->SNo }}</td>
+                        <td width="1px">{{ $row->emp_id }}</td>
                         <td>
                             <a title="More Details"  href="#"> {{ $row->NAME }}</a>
                         </td>

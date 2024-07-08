@@ -37,6 +37,25 @@ class DeductionSeeder extends Seeder
                 'remarks' => 'From Gross Salary',
                 'is_active' => 1,
             ],
+            // [
+            //     'id' => 5,
+            //     'name' => 'WU',
+            //     'code' => 5060,
+            //     'rate_employee' => 0,
+            //     'rate_employer' => 0.035,
+            //     'remarks' => 'From Gross Salary',
+            //     'is_active' => 1,
+            // ],
+
+            [
+                'id' => 10,
+                'name' => 'NHIF',
+                'code' => 4060,
+                'rate_employee' => 0.030,
+                'rate_employer' => 0.030,
+                'remarks' => 'From Gross Salary',
+                'is_active' => 1,
+            ],
             // Add more records if needed
         ]);
     }

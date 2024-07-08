@@ -47,8 +47,11 @@
 
                         <td colspan="4" class="w-50" style="">
                             <div class="box-text text-end">
-                                <img src="{{ asset('assets/images/logo-dif2.png') }}" alt="logo here" width="180px"
-                                    height="150px" class="image-fluid">
+                                @if ($brandSetting->report_logo)
+                                <img src="{{ asset('storage/' . $brandSetting->report_logo) }}" alt="logo here" width="180px" height="150px" class="image-fluid">
+                                @else
+                                <img src="{{ public_path('assets/images/logo-dif2.png') }}" alt="logo here" width="180px" height="150px" class="image-fluid">
+                                @endif
                             </div>
                         </td>
                     </tr>
@@ -129,7 +132,7 @@
                         <td style="text-align: right;">{{ number_format($termination->bonus, 2) }}</td>
                     </tr>
                     <tr>
-                        <td class="w-50">Long Serving</td>
+                        <td class="w-50">Long Serving Award</td>
                         <td style="text-align: right;">{{ number_format($termination->longServing, 2) }}</td>
                     </tr>
                     <tr>

@@ -5,10 +5,6 @@
 @endpush
 
 @push('head-scriptTwo')
-    <!-- notification Js -->
-
-
-
     <script src="{{ asset('assets/js/pages/datatables_basic.js') }}"></script>
 @endpush
 
@@ -112,8 +108,7 @@
 
                     <div class="tab-content" id="myTabContent">
 
-                        <div role="tabpanel" role="tabpanel" class="tab-pane fade " id="payrollReportTab"
-                            aria-labelledby="home-tab">
+                        <div role="tabpanel" role="tabpanel" class="tab-pane fade " id="payrollReportTab" aria-labelledby="home-tab">
                             <?php if ($pendingPayroll == 0 && session('mng_paym')) { ?>
 
                             <?php } ?>
@@ -131,7 +126,9 @@
                                             </div>
                                             @if ($state == 1)
                                             {{-- start of pending payroll --}}
-                                                @if ($pendingPayroll == 1 && $payroll->state == 1)
+                                                {{-- @if ($pendingPayroll == 1 && $payroll->state == 1) --}}
+                                                @if($level_check == $payroll->approval_status)
+
                                                     <div>
                                                         @can('approve-payroll')
                                                         {{-- approve pending payroll button --}}
@@ -154,54 +151,14 @@
                                                         {{-- / --}}
                                                         @endcan
                                                     </div>
-                                                {{-- / --}}
+
+                                                    @endif
+                                                {{-- / --}}h
 
                                                 {{-- hr approval --}}
-                                                @elseif($pendingPayroll == 1 && $payroll->state == 2)
-                                                @can('hr-recommend-payroll')
-                                                    <div>
-                                                        <a href="javascript:void(0)" onclick="recomendPayrollByHr()"
-                                                            title="Approve Payroll" class="me-2">
-                                                            <button type="button" class="btn btn-success text-white">
-                                                                <i class="ph-check me-2"></i>
-                                                                APPROVE PENDING PAYROLL
-                                                            </button>
-                                                        </a>
+                                                
 
-                                                        <a href="javascript:void(0)" onclick="cancelPayroll('hr')"
-                                                            title="Cancel Payroll" class="icon-2 info-tooltip">
-                                                            <button type="button" class="btn btn-danger text-white">
-                                                                <i class="ph-x me-2"></i>
-                                                                CANCEL PENDING PAYROLL
-                                                            </button>
-                                                        </a>
-                                                    </div>
-                                                @endcan
-                                                {{-- / --}}
-
-                                                {{-- finance approval --}}
-                                                @elseif($pendingPayroll == 1 && $payroll->state == 3)
-                                                @can('finance-recommend-payroll')
-                                                    <div>
-                                                        <a href="javascript:void(0)" onclick="recomendPayrollByFinance()"
-                                                            title="Approve Payroll" class="me-2">
-                                                            <button type="button" class="btn btn-success text-white">
-                                                                <i class="ph-check me-2"></i>
-                                                                APPROVE PENDING PAYROLL
-                                                            </button>
-                                                        </a>
-
-                                                        <a href="javascript:void(0)" onclick="cancelPayroll('finance')"
-                                                            title="Cancel Payroll By Head of Finance"
-                                                            class="icon-2 info-tooltip">
-                                                            <button type="button" class="btn btn-danger text-white">
-                                                                <i class="ph-x me-2"></i>
-                                                                CANCEL PENDING PAYROLL
-                                                            </button>
-                                                        </a>
-                                                    </div>
-                                                @endcan
-                                                @endif
+                                               {{-- @endif --}}
                                                 {{-- / --}}
                                             @endif
                                         </div>
@@ -330,6 +287,7 @@
                                 </div>
                             </div>
                         </div>
+
                         <div role="tabpanel" class="tab-pane active show" id="overtimeTab">
                             <div class="col-md-12 col-sm-12 col-xs-12">
                                 <div class="card  rounded-0 border-0 shadow-none">
@@ -1422,13 +1380,17 @@
             const message = "Are you sure you want to approve this payroll?";
             const message1 = "Send payslip as email to employees?";
 
+            // var message = document.getElementById('comment').value;
+
             $('#delete').modal('show');
             $('#delete').find('.modal-body #message').text(message);
 
             $("#yes_delete").click(function() {
                 $('#hideList').hide();
                 $.ajax({
-                    url: "<?php echo url('flex/payroll/runpayroll'); ?>/<?php echo $pendingPayroll_month; ?>",
+                    // var url = "{{ route('payroll.approvepayroll', ['pdate' => $pendingPayroll_month]) }}" + "?message="Message comment;
+
+                    url: "<?php echo url('flex/payroll/approvepayroll'); ?>/<?php echo $pendingPayroll_month; ?>",
                     async: true,
                 beforeSend: function () {
                     $('.request__spinner').show() },
@@ -1470,24 +1432,25 @@
         function recomendPayrollByHr() {
 
             const message = "Are you sure you want to recommend this payroll?";
+
             $('#delete').modal('show');
             $('#delete').find('.modal-body #message').text(message);
 
             $("#yes_delete").click(function() {
                 $('#hideList').hide();
                 var message = document.getElementById('comment').value;
-                var url =
-                    "{{ route('payroll.recommendpayrollByHr', ['pdate' => $pendingPayroll_month, 'message' => ':msg']) }}";
+                var url = "{{ route('payroll.recommendpayrollByHr', ['pdate' => $pendingPayroll_month, 'message' => ':msg']) }}";
                 url = url.replace(':msg', message);
+
                 if (message != "") {
                     $.ajax({
                         url: url,
                         async: true,
-                beforeSend: function () {
-                    $('.request__spinner').show() },
-                    complete: function(){
-
-                    },
+                        beforeSend: function () {
+                            $('#delete').modal('hide');
+                            $('.request__spinner').show();
+                        },
+                        complete: function(){},
                         success: function(data) {
                             var data = JSON.parse(data);
                             if (data.status == 'OK') {
@@ -1503,10 +1466,7 @@
                                     text: 'Payroll recommendation failed!',
                                     type: 'error'
                                 }).show();
-
-
                             }
-
                         }
 
                     });
@@ -1550,6 +1510,10 @@
 
 
         }
+
+
+
+
 
         function recomendPayrollByFinance() {
 

@@ -11,6 +11,10 @@ class Termination extends Model
     use HasFactory;
 
 
+    protected $fillable = [
+        'approval_status','status','employeeID',
+    ] ;
+
         // for relationship
         public function employee()
         {

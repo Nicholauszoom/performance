@@ -12,14 +12,13 @@
 
 
 
-<div class="card border-top  border-top-width-3 border-top-main rounded-0 ">
+<div class="row">
 
             @include('app.headers_payroll_input')
 
 
-            <div class="row">
 
-                <div class="col-md-7">
+                <div class=" col-md-7">
 
                     <div class="card border-top  border-top-width-3 border-top-main rounded-0 p-2">
                         <div class="card-header">
@@ -32,6 +31,7 @@
 
                             <?php //echo $this->session->flashdata("note");  ?>
 
+                            @can('view-overtime-setting')
                             <table  class="table table-bordered">
                                 <thead>
                                     <tr>
@@ -64,6 +64,7 @@
                                     <?php $SNo++;  } ?>
                                 </tbody>
                           </table>
+                          @endcan
                         </div>
                       </div>
                 </div>
@@ -78,6 +79,10 @@
                             </a>
                         </div>
 
+
+                        @can('add-overtime-setting')
+                            
+                       
                         <div class="card-body">
                             <h4 class="text-main">Add Overtime Settings</h4>
                             <div id="resultOvertimeSubmission"></div>
@@ -104,9 +109,10 @@
                                 </div>
                             </form>
                         </div>
+                        @endcan
                       </div>
                 </div>
-            </div>
+
 
         </div>
 

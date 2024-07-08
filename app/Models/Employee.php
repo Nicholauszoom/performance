@@ -56,6 +56,11 @@ class Employee extends Model
         'state' ,
         'national_id' ,
         'tin',
+        'approval_status',
+        'old_leave_days_entitled',
+        'leave_effective_date',
+        'old_accrual_rate',
+        'earlier_accrual_days'
     ];
 
     public function roles(){
@@ -77,6 +82,11 @@ class Employee extends Model
     public function contracts(){
         return $this->belongsTo('App\Models\Contract','contract_type');
     }
+
+    public function educations(){
+        return $this->belongsTo('App\Models\EducationQualification', 'emp_id', 'employeeID');
+    }
+
 
 
 }

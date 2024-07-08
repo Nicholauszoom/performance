@@ -3,6 +3,10 @@
 @push('head-script')
     <script src="{{ asset('assets/js/components/tables/datatables/datatables.min.js') }}"></script>
     <script src="{{ asset('assets/js/components/tables/datatables/extensions/buttons.min.js') }}"></script>
+    <style> .hdr {
+
+font-size: 18px !important;
+}</style>
 @endpush
 
 @push('head-scriptTwo')
@@ -25,11 +29,9 @@
 
 @endphp
 
-<div class="card border-top border-top-width-3 border-top-main border-bottom-main rounded-0 border-0 shadow-none">
-    <div class="card-header border-0">
-        @include('payroll.payroll_info_buttons')
+<div class="card border-bottom-main rounded-0 border-0 shadow-none">
+    @include('payroll.payroll_info_buttons')
 
-    </div>
 
 
     <div class="card-body">
@@ -44,8 +46,8 @@
             </a>
         <table class="table datatable-excel-filter">
             <thead>
-                <tr>
-                  <th>Payrollno</th>
+                <tr class="hdr"  >
+                  <th>Payroll Number</th>
                   <th>Name</th>
                   <th>Time Stamp</th>
                   <th>Change Made By</th>
@@ -58,7 +60,7 @@
 
             <tbody>
                 @foreach ($logs as $row)
-                    <tr id="{{ 'domain'.$row->id }}">
+                    <tr class="hdr" id="{{ 'domain'.$row->id }}">
                         <td>{{ $row->payrollno }}</td>
 
                         <td> {{ $row->empName }} </td>

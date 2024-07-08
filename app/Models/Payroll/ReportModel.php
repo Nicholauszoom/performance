@@ -147,7 +147,8 @@ FROM employee e, department dpt, position p, branch br, contract ct, pension_fun
         $status = $row->counts;
         if ($status > 0) {
             return true;
-        } else return false;
+        } else
+            return false;
     }
 
 
@@ -441,27 +442,49 @@ FROM employee e, department dpt, position p, branch br, contract ct, pension_fun
         return DB::select(DB::raw($query));
     }
 
-    function s_p9($date)
-    {
-
-        $query = "SELECT @s:=@s+1 sNo, CONCAT(e.fname,' ', IF(e.mname != null,e.mname,' '),' ', e.lname) as name, e.tin as tin, e.national_id as national_id,e.emp_id, e.postal_address as postal_address, e.postal_city as postal_city, pl.*
-    FROM employee AS e, (SELECT @s:=0) AS s, payroll_logs pl WHERE pl.empID = e.emp_id AND e.branch = 1 AND e.state = 1 and e.contract_type != 2 AND pl.payroll_date = '" . $date . "' order by e.emp_id ASC
-    ";
-
-
-        return DB::select(DB::raw($query));
-    }
-
     function s_p9_termination($date)
     {
         $raw_date = explode('-', $date);
         $terminationDate = $raw_date[0] . '-' . $raw_date[1];
-        //dd($terminationDate);
 
         $query = "SELECT @s:=@s+1 sNo, CONCAT(e.fname,' ', IF(e.mname != null,e.mname,' '),' ', e.lname) as name, e.tin as tin, e.national_id as national_id,e.emp_id, e.postal_address as postal_address, e.postal_city as postal_city, tm.*
         FROM employee AS e, (SELECT @s:=0) AS s, terminations tm WHERE tm.employeeID = e.emp_id AND e.state = 4 and e.contract_type != 2 AND tm.terminationDate LIKE '%" . $terminationDate . "%' order by e.emp_id ASC
      ";
 
+
+        return DB::select(DB::raw($query));
+    }
+
+    function s_p9($date) {
+        $raw_date = explode('-', $date);
+        $terminationMonth = $raw_date[0] . '-' . $raw_date[1];
+
+        $query = "
+            SELECT
+                CONCAT(e.fname, ' ', IF(e.mname IS NOT NULL, e.mname, ' '), ' ', e.lname) AS name,
+                e.tin AS tin,
+                e.national_id AS national_id,
+                e.emp_id,
+                e.postal_address AS postal_address,
+                e.postal_city AS postal_city,
+                pl.*
+            FROM
+                employee AS e
+            JOIN
+                payroll_logs pl ON pl.empID = e.emp_id
+            LEFT JOIN
+                (SELECT employeeID
+                 FROM terminations
+                 WHERE DATE_FORMAT(terminationDate, '%Y-%m') <= '" . $terminationMonth . "') AS tm
+                ON tm.employeeID = e.emp_id
+            WHERE
+                (e.state = 1 OR e.state = 4)
+                AND e.contract_type != 2
+                AND pl.payroll_date = '" . $date . "'
+                AND tm.employeeID IS NULL
+            ORDER BY
+                e.emp_id ASC
+        ";
 
         return DB::select(DB::raw($query));
     }
@@ -486,8 +509,8 @@ FROM employee AS e, (SELECT @s:=0) AS s, payroll_logs pl WHERE pl.empID = e.emp_
     }
     function s_p91($period_start, $period_end)
     {
-        $raw1  = explode('-', $period_start);
-        $raw2  = explode('-', $period_end);
+        $raw1 = explode('-', $period_start);
+        $raw2 = explode('-', $period_end);
         $termination_start = $raw1[0] . '-' . $raw1[1] . '-01';
         $termination_end = $raw2[0] . '-' . $raw2[1] . '-01';
 
@@ -499,11 +522,11 @@ FROM employee AS e, (SELECT @s:=0) AS s, payroll_logs pl WHERE pl.empID = e.emp_
 
     function s_p91_terminated($period_start, $period_end)
     {
-        $raw1  = explode('-', $period_start);
-        $raw2  = explode('-', $period_end);
+        $raw1 = explode('-', $period_start);
+        $raw2 = explode('-', $period_end);
         $termination_start = $raw1[0] . '-' . $raw1[1] . '-01';
         $termination_end = $raw2[0] . '-' . $raw2[1] . '-01';
-        $termination_date =  $raw2[0] . '-' . $raw2[1];
+        $termination_date = $raw2[0] . '-' . $raw2[1];
         if ($termination_start != $termination_end) {
 
             $query = "SELECT @s:=@s+1 sNo, CONCAT(e.fname,' ', IF(e.mname != null,e.mname,' '),' ', e.lname) as name, e.tin as tin,e.emp_id, e.national_id as national_id, e.postal_address as postal_address, e.postal_city as postal_city, tm.*
@@ -633,6 +656,7 @@ FROM payroll_logs pl, employee e WHERE e.emp_id = pl.empID and e.contract_type =
         foreach ($categories as $category) {
 
             $allowance_categories_query = $allowance_categories_query . "(IF((SELECT SUM(al.amount) FROM temp_allowance_logs al join allowances on allowances.id=al.allowanceID WHERE  al.empID = e.emp_id AND allowances.allowance_category_id=" . $category->id . "  AND al.payment_date = '" . $date . "' GROUP BY al.empID >0),(SELECT SUM(al.amount) FROM temp_allowance_logs al join allowances on allowances.id=al.allowanceID WHERE al.empID = e.emp_id AND allowances.allowance_category_id=" . $category->id . " AND al.payment_date = '" . $date . "' GROUP BY al.empID),0)) AS category" . $category->id . ",";
+
         }
 
         $query = "SELECT
@@ -672,16 +696,16 @@ FROM payroll_logs pl, employee e WHERE e.emp_id = pl.empID and e.contract_type =
         from employee e, department d, position p, branch b, employee el, contract c, pension_fund pf where e.department = d.id and e.position = p.id
         and e.branch = b.code  and c.id = e.contract_type and e.pension_fund = pf.id and e.state != 4 and e.emp_id = '" . $empID . "'";
 
-        $row  =  DB::select(DB::raw($query));
+        $row = DB::select(DB::raw($query));
 
-        $data['employee']  =  $row[0];
+        $data['employee'] = $row[0];
 
 
         $query = "SELECT al.name as NAME,al.Isrecursive as nature,al.pensionable,al.taxable,(IF((SELECT tl.amount from temp_allowance_logs tl where tl.description = al.name and tl.empID = '" . $empID . "') > 0,(SELECT tl.amount from temp_allowance_logs tl where tl.description = al.name and tl.empID = '" . $empID . "'),0)) as amount from allowances al";
-        $data['allowances']  =  DB::select(DB::raw($query));
+        $data['allowances'] = DB::select(DB::raw($query));
 
         $query = "SELECT d.name as NAME,(IF((SELECT td.paid from temp_deduction_logs td where td.description = d.name and td.empID = '" . $empID . "') > 0,(SELECT td.paid from temp_deduction_logs td where td.description = d.name and td.empID = '" . $empID . "'),0)) as amount from deductions d";
-        $data['deductions']  =  DB::select(DB::raw($query));
+        $data['deductions'] = DB::select(DB::raw($query));
         // dd($data);
         return $data;
     }
@@ -694,55 +718,116 @@ FROM payroll_logs pl, employee e WHERE e.emp_id = pl.empID and e.contract_type =
         from employee e, department d, position p, branch b, employee el, contract c, pension_fund pf where e.department = d.id and e.position = p.id
         and e.branch = b.code and e.line_manager = el.emp_id and c.id = e.contract_type and e.pension_fund = pf.id and e.state != 4 and e.emp_id = '" . $empID . "'";
 
-        $row  =  DB::select(DB::raw($query));
+        $row = DB::select(DB::raw($query));
 
-        $data['employee']  =  $row[0];
+        $data['employee'] = $row[0];
 
         $query = "SELECT al.name as NAME,al.Isrecursive as nature,al.pensionable,al.taxable,(IF((SELECT tl.amount from allowance_logs tl where tl.description = al.name and tl.empID = '" . $empID . "') > 0,(SELECT tl.amount from allowance_logs tl where tl.description = al.name and tl.empID = '" . $empID . "'),0)) as amount from allowances al";
-        $data['allowances']  =  DB::select(DB::raw($query));
+        $data['allowances'] = DB::select(DB::raw($query));
 
         $query = "SELECT d.name as NAME,(IF((SELECT td.paid from deduction_logs td where td.description = d.name and td.empID = '" . $empID . "') > 0,(SELECT td.paid from deduction_logs td where td.description = d.name and td.empID = '" . $empID . "'),0)) as amount from deductions d";
-        $data['deductions']  =  DB::select(DB::raw($query));
+        $data['deductions'] = DB::select(DB::raw($query));
         // dd($data);
         return $data;
     }
 
-    function get_payroll_summary($date)
-    {
-        $query = "SELECT
-        pl.*,
-        e.fname,e.mname,e.lname,e.account_no,e.pf_membership_no,pl.sdl,pl.wcf,e.currency,de.name,e.cost_center as costCenterName,b.name as bank_name,e.branch as branch_code,
-        e.emp_id,e.rate,
-        'al.description' as allowance_id,
-        0 as allowance_amount,
-        (IF((SELECT SUM(al.amount) FROM allowance_logs al WHERE al.empID = e.emp_id AND al.description lIKE '%Overtime%' AND al.payment_date = '" . $date . "' GROUP BY al.empID >0),(SELECT SUM(al.amount) FROM allowance_logs al WHERE al.empID = e.emp_id AND al.description lIKE '%Overtime%' AND al.payment_date = '" . $date . "' GROUP BY al.empID),0)) AS overtime,
-         (IF((SELECT SUM(al.amount) FROM allowance_logs al WHERE al.empID = e.emp_id AND al.description = 'House Rent' AND al.payment_date = '" . $date . "' GROUP BY al.empID >0),(SELECT SUM(al.amount) FROM allowance_logs al WHERE al.empID = e.emp_id AND al.description = 'House Rent' AND al.payment_date = '" . $date . "' GROUP BY al.empID),0)) AS house_rent,
-        (IF((SELECT SUM(al.amount) FROM allowance_logs al WHERE al.empID = e.emp_id AND al.description = 'House Rent' AND al.payment_date = '" . $date . "' GROUP BY al.empID >0),(SELECT SUM(al.amount) FROM allowance_logs al WHERE al.empID = e.emp_id AND al.description = 'House Rent' AND al.payment_date = '" . $date . "' GROUP BY al.empID),0)) AS disturbance_allowance,
+        function get_payroll_summary($date, $payrollstate = null)
+        {
+            $payroll_table = "payroll_logs";
+            $allowance_table = "allowance_logs";
+            $deduction_table = "deduction_logs";
+            $loan_table = "loan_logs";
 
-         (IF((SELECT SUM(al.amount) FROM allowance_logs al WHERE al.empID = e.emp_id AND al.description = 'Teller Allowance' AND al.payment_date = '" . $date . "' GROUP BY al.empID >0),(SELECT SUM(al.amount) FROM allowance_logs al WHERE al.empID = e.emp_id AND al.description = 'Teller Allowance' AND al.payment_date = '" . $date . "' GROUP BY al.empID),0)) AS teller_allowance,
-         (IF((SELECT SUM(al.amount) FROM allowance_logs al WHERE al.empID = e.emp_id AND al.description = 'Arrears' AND al.payment_date = '" . $date . "' GROUP BY al.empID >0),(SELECT SUM(al.amount) FROM allowance_logs al WHERE al.empID = e.emp_id AND al.description = 'Arrears' AND al.payment_date = '" . $date . "' GROUP BY al.empID),0)) AS arrears_allowance,
+            if ($payrollstate != 0) {  //Pending payroll
+                $payroll_table = "temp_payroll_logs";
+                $allowance_table = "temp_allowance_logs";
+                $deduction_table = "temp_deduction_logs";
+                $loan_table = "temp_loan_logs";
+            }
 
-         (IF((SELECT SUM(al.amount) FROM allowance_logs al WHERE al.empID = e.emp_id AND al.description != 'House Rent' AND al.description != 'Teller Allowance' AND al.description != 'Arrears' AND al.description NOT lIKE '%Overtime%' AND al.payment_date = '" . $date . "' GROUP BY al.empID >0),(SELECT SUM(al.amount) FROM allowance_logs al WHERE al.empID = e.emp_id AND al.description != 'House Rent' AND  al.description != 'Arrears' AND al.description NOT lIKE '%Overtime%' AND al.description != 'Teller Allowance' AND al.payment_date = '" . $date . "' GROUP BY al.empID),0)) AS other_payments,
+            $query = 'SELECT @s:=@s+1 SNo, a.* FROM allowance_categories a , (SELECT @s:=0) as s ';
 
-        IF((SELECT SUM(dl.paid) FROM deduction_logs dl WHERE dl.empID = e.emp_id AND dl.payment_date = '" . $date . "' GROUP BY dl.empID)>0,(SELECT SUM(dl.paid) FROM deduction_logs dl WHERE dl.empID = e.emp_id AND dl.payment_date = '" . $date . "' GROUP BY dl.empID),0) AS deductions,
+            $categories = DB::select(DB::raw($query));
 
-        (SELECT SUM(ll.paid) FROM loan_logs ll,loan l WHERE ll.loanID = l.id AND e.emp_id = l.empID AND  ll.payment_date = '" . $date . "' GROUP BY ll.loanID) AS loans,
+            $allowance_categories_query = "";
+            foreach ($categories as $category) {
+                $allowance_categories_query .= "(IFNULL((SELECT SUM(al.amount)
+                    FROM {$allowance_table} al
+                    JOIN allowances ON allowances.id = al.allowanceID
+                    WHERE al.empID = e.emp_id
+                    AND allowances.allowance_category_id = {$category->id}
+                    AND al.payment_date = '{$date}'
+                    GROUP BY al.empID
+                    LIMIT 1), 0)) AS category{$category->id}, ";
+            }
 
-        (SELECT SUM(ll.paid) FROM loan_logs ll,loan l WHERE ll.loanID = l.id AND e.emp_id = l.empID AND  ll.payment_date = '" . $date . "' GROUP BY ll.payment_date) AS total_loans
+            $allowance_categories_query .= "(IFNULL((SELECT SUM(al.amount)
+                FROM {$allowance_table} al
+                JOIN allowances ON allowances.id = al.allowanceID
+                WHERE al.empID = e.emp_id
+                AND allowances.allowance_category_id IS NULL
+                AND al.payment_date = '{$date}'
+                GROUP BY al.empID
+                LIMIT 1), 0)) AS other_payments, ";
 
-        from payroll_logs pl,employee e,bank b,department de,cost_center cc where b.id = e.bank and e.department = de.id and de.cost_center_id = cc.id and e.emp_id = pl.empID /* and e.state !=4 */  and pl.payroll_date='" . $date . "' ORDER BY e.emp_id ASC
+            $query = "SELECT
+                pl.*,
+                e.fname, e.mname, e.lname, e.account_no, e.pf_membership_no, pl.sdl, pl.wcf, e.currency, de.name, e.cost_center as costCenterName, b.name as bank_name, e.branch as branch_code,
+                e.emp_id, e.rate,
+                0 as allowance_amount,
+                IFNULL((SELECT SUM(al.amount)
+                    FROM {$allowance_table} al
+                    WHERE al.empID = e.emp_id
+                    AND al.description LIKE '%Overtime%'
+                    AND al.payment_date = '{$date}'
+                    GROUP BY al.empID
+                    LIMIT 1), 0) AS overtime,
+                {$allowance_categories_query}
+                IFNULL((SELECT SUM(al.amount)
+                    FROM {$allowance_table} al
+                    WHERE al.empID = e.emp_id
+                    AND al.description = 'Arrears'
+                    AND al.payment_date = '{$date}'
+                    GROUP BY al.empID
+                    LIMIT 1), 0) AS arrears_allowance,
+                IFNULL((SELECT SUM(dl.paid)
+                    FROM {$deduction_table} dl
+                    WHERE dl.empID = e.emp_id
+                    AND dl.payment_date = '{$date}'
+                    GROUP BY dl.empID
+                    LIMIT 1), 0) AS deductions,
+                IFNULL((SELECT SUM(ll.paid)
+                    FROM {$loan_table} ll
+                    JOIN loan l ON ll.loanID = l.id
+                    WHERE e.emp_id = l.empID
+                    AND ll.payment_date = '{$date}'
+                    GROUP BY ll.loanID
+                    LIMIT 1), 0) AS loans,
+                IFNULL((SELECT SUM(ll.paid)
+                    FROM {$loan_table} ll
+                    JOIN loan l ON ll.loanID = l.id
+                    WHERE e.emp_id = l.empID
+                    AND ll.payment_date = '{$date}'
+                    GROUP BY ll.payment_date
+                    LIMIT 1), 0) AS total_loans
+                FROM {$payroll_table} pl
+                JOIN employee e ON e.emp_id = pl.empID
+                JOIN bank b ON b.id = e.bank
+                JOIN department de ON e.department = de.id
+                JOIN cost_center cc ON de.cost_center_id = cc.id
+                WHERE pl.payroll_date = '{$date}'
+                ORDER BY e.emp_id ASC";
 
-        ";
+            return DB::select(DB::raw($query));
+        }
 
-        return DB::select(DB::raw($query));
-    }
     function get_termination($date)
     {
 
         $calendar = explode('-', $date);
-        $date =  isset($calendar) && is_array($calendar) && count($calendar) >= 2 ? '%' . $calendar[0] . '-' . $calendar[1] . '%' : null;
+        $date = isset($calendar) && is_array($calendar) && count($calendar) >= 2 ? '%' . $calendar[0] . '-' . $calendar[1] . '%' : null;
 
-        $query  = "SELECT t.*,e.pf_membership_no,e.cost_center as costCenterName,e.account_no,de.name,e.emp_id,e.mname,e.fname,e.lname,CONCAT(e.fname,' ', IF(e.mname != null,e.mname,' '),' ', e.lname) as name from terminations t,employee e,department de where e.emp_id = t.employeeID and e.department = de.id and t.terminationDate LIKE '%" . $date . "%' ";
+        $query = "SELECT t.*,e.pf_membership_no,e.cost_center as costCenterName,e.account_no,de.name as department_name,e.emp_id,e.mname,e.fname,e.lname,CONCAT(e.fname,' ', IF(e.mname != null,e.mname,' '),' ', e.lname) as name from terminations t,employee e,department de where e.emp_id = t.employeeID and e.department = de.id and t.terminationDate LIKE '%" . $date . "%' ";
         return (DB::select(DB::raw($query)));
     }
 
@@ -765,6 +850,13 @@ FROM payroll_logs pl, employee e WHERE e.emp_id = pl.empID and e.contract_type =
         $query = "SELECT @s:=@s+1 as SNo, l.form_four_index_no , CONCAT(e.fname,' ', IF(e.mname != null,e.mname,' '),' ', e.lname) as name, ll.paid, ll.remained FROM employee e, loan_logs ll, loan l, (SELECT @s:=0) s WHERE e.emp_id=l.empID AND e.emp_id= '" . $emp_id . "' and e.contract_type != 2 AND ll.loanID = l.id AND l.type = 3 ";
         return DB::select(DB::raw($query));
     }
+
+    function v_heslb2($emp_id)
+    {
+        $query = "SELECT @s:=@s+1 as SNo, l.form_four_index_no, l.description, l.form_four_index_no, l.approved_hr, l.approved_finance, l.approved_date_hr, l.approved_date_finance, l.empID, CONCAT(e.fname,' ', IF(e.mname != null, e.mname, ' '), ' ', e.lname) as name, ll.paid, ll.remained, ll.payment_date FROM employee e, loan_logs ll, loan l, (SELECT @s:=0) s WHERE e.emp_id=l.empID AND e.emp_id= '" . $emp_id . "' and e.contract_type != 2 AND ll.loanID = l.id AND l.type = 3 ";
+        return DB::select(DB::raw($query));
+    }
+
     function v_totalheslb($payrolldate, $emp_id)
     {
         $query = "SELECT if(SUM(ll.paid) IS NULL, 0, SUM(ll.paid)) as total_paid,MIN(ll.remained) as total_remained  FROM loan l, loan_logs ll, employee e  WHERE ll.loanID = l.id  AND l.type = 3 AND e.emp_id = l.empID  AND e.emp_id= '" . $emp_id . "' and e.contract_type !=2 ";
@@ -830,85 +922,34 @@ FROM payroll_logs pl, employee e WHERE e.emp_id = pl.empID and e.contract_type =
 
     function get_pension_years($empID)
     {
-        $query = "SELECT DISTINCT years
-        FROM payroll_logs
-        WHERE \"empID\"= '$empID'
-        ORDER BY years DESC";
+
+        $query = "SELECT DISTINCT years from payroll_logs where empID = '" . $empID . "' ORDER BY years DESC";
+        return DB::select(DB::raw($query));
+    }
+
+    function employee_pension($empID)
+    {
+
+        $query = "
+                (SELECT @s:=@s+1 as SNo, e.pf_membership_no,e.emp_id,e.fname,e.mname,e.lname,e.hire_date, CONCAT(e.fname,' ', IF(e.mname != null,e.mname,' '),' ', e.lname) as name,e.emp_id, pl.salary as salary,pl.years,pl.pension_employee,pl.receipt_no,pl.receipt_date,pl.payroll_date as payment_date, pl.pension_employee as pension_employer
+                FROM employee e, payroll_logs pl, (SELECT @s:=0) s WHERE pl.empID = e.emp_id and e.contract_type != 2 AND e.salary != 0.00  AND pl.empID = '" . $empID . "' ORDER BY payroll_date ASC)
+
+                UNION
+
+                (SELECT @s:=@s+1 as SNo, e.pf_membership_no,e.emp_id,e.fname,e.mname,e.lname,e.hire_date, CONCAT(e.fname,' ', IF(e.mname != null,e.mname,' '),' ', e.lname) as name,e.emp_id, tm.salaryEnrollment as salary,EXTRACT(YEAR FROM tm.terminationDate) AS years,tm.pension_employee,'-' as receipt_no,'-' as receipt_date,tm.terminationDate as payment_date, tm.pension_employee as pension_employer
+                FROM employee e, terminations tm, (SELECT @s:=0) s WHERE tm.employeeID = e.emp_id and e.contract_type != 2 AND e.salary != 0.00  AND tm.employeeID = '" . $empID . "' ORDER BY terminationDate ASC)
+
+ ";
+
+
 
         return DB::select(DB::raw($query));
     }
 
-    public function employee_pension($empID)
-{
-    $payrollLogs = DB::table('employee as employee')
-        ->join('payroll_logs as pl', 'pl.empID', '=', 'employee.emp_id')
-        ->select(
-            DB::raw('ROW_NUMBER() OVER () as SNo'),
-            'employee.pf_membership_no',
-            'employee.emp_id',
-            'employee.fname',
-            'employee.mname',
-            'employee.lname',
-            'employee.hire_date',
-            DB::raw('(employee.fname || \' \' || COALESCE(employee.mname, \'\') || \' \' || employee.lname) as name'),
-            'employee.emp_id',
-            'pl.salary as salary', // Keep the salary as-is
-            'pl.years',
-            'pl.pension_employee',
-            'pl.receipt_no',
-            'pl.receipt_date',
-            'pl.payroll_date as payment_date',
-            'pl.pension_employee as pension_employer'
-        )
-        ->where('employee.contract_type', '!=', 2)
-        ->where('employee.salary', '!=', '0.00')
-        ->where('pl.empID', '=', $empID)
-        ->orderBy('pl.payroll_date', 'ASC');
-
-        // dd($payrollLogs->get());
-
-    $terminations = DB::table('employee as employee')
-        ->join('terminations as tm', 'tm.employeeid', '=', 'employee.emp_id')
-        ->select(
-            DB::raw('ROW_NUMBER() OVER () as SNo'),
-            'employee.pf_membership_no',
-            'employee.emp_id',
-            'employee.fname',
-            'employee.mname',
-            'employee.lname',
-            'employee.hire_date',
-            DB::raw('(employee.fname || \' \' || COALESCE(employee.mname, \'\') || \' \' || employee.lname) as name'),
-            'employee.emp_id',
-            'employee.salary',
-            // 'salaryEnrollment as salary',
-            DB::raw('DATE_PART(\'year\', tm."terminationDate") AS years'),
-            'tm.pension_employee',
-            DB::raw('\'-\' as receipt_no'),
-            DB::raw('\'-\' as receipt_date'),
-            'tm.terminationDate as payment_date',
-            'tm.pension_employee as pension_employer'
-        )
-        ->where('employee.contract_type', '!=', 2)
-        ->where('(employee.salary','!=', '0.00')
-        ->where('tm.employeeid', '=', $empID)
-        ->orderBy('tm.terminationDate', 'ASC');
-
-        // dd($terminations->get());
-
-
-    $result = $payrollLogs->union($terminations)->get();
-
-    return $result;
-}
-
-
-
-
-
     function v_pension($date, $pensionFund)
     {
         $query = "SELECT @s:=@s+1 as SNo, e.pf_membership_no , CONCAT(e.fname,' ', IF(e.mname != null,e.mname,' '),' ', e.lname) as name, pl.salary as salary, pl.allowances,pl.pension_employee, pl.pension_employer
-FROM employee e, payroll_logs pl, (SELECT @s:=0) s WHERE pl.empID = e.emp_id and e.contract_type = 2 AND pl.pension_fund = '" . $pensionFund . "' AND pl.payroll_date LIKE '%" . $date . "%'";
+        FROM employee e, payroll_logs pl, (SELECT @s:=0) s WHERE pl.empID = e.emp_id and e.contract_type = 2 AND pl.pension_fund = '" . $pensionFund . "' AND pl.payroll_date LIKE '%" . $date . "%'";
         return DB::select(DB::raw($query));
     }
 
@@ -1253,7 +1294,9 @@ FROM payroll_logs pl, employee e, department d, position p  WHERE e.emp_id = pl.
     (SELECT SUM(plg.pension_employee) FROM  payroll_logs plg WHERE plg.empID = e.emp_id and e.emp_id = '" . $empID . "' and plg.payroll_date BETWEEN e.hire_date and '" . $payroll_month_end . "' ) as pension_employee_todate,
     (SELECT SUM(plg.pension_employer) FROM  payroll_logs plg WHERE plg.empID = e.emp_id and e.emp_id = '" . $empID . "' and plg.payroll_date BETWEEN e.hire_date and '" . $payroll_month_end . "' ) as pension_employer_todate,
     pl.*
-    FROM payroll_logs pl, employee e, department d, position p, bank bn, pension_fund pf, branch br  WHERE e.emp_id = pl.empID AND pl.branch = br.id AND pl.bank = bn.id AND pl.pension_fund = pf.id AND e.position = p.id AND d.id = e.department AND pl.payroll_date LIKE '%" . $payroll_month . "%' and pl.empID = '" . $empID . "'";
+    FROM payroll_logs pl, employee e, department d, position p, bank bn, pension_fund pf, branch br
+     WHERE e.emp_id = pl.empID AND pl.branch = br.id AND pl.bank = bn.id AND pl.pension_fund = pf.id
+     AND e.position = p.id AND d.id = e.department AND pl.payroll_date LIKE '%" . $payroll_month . "%' and pl.empID = '" . $empID . "'";
 
         return DB::select(DB::raw($query));
     }
@@ -1392,6 +1435,20 @@ FROM payroll_logs pl, employee e, department d, position p  WHERE e.emp_id = pl.
         $query = "SELECT l.description, ll.paid, ll.remained, ll.policy FROM loan_logs ll, loan l WHERE ll.loanID = l.id AND l.empID =  '" . $empID . "' AND ll.payment_date like '%" . $payroll_month . "%'";
         return DB::select(DB::raw($query));
     }
+    function getALlLoanHistory2($empID)
+    {
+        $query = "SELECT * FROM loan_logs ll, loan l WHERE ll.loanID = l.id AND l.empID = '" . $empID . "' ORDER BY ll.payment_date DESC";
+        return DB::select(DB::raw($query));
+
+
+    }
+    function getALlLoanHistory($empID)
+    {
+        $query = "SELECT * FROM loan_logs   ORDER BY payment_date DESC";
+        return DB::select(DB::raw($query));
+
+    }
+
 
     function temp_loans($empID, $payroll_month)
     {
@@ -1701,10 +1758,18 @@ and e.branch = b.code and e.line_manager = el.emp_id and c.id = e.contract_type 
         return DB::select(DB::raw($query));
     }
 
-    public function s_count($date)
+    public function s_count($date, $payrollstate = null)
     {
 
-        $row = DB::table('payroll_logs')->where('payroll_date', $date)->select('id')->count();
+        $table = "payroll_logs";
+
+        if ($payrollstate != 0) {  //Pending payroll
+
+            $table = "temp_payroll_logs";
+
+        }
+
+        $row = DB::table($table)->where('payroll_date', $date)->select('id')->count();
 
         $calendar = explode('-', $date);
         if (count($calendar) > 2) {
@@ -1719,13 +1784,20 @@ and e.branch = b.code and e.line_manager = el.emp_id and c.id = e.contract_type 
         return $row + $row2;
     }
 
-    public function new_employee($date, $date2)
+    public function new_employee($date, $date2, $payrollstate = null)
     {
-        // $calendar = explode('-', $date);
-        // $date2 = '%' . $calendar[0] . '-' . $calendar[1] . '%';
-        $query = "SELECT count(pl.empID) as total from payroll_logs pl where pl.payroll_date = '" . $date . "' and pl.empID NOT IN (SELECT pl2.empID from payroll_logs pl2 where pl2.payroll_date = '" . $date2 . "')";
 
-        $row =  DB::select(DB::raw($query));
+        $table = "payroll_logs";
+
+        if ($payrollstate != 0) {  //Pending payroll
+
+            $table = "temp_payroll_logs";
+
+        }
+
+        $query = "SELECT count(pl.empID) as total from " . $table . " pl where pl.payroll_date = '" . $date . "' and pl.empID NOT IN (SELECT pl2.empID from payroll_logs pl2 where pl2.payroll_date = '" . $date2 . "')";
+
+        $row = DB::select(DB::raw($query));
 
 
         return $row[0]->total;
@@ -1737,21 +1809,32 @@ and e.branch = b.code and e.line_manager = el.emp_id and c.id = e.contract_type 
         // $date2 = '%' . $calendar[0] . '-' . $calendar[1] . '%';
         $query = "SELECT count(pl.empID) as total from temp_payroll_logs pl where pl.payroll_date = '" . $date . "' and pl.empID NOT IN (SELECT pl2.empID from payroll_logs pl2 where pl2.payroll_date = '" . $date2 . "')";
 
-        $row =  DB::select(DB::raw($query));
+        $row = DB::select(DB::raw($query));
 
 
-        $data =  $row[0]->total;
+        $data = $row[0]->total;
 
 
 
         return $data;
+
     }
 
-    public function new_employee_salary($date, $date2)
+    public function new_employee_salary($date, $date2, $payrollstate = null)
     {
-        $query = "SELECT SUM(pl.salary) as total from payroll_logs pl where pl.payroll_date = '" . $date . "' and pl.empID NOT IN (SELECT pl2.empID from payroll_logs pl2 where pl2.payroll_date = '" . $date2 . "')";
 
-        $row =  DB::select(DB::raw($query));
+        $table = "payroll_logs";
+
+        if ($payrollstate != 0) {  //Pending payroll
+
+            $table = "temp_payroll_logs";
+
+        }
+
+
+        $query = "SELECT SUM(pl.salary) as total from " . $table . " pl where pl.payroll_date = '" . $date . "' and pl.empID NOT IN (SELECT pl2.empID from payroll_logs pl2 where pl2.payroll_date = '" . $date2 . "')";
+
+        $row = DB::select(DB::raw($query));
         return $row[0]->total;
     }
 
@@ -1759,7 +1842,7 @@ and e.branch = b.code and e.line_manager = el.emp_id and c.id = e.contract_type 
     {
         $query = "SELECT SUM(pl.salary) as total from temp_payroll_logs pl where pl.payroll_date = '" . $date . "' and pl.empID NOT IN (SELECT pl2.empID from payroll_logs pl2 where pl2.payroll_date = '" . $date2 . "')";
 
-        $row =  DB::select(DB::raw($query));
+        $row = DB::select(DB::raw($query));
         return $row[0]->total;
     }
 
@@ -1775,6 +1858,7 @@ and e.branch = b.code and e.line_manager = el.emp_id and c.id = e.contract_type 
             $terminationDate = '%' . $calendar[0] . '-' . $calendar[1] . '%';
         } else {
             $terminationDate = 'null';
+
         }
         $row2 = DB::table('terminations')->where('terminationDate', 'like', $terminationDate)->select('id')->count();
 
@@ -1789,11 +1873,13 @@ and e.branch = b.code and e.line_manager = el.emp_id and c.id = e.contract_type 
             $terminationDate = '%' . $calendar[0] . '-' . $calendar[1] . '%';
         } else {
             $terminationDate = 'null';
+
         }
         $query = "SELECT SUM(salaryEnrollment) as amount from terminations where terminationDate LIKE '" . $terminationDate . "'";
         $row = DB::select(DB::raw($query));
 
         return $row[0]->amount;
+
     }
 
     function terminated_employee($date)
@@ -1820,10 +1906,18 @@ and e.branch = b.code and e.line_manager = el.emp_id and c.id = e.contract_type 
 
 
 
-    public function s_overtime($date)
+    public function s_overtime($date, $payrollstate = null)
     {
 
-        $row = DB::table('allowance_logs')->where('payment_date', $date)->where('allowanceID', 23)->sum('amount');
+        $table = "allowance_logs";
+
+        if ($payrollstate != 0) {  //Pending payroll
+
+            $table = "temp_allowance_logs";
+
+        }
+
+        $row = DB::table($table)->where('payment_date', $date)->where('allowanceID', 23)->sum('amount');
 
         return $row;
     }
@@ -1837,19 +1931,29 @@ and e.branch = b.code and e.line_manager = el.emp_id and c.id = e.contract_type 
         return $row;
     }
 
-    function basic_decrease($previous_payroll_month, $current_payroll_month)
+    function basic_decrease($previous_payroll_month, $current_payroll_month, $payrollstate = null)
     {
+
+        $payroll_log = "payroll_logs";
+
+        if ($payrollstate != 0) {  //Pending payroll
+
+            $payroll_log = "temp_payroll_logs";
+
+        }
+
+
 
 
         $calendar1 = explode('-', $current_payroll_month);
         $calendar2 = explode('-', $previous_payroll_month);
 
         // $previous_terminationDate = $calendar2[0] . '-' . $calendar2[1];
-        $current_terminationDate =  isset($calendar1) && is_array($calendar1) && count($calendar1) >= 2 ? '%' . $calendar1[0] . '-' . $calendar1[1] . '%' : null;
+        $current_terminationDate = isset($calendar1) && is_array($calendar1) && count($calendar1) >= 2 ? '%' . $calendar1[0] . '-' . $calendar1[1] . '%' : null;
         $subquery = "SELECT SUM(tm.actual_salary - tm.salaryEnrollment) as amount from terminations tm where  tm.terminationDate like '%" . $current_terminationDate . "%'";
         $row1 = DB::select(DB::raw($subquery));
 
-        $query = "SELECT SUM(pl.actual_salary-pl.salary) as amount from payroll_logs pl where pl.actual_salary > pl.salary and pl.salary != (SELECT salary from payroll_logs where pl.empID = payroll_logs.empID and payroll_logs.payroll_date = '" . $previous_payroll_month . "') and pl.payroll_date = '" . $current_payroll_month . "'";
+        $query = "SELECT SUM(pl.actual_salary-pl.salary) as amount from " . $payroll_log . " pl where pl.actual_salary > pl.salary and pl.salary != (SELECT salary from payroll_logs where pl.empID = payroll_logs.empID and payroll_logs.payroll_date = '" . $previous_payroll_month . "') and pl.payroll_date = '" . $current_payroll_month . "'";
         $row = DB::select(DB::raw($query));
         $data['basic_decrease'] = $row[0]->amount + $row1[0]->amount;
 
@@ -1857,7 +1961,7 @@ and e.branch = b.code and e.line_manager = el.emp_id and c.id = e.contract_type 
         $subquery = "SELECT SUM(tm.actual_salary) as amount from terminations tm where tm.actual_salary > tm.salaryEnrollment and  tm.terminationDate like '%" . $current_terminationDate . "%'";
         $row1 = DB::select(DB::raw($subquery));
 
-        $query = "SELECT SUM(pl.actual_salary) as amount from payroll_logs pl where   pl.actual_salary > pl.salary and pl.salary != (SELECT salary from payroll_logs where pl.empID = payroll_logs.empID and payroll_logs.payroll_date = '" . $previous_payroll_month . "') and pl.payroll_date = '" . $current_payroll_month . "'";
+        $query = "SELECT SUM(pl.actual_salary) as amount from " . $payroll_log . " pl where   pl.actual_salary > pl.salary and pl.salary != (SELECT salary from payroll_logs where pl.empID = payroll_logs.empID and payroll_logs.payroll_date = '" . $previous_payroll_month . "') and pl.payroll_date = '" . $current_payroll_month . "'";
         $row = DB::select(DB::raw($query));
 
         $data['actual_amount'] = $row[0]->amount + $row1[0]->amount;
@@ -1899,15 +2003,17 @@ and e.branch = b.code and e.line_manager = el.emp_id and c.id = e.contract_type 
 
 
 
-    function basic_increase($previous_payroll_month, $current_payroll_month)
+    function basic_increase($previous_payroll_month, $current_payroll_month, $payrollstate = null)
     {
 
-        // if (empty($previous_payroll_month)) {
-        //     $data['basic_decrease'] = 0;
-        //     $data['actual_amount'] = 0;
+        $payroll_log = "payroll_logs";
 
-        //     return $data;
-        // }
+        if ($payrollstate != 0) {  //Pending payroll
+
+            $payroll_log = "temp_payroll_logs";
+
+        }
+
 
         $calendar1 = explode('-', $current_payroll_month);
         $calendar2 = explode('-', $previous_payroll_month);
@@ -1918,10 +2024,11 @@ and e.branch = b.code and e.line_manager = el.emp_id and c.id = e.contract_type 
         $row1 = DB::select(DB::raw($subquery));
         //dd($row1);
 
-        $query = "SELECT SUM(pl.salary - pl.actual_salary) as amount from payroll_logs pl where pl.actual_salary < pl.salary and pl.salary != (SELECT salary from payroll_logs where pl.empID = payroll_logs.empID and payroll_logs.payroll_date = '" . $previous_payroll_month . "') and pl.payroll_date = '" . $current_payroll_month . "'";
+        $query = "SELECT SUM(pl.salary - pl.actual_salary) as amount from " . $payroll_log . " pl where pl.actual_salary < pl.salary and pl.salary != (SELECT salary from payroll_logs where pl.empID = payroll_logs.empID and payroll_logs.payroll_date = '" . $previous_payroll_month . "') and pl.payroll_date = '" . $current_payroll_month . "'";
         $row = DB::select(DB::raw($query));
+        //dd($row);
 
-        $query = "SELECT SUM(pl.salary - (SELECT salary from payroll_logs where pl.empID = payroll_logs.empID and payroll_logs.payroll_date = '" . $previous_payroll_month . "')) as amount,SUM(pl.actual_salary) as actual_salary from payroll_logs pl where pl.actual_salary = pl.salary and pl.actual_salary > (SELECT salary from payroll_logs where pl.empID = payroll_logs.empID and payroll_logs.payroll_date = '" . $previous_payroll_month . "') and pl.payroll_date = '" . $current_payroll_month . "'";
+        $query = "SELECT SUM(pl.salary - (SELECT salary from payroll_logs where pl.empID = payroll_logs.empID and payroll_logs.payroll_date = '" . $previous_payroll_month . "')) as amount,SUM(pl.actual_salary) as actual_salary from " . $payroll_log . " pl where pl.actual_salary = pl.salary and pl.actual_salary > (SELECT salary from payroll_logs where pl.empID = payroll_logs.empID and payroll_logs.payroll_date = '" . $previous_payroll_month . "') and pl.payroll_date = '" . $current_payroll_month . "'";
         $row2 = DB::select(DB::raw($query));
 
         $data['basic_increase'] = $row[0]->amount + $row1[0]->amount + $row2[0]->amount;
@@ -1995,6 +2102,8 @@ and e.branch = b.code and e.line_manager = el.emp_id and c.id = e.contract_type 
         //     return $data;
         // }
 
+
+
         $calendar1 = explode('-', $current_payroll_month);
         $calendar2 = explode('-', $previous_payroll_month);
 
@@ -2058,10 +2167,10 @@ and e.branch = b.code and e.line_manager = el.emp_id and c.id = e.contract_type 
 
         $query = "SELECT SUM(pl.actual_salary) as total_amount from payroll_logs pl where  pl.payroll_date = '" . $date . "'";
 
-        $row  = DB::select(DB::raw($query));
+        $row = DB::select(DB::raw($query));
 
         $query2 = "SELECT IF(SUM(tm.salaryEnrollment) > 0,SUM(tm.salaryEnrollment),0) as total_amount from terminations tm where  tm.terminationDate like '" . $terminationDate . "'";
-        $row2  = DB::select(DB::raw($query2));
+        $row2 = DB::select(DB::raw($query2));
 
         return $row[0]->total_amount + $row2[0]->total_amount;
     }
@@ -2073,10 +2182,10 @@ and e.branch = b.code and e.line_manager = el.emp_id and c.id = e.contract_type 
 
         $query = "SELECT SUM(pl.actual_salary) as total_amount from temp_payroll_logs pl where  pl.payroll_date = '" . $date . "'";
 
-        $row  = DB::select(DB::raw($query));
+        $row = DB::select(DB::raw($query));
 
         $query2 = "SELECT IF(SUM(tm.salaryEnrollment) > 0,SUM(tm.salaryEnrollment),0) as total_amount from terminations tm where  tm.terminationDate like '" . $terminationDate . "'";
-        $row2  = DB::select(DB::raw($query2));
+        $row2 = DB::select(DB::raw($query2));
         //dd($row2[0]->total_amount);
         return $row[0]->total_amount + $row2[0]->total_amount;
     }
@@ -2089,16 +2198,26 @@ and e.branch = b.code and e.line_manager = el.emp_id and c.id = e.contract_type 
 
         return $row;
     }
-    public function employee_increase($current_payroll_month, $previous_payroll_month)
+    public function employee_increase($current_payroll_month, $previous_payroll_month, $payrollstate = null)
     {
+
+        $payroll_table = "payroll_logs";
+
+
+        if ($payrollstate != 0) {  //Pending payroll
+
+            $payroll_table = "temp_payroll_logs";
+
+        }
+
         $query = "
         (SELECT  'Add Employee' as description,e.emp_id,e.hire_date,e.contract_end,e.fname,e.lname,pl.salary,pl.salary as current_amount,0 as previous_amount
-        from employee e,payroll_logs pl where e.emp_id = pl.empID and pl.payroll_date = '" . $current_payroll_month . "' and e.emp_id NOT IN (SELECT empID from  payroll_logs where payroll_date = '" . $previous_payroll_month . "') )";
+        from employee e," . $payroll_table . " pl where e.emp_id = pl.empID and pl.payroll_date = '" . $current_payroll_month . "' and e.emp_id NOT IN (SELECT empID from  payroll_logs where payroll_date = '" . $previous_payroll_month . "') )";
         $row = DB::select(DB::raw($query));
 
         return $row;
     }
-    public function employee_basic_increase($current_payroll_month, $previous_payroll_month)
+    public function employee_basic_increase1($current_payroll_month, $previous_payroll_month)
     {
 
         $query = "SELECT  'Add Increase in Basic Pay incomparison to Last M' as description,e.emp_id,e.hire_date,e.contract_end,e.fname,e.lname,
@@ -2115,16 +2234,24 @@ and e.branch = b.code and e.line_manager = el.emp_id and c.id = e.contract_type 
         return $row;
     }
 
-    public function employee_basic_increase1($current_payroll_month, $previous_payroll_month)
+    public function employee_basic_increase($current_payroll_month, $previous_payroll_month, $payrollstate = null)
     {
 
+        $allowance_log = "payroll_logs";
+
+        if ($payrollstate != 0) {  //Pending payroll
+
+            $allowance_log = "temp_payroll_logs";
+
+        }
+
         $query = "SELECT  'Add Increase in Basic Pay incomparison to Last M' as description,e.emp_id,e.hire_date,e.contract_end,e.fname,e.lname,
-        (SELECT salary from temp_payroll_logs pl where e.emp_id = pl.empID and payroll_date = '" . $current_payroll_month . "' limit 1) as current_amount,
+        (SELECT salary from " . $allowance_log . " pl where e.emp_id = pl.empID and payroll_date = '" . $current_payroll_month . "' limit 1) as current_amount,
          (SELECT salary from payroll_logs pl where e.emp_id = pl.empID and payroll_date = '" . $previous_payroll_month . "' limit 1) as previous_amount
 
-         from employee e where (SELECT salary from temp_payroll_logs pl where e.emp_id = pl.empID and payroll_date = '" . $current_payroll_month . "' limit 1) > (SELECT salary from payroll_logs pl where e.emp_id = pl.empID and payroll_date = '" . $previous_payroll_month . "' limit 1)
+         from employee e where (SELECT salary from " . $allowance_log . " pl where e.emp_id = pl.empID and payroll_date = '" . $current_payroll_month . "' limit 1) > (SELECT salary from payroll_logs pl where e.emp_id = pl.empID and payroll_date = '" . $previous_payroll_month . "' limit 1)
          and e.emp_id IN (SELECT emp_id from payroll_logs pl where e.emp_id = pl.empID and payroll_date = '" . $previous_payroll_month . "')
-         and e.emp_id IN (SELECT emp_id from temp_payroll_logs pl where e.emp_id = pl.empID and payroll_date = '" . $current_payroll_month . "')
+         and e.emp_id IN (SELECT emp_id from " . $allowance_log . " pl where e.emp_id = pl.empID and payroll_date = '" . $current_payroll_month . "')
 
         ";
         $row = DB::select(DB::raw($query));
@@ -2132,8 +2259,16 @@ and e.branch = b.code and e.line_manager = el.emp_id and c.id = e.contract_type 
         return $row;
     }
 
-    public function employee_basic_decrease($current_payroll_month, $previous_payroll_month)
+    public function employee_basic_decrease($current_payroll_month, $previous_payroll_month, $payrollstate = null)
     {
+
+        $payroll_log = "payroll_logs";
+
+        if ($payrollstate != 0) {  //Pending payroll
+
+            $payroll_log = "temp_payroll_logs";
+
+        }
 
         $calendar1 = explode('-', $current_payroll_month);
         $calendar2 = explode('-', $previous_payroll_month);
@@ -2153,7 +2288,7 @@ and e.branch = b.code and e.line_manager = el.emp_id and c.id = e.contract_type 
         $s = "
         SELECT tm.salaryEnrollment as current_amount,(SELECT salary from payroll_logs where tm.employeeID = payroll_logs.empID and payroll_logs.payroll_date = '" . $previous_payroll_month . "') as previous_amount,e.emp_id,e.hire_date,e.contract_end,e.fname,e.lname from terminations tm,employee e where tm.employeeID = e.emp_id and tm.salaryEnrollment < tm.actual_salary and tm.terminationDate like '%" . $current_terminationDate . "%'
         UNION
-        SELECT pl.salary as current_amount,(SELECT salary from payroll_logs where pl.empID = payroll_logs.empID and payroll_logs.payroll_date = '" . $previous_payroll_month . "') as previous_amount,e.emp_id,e.hire_date,e.contract_end,e.fname,e.lname from payroll_logs pl,employee e where pl.empID = e.emp_id and pl.actual_salary > pl.salary and pl.salary != (SELECT salary from payroll_logs where pl.empID = payroll_logs.empID and payroll_logs.payroll_date = '" . $previous_payroll_month . "') and pl.payroll_date = '" . $current_payroll_month . "'
+        SELECT pl.salary as current_amount,(SELECT salary from payroll_logs where pl.empID = payroll_logs.empID and payroll_logs.payroll_date = '" . $previous_payroll_month . "') as previous_amount,e.emp_id,e.hire_date,e.contract_end,e.fname,e.lname from ". $payroll_log. " pl,employee e where pl.empID = e.emp_id and pl.actual_salary > pl.salary and pl.salary != (SELECT salary from payroll_logs where pl.empID = payroll_logs.empID and payroll_logs.payroll_date = '" . $previous_payroll_month . "') and pl.payroll_date = '" . $current_payroll_month . "'
 
 
 
@@ -2259,6 +2394,7 @@ and e.branch = b.code and e.line_manager = el.emp_id and c.id = e.contract_type 
 
         if (count($calendar) > 2) {
             $terminationDate = '%' . $calendar[0] . '-' . $calendar[1] . '%';
+
         } else {
             $terminationDate = 'null';
         }
@@ -2277,6 +2413,7 @@ and e.branch = b.code and e.line_manager = el.emp_id and c.id = e.contract_type 
 
         if (count($calendar) > 2) {
             $terminationDate = '%' . $calendar[0] . '-' . $calendar[1] . '%';
+
         } else {
             $terminationDate = 'null';
         }
@@ -2289,12 +2426,22 @@ and e.branch = b.code and e.line_manager = el.emp_id and c.id = e.contract_type 
         return $row;
     }
 
-    public function allowance_by_employee($current_payroll_month, $previous_payroll_month)
+    public function allowance_by_employee($current_payroll_month, $previous_payroll_month, $payrollstate = null)
     {
+
+        $allowance_log = "allowance_logs";
+
+        if ($payrollstate != 0) {  //Pending payroll
+
+            $allowance_log = "temp_allowance_logs";
+
+        }
+
         $calendar = explode('-', $current_payroll_month);
         $calendar1 = explode('-', $previous_payroll_month);
         if (count($calendar1) > 2) {
             $previous_termination_date = $calendar1[0] . '-' . $calendar1[1];
+
         } else {
             $previous_termination_date = 'null';
         }
@@ -2314,9 +2461,16 @@ and e.branch = b.code and e.line_manager = el.emp_id and c.id = e.contract_type 
 
 
           (SELECT  CONCAT('Add/Less ',al.description) as description,e.emp_id,e.hire_date,e.contract_end,e.fname,e.lname,
-          (IF((SELECT amount  FROM allowance_logs WHERE allowance_logs.description = al.description and e.emp_id = allowance_logs.empID  and  allowance_logs.payment_date = '" . $current_payroll_month . "' LIMIT 1 ) > 0,(SELECT amount  FROM allowance_logs WHERE allowance_logs.description = al.description and e.emp_id = allowance_logs.empID and  allowance_logs.payment_date = '" . $current_payroll_month . "'),0)) as current_amount,
+          (IF((SELECT amount  FROM " . $allowance_log . " WHERE " . $allowance_log . ".description = al.description and e.emp_id = " . $allowance_log . ".empID  and  " . $allowance_log . ".payment_date = '" . $current_payroll_month . "' LIMIT 1 ) > 0,(SELECT amount  FROM " . $allowance_log . " WHERE " . $allowance_log . ".description = al.description and e.emp_id = " . $allowance_log . ".empID and  " . $allowance_log . ".payment_date = '" . $current_payroll_month . "' LIMIT 1),0)) as current_amount,
          (IF((SELECT amount  FROM allowance_logs WHERE allowance_logs.description = al.description and e.emp_id = allowance_logs.empID and  allowance_logs.payment_date = '" . $previous_payroll_month . "' LIMIT 1)  > 0,(SELECT amount  FROM allowance_logs WHERE allowance_logs.description = al.description and e.emp_id = allowance_logs.empID and  allowance_logs.payment_date = '" . $previous_payroll_month . "'),0)) as previous_amount
-           from employee e,allowance_logs al where e.emp_id = al.empID and e.state!=4)
+           from employee e," . $allowance_log . " al where e.emp_id = al.empID and e.state!=4)
+
+           UNION
+
+           (SELECT  CONCAT('Add/Less ',al.description) as description,e.emp_id,e.hire_date,e.contract_end,e.fname,e.lname,
+           0 as current_amount,
+          (IF((SELECT amount  FROM allowance_logs WHERE allowance_logs.description = al.description and e.emp_id = allowance_logs.empID and  allowance_logs.payment_date = '" . $previous_payroll_month . "' LIMIT 1)  > 0,(SELECT amount  FROM allowance_logs WHERE allowance_logs.description = al.description and e.emp_id = allowance_logs.empID and  allowance_logs.payment_date = '" . $previous_payroll_month . "'),0)) as previous_amount
+            from employee e,allowance_logs al where e.emp_id = al.empID and al.description not in (select description from " . $allowance_log . " where  " . $allowance_log . ".payment_date = '" . $current_payroll_month . "' and e.emp_id = " . $allowance_log . ".empID) and e.state!=4)
 
            UNION
 
@@ -2365,21 +2519,33 @@ and e.branch = b.code and e.line_manager = el.emp_id and c.id = e.contract_type 
 
             UNION
 
-            SELECT 'Add/Less Long Serving allowance' as description,e.emp_id,e.hire_date,e.contract_end,e.fname,e.lname,
-            IF(arrears > 0,arrears,0) as current_amount,
-            IF((SELECT amount  FROM allowance_logs WHERE allowance_logs.description = 'Long Serving allowance' and e.emp_id = allowance_logs.empID and  payment_date = '" . $previous_payroll_month . "') > 0,(SELECT amount  FROM allowance_logs WHERE allowance_logs.description = 'Long Serving allowance'  and e.emp_id = allowance_logs.empID and  payment_date = '" . $previous_payroll_month . "'),0) as  previous_amount
+            SELECT 'Add/Less LSA' as description,e.emp_id,e.hire_date,e.contract_end,e.fname,e.lname,
+            IF(longServing > 0,longServing,0) as current_amount,
+            IF((SELECT amount  FROM allowance_logs WHERE allowance_logs.description = 'LSA' and e.emp_id = allowance_logs.empID and  payment_date = '" . $previous_payroll_month . "') > 0,(SELECT amount  FROM allowance_logs WHERE allowance_logs.description = 'Long Serving allowance'  and e.emp_id = allowance_logs.empID and  payment_date = '" . $previous_payroll_month . "'),0) as  previous_amount
             from terminations,employee e where e.emp_id = terminations.employeeID and terminationDate like '%" . $current_termination_date . "%'
 
             UNION
 
-            SELECT 'Add/Less Long Serving allowance' as description,e.emp_id,e.hire_date,e.contract_end,e.fname,e.lname,
+            SELECT 'Add/Less LSA' as description,e.emp_id,e.hire_date,e.contract_end,e.fname,e.lname,
             IF(longServing > 0,longServing,0) as current_amount, 0 as previous_amount
             from terminations,employee e where e.emp_id = terminations.employeeID and terminationDate like '%" . $current_termination_date . "%'
 
             UNION
 
             SELECT 'Add/Less Notice Pay' as description,e.emp_id,e.hire_date,e.contract_end,e.fname,e.lname,
-            IF(longServing > 0,longServing,0) as current_amount, 0 as previous_amount
+            IF(noticePay > 0,noticePay,0) as current_amount, 0 as previous_amount
+            from terminations,employee e where e.emp_id = terminations.employeeID and terminationDate like '%" . $current_termination_date . "%'
+
+            UNION
+
+            SELECT 'Add/Less Ex-Gratia' as description,e.emp_id,e.hire_date,e.contract_end,e.fname,e.lname,
+            IF(exgracia > 0,exgracia,0) as current_amount, 0 as previous_amount
+            from terminations,employee e where e.emp_id = terminations.employeeID and terminationDate like '%" . $current_termination_date . "%'
+
+            UNION
+
+            SELECT 'Add/Less Severance Pay' as description,e.emp_id,e.hire_date,e.contract_end,e.fname,e.lname,
+            IF(serevancePay > 0,serevancePay,0) as current_amount, 0 as previous_amount
             from terminations,employee e where e.emp_id = terminations.employeeID and terminationDate like '%" . $current_termination_date . "%'
 
             UNION
@@ -2445,25 +2611,31 @@ and e.branch = b.code and e.line_manager = el.emp_id and c.id = e.contract_type 
             SELECT 'Add/Less Arrears' as description,e.emp_id,e.hire_date,e.contract_end,e.fname,e.lname,
             0 as current_amount,IF(arrears > 0,arrears,0) as previous_amount
             from terminations,employee e where e.emp_id = terminations.employeeID and terminationDate like '%" . $previous_termination_date . "%'
-
             UNION
 
-            SELECT 'Add/Less Long Serving allowance' as description,e.emp_id,e.hire_date,e.contract_end,e.fname,e.lname,
-            0 as current_amount,IF(arrears > 0,arrears,0) as previous_amount
-            from terminations,employee e where e.emp_id = terminations.employeeID and terminationDate like '%" . $previous_termination_date . "%'
-
-            UNION
-
-            SELECT 'Add/Less Long Serving allowance' as description,e.emp_id,e.hire_date,e.contract_end,e.fname,e.lname,
+            SELECT 'Add/Less LSA' as description,e.emp_id,e.hire_date,e.contract_end,e.fname,e.lname,
             0 as current_amount,IF(longServing > 0,longServing,0) as previous_amount
             from terminations,employee e where e.emp_id = terminations.employeeID and terminationDate like '%" . $previous_termination_date . "%'
 
             UNION
 
             SELECT 'Add/Less Notice Pay' as description,e.emp_id,e.hire_date,e.contract_end,e.fname,e.lname,
-            0 as current_amount,IF(longServing > 0,longServing,0) as previous_amount
+            0 as current_amount,IF(noticePay > 0,noticePay,0) as previous_amount
             from terminations,employee e where e.emp_id = terminations.employeeID and terminationDate like '%" . $previous_termination_date . "%'
 
+            UNION
+
+            SELECT 'Add/Less Ex-Gratia' as description,e.emp_id,e.hire_date,e.contract_end,e.fname,e.lname,
+            0 as current_amount,IF(exgracia > 0,exgracia,0) as previous_amount
+            from terminations,employee e where e.emp_id = terminations.employeeID and terminationDate like '%" . $previous_termination_date . "%'
+
+
+
+            UNION
+
+            SELECT 'Add/Less Severance Pay' as description,e.emp_id,e.hire_date,e.contract_end,e.fname,e.lname,
+            0 as current_amount,IF(serevancePay > 0,serevancePay,0) as previous_amount
+            from terminations,employee e where e.emp_id = terminations.employeeID and terminationDate like '%" . $previous_termination_date . "%'
 
             UNION
 
@@ -2502,6 +2674,7 @@ and e.branch = b.code and e.line_manager = el.emp_id and c.id = e.contract_type 
         $calendar1 = explode('-', $previous_payroll_month);
         if (count($calendar1) > 2) {
             $previous_termination_date = $calendar1[0] . '-' . $calendar1[1];
+
         } else {
             $previous_termination_date = 'null';
         }
@@ -2719,24 +2892,50 @@ and e.branch = b.code and e.line_manager = el.emp_id and c.id = e.contract_type 
         return $row;
     }
 
-    public function total_allowance($current_payroll_month, $previous_payroll_month)
+    public function total_allowance($current_payroll_month, $previous_payroll_month, $payrollstate = null)
     {
 
+        $allowance_log = "allowance_logs";
 
-        $query = "SELECT  distinct(CONCAT('Add/Less ',al.description)) as description,al.description as allowance,
-(IF((SELECT SUM(amount)  FROM allowance_logs WHERE allowance_logs.description = al.description and  payment_date = '" . $current_payroll_month . "' GROUP BY description) > 0,(SELECT SUM(amount)  FROM allowance_logs WHERE allowance_logs.description = al.description and  payment_date = '" . $current_payroll_month . "' GROUP BY description),0)) as current_amount,
-(IF((SELECT SUM(amount)  FROM allowance_logs WHERE allowance_logs.description = al.description and  payment_date = '" . $previous_payroll_month . "' GROUP BY description) > 0,(SELECT SUM(amount)  FROM allowance_logs WHERE allowance_logs.description = al.description and  payment_date = '" . $previous_payroll_month . "' GROUP BY description),0)) as previous_amount,
+        if ($payrollstate != 0) {  //Pending payroll
 
-(IF((SELECT SUM(amount)  FROM allowance_logs WHERE allowance_logs.description = al.description and  payment_date = '" . $current_payroll_month . "' GROUP BY description) > 0,(SELECT SUM(amount)  FROM allowance_logs WHERE allowance_logs.description = al.description and  payment_date = '" . $current_payroll_month . "' GROUP BY description),0)-
+            $allowance_log = "temp_allowance_logs";
 
-IF((SELECT SUM(amount)  FROM allowance_logs WHERE allowance_logs.description = al.description and  payment_date = '" . $previous_payroll_month . "' GROUP BY description) > 0,(SELECT SUM(amount)  FROM allowance_logs WHERE allowance_logs.description = al.description and  payment_date = '" . $previous_payroll_month . "' GROUP BY description),0)
+        }
 
 
-) as difference
- from allowance_logs al  GROUP BY al.description
+        $query = "
 
- ";
+        SELECT  distinct(CONCAT('Add/Less ',al.description)) as description,al.description as allowance,
+     (IF((SELECT SUM(amount)  FROM " . $allowance_log . " WHERE " . $allowance_log . ".description = al.description and  " . $allowance_log . ".payment_date = '" . $current_payroll_month . "' GROUP BY description) > 0,(SELECT SUM(" . $allowance_log . ".amount)  FROM " . $allowance_log . " WHERE " . $allowance_log . ".description = al.description and  " . $allowance_log . ".payment_date = '" . $current_payroll_month . "' GROUP BY " . $allowance_log . ".description),0)) as current_amount,
+     (IF((SELECT SUM(amount)  FROM allowance_logs WHERE allowance_logs.description = al.description and  payment_date = '" . $previous_payroll_month . "' GROUP BY description) > 0,(SELECT SUM(amount)  FROM allowance_logs WHERE allowance_logs.description = al.description and  payment_date = '" . $previous_payroll_month . "' GROUP BY description),0)) as previous_amount,
+
+     (IF((SELECT SUM(amount)  FROM " . $allowance_log . " WHERE " . $allowance_log . ".description = al.description and  payment_date = '" . $current_payroll_month . "' GROUP BY description) > 0,(SELECT SUM(amount)  FROM " . $allowance_log . " WHERE " . $allowance_log . ".description = al.description and  payment_date = '" . $current_payroll_month . "' GROUP BY description),0)-
+
+     IF((SELECT SUM(amount)  FROM allowance_logs WHERE allowance_logs.description = al.description and  payment_date = '" . $previous_payroll_month . "' GROUP BY description) > 0,(SELECT SUM(amount)  FROM allowance_logs WHERE allowance_logs.description = al.description and  payment_date = '" . $previous_payroll_month . "' GROUP BY description),0)
+
+
+     ) as difference
+      from " . $allowance_log . " al GROUP BY al.description
+
+     UNION
+
+     SELECT  distinct(CONCAT('Add/Less ',al.description)) as description,al.description as allowance,
+     (IF((SELECT SUM(amount)  FROM " . $allowance_log . " WHERE " . $allowance_log . ".description = al.description and  " . $allowance_log . ".payment_date = '" . $current_payroll_month . "' GROUP BY description) > 0,(SELECT SUM(" . $allowance_log . ".amount)  FROM " . $allowance_log . " WHERE " . $allowance_log . ".description = al.description and  " . $allowance_log . ".payment_date = '" . $current_payroll_month . "' GROUP BY " . $allowance_log . ".description),0)) as current_amount,
+     (IF((SELECT SUM(amount)  FROM allowance_logs WHERE allowance_logs.description = al.description and  payment_date = '" . $previous_payroll_month . "' GROUP BY description) > 0,(SELECT SUM(amount)  FROM allowance_logs WHERE allowance_logs.description = al.description and  payment_date = '" . $previous_payroll_month . "' GROUP BY description),0)) as previous_amount,
+
+     (IF((SELECT SUM(amount)  FROM " . $allowance_log . " WHERE " . $allowance_log . ".description = al.description and  payment_date = '" . $current_payroll_month . "' GROUP BY description) > 0,(SELECT SUM(amount)  FROM " . $allowance_log . " WHERE " . $allowance_log . ".description = al.description and  payment_date = '" . $current_payroll_month . "' GROUP BY description),0)-
+
+     IF((SELECT SUM(amount)  FROM allowance_logs WHERE allowance_logs.description = al.description and  payment_date = '" . $previous_payroll_month . "' GROUP BY description) > 0,(SELECT SUM(amount)  FROM allowance_logs WHERE allowance_logs.description = al.description and  payment_date = '" . $previous_payroll_month . "' GROUP BY description),0)
+
+
+     ) as difference
+      from allowance_logs al WHERE al.description NOT IN (SELECT description  FROM " . $allowance_log . " WHERE  payment_date = '" . $current_payroll_month . "')  GROUP BY al.description
+
+
+      ";
         $row = DB::select(DB::raw($query));
+
 
 
         return $row;
@@ -2824,6 +3023,21 @@ IF((SELECT SUM(amount)  FROM allowance_logs WHERE allowance_logs.description = a
         (IF((SELECT SUM(public_overtime_amount)  FROM terminations WHERE tm.id = terminations.id and  terminations.terminationDate LIKE '" . $current_termination . "') != 0,(SELECT SUM(public_overtime_amount)  FROM terminations WHERE tm.id = terminations.id and  terminations.terminationDate LIKE '" . $current_termination . "'),0)) as current_amount,
          (IF((SELECT SUM(public_overtime_amount)  FROM terminations WHERE tm.id = terminations.id and  terminations.terminationDate LIKE '" . $previous_termination . "') != 0,(SELECT SUM(public_overtime_amount)  FROM terminations WHERE tm.id = terminations.id and  terminations.terminationDate LIKE '" . $previous_termination . "'),0)) as previous_amount
          from terminations tm";
+
+        } elseif ($type == "exgracia") {
+
+            $query = "SELECT CONCAT('Add/Less Ex-Gratia') as description,
+    (IF((SELECT SUM(exgracia)  FROM terminations WHERE   terminations.terminationDate LIKE '" . $current_termination . "') != 0,(SELECT SUM(exgracia)  FROM terminations WHERE   terminations.terminationDate LIKE '" . $current_termination . "'),0)) as current_amount,
+     (IF((SELECT SUM(exgracia)  FROM terminations WHERE   terminations.terminationDate LIKE '" . $previous_termination . "') != 0,(SELECT SUM(exgracia)  FROM terminations WHERE   terminations.terminationDate LIKE '" . $previous_termination . "'),0)) as previous_amount
+
+     from terminations tm";
+        } elseif ($type == "serevancePay") {
+
+            $query = "SELECT CONCAT('Add/Less Severance Pay') as description,
+    (IF((SELECT SUM(serevancePay)  FROM terminations WHERE   terminations.terminationDate LIKE '" . $current_termination . "') != 0,(SELECT SUM(serevancePay)  FROM terminations WHERE   terminations.terminationDate LIKE '" . $current_termination . "'),0)) as current_amount,
+     (IF((SELECT SUM(serevancePay)  FROM terminations WHERE   terminations.terminationDate LIKE '" . $previous_termination . "') != 0,(SELECT SUM(serevancePay)  FROM terminations WHERE   terminations.terminationDate LIKE '" . $previous_termination . "'),0)) as previous_amount
+
+     from terminations tm";
         } elseif ($type == "leave_pay") {
 
             $query = "SELECT CONCAT('Add/Less Leave Pay') as description,
@@ -2922,6 +3136,20 @@ IF((SELECT SUM(amount)  FROM allowance_logs WHERE allowance_logs.description = a
         $row = DB::select(DB::raw($query));
         array_push($data, ['description' => $row[0]->description, 'current_amount' => $row[0]->current_amount, 'previous_amount' => $row[0]->previous_amount]);
 
+        $query = "SELECT CONCAT('Add/Less Severance Pay') as description,
+         SUM((IF((SELECT SUM(serevancePay)  FROM terminations WHERE tm.id = terminations.id and  terminations.terminationDate LIKE '" . $current_termination . "') != 0,(SELECT SUM(serevancePay)  FROM terminations WHERE tm.id = terminations.id and  terminations.terminationDate LIKE '" . $current_termination . "'),0))) as current_amount,
+          SUM((IF((SELECT SUM(serevancePay)  FROM terminations WHERE tm.id = terminations.id and  terminations.terminationDate LIKE '" . $previous_termination . "') != 0,(SELECT SUM(serevancePay)  FROM terminations WHERE tm.id = terminations.id and  terminations.terminationDate LIKE '" . $previous_termination . "'),0))) as previous_amount
+          from terminations tm";
+        $row = DB::select(DB::raw($query));
+        array_push($data, ['description' => $row[0]->description, 'current_amount' => $row[0]->current_amount, 'previous_amount' => $row[0]->previous_amount]);
+
+        $query = "SELECT CONCAT('Add/Less Ex-Gratia') as description,
+              SUM((IF((SELECT SUM(exgracia)  FROM terminations WHERE tm.id = terminations.id and  terminations.terminationDate LIKE '" . $current_termination . "') != 0,(SELECT SUM(exgracia)  FROM terminations WHERE tm.id = terminations.id and  terminations.terminationDate LIKE '" . $current_termination . "'),0))) as current_amount,
+               SUM((IF((SELECT SUM(exgracia)  FROM terminations WHERE tm.id = terminations.id and  terminations.terminationDate LIKE '" . $previous_termination . "') != 0,(SELECT SUM(exgracia)  FROM terminations WHERE tm.id = terminations.id and  terminations.terminationDate LIKE '" . $previous_termination . "'),0))) as previous_amount
+               from terminations tm";
+        $row = DB::select(DB::raw($query));
+        array_push($data, ['description' => $row[0]->description, 'current_amount' => $row[0]->current_amount, 'previous_amount' => $row[0]->previous_amount]);
+
         $query = "SELECT CONCAT('Add/Less House Rent') as description,
     SUM((IF((SELECT SUM(houseAllowance)  FROM terminations WHERE tm.id = terminations.id and  terminations.terminationDate LIKE '" . $current_termination . "') != 0,(SELECT SUM(houseAllowance)  FROM terminations WHERE tm.id = terminations.id and  terminations.terminationDate LIKE '" . $current_termination . "'),0))) as current_amount,
      SUM((IF((SELECT SUM(houseAllowance)  FROM terminations WHERE tm.id = terminations.id and  terminations.terminationDate LIKE '" . $previous_termination . "') != 0,(SELECT SUM(houseAllowance)  FROM terminations WHERE tm.id = terminations.id and  terminations.terminationDate LIKE '" . $previous_termination . "'),0))) as previous_amount
@@ -2952,28 +3180,28 @@ IF((SELECT SUM(amount)  FROM allowance_logs WHERE allowance_logs.description = a
 
         array_push($data, ['description' => $row[0]->description, 'current_amount' => $row[0]->current_amount, 'previous_amount' => $row[0]->previous_amount]);
 
-        $query = "SELECT CONCAT('Add/Less Long Serving allowance') as description,
+        $query = "SELECT CONCAT('Add/Less LSA') as description,
     SUM((IF((SELECT SUM(longServing)  FROM terminations WHERE tm.id = terminations.id and  terminations.terminationDate LIKE '" . $current_termination . "') != 0,(SELECT SUM(longServing)  FROM terminations WHERE tm.id = terminations.id and  terminations.terminationDate LIKE '" . $current_termination . "'),0))) as current_amount,
      SUM((IF((SELECT SUM(longServing)  FROM terminations WHERE tm.id = terminations.id and  terminations.terminationDate LIKE '" . $previous_termination . "') != 0,(SELECT SUM(longServing)  FROM terminations WHERE tm.id = terminations.id and  terminations.terminationDate LIKE '" . $previous_termination . "'),0))) as previous_amount
      from terminations tm";
         $row = DB::select(DB::raw($query));
         array_push($data, ['description' => $row[0]->description, 'current_amount' => $row[0]->current_amount, 'previous_amount' => $row[0]->previous_amount]);
         /*
-    $query = "SELECT CONCAT('Add/Less Transport Allowance') as description,
-         SUM((IF((SELECT SUM(transport_allowance)  FROM terminations WHERE tm.id = terminations.id and  terminations.terminationDate LIKE '" . $current_termination . "') != 0,(SELECT SUM(transport_allowance)  FROM terminations WHERE tm.id = terminations.id and  terminations.terminationDate LIKE '" . $current_termination . "'),0))) as current_amount,
-          SUM((IF((SELECT SUM(al.amount)  FROM allowance_logs al WHERE al.description = 'Transport Allowance' and  al.payment_date = '" . $previous_payroll_month . "' GROUP BY al.description) > 0,(SELECT SUM(al.amount)  FROM allowance_logs al WHERE al.description = 'Transport Allowance' and  al.payment_date = '" . $previous_payroll_month . "' GROUP BY al.description),0))) as previous_amount
-          from terminations tm";
-        $row = DB::select(DB::raw($query));
+            $query = "SELECT CONCAT('Add/Less Transport Allowance') as description,
+                 SUM((IF((SELECT SUM(transport_allowance)  FROM terminations WHERE tm.id = terminations.id and  terminations.terminationDate LIKE '" . $current_termination . "') != 0,(SELECT SUM(transport_allowance)  FROM terminations WHERE tm.id = terminations.id and  terminations.terminationDate LIKE '" . $current_termination . "'),0))) as current_amount,
+                  SUM((IF((SELECT SUM(al.amount)  FROM allowance_logs al WHERE al.description = 'Transport Allowance' and  al.payment_date = '" . $previous_payroll_month . "' GROUP BY al.description) > 0,(SELECT SUM(al.amount)  FROM allowance_logs al WHERE al.description = 'Transport Allowance' and  al.payment_date = '" . $previous_payroll_month . "' GROUP BY al.description),0))) as previous_amount
+                  from terminations tm";
+                $row = DB::select(DB::raw($query));
 
-        array_push($data,['description'=>$row[0]->description,'current_amount'=>$row[0]->current_amount,'previous_amount'=>$row[0]->previous_amount]);
+                array_push($data,['description'=>$row[0]->description,'current_amount'=>$row[0]->current_amount,'previous_amount'=>$row[0]->previous_amount]);
 
-        $query = "SELECT CONCAT('Add/Less Night Shift Allowance') as description,
-        SUM((IF((SELECT SUM(nightshift_allowance)  FROM terminations WHERE tm.id = terminations.id and  terminations.terminationDate LIKE '" . $current_termination . "') != 0,(SELECT SUM(nightshift_allowance)  FROM terminations WHERE tm.id = terminations.id and  terminations.terminationDate LIKE '" . $current_termination . "'),0))) as current_amount,
- SUM((IF((SELECT SUM(al.amount)  FROM allowance_logs al WHERE al.description = 'Night Shift Allowance' and  al.payment_date = '" . $previous_payroll_month . "' GROUP BY al.description) > 0,(SELECT SUM(al.amount)  FROM allowance_logs al WHERE al.description = 'Night Shift Allowance' and  al.payment_date = '" . $previous_payroll_month . "' GROUP BY al.description),0))) as previous_amount
- from terminations tm";
-       $row = DB::select(DB::raw($query));
-       array_push($data,['description'=>$row[0]->description,'current_amount'=>$row[0]->current_amount,'previous_amount'=>$row[0]->previous_amount]);
- */
+                $query = "SELECT CONCAT('Add/Less Night Shift Allowance') as description,
+                SUM((IF((SELECT SUM(nightshift_allowance)  FROM terminations WHERE tm.id = terminations.id and  terminations.terminationDate LIKE '" . $current_termination . "') != 0,(SELECT SUM(nightshift_allowance)  FROM terminations WHERE tm.id = terminations.id and  terminations.terminationDate LIKE '" . $current_termination . "'),0))) as current_amount,
+         SUM((IF((SELECT SUM(al.amount)  FROM allowance_logs al WHERE al.description = 'Night Shift Allowance' and  al.payment_date = '" . $previous_payroll_month . "' GROUP BY al.description) > 0,(SELECT SUM(al.amount)  FROM allowance_logs al WHERE al.description = 'Night Shift Allowance' and  al.payment_date = '" . $previous_payroll_month . "' GROUP BY al.description),0))) as previous_amount
+         from terminations tm";
+               $row = DB::select(DB::raw($query));
+               array_push($data,['description'=>$row[0]->description,'current_amount'=>$row[0]->current_amount,'previous_amount'=>$row[0]->previous_amount]);
+         */
 
         $query = "SELECT CONCAT('Add/Less Other Payments') as description,
     SUM((IF((SELECT SUM(otherPayments)  FROM terminations WHERE tm.id = terminations.id and  terminations.terminationDate LIKE '" . $current_termination . "') != 0,(SELECT SUM(otherPayments)  FROM terminations WHERE tm.id = terminations.id and  terminations.terminationDate LIKE '" . $current_termination . "'),0))) as current_amount,
@@ -3150,8 +3378,10 @@ IF((SELECT SUM(amount)  FROM allowance_logs WHERE allowance_logs.description = a
 
         $data = 0;
 
-        if ($row) $data = $row[0]->total_gross;
-        if ($row2) $data = $data + $row2[0]->total_gross;
+        if ($row)
+            $data = $row[0]->total_gross;
+        if ($row2)
+            $data = $data + $row2[0]->total_gross;
 
 
         return $data;
@@ -3175,8 +3405,10 @@ IF((SELECT SUM(amount)  FROM allowance_logs WHERE allowance_logs.description = a
 
         $data = 0;
 
-        if ($row) $data = $row[0]->total_gross;
-        if ($row2) $data = $data + $row2[0]->total_gross;
+        if ($row)
+            $data = $row[0]->total_gross;
+        if ($row2)
+            $data = $data + $row2[0]->total_gross;
 
 
         return $data;
@@ -3192,6 +3424,8 @@ IF((SELECT SUM(amount)  FROM allowance_logs WHERE allowance_logs.description = a
 
 
         return $row;
+
+
     }
 
     public function contributions($payroll_date)
@@ -3224,13 +3458,19 @@ IF((SELECT SUM(amount)  FROM allowance_logs WHERE allowance_logs.description = a
         $data['wcf'] = ' ';
         $data['wcf'] = ' ';
 
-        if ($paye) $data['paye'] = $paye[0]->paye;
-        if ($wcf) $data['wcf'] = $wcf[0]->wcf;
-        if ($sdl) $data['sdl'] = $sdl[0]->sdl;
-        if ($nssf) $data['nssf'] = $nssf[0]->pension_employee;
+        if ($paye)
+            $data['paye'] = $paye[0]->paye;
+        if ($wcf)
+            $data['wcf'] = $wcf[0]->wcf;
+        if ($sdl)
+            $data['sdl'] = $sdl[0]->sdl;
+        if ($nssf)
+            $data['nssf'] = $nssf[0]->pension_employee;
 
 
         return $data;
+
+
     }
 
     public function net_terminal_benefit($payroll_date)
@@ -3242,6 +3482,7 @@ IF((SELECT SUM(amount)  FROM allowance_logs WHERE allowance_logs.description = a
         $row = DB::select(DB::raw($query));
 
         return $row;
+
     }
 
     public function net_pay($payroll_date)
@@ -3251,6 +3492,7 @@ IF((SELECT SUM(amount)  FROM allowance_logs WHERE allowance_logs.description = a
         foreach ($data as $row) {
 
             $net_salary += $row->salary + $row->allowances - $row->pension_employer - $row->loans - $row->deductions - $row->meals - $row->taxdue;
+
         }
 
         //dd($net_salary);
@@ -3272,6 +3514,8 @@ IF((SELECT SUM(amount)  FROM allowance_logs WHERE allowance_logs.description = a
             $amount = $row[0]->amount;
 
         return $amount;
+
+
     }
 
     public function journal_deductions($payroll_date)
@@ -3305,18 +3549,28 @@ IF((SELECT SUM(amount)  FROM allowance_logs WHERE allowance_logs.description = a
 
         $data = 0;
 
-        if ($row) $data = $row[0]->total_gross;
-        if ($row2) $data = $data + $row2[0]->total_gross;
+        if ($row)
+            $data = $row[0]->total_gross;
+        if ($row2)
+            $data = $data + $row2[0]->total_gross;
 
 
         return $data;
     }
 
-    public function s_grossMonthly1($payroll_date)
+    public function s_grossMonthly1($payroll_date, $payrollstate = null)
     {
+
+        $table = "payroll_logs";
+
+        if ($payrollstate != 0) {  //Pending payroll
+
+            $table = "temp_payroll_logs";
+
+        }
         $calendar = explode('-', $payroll_date);
         $date = $calendar[0] . '-' . $calendar[1];
-        $query = "SELECT SUM(pl.salary+pl.allowances)+(IF((SELECT SUM(tm.total_gross) from terminations tm where terminationDate like '%" . $date . "%') > 0,(SELECT SUM(tm.total_gross) from terminations tm where terminationDate like '%" . $date . "%'),0)) as total_gross FROM temp_payroll_logs pl, employee e
+        $query = "SELECT SUM(pl.salary+pl.allowances)+(IF((SELECT SUM(tm.total_gross) from terminations tm where terminationDate like '%" . $date . "%') > 0,(SELECT SUM(tm.total_gross) from terminations tm where terminationDate like '%" . $date . "%'),0)) as total_gross FROM " . $table . " pl, employee e
         WHERE e.emp_id = pl.empID and e.contract_type != 2 and pl.payroll_date = '" . $payroll_date . "' group by pl.payroll_date";
 
         $row = DB::select(DB::raw($query));

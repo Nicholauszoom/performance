@@ -21,7 +21,13 @@
     {{-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
         integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous"> --}}
 
-    <link rel="stylesheet" href="{{ asset('assets/bootstrap/b4css/bootstrap.css') }}">
+    <link rel="stylesheet" href="{{ public_path('assets/bootstrap/b4css/bootstrap.css') }}">
+
+
+    @php
+    $brandSetting = \App\Models\BrandSetting::first();
+@endphp
+
 
     <style>
         body {
@@ -29,7 +35,9 @@
             background-position: auto;
             background-repeat: no-repeat;
             background-size: cover;
-            background: url({{ asset('img/bg2.png') }});
+            background-image: {{ url($brandSetting != null && $brandSetting->body_background != null ? asset('storage/' . $brandSetting->body_background) : asset('img/bg2.png')) }};
+
+            /* background: url({{ public_path('img/bg2.png') }}); */
         }
 
         table {
@@ -107,14 +115,14 @@
         <tr>
             <th style="text-align: left; padding: 0">
                 <div style="display: inline-block; vertical-align: middle;">
-                  <img src="{{ asset('assets/images/hc-hub-logo3.png') }}" class="img-fluid" alt="" width="150px" height="150px" style="display: inline;">
+                  <img src="{{ public_path('assets/images/hc-hub-logo3.png') }}" class="img-fluid" alt="" width="150px" height="150px" style="display: inline;">
                   <h5 class="text-main" style="display: inline; margin: 0; vertical-align: middle;">Terminal Benefit Slip</h5>
                 </div>
               </th>
 
 
             <th style="text-align: right;">
-                <p><img src="{{ asset('img/logo.png') }}" class="img-fluid" alt="" width="180px"
+                <p><img src="{{ public_path('img/logo.png') }}" class="img-fluid" alt="" width="180px"
                         height="150px"></p>
             </th>
         </tr>
@@ -223,10 +231,10 @@
                                     <span class="font-weight-bold">{{ number_format($termination->leavePay, 2) }}</span>
                                 </li>
                             @endif
-                            @if ($termination->serevanceCost != 0)
+                            @if ($termination->houseAllowance != 0)
                                 <li class="list-group-item d-flex">
                                     <span class="text-muted">House Allowance</span>
-                                    <span class="font-weight-bold">{{ number_format($termination->serevanceCost, 2) }}</span>
+                                    <span class="font-weight-bold">{{ number_format($termination->houseAllowance, 2) }}</span>
                                 </li>
                             @endif
                             @if ($termination->livingCost != 0)
@@ -247,10 +255,10 @@
                                     <span class="font-weight-bold">{{ number_format($termination->leaveAllowance, 2) }}</span>
                                 </li>
                             @endif
-                            @if ($termination->severanceCost != 0)
+                            @if ($termination->serevancePay != 0)
                                 <li class="list-group-item d-flex">
-                                    <span class="text-muted">Serevance Pay</span>
-                                    <span class="font-weight-bold">{{ number_format($termination->serevanceCost, 2) }}</span>
+                                    <span class="text-muted">Severance  Pay</span>
+                                    <span class="font-weight-bold">{{ number_format($termination->serevancePay, 2) }}</span>
                                 </li>
                             @endif
                             @if ($termination->tellerAllowance != 0)
@@ -291,7 +299,7 @@
                     @endif
                             @if ($termination->longServing != 0)
                                 <li class="list-group-item d-flex">
-                                    <span class="text-muted">Long Serving</span>
+                                    <span class="text-muted">Long Service Award</span>
                                     <span class="font-weight-bold">{{ number_format($termination->longServing, 2) }}</span>
                                 </li>
                             @endif
@@ -411,7 +419,7 @@
 
                                 <span class="text-muted">NET PAY </span>
                                 <span class="font-weight-bold">
-                                    {{ number_format($termination->taxable - $termination->paye, 2) }}
+                                    {{ number_format($termination->total_gross - ($termination->pension_employee + $termination->paye + $termination->otherDeductions), 2) }}
                                 </span>
                             </li>
 

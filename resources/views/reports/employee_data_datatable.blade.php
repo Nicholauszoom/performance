@@ -9,9 +9,9 @@
 @endpush
 
 @push('head-scriptTwo')
-    <script src="{{ asset('assets/js/pages/datatables_basic.js') }}"></script>
-    <script src="{{ asset('assets/js/pages/datatables_extension_buttons_html5.js') }} "></script>
+    <script src="{{ asset('assets/js/pages/datatables_extension_buttons_excel.js') }}"></script>
 @endpush
+
 
 @section('content')
     <!-- Column selectors -->
@@ -20,7 +20,7 @@
             {{-- <h5 class="mb-0">(Payroll Details)</h5> --}}
         </div>
 
-        <table class="table datatable-button-html5-columns">
+        <table class="table datatable-excel-filter">
             <thead>
                 <tr>
                     <th><b>Payroll No</b></th>
@@ -41,7 +41,7 @@
                     <th class="text-end"><b>NIDA</b></th>
 
                     <th class="text-end"><b>Gender</b></th>
-                    <th class="text-end"><b>Contract Type</b></th>
+                    {{-- <th class="text-end"><b>Contract Type</b></th> --}}
 
                     <th class="text-end"><b>Date Of birth</b></th>
                     <th class="text-end"><b>Joining Date</b></th>
@@ -53,14 +53,19 @@
                     <th class="text-end"><b>Email Address</b></th>
                     <th class="text-end"><b>Phone Number</b></th>
 
-
-
-
+                    <th class="text-end"><b>Phd</b></th>
+                    <th class="text-end"><b>Masters</b></th>
+                    <th class="text-end"><b>Degree</b></th>
+                    <th class="text-end"><b>Diploma</b></th>
+                    <th class="text-end"><b>Certificate</b></th>
+                
 
                 </tr>
             </thead>
             <tbody>
                 @foreach ($employee as $row)
+               
+
                 <tr>
                     <td>{{ $row->emp_id }}</td>
                     <td>{{ $row->fname.' '.$row->mname.' '.$row->lname }}</td>
@@ -75,15 +80,35 @@
                  <td>{{ $row->tin }}</td>
                  <td>{{ $row->national_id }}</td>
                  <td>{{ $row->gender }}</td>
-                 <td>{{ $row->contracts->name }}</td>
+                 {{-- <td>{{ $row->contracts->name }}</td> --}}
                  <td>{{ $row->birthdate }}</td>
                  <td>{{ $row->hire_date }}</td>
                  <td>{{ date('M', strtotime($row->hire_date))  }}</td>
                  <td>{{ $row->contract_end }}</td>
                  <td>{{ $row->leave_days_entitled }}</td>
-                 <td>{{ $row->accrual_rate }}</td>
+                 <td>{{ number_format($row->accrual_rate, 2) }}
+                </td>
                  <td>{{ $row->email }}</td>
                  <td>{{ $row->phone }}</td>
+                 <td>
+                    {{ $row->educations()->where('level', "PHD")->first() ? $row->educations()->where('level', "PHD")->first()->course : "-" }}
+                </td>
+                <td>
+                    {{ $row->educations()->where('level', "Masters")->first() ? $row->educations()->where('level', "Masters")->first()->course : "-" }}
+                </td>
+                <td>
+                    {{ $row->educations()->where('level', "Degree")->first() ? $row->educations()->where('level', "Degree")->first()->course : "-" }}
+                </td>
+                <td>
+                    {{ $row->educations()->where('level', "Diploma")->first() ? $row->educations()->where('level', "Diploma")->first()->course : "-" }}
+                </td>
+                <td>
+                    {{ $row->educations()->where('level', "Certificate")->first() ? $row->educations()->where('level', "Certificate")->first()->course : "-" }}
+                </td>
+                
+
+
+
 
                 </tr>
 
