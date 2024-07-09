@@ -270,11 +270,11 @@ class ReportController extends Controller
     {
         $reportType = 1;
         $reportformat = $request->input('type');
+        $payrolldate = $request->input('payrolldate');
 
+         // Initialize data array
+        $data = [];
 
-        if (1) {
-            $payrolldate = $request->input('payrolldate');
-            $reportType = 1;
             //Staff = 1, temporary = 2
             if ($reportType == 1) {
                 $data['paye'] = $this->reports_model->s_p9($payrolldate);
@@ -284,22 +284,25 @@ class ReportController extends Controller
 
                 $data['paye'] = $this->reports_model->v_p9($payrolldate);
                 $data['total'] = $this->reports_model->v_totalp9($payrolldate);
+                $data['paye_termination'] = null; // Define it to avoid undefined variable issues
+
             }
             $data['info'] = $this->reports_model->company_info();
             $data['reportType'] = $reportType;
             $data['payroll_date'] = $payrolldate;
-            // dd($data['paye']);
 
             $paye = $data['paye'];
             $total = $data['total'];
             $info = $data['info'];
             $payroll_date = $data['payroll_date'];
+            $paye_termination = $data['paye_termination'];
 
-            if ($reportformat == 1)
-                include(app_path() . '/reports/p9.php');
-            else
-                return view('reports/p9', $data);
-        }
+
+          if($reportformat == 1){
+           include(app_path() . '/reports/p9.php');
+          }else{
+            return view('reports/p9', $data);
+          }
     }
 
     function p10(Request $request)
@@ -854,11 +857,11 @@ class ReportController extends Controller
                 $employeeDate = '';
 
                 if ($employeeHireYear == $year) {
-                    $employeeDate = Auth::user()->hire_date;
+                    $employeeDate = $emp->hire_date;
                 } else {
                     $employeeDate = $year . ('-01-01');
                 }
-                $data['leaveBalance'] = $this->attendance_model->getLeaveBalance($empID,  $employeeDate, $payroll_month_end);
+                $data['leaveBalance'] = $this->attendance_model->getLeaveBalance($empID,  $employeeDate, $start);
 
                 $slipinfo = $data['slipinfo'];
                 $leaves = $data['leaves'];
@@ -894,7 +897,6 @@ class ReportController extends Controller
                 // dd("hhhhhh");
 
                 $pdf = Pdf::loadView('payroll.payslip_details_pdf', $data)->setPaper('a4', 'potrait');
-
 
                 return $pdf->download('payslip_for_' . $empID . '.pdf');
             }
@@ -2156,6 +2158,7 @@ class ReportController extends Controller
         $previous_payroll_month_raw = date('Y-m', strtotime(date('Y-m-d', strtotime($current_payroll_month . "-1 month"))));
         $previous_payroll_month = $this->reports_model->prevPayrollMonth($previous_payroll_month_raw);
         $data['payroll_state'] = $request->payrollState;
+        $payrollState = $request->payrollState;
         $data['payroll_date'] = $request->payrolldate;
         $data['total_previous_gross'] = !empty($previous_payroll_month) ? $this->reports_model->s_grossMonthly($previous_payroll_month) : 0;
         $data['total_current_gross'] = $this->reports_model->s_grossMonthly($current_payroll_month, $payrollState);

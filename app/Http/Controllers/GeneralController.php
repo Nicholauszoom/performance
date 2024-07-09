@@ -3809,15 +3809,7 @@ class GeneralController extends Controller
 
         $data['level_check'] = SysHelpers::approvalCheck("Loan Approval");
 
-
-
-
-
-
         return view('app.salary_advance', $data);
-        // }else{
-        //    echo 'Unauthorized Access';
-        //}
 
     }
 
@@ -3893,16 +3885,21 @@ class GeneralController extends Controller
         if ($request->method() == "POST") {
             $category = $request->input("type");
 
+            $reason = "";
             if ($category == 2) {
                 $type = 3;
                 $form_four_index_no = $request->input("index_no");
                 $deduction = 0;
+                $reason = "Add deduction HESLB loan";
             } elseif ($category == 1) {
                 $form_four_index_no = "0";
                 $type = 2;
                 $deduction = $request->input("deduction");
+                $reason = "Add deduction COMPANY Loan";
             }
 
+            $employeewithLoan = $request->input("employee");
+            $loan_amount = $request->input("amount");
             $data = array(
                 'empID' => $request->input("employee"),
                 'amount' => $request->input("amount"),
@@ -3931,12 +3928,12 @@ class GeneralController extends Controller
             $loanApplication->application_date = date('Y-m-d');
             $success = $loanApplication->save();
 
-            // dd(Approvals::where('process_name', 'Loan Approval')->first()->ApprLevels->count() < 1);
-
             try {
                 if (Approvals::where('process_name', 'Loan Approval')->first()->ApprLevels->count() < 1) {
                     $todate = date('Y-m-d');
                     $result = $this->flexperformance_model->approve_loan($loanApplication->id, auth()->user()->emp_id, $todate);
+                    SysHelpers::FinancialLogs($employeewithLoan, $reason, '0.00',  $loan_amount, 'Insert Direct Deduction');
+
                 }
             } catch (\Throwable $th) {
                 if ($success) {
@@ -5653,11 +5650,19 @@ class GeneralController extends Controller
 
     public function assign_allowance_individual(Request $request)
     {
-        $method = $request->method();
 
+        $method = $request->method();
         if ($method == "POST") {
 
             $rate = $this->flexperformance_model->get_rate($request->currency);
+
+            $currency = "";
+            if($request->currency != 'TZS'){
+                $currency = 'TZS';
+
+            }else{
+                $currency = $request->currency;
+            }
 
             $data = array(
                 'empID' => $request->input('empID'),
@@ -5665,9 +5670,8 @@ class GeneralController extends Controller
                 'amount' => $request->input('amount') * $rate,
                 'mode' => $request->input('mode'),
                 'percent' => $request->input('percent') / 100,
-                'currency' => $request->currency,
+                'currency' => $currency,
                 'rate' => $rate,
-                'created_at'=> now()
             );
 
             $result = $this->flexperformance_model->assign_allowance($data);
@@ -5676,7 +5680,7 @@ class GeneralController extends Controller
 
 
 
-            // SysHelpers::FinancialLogs($data['empID'], 'Assign ' . $allowanceName->name, '0.00', ($data['amount'] != 0) ? $data['amount'] . ' ' . $data['currency'] : $data['percent'] . '%', 'Payroll Input');
+            SysHelpers::FinancialLogs($data['empID'], 'Assign ' . $allowanceName->name, '0.00', ($data['amount'] != 0) ? $data['amount'] . ' ' . $data['currency'] : $data['percent'] . '%', 'Payroll Input');
 
             if ($result == true) {
                 $autheniticateduser = auth()->user()->emp_id;
@@ -5773,6 +5777,81 @@ class GeneralController extends Controller
 
     }
 
+
+
+
+            public function insertLoanDetailsToFinancialLogs($payroll_date)
+            {
+                // Query to fetch HESLB loan details for all employees
+                $heslbQuery = "SELECT l.empID, l.id AS loanID, l.description, l.paid, l.amount, l.deduction_amount, l.amount_last_paid,
+                                    IF(deduction_amount = 0, (SELECT rate_employee FROM deduction WHERE id = 3), deduction_amount) AS policy,
+                                    IF((l.paid + l.deduction_amount) > l.amount, l.amount,
+                                        (SELECT rate_employee FROM deduction WHERE id = 3) *
+                                        (SELECT salary FROM employee WHERE emp_id = l.empID AND state != 4 AND login_user != 1)
+                                    ) AS paid,
+                                    (l.amount - IF((l.paid + l.deduction_amount) >= l.amount,
+                                                    l.amount - l.paid,
+                                                    (l.paid + ((SELECT rate_employee FROM deduction WHERE id = 3) *
+                                                                (SELECT salary FROM employee WHERE emp_id = l.empID AND state != 4 AND login_user != 1))
+                                                    )
+                                                )
+                                    ) AS remained,
+                                    '$payroll_date' AS payment_date,
+                                    e.currency,
+                                    (SELECT COUNT(*) FROM loan WHERE empID = l.empID AND type = l.type AND state = 1) AS loan_count
+                            FROM loan l
+                            JOIN employee e ON l.empID = e.emp_id
+                            WHERE l.state = 1 AND l.type = 3";
+
+                $heslbResults = DB::select(DB::raw($heslbQuery));
+
+                // Query to fetch other loan details for all employees
+                $otherLoansQuery = "SELECT l.empID, l.id AS loanID, l.description, l.paid, l.amount, l.deduction_amount, l.amount_last_paid,
+                                        IF(deduction_amount = 0, (SELECT rate_employee FROM deduction WHERE id = 3), deduction_amount) AS policy,
+                                        IF((l.paid + l.deduction_amount) > l.amount, l.amount, l.deduction_amount) AS paid,
+                                        (l.amount - IF((l.paid + l.deduction_amount) >= l.amount, l.amount - l.paid, (l.paid + l.deduction_amount))) AS remained,
+                                        '$payroll_date' AS payment_date,
+                                        e.currency,
+                                        (SELECT COUNT(*) FROM loan WHERE empID = l.empID AND type = l.type AND state = 1) AS loan_count
+                                    FROM loan l
+                                    JOIN employee e ON l.empID = e.emp_id
+                                    WHERE l.state = 1 AND l.type != 3";
+
+                $otherLoansResults = DB::select(DB::raw($otherLoansQuery));
+
+                // Function to insert financial logs
+                function insertFinancialLogs($results, $payroll_date) {
+                    foreach ($results as $row) {
+                        $empID = $row->empID;
+                        $description = $row->description;
+                        $paid = $row->paid;
+                        $amount_last_paid = $row->amount_last_paid;
+                        $isFirstPayment = $row->loan_count == 1;
+                        $isLastPayment = ($row->paid + $row->deduction_amount) >= $row->amount;
+                        SysHelpers::FinancialLogs($empID, $description, $paid.' '.'TZS', $paid.' '.'TZS', 'Payroll Input');
+
+
+                        // if ($isFirstPayment) {
+                        //     SysHelpers::FinancialLogs($empID, $description, '0.00', $amount_last_paid.' '.'TZS', 'Payroll Input');
+                        // } elseif ($isLastPayment) {
+                        // } else {
+                        //     SysHelpers::FinancialLogs($empID, $description, 0, $paid.' '.'TZS', 'Payroll Input');
+                        // }
+                    }
+                }
+
+                // Insert HESLB loan details into financial logs
+                insertFinancialLogs($heslbResults, $payroll_date);
+
+                // Insert other loan details into financial logs
+                insertFinancialLogs($otherLoansResults, $payroll_date);
+            }
+
+
+
+
+
+
     public function submitInputs(Request $request)
     {
 
@@ -5790,6 +5869,8 @@ class GeneralController extends Controller
             if ($request->method() == 'POST') {
                 $month = $this->payroll_model->checkPayrollMonth($date);
                 $submission = $this->payroll_model->checkInputMonth($date);
+               // $this->insertLoanDetailsToFinancialLogs($date);
+
 
                 if ($month < 1) {
                     if ($submission < 1) {
@@ -12752,10 +12833,10 @@ class GeneralController extends Controller
     }
 
 
-    
+
     public function upload_pension(Request $request)
     {
-        
+
 
     }
 

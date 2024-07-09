@@ -110,7 +110,7 @@
 
     <main>
         <?php
-        
+
         foreach ($slipinfo as $row) {
             $rate = $row->rate;
             $id = $row->empID;
@@ -139,16 +139,16 @@
             $taxdue = $row->taxdue / $row->rate;
             $show_nhif = false;
         }
-        
+
         foreach ($companyinfo as $row) {
             $companyname = $row->cname;
         }
-        
+
         foreach ($total_pensions as $row) {
             $uptodate_pension_employee = $row->total_pension_employee / $row->rate;
             $uptodate_pension_employer = $row->total_pension_employer / $row->rate;
         }
-        
+
         $sum_allowances = $total_allowances / $rate;
         $sum_deductions = $total_deductions / $rate;
         $sum_loans = 0;
@@ -158,12 +158,12 @@
         $diff = date_diff($hire, $today);
         $accrued = (37 * $diff->format('%a%')) / 365;
         $totalAccrued = number_format((float) $accrued, 2, '.', ''); //3,04days
-        
+
         $balance = $totalAccrued - $annualLeaveSpent; //days
         if ($balance < 0) {
             $balance = 0;
         }
-        
+
         foreach ($loans as $row) {
             $paid = $row->paid;
             if ($row->remained == 0) {
@@ -179,12 +179,12 @@
             }
             $sum_loans = $sum_loans + $paid;
         }
-        
+
         // START TAKE HOME
 
         $nhif_sum=$show_nhif?$nhif_deductions:0;
         $amount_takehome = $sum_allowances + $salary - ($sum_loans + $pension_employee + $taxdue + $sum_deductions + $nhif_sum);
-        
+
         $paid_salary = $amount_takehome;
         foreach ($paid_with_arrears as $paid_with_arrear) {
             if ($paid_with_arrear->with_arrears) {
@@ -194,7 +194,7 @@
                 $with_arr = 0; //with held
             }
         }
-        
+
         foreach ($arrears_paid as $arrear_paid) {
             if ($arrear_paid->arrears_paid) {
                 $paid_salary = $amount_takehome + $arrear_paid->arrears_paid - $with_arr;
@@ -203,7 +203,7 @@
                 $paid_arr = 0;
             }
         }
-        
+
         foreach ($paid_with_arrears_d as $paid_with_arrear_d) {
             if ($paid_with_arrear_d->arrears_paid) {
                 $paid_arr_all = $paid_with_arrear_d->arrears_paid;
@@ -211,7 +211,7 @@
                 $paid_arr_all = 0;
             }
         }
-        
+
         if ($with_arr > 0) {
             foreach ($arrears_all as $arrear_all) {
                 if ($arrear_all->arrears_all) {
@@ -229,13 +229,13 @@
                 }
             }
         }
-        
+
         $sum_allowances = $total_allowances / $rate;
         $sum_deductions = $total_deductions / $rate;
-        
+
         ?>
 
-       
+
 
 
         <table class="table border-0">
@@ -248,11 +248,11 @@
                             alt="" width="150px" height="150px" style="display: inline;">
                             @else
                             <img src="{{ public_path('assets/images/hc-hub-logo3.png') }}" class="img-fluid"
-                            alt="" width="150px" height="150px" style="display: inline;"> 
+                            alt="" width="150px" height="150px" style="display: inline;">
                             @endif
                             <h5 class="text-main" style="display: inline; margin: 0; vertical-align: middle;">Payslip
                             </h5>
-                            
+
                         </div>
                     </th>
 
@@ -266,8 +266,8 @@
                             <img src="{{ public_path('img/logo.png') }}" class="img-fluid" alt="" width="180px"
                                 height="150px">
                             @endif
-                            
-                            
+
+
                         </p>
                     </th>
                 </tr>
@@ -322,7 +322,7 @@
                             </li>
 
                             <li class="list-group-item d-flex">
-                                <span class="text-muted">Annual leave remaining</span>
+                                <span class="text-muted">Annual leave Balance</span>
                                 <span class="font-weight-bold">
                                     {{ number_format($leaveBalance, 2) }} </span>
                             </li>
@@ -394,7 +394,7 @@
                                 <span class="font-weight-bold"> {{ number_format($nhif_deductions, 2) }} </span>
                             </li>
                             @endif
-                           
+
                             @foreach ($deductions as $row)
                                 <li class="list-group-item d-flex">
                                     <span class="text-muted">{{ $row->description }}</span>
@@ -408,7 +408,7 @@
                                 </li>
                             @endforeach
 
-                           
+
 
                             <li class="list-group-item mt-5 bg-light">
                                 <span class="text-muted">Total Deduction</span>

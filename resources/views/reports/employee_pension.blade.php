@@ -158,15 +158,7 @@
     $gland_total_salary = 0;
     $gland_total_pension = 0;
 
-    foreach($employee_pension as $row) {
-        $total_salary +=$row->salary;
-        $total_pension += $row->pension_employer;
-        $name=$row->name;
-        $emp_id=$row->emp_id;
-        $pension_number=$row->pf_membership_no;
-        $contribution_date=$row->hire_date;
-
-    }
+    
 
     $brandSetting = \App\Models\BrandSetting::first();
 
@@ -222,6 +214,10 @@
 
     <div class="table-section bill-tbl w-100 mt-10">
         @foreach($years as $year)
+
+        @php
+                $No=0;
+        @endphp
         <h5><b>YEAR: {{ $year->years }}</b></h5>
         <table class="table w-100 mt-10" style="font-size: 6px;">
             <thead>
@@ -241,10 +237,32 @@
 
                 @foreach($employee_pension as $row)
                 @if($row->years == $year->years)
+
+                @php
+                $name='';
+                $pension_number='';
+                $contribution_date='';
+                $emp_id='';
+
+                $No=$No+1;
+                if($row->salary==0){
+                $row->salary=10*$row->pension_employer;
+                }
+
+                    $total_salary +=$row->salary;
+                    $total_pension += $row->pension_employer;
+                    $name=$row->name;
+                    $emp_id=$row->emp_id;
+                    $pension_number=$row->pf_membership_no;
+                    $contribution_date=$row->hire_date;
+
+
+                @endphp
                 <tr>
-                    <td>No</td>
+                    <td>{{ $No}}</td>
                     <td >{{ date('M',strtotime($row->payment_date)) }}</td>
                     <td >{{ $row->pf_membership_no }}</td>
+                             
                     <td >{{ number_format($row->salary,2) }}</td>
                     <td >{{ number_format($row->pension_employer,2) }}</td>
                     <td >{{ number_format($row->pension_employer,2) }}</td>
@@ -254,7 +272,7 @@
                 </tr>
                 @endif
                 @endforeach
-                 <?php $gland_total_salary +=$total_salary;  $gland_total_pension +=$total_pension;
+                 <?php $gland_total_salary +=$total_salary;  $gland_total_pension +=$total_pension*2;
 
                  ?>
                 <tr>

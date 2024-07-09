@@ -25,7 +25,7 @@
                 <form id="demo-form2" enctype="multipart/form-data"  method="post" action="{{ url("/flex/reports/payslip") }}" target="_blank"  data-parsley-validate class="form-horizontal form-label-left">
 
                 <div class="form-group">
-                    <label class="control-label col-md-3  col-xs-6" >Employee Type jhjhj</label>
+                    <label class="control-label col-md-3  col-xs-6" >Employee Type</label>
                     <div class="col-md-3 col-sm-6 col-xs-12">
                     <select id="employee_exited_list" onchange="filterType()" class="form-control" tabindex="-1">
                         <option value="1">Active</option>

@@ -45,13 +45,15 @@ class TrustProxies extends Middleware
 
             $response = $next($request);
 
-            $brand = BrandSetting::first();
+            $brands = BrandSetting::all();
 
 
             if (!($response instanceof BinaryFileResponse)) {
 
-           
-            $response->header('Content-Security-Policy', $brand->allowed_domain);
+            foreach($brands as $brand){
+                $response->header('Content-Security-Policy', $brand->allowed_domain);
+            }
+
             $response->header('X-Frame-Options', 'DENY');
             $response->header('Strict-Transport-Security', 'max-age=31536000; includeSubDomains');
             $response->header('X-Content-Type-Options', 'nosniff');

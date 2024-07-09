@@ -18,6 +18,8 @@ class PayrollLog extends Model
         'pension_employee',
         'receipt_date',
         'receipt_number',
+        'years',
+        'pension_fund'
 
     ];
 }
