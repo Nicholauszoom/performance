@@ -126,6 +126,7 @@ public function getCurrentStrategy()
 
         return DB::select(DB::raw($query));
     }
+    
     public function employeeTerminatedPartial()
     {
         $query = "SELECT @s:=@s+1 SNo, p.name as POSITION, d.name as DEPARTMENT, e.*,

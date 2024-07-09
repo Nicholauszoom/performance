@@ -39,7 +39,7 @@ use Illuminate\Support\Facades\DB;
 // use App\Http\Middleware\Employee;
 use Illuminate\Support\Facades\Notification;
 use Maatwebsite\Excel\Facades\Excel;
-use Illuminate\Support\Facades\Gate;
+
 
 
 class AttendanceController extends Controller
@@ -3318,10 +3318,10 @@ class AttendanceController extends Controller
             $holidays = SysHelpers::countHolidays($start, $end);
             $different_days = SysHelpers::countWorkingDays($start, $end) - $holidays;
             $total_leave_days = $leaves + $different_days;
-        
 
 
-       
+
+
 
         if ($type->type == "Annual") {
             $max_leave_days = $annualleaveBalance;
@@ -3472,9 +3472,10 @@ class AttendanceController extends Controller
                 'nature' => $leaves->nature,
 
             ];
+
             $extraData = [
                 'emp_id' => $condition['emp_id'],
-                'appliedby' => $condition['appliedBy'],
+                'appliedby' => $condition['appliedBy']??null,
                 'leaveId' => $condition['leaveId'],
                 'nature' => $condition['nature'],
                 'forfeit_days' => $extradays

@@ -7,7 +7,6 @@ use Illuminate\Support\Facades\Gate;
 use Carbon\Carbon;
 use App\Models\BrandSetting;
 use Doctrine\DBAL\Driver\OCI8\ConvertPositionalToNamedPlaceholders;
-use Illuminate\Support\Facades\Gate;
 use App\Charts\EmployeeLineChart;
 use App\Exports\LeaveApprovalsExport;
 use App\Helpers\SysHelpers;

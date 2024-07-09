@@ -447,17 +447,26 @@ class AttendanceModel extends Model
 
         $last_month_date = date('Y-m-t', strtotime($prev_month));
 
+    //    $query = "SELECT
+    //     CASE
+    //         WHEN (SELECT COUNT(id) FROM leaves WHERE nature = '" . $nature . "' AND empID = '" . $empID . "') = 0 THEN 0
+    //         ELSE (SELECT SUM(days) FROM leaves WHERE nature = '" . $nature . "' AND (state = 0 OR state = 3)
+    //         AND empID = '" . $empID . "' AND start <= '" . $today . "' AND leave_address != 'auto' AND start BETWEEN '" . $hireDate . "' AND '" . $today . "' GROUP BY nature)
+    //     END as days_spent,
+    //     (CAST('" . $today . "' AS DATE) - CAST('" . $hireDate . "' AS DATE)) as days_accrued";
+
         $query = "SELECT
-                IF(
-                    (SELECT COUNT(id) FROM leaves WHERE nature = '" . $nature . "' AND empID = '" . $empID . "') = 0,
-                    0,
-                    (SELECT SUM(days) FROM leaves WHERE nature = '" . $nature . "' AND state = 0  AND state = 3
-                    AND empID = '" . $empID . "' AND start <= '" . $today . "' AND leave_address != 'auto' AND start BETWEEN '" . $hireDate . "' AND '" . $today . "' GROUP BY nature)
-                ) as days_spent,
-                DATEDIFF('" . $today . "','" . $hireDate . "') as days_accrued";
+        CASE
+            WHEN (SELECT COUNT(id) FROM leaves WHERE nature::integer = :nature AND empID = :empId::varchar) = 0 THEN 0
+            ELSE (SELECT SUM(days) FROM leaves WHERE nature::integer = :nature AND (state = '0' OR state = '3')
+            AND empID = :empId AND start <= :today AND leave_address != 'auto' AND start BETWEEN :hire_date AND :today GROUP BY nature)
+        END as days_spent, (CAST(:today AS DATE) - CAST(:hire_date AS DATE)) as days_accrued";
 
 
-        $row = DB::select(DB::raw($query));
+// dd(['nature' => (string) $nature,'empId' => (string) $empID,'hire_date' => $hireDate,'today' => $today]);
+// $row = DB::select(DB::raw($query));
+$row = DB::select($query,['nature' => (string) $nature,'empId' => (string) $empID,'hire_date' => $hireDate,'today' => $today]);
+
 
         $employee = DB::table('employee')->where('emp_id', $empID)->first();
 

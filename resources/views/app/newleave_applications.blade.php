@@ -33,13 +33,13 @@
 
                         $line_manager = auth()->user()->emp_id;
                         // $approve=App\Models\LeaveApproval::where('empID',$item->empID)->first();
-                        $level1 = App\Models\LeaveApproval::where('empid', $item->empID)
+                        $level1 = App\Models\LeaveApproval::where('empID', $item->empID)
                             ->where('level1', $line_manager)
                             ->first();
-                        $level2 = App\Models\LeaveApproval::where('empid', $item->empID)
+                        $level2 = App\Models\LeaveApproval::where('empID', $item->empID)
                             ->where('level2', $line_manager)
                             ->first();
-                        $level3 = App\Models\LeaveApproval::where('empid', $item->empID)
+                        $level3 = App\Models\LeaveApproval::where('empID', $item->empID)
                             ->where('level3', $line_manager)
                             ->first();
 

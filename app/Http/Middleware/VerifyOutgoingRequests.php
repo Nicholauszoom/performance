@@ -21,6 +21,7 @@ class VerifyOutgoingRequests
 
         $brands = BrandSetting::all();
 
+        $allowedDomains = [];
         foreach($brands as $brand){
             $allowedDomains = [
                 $brand->allowed_domain,
