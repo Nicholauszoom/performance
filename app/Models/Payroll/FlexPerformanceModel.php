@@ -121,12 +121,50 @@ public function getCurrentStrategy()
 
 
     public function employee()
-    {
-        $query = "SELECT @s:=@s+1 SNo, p.name as POSITION, d.name as DEPARTMENT, e.*, CONCAT(e.fname,' ',IF( e.mname != null,e.mname,' '),' ', e.lname) as NAME, (SELECT CONCAT(el.fname,' ', el.mname,' ', el.lname) FROM employee el where el.emp_id = e.line_manager limit 1 ) as LINEMANAGER, IF((( SELECT sum(days)  FROM `leaves` where nature=1 and empID=e.emp_id GROUP by nature)>0), (SELECT sum(days)  FROM `leaves` where nature=1 and empID=e.emp_id  GROUP by nature),0) as ACCRUED FROM employee e, department d, position p , (select @s:=0) as s WHERE  p.id=e.position and d.id=e.department and e.state=1";
+{
+    $query = "WITH serial AS (
+            SELECT ROW_NUMBER() OVER () AS SNo, emp_id
+            FROM employee
+        ),
+        accrued_leaves AS (
+            SELECT empID, COALESCE(SUM(days), 0) AS accrued
+            FROM leaves
+            WHERE nature = '1'
+            GROUP BY empID
+        ),
+        linemanagers AS (
+            SELECT emp_id, CONCAT(fname, ' ', COALESCE(mname, ''), ' ', lname) AS linemanager_name
+            FROM employee
+        )
+        SELECT
+            s.SNo,
+            p.name AS \"POSITION\",
+            d.name AS \"DEPARTMENT\",
+            e.*,
+            CONCAT(e.fname, ' ', COALESCE(e.mname, ''), ' ', e.lname) AS \"NAME\",
+            lm.linemanager_name AS \"LINEMANAGER\",
+            COALESCE(al.accrued, 0) AS \"ACCRUED\"
+        FROM
+            employee e
+        JOIN
+            department d ON d.id = e.department
+        JOIN
+            position p ON p.id = e.position
+        LEFT JOIN
+            accrued_leaves al ON al.empID = e.emp_id
+        LEFT JOIN
+            linemanagers lm ON lm.emp_id = e.line_manager
+        JOIN
+            serial s ON s.emp_id = e.emp_id
+        WHERE
+            e.state = 1
+    ";
 
-        return DB::select(DB::raw($query));
-    }
-    
+    return DB::select(DB::raw($query));
+}
+
+
+
     public function employeeTerminatedPartial()
     {
         $query = "SELECT @s:=@s+1 SNo, p.name as POSITION, d.name as DEPARTMENT, e.*,
@@ -3227,7 +3265,7 @@ last_paid_date='" . $date . "' WHERE  state = 1 and type = 3";
         return DB::select(DB::raw($query));
     }
 
- 
+
 
     public function linemanagerdropdown()
     {
@@ -3275,10 +3313,10 @@ last_paid_date='" . $date . "' WHERE  state = 1 and type = 3";
             ->where('position.id', $positionID)
             ->get();
 
-    
+
         return $result;
     }
-    
+
 
     public function bank()
     {
@@ -3361,12 +3399,12 @@ last_paid_date='" . $date . "' WHERE  state = 1 and type = 3";
     }
 
     // FORM
-   
+
 
 
 public function positionFetcher($id)
 {
-   
+
     $positions = DB::table('position')
         ->where('dept_id', $id)
         ->where('state', 1)
@@ -4427,10 +4465,10 @@ FROM payroll_logs pl, employee e, position p, department d where e.emp_id=pl.emp
             )
             ->where('g.id', '=', $id)
             ->get();
-    
+
         return $result;
     }
-    
+
 
     public function all_grievances()
     {

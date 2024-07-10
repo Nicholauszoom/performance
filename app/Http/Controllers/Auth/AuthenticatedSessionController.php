@@ -19,7 +19,8 @@ class AuthenticatedSessionController extends Controller
 
     protected $flexperformance_model;
 
-    public function __construct(FlexPerformanceModel $flexperformance_model){
+    public function __construct(FlexPerformanceModel $flexperformance_model)
+    {
         $this->flexperformance_model = $flexperformance_model;
     }
 
@@ -31,7 +32,7 @@ class AuthenticatedSessionController extends Controller
     public function create(Request $request)
     {
         $data['next'] = $request->query('next');
-        return view('auth.login',$data);
+        return view('auth.login', $data);
     }
 
     /**
@@ -45,14 +46,13 @@ class AuthenticatedSessionController extends Controller
 
         $request->authenticate();
 
-        if($this->password_set(Auth::user()->emp_id) == 1){
+        if ($this->password_set(Auth::user()->emp_id) == 1) {
 
             return redirect('/change-password');
-
-        }else{
+        } else {
             $this->setPermissions(Auth::user()->emp_id);
-            $result=$this->dateDiffCalculate();
-            if($result >= 90){
+            $result = $this->dateDiffCalculate();
+            if ($result >= 90) {
                 return redirect('/change-password')->with('status', 'You password has expired');
             }
             $request->session()->regenerate();
@@ -60,20 +60,18 @@ class AuthenticatedSessionController extends Controller
             if (session('pass_age') >= 90) {
 
                 return redirect('/change-password')->with('status', 'You password has expired');
+            } else {
+                $employeeName = Auth::user()->fname . ' ' . Auth::user()->mname;
 
-            }else{
-                $employeeName = Auth::user()->fname.' '.Auth::user()->mname;
-
-                SysHelpers::AuditLog(1, 'Logged in with '.$employeeName , $request);
+                SysHelpers::AuditLog(1, 'Logged in with ' . $employeeName, $request);
 
                 // redirect to specific page if $request->next is set
-                if($request->next){
+                if ($request->next) {
                     return redirect($request->next);
                 }
                 return redirect()->intended(RouteServiceProvider::HOME);
             }
         }
-
     }
 
     public function password_set($empID)
@@ -84,9 +82,9 @@ class AuthenticatedSessionController extends Controller
             ->limit(1)
             ->first();
 
-        if($query){
+        if ($query) {
             return $query->password_set;
-        }else{
+        } else {
             return 'UNKNOWN';
         }
     }
@@ -104,7 +102,7 @@ class AuthenticatedSessionController extends Controller
             ->where('emp_id', $emp_id)
             ->first();
 
-        if(empty($status)){
+        if (empty($status)) {
             return "404";
         } else {
             return $status->account;
@@ -113,17 +111,17 @@ class AuthenticatedSessionController extends Controller
 
 
 
-    public function setPermissions($emp_id) {
+    public function setPermissions($emp_id)
+    {
 
         $query = "SELECT e.*, d.name AS dname, c.name AS CONTRACT, d.id AS departmentID, p.id AS positionID, p.name AS pName,
-        CONCAT(l.fname, ' ', l.mname, ' ', l.lname) AS lineManager
-        FROM employee e
-        LEFT JOIN contract c ON e.contract_type = c.item_code
-        LEFT JOIN department d ON d.id = e.department
-        LEFT JOIN position p ON p.id = e.position
-        LEFT JOIN employee l ON l.emp_id = e.line_manager
-        WHERE (e.state = '1' OR e.state = '3') AND e.emp_id = '".$emp_id."'";
-
+         CONCAT(l.fname, ' ', l.mname, ' ', l.lname) AS lineManager
+FROM employee e
+LEFT JOIN contract c ON e.contract_type = c.item_code
+LEFT JOIN department d ON d.id = e.department
+LEFT JOIN position p ON p.id = e.position
+LEFT JOIN employee l ON l.emp_id = e.line_manager
+WHERE (e.state = '1' OR e.state = '3') AND e.emp_id = '$emp_id'";
         $data = DB::select(DB::raw($query));
 
         // dd($data);
@@ -140,92 +138,91 @@ class AuthenticatedSessionController extends Controller
         $res = $this->dateDiffCalculate();
 
 
-        if($data) {
+        if ($data) {
             session(['pass_age' => $res]);
             // session(['logo' =>$this->flexperformance_model->logo()]);
-            session(['id' =>$data['id']]);
-            session(['emp_id' =>$data['emp_id']]);
+            session(['id' => $data['id']]);
+            session(['emp_id' => $data['emp_id']]);
 
-            session(['password_set' =>$data['password_set']]);
-            session(['username' =>$data['username']]);
-            session(['password' =>$data['password']]);
-            session(['email' =>$data['email']]);
-            session(['fname' =>$data['fname']]);
-            session(['mname' =>$data['mname']]);
-            session(['lname' =>$data['lname']]);
-            session(['position' =>$data['pName']]);
-            session(['departmentID' =>$data['departmentID']]);
-            session(['positionID' =>$data['positionID']]);
-            session(['photo' =>$data['photo']]);
-            session(['birthdate' =>$data['birthdate']]);
-            session(['nationality' =>$data['nationality']]);
-            session(['gender' =>$data['gender']]);
-            session(['merital_status' =>$data['merital_status']]);
-            session(['department' =>$data['dname']]);
-            session(['postal_city' =>$data['postal_city']]);
-            session(['mobile' =>$data['mobile']]);
-            session(['linemanager' =>$data['lineManager']]);
-            session(['ctype' =>$data['contract']]);
-            session(['postal_address' =>$data['postal_address']]);
-            session(['physical_address' =>$data['physical_address']]);
-            session(['salary' =>$data['salary']]);
-            session(['account_no' =>$data['account_no']]);
-            session(['last_updated' =>$data['last_updated']]);
-            session(['pf_membership_no' =>$data['pf_membership_no']]);
-            session(['hire_date' =>$data['hire_date']]);
-
+            session(['password_set' => $data['password_set']]);
+            session(['username' => $data['username']]);
+            session(['password' => $data['password']]);
+            session(['email' => $data['email']]);
+            session(['fname' => $data['fname']]);
+            session(['mname' => $data['mname']]);
+            session(['lname' => $data['lname']]);
+            session(['position' => $data['pName']]);
+            session(['departmentID' => $data['departmentID']]);
+            session(['positionID' => $data['positionID']]);
+            session(['photo' => $data['photo']]);
+            session(['birthdate' => $data['birthdate']]);
+            session(['nationality' => $data['nationality']]);
+            session(['gender' => $data['gender']]);
+            session(['merital_status' => $data['merital_status']]);
+            session(['department' => $data['dname']]);
+            session(['postal_city' => $data['postal_city']]);
+            session(['mobile' => $data['mobile']]);
+            session(['linemanager' => $data['lineManager']]);
+            session(['ctype' => $data['contract']]);
+            session(['postal_address' => $data['postal_address']]);
+            session(['physical_address' => $data['physical_address']]);
+            session(['salary' => $data['salary']]);
+            session(['account_no' => $data['account_no']]);
+            session(['last_updated' => $data['last_updated']]);
+            session(['pf_membership_no' => $data['pf_membership_no']]);
+            session(['hire_date' => $data['hire_date']]);
         }
 
         $this->getPermissions();
-
     }
 
-    public function getPermissions()  {
-        $id =session('emp_id');
-        $empID =session('emp_id');
+    public function getPermissions()
+    {
+        $id = session('emp_id');
+        $empID = session('emp_id');
 
         // dd( $this->getpermission($empID, '0'),$empID);
 
         // NEW ROLES AND PERMISSION;
-        session(['vw_emp_sum'=> $this->getpermission($empID, '0')]);
-        session(['vw_payr_sum'=> $this->getpermission($empID, '1')]);
-        session(['vw_dept_proj_sum'=> $this->getpermission($empID, '2')]);
-        session(['vw_org_proj_sum'=> $this->getpermission($empID, '3')]);
-        session(['vw_emp'=> $this->getpermission($empID, '4')]);
-        session(['mng_emp'=> $this->getpermission($empID, '5')]);
-        session(['appr_emp'=> $this->getpermission($empID, '6')]);
-        session(['vw_proj'=> $this->getpermission($empID, '7')]);
-        session(['mng_proj'=> $this->getpermission($empID, '8')]);
-        session(['vw_leave'=> $this->getpermission($empID, '9')]);
-        session(['mng_leave'=> $this->getpermission($empID, 'a')]);
-        session(['appr_leave'=> $this->getpermission($empID, 'b')]);
-        session(['mng_attend'=> $this->getpermission($empID, 'c')]);
-        session(['mng_leave_rpt'=> $this->getpermission($empID, 'd')]);
-        session(['vw_org'=> $this->getpermission($empID, 'e')]);
-        session(['mng_org'=> $this->getpermission($empID, 'f')]);
-        session(['recom_paym'=> $this->getpermission($empID, 'g')]);
-        session(['mng_stat_rpt'=> $this->getpermission($empID, 'h')]);
-        session(['mng_paym'=> $this->getpermission($empID, 'i')]);
-        session(['gen_payslip'=> $this->getpermission($empID, 'j')]);
-        session(['use_salary_calc'=> $this->getpermission($empID, 'k')]);
-        session(['appr_paym'=> $this->getpermission($empID, 'l')]);
-        session(['mng_roles_grp'=> $this->getpermission($empID, 'm')]);
-        session(['mng_audit'=> $this->getpermission($empID, 'n')]);
-        session(['mng_bank_info'=> $this->getpermission($empID, 'o')]);
-        session(['recom_deduction'=> $this->getpermission($empID, 'p')]);
-        session(['appr_deduction'=> $this->getpermission($empID, 'q')]);
-        session(['mgn_deduction'=> $this->getpermission($empID, 'r')]);
-        session(['vw_dept_allocation'=> $this->getpermission($empID, 's')]);
-        session(['vw_settings'=> $this->getpermission($empID, 't')]);
-        session(['vw_proj'=> $this->getpermission($empID, 'u')]);
-        session(['vw_trans'=> $this->getpermission($empID, 'v')]);
-        session(['vw_org'=> $this->getpermission($empID, 'w')]);
-        session(['appr_loan'=> $this->getpermission($empID, 'q')]);
+        session(['vw_emp_sum' => $this->getpermission($empID, '0')]);
+        session(['vw_payr_sum' => $this->getpermission($empID, '1')]);
+        session(['vw_dept_proj_sum' => $this->getpermission($empID, '2')]);
+        session(['vw_org_proj_sum' => $this->getpermission($empID, '3')]);
+        session(['vw_emp' => $this->getpermission($empID, '4')]);
+        session(['mng_emp' => $this->getpermission($empID, '5')]);
+        session(['appr_emp' => $this->getpermission($empID, '6')]);
+        session(['vw_proj' => $this->getpermission($empID, '7')]);
+        session(['mng_proj' => $this->getpermission($empID, '8')]);
+        session(['vw_leave' => $this->getpermission($empID, '9')]);
+        session(['mng_leave' => $this->getpermission($empID, 'a')]);
+        session(['appr_leave' => $this->getpermission($empID, 'b')]);
+        session(['mng_attend' => $this->getpermission($empID, 'c')]);
+        session(['mng_leave_rpt' => $this->getpermission($empID, 'd')]);
+        session(['vw_org' => $this->getpermission($empID, 'e')]);
+        session(['mng_org' => $this->getpermission($empID, 'f')]);
+        session(['recom_paym' => $this->getpermission($empID, 'g')]);
+        session(['mng_stat_rpt' => $this->getpermission($empID, 'h')]);
+        session(['mng_paym' => $this->getpermission($empID, 'i')]);
+        session(['gen_payslip' => $this->getpermission($empID, 'j')]);
+        session(['use_salary_calc' => $this->getpermission($empID, 'k')]);
+        session(['appr_paym' => $this->getpermission($empID, 'l')]);
+        session(['mng_roles_grp' => $this->getpermission($empID, 'm')]);
+        session(['mng_audit' => $this->getpermission($empID, 'n')]);
+        session(['mng_bank_info' => $this->getpermission($empID, 'o')]);
+        session(['recom_deduction' => $this->getpermission($empID, 'p')]);
+        session(['appr_deduction' => $this->getpermission($empID, 'q')]);
+        session(['mgn_deduction' => $this->getpermission($empID, 'r')]);
+        session(['vw_dept_allocation' => $this->getpermission($empID, 's')]);
+        session(['vw_settings' => $this->getpermission($empID, 't')]);
+        session(['vw_proj' => $this->getpermission($empID, 'u')]);
+        session(['vw_trans' => $this->getpermission($empID, 'v')]);
+        session(['vw_org' => $this->getpermission($empID, 'w')]);
+        session(['appr_loan' => $this->getpermission($empID, 'q')]);
 
 
         //set default strategy as current strategy
         $defaultStrategy = $this->getCurrentStrategy();
-        session(['current_strategy'=> $defaultStrategy]);
+        session(['current_strategy' => $defaultStrategy]);
 
         // $logData = array(
         //    'empID' =>session('emp_id'),
@@ -258,7 +255,6 @@ class AuthenticatedSessionController extends Controller
     {
         DB::table('audit_logs')->insert($logData);
         return true;
-
     }
 
     public function password_age($empID)
@@ -303,26 +299,28 @@ class AuthenticatedSessionController extends Controller
         return  redirect('/');
     }
 
-    public function dateDiffCalculate(){
+    public function dateDiffCalculate()
+    {
         $from = $this->password_age(Auth::user()->emp_id);
 
         $from = date_create($from);
 
-        $today=date_create(date('Y-m-d'));
+        $today = date_create(date('Y-m-d'));
 
-        $diff=date_diff($from, $today);
+        $diff = date_diff($from, $today);
 
         $accrued = $diff->format("%a%") + 1;
         return $accrued;
     }
-    public function dateDiffCalculate2($empID){
+    public function dateDiffCalculate2($empID)
+    {
         $from = $this->password_age($empID);
 
         $from = date_create($from);
 
-        $today=date_create(date('Y-m-d'));
+        $today = date_create(date('Y-m-d'));
 
-        $diff=date_diff($from, $today);
+        $diff = date_diff($from, $today);
 
         $accrued = $diff->format("%a%") + 1;
         return $accrued;
