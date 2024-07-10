@@ -13,9 +13,9 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('payroll_logs', function (Blueprint $table) {
-            $table->timestamps();
-        });
+        // Schema::table('payroll_logs', function (Blueprint $table) {
+        //     $table->timestamps();
+        // });
     }
 
     /**

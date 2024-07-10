@@ -208,7 +208,7 @@
 @push('footer-script')
     {{-- <script src="<?php echo url(''); ?>style/jquery/jquery.easypiechart.min.js"></script> --}}
 
-    <script>
+    <!-- <script>
         $(function() {
             $('.chart').easyPieChart({
                 easing: 'easeOutElastic',
@@ -224,5 +224,5 @@
                 }
             });
         });
-    </script>
+    </script> -->
 @endpush
