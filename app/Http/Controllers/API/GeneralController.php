@@ -630,7 +630,7 @@ class GeneralController extends Controller
                 ->first();
 
             $approval = LeaveApproval::where('empID', $leave->empID)->first();
-
+       if($approval){
             if (
                 auth()->user()->emp_id == $approval->level1 ||
                 (auth()->user()->emp_id == $approval->level2 && $leave->status == 2) ||
@@ -639,6 +639,7 @@ class GeneralController extends Controller
             ) {
                 $filteredLeaves[] = $leave;
             }
+        }
         }
         foreach ($data['revoked_leaves'] as $leave) {
             $level1 = LeaveApproval::where('empID', $leave->empID)
@@ -654,7 +655,7 @@ class GeneralController extends Controller
                 ->first();
 
             $approval = LeaveApproval::where('empID', $leave->empID)->first();
-
+            if($approval){
             if (
                 auth()->user()->emp_id == $approval->level1 ||
                 (auth()->user()->emp_id == $approval->level2 && $leave->status == 2) ||
@@ -663,6 +664,8 @@ class GeneralController extends Controller
             ) {
                 $filteredLeaves1[] = $leave;
             }
+        }
+            
         }
 
 
