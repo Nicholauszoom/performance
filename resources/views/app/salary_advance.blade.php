@@ -116,10 +116,10 @@
                                                     </a>
                                                 @endif
 
-                                                {{-- @if ($level_check == $row->approval_status) --}}
+                                      
                                                 <a href="javascript:void(0)">
                                                     <?php }  ?>
-                                                    {{-- @endif --}}
+
 
                                             </td>
 

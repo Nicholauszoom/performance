@@ -8500,22 +8500,28 @@ class GeneralController extends Controller
 
                 if (SysHelpers::ApprovalLastLevel("Employee Approval")) {
                     // dd($approval->levels == $level->level_name);
+                    // dd($transfers);
+                    $emp_id = $transfers->empid;
 
-                    $emp_id = $transfers->empID;
                     $approver = auth()->user()->emp_id;
                     $date = date('Y-m-d');
 
                     $result = $this->flexperformance_model->approveRegistration($emp_id, $transferID, $approver, $date);
+
                     if ($result == true) {
-                        $emp  = Employee::where("emp_id", $transfers->empID)->first();
+
+                        $emp  = Employee::where("emp_id", $transfers->empid)->first();
                         $emp->approval_status = $emp->approval_status + 1;
                         echo "<p class='alert alert-success text-center'>Registration Successfully!</p>";
+
                     } else {
+
                         echo "<p class='alert alert-danger text-center'>FAILED: Failed To Approve Registration, Please Try Again</p>";
+
                     }
                 } else {
                     // dd( $employee);
-                    $emp  = Employee::where("emp_id", $transfers->empID)->first();
+                    $emp  = Employee::where("emp_id", $transfers->empid)->first();
                     $emp->approval_status = $emp->approval_status + 1;
                     $emp->save();
                     $msg = 'Approved By ';
