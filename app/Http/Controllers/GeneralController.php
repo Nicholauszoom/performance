@@ -7308,7 +7308,7 @@ class GeneralController extends Controller
 
     public function addEmployee(Request $request)
     {
-        
+
         $this->authenticateUser('add-employee');
 
         $data['pdrop'] = $this->flexperformance_model->positiondropdown();
@@ -8349,7 +8349,6 @@ class GeneralController extends Controller
                 $response_array['status'] = "no_date";
                 echo json_encode($response_array);
             } else {
-
                 $fx = explode('/', $request->input('from'));
                 $tx = explode('/', $request->input('to'));
                 $from = $fx[2] . '-' . $fx[1] . '-' . $fx[0];
@@ -8496,8 +8495,6 @@ class GeneralController extends Controller
             // dd($transfers);
 
             if ($transfers) {
-
-
 
                 $employee = Auth::User()->id;
 

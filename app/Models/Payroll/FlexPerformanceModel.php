@@ -167,19 +167,37 @@ public function getCurrentStrategy()
 
     public function employeeTerminatedPartial()
     {
-        $query = "SELECT @s:=@s+1 SNo, p.name as POSITION, d.name as DEPARTMENT, e.*,
-                  CONCAT(e.fname,' ',IF(e.mname != null,e.mname,' '),' ', e.lname) as NAME,
-                  (SELECT CONCAT(el.fname,' ', el.mname,' ', el.lname)
-                   FROM employee el
-                   WHERE el.emp_id = e.line_manager LIMIT 1) as LINEMANAGER,
-                   IF(((SELECT sum(days) FROM `leaves` WHERE nature=1 and empID=e.emp_id GROUP by nature)>0),
-                   (SELECT sum(days) FROM `leaves` WHERE nature=1 and empID=e.emp_id GROUP by nature),0) as ACCRUED,
-                   IF(t.employeeID IS NOT NULL, 1, 0) AS termination_flag
-                  FROM employee e
-                  JOIN department d ON d.id = e.department
-                  JOIN position p ON p.id = e.position
-                  LEFT JOIN terminations t ON t.employeeID = e.emp_id
-                  WHERE t.employeeID IS NULL AND e.state=1";
+        $query = "WITH employee_data AS (
+            SELECT
+                e.*,
+                p.name as POSITION_NAME,
+                d.name as DEPARTMENT_NAME,
+                CONCAT(e.fname, ' ', COALESCE(e.mname, ''), ' ', e.lname) as NAME,
+                (SELECT CONCAT(el.fname, ' ', COALESCE(el.mname, ''), ' ', el.lname)
+                 FROM employee el
+                 WHERE el.emp_id = e.line_manager
+                 LIMIT 1) as LINEMANAGER,
+                COALESCE((SELECT sum(days) FROM leaves WHERE nature='1' AND empID=e.emp_id GROUP BY nature), 0) as ACCRUED,
+                CASE WHEN t.\"employeeID\" IS NOT NULL THEN 1 ELSE 0 END AS termination_flag
+            FROM
+                employee e
+            JOIN
+                department d ON d.id = e.department
+            JOIN
+                position p ON p.id = e.position
+            LEFT JOIN
+                terminations t ON t.\"employeeID\" = e.emp_id
+            WHERE
+                t.\"employeeID\" IS NULL AND e.state = 1
+        )
+        SELECT
+            ROW_NUMBER() OVER (ORDER BY e.emp_id) as SNo,
+            POSITION_NAME,
+            DEPARTMENT_NAME,
+            e.*
+        FROM
+            employee_data e
+    ";
 
         return DB::select(DB::raw($query));
     }
@@ -1126,9 +1144,31 @@ public function getCurrentStrategy()
 
     public function employeeTransfers()
     {
-        $query = "SELECT @s:=@s+1 SNo, p.name as position_name, d.name as department_name, br.name as branch_name, tr.*, CONCAT(e.fname,'  ', e.lname) as empName , e.approval_status FROM employee e, transfer tr, department d, position p, branch br, (SELECT @s:=0) as s WHERE tr.empID = e.emp_id AND e.branch = br.id AND  p.id=e.position AND d.id=e.department  ORDER BY tr.id DESC ";
+$query = "SELECT
+        ROW_NUMBER() OVER (ORDER BY tr.id DESC) AS \"SNo\",
+        p.name AS position_name,
+        d.name AS \"department_name\",
+        br.name AS \"branch_name\",
+        tr.empID AS \"empID\",
+        tr.*,
+        CONCAT(e.fname, ' ', e.lname) AS \"empName\",
+        e.approval_status
+    FROM
+        employee e
+    JOIN
+        transfer tr ON tr.empID = e.emp_id
+    JOIN
+        department d ON d.id = e.department
+    JOIN
+        position p ON p.id = e.position
+    JOIN
+        branch br ON br.id = CAST(e.branch AS BIGINT)
+    ORDER BY
+        tr.id DESC
+";
 
-        return $result;
+        $results = DB::select(DB::raw($query));
+        return $results;
     }
 
 
@@ -1147,6 +1187,8 @@ public function getCurrentStrategy()
     }
 }
 
+
+
 public function newPositionTransfer($id)
 {
     $row = DB::table('position')
@@ -1160,6 +1202,8 @@ public function newPositionTransfer($id)
         return 'Position not found'; // Or handle the case when position is not found
     }
 }
+
+
 
 
     public function newBranchTransfer($id)
@@ -1652,7 +1696,32 @@ public function skills_missing($empID)
     {
 
 
-        $query = "SELECT e.*, bank.name as bankName, ctry.description as country, b.name as branch_name,  bb.name as bankBranch, d.name as deptname, c.name as CONTRACT, p.name as pName, (SELECT CONCAT(fname,' ', mname,' ', lname) from employee where  emp_id = e.line_manager) as LINEMANAGER from employee e, department d, contract c, country ctry, position p, bank, branch b, bank_branch bb WHERE d.id=e.department and p.id=e.position and e.contract_type = c.item_code AND e.bank_branch = bb.id and ctry.item_code = e.nationality AND e.bank = bank.id AND e.branch = b.id AND e.emp_id ='" . $empID . "'";
+        $query = "SELECT
+        e.*,
+        bank.name as bankName,
+        ctry.description as country,
+        b.name as branch_name,
+        bb.name as bankBranch,
+        d.name as deptname,
+        c.name as CONTRACT,
+        p.name as pName,
+        (
+            SELECT CONCAT(fname,' ', mname,' ', lname)
+            FROM employee
+            WHERE emp_id = e.line_manager
+        ) as LINEMANAGER
+    FROM
+        employee e
+        JOIN department d ON d.id = e.department
+        JOIN contract c ON e.contract_type = CAST(c.item_code AS character varying)
+        JOIN country ctry ON CAST(ctry.item_code  AS character varying)= e.nationality
+        JOIN position p ON p.id = CAST(e.position AS BIGINT)
+        JOIN bank ON bank.id = CAST(e.bank AS BIGINT)
+        JOIN branch b ON b.id = CAST(e.branch AS BIGINT)
+        JOIN bank_branch bb ON e.bank_branch = bb.id
+    WHERE
+        e.emp_id = '" . $empID . "'
+";
 
         $row = DB::select(DB::raw($query));
 
@@ -2136,16 +2205,25 @@ public function getpropertyexit($id)
         return $total_amount * $rate;
     }
 
-    public function get_pension_employer($salaryEnrollment, $serevancePay, $exgracia, $leavePay, $noticePay, $arrears, $overtime_amount,$emp_id, $tellerAllowance)
+    public function get_pension_employer($salaryEnrollment, $serevancePay, $exgracia, $leavePay, $noticePay, $arrears, $overtime_amount ,$emp_id, $tellerAllowance)
     {
 
         //$pesionable_amount =  $this->get_pensionable_allowance($emp_id);
         $total_amount = $salaryEnrollment + $leavePay + $arrears + $overtime_amount + $serevancePay + $exgracia + $noticePay +$tellerAllowance;
 
-        //+ $pesionable_amount;
 
-        $query = "SELECT pf.amount_employer FROM employee e,pension_fund pf where e.pension_fund = pf.id AND  e.emp_id =" . $emp_id . " ";
-        $row = DB::select(DB::raw($query));
+            $query = "SELECT pf.amount_employer
+        FROM employee e
+        JOIN pension_fund pf ON e.pension_fund = pf.id
+        WHERE e.emp_id = :emp_id
+        ";
+
+
+       $row = DB::select($query, ['emp_id' => $emp_id]);
+
+
+
+
         $rate = $row[0]->amount_employer;
 
         return $total_amount * $rate;
@@ -3270,8 +3348,13 @@ last_paid_date='" . $date . "' WHERE  state = 1 and type = 3";
     public function linemanagerdropdown()
     {
         // $query = "SELECT DISTINCT er.userID as empID,  CONCAT(e.fname,' ',IF( e.mname != null,e.mname,' '),' ', e.lname) as NAME FROM employee e, emp_role er, role r WHERE er.role = r.id and er.userID = e.emp_id and  r.permissions like '%p%'";
-        $query = "SELECT DISTINCT e.emp_id as empID,  CONCAT(e.fname,' ',IF( e.mname != null,e.mname,' '),' ', e.lname) as NAME FROM employee e where e.state !=4 and emp_id not like '%JOB_%'";
-        return DB::select(DB::raw($query));
+        $query = "SELECT DISTINCT
+            e.emp_id as empID,
+            CONCAT(e.fname, ' ', COALESCE(e.mname, ''), ' ', e.lname) as NAME
+        FROM employee e
+        WHERE e.state != 4
+            AND e.emp_id NOT LIKE '%JOB_%'
+    ";        return DB::select(DB::raw($query));
     }
 
     public function departmentdropdown()

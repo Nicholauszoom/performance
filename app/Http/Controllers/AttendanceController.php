@@ -3381,13 +3381,13 @@ class AttendanceController extends Controller
             $condition = [
                 'emp_id' => $empID,
                 'appliedby' => Auth::user()->emp_id,
-                'leaveId' => $leaves->id,
+                'leaveid' => $leaves->id,
                 'nature' => $leaves->nature,
 
             ];
             $extraData = [
                 'emp_id' => $condition['emp_id'],
-                'appliedby' => $condition['appliedBy'],
+                'appliedby' => $condition['appliedBy']??null,
                 'leaveId' => $condition['leaveId'],
                 'nature' => $condition['nature'],
                 'forfeit_days' => $extradays
