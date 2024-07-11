@@ -4338,13 +4338,13 @@ return DB::select(DB::raw($query));
 
     public function customemployee()
     {
-         $query = "SELECT DISTINCT e.emp_id AS empID,
+         $query = "SELECT DISTINCT e.emp_id AS \"empID\",
          CONCAT(e.fname, ' ',
              CASE
                  WHEN e.mname IS NOT NULL THEN e.mname || ' '
                  ELSE ''
              END,
-             e.lname) AS NAME
+             e.lname) AS \"NAME\"
      FROM employee e
      WHERE state = 1";
 

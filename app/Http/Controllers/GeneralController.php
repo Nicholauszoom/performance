@@ -3794,6 +3794,7 @@ class GeneralController extends Controller
         // if(session('recom_loan')!='' &&session('appr_loan')){
 
         $data['otherloan'] = $this->flexperformance_model->salary_advance();
+        // dd($data['otherloan']);
 
         // } elseif (session('recom_loan')!=''){
         //     $data['otherloan'] = $this->flexperformance_model->hr_fin_salary_advance();
@@ -3880,81 +3881,76 @@ class GeneralController extends Controller
     }
 
     public function insert_directLoan(Request $request)
-    {
+{
+    if ($request->method() == "POST") {
+        $category = $request->input("type");
 
-        if ($request->method() == "POST") {
-            $category = $request->input("type");
+        $reason = "";
+        if ($category == 2) {
+            $type = '3';
+            $form_four_index_no = $request->input("index_no");
+            $deduction = 0;
+            $reason = "Add deduction HESLB loan";
+        } elseif ($category == 1) {
+            $form_four_index_no = "0";
+            $type = '2';
+            $deduction = $request->input("deduction");
+            $reason = "Add deduction COMPANY Loan";
+        }
 
-            $reason = "";
-            if ($category == 2) {
-                $type = 3;
-                $form_four_index_no = $request->input("index_no");
-                $deduction = 0;
-                $reason = "Add deduction HESLB loan";
-            } elseif ($category == 1) {
-                $form_four_index_no = "0";
-                $type = 2;
-                $deduction = $request->input("deduction");
-                $reason = "Add deduction COMPANY Loan";
+        $employeewithLoan = $request->input("employee");
+        $loan_amount = $request->input("amount");
+        $data = array(
+            'empid' => $request->input("employee"),
+            'amount' => $request->input("amount"),
+            'deduction_amount' => $deduction,
+            'approved_hr' => auth()->user()->emp_id,
+            'status' => '1',
+            'notification' => '3',
+            'approved_date_hr' => date('Y-m-d'),
+            'type' => $type,
+        );
+
+        $loanApplication = new LoanApplication;
+        $loanApplication->empid = $request->input("employee");
+        $loanApplication->amount = $request->input("amount");
+        $loanApplication->deduction_amount = $deduction;
+        $loanApplication->approved_hr = auth()->user()->emp_id;
+        $loanApplication->status = '1';
+        $loanApplication->notification = 3;
+        $loanApplication->approved_date_hr = date('Y-m-d');
+        $loanApplication->type = $type;
+        $loanApplication->form_four_index_no = $form_four_index_no;
+        $loanApplication->reason = $request->input("reason");
+        $loanApplication->application_date = date('Y-m-d');
+        $success = $loanApplication->save();
+
+        try {
+            if (Approvals::where('process_name', 'Loan Approval')->first()->ApprLevels->count() < 1) {
+                $todate = date('Y-m-d');
+                $result = $this->flexperformance_model->approve_loan($loanApplication->id, auth()->user()->emp_id, $todate);
+                SysHelpers::FinancialLogs($employeewithLoan, $reason, '0.00', $loan_amount, 'Insert Direct Deduction');
             }
-
-            $employeewithLoan = $request->input("employee");
-            $loan_amount = $request->input("amount");
-            $data = array(
-                'empid' => $request->input("employee"),
-                'amount' => $request->input("amount"),
-                'deduction_amount' => $deduction,
-                'approved_hr' => auth()->user()->emp_id,
-                'status' => 1,
-                'notification' => 3,
-                'approved_date_hr' => date('Y-m-d'),
-                'type' => $type,
-                'form_four_index_no' => $form_four_index_no,
-                'reason' => $request->input("reason"),
-                'application_date' => date('Y-m-d'),
-            );
-
-            $loanApplication = new LoanApplication;
-            $loanApplication->empID = $request->input("employee");
-            $loanApplication->amount = $request->input("amount");
-            $loanApplication->deduction_amount = $deduction;
-            $loanApplication->approved_hr = auth()->user()->emp_id;
-            $loanApplication->status = 1;
-            $loanApplication->notification = 3;
-            $loanApplication->approved_date_hr = date('Y-m-d');
-            $loanApplication->type = $type;
-            $loanApplication->form_four_index_no = $form_four_index_no;
-            $loanApplication->reason = $request->input("reason");
-            $loanApplication->application_date = date('Y-m-d');
-            $success = $loanApplication->save();
-
-            try {
-                if (Approvals::where('process_name', 'Loan Approval')->first()->ApprLevels->count() < 1) {
-                    $todate = date('Y-m-d');
-                    $result = $this->flexperformance_model->approve_loan($loanApplication->id, auth()->user()->emp_id, $todate);
-                    SysHelpers::FinancialLogs($employeewithLoan, $reason, '0.00',  $loan_amount, 'Insert Direct Deduction');
-
-                }
-            } catch (\Throwable $th) {
-                if ($success) {
-                    dd('' . $th->getMessage());
-                    echo "<p class='alert alert-successs text-center'>Loan Approval was not successfull, but was created</p>";
-                } else {
-                    echo "<p class='alert alert-warning text-center'>Loan application not created successful</p>";
-                }
-            }
-
-
-            // $result = $this->flexperformance_model->applyloan($data);
-            if ($success == true) {
-                $autheniticateduser = auth()->user()->emp_id;
-                $auditLog = SysHelpers::AuditLog(2, "Direct loan inserted by " . $autheniticateduser, $request);
-                echo "<p class='alert alert-success text-center'>Request Submitted Successifully</p>";
+        } catch (\Throwable $th) {
+            if ($success) {
+                dd('' . $th->getMessage());
+                echo "<p class='alert alert-success text-center'>Loan Approval was not successful, but was created</p>";
             } else {
-                echo "<p class='alert alert-warning text-center'>Request FAILED, Please Try Again</p>";
+                echo "<p class='alert alert-warning text-center'>Loan application not created successfully</p>";
             }
         }
+
+        if ($success == true) {
+            $authenticatedUser = auth()->user()->emp_id;
+            $auditLog = SysHelpers::AuditLog(2, "Direct loan inserted by " . $authenticatedUser, $request);
+            echo "<p class='alert alert-success text-center'>Request Submitted Successfully</p>";
+        } else {
+            echo "<p class='alert alert-warning text-center'>Request FAILED, Please Try Again</p>";
+        }
     }
+}
+
+
 
     public function confirmed_loans(Request $request)
     {

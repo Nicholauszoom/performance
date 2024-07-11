@@ -941,6 +941,7 @@ FROM payroll_logs pl, employee e WHERE e.emp_id = pl.empID and e.contract_type =
        e.emp_id,
        pl.salary AS salary,
        pl.years,
+       pl.empID,
        pl.pension_employee,
        pl.receipt_no,
        pl.receipt_date AS receipt_date,

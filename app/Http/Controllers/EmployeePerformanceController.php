@@ -139,7 +139,7 @@ class EmployeePerformanceController extends Controller
     public function save_evaluation ($id)
     {
         $evaluation=new EmployeeEvaluation();
-        $evaluation->empID=$id;
+        $evaluation->empid=$id;
         // $evaluation->name= now();
         $evaluation->save();
 
@@ -199,7 +199,7 @@ class EmployeePerformanceController extends Controller
         $data['id'] = $id;
 
         $data['evaluation']=EmployeeEvaluation::where('id',$id)->first();
-        $data['employee']=EMPL::where('emp_id',$evaluation->empID)->first();
+        $data['employee']=EMPL::where('emp_id',$evaluation->empid)->first();
         //$result = $this->flexperformance_model->addEvaluation($evaluation,$id);
         $data['strategy'] = PerformanceEvaluation::all()->where('strategy_type','Strategy')->where('evaluation_id',$evaluation->id);
         //$data['strategy']=PerformancePillar::where('type','Strategy')->latest()->get();
