@@ -640,11 +640,11 @@ class AttendanceController extends Controller
         $employeee = Employee::where('emp_id', Auth::user()->emp_id)->first();
         $linemanager = $employeee->line_manager;
         $leaveApproval = new LeaveApproval();
-        $leaveApproval = $leaveApproval::where('empid', Auth::user()->emp_id)->first();
+        $leaveApproval = $leaveApproval::where('empID', Auth::user()->emp_id)->first();
 
         if (!$leaveApproval) {
             $leaveApproval = new LeaveApproval();
-            $leaveApproval->empid = Auth::user()->emp_id;
+            $leaveApproval->empID = Auth::user()->emp_id;
             $leaveApproval->level1 = $linemanager;
             $leaveApproval->save();
         }
@@ -700,7 +700,7 @@ class AttendanceController extends Controller
             }
 
             // Checking used leave days based on leave type
-            $leaves = Leaves::where('empID', $empID)->where('nature', $nature)->where('state',[0,3])->where('sub_category', $request->sub_cat)->whereNot('reason', 'Automatic applied!')->whereYear('created_at', date('Y'))->sum('days');
+            $leaves = Leaves::where('empid', $empID)->where('nature', $nature)->where('state',[0,3])->where('sub_category', $request->sub_cat)->whereNot('reason', 'Automatic applied!')->whereYear('created_at', date('Y'))->sum('days');
 
             $leave_balance = $leaves;
             // For Leave Nature days
@@ -1258,7 +1258,7 @@ class AttendanceController extends Controller
                         Notification::route('mail', $linemanager_data['email'])->notify(new EmailRequests($email_data));
 
                     } catch (Exception $exception) {
-                        dd($exception->getMessage());
+                        // dd($exception->getMessage());
                         $msg = $type_name . " Leave Request is submitted successfully but email not sent(SMTP Problem)!";
                         return $url->with('msg', $msg);
                     }
