@@ -311,7 +311,7 @@ class AttendanceController extends Controller
 
         $this->authenticateUser('view-leaves');
 
-        $data['myleave'] = Leaves::where('empID', Auth::user()->emp_id)->orderBy('id', 'desc')->get();
+        $data['myleave'] = Leaves::where('empid', Auth::user()->emp_id)->orderBy('id', 'desc')->get();
         $id = Auth::user()->emp_id;
         $employeee = Employee::where('emp_id', $id)->first();
 
@@ -385,7 +385,7 @@ class AttendanceController extends Controller
             $data['Days Entitled'] = Employee::where('emp_id', Auth::user()->emp_id)->value('leave_days_entitled');
         }
 
-        $openingBalance = LeaveForfeiting::where('empID', Auth::user()->emp_id)->value('opening_balance');
+        $openingBalance = LeaveForfeiting::where('empid', Auth::user()->emp_id)->value('opening_balance');
         if ($year > date('Y')) {
             $forfeitDays = 0;
             $data['Opening Balance'] = 0;
