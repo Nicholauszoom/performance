@@ -5660,7 +5660,7 @@ class GeneralController extends Controller
             }
 
             $data = array(
-                'empID' => $request->input('empID'),
+                'empid' => $request->input('empID'),
                 'allowance' => $request->input('allowance'),
                 'amount' => $request->input('amount') * $rate,
                 'mode' => $request->input('mode'),
@@ -5675,7 +5675,7 @@ class GeneralController extends Controller
 
 
 
-            SysHelpers::FinancialLogs($data['empID'], 'Assign ' . $allowanceName->name, '0.00', ($data['amount'] != 0) ? $data['amount'] . ' ' . $data['currency'] : $data['percent'] . '%', 'Payroll Input');
+            SysHelpers::FinancialLogs($data['empid'], 'Assign ' . $allowanceName->name, '0.00', ($data['amount'] != 0) ? $data['amount'] . ' ' . $data['currency'] : $data['percent'] . '%', 'Payroll Input');
 
             if ($result == true) {
                 $autheniticateduser = auth()->user()->emp_id;
