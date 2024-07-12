@@ -61,10 +61,10 @@
 
 
                                     <tbody>
-                                        <?php
-                          foreach ($myloan as $row) { ?>
+
+                          @foreach ($myloan as $row)
                                         <tr id="domain<?php echo $row->id; ?>">
-                                            <td width="1px"><?php echo $row->SNo; ?></td>
+                                            <td width="1px"><?php echo $row->sno; ?></td>
                                             <td><?php echo $row->TYPE; ?></td>
                                             <td><?php echo $row->amount; ?></td>
                                             <td><?php $datewell = explode('-', $row->application_date);
@@ -79,7 +79,7 @@
                                                     <?php if ($row->status==0){ ?>
                                                     <div class="col-md-12">
                                                         <span class="label label-default">SENT</span>
-                                                    </div><?php } 
+                                                    </div><?php }
                                     elseif($row->status==1){?>
                                                     <div class="col-md-12">
                                                         <span class="label label-info">RECOMMENDED</span>
@@ -119,7 +119,7 @@
 
                                             </td>
                                         </tr>
-                                        <?php }?>
+                                        @endforeach
                                     </tbody>
                                 </table>
                             </div>
@@ -158,10 +158,10 @@
 
 
                                     <tbody>
-                                        <?php
-                      foreach ($my_loans as $row) { ?>
+
+                                    @foreach ($my_loans as $row)
                                         <tr>
-                                            <td width="1px"><?php echo $row->SNo; ?></td>
+                                            <td width="1px"><?php echo $row->sNo; ?></td>
                                             <td><?php echo $row->description; ?></td>
                                             <td><?php echo number_format($row->amount, 2); ?></td>
                                             <td><?php echo number_format($row->paid, 2); ?></td>
@@ -174,7 +174,7 @@
                                                         class="label label-warning">PAUSED</span></div><?php } ?>
                                             </td>
                                         </tr>
-                                        <?php }  ?>
+                                        @endforeach
                                     </tbody>
                                 </table>
                             </div>

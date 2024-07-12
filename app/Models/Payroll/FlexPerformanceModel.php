@@ -290,7 +290,7 @@ public function getCurrentStrategy()
 
     public function branch()
     {
-        $query = "SELECT @s:=@s+1 as SNo, b.* FROM branch b";
+        $query = "SELECT ROW_NUMBER() OVER () AS \"SNo\", b.*FROM branch b";
 
         return DB::select(DB::raw($query));
     }

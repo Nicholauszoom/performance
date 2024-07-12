@@ -42,6 +42,8 @@ class BankLoanController extends Controller
         $this->authenticateUser('view-bank-loan');
         $loans = BankLoan::orderBy('created_at','DESC')->get();
 
+        // dd($loans);
+
         return view('loans.loans', compact('loans'));
     }
 
@@ -108,7 +110,7 @@ class BankLoanController extends Controller
 
 
     public function import(Request $request) {
-        
+
 
         $complain = new TempDate();
         $complain->date=$request->date;

@@ -548,6 +548,7 @@ class GeneralController extends Controller
         $data['cost_center'] = $this->flexperformance_model->costCenter();
         $data['countrydrop'] = $this->flexperformance_model->countrydropdown();
         $data['title'] = "Cost Center";
+        // dd($data['cost_center']);
         return view('app.cost_center', $data);
     }
 
@@ -691,13 +692,22 @@ class GeneralController extends Controller
     public function addCostCenter(Request $request)
     {
         if ($request->method() == "POST") {
+            $name = $request->input('name');
+            $region = $request->input('region');
+            $country = $request->input('country');
+            // $description = $request->input('description');
+
+            // Check if region and country are numeric, if not set them to null
+            $region = is_numeric($region) ? (int)$region : null;
 
             $data = array(
-                'name' => $request->input('name'),
+                'name' => $name,
 
-                'region' => '-',
+                'region' => $region,
 
-                'country' => '-',
+                'country' => $country,
+
+                'description'=> 'description',
             );
             $branchID = $this->flexperformance_model->addCostCenter($data);
             if ($branchID > 0) {
