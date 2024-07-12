@@ -6626,7 +6626,7 @@ class GeneralController extends Controller
                     if (!empty($emp_ids)) {
                         //  dd($emp_ids);
                         foreach ($emp_ids as $ids) {
-                            $empID = $ids->empID;
+                            $empID = $ids->empid;
 
                             $result = $this->flexperformance_model->removeEmployeeByROleFromGroup($empID, $groupID);
                         }
