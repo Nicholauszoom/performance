@@ -106,7 +106,7 @@ class AccelerationController extends Controller
         return view('acceleration.edit-acceleration', compact('project'));
     }
 
-    
+
     /**
      * Update the specified resource in storage.
      *
@@ -171,7 +171,7 @@ class AccelerationController extends Controller
         public function delete_project($id)
         {
             $project = Acceleration::find($id);
-    
+
             $tasks = AccelerationTask::where('acceleration_id', $project->id)->get();
             foreach ($tasks as $item) {
                 // $performance = EmployeePerformance::where('task_id', $item->id)->first();
@@ -181,14 +181,14 @@ class AccelerationController extends Controller
                 // }
                 $item->delete();
             }
-    
+
             $project->delete();
-    
+
             return redirect('flex/acceleration');
         }
 
-        // For Complete Acceleration 
-        
+        // For Complete Acceleration
+
         public function completed_acceleration( $id)
         {
             $acceleration = Acceleration::where('id', $id)->first();
@@ -202,12 +202,12 @@ class AccelerationController extends Controller
         public function completed_acceleration_task($id)
         {
             $task = AccelerationTask::where('id', $id)->first();
-    
+
             $task->status = 1;
             $task->complete_date = Carbon::now();;
-    
+
             $task->update();
-    
+
             $performance = new EmployeePerformance();
             $performance->empID = $task->assigned;
             $performance->performance = $task->performance;
@@ -217,8 +217,8 @@ class AccelerationController extends Controller
             $performance->achieved = $task->achieved;
             $performance->type = 'pip';
             $performance->save();
-    
-    
+
+
             $tasks = AccelerationTask::where('acceleration_id', $task->project_id)->get();
 
             $project = Acceleration::where('id', $task->acceleration_id)->first();
@@ -408,6 +408,9 @@ class AccelerationController extends Controller
                 // ->get()
             ;
 
+
+
+
             $behaviour = DB::table('employee')
                 ->join('employee_performances', 'employee.emp_id', '=', 'employee_performances.empID')
                 ->where('employee.emp_id', $item->emp_id)
@@ -440,6 +443,8 @@ class AccelerationController extends Controller
                     array_push($data['item3_data'],['full_name'=>$item->NAME,'emp_id'=>$item->emp_id,'department'=>$item->DEPARTMENT,'performance'=>$performance,'behavior'=>$behaviour]);
 
                 }
+
+
                 // For Improvement very Strong
                 if ($performance >= 60 && $performance < 80) {
                     $item4 = $item4 + $performance;
