@@ -3961,10 +3961,10 @@ $results = DB::table('employee as e')
 
     public function members_byid($id)
     {
+        $query = "WITH s AS (SELECT 0 AS s) SELECT DISTINCT s.s + row_number() OVER () AS SNo, eg.id AS EGID, e.emp_id AS ID, CONCAT(e.fname, ' ', CASE WHEN e.mname IS NOT NULL THEN e.mname ELSE ' ' END, ' ', e.lname) AS NAME, d.name AS DEPARTMENT, p.name AS POSITION
+        FROM employee e JOIN position p ON e.position = p.id JOIN department d ON e.department = d.id JOIN employee_group eg ON e.emp_id = eg.empID CROSS JOIN s WHERE eg.group_name = :id AND e.state = 1 AND e.emp_id IN (SELECT empID FROM employee_group WHERE group_name = :id)";
 
-        $query = "SELECT DISTINCT @s:=@s+1 as SNo, eg.id as EGID,  e.emp_id as ID,  CONCAT(e.fname,' ',IF( e.mname != null,e.mname,' '),' ', e.lname) as NAME, d.name as DEPARTMENT, p.name as POSITION FROM employee e, position p, department d, employee_group eg,  (SELECT @s:=0) as s  where e.position = p.id and e.emp_id = eg.empID and e.department = d.id and eg.group_name = " . $id . "  AND e.state =1 and e.emp_id IN (SELECT empID from employee_group where group_name=" . $id . ")";
-
-        return DB::select(DB::raw($query));
+        return DB::select(DB::raw($query), ['id' => $id]);
     }
     public function roles_byid($id)
     {
@@ -4033,25 +4033,24 @@ $results = DB::table('employee as e')
 
     public function getEmpByGroupID($group_id, $position)
     {
-
-        $query = "SELECT eg.empID from employee_group eg INNER JOIN  employee e ON e.emp_id=eg.empID WHERE eg.group_name = " . $group_id . " AND  e.position =" . $position;
-
-        //dd(count(DB::select(DB::raw($query))));
-        return DB::select(DB::raw($query));
+        $query = 'SELECT eg."empid" from employee_group eg INNER JOIN  employee e ON e.emp_id=eg."empid" WHERE eg.group_name = :group_id AND  e.position = :position';
+        return DB::select(DB::raw($query), ['group_id' => $group_id, 'position' => $position]);
     }
 
     public function removeEmployeeByROleFromGroup($empID, $groupID)
     {
         DB::transaction(function () use ($empID, $groupID) {
+            $query = 'DELETE FROM employee_group  WHERE  "group_name" = :groupID AND "empid" = :empID';
+            DB::delete(DB::raw($query), ['groupID' => $groupID, 'empID' => $empID]);
 
-            $query = "DELETE FROM employee_group  WHERE  group_name ='" . $groupID . "' AND empID = '" . $empID . "' ";
-            DB::insert(DB::raw($query));
-            $query = "DELETE FROM emp_allowances WHERE  group_name ='" . $groupID . "' AND empID = '" . $empID . "' ";
-            DB::insert(DB::raw($query));
-            $query = "DELETE FROM emp_deductions WHERE  group_name ='" . $groupID . "' AND empID = '" . $empID . "' ";
-            DB::insert(DB::raw($query));
-            $query = "DELETE FROM emp_role WHERE  group_name ='" . $groupID . "' AND userID = '" . $empID . "' ";
-            DB::insert(DB::raw($query));
+            $query = 'DELETE FROM emp_allowances WHERE  "group_name" = :groupID AND "empid" = :empID';
+            DB::delete(DB::raw($query), ['groupID' => $groupID, 'empID' => $empID]);
+
+            $query = 'DELETE FROM emp_deductions WHERE  "group_name" = :groupID AND "empID" = :empID';
+            DB::delete(DB::raw($query), ['groupID' => $groupID, 'empID' => $empID]);
+
+            $query = 'DELETE FROM emp_role WHERE  "group_name" = :groupID  AND "userid" = :empID';
+            DB::delete(DB::raw($query), ['groupID' => $groupID, 'empID' => $empID]);
         });
 
         return true;
@@ -4059,16 +4058,18 @@ $results = DB::table('employee as e')
 
     public function removeEmployeeFromGroup($refID, $empID, $groupID)
     {
-
         DB::transaction(function () use ($refID, $empID, $groupID) {
-            $query = "DELETE FROM employee_group WHERE id ='" . $refID . "'";
-            DB::insert(DB::raw($query));
-            $query = "DELETE FROM emp_allowances WHERE  group_name ='" . $groupID . "' AND empID = '" . $empID . "' ";
-            DB::insert(DB::raw($query));
-            $query = "DELETE FROM emp_deductions WHERE  group_name ='" . $groupID . "' AND empID = '" . $empID . "' ";
-            DB::insert(DB::raw($query));
-            $query = "DELETE FROM emp_role WHERE  group_name ='" . $groupID . "' AND userID = '" . $empID . "' ";
-            DB::insert(DB::raw($query));
+            $query = 'DELETE FROM employee_group WHERE id = :refID';
+            DB::delete(DB::raw($query), ['refID' => $refID]);
+
+            $query = "DELETE FROM emp_allowances WHERE group_name = :groupID AND empID = :empID";
+            DB::delete(DB::raw($query), ['groupID' => $groupID, 'empID' => $empID]);
+
+            $query = 'DELETE FROM emp_deductions WHERE "group_name" = :groupID AND "empID" = :empID';
+            DB::delete(DB::raw($query), ['groupID' => $groupID, 'empID' => $empID]);
+
+            $query = "DELETE FROM emp_role WHERE group_name = :groupID AND userID = :empID";
+            DB::delete(DB::raw($query), ['groupID' => $groupID, 'empID' => $empID]);
         });
 
         return true;
@@ -4078,7 +4079,7 @@ $results = DB::table('employee as e')
     {
         DB::table('role_groups')
             ->where('roleID', $roleID)
-            ->where('Group_name', $GroupID)
+            ->where('group_name', $GroupID)
             ->delete();
 
         return true;
@@ -4126,8 +4127,8 @@ $results = DB::table('employee as e')
 
     public function addRoleToGroup($roleID, $groupID)
     {
-        $query = "INSERT INTO  role_groups(roleID, group_name) VALUES ('" . $roleID . "', " . $groupID . ") ";
-        DB::insert(DB::raw($query));
+        $query = 'INSERT INTO role_groups("roleID", "group_name") VALUES (:roleID, :groupID)';
+        DB::insert(DB::raw($query), ['roleID' => $roleID, 'groupID' => $groupID]);
         return true;
     }
 
