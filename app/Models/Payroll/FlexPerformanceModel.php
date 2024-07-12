@@ -2030,7 +2030,7 @@ public function getpropertyexit($id)
 
     public function allowance()
     {
-        $query = 'SELECT ROW_NUMBER() OVER (ORDER BY id) AS SNo, sub.*
+        $query = 'SELECT ROW_NUMBER() OVER (ORDER BY id) AS "SNo", sub.*
         FROM (
             SELECT * FROM allowances WHERE state = 1
         ) sub
@@ -2152,9 +2152,10 @@ public function getpropertyexit($id)
 
     public function get_individual_employee($allowance)
     {
-        $query = "SELECT @s:=@s+1 SNo, e.emp_id as empID,  CONCAT(e.fname,' ',IF( e.mname != null,e.mname,' '),' ', e.lname) as NAME,ea.* FROM employee e, emp_allowances ea, (SELECT @s:=0) as s WHERE e.emp_id = ea.empID and ea.group_name = 0 and ea.allowance = " . $allowance . "  ";
+        $query = "SELECT ROW_NUMBER() OVER () AS \"SNo\", e.emp_id AS \"empID\", CONCAT(e.fname, ' ', COALESCE(e.mname, ''), ' ', e.lname) AS \"NAME\", ea.* FROM employee e
+        JOIN emp_allowances ea ON e.emp_id = ea.\"empid\" WHERE ea.group_name = 0 AND ea.allowance = :allowance";
 
-        return DB::select(DB::raw($query));
+        return DB::select(DB::raw($query), ['allowance' => $allowance]);
     }
 
     public function allowance_membersCount($allowance)
@@ -2355,8 +2356,9 @@ IF(
 
     public function employee_allowance($allowance)
     {
-        $query = "SELECT e.emp_id as empID, CONCAT(e.fname,' ',IF( e.mname != null,e.mname,' '),' ', e.lname) as NAME FROM employee e WHERE e.state = 1 AND  e.emp_id NOT IN (SELECT empID from emp_allowances where allowance = " . $allowance . " AND group_name = 0 ) ";
-        return DB::select(DB::raw($query));
+        $query = "SELECT e.emp_id as \"empID\", CONCAT(e.fname, ' ', COALESCE(e.mname, ''), ' ', e.lname) as \"NAME\" FROM employee e WHERE e.state = 1 AND e.emp_id NOT IN ( SELECT empid FROM emp_allowances WHERE allowance = :allowance AND group_name = 0)";
+
+        return DB::select(DB::raw($query), ['allowance' => $allowance]);
     }
 
     public function employeesrole($id)
