@@ -102,7 +102,7 @@
                         <select required="" name="hod" class="select4_single form-control select" tabindex="-1">
                             <option> Select </option>
                             <?php  foreach ($employee as $row) { ?>
-                            <option value="<?php echo $row->empid; ?>"><?php echo $row->name; ?></option> <?php } ?>
+                            <option value="<?php echo $row->empID; ?>"><?php echo $row->NAME; ?></option> <?php } ?>
                         </select>
                     </div>
 

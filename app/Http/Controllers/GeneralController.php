@@ -364,7 +364,7 @@ class GeneralController extends Controller
         $data['parent'] = "Organisation";
         $data['child'] = "Departments";
 
-        // dd($data['department']);
+        // dd($data['employee']);
 
         return view('app.department', $data);
     }
