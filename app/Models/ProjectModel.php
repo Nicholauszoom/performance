@@ -12,7 +12,7 @@ class ProjectModel extends Model
 
 
 	public function allProjects() {
-		$query ="SELECT * FROM project where state = 1 ";
+		$query ="SELECT * FROM project where state = '1' ";
     	return DB::select(DB::raw($query));
 	}
 	public function myProjects($empID) {

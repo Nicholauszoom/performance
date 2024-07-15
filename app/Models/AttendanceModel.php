@@ -983,7 +983,7 @@ $row = DB::select(DB::raw($query));
 
         $holidays = [];
 
-        $leaves = DB::table('leaves')->where('empID', $empID)->where('nature', $nature)->get();
+        $leaves = DB::table('leaves')->where('empid', $empID)->where('nature', $nature)->get();
 
         $first_this_month = date('Y-m-01', strtotime($today));
 
@@ -1163,8 +1163,25 @@ $row = DB::select(DB::raw($query));
         $last_month_date = date('Y-m-t', strtotime($prev_month));
 
         //opening balance
-        $query = "SELECT  IF( (SELECT COUNT(id)  FROM leaves WHERE nature= '" . $nature . "' AND empID = '" . $empID . "')=0, 0, (SELECT SUM(days)  FROM leaves WHERE nature= '" . $nature . "' and empID = '" . $empID . "' and start >= '" . $last_month_date . "' and start <= '" . $today . "'  GROUP BY nature )) as days_spent, DATEDIFF('" . $today . "','" . $hireDate . "') as days_accrued limit 1";
-        $row = DB::select(DB::raw($query));
+        $query = "SELECT 
+        CASE 
+            WHEN (SELECT COUNT(id) FROM leaves WHERE nature = :nature AND empID = :empID) = 0 
+            THEN 0 
+            ELSE (SELECT SUM(days) FROM leaves WHERE nature = :nature AND empID = :empID AND start >= :last_month_date AND start <= :today GROUP BY nature) 
+        END AS days_spent, 
+        (DATE_PART('day', :today::timestamp - :hireDate::timestamp)) AS days_accrued 
+      LIMIT 1";
+
+            // Parameters for binding
+            $params = [
+            'nature' => $nature,
+            'empID' => $empID,
+            'last_month_date' => $last_month_date,
+            'today' => $today,
+            'hireDate' => $hireDate
+            ];
+
+  $row = DB::select(DB::raw($query), $params);
 
 
         $days_spent = $row[0]->days_spent;
@@ -1260,9 +1277,25 @@ $row = DB::select(DB::raw($query));
 
         //dd($today);
 
-        $query = "SELECT  IF( (SELECT COUNT(id)  FROM leaves WHERE nature= '" . $nature . "' AND empID = '" . $empID . "')=0, 0, (SELECT SUM(days)  FROM leaves WHERE nature= '" . $nature . "' and empID = '" . $empID . "' and start <= '" . $last_month_date . "'  GROUP BY nature )) as days_spent, DATEDIFF('" . $today . "','" . $hireDate . "') as days_accrued limit 1";
+        $query = "SELECT 
+        CASE 
+            WHEN (SELECT COUNT(id) FROM leaves WHERE nature = :nature AND empID = :empID) = 0 
+            THEN 0 
+            ELSE (SELECT SUM(days) FROM leaves WHERE nature = :nature AND empID = :empID AND start <= :last_month_date GROUP BY nature) 
+        END AS days_spent, 
+        DATE_PART('day', :today::timestamp - :hireDate::timestamp) AS days_accrued 
+      LIMIT 1";
 
-        $row = DB::select(DB::raw($query));
+        // Parameters for binding
+        $params = [
+        'nature' => $nature,
+        'empID' => $empID,
+        'last_month_date' => $last_month_date,
+        'today' => $today,
+        'hireDate' => $hireDate
+        ];
+        $row = DB::select(DB::raw($query), $params);
+
         $employee = DB::table('employee')->where('emp_id', $empID)->first();
         //$date = $employee->hire_date;
         $d1 = new DateTime($hireDate);
@@ -1663,7 +1696,7 @@ $row = DB::select(DB::raw($query));
                 //     ->toSql();
                 $monthlyleave = DB::table('leaves')
                     ->select('leaves.*', 'employee.*', 'department.name as department_name', 'position.name as position_name')
-                    ->join('employee', 'leaves.empID', '=', 'employee.emp_id')
+                    ->join('employee', 'leaves.empid', '=', 'employee.emp_id')
                     ->join('department', 'department.id', '=', 'employee.department')
                     ->join('position', 'position.id', '=', 'employee.position')
                     ->where('leaves.status', 3)
@@ -1684,7 +1717,7 @@ $row = DB::select(DB::raw($query));
         } else {
 
             $monthlyleave = DB::table('leaves')
-                ->join('employee', 'leaves.empID', '=', 'employee.emp_id')
+                ->join('employee', 'leaves.empid', '=', 'employee.emp_id')
                 ->join('department', 'department.id', '=', 'employee.department')
                 ->join('position', 'position.id', '=', 'employee.position')
                 ->where('leaves.status', 3)
@@ -1934,7 +1967,7 @@ $row = DB::select(DB::raw($query));
                     ->join('employee', 'leaves.empID', '=', 'employee.emp_id')
                     ->join('department', 'department.id', '=', 'employee.department')
                     ->join('position', 'position.id', '=', 'employee.position')
-                    ->join('leave_approvals', 'leave_approvals.empID', '=', 'leaves.empID')
+                    ->join('leave_approvals', 'leave_approvals.empID', '=', 'leaves.empid')
                     ->select('leaves.*', 'leave_approvals.level1', 'employee.*', 'department.name as department_name', 'position.name as  position_name')->where('employee.department', $department)
                     ->where(function ($query) use ($firstDayOfMonth, $lastDayOfMonth) {
                         $query->where(function ($query) use ($firstDayOfMonth, $lastDayOfMonth) {
@@ -1952,10 +1985,10 @@ $row = DB::select(DB::raw($query));
                 $employees = Employee::where('state', '=', 1)->get();
 
                 $monthlyleave = DB::table('leaves')
-                    ->join('employee', 'leaves.empID', '=', 'employee.emp_id')
+                    ->join('employee', 'leaves.empid', '=', 'employee.emp_id')
                     ->join('department', 'department.id', '=', 'employee.department')
                     ->join('position', 'position.id', '=', 'employee.position')
-                    ->join('leave_approvals', 'leave_approvals.empID', '=', 'leaves.empID')
+                    ->join('leave_approvals', 'leave_approvals.empID', '=', 'leaves.empid')
                     ->select('leaves.*', 'leave_approvals.level1', 'employee.*', 'department.name as department_name', 'position.name as  position_name')->where('start', '>=', $last_month_date)
                     ->where('nature', $nature)
                     ->where(function ($query) use ($firstDayOfMonth, $lastDayOfMonth) {
@@ -1973,7 +2006,7 @@ $row = DB::select(DB::raw($query));
         } else {
 
             $monthlyleave = DB::table('leaves')
-                ->join('employee', 'leaves.empID', '=', 'employee.emp_id')
+                ->join('employee', 'leaves.empid', '=', 'employee.emp_id')
                 ->join('department', 'department.id', '=', 'employee.department')
                 ->join('leave_approvals', 'leave_approvals.empID', '=', 'leaves.empID')
                 ->join('position', 'position.id', '=', 'employee.position')

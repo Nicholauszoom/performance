@@ -3476,7 +3476,7 @@ class AttendanceController extends Controller
             $extraData = [
                 'emp_id' => $condition['emp_id'],
                 'appliedby' => $condition['appliedBy']??null,
-                'leaveId' => $condition['leaveId'],
+                'leaveid' => $condition['leaveId'],
                 'nature' => $condition['nature'],
                 'forfeit_days' => $extradays
             ];

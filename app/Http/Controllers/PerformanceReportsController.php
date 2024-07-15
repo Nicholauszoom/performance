@@ -47,24 +47,21 @@ class PerformanceReportsController extends Controller
         $data['start'] = $request->start_date;
         $data['end'] = $request->end_date;
         $data['performances'] = DB::table('employee')
-        ->select('projects.name'
-        , DB::raw('AVG(employee_performances.performance) as performance'),
-        DB::raw('AVG(project_tasks.time) as time'),
-        DB::raw('AVG(employee_performances.behaviour) as behaviour')
+        ->select(
+            'projects.name',
+            DB::raw('AVG(employee_performances.performance) as performance'),
+            DB::raw('AVG(project_tasks.time) as time'),
+            DB::raw('AVG(employee_performances.behaviour) as behaviour')
         )
-        ->groupBy('projects.id')
-        ->distinct('projects.id')
-        ->join('employee_performances', 'employee.emp_id', '=', 'employee_performances.empID')
-
-        ->whereNotNull('employee_performances.performance')
-
+        ->join('employee_performances', 'employee.emp_id', '=', 'employee_performances.empid')
         ->join('project_tasks', 'employee_performances.task_id', '=', 'project_tasks.id')
-        ->join('projects', 'project_tasks.project_id', '=', 'project_tasks.project_id')
-        // ->whereBetween('project.start_date', [$start, $end])
-        ->where('employee_performances.type','=','project')
+        ->join('projects', 'project_tasks.project_id', '=', 'projects.id')
+        ->whereNotNull('employee_performances.performance')
+        ->where('employee_performances.type', '=', 'project')
+        ->groupBy('projects.name', 'projects.id')
         ->get();
 
-//   return($data['performances']);
+        //  dd( $data['performances']);
 
         return view('performance-reports.organisation-report',$data);
     }

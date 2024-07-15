@@ -2643,8 +2643,10 @@ IF(
 
     public function payroll_year_list()
     {
-        $query = "SELECT DISTINCT DATE_FORMAT(`payroll_date`,'%Y') as year  FROM payroll_logs ORDER BY DATE_FORMAT(`payroll_date`,'%Y') DESC";
-        return DB::select(DB::raw($query));
+        $query = "SELECT DISTINCT TO_CHAR(payroll_date, 'YYYY') AS year 
+        FROM payroll_logs 
+        ORDER BY TO_CHAR(payroll_date, 'YYYY') DESC";
+                return DB::select(DB::raw($query));
     }
 
     public function updateHESLB($date)
@@ -3854,52 +3856,54 @@ d.department_pattern AS child_department, d.parent_pattern as parent_department 
 
     public function role($id)
     {
+        
         $query = "WITH seq AS (
-    SELECT
-        ROW_NUMBER() OVER (ORDER BY p.id) AS SNo,
-        'none' AS parent,
-        d.name AS department,
-        p.*
-    FROM
-        position p
-    JOIN
-        department d ON d.id = p.dept_id
-    WHERE
-        p.state = 1
-),
-roles AS (
-    SELECT
-        r.id,
-        r.name
-    FROM
-        public.role r
-    LEFT JOIN
-        public.emp_role er ON r.id = er.role
-    WHERE
-        er.\"userid\" = :id
-        AND er.role IS NULL
-)
-SELECT
-    seq.SNo,
-    seq.parent,
-    seq.department,
-    seq.*,
-    roles.id AS role_id,
-    roles.name AS role_name
-FROM
-    seq
-FULL JOIN
-    roles ON true
-ORDER BY
-    seq.SNo;
+            SELECT
+                ROW_NUMBER() OVER (ORDER BY p.id) AS SNo,
+                'none' AS parent,
+                d.name AS department,
+                p.*
+            FROM
+                position p
+            JOIN
+                department d ON d.id = p.dept_id
+            WHERE
+                p.state = 1
+        ),
+        roles AS (
+            SELECT
+                r.id,
+                r.name
+            FROM
+                public.role r
+            LEFT JOIN
+                public.emp_role er ON r.id = er.role
+            WHERE
+                er.\"userid\" = :id
+                AND er.role IS NULL
+        )
+        SELECT
+            seq.SNo,
+            seq.parent,
+            seq.department,
+            seq.*,
+            roles.id AS role_id,
+            roles.name AS role_name
+        FROM
+            seq
+        FULL JOIN
+            roles ON true
+        ORDER BY
+            seq.SNo;
         ";
-
-
-
-
-        return DB::select(DB::raw($query));
-    }
-
+        
+       
+        
+        // Execute the query with parameter binding
+        $results = DB::select(DB::raw($query));
+        
+        return $results;
+        }        
 
     public function rolecount($id)
     {

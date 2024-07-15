@@ -931,51 +931,59 @@ FROM payroll_logs pl, employee e WHERE e.emp_id = pl.empID and e.contract_type =
     {
 
         $query = "SELECT ROW_NUMBER() OVER () AS SNo,
-       e.pf_membership_no,
-       e.emp_id,
-       e.fname,
-       e.mname,
-       e.lname,
-       e.hire_date,
-       CONCAT(e.fname,' ', COALESCE(e.mname,''),' ', e.lname) AS name,
-       e.emp_id,
-       pl.salary AS salary,
-       pl.years,
-       pl.empID,
-       pl.pension_employee,
-       pl.receipt_no,
-       pl.receipt_date AS receipt_date,
-       pl.payroll_date AS payment_date,
-       pl.pension_employee AS pension_employer
-FROM employee e
-JOIN payroll_logs pl ON pl.empID = e.emp_id
-WHERE e.contract_type != 2
-  AND e.salary != 0.00
-  AND pl.empID = $1
-UNION
-SELECT ROW_NUMBER() OVER () AS SNo,
-       e.pf_membership_no,
-       e.emp_id,
-       e.fname,
-       e.mname,
-       e.lname,
-       e.hire_date,
-       CONCAT(e.fname,' ', COALESCE(e.mname,''),' ', e.lname) AS name,
-       e.emp_id,
-       tm.salaryEnrollment AS salary,
-       EXTRACT(YEAR FROM tm.terminationDate) AS years,
-       tm.pension_employee,
-       '-' AS receipt_no,
-       '-' AS receipt_date,
-       tm.terminationDate AS payment_date,
-       tm.pension_employee AS pension_employer
-FROM employee e
-JOIN terminations tm ON tm.employeeID = e.emp_id
-WHERE e.contract_type != 2
-  AND e.salary != 0.00
-  AND tm.employeeID = $1
-ORDER BY payment_date ASC;
-";
+               e.pf_membership_no,
+               e.emp_id,
+               e.fname,
+               e.mname,
+               e.lname,
+               e.hire_date,
+               CONCAT(e.fname,' ', COALESCE(e.mname,''),' ', e.lname) AS name,
+               e.emp_id AS emp_id_duplicate,
+               pl.salary,
+               pl.years::INTEGER AS years,  -- Ensure this is numeric
+               pl.\"empID\" AS empID_duplicate,
+               pl.pension_employee,
+               pl.receipt_no,
+               pl.receipt_date AS receipt_date,  -- Assume pl.receipt_date is character varying
+               pl.payroll_date AS payment_date,
+               pl.pension_employee AS pension_employer
+        FROM employee e
+        JOIN payroll_logs pl ON pl.\"empID\" = e.emp_id
+        WHERE e.contract_type != '2'
+          AND e.salary != 0.00
+          AND pl.\"empID\" = '1'
+        
+        UNION ALL
+        
+        SELECT ROW_NUMBER() OVER () AS SNo,
+               e.pf_membership_no,
+               e.emp_id,
+               e.fname,
+               e.mname,
+               e.lname,
+               e.hire_date,
+               CONCAT(e.fname,' ', COALESCE(e.mname,''),' ', e.lname) AS name,
+               e.emp_id AS emp_id_duplicate,
+               tm.\"salaryEnrollment\" AS salary,
+               EXTRACT(YEAR FROM tm.\"terminationDate\")::INTEGER AS years,  -- Ensure this is numeric
+               tm.\"employeeID\" AS empID_duplicate,
+               tm.pension_employee,
+               '-' AS receipt_no,  -- Placeholder for the second part
+               NULL::VARCHAR AS receipt_date,   -- Cast to VARCHAR
+               tm.\"terminationDate\" AS payment_date,
+               tm.pension_employee AS pension_employer
+        FROM employee e
+        JOIN terminations tm ON tm.\"employeeID\" = e.emp_id
+        WHERE e.contract_type != '2'
+          AND e.salary != 0.00
+          AND tm.\"employeeID\" ='1'
+        
+        ORDER BY payment_date ASC;
+        ";
+        
+        
+
+
 
 
 

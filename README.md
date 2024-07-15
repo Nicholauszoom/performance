@@ -21,7 +21,7 @@ php artisan migrate
 
 -   Run the seed command in the terminal with.
 
-```bash
+```bash 
 php artisan db:seed
 ```
 
