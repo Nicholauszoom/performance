@@ -175,7 +175,7 @@ class Payroll extends Model
     JOIN
         position p ON e.position = p.id
     JOIN
-        bonus b ON e.emp_id = b.\"empID\"
+        bonus b ON e.emp_id = b.empID
     JOIN
         bonus_tags tags ON tags.id = b.name
     WHERE
@@ -1430,10 +1430,10 @@ FROM employee e, emp_allowances ea,  allowances a WHERE e.emp_id = ea.empID AND 
 
      (
       IF(
-          (SELECT SUM(IF((month(e.hire_date) = month('" . $payroll_date . "')) AND (year(e.hire_date) = year('" . $payroll_date . "')),((" . $days . "- day(e.hire_date)+1)*e.salary/" . $days . "),e.salary)*ea.percent) 
+          (SELECT SUM(IF((month(e.hire_date) = month('" . $payroll_date . "')) AND (year(e.hire_date) = year('" . $payroll_date . "')),((" . $days . "- day(e.hire_date)+1)*e.salary/" . $days . "),e.salary)*ea.percent)
           FROM emp_allowances ea, allowances a  WHERE  a.id = ea.allowance AND ea.empID =  e.emp_id AND ea.mode=2 And a.pensionable = 'YES' AND a.state= 1 AND a.type = 1 GROUP BY ea.empID)>0,
 
-          (SELECT SUM(IF((month(e.hire_date) = month('" . $payroll_date . "')) AND (year(e.hire_date) = year('" . $payroll_date . "')),((" . $days . "- day(e.hire_date)+1)*e.salary/" . $days . "),e.salary)*ea.percent) 
+          (SELECT SUM(IF((month(e.hire_date) = month('" . $payroll_date . "')) AND (year(e.hire_date) = year('" . $payroll_date . "')),((" . $days . "- day(e.hire_date)+1)*e.salary/" . $days . "),e.salary)*ea.percent)
           FROM emp_allowances ea, allowances a  WHERE  a.id = ea.allowance AND ea.empID =  e.emp_id AND ea.mode=2 And a.pensionable = 'YES' AND a.state= 1 AND a.type = 1 GROUP BY ea.empID),
           0)
      )
@@ -2876,7 +2876,7 @@ as gross,
     {
         // dd($date);
         // $date="20-11-2023";
-    
+
         $reports_model= new ReportModel();
 
         $previous_payroll_month_raw = date('Y-m', strtotime(date('d-m-Y', strtotime($date . "-1 month"))));
@@ -3393,14 +3393,14 @@ FROM temp_loan_logs tlg, loan l WHERE l.id = tlg.loanID and payment_date = '" . 
     public function pending_arrears_payment()
     {
         $query1 = "SELECT (@s:=@s+1) as SNo, arp.id, ar.empID, ar.payroll_date, CONCAT(fname,' ', mname,' ', lname) AS empName, SUM(arp.amount) as amount, arp.status, ar.amount as arrear_amount, ar.paid as arrear_paid, ar.payroll_date, ar.last_paid_date, ar.amount_last_paid as amount_last_paid FROM employee e, arrears ar, arrears_pendings arp, (SELECT @s:=0) as s WHERE ar.empID = e.emp_id and e.state = 1 AND ar.id = arp.arrear_id GROUP BY e.fname,e.mname,e.lname,ar.payroll_date, ar.empID, ar.last_paid_date, ar.amount, ar.amount_last_paid, ar.paid,arp.id, arp.status";
-        $query = "SELECT ROW_NUMBER() OVER (ORDER BY arp.id) AS SNo, arp.id, ar.\"empID\", ar.payroll_date,
+        $query = "SELECT ROW_NUMBER() OVER (ORDER BY arp.id) AS SNo, arp.id, ar.empID, ar.payroll_date,
         CONCAT(e.fname, ' ', COALESCE(e.mname, ''), ' ', e.lname) AS empName,
         SUM(arp.amount) as amount, arp.status, ar.amount as arrear_amount,
         ar.paid as arrear_paid, ar.payroll_date, ar.last_paid_date
  FROM arrears_pendings arp
  JOIN arrears ar ON arp.id = ar.id
- JOIN employee e ON ar.\"empID\" = e.emp_id
- GROUP BY arp.id, ar.\"empID\", ar.payroll_date, empName, arp.status, ar.amount, ar.paid, ar.payroll_date, ar.last_paid_date
+ JOIN employee e ON ar.empID = e.emp_id
+ GROUP BY arp.id, ar.empID, ar.payroll_date, empName, arp.status, ar.amount, ar.paid, ar.payroll_date, ar.last_paid_date
  ORDER BY arp.id";
         return DB::select(DB::raw($query));
     }

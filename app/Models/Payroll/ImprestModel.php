@@ -17,7 +17,53 @@ class ImprestModel {
 
 	function othersImprests($empID)
 	{
-		$query = "SELECT @s:=@s+1 as SNo, im.*  ,(SELECT CONCAT(e.fname,' ', e.mname,' ', e.lname) FROM employee e WHERE im.empID = e.emp_id) as name , IF((SELECT COUNT(id) FROM imprest_requirement WHERE  imprestID = im.id )>0, (SELECT SUM(initial_amount) FROM imprest_requirement WHERE imprestID = im.id ), 0)  as requested_amount, IF((SELECT COUNT(id) FROM imprest_requirement WHERE status = 1 AND imprestID = im.id )>0, (SELECT SUM(final_amount) FROM imprest_requirement WHERE status = 1 AND imprestID = im.id ), 0)  as approved_amount, IF((SELECT COUNT(id) FROM imprest_requirement WHERE imprestID = im.id )>0, (SELECT SUM(initial_amount) FROM imprest_requirement WHERE status = 2 AND imprestID = im.id ), 0)  as confirmed_amount, (SELECT COUNT(id) FROM imprest_requirement WHERE NOT status = 4 AND imprestID = im.id ) AS pending_requirements FROM imprest im, (SELECT @s:=0) as s WHERE NOT im.empID = '".$empID."' GROUP BY im.id ORDER BY im.id DESC ";
+		$query = "WITH seq AS (
+    SELECT ROW_NUMBER() OVER (ORDER BY im.id DESC) AS SNo,
+           im.*,
+           (SELECT CONCAT(e.fname, ' ', COALESCE(e.mname, ''), ' ', e.lname)
+            FROM employee e
+            WHERE im.empID = e.emp_id) AS name,
+           CASE
+               WHEN (SELECT COUNT(id)
+                     FROM imprest_requirement
+                     WHERE \"imprestID\" = im.id) > 0
+               THEN (SELECT SUM(initial_amount)
+                     FROM imprest_requirement
+                     WHERE \"imprestID\" = im.id)
+               ELSE 0
+           END AS requested_amount,
+           CASE
+               WHEN (SELECT COUNT(id)
+                     FROM imprest_requirement
+                     WHERE status = 1
+                     AND \"imprestID\" = im.id) > 0
+               THEN (SELECT SUM(final_amount)
+                     FROM imprest_requirement
+                     WHERE status = 1
+                     AND \"imprestID\" = im.id)
+               ELSE 0
+           END AS approved_amount,
+           CASE
+               WHEN (SELECT COUNT(id)
+                     FROM imprest_requirement
+                     WHERE \"imprestID\" = im.id) > 0
+               THEN (SELECT SUM(initial_amount)
+                     FROM imprest_requirement
+                     WHERE status = 2
+                     AND \"imprestID\" = im.id)
+               ELSE 0
+           END AS confirmed_amount,
+           (SELECT COUNT(id)
+            FROM imprest_requirement
+            WHERE status != 4
+              AND \"imprestID\" = im.id) AS pending_requirements
+    FROM imprest im
+    WHERE im.empID != empID
+)
+SELECT *
+FROM seq
+ORDER BY SNo DESC
+         ";
 		return DB::select(DB::raw($query));
 	}
 

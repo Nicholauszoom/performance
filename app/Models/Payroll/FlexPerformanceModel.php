@@ -584,9 +584,39 @@ public function getCurrentStrategy()
 
     public function allOvertimes($empID)
     {
-        $query = "SELECT @s:=@s+1 as SNo, eo.linemanager as manager, eo.final_line_manager_comment as comment,  eo.status as status, eo.id as eoid, eo.reason as reason, eo.empID as empID, CONCAT(e.fname,' ',IF( e.mname != null,e.mname,' '),' ', e.lname) as name, d.name as DEPARTMENT, p.name as POSITION, CAST(eo.application_time as date) as applicationDATE,
-		CAST(eo.time_end as time) as time_out, CAST(eo.time_start as time) as time_in, (TIMESTAMPDIFF(MINUTE, eo.time_start, eo.time_end)/60) * (IF((eo.overtime_type = 0),((e.salary/240)*(SELECT day_percent FROM overtime_category WHERE id = eo.overtime_category)),((e.salary/240)*(SELECT day_percent FROM overtime_category WHERE id = eo.overtime_category)) )) AS earnings, (TIMESTAMPDIFF(MINUTE, eo.time_start, eo.time_end)/60) as totoalHOURS
-		FROM employee e, employee_overtime eo, position p, department d, (SELECT @s:=0) as s WHERE NOT  eo.empID = '" . $empID . "' and e.department = d.id and eo.empID = e.emp_id  and e.position = p.id   ORDER BY eo.id DESC";
+        $query = "SELECT
+    ROW_NUMBER() OVER (ORDER BY eo.id DESC) AS SNo,
+    eo.linemanager AS manager,
+    eo.final_line_manager_comment AS comment,
+    eo.status AS status,
+    eo.id AS eoid,
+    eo.reason AS reason,
+    eo.\"empID\" AS empID,
+    CONCAT(e.fname, ' ', COALESCE(e.mname, ''), ' ', e.lname) AS name,
+    d.name AS DEPARTMENT,
+    p.name AS POSITION,
+    CAST(eo.application_time AS DATE) AS applicationDATE,
+    CAST(eo.time_end AS TIME) AS time_out,
+    CAST(eo.time_start AS TIME) AS time_in,
+    ((EXTRACT(EPOCH FROM eo.time_end - eo.time_start) / 3600) *
+        (CASE
+            WHEN eo.overtime_type = 0 THEN ((e.salary / 240) * (SELECT day_percent FROM overtime_category WHERE id = eo.overtime_category))
+            ELSE ((e.salary / 240) * (SELECT day_percent FROM overtime_category WHERE id = eo.overtime_category))
+        END)) AS earnings,
+    (EXTRACT(EPOCH FROM eo.time_end - eo.time_start) / 3600) AS totoalHOURS
+FROM
+    employee e
+JOIN
+    employee_overtime eo ON eo.\"empID\" = e.emp_id
+JOIN
+    position p ON e.position = p.id
+JOIN
+    department d ON e.department = d.id
+WHERE
+    eo.\"empID\" != \"empID\"
+ORDER BY
+    eo.id DESC
+";
 
         return DB::select(DB::raw($query));
     }
@@ -1348,7 +1378,9 @@ public function updatedepartment($data, $id)
 
     public function addposition($data)
     {
+        // dd($data);
         DB::table('position')->insert($data);
+
         return true;
     }
 
@@ -3312,12 +3344,13 @@ last_paid_date='" . $date . "' WHERE  state = 1 and type = 3";
     public function position()
     {
         //$query = "SELECT @s:=@s+1 as SNo, (SELECT pp.name from position pp WHERE p.parent_code = pp.position_code) as parent, d.name as department, p.* FROM position p, department d, (SELECT @s:=0) as s WHERE d.id = p.dept_id AND p.state = 1";
-        $query = "SELECT @s:=@s+1 as SNo, 'none' as parent, d.name as department, p.* FROM position p, department d, (SELECT @s:=0) as s WHERE d.id = p.dept_id AND p.state = 1";
+        // $query = "SELECT @s:=@s+1 as SNo, 'none' as parent, d.name as department, p.* FROM position p, department d, (SELECT @s:=0) as s WHERE d.id = p.dept_id AND p.state = 1";
+        $query = "SELECT row_number() OVER () as \"SNo\", 'none' as parent, d.name as department, p.* FROM position p JOIN department d ON d.id = p.dept_id WHERE p.state = 1; ";
         return DB::select(DB::raw($query));
     }
     public function inactive_position()
     {
-        $query = "SELECT @s:=@s+1 as SNo, (SELECT pp.name from position pp WHERE p.parent_code = pp.position_code) as parent, d.name as department, p.* FROM position p, department d, (SELECT @s:=0) as s WHERE d.id = p.dept_id AND p.state = 0";
+        $query = "SELECT row_number() OVER () as \"SNo\",(SELECT pp.name FROM position pp WHERE p.parent_code = pp.position_code) as parent, d.name as department, p.* FROM position p JOIN department d ON d.id = p.dept_id WHERE p.state = 0;";
         return DB::select(DB::raw($query));
     }
     public function allposition()
@@ -3556,6 +3589,7 @@ public function positionFetcher($id)
 
         return true;
     }
+
 
     public function get_latestEmployee()
     {
@@ -3820,10 +3854,48 @@ d.department_pattern AS child_department, d.parent_pattern as parent_department 
 
     public function role($id)
     {
-        $query = "SELECT r.id, r.name
-                  FROM public.role r
-                  LEFT JOIN public.emp_role er ON r.id = er.role AND er.\"userid\" = '" . $id . "'
-                  WHERE er.role IS NULL";
+        $query = "WITH seq AS (
+    SELECT
+        ROW_NUMBER() OVER (ORDER BY p.id) AS SNo,
+        'none' AS parent,
+        d.name AS department,
+        p.*
+    FROM
+        position p
+    JOIN
+        department d ON d.id = p.dept_id
+    WHERE
+        p.state = 1
+),
+roles AS (
+    SELECT
+        r.id,
+        r.name
+    FROM
+        public.role r
+    LEFT JOIN
+        public.emp_role er ON r.id = er.role
+    WHERE
+        er.\"userid\" = :id
+        AND er.role IS NULL
+)
+SELECT
+    seq.SNo,
+    seq.parent,
+    seq.department,
+    seq.*,
+    roles.id AS role_id,
+    roles.name AS role_name
+FROM
+    seq
+FULL JOIN
+    roles ON true
+ORDER BY
+    seq.SNo;
+        ";
+
+
+
 
         return DB::select(DB::raw($query));
     }
@@ -3926,9 +3998,9 @@ public function group_byid($id)
 
 $results = DB::table('employee as e')
     ->select(
-        DB::raw('DISTINCT ROW_NUMBER() OVER () as SNo'),
+        DB::raw('DISTINCT ROW_NUMBER() OVER (ORDER BY e.emp_id) as SNo'),
         'e.emp_id as ID',
-        DB::raw("CONCAT(e.fname, ' ', COALESCE(e.mname, ' '), ' ', e.lname) as NAME"),
+        DB::raw("CONCAT(e.fname, ' ', COALESCE(e.mname, ''), ' ', e.lname) as NAME"),
         'd.name as DEPARTMENT',
         'p.name as POSITION'
     )
@@ -3941,7 +4013,6 @@ $results = DB::table('employee as e')
             ->where('group_name', $id);
     })
     ->get();
-
         // $query = "SELECT DISTINCT @s:=@s+1 as SNo, e.emp_id as ID,  CONCAT(e.fname,' ',IF( e.mname != null,e.mname,' '),' ', e.lname) as NAME, d.name as DEPARTMENT, p.name as POSITION FROM employee e, position p, department d,  (SELECT @s:=0) as s  where e.position = p.id AND e.department = d.id AND e.state =1 AND e.emp_id NOT IN (SELECT empID from employee_group where group_name=" . $id . ")";
 
         return $results;
