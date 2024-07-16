@@ -125,7 +125,6 @@ class PerformanceReportsController extends Controller
         // dd($start);
         $data['start'] = $request->start_date;
         $data['name'] =Department::where('id',$request->dept_id)->first() ;
-
         $data['end'] = $request->end_date;
         $data['performances'] = DB::table('employee')
         ->select('projects.name'
@@ -135,18 +134,17 @@ class PerformanceReportsController extends Controller
         )
         ->groupBy('projects.id')
         ->distinct('projects.id')
-        ->join('employee_performances', 'employee.emp_id', '=', 'employee_performances.empID')
-
+        ->join('employee_performances', 'employee.emp_id', '=', 'employee_performances.empid')
         ->whereNotNull('employee_performances.performance')
-
         ->join('project_tasks', 'employee_performances.task_id', '=', 'project_tasks.id')
         ->join('projects', 'project_tasks.project_id', '=', 'project_tasks.project_id')
         // ->whereBetween('project.start_date', [$start, $end])
         ->where('employee_performances.type','=','project')
         ->where('projects.id','=',$request->project_id)
         ->where('employee.department','=',$request->dept_id)
-
         ->get();
+
+        // dd($data);
 
 
         return view('performance-reports.department-report',$data);

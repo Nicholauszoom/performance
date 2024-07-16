@@ -3855,54 +3855,34 @@ d.department_pattern AS child_department, d.parent_pattern as parent_department 
     }
 
     public function role($id)
-    {
-        
-        $query = "WITH seq AS (
-            SELECT
-                ROW_NUMBER() OVER (ORDER BY p.id) AS SNo,
-                'none' AS parent,
-                d.name AS department,
-                p.*
-            FROM
-                position p
-            JOIN
-                department d ON d.id = p.dept_id
-            WHERE
-                p.state = 1
-        ),
-        roles AS (
-            SELECT
-                r.id,
-                r.name
-            FROM
-                public.role r
-            LEFT JOIN
-                public.emp_role er ON r.id = er.role
-            WHERE
-                er.\"userid\" = :id
-                AND er.role IS NULL
-        )
-        SELECT
-            seq.SNo,
-            seq.parent,
-            seq.department,
-            seq.*,
-            roles.id AS role_id,
-            roles.name AS role_name
-        FROM
-            seq
-        FULL JOIN
-            roles ON true
-        ORDER BY
-            seq.SNo;
-        ";
-        
-       
-        
-        // Execute the query with parameter binding
-        $results = DB::select(DB::raw($query));
-        
-        return $results;
+{
+    $query = DB::table('position as p')
+        ->selectRaw('ROW_NUMBER() OVER (ORDER BY p.id) AS SNo')
+        ->selectRaw("'none' AS parent")
+        ->selectRaw('d.name AS department')
+        ->select('p.*')
+        ->join('department as d', 'd.id', '=', 'p.dept_id')
+        ->where('p.state', 1);
+
+    $rolesSubquery = DB::table('public.role as r')
+        ->select('r.id', 'r.name')
+        ->leftJoin('public.emp_role as er', 'r.id', '=', 'er.role')
+        ->where('er.userid', $id)
+        ->whereNull('er.role');
+
+    $query = DB::table(DB::raw("({$query->toSql()}) as seq"))
+        ->mergeBindings($query)
+        ->select('seq.SNo', 'seq.parent', 'seq.department', 'seq.*', 'roles.id as role_id', 'roles.name as role_name')
+        ->leftJoin(DB::raw("({$rolesSubquery->toSql()}) as roles"), function($join) {
+            $join->on(DB::raw('true'));
+        })
+        ->mergeBindings($rolesSubquery)
+        ->orderBy('seq.SNo')
+        ->get();
+
+    return $query;
+
+
         }        
 
     public function rolecount($id)
