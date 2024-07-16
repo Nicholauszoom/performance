@@ -344,11 +344,17 @@ public function getCurrentStrategy()
     public function getCompanyInfo()
     {
         $query = DB::table('company_info')->first();
+
+        // dd($query);
+        
+
         return $query;
     }
 
     public function updateCompanyInfo($data, $id)
     {
+        $id =1;
+        unset($data['id']);
 
         DB::table('company_info')->where('id', $id)->update($data);
 
