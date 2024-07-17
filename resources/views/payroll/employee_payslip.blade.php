@@ -46,7 +46,7 @@
                             <select required="" name="employee" id="employee_list" class="select4_single form-control select" tabindex="-1">
                                 <option> Select Employee </option>
                                 @foreach ( $employee as $row)
-                                <option value="{{ $row->empID }}">{{ $row->empID }} - {{ $row->NAME }}</option>
+                                <option value="{{ $row->empID }}">{{ $row->empID }} - {{ $row->name }}</option>
                                 @endforeach
                             </select>
                         </div>

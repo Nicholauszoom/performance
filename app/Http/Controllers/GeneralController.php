@@ -11310,6 +11310,7 @@ class GeneralController extends Controller
         $data['pendingPayroll'] = $this->payroll_model->pendingPayrollCheck();
         $data['parent'] = 'My Services';
         $data['child'] = 'Overtimes';
+        // dd($data)
 
         // dd( $data['my_overtimes']);
         return view('my-services.overtimes', $data);

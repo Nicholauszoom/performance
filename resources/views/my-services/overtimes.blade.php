@@ -156,7 +156,7 @@
                                     @endforeach
                                 </td>
                                 <td>
-                                    <b>Duration:</b> {{ $row->totoalHOURS }} Hrs.<br>
+                                    <b>Duration:</b> {{$row->total_hours}} Hrs.<br>
                                     <b>From:</b> {{ $row->time_in }} <b> To </b> {{ $row->time_out }}
                                 </td>
                                 <td>{{ $row->reason }}</td>

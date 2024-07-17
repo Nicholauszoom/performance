@@ -510,9 +510,8 @@ public function getCurrentStrategy()
 
      public function my_overtimes($id)
      {
-        $query = "
-        SELECT
-            row_number() OVER () as SNo,
+        $query = "SELECT
+            row_number() OVER () as \"SNo\",
             eo.final_line_manager_comment as comment,
             eo.linemanager as line_manager,
             eo.status as status,
@@ -529,7 +528,7 @@ public function getCurrentStrategy()
                 (CASE WHEN eo.overtime_type = 0 THEN (e.salary / 240) * (SELECT day_percent FROM overtime_category WHERE id = eo.overtime_category)
                     ELSE (e.salary / 240) * (SELECT day_percent FROM overtime_category WHERE id = eo.overtime_category)
                 END) AS earnings,
-            ROUND((EXTRACT(EPOCH FROM (eo.time_end - eo.time_start)) / 3600), 2) as total_hours
+            ROUND((EXTRACT(EPOCH FROM (eo.time_end - eo.time_start)) / 3600), 2) as \"total_hours\"
         FROM
             employee e
         JOIN
