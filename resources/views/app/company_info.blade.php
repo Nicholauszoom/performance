@@ -24,13 +24,12 @@
                 </div>
 
                 <div class="tab-body">
-                    <?php //echo $this->session->flashdata("note");
-                    ?>
                     <div id="resultfeedOvertime"></div>
 
                     <form action="{{ route('flex.updatecompanyInfo') }}" method="POST">
                         @csrf
-                        <input type="hidden" name="id" @isset($id) value="{{ $id }}" @endisset />
+
+                        <input type="hidden" name="id" value='{{ empty(!$data->id) ?  $data->id : null  }}'  />
 
                         <div class="row">
                             <div class="col-lg-6 col-sm-6 mb-3">

@@ -923,7 +923,7 @@ FROM payroll_logs pl, employee e WHERE e.emp_id = pl.empID and e.contract_type =
     function get_pension_years($empID)
     {
 
-        $query = "SELECT DISTINCT years from payroll_logs where empID = '" . $empID . "' ORDER BY years DESC";
+        $query = "SELECT DISTINCT years from payroll_logs where \"empID\" = '" . $empID . "' ORDER BY years DESC";
         return DB::select(DB::raw($query));
     }
 

@@ -599,7 +599,7 @@ class GeneralController extends Controller
     public function CompanyInfo(Request $request)
     {
 
-        $this->authenticateUser('view-setting');
+        $this->authenticateUser('view-setting');        
 
         if ($request->method() == "POST") {
 
@@ -632,8 +632,9 @@ class GeneralController extends Controller
 
     public function UpdateCompanyInfo(Request $request)
     {
-        //if ($request->method() == "PUT") {
+        // dd($request);
         $id = $request->id;
+        // dd($id);
         $data = $request->except('_token', '_method');
         $result = $this->flexperformance_model->updateCompanyInfo($data, $id);
         if ($result == true) {

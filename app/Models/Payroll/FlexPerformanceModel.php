@@ -345,7 +345,6 @@ public function getCurrentStrategy()
     {
         $query = DB::table('company_info')->first();
 
-        // dd($query);
         
 
         return $query;
@@ -353,7 +352,7 @@ public function getCurrentStrategy()
 
     public function updateCompanyInfo($data, $id)
     {
-        $id =1;
+
         unset($data['id']);
 
         DB::table('company_info')->where('id', $id)->update($data);
@@ -3863,28 +3862,30 @@ d.department_pattern AS child_department, d.parent_pattern as parent_department 
     public function role($id)
 {
     $query = DB::table('position as p')
-        ->selectRaw('ROW_NUMBER() OVER (ORDER BY p.id) AS SNo')
-        ->selectRaw("'none' AS parent")
-        ->selectRaw('d.name AS department')
-        ->select('p.*')
-        ->join('department as d', 'd.id', '=', 'p.dept_id')
-        ->where('p.state', 1);
+    ->selectRaw('ROW_NUMBER() OVER (ORDER BY p.id) AS SNo')
+    ->selectRaw("'none' AS parent")
+    ->selectRaw('d.name AS department')
+    ->select('p.*')
+    ->join('department as d', 'd.id', '=', 'p.dept_id')
+    ->where('p.state', 1);
 
-    $rolesSubquery = DB::table('public.role as r')
-        ->select('r.id', 'r.name')
-        ->leftJoin('public.emp_role as er', 'r.id', '=', 'er.role')
-        ->where('er.userid', $id)
-        ->whereNull('er.role');
+$rolesSubquery = DB::table('public.role as r')
+    ->select('r.id', 'r.name')
+    ->leftJoin('public.emp_role as er', 'r.id', '=', 'er.role')
+    ->where('er.userid', $id)
+    ->whereNull('er.role');
 
-    $query = DB::table(DB::raw("({$query->toSql()}) as seq"))
-        ->mergeBindings($query)
-        ->select('seq.SNo', 'seq.parent', 'seq.department', 'seq.*', 'roles.id as role_id', 'roles.name as role_name')
-        ->leftJoin(DB::raw("({$rolesSubquery->toSql()}) as roles"), function($join) {
-            $join->on(DB::raw('true'));
-        })
-        ->mergeBindings($rolesSubquery)
-        ->orderBy('seq.SNo')
-        ->get();
+$query = DB::table(DB::raw("({$query->toSql()}) as seq"))
+    ->mergeBindings($query) // Ensure the bindings are merged correctly
+    ->select('seq.SNo', 'seq.parent', 'seq.department', 'seq.*', 'roles.id as role_id', 'roles.name as role_name')
+    ->leftJoin(DB::raw("({$rolesSubquery->toSql()}) as roles"), function($join) {
+        // Use a proper column for joining; this example assumes 'id' columns can be used
+        $join->on('seq.id', '=', 'roles.id');
+    })
+    ->mergeBindings($rolesSubquery) // Ensure the bindings are merged correctly
+    ->orderBy('seq.SNo')
+    ->get();
+
 
     return $query;
 
