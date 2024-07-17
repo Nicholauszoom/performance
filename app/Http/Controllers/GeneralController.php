@@ -2627,6 +2627,7 @@ class GeneralController extends Controller
         $role_id = $role->role_id;
 
         $approval = Approvals::where('process_name', 'Payroll Approval')->first();
+        // dd($approval);
         $roles = Position::where('id', $role_id)->first();
         $level = ApprovalLevel::where('role_id', $role_id)->where('approval_id', $approval->id)->first();
         $data['level'] = $level;
@@ -7887,6 +7888,7 @@ class GeneralController extends Controller
         $data['my_grievances'] = $this->flexperformance_model->my_grievances($empID);
         //if(session('griev_hr')!=''){
         $data['other_grievances'] = $this->flexperformance_model->all_grievances();
+        // dd($data);
         //}
         return view('app.grievances', $data);
 

@@ -52,7 +52,7 @@
                           <th>S/N</th>
                           <th>Name</th>
                           <th>Department</th>
-                          {{-- <th>Evidence</th>  --}}
+                          <!-- {{-- <th>Evidence</th>  --}} -->
                           <th>Title</th> 
                           <th>Description</th>
                           <th>Date</th>
@@ -67,14 +67,14 @@
                           foreach ($other_grievances as $row) {
                           //if($row->forwarded != 1 ) continue; ?>
                           <tr id="domain<?php echo $row->id;?>">
-                            <td width="1px"><?php echo $row->SNo; ?></td>
+                            <td width="1px"><?php echo $row->sno; ?></td>
                             <td><?php if($row->anonymous == 1) echo "ANONYMOUS"; else echo $row->NAME; ?></td>
                             <td><?php if($row->anonymous == 1) echo "ANONYMOUS"; else  echo "<b>Department: </b>".$row->DEPARTMENT."<br><b>Position: </b>".$row->POSITION; ?></td>
-                            {{-- <td><?php if($row->attachment != NULL) echo "<a download= '' href ='". url('').$row->attachment."' class='btn btn-sm btn-main'>"."<div class='col-md-12'>
-                                <span class='label label-info'>DOWNLOAD</span></div>"."</a>"; else echo "NIL"; ?></td> --}}
+                            <!-- {{-- <td><?php if($row->attachment != NULL) echo "<a download= '' href ='". url('').$row->attachment."' class='btn btn-sm btn-main'>"."<div class='col-md-12'>
+                                <span class='label label-info'>DOWNLOAD</span></div>"."</a>"; else echo "NIL"; ?></td> --}} -->
                             <td><?php if($row->anonymous == 1) echo "ANONYMOUS"; else echo $row->title; ?></td>
                             <td><?php echo $row->description; ?></td>
-                            <td><?php $datesValue = str_replace('-', '/', $row->DATED);
+                            <td><?php $datesValue = str_replace('-', '/', $row->timed);
                                   echo date('d-m-Y', strtotime($datesValue));  ?></td>
 
                             <td>

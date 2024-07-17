@@ -3876,7 +3876,7 @@ $rolesSubquery = DB::table('public.role as r')
 
 $query = DB::table(DB::raw("({$query->toSql()}) as seq"))
     ->mergeBindings($query) // Ensure the bindings are merged correctly
-    ->select('seq.SNo', 'seq.parent', 'seq.department', 'seq.*', 'roles.id as role_id', 'roles.name as role_name')
+    ->select('seq.sno', 'seq.parent', 'seq.department', 'seq.*', 'roles.id as role_id', 'roles.name as role_name')
     ->leftJoin(DB::raw("({$rolesSubquery->toSql()}) as roles"), function($join) {
         // Use a proper column for joining; this example assumes 'id' columns can be used
         $join->on('seq.id', '=', 'roles.id');
@@ -4639,18 +4639,17 @@ FROM payroll_logs pl, employee e, position p, department d where e.emp_id=pl.emp
     }
 
 
-    public function my_grievances($empID)
-{
-    $result = DB::table('grievances as g')
-        ->select(
-            DB::raw('ROW_NUMBER() OVER () as SNo'),
-            'g.*',
-            DB::raw('CAST(g.timed as date) as DATED')
-        )
-        ->where('g.empid', '=', $empID)
-        ->get();
+            public function my_grievances($empID)
+        {
+            $result = "SELECT 
+        ROW_NUMBER() OVER () as \"SNo\",
+        g.*,
+        CAST(g.timed as date) as \"DATED\"
+        FROM grievances g
+        WHERE g.empid = :empID";
 
-    return $result;
+    $row = DB::select(DB::raw($result), ['empID' => $empID]);
+            return $row;
 }
 
 
