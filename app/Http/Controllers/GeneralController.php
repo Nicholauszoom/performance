@@ -8795,7 +8795,6 @@ class GeneralController extends Controller
         $employee = Auth::User()->id;
         $uid = Auth::User()->position;
 
-        // $role = UserRole::where('user_id', $employee)->first();
         $role = Position::where('id', $uid)->first();
 
         $role_id = $role->id;
@@ -8803,7 +8802,6 @@ class GeneralController extends Controller
         $terminate = Approvals::where('process_name', 'Termination Approval')->first();
         $roles = Role::where('id', $role_id)->first();
         $level = ApprovalLevel::where('role_id', $role_id)->where('approval_id', $terminate->id)->first();
-        // dd($level);
 
 
         if (SysHelpers::ApprovalLastLevel("Termination Approval")) {
@@ -10900,27 +10898,6 @@ class GeneralController extends Controller
         // return view('reports.employee-data', $data, compact('details', 'emergency', 'spouse', 'children', 'parents', 'childs'));
     }
 
-    // Start of leave approvals
-
-    // public function LeaveApprovals(Request $request)
-    // {
-
-    //     $empID = Auth()->user()->emp_id;
-    //     $data['employees'] = EMPL::get();
-
-    //     $data['approvals'] = LeaveApproval::orderBy('created_at', 'desc')->get();
-
-    //     $data['parent'] = 'Settings';
-    //     $data['child'] = 'Leave Approval';
-
-    //     if ($request->isMethod('post')) {
-
-    //         // dd("uuuuuuuuuuuuuuuuuuuuuu");
-    //         return Excel::download(new LeaveApprovalsExport($data['approvals']), 'leave_approvals.xlsx');
-    //     }
-
-    //     return view('setting.leave-approval', $data);
-    // }
 
     public function LeaveApprovals(Request $request)
     {
