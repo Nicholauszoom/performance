@@ -17,13 +17,13 @@
   $referenceoutcomeID = $outcomeID;
   $referencestrategyID = $strategyID;
 
-  // if ($referenceOutputID>=1 && $referenceoutcomeID>=1 && $referencestrategyID>=1) {
+ 
     foreach($taskDateRange as $row){
     
     $startLimit = $row->start;
     $endLimit = $row->end; 
     }
-  // }
+ 
 
 ?>
 <!-- /top navigation -->

@@ -5472,6 +5472,7 @@ class GeneralController extends Controller
 
         // if (session('mng_paym') || session('recom_paym') || session('appr_paym')) {
         $data['allowance'] = $this->flexperformance_model->allowance();
+
         $data['overtimes'] = $this->flexperformance_model->overtime_allowances();
         $data['deduction'] = $this->flexperformance_model->deductions();
         $data['pension'] = $this->flexperformance_model->pension_fund();
@@ -5484,6 +5485,8 @@ class GeneralController extends Controller
 
         $data['parent'] = "Settings";
         $data['child'] = "Statutory Deductions";
+
+        
 
         return view('app.statutory_deduction', $data);
         // } else {
@@ -5515,6 +5518,9 @@ class GeneralController extends Controller
         $data['pension'] = $this->flexperformance_model->pension_fund();
         $data['meals'] = $this->flexperformance_model->meals_deduction();
         $data['pendingPayroll'] = $this->payroll_model->pendingPayrollCheck();
+
+        // dd($data['allowance']);
+        // dd( $data['deduction']);
 
         $data['title'] = "Non-Statutory Deductions";
 
@@ -5564,6 +5570,7 @@ class GeneralController extends Controller
         }
         return back()->with('success', 'Saved');
     }
+
     public function addAllowanceCategory(Request $request)
     {
         $data = array(
@@ -5613,6 +5620,7 @@ class GeneralController extends Controller
         $mode = $request->input('policy');
         $currency = $request->input('currency');
         $state = 1;
+        $apply_to = 0;
         $rate = $this->flexperformance_model->get_rate($currency);
 
 
@@ -5628,7 +5636,14 @@ class GeneralController extends Controller
             'state' => $state,
             'currency' => $currency,
             'rate' => $rate,
+            'apply_to'=>$apply_to,
+
+
+            
         );
+        
+
+        // dd($data);
 
         DB::table('deductions')->insert($data);
         $autheniticateduser = auth()->user()->emp_id;
@@ -5859,7 +5874,7 @@ class GeneralController extends Controller
 
 
 
-    public function submitInputs(Request $request)
+public function submitInputs(Request $request)
     {
 
         $this->authenticateUser('edit-payroll');
@@ -5907,6 +5922,7 @@ class GeneralController extends Controller
             return view('payroll.submit_inputs', $data);
         }
     }
+            
 
     public function assign_allowance_group(Request $request)
     {

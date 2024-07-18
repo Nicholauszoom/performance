@@ -1425,8 +1425,18 @@ public function updatedepartment($data, $id)
     public function getskills($id)
     {
 
-        $query = "SELECT  @s:=@s+1 as SNo, CONCAT(e.fname,' ',IF( e.mname != null,e.mname,' '),' ', e.lname) as AUTHOR,  s.* FROM skills s, employee e, (SELECT @s:=0) as s  WHERE s.created_by = e.emp_id and s.isActive = '1' and s.position_ref ='" . $id . "'";
-
+        $query = "SELECT
+            ROW_NUMBER() OVER () as SNo,
+            CONCAT(e.fname, ' ', COALESCE(e.mname, ''), ' ', e.lname) as AUTHOR,
+            s.*
+        FROM
+            skills s
+        JOIN
+            employee e ON s.created_by = e.emp_id
+        WHERE
+            s.\"isActive\" = 1
+            AND s.position_ref = :id
+    ";
         return DB::select(DB::raw($query));
     }
 
@@ -1847,7 +1857,7 @@ public function getpropertyexit($id)
 
     public function deduction()
     {
-        $query = 'SELECT ROW_NUMBER() OVER (ORDER BY id) AS SNo, d.*
+        $query = 'SELECT ROW_NUMBER() OVER (ORDER BY id) AS \"SNo\", d.*
         FROM (
             SELECT * FROM deduction
             WHERE is_active = 1 AND id NOT IN (7, 8)
@@ -1926,14 +1936,20 @@ public function getpropertyexit($id)
     }
     public function updatededuction_non_statutory_deduction($data, $id)
     {
-        DB::table('deductions')->where('id', $id)
+        $query=DB::table('deductions')->where('id', $id)
             ->delete();
+
+            // dd($query);
+
+            
         return true;
     }
 
     public function addDeduction($data)
     {
+         
         DB::table('deductions')->insert($data);
+       
         return true;
     }
 

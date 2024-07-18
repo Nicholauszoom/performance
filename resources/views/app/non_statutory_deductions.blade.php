@@ -52,7 +52,7 @@
                                     <tbody>
                                         <?php foreach ($deduction as $row) { //if($row->id==0) continue; // Skip the default group ?>
                                         <tr id="domain<?php echo $row->id; ?>">
-                                            <td width="1px"><?php echo $row->SNo; ?></td>
+                                            <td width="1px"><?php echo $row->sno; ?></td>
                                             <td><?php echo $row->name; ?></td>
                                             <td>
                                                 <?php if($row->mode==1){ ?>
