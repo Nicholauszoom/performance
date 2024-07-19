@@ -46,13 +46,11 @@
                 <tbody>
                     <?php foreach ($line_overtime as $row) { ?>
                     @if ($row->status != 2)
-
-
                     <tr>
                         <td width="1px"><?php echo $row->SNo; ?></td>
                         <td><?php echo $row->name; ?></td>
-                        <td><?php echo '<b>Department: </b>' . $row->DEPARTMENT . '<br><b>Position: </b>' . $row->POSITION; ?></td>
-                        <td><?php echo '<b>On: </b>' . date('d-m-Y', strtotime($row->applicationDATE)) . '<br><b>Duration: </b>' . number_format($row->totoalHOURS,1) . ' Hrs.<br><b>From: </b>' . date('H:i', strtotime($row->time_in)) . ' <b> To </b>' . date('H:i', strtotime($row->time_out)); ?> </td>
+                        <td><?php echo '<b>Department: </b>' . $row->department . '<br><b>Position: </b>' . $row->position; ?></td>
+                        <td><?php echo '<b>On: </b>' . date('d-m-Y', strtotime($row->application_date)) . '<br><b>Duration: </b>' . number_format($row->total_hours,1) . ' Hrs.<br><b>From: </b>' . date('H:i', strtotime($row->time_in)) . ' <b> To </b>' . date('H:i', strtotime($row->time_out)); ?> </td>
                         <td><?php echo $row->reason; ?></td>
 
                         <td>
