@@ -2982,44 +2982,51 @@ as gross,
         $payroll_date = date($payroll_date);
 
         $query = "SELECT
-        ea.*,
-        a.name,
-        a.state,
-        IF(
-            ea.mode = 1,
-            ea.amount,
-            IF(
-                a.type = 1,
-                IF(
-                    DATEDIFF('" . $last_date . "', e.hire_date) < 365,
-                    ((DATEDIFF('" . $last_date . "', e.hire_date) + 1) / 365) * e.salary,
-                    ea.percent * e.salary
-                ),
-                ea.percent *
-                    IF(
-                        MONTH(e.hire_date) = MONTH('" . $payroll_date . "') AND YEAR(e.hire_date) = YEAR('" . $payroll_date . "'),
-                        ((" . $days . " - (DAY(e.hire_date) + 1)) * e.salary / 30),
-                        e.salary
-                    )
-            )
-        ) AS amount
+    ea.*,
+    a.name,
+    a.state,
+    CASE
+        WHEN ea.mode::integer = 1 THEN ea.amount::numeric
+        ELSE
+            CASE
+                WHEN a.type::integer = 1 THEN
+                    CASE
+                        WHEN AGE(DATE '" . $last_date . "', e.hire_date) < INTERVAL '1 year' THEN
+                            (EXTRACT(EPOCH FROM (AGE(DATE '" . $last_date . "', e.hire_date)))/(365 * 86400) * e.salary)::numeric
+                        ELSE
+                            (ea.percent::numeric * e.salary)::numeric
+                    END
+                ELSE
+                    (ea.percent::numeric *
+                        CASE
+                            WHEN EXTRACT(MONTH FROM e.hire_date) = EXTRACT(MONTH FROM DATE '" . $payroll_date . "') 
+                                AND EXTRACT(YEAR FROM e.hire_date) = EXTRACT(YEAR FROM DATE '" . $payroll_date . "') THEN
+                                ((DATE_PART('day', DATE '" . $last_date . "') - (DATE_PART('day', e.hire_date) + 1)) * e.salary / 30)::numeric
+                            ELSE
+                                e.salary::numeric
+                        END)::numeric
+            END
+    END AS amount
+FROM
+    employee e,
+    emp_allowances ea,
+    allowances a
+WHERE
+    e.emp_id = ea.empid
+    AND a.id = ea.allowance
+    AND a.state = 1
+    AND e.state = 1
+    AND e.login_user != 1";
 
-     FROM
-        employee e,
-        emp_allowances ea,
-        allowances a
-     WHERE
-        e.emp_id = ea.empID
-        AND a.id = ea.allowance
-        AND a.state = 1
-        AND e.state = 1
-        AND e.login_user != 1";
+// dd($query);
 
-        // dd($query);
+$row = DB::select(DB::raw($query));
 
-        $row = DB::select(DB::raw($query));
+return $row;
 
-        return $row;
+    
+
+    
     }
 
 
@@ -3034,32 +3041,50 @@ as gross,
     {
 
 
-        $query = "SELECT ed.empID,ed.deduction,d.* from emp_deductions ed,deductions d where d.id = ed.deduction";
+        $query = "SELECT ed.\"empID\",ed.deduction,d.* from emp_deductions ed,deductions d where d.id = ed.deduction";
         $row = DB::select(DB::raw($query));
 
         return $row;
     }
+    
     public function checkPayrollMonth($date)
     {
+        // Extract year and month from the date
         $calender = explode('-', $date);
-
         $month = $calender[0] . '-' . $calender[1];
-        $query = "SELECT count(id) as total from payroll_months where payroll_date like '%" . $month . "%'";
-
-        $row = DB::select(DB::raw($query));
-
-        return $row[0]->total;
+    
+        // dd($month);
+        // Construct the query using TO_CHAR to format the date
+        $query = "SELECT count(id) as total FROM payroll_months WHERE TO_CHAR(payroll_date, 'YYYY-MM') = ?";
+    
+        // Execute the query with parameter binding
+        // dd(DB::select(DB::raw($query), [$month]));
+        $row = DB::select(DB::raw($query), [$month]);
+    
+        // dd( $row[0]->total ?? 0);
+        // Return the total count
+        return $row[0]->total ?? 0;
     }
+    
+
 
     public function checkInputMonth($date)
-    {
-        $calender = explode('-', $date);
-        $month = $calender[0] . '-' . $calender[2];
-        //dd($calender);
-        $query = "SELECT count(id) as total from  input_submissions where updated_at like '" . $month . "%'";
-        $row = DB::select(DB::raw($query));
-        return $row[0]->total;
-    }
+{
+    // Parse the date in the mm-dd-yyyy format
+    $calender = explode('-', $date);
+    $month = $calender[2] . '-' . $calender[0];
+
+    // Construct the query using TO_CHAR to format the date
+    $query = "SELECT count(id) as total FROM input_submissions WHERE TO_CHAR(updated_at, 'YYYY-MM') = ?";
+
+    // Execute the query with parameter binding
+    $row = DB::select(DB::raw($query), [$month]);
+
+    // dd($row);
+    // Return the total count
+    return $row[0]->total ?? 0;
+}
+
 
     public function getPayrollMonth1()
     {

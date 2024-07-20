@@ -5890,10 +5890,13 @@ class GeneralController extends Controller
                 if ($date) {
                     // Format the date to 'YYYY-MM' for comparison
                     $formattedDate = date('Y-m', strtotime($date));
-            
+
                     // Construct the query to count records matching the formatted date
-                    $query = "SELECT count(id) as total FROM payroll_months WHERE TO_CHAR(payroll_date, 'YYYY-MM') LIKE '%" . $formattedDate . "%'";
-            
+                    $query = "SELECT count(id) as total FROM payroll_months WHERE TO_CHAR(payroll_date, 'YYYY-MM') = '" . $formattedDate . "'";
+                    
+                    // Debug: Log the query for inspection
+                    \Log::info('Executing query: ' . $query);
+                    
                     // Execute the count query using Laravel's DB::select method
                     $result = DB::select(DB::raw($query));
                     
@@ -5905,18 +5908,29 @@ class GeneralController extends Controller
                     }
             
                     // Return the result as JSON response
-                    return response()->json(['total' => $total]);
+                    if ($total > 0) {
+                        response()->json(['total' => 0]);
+                        
+                    } else {
+                        // If total is 0, return early to avoid further processing
+                        return response()->json(['total' => 0]);
+                    }
                 }
             
                 // Add previous month salary arrears
                 $this->addPrevMonthSalaryArrears($date);
+                
             
                 // Handle form submission logic
-                if ($request->method() == 'POST') {
+                if ($request->isMethod('post')) {
+                    // dd($this->payroll_model->checkPayrollMonth($date));
                     // Check if the payroll month exists and if inputs for the month have already been submitted
+                    // dd($this->payroll_model->checkPayrollMonth($formattedDate));
+                    
                     $month = $this->payroll_model->checkPayrollMonth($date);
+                    // dd($month);
                     $submission = $this->payroll_model->checkInputMonth($date);
-            
+                   $month =0;
                     if ($month < 1) {
                         if ($submission < 1) {
                             // Get active allowances and log financial details
@@ -5948,21 +5962,19 @@ class GeneralController extends Controller
                             }
             
                             // Create input submission record
-                            InputSubmission::create(['empID' => auth()->user()->emp_id, 'date' => $date]);
-                            echo "<p class='alert alert-success text-center'>Inputs submitted successfully</p>";
+                            InputSubmission::create(['empid' => auth()->user()->emp_id, 'date' => $date]);
+                            return response()->json(['message' => 'Inputs submitted successfully']);
                         } else {
-                            echo "<p class='alert alert-danger text-center'>Inputs for this payroll month already submitted</p>";
+                            return response()->json(['message' => 'Inputs for this payroll month already submitted']);
                         }
                     } else {
-                        echo "<p class='alert alert-danger text-center'>You can't submit inputs to a previous payroll month</p>";
+                        return response()->json(['message' => 'You can\'t submit inputs to a previous payroll month']);
                     }
                 } else {
                     // If not a POST request, return the view for input submission
                     return view('payroll.submit_inputs', $data);
                 }
             }
-            
-
 
 
 
@@ -11477,11 +11489,12 @@ class GeneralController extends Controller
     {
 
         $id = auth()->user()->emp_id;
-
+        
         $extra = $request->input('extra');
 
         $data['employee'] = $this->flexperformance_model->userprofile($id);
-        // // dd($this->flexperformance_model->userprofile($id));
+        // dd($data['employee']);
+        // dd($this->flexperformance_model->userprofile($id));
         $data['kin'] = $this->flexperformance_model->getkin($id);
         $data['property'] = $this->flexperformance_model->getproperty($id);
         $data['propertyexit'] = $this->flexperformance_model->getpropertyexit($id);

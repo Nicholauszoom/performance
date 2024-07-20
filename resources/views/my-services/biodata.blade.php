@@ -13,7 +13,7 @@
 
 @section('content')
 
-{{-- {{ dd($employee)  }} --}}
+<!-- {{ dd($employee)  }}   -->
 
 
     <?php
