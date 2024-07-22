@@ -13,7 +13,6 @@
 
 @section('content')
 
-<!-- {{ dd($employee)  }}   -->
 
 
     <?php
@@ -26,9 +25,9 @@
         $merital_status = $row->merital_status;
         $birthdate = explode('-', $row->birthdate);
         $hire_date = explode('-', $row->hire_date);
-        $position = $row->pName;
-        $ctype = $row->CONTRACT;
-        $linemanager = $row->LINEMANAGER;
+        $position = $row->pname;
+        $ctype = $row->contract;
+        $linemanager = $row->line_manager;
         $pf_membership_no = $row->pf_membership_no;
         $account_no = $row->account_no;
         $mobile = $row->mobile;
@@ -62,14 +61,14 @@
         $hire_date = $row->hire_date;
         $contract_end = $row->contract_end;
         $departmentID = $row->department;
-        $position = $row->pName;
-        $bankName = $row->bankName;
-        // $bankBranch = $row->bankBranch;
+        $position = $row->pname;
+        $bankName = $row->bankname;
+        $bankBranch = $row->bankbranch;
         $positionID = $row->position;
         $ctype = $row->contract_type;
         $emp_shift = $row->shift;
         $line_managerID = $row->line_manager;
-        $linemanager = $row->LINEMANAGER;
+        $linemanager = $row->line_manager;
         $pf_membership_no = $row->pf_membership_no;
         $account_no = $row->account_no;
         $mobile = $row->mobile;
@@ -503,7 +502,7 @@
                                         <div class="col-6 col-md-6 col-6 col-lg-6">
                                             <p class="text-muted"> Name Here </p>
                                         </div>
-
+    
                                         <div class="col-6 col-md-6 col-6 col-lg-6">
                                             <h6 class="text-main">Employment Status:</h6>
                                         </div>

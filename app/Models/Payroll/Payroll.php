@@ -274,25 +274,25 @@ class Payroll extends Model
 
 
 
-IF( (ea.mode = 1), 'Fixed Amount', CONCAT(100*ea.percent,'% ( Basic Salary )') ) AS policy,
+                IF( (ea.mode = 1), 'Fixed Amount', CONCAT(100*ea.percent,'% ( Basic Salary )') ) AS policy,
 
-IF((e.unpaid_leave = 0)
-,0,IF((ea.mode = 1),
-          ea.amount,
-          IF(a.type = 1,IF(DATEDIFF('" . $last_date . "',e.hire_date) < 365,
-          ((DATEDIFF('" . $last_date . "',e.hire_date)+1)/365)*e.salary,ea.percent*e.salary),
+                IF((e.unpaid_leave = 0)
+                ,0,IF((ea.mode = 1),
+                        ea.amount,
+                        IF(a.type = 1,IF(DATEDIFF('" . $last_date . "',e.hire_date) < 365,
+                        ((DATEDIFF('" . $last_date . "',e.hire_date)+1)/365)*e.salary,ea.percent*e.salary),
 
-          (ea.percent*
-          IF((month(e.hire_date) = month('" . $payroll_date . "')) AND (year(e.hire_date) = year('" . $payroll_date . "')),
-          ((" . $days . " - (day(e.hire_date)+1))*e.salary/" . $days . "),e.salary)
-           )
+                        (ea.percent*
+                        IF((month(e.hire_date) = month('" . $payroll_date . "')) AND (year(e.hire_date) = year('" . $payroll_date . "')),
+                        ((" . $days . " - (day(e.hire_date)+1))*e.salary/" . $days . "),e.salary)
+                        )
 
-      )
-      )
+                    )
+                    )
 
-  ) AS amount,
+                ) AS amount,
 
-  ea.allowance,
+                ea.allowance,
 
 
 
@@ -1620,102 +1620,280 @@ e.salary),
         //   DD(DB::select(DB::raw($query)));
         DB::transaction(function () use ($payroll_date, $payroll_month, $empID, $todate, $days, $year) {
             $last_date = date("Y-m-t", strtotime($payroll_date));
-            $query = "UPDATE allowances SET state = IF(month('" . $payroll_date . "') = 12,1,0) WHERE type = 1";
+            $query = "UPDATE allowances 
+            SET state = CASE 
+                            WHEN EXTRACT(MONTH FROM DATE '" . $payroll_date . "') = 12 THEN 1 
+                            ELSE 0 
+                        END 
+            WHERE type = 1";
+  
             DB::insert(DB::raw($query));
             //INSERT ALLOWANCES
-            $query = "INSERT INTO allowance_logs(empID, description, policy, amount, payment_date,benefit_in_kind)
-
-            SELECT ea.empID AS empID, a.name AS description,
-
-
-
-
-IF( (ea.mode = 1), 'Fixed Amount', CONCAT(100*ea.percent,'% ( Basic Salary )') ) AS policy,
-
-IF((e.unpaid_leave = 0)
-,0,IF((ea.mode = 1),
-          ea.amount,
-          IF(a.type = 1,IF(DATEDIFF('" . $last_date . "',e.hire_date) < 365,
-          ((DATEDIFF('" . $last_date . "',e.hire_date)+1)/365)*e.salary,ea.percent*e.salary),
-
-          (ea.percent*
-          IF((month(e.hire_date) = month('" . $payroll_date . "')) AND (year(e.hire_date) = year('" . $payroll_date . "')),
-          ((" . $days . " - (day(e.hire_date)+1))*e.salary/" . $days . "),e.salary)
-           )
-
-      )
-      )
-
-  ) AS amount,
-
-
-
- '" . $payroll_date . "' AS payment_date,
- a.Isbik as benefit_in_kind
-
-FROM employee e, emp_allowances ea,  allowances a WHERE e.emp_id = ea.empID AND a.id = ea.allowance AND a.state = 1 AND e.state = 1 and e.login_user != 1";
+            $query = "
+            INSERT INTO allowance_logs(empID, description, policy, amount, payment_date, benefit_in_kind)
+            SELECT 
+                ea.empID AS empID, 
+                a.name AS description,
+                CASE 
+                    WHEN ea.mode = 1 THEN 'Fixed Amount' 
+                    ELSE CONCAT(100 * ea.percent, '% ( Basic Salary )') 
+                END AS policy,
+                CASE 
+                    WHEN e.unpaid_leave = 0 THEN 0 
+                    WHEN ea.mode = 1 THEN ea.amount 
+                    ELSE 
+                        CASE 
+                            WHEN a.type = 1 THEN 
+                                CASE 
+                                    WHEN AGE(DATE '" . $last_date . "', e.hire_date) < INTERVAL '1 year' THEN 
+                                        EXTRACT(EPOCH FROM (AGE(DATE '" . $last_date . "', e.hire_date))) / (365 * 86400) * e.salary 
+                                    ELSE ea.percent * e.salary 
+                                END 
+                            ELSE 
+                                ea.percent * 
+                                CASE 
+                                    WHEN EXTRACT(MONTH FROM e.hire_date) = EXTRACT(MONTH FROM DATE '" . $payroll_date . "') 
+                                    AND EXTRACT(YEAR FROM e.hire_date) = EXTRACT(YEAR FROM DATE '" . $payroll_date . "') THEN 
+                                        (" . $days . " - (DATE_PART('day', e.hire_date) + 1)) * e.salary / " . $days . " 
+                                    ELSE e.salary 
+                                END 
+                        END 
+                END AS amount,
+                '" . $payroll_date . "' AS payment_date,
+                a.Isbik AS benefit_in_kind
+            FROM 
+                employee e
+                JOIN emp_allowances ea ON e.emp_id = ea.empID
+                JOIN allowances a ON a.id = ea.allowance
+            WHERE 
+                a.state = 1 
+                AND e.state = 1 
+                AND e.login_user != 1";
+            
             DB::insert(DB::raw($query));
-            //INSERT BONUS
-            $query = " INSERT INTO allowance_logs(empID, description, policy, amount, payment_date)
-
-	    SELECT b.empID AS empID, bt.name AS description,
-
-	    'Fixed Amount' AS policy,
-
-	    IF((e.unpaid_leave = 0),0,SUM(b.amount)) AS amount,
-
-	    '" . $payroll_date . "' AS payment_date
-
-	    FROM employee e,  bonus b, bonus_tags bt WHERE e.emp_id =  b.empID and bt.id = b.name AND b.state = 1 and e.state = 1 and e.login_user != 1 GROUP BY b.empID, bt.name";
-            DB::insert(DB::raw($query));
-            //INSERT OVERTIME
-            $query = " INSERT INTO allowance_logs(empID, description, policy, amount, payment_date)
-	    SELECT o.empID AS empID,
-        IF(o.overtime_category = 1,'N-Overtime','S-Overtime') AS description,
-
-	    'Fixed Amount' AS policy,
-
-        IF((e.unpaid_leave = 0),0,SUM(o.amount)) AS amount,
-
-	    '" . $payroll_date . "' AS payment_date
-
-	    FROM  employee e, overtimes o WHERE  o.empID =  e.emp_id and e.state = 1 and e.login_user != 1 GROUP BY o.empID, o.overtime_category";
-            DB::insert(DB::raw($query));
+            
 
             //INSERT SALARY ADVANCE, FORCED DEDUCTIONS and other LOANS INTO LOAN LOGS
-            $query = "INSERT into loan_logs(loanID, policy, paid, remained, payment_date) SELECT id as loanID, IF( (deduction_amount = 0), (SELECT rate_employee FROM deduction where id = 3), deduction_amount ) as policy, IF(((paid+deduction_amount) > amount), amount, deduction_amount) as  paid, (amount - IF(((paid+deduction_amount) >= amount), amount-paid,  ((paid+deduction_amount)))) as remained,  '" . $payroll_date . "' as payment_date FROM loan  WHERE  state = 1 AND NOT type = 3";
-            DB::insert(DB::raw($query));
+            $query = "
+            INSERT INTO loan_logs(loanID, policy, paid, remained, payment_date)
+            SELECT 
+                id AS loanID, 
+                CASE 
+                    WHEN deduction_amount = 0 THEN (SELECT rate_employee FROM deduction WHERE id = 3) 
+                    ELSE deduction_amount 
+                END AS policy,
+                CASE 
+                    WHEN (paid + deduction_amount) > amount THEN amount 
+                    ELSE deduction_amount 
+                END AS paid,
+                amount - CASE 
+                    WHEN (paid + deduction_amount) >= amount THEN amount - paid 
+                    ELSE paid + deduction_amount 
+                END AS remained,
+                '" . $payroll_date . "' AS payment_date
+            FROM 
+                loan
+            WHERE 
+                state = 1 
+                AND type <> 3";
+            
+            
+             DB::insert(DB::raw($query));
             //INSERT HESLB INTO LOGS
-            $query = "INSERT into loan_logs(loanID, policy, paid, remained, payment_date) SELECT id as loanID, IF( (deduction_amount = 0), (SELECT rate_employee FROM deduction where id = 3), deduction_amount ) as policy, IF(((paid+deduction_amount) > amount), amount, ((SELECT rate_employee FROM deduction where id = 3)*(SELECT IF((e.unpaid_leave = 0),0, IF((month(e.hire_date) = month('" . $payroll_date . "')) AND (year(e.hire_date) = year('" . $payroll_date . "'))
-            ,((" . $days . "- day(e.hire_date)+1)*e.salary/" . $days . "),e.salary)) from employee e where emp_id=empID and state != 4 and login_user != 1))) as  paid, (amount - IF(((paid+deduction_amount) >= amount), amount-paid,  ((paid+((SELECT rate_employee FROM deduction where id = 3)*(SELECT IF((e.unpaid_leave = 0),0, IF((month(e.hire_date) = month('" . $payroll_date . "')) AND (year(e.hire_date) = year('" . $payroll_date . "'))
-            ,((" . $days . "- day(e.hire_date)+1)*e.salary/" . $days . "),e.salary)) from employee e where emp_id=empID and state != 4 and login_user != 1)))))) as remained, '" . $payroll_date . "' as payment_date FROM loan  WHERE  state = 1 AND type = 3";
-            DB::insert(DB::raw($query));
+            $query = "
+                    INSERT INTO loan_logs(loanID, policy, paid, remained, payment_date)
+                    SELECT 
+                        id AS loanID, 
+                        CASE 
+                            WHEN deduction_amount = 0 THEN (SELECT rate_employee FROM deduction WHERE id = 3) 
+                            ELSE deduction_amount 
+                        END AS policy,
+                        CASE 
+                            WHEN (paid + deduction_amount) > amount THEN amount 
+                            ELSE (
+                                (SELECT rate_employee FROM deduction WHERE id = 3) * 
+                                (
+                                    SELECT 
+                                        CASE 
+                                            WHEN e.unpaid_leave = 0 THEN 0 
+                                            ELSE 
+                                                CASE 
+                                                    WHEN (EXTRACT(MONTH FROM e.hire_date) = EXTRACT(MONTH FROM DATE '" . $payroll_date . "')) 
+                                                        AND (EXTRACT(YEAR FROM e.hire_date) = EXTRACT(YEAR FROM DATE '" . $payroll_date . "')) 
+                                                    THEN (((" . $days . " - EXTRACT(DAY FROM e.hire_date) + 1) * e.salary / " . $days . ")) 
+                                                    ELSE e.salary 
+                                                END 
+                                        END 
+                                    FROM employee e 
+                                    WHERE emp_id = empID 
+                                    AND state != 4 
+                                    AND login_user != 1
+                                )
+                            ) 
+                        END AS paid,
+                        amount - CASE 
+                            WHEN (paid + deduction_amount) >= amount THEN amount - paid 
+                            ELSE 
+                                (
+                                    paid + 
+                                    (
+                                        (SELECT rate_employee FROM deduction WHERE id = 3) * 
+                                        (
+                                            SELECT 
+                                                CASE 
+                                                    WHEN e.unpaid_leave = 0 THEN 0 
+                                                    ELSE 
+                                                        CASE 
+                                                            WHEN (EXTRACT(MONTH FROM e.hire_date) = EXTRACT(MONTH FROM DATE '" . $payroll_date . "')) 
+                                                                AND (EXTRACT(YEAR FROM e.hire_date) = EXTRACT(YEAR FROM DATE '" . $payroll_date . "')) 
+                                                            THEN (((" . $days . " - EXTRACT(DAY FROM e.hire_date) + 1) * e.salary / " . $days . ")) 
+                                                            ELSE e.salary 
+                                                        END 
+                                                END 
+                                            FROM employee e 
+                                            WHERE emp_id = empID 
+                                            AND state != 4 
+                                            AND login_user != 1
+                                        )
+                                    )
+                                )
+                        END AS remained,
+                        '" . $payroll_date . "' AS payment_date
+                    FROM loan
+                    WHERE state = 1 
+                    AND type = 3";
+                    DB::insert(DB::raw($query));
+
 
             //UPDATE LOAN BOARD
-            $query = "UPDATE loan SET paid = IF(((paid + (SELECT rate_employee FROM deduction where id = 3)*(SELECT IF((e.unpaid_leave = 0),0, IF((month(e.hire_date) = month('" . $payroll_date . "')) AND (year(e.hire_date) = year('" . $payroll_date . "'))
-            ,((" . $days . "- day(e.hire_date)+1)*e.salary/" . $days . "),e.salary)) from employee e where emp_id=empID and state != 4 and login_user != 1) ) > amount), amount, (paid+ (SELECT rate_employee FROM deduction where id = 3)*(SELECT IF((e.unpaid_leave = 0),0, IF((month(e.hire_date) = month('" . $payroll_date . "')) AND (year(e.hire_date) = year('" . $payroll_date . "'))
-            ,((" . $days . "- day(e.hire_date)+1)*e.salary/" . $days . "),e.salary)) from employee e where emp_id=empID and state != 4 and login_user != 1) )),
-		amount_last_paid = IF(((paid + (SELECT rate_employee FROM deduction where id = 3)*(SELECT IF((e.unpaid_leave = 0),0, IF((month(e.hire_date) = month('" . $payroll_date . "')) AND (year(e.hire_date) = year('" . $payroll_date . "'))
-            ,((" . $days . "- day(e.hire_date)+1)*e.salary/" . $days . "),e.salary)) from employee e where emp_id=empID and state != 4 and login_user != 1) ) > amount), amount-paid, ((SELECT rate_employee FROM deduction where id = 3)*(SELECT IF((e.unpaid_leave = 0),0, IF((month(e.hire_date) = month('" . $payroll_date . "')) AND (year(e.hire_date) = year('" . $payroll_date . "'))
-            ,((" . $days . "- day(e.hire_date)+1)*e.salary/" . $days . "),e.salary)) from employee e where emp_id=empID and state != 4 and login_user != 1) )),
-		last_paid_date = '" . $payroll_date . "' WHERE  state = 1 AND type = 3";
-
-            DB::insert(DB::raw($query));
+            $query = "
+            UPDATE loan
+            SET 
+                paid = CASE 
+                    WHEN (paid + (
+                        SELECT rate_employee FROM deduction WHERE id = 3
+                    ) * (
+                        SELECT CASE 
+                            WHEN e.unpaid_leave = 0 THEN 0 
+                            ELSE 
+                                CASE 
+                                    WHEN EXTRACT(MONTH FROM e.hire_date) = EXTRACT(MONTH FROM DATE '" . $payroll_date . "')
+                                         AND EXTRACT(YEAR FROM e.hire_date) = EXTRACT(YEAR FROM DATE '" . $payroll_date . "') 
+                                    THEN (((" . $days . " - EXTRACT(DAY FROM e.hire_date) + 1) * e.salary / " . $days . "))
+                                    ELSE e.salary 
+                                END 
+                        END 
+                        FROM employee e 
+                        WHERE e.emp_id = loan.empID 
+                        AND e.state != 4 
+                        AND e.login_user != 1
+                    )) > amount THEN amount 
+                    ELSE (paid + (
+                        SELECT rate_employee FROM deduction WHERE id = 3
+                    ) * (
+                        SELECT CASE 
+                            WHEN e.unpaid_leave = 0 THEN 0 
+                            ELSE 
+                                CASE 
+                                    WHEN EXTRACT(MONTH FROM e.hire_date) = EXTRACT(MONTH FROM DATE '" . $payroll_date . "')
+                                         AND EXTRACT(YEAR FROM e.hire_date) = EXTRACT(YEAR FROM DATE '" . $payroll_date . "') 
+                                    THEN (((" . $days . " - EXTRACT(DAY FROM e.hire_date) + 1) * e.salary / " . $days . "))
+                                    ELSE e.salary 
+                                END 
+                        END 
+                        FROM employee e 
+                        WHERE e.emp_id = loan.empID 
+                        AND e.state != 4 
+                        AND e.login_user != 1
+                    ))
+                END,
+                amount_last_paid = CASE 
+                    WHEN (paid + (
+                        SELECT rate_employee FROM deduction WHERE id = 3
+                    ) * (
+                        SELECT CASE 
+                            WHEN e.unpaid_leave = 0 THEN 0 
+                            ELSE 
+                                CASE 
+                                    WHEN EXTRACT(MONTH FROM e.hire_date) = EXTRACT(MONTH FROM DATE '" . $payroll_date . "')
+                                         AND EXTRACT(YEAR FROM e.hire_date) = EXTRACT(YEAR FROM DATE '" . $payroll_date . "') 
+                                    THEN (((" . $days . " - EXTRACT(DAY FROM e.hire_date) + 1) * e.salary / " . $days . "))
+                                    ELSE e.salary 
+                                END 
+                        END 
+                        FROM employee e 
+                        WHERE e.emp_id = loan.empID 
+                        AND e.state != 4 
+                        AND e.login_user != 1
+                    )) > amount THEN amount - paid 
+                    ELSE ((
+                        SELECT rate_employee FROM deduction WHERE id = 3
+                    ) * (
+                        SELECT CASE 
+                            WHEN e.unpaid_leave = 0 THEN 0 
+                            ELSE 
+                                CASE 
+                                    WHEN EXTRACT(MONTH FROM e.hire_date) = EXTRACT(MONTH FROM DATE '" . $payroll_date . "')
+                                         AND EXTRACT(YEAR FROM e.hire_date) = EXTRACT(YEAR FROM DATE '" . $payroll_date . "') 
+                                    THEN (((" . $days . " - EXTRACT(DAY FROM e.hire_date) + 1) * e.salary / " . $days . "))
+                                    ELSE e.salary 
+                                END 
+                        END 
+                        FROM employee e 
+                        WHERE e.emp_id = loan.empID 
+                        AND e.state != 4 
+                        AND e.login_user != 1
+                    )) 
+                END,
+                last_paid_date = '" . $payroll_date . "'
+            WHERE state = 1 
+            AND type = 3";
+            
+            DB::update(DB::raw($query));
+            
 
             //INSERT DEDUCTION LOGS
-            $query = "INSERT INTO deduction_logs(empID, description, policy, paid, payment_date)
+            $query = "
+                    INSERT INTO deduction_logs(empID, description, policy, paid, payment_date)
+                    SELECT 
+                        ed.empID AS empID, 
+                        d.name AS description,
+                        CASE 
+                            WHEN d.mode = 1 THEN 'Fixed Amount' 
+                            ELSE CONCAT(CAST(100 * d.percent AS TEXT), '% ( Basic Salary )') 
+                        END AS policy,
+                        CASE 
+                            WHEN e.unpaid_leave = 0 THEN 0
+                            ELSE 
+                                CASE 
+                                    WHEN d.mode = 1 THEN d.amount
+                                    ELSE d.percent * (
+                                        CASE 
+                                            WHEN EXTRACT(MONTH FROM e.hire_date) = EXTRACT(MONTH FROM DATE '" . $payroll_date . "')
+                                                AND EXTRACT(YEAR FROM e.hire_date) = EXTRACT(YEAR FROM DATE '" . $payroll_date . "')
+                                            THEN (
+                                                ((" . $days . " - EXTRACT(DAY FROM e.hire_date) + 1) * e.salary / " . $days . ")
+                                            )
+                                            ELSE e.salary
+                                        END
+                                    )
+                                END
+                        END AS paid,
+                        DATE '" . $payroll_date . "' AS payment_date
+                    FROM 
+                        emp_deductions ed
+                    JOIN 
+                        deductions d ON ed.deduction = d.id
+                    JOIN 
+                        employee e ON e.emp_id = ed.empID
+                    WHERE 
+                        e.state = 1 
+                        AND e.login_user != 1 
+                        AND d.state = 1
+                    ";
 
-	    SELECT ed.empID as empID, name as description,
+                    DB::insert(DB::raw($query));
 
-	    IF( (d.mode = 1), 'Fixed Amount', CONCAT(100*d.percent,'% ( Basic Salary )') ) as policy,
-
-	    IF((e.unpaid_leave = 0),0,IF( (d.mode = 1), d.amount, (d.percent*IF((month(e.hire_date) = month('" . $payroll_date . "')) AND (year(e.hire_date) = year('" . $payroll_date . "'))
-                  ,((" . $days . "- day(e.hire_date)+1)*e.salary/" . $days . "),e.salary)) )) as paid,
-
-	    '" . $payroll_date . "' as payment_date
-
-	    FROM emp_deductions ed,  deductions d, employee e WHERE e.emp_id = ed.empID and e.state = 1 and e.login_user != 1 AND ed.deduction = d.id AND  d.state = 1";
-            DB::insert(DB::raw($query));
             //DEDUCTION LOGS FROM IMPREST REFUND
             $query = "INSERT INTO deduction_logs(empID, description, policy, paid, payment_date)
 
@@ -1725,19 +1903,48 @@ FROM employee e, emp_allowances ea,  allowances a WHERE e.emp_id = ea.empID AND 
             DB::insert(DB::raw($query));
             // DEDUCTION LOGS FOR EXPATRIATES(HOUSING ALLOWANCE REFUND)
             // Housing Allowance has id = 6
-            $query = "INSERT INTO deduction_logs(empID, description, policy, paid, payment_date)
-
-	    	SELECT ea.empID AS empID, 'Housing Allowance Compasation' AS description,
-
-	    IF( (ea.mode = 1), 'Fixed Amount', CONCAT(100*ea.percent,'% ( Basic Salary )') ) AS policy,
-
-	    IF((e.unpaid_leave = 0),0,IF( (ea.mode = 1), ea.amount, (ea.percent*IF((month(e.hire_date) = month('" . $payroll_date . "')) AND (year(e.hire_date) = year('" . $payroll_date . "'))
-                  ,((" . $days . "- day(e.hire_date)+1)*e.salary/" . $days . "),e.salary)) )) AS paid,
-
-	     '" . $payroll_date . "' AS payment_date
-
-	    FROM employee e, emp_allowances ea,  allowances a WHERE e.emp_id = ea.empID AND a.id = ea.allowance AND e.is_expatriate = 1 and e.state = 1 and e.login_user != 1 AND a.id = 6";
+            $query = "
+            INSERT INTO deduction_logs(empID, description, policy, paid, payment_date)
+            SELECT 
+                ea.empID AS empID, 
+                'Housing Allowance Compensation' AS description,
+                CASE 
+                    WHEN ea.mode = 1 THEN 'Fixed Amount'
+                    ELSE CONCAT(CAST(100 * ea.percent AS TEXT), '% ( Basic Salary )') 
+                END AS policy,
+                CASE 
+                    WHEN e.unpaid_leave = 0 THEN 0
+                    ELSE 
+                        CASE 
+                            WHEN ea.mode = 1 THEN ea.amount
+                            ELSE ea.percent * (
+                                CASE 
+                                    WHEN EXTRACT(MONTH FROM e.hire_date) = EXTRACT(MONTH FROM DATE '" . $payroll_date . "')
+                                         AND EXTRACT(YEAR FROM e.hire_date) = EXTRACT(YEAR FROM DATE '" . $payroll_date . "')
+                                    THEN (
+                                        ((" . $days . " - EXTRACT(DAY FROM e.hire_date) + 1) * e.salary / " . $days . ")
+                                    )
+                                    ELSE e.salary
+                                END
+                            )
+                        END
+                END AS paid,
+                DATE '" . $payroll_date . "' AS payment_date
+            FROM 
+                employee e
+            JOIN 
+                emp_allowances ea ON e.emp_id = ea.empID
+            JOIN 
+                allowances a ON a.id = ea.allowance
+            WHERE 
+                e.is_expatriate = 1 
+                AND e.state = 1 
+                AND e.login_user != 1 
+                AND a.id = 6
+            ";
+            
             DB::insert(DB::raw($query));
+            
             //STOP LOAN
             $query = " UPDATE loan SET state = 0 WHERE amount = paid and state = 1";
             DB::insert(DB::raw($query));

@@ -10,6 +10,8 @@
 
 @section('content')
 
+
+
 <?php
   foreach ($employee as $row) {
     $name = $row->fname." ".$row->mname." ".$row->lname;
@@ -20,9 +22,9 @@
     $merital_status = $row->merital_status;
     $birthdate = explode("-",$row->birthdate);
     $hire_date = explode("-",$row->hire_date);
-    $position = $row->pName;
-    $ctype = $row->CONTRACT;
-    $linemanager = $row->LINEMANAGER;
+    $position = $row->pname;
+    $ctype = $row->contract;
+    $linemanager = $row->linemanager;
     $pf_membership_no = $row->pf_membership_no;
     $account_no = $row->account_no;
     $mobile = $row->mobile;
@@ -56,14 +58,14 @@
         $hire_date = $row->hire_date;
         $contract_end = $row->contract_end;
         $departmentID = $row->department;
-        $position = $row->pName;
-        $bankName = $row->bankName;
-        $bankBranch = $row->bankBranch;
+        $position = $row->pname;
+        $bankName = $row->bankname;
+        $bankBranch = $row->bankbranch;
         $positionID = $row->position;
         $ctype = $row->contract_type;
         $emp_shift = $row->shift;
         $line_managerID = $row->line_manager;
-        $linemanager = $row->LINEMANAGER;
+        $linemanager = $row->linemanager;
         $pf_membership_no = $row->pf_membership_no;
         $account_no = $row->account_no;
         $mobile = $row->mobile;

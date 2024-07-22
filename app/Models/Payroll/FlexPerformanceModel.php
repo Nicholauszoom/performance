@@ -1741,6 +1741,7 @@ public function skills_missing($empID)
     public function userprofile($empID)
     {
 
+        // dd($empID);
 
         $query = "SELECT
         e.*,
@@ -1770,8 +1771,9 @@ public function skills_missing($empID)
 ";
 
         $row = DB::select(DB::raw($query));
+        // dd($row);
 
-// return $row;
+return $row;
 
 
     }

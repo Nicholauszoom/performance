@@ -9623,6 +9623,7 @@ class GeneralController extends Controller
 
         // dd($request->landmark);
         $empl = Employee::where('emp_id', $id)->first();
+        
 
         if ($empl) {
             // updating employee data
@@ -9813,6 +9814,7 @@ class GeneralController extends Controller
 
                 $profile->update();
             } else {
+
                 $profile = new EmployeeDetail();
                 $profile->prefix = $request->prefix;
                 // $profile->maide_name = $request->maide_name;
@@ -10036,6 +10038,8 @@ class GeneralController extends Controller
             // Start of Employee Details
             $profile = EmployeeDetail::where('employeeid', $id)->first();
 
+            // dd($request);
+
             if ($profile) {
 
                 $profile->marriage_date = $request->marriage_date;
@@ -10043,7 +10047,7 @@ class GeneralController extends Controller
                 $profile->birthplace = $request->birthplace;
                 $profile->birthcountry = $request->birthcountry;
                 $profile->religion = $request->religion;
-                // $profile->employeeID = $request->employeeID;
+                $profile->employeeid = $request->employeeID;
                 // $profile->passport_number = $request->passport_number;
                 // $profile->landmark = $request->landmark;
                 // $profile->prefix = $request->prefix;
@@ -10058,7 +10062,7 @@ class GeneralController extends Controller
                 $profile->birthplace = $request->birthplace;
                 $profile->birthcountry = $request->birthcountry;
                 $profile->religion = $request->religion;
-                //  $profile->employeeID = $request->employeeID;
+                 $profile->employeeid = $request->employeeID;
                 // $profile->passport_number = $request->passport_number;
                 // $profile->former_title = $request->former_title;
                 $profile->divorced_date = $request->divorced_date;
@@ -11489,6 +11493,7 @@ class GeneralController extends Controller
     {
 
         $id = auth()->user()->emp_id;
+        // dd($id);
         
         $extra = $request->input('extra');
 
