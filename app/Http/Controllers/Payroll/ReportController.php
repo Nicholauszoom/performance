@@ -3191,7 +3191,7 @@ EOD;
         if ($request->type == 1) {  //Return pay checklist report
 
             $pdf = Pdf::loadView('reports.payrolldetails.pay_checklist', $data)->setPaper('a4', 'potrait');
-            return $pdf->download('paychecklist-' . $date . '.pdf');
+            return $pdf->download('paychecklist-'.$data['currency'].'-' . $date . '.pdf');
         } else {
 
             return view('reports.payrolldetails.pay_checklist_datatable', $data);
