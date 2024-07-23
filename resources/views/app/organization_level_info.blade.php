@@ -29,8 +29,8 @@
             foreach ($category as $row) {
                 $levelID = $row->id;
                 $name = $row->name;
-                $minSalary = $row->minSalary;
-                $maxSalary = $row->maxSalary;
+                $minSalary = $row->minsalary;
+                $maxSalary = $row->maxsalary;
                 //$state = $row->state;
             }
 

@@ -57,8 +57,8 @@
                                     <tr id="domain {{ $row->id }}">
                                         <td width="1px">{{ $SNo }}</td>
                                         <td>{{ $row->name }}</td>
-                                        <td>{{ $row->minSalary }}</td>
-                                        <td>{{ $row->maxSalary }}</td>
+                                        <td>{{ $row->minsalary }}</td>
+                                        <td>{{ $row->maxsalary }}</td>
                                         <?php if(session('mng_org')){ ?>
                                         <td class="options-width">
                                             <a
@@ -115,8 +115,8 @@
                                 <tr>
                                     <td>{{ $SNo++ }}</td>
                                     <td>{{ $row->name }}</td>
-                                    <td>{{ number_format($row->minSalary) }}</td>
-                                    <td>{{ number_format($row->maxSalary) }}</td>
+                                    <td>{{ number_format($row->minsalary) }}</td>
+                                    <td>{{ number_format($row->maxsalary) }}</td>
                                     <td align="center">
 
                                         <a href="{{ route('flex.organization_level_info', [$row->id]) }}"

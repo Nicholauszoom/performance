@@ -1398,6 +1398,8 @@ public function updatedepartment($data, $id)
     {
         $query = "SELECT ol.* FROM organization_level ol";
 
+        // dd(DB::select(DB::raw($query)));
+
         return DB::select(DB::raw($query));
     }
 

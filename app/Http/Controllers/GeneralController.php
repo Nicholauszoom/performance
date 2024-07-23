@@ -4791,6 +4791,7 @@ class GeneralController extends Controller
 
         $data['title'] = "Employee";
         $data['parent'] = "Inactive employee";
+        // dd($data);
 
         // dd($data['employee2']);
         return view('app.inactive_employee', $data);
@@ -8790,6 +8791,7 @@ class GeneralController extends Controller
         $normal_days_overtime_amount = ($employee_actual_salary / 195) * 1.5 * $normalDays;
         $public_overtime_amount = ($employee_actual_salary / 195) * 2.0 * $publicDays;
 
+        // dd($salaryEnrollment);
         $total_gross = $salaryEnrollment +
             $normal_days_overtime_amount +
             $public_overtime_amount +

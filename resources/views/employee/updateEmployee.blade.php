@@ -36,15 +36,15 @@
         $hire_date = $row->hire_date;
         $contract_end = $row->contract_end;
         $departmentID = $row->department;
-        $position = $row->pName;
-        $bankName = $row->bankName;
-        $bankBranch = $row->bankBranch;
+        $position = $row->pname;
+        $bankName = $row->bankname;
+        $bankBranch = $row->bank_branch;
         $positionID = $row->position;
         $ctype = $row->contract_type;
         $cost_center = $row->cost_center;
         $emp_shift = $row->shift;
         $line_managerID = $row->line_manager;
-        $linemanager = $row->LINEMANAGER;
+        $linemanager = $row->line_manager;
         $pf_membership_no = $row->pf_membership_no;
         $account_no = $row->account_no;
         $mobile = $row->mobile;
@@ -533,7 +533,7 @@
                             <select required name="line_manager" class="select2_single form-control select" data-width="1%">
                                 <option> Select Line Manager </option>
                                 <?php foreach ($ldrop as $row){ ?>
-                                <option <?php if($line_managerID == $row->empID){ ?> selected <?php } ?> value="<?php echo $row->empID; ?>"><?php echo $row->NAME; ?></option>
+                                <option <?php if($line_managerID == $row->empid){ ?> selected <?php } ?> value="<?php echo $row->empid; ?>"><?php echo $row->name; ?></option>
                                 <?php } ?>
                             </select>
                             <button class="btn btn-main">UPDATE</button>

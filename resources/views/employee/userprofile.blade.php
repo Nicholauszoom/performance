@@ -27,8 +27,8 @@ $brandSetting = \App\Models\BrandSetting::firstOrCreate();
         $birthdate = explode('-', $row->birthdate);
         $hire_date = explode('-', $row->hire_date);
         $contract_end = $row->contract_end;
-        $position = $row->pName;
-        $ctype = $row->CONTRACT;
+        $position = $row->pname;
+        $ctype = $row->contract;
         $linemanager = $row->line_manager;
         $last_updated = $row->updated_at;
 

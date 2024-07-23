@@ -36,24 +36,24 @@
     <tbody>
       @foreach ( $employee1 as $row )
           <tr id="{{ 'emp'.$row->emp_id }}">
-            <td width="1px"> {{ $row->SNo }}</td>
+            <td width="1px"> {{ $row->sno }}</td>
             <td>
               <a
                 title="More Details"
                 href="<?php echo  url('') .'/flex/userprofile/'.$row->emp_id; ?>"
-              >{{ $row->NAME }}</a>
+              >{{ $row->name }}</a>
             </td>
             <td > {{ $row->gender }}</td>
             <td hidden> {{ $row->emp_id }}</td>
             <td>
               <?php echo "<b>Department: </b>".$row->DEPARTMENT."<br><b>Position: </b>".$row->POSITION; ?>
             </td>
-            <td><?php echo $row->LINEMANAGER; ?></td>
+            <td><?php echo $row->linemanager; ?></td>
             <td><?php echo "<b>Email: </b>".$row->email."<br><b>Mobile: </b>".$row->mobile; ?></td>
             <td ><?php echo $row->dated;  ?></td>
 
             <td class="options-width">
-              <?php if($row->isRequested==0){
+              <?php if($row->isrequested==0){
                 if( session('mng_emp')){ ?>
                   <a href="javascript:void(0)" title="Request Activation" class="icon-2 info-tooltip" id="reactivate">
                     <button type="button" class="btn btn-main btn-xs"><i class="ph-check"></i></button>
