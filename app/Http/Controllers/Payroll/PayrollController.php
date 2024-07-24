@@ -174,6 +174,7 @@ class PayrollController extends Controller
         $data['employee'] = $this->payroll_model->customemployee();
         $data['title'] = "Financial Reports";
         return view('app.financial_reports', $data);
+        
     }
 
     public function employee_payslip()
@@ -312,7 +313,6 @@ class PayrollController extends Controller
         // dd($previous_payroll_month_raw);
         $data['payroll_date'] = $request->payrolldate;
         $data['total_previous_gross'] = !empty($previous_payroll_month) ? $this->reports_model->s_grossMonthly($previous_payroll_month) : 0;
-
         $data['total_current_gross'] = $this->reports_model->s_grossMonthly1($current_payroll_month);
         $data['count_previous_month'] = !empty($previous_payroll_month) ? $this->reports_model->s_count($previous_payroll_month) : 0;
         $data['count_current_month'] = $this->reports_model->s_count1($current_payroll_month);

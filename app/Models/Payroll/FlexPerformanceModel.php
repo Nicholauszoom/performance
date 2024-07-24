@@ -2406,6 +2406,7 @@ IF(
 
     public function assign_allowance($data)
     {
+        // dd($data);
         DB::table('emp_allowances')->insert($data);
         return true;
     }

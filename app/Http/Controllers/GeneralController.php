@@ -4791,7 +4791,7 @@ class GeneralController extends Controller
 
         $data['title'] = "Employee";
         $data['parent'] = "Inactive employee";
-        // dd($data);
+        // dd($data); 
 
         // dd($data['employee2']);
         return view('app.inactive_employee', $data);
@@ -5737,27 +5737,34 @@ class GeneralController extends Controller
 
         $previous_payroll_month = date('Y-m-d', strtotime($previous_payroll_month));
 
+        // dd($previous_payroll_month);
+
         $last_day_of_month = date('Y-m-t', strtotime($previous_payroll_month));
+        // dd($last_day_of_month);
 
         $days = intval(date('t', strtotime($previous_payroll_month)));
+        // dd($days);
 
         $startDate = $previous_payroll_month;
         $endDate = $last_day_of_month;
         $daysInMonth = Carbon::parse($endDate)->daysInMonth; // Get the number of days in the month
 
-        $employees = Employee::select([
-            'emp_id',
-            DB::raw("({$daysInMonth} - DAY(hire_date) + 1) * salary / 30 as partialpayment"),
-
-        ])
-            ->where(function ($query) use ($startDate, $endDate) {
-                $query->where('hire_date', '>', $startDate,)
-                    ->where('hire_date', '<=', $endDate);
-            })
-            ->get();
+        // dd($endDate);
+        $employees = DB::table('employee')
+        ->select([
+        'emp_id',
+        DB::raw("({$daysInMonth} - EXTRACT(DAY FROM hire_date) + 1) * salary / 30 as partialpayment")
+    ])
+    ->where('hire_date', '>', $startDate)
+    ->where('hire_date', '<=', $endDate)
+    ->get();
+        
+    
+        // $employees = DB::table('employee')->get();
+        //    dd($employees);
 
         foreach ($employees as $employee) {
-
+            
             // dd($employee->partialpayment);
             $data = array(
                 "name" => "Arrears",
@@ -5771,13 +5778,15 @@ class GeneralController extends Controller
                 "state" => 1, //1 active state
                 "percent" => 0,
             );
-
+           
+            // dd($data);
             $result = DB::table('allowances')->insertGetId($data);
 
             // $result = $this->flexperformance_model->addAllowance($data);
 
+            
             $data = array(
-                'empID' => $employee->emp_id,
+                'empid' => $employee->emp_id,
                 'allowance' => $result,
                 'amount' => $employee->partialpayment,
                 'mode' => "1", //fixed
@@ -5785,6 +5794,7 @@ class GeneralController extends Controller
                 'currency' => "TZS",
                 'rate' => 1,
             );
+            // dd($data);
 
             $result = $this->flexperformance_model->assign_allowance($data);
         }
@@ -5800,7 +5810,6 @@ class GeneralController extends Controller
             $data['pending_payroll'] = 0;
             return view('payroll.submit_inputs', $data);
         }
-
     }
 
 
@@ -5878,6 +5887,7 @@ class GeneralController extends Controller
 
             public function submitInputs(Request $request)
             {
+                // dd($request);
                 // Authenticate user
                 $this->authenticateUser('edit-payroll');
             
@@ -5899,7 +5909,9 @@ class GeneralController extends Controller
                     \Log::info('Executing query: ' . $query);
                     
                     // Execute the count query using Laravel's DB::select method
+                 
                     $result = DB::select(DB::raw($query));
+
                     
                     // Check if result is found
                     if (count($result) > 0 && $result[0]->total > 0) {
@@ -5917,8 +5929,9 @@ class GeneralController extends Controller
                         return response()->json(['total' => 0]);
                     }
                 }
-            
+           
                 // Add previous month salary arrears
+              
                 $this->addPrevMonthSalaryArrears($date);
                 
             
@@ -5927,7 +5940,7 @@ class GeneralController extends Controller
                     // dd($this->payroll_model->checkPayrollMonth($date));
                     // Check if the payroll month exists and if inputs for the month have already been submitted
                     // dd($this->payroll_model->checkPayrollMonth($formattedDate));
-                    
+                    // dd($request);
                     $month = $this->payroll_model->checkPayrollMonth($date);
                     // dd($month);
                     $submission = $this->payroll_model->checkInputMonth($date);
@@ -5937,9 +5950,11 @@ class GeneralController extends Controller
                             // Get active allowances and log financial details
                             $allowances = $this->payroll_model->getAssignedAllowanceActive($date);
                             foreach ($allowances as $row) {
+                               
                                 if ($row->state == 1) {
+
                                     SysHelpers::FinancialLogs(
-                                        $row->empID, 
+                                        $row->empid, 
                                         $row->name,  
                                         ($row->amount != 0) ? number_format($row->amount, 2) . ' ' . $row->currency : $row->percent . '%', 
                                         ($row->amount != 0) ? number_format($row->amount, 2) . ' ' . $row->currency : $row->percent . '%', 
@@ -5952,6 +5967,7 @@ class GeneralController extends Controller
                             // Get assigned deductions and log financial details
                             $deductions = $this->payroll_model->getAssignedDeduction();
                             foreach ($deductions as $row) {
+                                // dd($row);
                                 SysHelpers::FinancialLogs(
                                     $row->empID, 
                                     $row->name,  
@@ -5972,6 +5988,7 @@ class GeneralController extends Controller
                         return response()->json(['message' => 'You can\'t submit inputs to a previous payroll month']);
                     }
                 } else {
+                
                     // If not a POST request, return the view for input submission
                     return view('payroll.submit_inputs', $data);
                 }

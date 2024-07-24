@@ -3177,10 +3177,12 @@ as gross,
 
     public function getAssignedAllowanceActive($payroll_date)
     {
+        // dd($payroll_date);
 
         $last_date = date("Y-m-t", strtotime(now())); //Last day of the month
 
         $year = date('Y', strtotime($payroll_date));
+        
 
         // Calculate the number of days in the month of the payroll_date
         $days = intval(date('t', strtotime($payroll_date)));
@@ -3229,6 +3231,7 @@ WHERE
 
 $row = DB::select(DB::raw($query));
 
+
 return $row;
 
     
@@ -3248,8 +3251,9 @@ return $row;
     {
 
 
-        $query = "SELECT ed.\"empID\",ed.deduction,d.* from emp_deductions ed,deductions d where d.id = ed.deduction";
+        $query = "SELECT ed.\"empID\",ed.deduction,d.* from emp_deductions ed, deductions d where d.id = ed.deduction";
         $row = DB::select(DB::raw($query));
+        // dd($row);
 
         return $row;
     }
@@ -3267,6 +3271,7 @@ return $row;
         // Execute the query with parameter binding
         // dd(DB::select(DB::raw($query), [$month]));
         $row = DB::select(DB::raw($query), [$month]);
+        
     
         // dd( $row[0]->total ?? 0);
         // Return the total count
@@ -3286,6 +3291,8 @@ return $row;
 
     // Execute the query with parameter binding
     $row = DB::select(DB::raw($query), [$month]);
+
+    // dd($row);
 
     // dd($row);
     // Return the total count

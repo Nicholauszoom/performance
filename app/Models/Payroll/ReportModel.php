@@ -3288,12 +3288,13 @@ and e.branch = b.code and e.line_manager = el.emp_id and c.id = e.contract_type 
         $query = "payroll_date";
         $condition = "%" . $date . "%";
         $row = DB::table('payroll_months')
-    ->where(DB::raw("CAST(payroll_date AS TEXT)"), 'like', $condition)
-    ->select(DB::raw($query))
-    ->first();
+      ->where(DB::raw("CAST(payroll_date AS TEXT)"), 'like', $condition)
+      ->select(DB::raw($query))
+      ->first();
+
+    //   dd($row);
 
         if ($row) {
-
             return $row->payroll_date;
         } else {
             return null;

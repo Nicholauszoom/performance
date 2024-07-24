@@ -24,6 +24,7 @@
                     <div class="col-md-12">
                         <form autocomplete="off" id="submitInputs" method="POST">
                             <div class="mb-3 row">
+                               
                                 @if($pending_payroll == 0)
                                     <div class="col-7 row">
                                         <label class="form-label col-md-3 text-center font-bold">
