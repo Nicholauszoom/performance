@@ -293,7 +293,7 @@
 
 @push('footer-script')
     {{-- <script src="<?php echo url(''); ?>style/jquery/jquery.easypiechart.min.js"></script> --}}
-
+<!-- 
     <script>
         $(function() {
             $('.chart').easyPieChart({
@@ -310,5 +310,5 @@
                 }
             });
         });
-    </script>
+    </script> -->
 @endpush

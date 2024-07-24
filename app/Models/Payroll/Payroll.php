@@ -245,7 +245,7 @@ class Payroll extends Model
 
 IF( (ea.mode = 1), 'Fixed Amount', CONCAT(100*ea.percent,'% ( Basic Salary )') ) AS policy,
 
-IF((e.unpaid_leave = 0)
+IF((e.unpaid_leave = 9)
 ,0,IF((ea.mode = 1),
           ea.amount,
           IF(a.type = 1,IF(DATEDIFF('" . $last_date . "',e.hire_date) < 365,
@@ -1431,7 +1431,8 @@ FROM employee e, emp_allowances ea,  allowances a WHERE e.emp_id = ea.empID AND 
              '" . $payroll_date . "' as payroll_date,
 
              '" . $year . "' as years,
-             e.salary as actual_salary
+             IF((e.unpaid_leave = 0)
+            ,0,e.salary) as actual_salary
              FROM employee e, pension_fund pf, bank bn, bank_branch bb WHERE e.pension_fund = pf.id AND  e.bank = bn.id AND bb.id = e.bank_branch AND e.state = 1 and e.login_user != 1";
             DB::insert(DB::raw($query));
 
@@ -1608,7 +1609,7 @@ e.salary),
 
 IF( (ea.mode = 1), 'Fixed Amount', CONCAT(100*ea.percent,'% ( Basic Salary )') ) AS policy,
 
-IF((e.unpaid_leave = 0)
+IF((e.unpaid_leave = 9)
 ,0,IF((ea.mode = 1),
           ea.amount,
           IF(a.type = 1,IF(DATEDIFF('" . $last_date . "',e.hire_date) < 365,
@@ -2780,7 +2781,9 @@ as gross,
 
              '" . $payroll_date . "' as payroll_date,
              '" . $year . "' as years,
-             e.salary as actual_salary
+
+             IF((e.unpaid_leave = 0)
+,0,e.salary) as actual_salary
              FROM employee e, pension_fund pf, bank bn, bank_branch bb WHERE e.pension_fund = pf.id AND  e.bank = bn.id AND bb.id = e.bank_branch AND e.state = 1 and e.login_user != 1";
             DB::insert(DB::raw($query));
             $query = " UPDATE payroll_months SET state = 0, appr_author = '" . $empID . "', appr_date = '" . $todate . "'  WHERE state = 1 ";
