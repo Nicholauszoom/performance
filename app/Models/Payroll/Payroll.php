@@ -277,11 +277,19 @@ class Payroll extends Model
 
                 IF( (ea.mode = 1), 'Fixed Amount', CONCAT(100*ea.percent,'% ( Basic Salary )') ) AS policy,
 
+<<<<<<< HEAD
                 IF((e.unpaid_leave = 0)
                 ,0,IF((ea.mode = 1),
                         ea.amount,
                         IF(a.type = 1,IF(DATEDIFF('" . $last_date . "',e.hire_date) < 365,
                         ((DATEDIFF('" . $last_date . "',e.hire_date)+1)/365)*e.salary,ea.percent*e.salary),
+=======
+IF((e.unpaid_leave = 9)
+,0,IF((ea.mode = 1),
+          ea.amount,
+          IF(a.type = 1,IF(DATEDIFF('" . $last_date . "',e.hire_date) < 365,
+          ((DATEDIFF('" . $last_date . "',e.hire_date)+1)/365)*e.salary,ea.percent*e.salary),
+>>>>>>> main_join
 
                         (ea.percent*
                         IF((month(e.hire_date) = month('" . $payroll_date . "')) AND (year(e.hire_date) = year('" . $payroll_date . "')),
@@ -1460,7 +1468,8 @@ FROM employee e, emp_allowances ea,  allowances a WHERE e.emp_id = ea.empID AND 
              '" . $payroll_date . "' as payroll_date,
 
              '" . $year . "' as years,
-             e.salary as actual_salary
+             IF((e.unpaid_leave = 0)
+            ,0,e.salary) as actual_salary
              FROM employee e, pension_fund pf, bank bn, bank_branch bb WHERE e.pension_fund = pf.id AND  e.bank = bn.id AND bb.id = e.bank_branch AND e.state = 1 and e.login_user != 1";
             DB::insert(DB::raw($query));
 
@@ -1630,6 +1639,7 @@ e.salary),
   
             DB::insert(DB::raw($query));
             //INSERT ALLOWANCES
+
             $query = "
             INSERT INTO allowance_logs(empID, description, policy, amount, payment_date, benefit_in_kind)
             SELECT 
@@ -1671,6 +1681,65 @@ e.salary),
                 AND e.state = 1 
                 AND e.login_user != 1";
             
+
+            $query = "INSERT INTO allowance_logs(empID, description, policy, amount, payment_date,benefit_in_kind)
+
+            SELECT ea.empID AS empID, a.name AS description,
+
+
+
+
+IF( (ea.mode = 1), 'Fixed Amount', CONCAT(100*ea.percent,'% ( Basic Salary )') ) AS policy,
+
+IF((e.unpaid_leave = 9)
+,0,IF((ea.mode = 1),
+          ea.amount,
+          IF(a.type = 1,IF(DATEDIFF('" . $last_date . "',e.hire_date) < 365,
+          ((DATEDIFF('" . $last_date . "',e.hire_date)+1)/365)*e.salary,ea.percent*e.salary),
+
+          (ea.percent*
+          IF((month(e.hire_date) = month('" . $payroll_date . "')) AND (year(e.hire_date) = year('" . $payroll_date . "')),
+          ((" . $days . " - (day(e.hire_date)+1))*e.salary/" . $days . "),e.salary)
+           )
+
+      )
+      )
+
+  ) AS amount,
+
+
+
+ '" . $payroll_date . "' AS payment_date,
+ a.Isbik as benefit_in_kind
+
+FROM employee e, emp_allowances ea,  allowances a WHERE e.emp_id = ea.empID AND a.id = ea.allowance AND a.state = 1 AND e.state = 1 and e.login_user != 1";
+            DB::insert(DB::raw($query));
+            //INSERT BONUS
+            $query = " INSERT INTO allowance_logs(empID, description, policy, amount, payment_date)
+
+	    SELECT b.empID AS empID, bt.name AS description,
+
+	    'Fixed Amount' AS policy,
+
+	    IF((e.unpaid_leave = 0),0,SUM(b.amount)) AS amount,
+
+	    '" . $payroll_date . "' AS payment_date
+
+	    FROM employee e,  bonus b, bonus_tags bt WHERE e.emp_id =  b.empID and bt.id = b.name AND b.state = 1 and e.state = 1 and e.login_user != 1 GROUP BY b.empID, bt.name";
+            DB::insert(DB::raw($query));
+            //INSERT OVERTIME
+            $query = " INSERT INTO allowance_logs(empID, description, policy, amount, payment_date)
+	    SELECT o.empID AS empID,
+        IF(o.overtime_category = 1,'N-Overtime','S-Overtime') AS description,
+
+	    'Fixed Amount' AS policy,
+
+        IF((e.unpaid_leave = 0),0,SUM(o.amount)) AS amount,
+
+	    '" . $payroll_date . "' AS payment_date
+
+	    FROM  employee e, overtimes o WHERE  o.empID =  e.emp_id and e.state = 1 and e.login_user != 1 GROUP BY o.empID, o.overtime_category";
+
             DB::insert(DB::raw($query));
             
 
@@ -3012,7 +3081,9 @@ as gross,
 
              '" . $payroll_date . "' as payroll_date,
              '" . $year . "' as years,
-             e.salary as actual_salary
+
+             IF((e.unpaid_leave = 0)
+,0,e.salary) as actual_salary
              FROM employee e, pension_fund pf, bank bn, bank_branch bb WHERE e.pension_fund = pf.id AND  e.bank = bn.id AND bb.id = e.bank_branch AND e.state = 1 and e.login_user != 1";
 
              DB::insert(DB::raw($query));

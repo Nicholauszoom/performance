@@ -8899,7 +8899,6 @@ class GeneralController extends Controller
         $employee = Auth::User()->id;
         $uid = Auth::User()->position;
 
-        // $role = UserRole::where('user_id', $employee)->first();
         $role = Position::where('id', $uid)->first();
 
         $role_id = $role->id;
@@ -8907,7 +8906,6 @@ class GeneralController extends Controller
         $terminate = Approvals::where('process_name', 'Termination Approval')->first();
         $roles = Role::where('id', $role_id)->first();
         $level = ApprovalLevel::where('role_id', $role_id)->where('approval_id', $terminate->id)->first();
-        // dd($level);
 
 
         if (SysHelpers::ApprovalLastLevel("Termination Approval")) {
@@ -9059,8 +9057,15 @@ class GeneralController extends Controller
         $role_id = $role->role_id;
         $terminate = Approvals::where('process_name', 'Promotion Approval')->first();
         $roles = Role::where('id', $role_id)->first();
-        $data['level'] = ApprovalLevel::where('role_id', $role_id)->where('approval_id', $terminate->id)->first();
-
+        // dd($terminate);
+        if ($terminate !== null) {
+            $data['level'] = ApprovalLevel::where('role_id', $role_id)
+                                           ->where('approval_id', $terminate->id)
+                                           ->first();
+        } else {
+            $data['level'] = null; // or any default value you want to set
+        }
+        
         $data['check'] = 'Approved By ' . $roles->name;
         $data['parent'] = 'Workforce';
         $data['child'] = 'Promotion|Increment';
@@ -9120,6 +9125,7 @@ class GeneralController extends Controller
         $old->effective_date = $request->effective_date;
         $old->created_by = Auth::user()->id;
         $old->action = "promoted";
+        // dd($old);
         $old->save();
         // saving new employee data
 
@@ -11008,27 +11014,6 @@ class GeneralController extends Controller
         // return view('reports.employee-data', $data, compact('details', 'emergency', 'spouse', 'children', 'parents', 'childs'));
     }
 
-    // Start of leave approvals
-
-    // public function LeaveApprovals(Request $request)
-    // {
-
-    //     $empID = Auth()->user()->emp_id;
-    //     $data['employees'] = EMPL::get();
-
-    //     $data['approvals'] = LeaveApproval::orderBy('created_at', 'desc')->get();
-
-    //     $data['parent'] = 'Settings';
-    //     $data['child'] = 'Leave Approval';
-
-    //     if ($request->isMethod('post')) {
-
-    //         // dd("uuuuuuuuuuuuuuuuuuuuuu");
-    //         return Excel::download(new LeaveApprovalsExport($data['approvals']), 'leave_approvals.xlsx');
-    //     }
-
-    //     return view('setting.leave-approval', $data);
-    // }
 
     public function LeaveApprovals(Request $request)
     {
@@ -11488,11 +11473,8 @@ class GeneralController extends Controller
         $grievance->description = $request->description;
         $grievance->empid = Auth::user()->emp_id;
         if ($request->hasfile('attachment')) {
-            // $request->validate([
-            //     'attachment' => 'required|clamav',
-            // ]);
             $request->validate([
-                'attachment' => 'mimes:jpg,png,jpeg,pdf|max:2048',
+                'attachment' => 'mimes:png,pdf|max:2048',
             ]);
             $newAttachmentName = $request->attachment->hashName();
             $request->attachment->move(public_path('storage\grieavences-attachments'), $newAttachmentName);
