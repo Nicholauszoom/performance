@@ -447,9 +447,29 @@ FROM employee e, department dpt, position p, branch br, contract ct, pension_fun
         $raw_date = explode('-', $date);
         $terminationDate = $raw_date[0] . '-' . $raw_date[1];
 
-        $query = "SELECT @s:=@s+1 sNo, CONCAT(e.fname,' ', IF(e.mname != null,e.mname,' '),' ', e.lname) as name, e.tin as tin, e.national_id as national_id,e.emp_id, e.postal_address as postal_address, e.postal_city as postal_city, tm.*
-        FROM employee AS e, (SELECT @s:=0) AS s, terminations tm WHERE tm.employeeID = e.emp_id AND e.state = 4 and e.contract_type != 2 AND tm.terminationDate LIKE '%" . $terminationDate . "%' order by e.emp_id ASC
-     ";
+    //     $query = "SELECT @s:=@s+1 sNo, CONCAT(e.fname,' ', IF(e.mname != null,e.mname,' '),' ', e.lname) as name, e.tin as tin, e.national_id as national_id,e.emp_id, e.postal_address as postal_address, e.postal_city as postal_city, tm.*
+    //     FROM employee AS e, (SELECT @s:=0) AS s, terminations tm WHERE tm.employeeID = e.emp_id AND e.state = 4 and e.contract_type != 2 AND tm.terminationDate LIKE '%" . $terminationDate . "%' order by e.emp_id ASC
+    //  ";
+
+    $query = "SELECT
+    ROW_NUMBER() OVER (ORDER BY e.emp_id) AS sNo,
+    CONCAT(e.fname, ' ', COALESCE(e.mname, ''), ' ', e.lname) AS name,
+    e.tin AS tin,
+    e.national_id AS national_id,
+    e.emp_id,
+    e.postal_address AS postal_address,
+    e.postal_city AS postal_city,
+    tm.*
+FROM
+    employee AS e
+JOIN
+    terminations tm ON tm.\"employeeID\" = e.emp_id
+WHERE
+    e.state = 4
+    AND e.contract_type != '2'
+    AND tm.\"terminationDate\"::text LIKE '%' || $terminationDate || '%'
+ORDER BY
+    e.emp_id ASC";
 
 
         return DB::select(DB::raw($query));
@@ -459,32 +479,57 @@ FROM employee e, department dpt, position p, branch br, contract ct, pension_fun
         $raw_date = explode('-', $date);
         $terminationMonth = $raw_date[0] . '-' . $raw_date[1];
 
-        $query = "
-            SELECT
-                CONCAT(e.fname, ' ', IF(e.mname IS NOT NULL, e.mname, ' '), ' ', e.lname) AS name,
-                e.tin AS tin,
-                e.national_id AS national_id,
-                e.emp_id,
-                e.postal_address AS postal_address,
-                e.postal_city AS postal_city,
-                pl.*
-            FROM
-                employee AS e
-            JOIN
-                payroll_logs pl ON pl.empID = e.emp_id
-            LEFT JOIN
-                (SELECT employeeID
-                 FROM terminations
-                 WHERE DATE_FORMAT(terminationDate, '%Y-%m') <= '" . $terminationMonth . "') AS tm
-                ON tm.employeeID = e.emp_id
-            WHERE
-                (e.state = 1 OR e.state = 4)
-                AND e.contract_type != 2
-                AND pl.payroll_date = '" . $date . "'
-                AND tm.employeeID IS NULL
-            ORDER BY
-                e.emp_id ASC
-        ";
+        // $query = "
+        //     SELECT
+        //         CONCAT(e.fname, ' ', IF(e.mname IS NOT NULL, e.mname, ' '), ' ', e.lname) AS name,
+        //         e.tin AS tin,
+        //         e.national_id AS national_id,
+        //         e.emp_id,
+        //         e.postal_address AS postal_address,
+        //         e.postal_city AS postal_city,
+        //         pl.*
+        //     FROM
+        //         employee AS e
+        //     JOIN
+        //         payroll_logs pl ON pl.empID = e.emp_id
+        //     LEFT JOIN
+        //         (SELECT employeeID
+        //          FROM terminations
+        //          WHERE DATE_FORMAT(terminationDate, '%Y-%m') <= '" . $terminationMonth . "') AS tm
+        //         ON tm.employeeID = e.emp_id
+        //     WHERE
+        //         (e.state = 1 OR e.state = 4)
+        //         AND e.contract_type != 2
+        //         AND pl.payroll_date = '" . $date . "'
+        //         AND tm.employeeID IS NULL
+        //     ORDER BY
+        //         e.emp_id ASC
+        // ";
+
+        $query = "SELECT
+        e.fname || ' ' || COALESCE(e.mname, '') || ' ' || e.lname AS name,
+        e.tin,
+        e.national_id,
+        e.emp_id,
+        e.postal_address,
+        e.postal_city,
+        row_to_json(pl.*) AS pl_columns
+    FROM
+        employee AS e
+    JOIN
+        payroll_logs pl ON pl.\"empID\" = e.emp_id
+    LEFT JOIN
+        (SELECT \"employeeID\"
+         FROM terminations
+         WHERE to_char(\"terminationDate\", 'YYYY-MM') <= to_char($terminationMonth, 'YYYY-MM')) AS tm
+    ON tm.\"employeeID\" = e.emp_id
+    WHERE
+        (e.state = 1 OR e.state = 4)
+        AND e.contract_type != '2'
+        AND pl.payroll_date = TO_DATE(CAST($date AS TEXT), 'YYYYMMDD')
+        AND tm.\"employeeID\" IS NULL
+    ORDER BY
+        e.emp_id ASC";
 
         return DB::select(DB::raw($query));
     }
@@ -565,7 +610,7 @@ SUM(pl.taxdue) as sum_taxdue FROM payroll_logs pl, employee e WHERE e.emp_id = p
 SUM(pl.salary+pl.allowances) as sum_gross,
 SUM(pl.pension_employee) as sum_deductions,
 SUM(pl.salary+pl.allowances-pl.pension_employee) as sum_taxable,
-SUM(pl.taxdue) as sum_taxdue FROM payroll_logs pl, employee e WHERE e.emp_id = pl.empID and e.contract_type != 2 AND pl.payroll_date = '" . $date . "'  GROUP BY pl.payroll_date";
+SUM(pl.taxdue) as sum_taxdue FROM payroll_logs pl, employee e WHERE e.emp_id = pl.\"empID\" and e.contract_type != '2' AND pl.payroll_date = '" . $date . "'  GROUP BY pl.payroll_date";
 
         return DB::select(DB::raw($query));
     }
@@ -952,9 +997,9 @@ FROM payroll_logs pl, employee e WHERE e.emp_id = pl.empID and e.contract_type =
         WHERE e.contract_type != '2'
           AND e.salary != 0.00
           AND pl.\"empID\" = '1'
-        
+
         UNION ALL
-        
+
         SELECT ROW_NUMBER() OVER () AS SNo,
                e.pf_membership_no,
                e.emp_id,
@@ -977,11 +1022,11 @@ FROM payroll_logs pl, employee e WHERE e.emp_id = pl.empID and e.contract_type =
         WHERE e.contract_type != '2'
           AND e.salary != 0.00
           AND tm.\"employeeID\" ='1'
-        
+
         ORDER BY payment_date ASC;
         ";
-        
-        
+
+
 
 
 

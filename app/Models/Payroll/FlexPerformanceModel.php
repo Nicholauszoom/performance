@@ -347,7 +347,7 @@ public function getCurrentStrategy()
     {
         $query = DB::table('company_info')->first();
 
-        
+
 
         return $query;
     }
@@ -1948,15 +1948,15 @@ public function getpropertyexit($id)
 
             // dd($query);
 
-            
+
         return true;
     }
 
     public function addDeduction($data)
     {
-         
+
         DB::table('deductions')->insert($data);
-       
+
         return true;
     }
 
@@ -2671,8 +2671,8 @@ IF(
 
     public function payroll_year_list()
     {
-        $query = "SELECT DISTINCT TO_CHAR(payroll_date, 'YYYY') AS year 
-        FROM payroll_logs 
+        $query = "SELECT DISTINCT TO_CHAR(payroll_date, 'YYYY') AS year
+        FROM payroll_logs
         ORDER BY TO_CHAR(payroll_date, 'YYYY') DESC";
                 return DB::select(DB::raw($query));
     }
@@ -3881,7 +3881,7 @@ d.department_pattern AS child_department, d.parent_pattern as parent_department 
         $query = "SELECT count(hod) as DETCOUNT FROM department WHERE hod ='" . $id . "'";
         return DB::select(DB::raw($query));
     }
-    
+
     public function role($id)
 {
     // Initial query to fetch positions and related departments
@@ -3919,7 +3919,7 @@ d.department_pattern AS child_department, d.parent_pattern as parent_department 
     return $result;
 }
 
-    
+
 
     public function rolecount($id)
     {
@@ -4671,7 +4671,7 @@ FROM payroll_logs pl, employee e, position p, department d where e.emp_id=pl.emp
 
             public function my_grievances($empID)
         {
-            $result = "SELECT 
+            $result = "SELECT
         ROW_NUMBER() OVER () as \"SNo\",
         g.*,
         CAST(g.timed as date) as \"DATED\"
