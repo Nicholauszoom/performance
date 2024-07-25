@@ -243,6 +243,7 @@ class Payroll extends Model
         $row = DB::table('payroll_logs')->where('payroll_date', 'like', '%' . $date . '%')->select('id');
         return $row->count();
     }
+    
     public function initPayroll($dateToday, $payroll_date, $payroll_month, $empID)
     {
         // Extract the year from the payroll_date

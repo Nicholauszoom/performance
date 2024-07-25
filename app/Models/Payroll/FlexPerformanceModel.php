@@ -629,6 +629,7 @@ ORDER BY
     {
         $query = "SELECT count(id) as total from employee_overtime where status = 1";
         $row = DB::select(DB::raw($query));
+        // dd($row);
         return $row[0]->total;
     }
 
