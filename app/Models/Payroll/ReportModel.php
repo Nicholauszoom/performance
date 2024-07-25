@@ -1113,24 +1113,86 @@ SUM(ll.taxdue) as TAXDUE FROM payroll_logs ll, employee e WHERE e.emp_id = ll.em
 
     function s_wcf($date)
     {
-        $query = "SELECT @s:=@s+1 as SNo, e.emp_id , CONCAT(e.fname,' ', IF(e.mname != null,e.mname,' '),' ', e.lname) as name, e.tin as tin, e.national_id as national_id,pl.wcf as wcf, pl.salary as salary, pl.allowances
-FROM employee e, payroll_logs pl, (SELECT @s:=0) s WHERE pl.empID = e.emp_id and e.contract_type != 2 AND pl.payroll_date LIKE '%" . $date . "%'";
+//         $query = "SELECT @s:=@s+1 as SNo, e.emp_id , CONCAT(e.fname,' ', IF(e.mname != null,e.mname,' '),' ', e.lname) as name, e.tin as tin, e.national_id as national_id,pl.wcf as wcf, pl.salary as salary, pl.allowances
+// FROM employee e, payroll_logs pl, (SELECT @s:=0) s WHERE pl.empID = e.emp_id and e.contract_type != 2 AND pl.payroll_date LIKE '%" . $date . "%'";
+            $query = "WITH numbered_employees AS (
+                SELECT
+                    row_number() OVER (ORDER BY e.emp_id) AS SNo,
+                    e.emp_id,
+                    CONCAT(e.fname, ' ', COALESCE(e.mname, ''), ' ', e.lname) AS name,
+                    e.tin,
+                    e.national_id,
+                    pl.wcf,
+                    pl.salary,
+                    pl.allowances
+                FROM
+                    employee e
+                JOIN
+                    payroll_logs pl ON pl.\"empID\" = e.emp_id
+                WHERE
+                    e.contract_type != '2'
+                    AND pl.payroll_date::text LIKE '%' || $date || '%'
+            )
+            SELECT
+                SNo,
+                emp_id,
+                name,
+                tin,
+                national_id,
+                wcf,
+                salary,
+                allowances
+            FROM
+                numbered_employees
+            ORDER BY
+                emp_id";
         return DB::select(DB::raw($query));
     }
     function s_wcf_termination($date)
     {
         $raw_date = explode('-', $date);
         $terminationDate = $raw_date[0] . '-' . $raw_date[1];
-        $query = "SELECT @s:=@s+1 as SNo, e.emp_id , CONCAT(e.fname,' ', IF(e.mname != null,e.mname,' '),' ', e.lname) as name, e.tin as tin, e.national_id as national_id,tm.wcf as wcf, tm.salaryEnrollment as salary,tm.total_gross as total_gross
-FROM employee e, terminations tm, (SELECT @s:=0) s WHERE tm.employeeID = e.emp_id and e.contract_type != 2 AND tm.terminationDate LIKE '%" . $terminationDate . "%'";
+//         $query = "SELECT @s:=@s+1 as SNo, e.emp_id , CONCAT(e.fname,' ', IF(e.mname != null,e.mname,' '),' ', e.lname) as name, e.tin as tin, e.national_id as national_id,tm.wcf as wcf, tm.salaryEnrollment as salary,tm.total_gross as total_gross
+// FROM employee e, terminations tm, (SELECT @s:=0) s WHERE tm.employeeID = e.emp_id and e.contract_type != 2 AND tm.terminationDate LIKE '%" . $terminationDate . "%'";
         //   dd(DB::select(DB::raw($query)));
+        $query = "WITH seq AS (
+            SELECT
+                row_number() OVER (ORDER BY e.emp_id) AS SNo,
+                e.emp_id,
+                CONCAT(e.fname, ' ', COALESCE(e.mname, ''), ' ', e.lname) AS name,
+                e.tin,
+                e.national_id,
+                tm.wcf,
+                tm.\"salaryEnrollment\" AS salary,
+                tm.total_gross
+            FROM
+                employee e
+            JOIN
+                terminations tm ON tm.\"employeeID\" = e.emp_id
+            WHERE
+                e.contract_type != '2'
+                AND tm.\"terminationDate\"::text LIKE '%' || $terminationDate || '%'
+        )
+        SELECT
+            SNo,
+            emp_id,
+            name,
+            tin,
+            national_id,
+            wcf,
+            salary,
+            total_gross
+        FROM
+            seq
+        ORDER BY
+            emp_id";
         return DB::select(DB::raw($query));
     }
 
     function s_totalwcf($date)
     {
         $query = "SELECT SUM(pl.salary) as totalsalary, SUM(pl.allowances) as totalgross, SUM(pl.wcf) as totalwcf
-FROM  payroll_logs pl, employee e WHERE pl.empID = e.emp_id and e.contract_type != 2 and pl.payroll_date LIKE '%" . $date . "%'";
+FROM  payroll_logs pl, employee e WHERE pl.\"empID\" = e.emp_id and e.contract_type != '2' and pl.payroll_date::text LIKE '%' || $date || '%'";
         return DB::select(DB::raw($query));
     }
 
