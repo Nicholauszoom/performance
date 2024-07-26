@@ -40,6 +40,8 @@ class FlexPerformanceModel extends Model
               JOIN department d ON e.department = d.id
               ORDER BY al.created_at DESC";
 
+            //   dd(DB::select(DB::raw($query)));
+
     return DB::select(DB::raw($query));
 }
 
