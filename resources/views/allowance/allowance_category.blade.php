@@ -38,8 +38,9 @@
 
                             <tbody>
                                 <?php foreach ($allowanceCategory as $row) { ?>
+                                   
                                 <tr id=" {{ 'domain' . $row->id }}">
-                                    <td width="1px"><?php echo $row->sno; ?></td>
+                                    <td width="1px"><?php echo $row->SNo; ?></td>
                                     <td><?php echo $row->name; ?></td>
 
 

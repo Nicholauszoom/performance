@@ -47,9 +47,11 @@
             </thead>
 
             <tbody>
+
                 <?php foreach ($financialgroups as $row) { ?>
+                    
                     <tr id = "recordFinanceGroup<?php echo $row->id; ?>">
-                        <td width="1px"><?php echo $row->sno; ?></td>
+                        <td width="1px"><?php echo $row->SNo; ?></td>
                         <td><?php echo $row->name; ?></td>
                         <td>@if($row->grouped_by == 1) Employee @else Role @endif</td>
 
