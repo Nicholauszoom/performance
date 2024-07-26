@@ -313,7 +313,6 @@ class ReportController extends Controller
         //  dd($reportformat);
 
         $period = $request->input('period');
-        //dd($period);
         $year = $request->input('payrolldate');
 
         $period1start = $year . "-01-01";

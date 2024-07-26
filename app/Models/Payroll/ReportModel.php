@@ -559,8 +559,40 @@ FROM employee AS e, (SELECT @s:=0) AS s, payroll_logs pl WHERE pl.empID = e.emp_
         $termination_start = $raw1[0] . '-' . $raw1[1] . '-01';
         $termination_end = $raw2[0] . '-' . $raw2[1] . '-01';
 
-        $query = "SELECT @s:=@s+1 sNo, CONCAT(e.fname,' ', IF(e.mname != null,e.mname,' '),' ', e.lname) as name, e.tin as tin, e.national_id as national_id,e.emp_id, e.postal_address as postal_address, e.postal_city as postal_city, pl.*
-        FROM employee AS e, (SELECT @s:=0) AS s, payroll_logs pl WHERE pl.empID = e.emp_id AND e.state = 1 and e.contract_type != 2 and pl.payroll_date BETWEEN   '" . $period_start . "' AND '" . $period_end . "' order by e.emp_id ASC";
+        // $query = "SELECT @s:=@s+1 sNo, CONCAT(e.fname,' ', IF(e.mname != null,e.mname,' '),' ', e.lname) as name, e.tin as tin, e.national_id as national_id,e.emp_id, e.postal_address as postal_address, e.postal_city as postal_city, pl.*
+        // FROM employee AS e, (SELECT @s:=0) AS s, payroll_logs pl WHERE pl.empID = e.emp_id AND e.state = 1 and e.contract_type != 2 and pl.payroll_date BETWEEN   '" . $period_start . "' AND '" . $period_end . "' order by e.emp_id ASC";
+
+        $query = "WITH seq AS (
+            SELECT
+                row_number() OVER (ORDER BY e.emp_id) AS sNo,
+                e.emp_id,
+                CONCAT(e.fname, ' ', COALESCE(e.mname, ''), ' ', e.lname) AS name,
+                e.tin,
+                e.national_id,
+                e.postal_address,
+                e.postal_city,
+                pl.*
+            FROM
+                employee e
+            JOIN
+                payroll_logs pl ON pl.\"empID\" = e.emp_id
+            WHERE
+                e.state = 1
+                AND e.contract_type != '2'
+                AND pl.payroll_date BETWEEN '$period_start' AND '$period_end'
+        )
+        SELECT
+            sNo,
+            emp_id,
+            name,
+            tin,
+            national_id,
+            postal_address,
+            postal_city
+        FROM
+            seq
+        ORDER BY
+            emp_id ASC";
 
         return DB::select(DB::raw($query));
     }
@@ -573,13 +605,45 @@ FROM employee AS e, (SELECT @s:=0) AS s, payroll_logs pl WHERE pl.empID = e.emp_
         $termination_end = $raw2[0] . '-' . $raw2[1] . '-01';
         $termination_date = $raw2[0] . '-' . $raw2[1];
         if ($termination_start != $termination_end) {
-
-            $query = "SELECT @s:=@s+1 sNo, CONCAT(e.fname,' ', IF(e.mname != null,e.mname,' '),' ', e.lname) as name, e.tin as tin,e.emp_id, e.national_id as national_id, e.postal_address as postal_address, e.postal_city as postal_city, tm.*
-        FROM employee AS e, (SELECT @s:=0) AS s, terminations tm WHERE tm.employeeID = e.emp_id AND e.state = 4 and e.contract_type != 2 and tm.terminationDate BETWEEN   '" . $termination_start . "' AND '" . $termination_end . "' order by e.emp_id ASC";
+            $query = "SELECT
+            row_number() OVER (ORDER BY e.emp_id) AS sNo,
+            CONCAT(e.fname, ' ', COALESCE(e.mname, ''), ' ', e.lname) AS name,
+            e.tin AS tin,
+            e.emp_id,
+            e.national_id AS national_id,
+            e.postal_address AS postal_address,
+            e.postal_city AS postal_city,
+            tm.*
+        FROM
+            employee e
+        JOIN
+            terminations tm ON tm.\"employeeID\" = e.emp_id
+        WHERE
+            e.state = 4
+            AND e.contract_type != '2'
+            AND tm.\"terminationDate\" BETWEEN '$termination_start' AND '$termination_end'
+        ORDER BY
+            e.emp_id ASC";
         } else {
-
-            $query = "SELECT @s:=@s+1 sNo, CONCAT(e.fname,' ', IF(e.mname != null,e.mname,' '),' ', e.lname) as name, e.tin as tin, e.national_id as national_id, e.postal_address as postal_address,e.emp_id, e.postal_city as postal_city, tm.*
-    FROM employee AS e, (SELECT @s:=0) AS s, terminations tm WHERE tm.employeeID = e.emp_id AND e.state = 4 and e.contract_type != 2 and tm.terminationDate LIKE   '%" . $termination_date . "%' order by e.emp_id ASC";
+        $query = "SELECT
+        row_number() OVER (ORDER BY e.emp_id) AS sNo,
+        CONCAT(e.fname, ' ', COALESCE(e.mname, ''), ' ', e.lname) AS name,
+        e.tin,
+        e.national_id,
+        e.emp_id,
+        e.postal_address,
+        e.postal_city,
+        tm.*
+    FROM
+        employee e
+    JOIN
+        terminations tm ON tm.\"employeeID\" = e.emp_id
+    WHERE
+        e.state = 4
+        AND e.contract_type != '2'
+        AND tm.\"terminationDate\"::text LIKE '%' ||  $termination_date || '%'
+    ORDER BY
+        e.emp_id ASC";
         }
         return DB::select(DB::raw($query));
     }
@@ -587,8 +651,27 @@ FROM employee AS e, (SELECT @s:=0) AS s, payroll_logs pl WHERE pl.empID = e.emp_
     function v_p91($period_start, $period_end)
     {
 
-        $query = "SELECT @s:=@s+1 sNo, CONCAT(e.fname,' ', IF(e.mname != null,e.mname,' '),' ', e.lname) as name, e.tin as tin, e.national_id as national_id,e.emp_id, e.postal_address as postal_address, e.postal_city as postal_city, pl.*
-FROM employee AS e, (SELECT @s:=0) AS s, payroll_logs pl WHERE pl.empID = e.emp_id AND e.state = 1 and e.contract_type = 2 and pl.payroll_date BETWEEN   '" . $period_start . "' AND '" . $period_end . "' order by e.emp_id ASC";
+//         $query = "SELECT @s:=@s+1 sNo, CONCAT(e.fname,' ', IF(e.mname != null,e.mname,' '),' ', e.lname) as name, e.tin as tin, e.national_id as national_id,e.emp_id, e.postal_address as postal_address, e.postal_city as postal_city, pl.*
+// FROM employee AS e, (SELECT @s:=0) AS s, payroll_logs pl WHERE pl.empID = e.emp_id AND e.state = 1 and e.contract_type = 2 and pl.payroll_date BETWEEN   '" . $period_start . "' AND '" . $period_end . "' order by e.emp_id ASC";
+        $query = "SELECT
+        row_number() OVER (ORDER BY e.emp_id) AS sNo,
+        CONCAT(e.fname, ' ', COALESCE(e.mname, ''), ' ', e.lname) AS name,
+        e.tin AS tin,
+        e.national_id AS national_id,
+        e.emp_id,
+        e.postal_address AS postal_address,
+        e.postal_city AS postal_city,
+        pl.*
+    FROM
+        employee e
+    JOIN
+        payroll_logs pl ON pl.\"empID\" = e.emp_id
+    WHERE
+        e.state = 1
+        AND e.contract_type = '2'
+        AND pl.payroll_date BETWEEN '$period_start' AND '$period_end'
+    ORDER BY
+        e.emp_id ASC";
 
         return DB::select(DB::raw($query));
     }
@@ -636,7 +719,7 @@ SUM(pl.taxdue) as sum_taxdue FROM payroll_logs pl, employee e WHERE e.emp_id = p
 
     function p10check($period_start, $period_end)
     {
-        $query = " SELECT id  FROM payroll_logs WHERE payroll_date  BETWEEN '" . $period_start . "' AND '" . $period_end . "' ";
+        $query = "SELECT id  FROM payroll_logs WHERE payroll_date BETWEEN '$period_start' AND '$period_end'";
         return count(DB::select(DB::raw($query)));
     }
     function p10($period_start, $period_end)
@@ -649,7 +732,7 @@ SUM(pl.taxdue) as sum_taxdue FROM payroll_logs pl, employee e WHERE e.emp_id = p
     {
 
         $query = "SELECT payroll_date, SUM(pl.salary) as sum_salary, SUM(pl.salary+pl.allowances) as sum_gross, SUM(pl.sdl) as sum_sdl
-FROM payroll_logs pl, employee e WHERE e.emp_id = pl.empID and e.contract_type != 2 and payroll_date BETWEEN   '" . $period_start . "' AND '" . $period_end . "' GROUP BY payroll_date ORDER BY payroll_date ASC";
+FROM payroll_logs pl, employee e WHERE e.emp_id = pl.\"empID\" and e.contract_type != '2' and payroll_date BETWEEN   '$period_start' AND '$period_end' GROUP BY payroll_date ORDER BY payroll_date ASC";
         return DB::select(DB::raw($query));
     }
 
@@ -658,7 +741,7 @@ FROM payroll_logs pl, employee e WHERE e.emp_id = pl.empID and e.contract_type !
     function v_p10($period_start, $period_end)
     {
         $query = "SELECT payroll_date, SUM(pl.salary) as sum_salary, SUM(pl.salary+pl.allowances) as sum_gross, SUM(pl.sdl) as sum_sdl
-FROM payroll_logs pl, employee e WHERE e.emp_id = pl.empID and e.contract_type = 2 and payroll_date BETWEEN   '" . $period_start . "' AND '" . $period_end . "' GROUP BY payroll_date ORDER BY payroll_date ASC";
+FROM payroll_logs pl, employee e WHERE e.emp_id = pl.\"empID\" and e.contract_type = '2' and payroll_date BETWEEN '$period_start' AND '$period_end' GROUP BY payroll_date ORDER BY payroll_date ASC";
         return DB::select(DB::raw($query));
     }
 
@@ -670,15 +753,15 @@ FROM payroll_logs pl, employee e WHERE e.emp_id = pl.empID and e.contract_type =
 
     function s_totalp10($period_start, $period_end)
     {
-        $query = " SELECT SUM(pl.salary) as total_salary, SUM(pl.salary+pl.allowances) as total_gross, SUM(pl.sdl) as total_sdl
- FROM payroll_logs pl, employee e WHERE pl.empID = e.emp_id and e.contract_type != 2 and payroll_date BETWEEN   '" . $period_start . "' AND '" . $period_end . "'";
+        $query = "SELECT SUM(pl.salary) as total_salary, SUM(pl.salary+pl.allowances) as total_gross, SUM(pl.sdl) as total_sdl
+ FROM payroll_logs pl, employee e WHERE pl.\"empID\" = e.emp_id and e.contract_type != '2' and payroll_date BETWEEN   '$period_start' AND '$period_end'";
         return DB::select(DB::raw($query));
     }
 
     function v_totalp10($period_start, $period_end)
     {
-        $query = " SELECT SUM(pl.salary) as total_salary, SUM(pl.salary+pl.allowances) as total_gross, SUM(pl.sdl) as total_sdl
- FROM payroll_logs pl, employee e WHERE pl.empID = e.emp_id and e.contract_type = 2 and payroll_date BETWEEN   '" . $period_start . "' AND '" . $period_end . "'";
+        $query = "SELECT SUM(pl.salary) as total_salary, SUM(pl.salary+pl.allowances) as total_gross, SUM(pl.sdl) as total_sdl
+ FROM payroll_logs pl, employee e WHERE pl.\"empID\" = e.emp_id and e.contract_type = '2' and payroll_date BETWEEN '$period_start' AND '$period_end'";
         return DB::select(DB::raw($query));
     }
 
