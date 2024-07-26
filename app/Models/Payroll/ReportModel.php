@@ -538,8 +538,26 @@ ORDER BY
     function v_p9($date)
     {
 
-        $query = "SELECT @s:=@s+1 sNo, CONCAT(e.fname,' ', IF(e.mname != null,e.mname,' '),' ', e.lname) as name, e.postal_address as postal_address, e.tin as tin, e.national_id as national_id, e.postal_city as postal_city, pl.*
-    FROM employee AS e, (SELECT @s:=0) AS s, payroll_logs pl WHERE pl.empID = e.emp_id  AND e.state = 1 and e.contract_type = 2 AND pl.payroll_date = '" . $date . "' order by e.emp_id ASC";
+    //     $query = "SELECT @s:=@s+1 sNo, CONCAT(e.fname,' ', IF(e.mname != null,e.mname,' '),' ', e.lname) as name, e.postal_address as postal_address, e.tin as tin, e.national_id as national_id, e.postal_city as postal_city, pl.*
+    // FROM employee AS e, (SELECT @s:=0) AS s, payroll_logs pl WHERE pl.empID = e.emp_id  AND e.state = 1 and e.contract_type = 2 AND pl.payroll_date = '" . $date . "' order by e.emp_id ASC";
+        $query = "SELECT
+        row_number() OVER (ORDER BY e.emp_id) AS sNo,
+        CONCAT(e.fname, ' ', COALESCE(e.mname, ''), ' ', e.lname) AS name,
+        e.postal_address AS postal_address,
+        e.tin AS tin,
+        e.national_id AS national_id,
+        e.postal_city AS postal_city,
+        pl.*
+    FROM
+        employee e
+    JOIN
+        payroll_logs pl ON pl.\"empID\" = e.emp_id
+    WHERE
+        e.state = 1
+        AND e.contract_type = '2'
+        AND pl.payroll_date = '$date'
+    ORDER BY
+        e.emp_id ASC";
 
         return DB::select(DB::raw($query));
     }
@@ -704,7 +722,7 @@ SUM(pl.taxdue) as sum_taxdue FROM payroll_logs pl, employee e WHERE e.emp_id = p
 SUM(pl.salary+pl.allowances) as sum_gross,
 SUM(pl.pension_employee) as sum_deductions,
 SUM(pl.salary+pl.allowances-pl.pension_employee) as sum_taxable,
-SUM(pl.taxdue) as sum_taxdue FROM payroll_logs pl, employee e WHERE e.emp_id = pl.empID and e.contract_type = 2 AND pl.payroll_date = '" . $date . "'  GROUP BY pl.payroll_date";
+SUM(pl.taxdue) as sum_taxdue FROM payroll_logs pl, employee e WHERE e.emp_id = pl.\"empID\" and e.contract_type = '2' AND pl.payroll_date = '$date'  GROUP BY pl.payroll_date";
 
         return DB::select(DB::raw($query));
     }
