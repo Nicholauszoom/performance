@@ -1299,14 +1299,29 @@ FROM  payroll_logs pl, employee e WHERE pl.\"empID\" = e.emp_id and e.contract_t
 
     function v_wcf($date)
     {
-        $query = "SELECT @s:=@s+1 as SNo, e.emp_id , CONCAT(e.fname,' ', IF(e.mname != null,e.mname,' '),' ', e.lname) as name, e.tin as tin, e.national_id as national_id, pl.salary as salary, pl.allowances
-FROM employee e, payroll_logs pl, (SELECT @s:=0) s WHERE pl.empID = e.emp_id and e.contract_type = 2 AND pl.payroll_date LIKE '%" . $date . "%'";
+        $query = "SELECT
+        row_number() OVER (ORDER BY e.emp_id) AS SNo,
+        e.emp_id,
+        CONCAT(e.fname, ' ', COALESCE(e.mname, ''), ' ', e.lname) AS name,
+        e.tin AS tin,
+        e.national_id AS national_id,
+        pl.salary AS salary,
+        pl.allowances AS allowances
+    FROM
+        employee e
+    JOIN
+        payroll_logs pl ON pl.\"empID\" = e.emp_id
+    WHERE
+        e.contract_type = '2'
+        AND pl.payroll_date::text LIKE '%' || $date || '%'
+    ORDER BY
+        e.emp_id ASC";
         return DB::select(DB::raw($query));
     }
     function v_totalwcf($date)
     {
         $query = "SELECT SUM(pl.salary) as totalsalary, SUM(pl.allowances) as totalgross, SUM(pl.wcf) as totalwcf
-FROM  payroll_logs pl, employee e WHERE pl.empID = e.emp_id and e.contract_type = 2 and pl.payroll_date LIKE '%" . $date . "%'";
+FROM  payroll_logs pl, employee e WHERE pl.\"empID\" = e.emp_id and e.contract_type = '2' and pl.payroll_date::text LIKE '%' || $date || '%'";
         return DB::select(DB::raw($query));
     }
 
