@@ -5909,7 +5909,7 @@ class GeneralController extends Controller
                     \Log::info('Executing query: ' . $query);
                     
                     // Execute the count query using Laravel's DB::select method
-                 
+
                     $result = DB::select(DB::raw($query));
 
                     
