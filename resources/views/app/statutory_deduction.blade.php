@@ -40,7 +40,7 @@
             @foreach ($pension as $row)
           
                 <tr id="{{ 'domain'.$row->id }}">
-                    <td>{{ $row->SNo }}</td>
+                    <td>{{ $row->SNo}}</td>
                     <td>{{ $row->name.' ('.$row->abbrv.')' }}</td>
                     <td>{{ ($row->amount_employee) * 100 .'%' }}</td>
                     <td> {{ ($row->amount_employer) * 100 .'%' }}</td>
@@ -98,7 +98,7 @@
         <tbody>
             @foreach ($deduction as $row)
                 <tr>
-                    <td>{{ $row->SNo }}</td>
+                    <td>{{ $row->SNo}}</td>
                     <td>{{ $row->name }}</td>
                     <td>{{ 100*($row->rate_employee) .'%' }}</td>
                     <td>{{ 100*($row->rate_employer) .'%' }}</td>

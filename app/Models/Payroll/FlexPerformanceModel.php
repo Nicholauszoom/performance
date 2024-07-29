@@ -33,16 +33,22 @@ class FlexPerformanceModel extends Model
 
     public function audit_logs()
 {
-    $query = "SELECT d.name as department, p.name as position, al.*, p.name as position, d.name as department, CONCAT(e.fname,' ', COALESCE(e.mname, ' '), ' ', e.lname) as empName
-              FROM audit_trails al
-              JOIN employee e ON al.emp_id = e.emp_id
-              JOIN position p ON p.id = e.position
-              JOIN department d ON e.department = d.id
-              ORDER BY al.created_at DESC";
+    $query = DB::table('audit_trails as al')
+    ->join('employee as e', 'al.emp_id', '=', 'e.emp_id')
+    ->join('position as p', 'p.id', '=', 'e.position')
+    ->join('department as d', 'e.department', '=', 'd.id')
+    ->select(
+        'd.name as department',
+        'p.name as position',
+        'al.*',
+        DB::raw("CONCAT(e.fname, ' ', COALESCE(e.mname, ''), ' ', e.lname) as empName")
+    )
+    ->orderBy('al.created_at', 'DESC')
+    ->get();
 
-            //   dd(DB::select(DB::raw($query)));
+            //   dd($query);
 
-    return DB::select(DB::raw($query));
+    return $query;
 }
 
 
@@ -1864,7 +1870,7 @@ public function getpropertyexit($id)
 
     public function deduction()
     {
-        $query = 'SELECT ROW_NUMBER() OVER (ORDER BY id) AS SNo, d.*
+        $query = 'SELECT ROW_NUMBER() OVER (ORDER BY id) AS "SNo", d.*
         FROM (
             SELECT * FROM deduction
             WHERE is_active = 1 AND id NOT IN (7, 8)
@@ -2100,7 +2106,7 @@ public function getpropertyexit($id)
 
     public function allowance_category()
     {
-        $query = 'SELECT ROW_NUMBER() OVER (ORDER BY id) AS SNo, sub.*
+        $query = 'SELECT ROW_NUMBER() OVER (ORDER BY id) AS "SNo", sub.*
         FROM (
             SELECT * FROM allowance_categories
         ) sub
@@ -2147,10 +2153,9 @@ public function getpropertyexit($id)
 
     public function pension_fund()
     {
-        $query = 'SELECT ROW_NUMBER() OVER (ORDER BY id) AS SNo, pf.*
-        FROM pension_fund pf;
-        ';
-
+        $query = "SELECT ROW_NUMBER() OVER (ORDER BY id) AS \"SNo\", pf.*
+        FROM pension_fund pf";
+        // dd(DB::select(DB::raw($query)));
         return DB::select(DB::raw($query));
     }
 
@@ -2511,7 +2516,7 @@ IF(
 
     public function paye()
     {
-        $query = 'SELECT ROW_NUMBER() OVER (ORDER BY id) AS SNo, p.*
+        $query = 'SELECT ROW_NUMBER() OVER (ORDER BY id) AS "SNo", p.*
         FROM paye p
         ';
 
@@ -3943,8 +3948,9 @@ d.department_pattern AS child_department, d.parent_pattern as parent_department 
 
     public function finencialgroups()
     {
-        $query = "SELECT ROW_NUMBER() OVER () as SNo, g.* FROM groups g WHERE type IN (0,1)";
+        $query = "SELECT ROW_NUMBER() OVER () as \"SNo\", g.* FROM groups g WHERE type IN (0,1)";
 
+        // dd(DB::select(DB::raw($query)));
         return DB::select(DB::raw($query));
     }
 
@@ -4753,6 +4759,8 @@ FROM payroll_logs pl, employee e, position p, department d where e.emp_id=pl.emp
         $row = DB::table('pension_fund')
             ->select(DB::raw($query))
             ->first();
+
+            // dd($row);
         return $row;
     }
 
