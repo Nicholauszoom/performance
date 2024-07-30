@@ -41,7 +41,7 @@ class FlexPerformanceModel extends Model
         'd.name as department',
         'p.name as position',
         'al.*',
-        DB::raw("CONCAT(e.fname, ' ', COALESCE(e.mname, ''), ' ', e.lname) as empName")
+        DB::raw("CONCAT(e.fname, ' ', COALESCE(e.mname, ''), ' ', e.lname) as \"empName\"")
     )
     ->orderBy('al.created_at', 'DESC')
     ->get();

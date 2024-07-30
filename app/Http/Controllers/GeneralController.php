@@ -10182,7 +10182,7 @@ class GeneralController extends Controller
             ->first();
 
         if ($parent) {
-            $parent->employeeID = $request->employeeID;
+            $parent->employeeid = $request->employeeID;
             $parent->parent_names = $request->parent_names;
             $parent->parent_relation = $request->parent_relation;
             $parent->parent_birthdate = $request->parent_birthdate;
@@ -10194,7 +10194,7 @@ class GeneralController extends Controller
             if ($request->parent_names != null && $request->parent_relation != null) {
                 $parent = new EmployeeParent();
 
-                $parent->employeeID = $request->employeeID;
+                $parent->employeeid = $request->employeeID;
                 $parent->parent_names = $request->parent_names;
                 $parent->parent_relation = $request->parent_relation;
                 $parent->parent_birthdate = $request->parent_birthdate;
@@ -10228,7 +10228,7 @@ class GeneralController extends Controller
         } else {
             // Create a new dependant if it doesn't exist
             $dependant = new EmployeeDependant();
-            $dependant->employeeID = $emp_id; // Set the employee ID
+            $dependant->employeeid = $emp_id; // Set the employee ID
             $dependant->dep_name = $request->dep_name;
             $dependant->dep_surname = $request->dep_surname;
             $dependant->dep_birthdate = $request->dep_birthdate;
@@ -10251,7 +10251,7 @@ class GeneralController extends Controller
 
         if ($spouse) {
 
-            $spouse->employeeID = $request->employeeID;
+            $spouse->employeeid = $request->employeeID;
             $spouse->spouse_fname = $request->spouse_name;
             $spouse->spouse_birthdate = $request->spouse_birthdate;
             $spouse->spouse_birthplace = $request->spouse_birthplace;
@@ -10265,7 +10265,7 @@ class GeneralController extends Controller
         } else {
             $spouse = new EmployeeSpouse();
 
-            $spouse->employeeID = $request->employeeID;
+            $spouse->employeeid = $request->employeeID;
             $spouse->spouse_fname = $request->spouse_name;
             $spouse->spouse_birthdate = $request->spouse_birthdate;
             $spouse->spouse_birthplace = $request->spouse_birthplace;
@@ -10288,7 +10288,7 @@ class GeneralController extends Controller
         if ($request->hist_employer != null && $request->hist_position != null) {
             $history = new EmploymentHistory();
 
-            $history->employeeID = $request->employeeID;
+            $history->employeeid = $request->employeeID;
             $history->hist_start = $request->hist_start;
             $history->hist_end = $request->hist_end;
             $history->hist_employer = $request->hist_employer;
@@ -10311,7 +10311,7 @@ class GeneralController extends Controller
         if ($request->institute != null && $request->course != null) {
             $qualification = new EducationQualification();
 
-            $qualification->employeeID = $request->employeeID;
+            $qualification->employeeid = $request->employeeID;
             $qualification->institute = $request->institute;
             $qualification->level = $request->level;
             $qualification->course = $request->course;
