@@ -13,15 +13,9 @@ return new class extends Migration
      */
     public function up()
     {
-<<<<<<< HEAD
         Schema::table('payroll_logs', function (Blueprint $table) {
           //  $table->timestamps();
         });
-=======
-        // Schema::table('payroll_logs', function (Blueprint $table) {
-        //     $table->timestamps();
-        // });
->>>>>>> main_join
     }
 
     /**

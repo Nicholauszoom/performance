@@ -696,9 +696,9 @@ ORDER BY
         $query = "SELECT
         eo.id as id,
         CONCAT(e.fname, ' ', COALESCE(e.mname, ' '), ' ', e.lname) as name,
-        d.name as DEPARTMENT,
-        p.name as POSITION,
-        eo.days as totalHOURS,
+        d.name as \"DEPARTMENT\",
+        p.name as \"POSITION\",
+        eo.days as \"totalHOURS\",
         eo.amount,
         eo.status as status,
         oc.name as overtime_category
@@ -934,16 +934,9 @@ ORDER BY
         $time_approved = $date;
         $type = 0;
 
-        //     DB::transaction(function() use($id,$signatory, $time_approved)
-        //   {
-        $query = "INSERT INTO overtimes(overtimeID, empID, time_start, time_end,overtime_category, amount, linemanager, hr, application_time, confirmation_time, approval_time,days) SELECT 1, '" . $empID . "', '" . $time_start . "','" . $time_end . "','" . $overtime_category . "', (('" . $days . "') * ((e.salary/195)*('" . $percent . "')))
+        $query = "INSERT INTO overtimes(\"overtimeID\", empID, time_start, time_end,overtime_category, amount, linemanager, hr, application_time, confirmation_time, approval_time,days) SELECT 1, '" . $empID . "', '" . $time_start . "','" . $time_end . "','" . $overtime_category . "', (('" . $days . "') * ((e.salary/195)*('" . $percent . "')))
         AS amount,'" . $line_maager . "', '" . $signatory . "','" . $application_time . "','" . $time_confirmed_line . "', '" . $time_approved . "','" . $days . "' FROM employee e WHERE e.emp_id = '" . $empID . "'  ";
         DB::insert(DB::raw($query));
-
-        //$query = "UPDATE employee_overtime SET status = 2, cd ='".$signatory."', time_approved_cd = '".$time_approved."'  WHERE id ='".$id."'";
-        // DB::insert(DB::raw($query));
-
-        //    });
 
         return true;
     }
@@ -1005,7 +998,7 @@ ORDER BY
     {
 
         $overtime_yenyewe =  DB::table('overtimes')->where('id', $id)->select()->first();
-        $payroll_number = $overtime_yenyewe->empID;
+        $payroll_number = $overtime_yenyewe->empid;
         $changed_by = $overtime_yenyewe->hr;
         $overtime_category = $overtime_yenyewe->overtime_category;
 

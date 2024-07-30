@@ -140,7 +140,7 @@
                                         <td><?php echo $row->name; ?></td>
                                         <td><?php echo '<b>Department: </b>' . $row->DEPARTMENT . '<br><b>Position: </b>' . $row->POSITION; ?></td>
                                         <td>{{ $row->overtime_category }} </td>
-                                        <td>{{ $row->totoalHOURS }} </td>
+                                        <td>{{ $row->totalHOURS }} </td>
                                         <td><?php echo $row->amount; ?></td>
 
 
