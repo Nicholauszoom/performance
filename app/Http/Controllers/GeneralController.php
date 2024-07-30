@@ -4977,10 +4977,9 @@ class GeneralController extends Controller
         if ($request->method() == "POST") {
 
             $members = $this->flexperformance_model->get_deduction_members($request->input('deduction'), $request->input('group'));
-
             foreach ($members as $row) {
                 $data = array(
-                    'empid' => $row->empID,
+                    'empID' => $row->empid,
                     'deduction' => $request->input('deduction'),
                     'group_name' => $request->input('group'),
                 );
@@ -5023,9 +5022,9 @@ class GeneralController extends Controller
 
                     $result = $this->flexperformance_model->remove_individual_deduction($empID, $deductionID);
 
-                    $deductionName = DB::table('deductions')->select('name')->where('id', $request->input('deductionID'))->limit(1)->first();
+                    $deductionName = DB::table('deductions')->select('name', 'amount', 'rate', 'currency')->where('id', $request->input('deductionID'))->limit(1)->first();
 
-                    SysHelpers::FinancialLogs($request->input('empID'), "Removed ". $deductionName->name, number_format($deductionName->amount / $deductionName->rate, 2) . ' ' . $deductionName->currency, '0.00', 'Payroll Input');
+                    SysHelpers::FinancialLogs($empID, "Removed ". $deductionName->name, number_format($deductionName->amount / $deductionName->rate, 2) . ' ' . $deductionName->currency, '0.00', 'Payroll Input');
 
                     //SysHelpers::FinancialLogs($empID, 'Removed from deduction', $deductionName->name, '0', 'Payroll Input');
                 }
@@ -5061,9 +5060,9 @@ class GeneralController extends Controller
 
                     $result = $this->flexperformance_model->remove_group_deduction($groupID, $deductionID);
 
-                    $deductionName = DB::table('deduction')->select('name')->where('id', $deductionID)->limit(1)->first();
+                    $deductionName = DB::table('deductions')->select('name', 'amount', 'rate', 'currency')->where('id', $deductionID)->limit(1)->first();
 
-                    SysHelpers::FinancialLogs($request->input('empID'), $deductionName->name, number_format($deductionName->amount / $deductionName->rate, 2) . ' ' . $deductionName->currency, '0.00', 'Payroll Input');
+                    SysHelpers::FinancialLogs($groupID, $deductionName->name, number_format($deductionName->amount / $deductionName->rate, 2) . ' ' . $deductionName->currency, '0.00', 'Payroll Input');
 
                     // SysHelpers::FinancialLogs($groupID, 'Removed Group from deduction', $deductionName->name, '0', 'Payroll Input');
                 }

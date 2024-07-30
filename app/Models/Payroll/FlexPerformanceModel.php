@@ -2013,7 +2013,7 @@ public function getpropertyexit($id)
 
     public function get_deduction_group_in($deduction)
     {
-        $query = "SELECT DISTINCT  g.name as NAME, g.id as id FROM groups g, emp_deductions ed  WHERE g.id = ed.group_name and ed.deduction = " . $deduction . "";
+        $query = "SELECT DISTINCT  g.name as \"NAME\", g.id as id FROM groups g, emp_deductions ed  WHERE g.id = ed.group_name and ed.deduction = " . $deduction . "";
         return DB::select(DB::raw($query));
     }
 
@@ -2025,7 +2025,7 @@ public function getpropertyexit($id)
 
     public function remove_individual_deduction($empID, $deductionID)
     {
-        DB::table('emp_deductions')->where('empid', $empID)
+        DB::table('emp_deductions')->where('empID', $empID)
             ->where('group_name', 0)
             ->where('deduction', $deductionID)
             ->delete();
@@ -2043,14 +2043,17 @@ public function getpropertyexit($id)
 
     public function get_deduction_members($deduction, $group)
     {
-        $query = "SELECT empID from employee_group WHERE group_name = " . $group . " and empID NOT IN (SELECT empID from emp_deductions where deduction = " . $deduction . ")";
+        $query = "SELECT empid from employee_group WHERE group_name = $group and empid NOT IN (SELECT empID from emp_deductions where deduction = $deduction)";
 
         return DB::select(DB::raw($query));
     }
 
     public function employee_deduction($deduction)
     {
-        $query = "SELECT e.emp_id as empID, CONCAT(e.fname,' ',IF( e.mname != null,e.mname,' '),' ', e.lname) as NAME FROM employee e WHERE e.state = 1 AND  e.emp_id NOT IN (SELECT empID from emp_deductions WHERE deduction = " . $deduction . " AND group_name = 0 ) ";
+        $query = "SELECT e.emp_id AS \"empID\", CONCAT(e.fname, ' ', COALESCE(e.mname, ''), ' ', e.lname) AS \"NAME\" FROM employee e
+                WHERE e.state = 1 AND e.emp_id NOT IN (SELECT \"empID\" FROM emp_deductions
+                WHERE deduction = " . $deduction . " AND group_name = 0)";
+
         return DB::select(DB::raw($query));
     }
 
@@ -2063,7 +2066,7 @@ public function getpropertyexit($id)
 
     public function deduction_membersCount($deduction)
     {
-        $query = "SELECT COUNT(DISTINCT ed.empID) members FROM  emp_deductions ed WHERE ed.deduction = " . $deduction . "  ";
+        $query = "SELECT COUNT(DISTINCT ed.\"empID\") members FROM  emp_deductions ed WHERE ed.deduction = " . $deduction . "  ";
 
         $row = DB::select(DB::raw($query));
 
@@ -2072,7 +2075,10 @@ public function getpropertyexit($id)
 
     public function deduction_individual_employee($deduction)
     {
-        $query = "SELECT @s:=@s+1 SNo, e.emp_id as empID,  CONCAT(e.fname,' ',IF( e.mname != null,e.mname,' '),' ', e.lname) as NAME FROM employee e, emp_deductions ed, (SELECT @s:=0) as s WHERE e.emp_id = ed.empID and ed.group_name = 0 and ed.deduction = " . $deduction . "  ";
+        $query = "SELECT ROW_NUMBER() OVER () AS \"SNo\", e.emp_id AS \"empID\", CONCAT(e.fname, ' ', COALESCE(e.mname, ''), ' ', e.lname) AS \"NAME\"
+                    FROM employee e JOIN emp_deductions ed ON e.emp_id = ed.\"empID\"
+                    WHERE ed.group_name = 0 AND ed.deduction = " . $deduction . "";
+
 
         return DB::select(DB::raw($query));
     }
