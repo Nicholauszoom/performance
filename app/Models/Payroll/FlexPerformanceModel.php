@@ -2181,7 +2181,7 @@ public function getpropertyexit($id)
 
     public function get_allowance_members($allowance, $group)
     {
-        $query = "SELECT empID from employee_group WHERE group_name = " . $group . " and empID NOT IN (SELECT empID from emp_allowances where allowance = " . $allowance . ")";
+        $query = "SELECT empid from employee_group WHERE group_name = " . $group . " and empid NOT IN (SELECT empid from emp_allowances where allowance = " . $allowance . ")";
 
         return DB::select(DB::raw($query));
     }
@@ -2202,7 +2202,7 @@ public function getpropertyexit($id)
 
     public function get_allowance_group_in($allowance)
     {
-        $query = "SELECT DISTINCT  g.name as NAME, g.id as id FROM groups g, emp_allowances ea  WHERE g.id = ea.group_name and ea.group_name != 0 and ea.allowance = " . $allowance . "";
+        $query = "SELECT DISTINCT  g.name as \"NAME\", g.id as id FROM groups g, emp_allowances ea  WHERE g.id = ea.group_name and ea.group_name != 0 and ea.allowance = " . $allowance . "";
 
         return DB::select(DB::raw($query));
     }

@@ -766,8 +766,6 @@ function deleteAllowance(id)
             confirmButtonText: 'Yes, cancel it!'
         }).then((result) => {
             if (result.isConfirmed) {
-                var id = id;
-
                 $.ajax({
                     url:"<?php echo url('flex/deleteAllowance');?>/"+id,
                     success:function(data)
