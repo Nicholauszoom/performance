@@ -18,7 +18,7 @@
                 @can('view-allowance-category')
                 <div class="col-md-7">
 
-                
+
                 <div class="card border-top  border-top-width-3 border-top-main rounded-0 p-2">
                     <div class="card-header">
                         <h5 class="h5 text-warning">Allowance Categories</h5>
@@ -38,7 +38,7 @@
 
                             <tbody>
                                 <?php foreach ($allowanceCategory as $row) { ?>
-                                   
+
                                 <tr id=" {{ 'domain' . $row->id }}">
                                     <td width="1px"><?php echo $row->SNo; ?></td>
                                     <td><?php echo $row->name; ?></td>
@@ -65,15 +65,15 @@
                     </div>
 
                 </div>
-               
+
             </div>
             @endcan
 
             <div class="col-md-5">
                 <div class="card border-top  border-top-width-3 border-top-main rounded-0 p-2">
                     @can('add-allowance-category')
-                        
-                 
+
+
                     <div class="card-body">
                         <h4 class="text-main">Add Allowance Category</h4>
 
@@ -168,10 +168,8 @@
                 confirmButtonText: 'Yes, cancel it!'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    var id = id;
-
                     $.ajax({
-                        url: "<?php echo url('flex/deleteAllowance'); ?>/" + id,
+                        url: "<?php echo url('flex/deleteAllowanceCategory'); ?>/" + id,
                         success: function(data) {
                             var data = JSON.parse(data);
                             if (data.status == 'OK') {

@@ -6165,10 +6165,15 @@ class GeneralController extends Controller
         $result = $this->flexperformance_model->deleteAllowanceCategory($id);
 
         if ($result == true) {
-            echo "<p class='alert alert-warning text-center'>Allowance Category DELETED Successifully</p>";
+            $json_array['status'] = "OK";
+            $json_array['message'] = "<p class='alert alert-warning text-center'>Allowance Category DELETED Successifully</p>";
+            echo "";
         } else {
-            echo "<p class='alert alert-danger text-center'>FAILED to DELETE, Please Try Again!</p>";
+            $json_array['status'] = "ERR";
+            $json_array['message'] = "<p class='alert alert-danger text-center'>FAILED to DELETE, Please Try Again!</p>";
         }
+        header("Content-type: application/json");
+            echo json_encode($json_array);
     }
 
     public function activateAllowance($id, Request $request)
