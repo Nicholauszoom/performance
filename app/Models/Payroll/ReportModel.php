@@ -891,73 +891,79 @@ FROM payroll_logs pl, employee e WHERE e.emp_id = pl.\"empID\" and e.contract_ty
                 $loan_table = "temp_loan_logs";
             }
 
-            $query = 'SELECT @s:=@s+1 SNo, a.* FROM allowance_categories a , (SELECT @s:=0) as s ';
+            $query = "SELECT ROW_NUMBER() OVER () AS SNo, a.* FROM allowance_categories a";
 
             $categories = DB::select(DB::raw($query));
 
             $allowance_categories_query = "";
             foreach ($categories as $category) {
-                $allowance_categories_query .= "(IFNULL((SELECT SUM(al.amount)
-                    FROM {$allowance_table} al
-                    JOIN allowances ON allowances.id = al.allowanceID
-                    WHERE al.empID = e.emp_id
-                    AND allowances.allowance_category_id = {$category->id}
-                    AND al.payment_date = '{$date}'
-                    GROUP BY al.empID
-                    LIMIT 1), 0)) AS category{$category->id}, ";
+                $allowance_categories_query .= "
+            COALESCE((SELECT SUM(al.amount)
+                FROM {$allowance_table} al
+                JOIN allowances ON allowances.id = al.\"allowanceID\"
+                WHERE al.empid = e.emp_id
+                AND allowances.allowance_category_id = {$category->id}
+                AND al.payment_date = '{$date}'
+                GROUP BY al.empid LIMIT 1
+            ), 0) AS category{$category->id},";
             }
 
-            $allowance_categories_query .= "(IFNULL((SELECT SUM(al.amount)
+            // Add query for other payments
+            $allowance_categories_query .= "
+            COALESCE((SELECT SUM(al.amount)
                 FROM {$allowance_table} al
-                JOIN allowances ON allowances.id = al.allowanceID
+                JOIN allowances ON allowances.id = al.\"allowanceID\"
                 WHERE al.empID = e.emp_id
                 AND allowances.allowance_category_id IS NULL
                 AND al.payment_date = '{$date}'
-                GROUP BY al.empID
-                LIMIT 1), 0)) AS other_payments, ";
+                GROUP BY al.empID LIMIT 1
+            ), 0) AS other_payments,";
 
-            $query = "SELECT
-                pl.*,
-                e.fname, e.mname, e.lname, e.account_no, e.pf_membership_no, pl.sdl, pl.wcf, e.currency, de.name, e.cost_center as costCenterName, b.name as bank_name, e.branch as branch_code,
-                e.emp_id, e.rate,
-                0 as allowance_amount,
-                IFNULL((SELECT SUM(al.amount)
-                    FROM {$allowance_table} al
-                    WHERE al.empID = e.emp_id
-                    AND al.description LIKE '%Overtime%'
-                    AND al.payment_date = '{$date}'
-                    GROUP BY al.empID
-                    LIMIT 1), 0) AS overtime,
-                {$allowance_categories_query}
-                IFNULL((SELECT SUM(al.amount)
-                    FROM {$allowance_table} al
-                    WHERE al.empID = e.emp_id
-                    AND al.description = 'Arrears'
-                    AND al.payment_date = '{$date}'
-                    GROUP BY al.empID
-                    LIMIT 1), 0) AS arrears_allowance,
-                IFNULL((SELECT SUM(dl.paid)
-                    FROM {$deduction_table} dl
-                    WHERE dl.empID = e.emp_id
-                    AND dl.payment_date = '{$date}'
-                    GROUP BY dl.empID
-                    LIMIT 1), 0) AS deductions,
-                IFNULL((SELECT SUM(ll.paid)
-                    FROM {$loan_table} ll
-                    JOIN loan l ON ll.loanID = l.id
-                    WHERE e.emp_id = l.empID
-                    AND ll.payment_date = '{$date}'
-                    GROUP BY ll.loanID
-                    LIMIT 1), 0) AS loans,
-                IFNULL((SELECT SUM(ll.paid)
-                    FROM {$loan_table} ll
-                    JOIN loan l ON ll.loanID = l.id
-                    WHERE e.emp_id = l.empID
-                    AND ll.payment_date = '{$date}'
-                    GROUP BY ll.payment_date
-                    LIMIT 1), 0) AS total_loans
+            // Trim the trailing comma and space
+            $allowance_categories_query = rtrim($allowance_categories_query, ', ');
+
+                $query = "SELECT
+                    pl.*,
+                    e.fname, e.mname, e.lname, e.account_no, e.pf_membership_no, pl.sdl, pl.wcf, e.currency, de.name, e.cost_center as costCenterName, b.name as bank_name, e.branch as branch_code,
+                    e.emp_id, e.rate,
+                    0 as allowance_amount,
+                    COALESCE((SELECT SUM(al.amount)
+                        FROM {$allowance_table} al
+                        WHERE al.empid = e.emp_id
+                        AND al.description LIKE '%Overtime%'
+                        AND al.payment_date = '{$date}'
+                        GROUP BY al.empid
+                    ), 0) AS overtime,
+                    {$allowance_categories_query},
+                    COALESCE((SELECT SUM(al.amount)
+                        FROM {$allowance_table} al
+                        WHERE al.empid = e.emp_id
+                        AND al.description = 'Arrears'
+                        AND al.payment_date = '{$date}'
+                        GROUP BY al.empid
+                    ), 0) AS arrears_allowance,
+                    COALESCE((SELECT SUM(dl.paid)
+                        FROM {$deduction_table} dl
+                        WHERE dl.empid = e.emp_id
+                        AND dl.payment_date = '{$date}'
+                        GROUP BY dl.empid
+                    ), 0) AS deductions,
+                    COALESCE((SELECT SUM(ll.paid)
+                        FROM {$loan_table} ll
+                        JOIN loan l ON ll.\"loanID\" = l.id
+                        WHERE e.emp_id = l.empid
+                        AND ll.payment_date = '{$date}'
+                        GROUP BY ll.\"loanID\"
+                    ), 0) AS loans,
+                    COALESCE((SELECT SUM(ll.paid)
+                        FROM {$loan_table} ll
+                        JOIN loan l ON ll.\"loanID\" = l.id
+                        WHERE e.emp_id = l.empid
+                        AND ll.payment_date = '{$date}'
+                        GROUP BY ll.payment_date
+                    ), 0) AS total_loans
                 FROM {$payroll_table} pl
-                JOIN employee e ON e.emp_id = pl.empID
+                JOIN employee e ON e.emp_id = pl.\"empID\"
                 JOIN bank b ON b.id = e.bank
                 JOIN department de ON e.department = de.id
                 JOIN cost_center cc ON de.cost_center_id = cc.id
@@ -3740,8 +3746,11 @@ FROM terminations tm";
         $calendar = explode('-', $payroll_date);
         $date = !empty($payroll_date) ? $calendar[0] . '-' . $calendar[1] : null;
 
-        $query = "SELECT SUM(pl.salary)+(IF((SELECT SUM(tm.total_gross) from terminations tm,employee e2 where e2.emp_id = tm.employeeID and e2.cost_center = 'Management' and terminationDate like '%" . $date . "%') > 0,(SELECT SUM(tm.total_gross) from terminations tm,employee e2 where tm.employeeID = e2.emp_id and e.cost_center = 'Management' and terminationDate like '%" . $date . "%'),0)) as total_gross FROM payroll_logs pl, employee e
-        WHERE e.emp_id = pl.empID  and e.cost_center = 'Management'  and e.contract_type != 2  and pl.payroll_date = '" . $payroll_date . "'";
+        $query = "SELECT
+    SUM(pl.salary) + COALESCE(SUM(tm.total_gross), 0) as total_gross FROM payroll_logs pl JOIN employee e ON e.emp_id = pl.\"empID\"
+    LEFT JOIN terminations tm ON tm.\"employeeID\" = e.emp_id AND tm.\"terminationDate\"::text LIKE '%" . $date . "%'
+    WHERE e.cost_center = 'Management' AND e.contract_type != '2' AND pl.payroll_date = '" . $payroll_date . "'";
+
 
         $query2 = "SELECT SUM(al.amount) as total_gross FROM allowance_logs al,employee e
         WHERE  al.empID = e.emp_id and al.benefit_in_kind = 'NO'   and e.cost_center = 'Management'  and  al.payment_date = '" . $payroll_date . "'";
@@ -3795,7 +3804,7 @@ FROM terminations tm";
     {
 
         $query = "SELECT SUM(al.amount) as amount,al.description as description,e.cost_center as account_name FROM allowance_logs al,employee e
-        WHERE   al.empID = e.emp_id and al.benefit_in_kind = 'YES'  and  al.payment_date = '" . $payroll_date . "' group by al.description";
+        WHERE   al.empid = e.emp_id and al.benefit_in_kind = 'YES'  and  al.payment_date = '" . $payroll_date . "' group by al.description, e.cost_center";
 
         $row = DB::select(DB::raw($query));
 
@@ -3810,25 +3819,24 @@ FROM terminations tm";
         $calendar = explode('-', $payroll_date);
         $date = !empty($payroll_date) ? $calendar[0] . '-' . $calendar[1] : null;
         //paye
-        $query = "SELECT SUM(pl.taxdue)+(IF((SELECT SUM(tm.paye) from terminations tm,employee e2 where e2.emp_id = tm.employeeID  and terminationDate like '%" . $date . "%') > 0,(SELECT SUM(tm.paye) from terminations tm,employee e2 where tm.employeeID = e2.emp_id  and terminationDate like '%" . $date . "%'),0)) as paye FROM payroll_logs pl, employee e
-        WHERE e.emp_id = pl.empID  and e.contract_type != 2  and pl.payroll_date = '" . $payroll_date . "'";
+        $query = "SELECT SUM(pl.taxdue) + COALESCE(SUM(tm.paye), 0) as paye FROM payroll_logs pl JOIN employee e ON e.emp_id = pl.\"empID\" LEFT JOIN terminations tm ON tm.\"employeeID\" = e.emp_id
+        AND tm.\"terminationDate\"::text LIKE '%" . $date . "%' WHERE e.contract_type != '2' AND pl.payroll_date = '" . $payroll_date . "'";
+
         $paye = DB::select(DB::raw($query));
 
         //sdl
-        $query = "SELECT SUM(pl.sdl)+(IF((SELECT SUM(tm.sdl) from terminations tm,employee e2 where e2.emp_id = tm.employeeID  and terminationDate like '%" . $date . "%') > 0,(SELECT SUM(tm.sdl) from terminations tm,employee e2 where tm.employeeID = e2.emp_id  and terminationDate like '%" . $date . "%'),0)) as sdl FROM payroll_logs pl, employee e
-         WHERE e.emp_id = pl.empID  and e.contract_type != 2  and pl.payroll_date = '" . $payroll_date . "'";
+         $query = "SELECT SUM(pl.sdl) + COALESCE(SUM(tm.sdl), 0) as sdl FROM payroll_logs pl JOIN employee e ON e.emp_id = pl.\"empID\" LEFT JOIN terminations tm ON tm.\"employeeID\" = e.emp_id
+        AND tm.\"terminationDate\"::text LIKE '%" . $date . "%' WHERE e.contract_type != '2' AND pl.payroll_date = '" . $payroll_date . "'";
         $sdl = DB::select(DB::raw($query));
 
         //wcf
-        $query = "SELECT SUM(pl.wcf)+(IF((SELECT SUM(tm.wcf) from terminations tm,employee e2 where e2.emp_id = tm.employeeID  and terminationDate like '%" . $date . "%') > 0,(SELECT SUM(tm.wcf) from terminations tm,employee e2 where tm.employeeID = e2.emp_id  and terminationDate like '%" . $date . "%'),0)) as wcf FROM payroll_logs pl, employee e
-        WHERE e.emp_id = pl.empID  and e.contract_type != 2  and pl.payroll_date = '" . $payroll_date . "'";
+        $query = "SELECT SUM(pl.wcf) + COALESCE(SUM(tm.wcf), 0) as wcf FROM payroll_logs pl JOIN employee e ON e.emp_id = pl.\"empID\" LEFT JOIN terminations tm ON tm.\"employeeID\" = e.emp_id
+        AND tm.\"terminationDate\"::text LIKE '%" . $date . "%' WHERE e.contract_type != '2' AND pl.payroll_date = '" . $payroll_date . "'";
         $wcf = DB::select(DB::raw($query));
 
-
-
         //nssf
-        $query = "SELECT SUM(pl.pension_employee)+(IF((SELECT SUM(tm.pension_employee) from terminations tm,employee e2 where e2.emp_id = tm.employeeID  and terminationDate like '%" . $date . "%') > 0,(SELECT SUM(tm.pension_employee) from terminations tm,employee e2 where tm.employeeID = e2.emp_id  and terminationDate like '%" . $date . "%'),0)) as pension_employee FROM payroll_logs pl, employee e
-        WHERE e.emp_id = pl.empID  and e.contract_type != 2  and pl.payroll_date = '" . $payroll_date . "'";
+        $query = "SELECT SUM(pl.pension_employee) + COALESCE(SUM(tm.pension_employee), 0) as pension_employee FROM payroll_logs pl JOIN employee e ON e.emp_id = pl.\"empID\" LEFT JOIN terminations tm ON tm.\"employeeID\" = e.emp_id
+        AND tm.\"terminationDate\"::text LIKE '%" . $date . "%' WHERE e.contract_type != '2' AND pl.payroll_date = '" . $payroll_date . "'";
         $nssf = DB::select(DB::raw($query));
         $data['paye'] = ' ';
         $data['wcf'] = ' ';
@@ -3854,7 +3862,7 @@ FROM terminations tm";
     {
         $calendar = explode('-', $payroll_date);
         $date = !empty($payroll_date) ? $calendar[0] . '-' . $calendar[1] : null;
-        $query = "SELECT tm.take_home as amount,'Terminal Benefit' as Description,e.fname as name from terminations tm,employee e where e.emp_id = tm.employeeID and tm.terminationDate like '%" . $date . "%'";
+        $query = "SELECT tm.take_home as amount,'Terminal Benefit' as Description,e.fname as name from terminations tm,employee e where e.emp_id = tm.\"employeeID\" and tm.\"terminationDate\"::text like '%" . $date . "%'";
 
         $row = DB::select(DB::raw($query));
 
@@ -3872,7 +3880,7 @@ FROM terminations tm";
 
         }
 
-        //dd($net_salary);
+        // dd($net_salary);
 
         return $net_salary;
     }
@@ -3898,7 +3906,7 @@ FROM terminations tm";
     public function journal_deductions($payroll_date)
     {
         $query = "SELECT SUM(dl.paid) as amount,dl.description as description,CONCAT(dl.description,'-',e.fname,' ',e.lname) as naration FROM deduction_logs dl,employee e
-        WHERE   dl.empID = e.emp_id   and  dl.payment_date = '" . $payroll_date . "' group by dl.description";
+        WHERE   dl.empid = e.emp_id   and  dl.payment_date = '" . $payroll_date . "' group by dl.description, e.fname, e.lname";
 
         $row = DB::select(DB::raw($query));
 
@@ -3912,8 +3920,9 @@ FROM terminations tm";
         $calendar = explode('-', $payroll_date);
         $date = !empty($payroll_date) ? $calendar[0] . '-' . $calendar[1] : null;
 
-        $query = "SELECT SUM(pl.salary)+(IF((SELECT SUM(tm.total_gross) from terminations tm,employee e2 where e2.emp_id = tm.employeeID and e2.cost_center = 'Non Management' and terminationDate like '%" . $date . "%') > 0,(SELECT SUM(tm.total_gross) from terminations tm,employee e2 where tm.employeeID = e2.emp_id and e.cost_center = 'Non Management' and terminationDate like '%" . $date . "%'),0)) as total_gross FROM payroll_logs pl, employee e
-        WHERE e.emp_id = pl.empID  and e.cost_center = 'Non Management'  and e.contract_type != 2  and pl.payroll_date = '" . $payroll_date . "'";
+        $query = "SELECT SUM(pl.salary) + COALESCE(SUM(tm.total_gross), 0) as total_gross FROM payroll_logs pl JOIN employee e ON e.emp_id = pl.\"empID\"
+        LEFT JOIN terminations tm ON tm.\"employeeID\" = e.emp_id AND e.cost_center = 'Non Management' AND tm.\"terminationDate\"::text LIKE '%" . $date . "%'
+        WHERE e.cost_center = 'Non Management' AND e.contract_type != '2' AND pl.payroll_date = '" . $payroll_date . "'";
 
         $query2 = "SELECT SUM(al.amount) as total_gross FROM allowance_logs al,employee e
         WHERE  al.empID = e.emp_id and al.benefit_in_kind = 'NO'   and e.cost_center = 'Non Management'  and  al.payment_date = '" . $payroll_date . "'";
