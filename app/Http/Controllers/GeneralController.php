@@ -5886,7 +5886,6 @@ class GeneralController extends Controller
 
             public function submitInputs(Request $request)
             {
-                // dd($request);
                 // Authenticate user
                 $this->authenticateUser('edit-payroll');
 
@@ -5896,101 +5895,143 @@ class GeneralController extends Controller
                 // Initialize data array
                 $data['pending_payroll'] = 0;
 
-                // Check if date is provided
                 if ($date) {
-                    // Format the date to 'YYYY-MM' for comparison
-                    $formattedDate = date('Y-m', strtotime($date));
+                    // $query = "UPDATE allowances SET state = IF(month('" . $date . "') = 12,1,0) WHERE type = 1";  //Activate leave allowance
+                    $query = "UPDATE allowances SET state = CASE WHEN EXTRACT(MONTH FROM DATE '" . $date . "') = 12 THEN 1 ELSE 0 END
+                    WHERE type = '1'";
+                    DB::update(DB::raw($query));
 
-                    // Construct the query to count records matching the formatted date
-                    $query = "SELECT count(id) as total FROM payroll_months WHERE TO_CHAR(payroll_date, 'YYYY-MM') = '" . $formattedDate . "'";
+                    $this->addPrevMonthSalaryArrears($date);
 
-                    // Debug: Log the query for inspection
-                    \Log::info('Executing query: ' . $query);
-
-                    // Execute the count query using Laravel's DB::select method
-
-                    $result = DB::select(DB::raw($query));
-
-
-                    // Check if result is found
-                    if (count($result) > 0 && $result[0]->total > 0) {
-                        $total = $result[0]->total;
-                    } else {
-                        $total = 0;
-                    }
-
-                    // Return the result as JSON response
-                    if ($total > 0) {
-                        response()->json(['total' => 0]);
-
-                    } else {
-                        // If total is 0, return early to avoid further processing
-                        return response()->json(['total' => 0]);
-                    }
-                }
-
-                // Add previous month salary arrears
-
-                $this->addPrevMonthSalaryArrears($date);
+                    if ($request->method() == 'POST') {
+                        $month = $this->payroll_model->checkPayrollMonth($date);
+                        $submission = $this->payroll_model->checkInputMonth($date);
+                       // $this->insertLoanDetailsToFinancialLogs($date);
 
 
-                // Handle form submission logic
-                if ($request->isMethod('post')) {
-                    // dd($this->payroll_model->checkPayrollMonth($date));
-                    // Check if the payroll month exists and if inputs for the month have already been submitted
-                    // dd($this->payroll_model->checkPayrollMonth($formattedDate));
-                    // dd($request);
-                    $month = $this->payroll_model->checkPayrollMonth($date);
-                    // dd($month);
-                    $submission = $this->payroll_model->checkInputMonth($date);
-                   $month =0;
-                    if ($month < 1) {
-                        if ($submission < 1) {
-                            // Get active allowances and log financial details
-                            $allowances = $this->payroll_model->getAssignedAllowanceActive($date);
-                            foreach ($allowances as $row) {
+                        if ($month < 1) {
+                            if ($submission < 1) {
+                                $allowances = $this->payroll_model->getAssignedAllowanceActive($date);
 
-                                if ($row->state == 1) {
+                                foreach ($allowances as $row) {
+                                    if ($row->state == 1) {
 
-                                    SysHelpers::FinancialLogs(
-                                        $row->empid,
-                                        $row->name,
-                                        ($row->amount != 0) ? number_format($row->amount, 2) . ' ' . $row->currency : $row->percent . '%',
-                                        ($row->amount != 0) ? number_format($row->amount, 2) . ' ' . $row->currency : $row->percent . '%',
-                                        'Payroll Input',
-                                        $date
-                                    );
+                                        SysHelpers::FinancialLogs($row->empID, $row->name,  ($row->amount != 0) ? number_format($row->amount, 2) . ' ' . $row->currency : $row->percent . '%', ($row->amount != 0) ? number_format($row->amount, 2) . ' ' . $row->currency : $row->percent . '%', 'Payroll Input', $date);
+                                    }
                                 }
+                                $deductions = $this->payroll_model->getAssignedDeduction();
+                                foreach ($deductions as $row) {
+                                    SysHelpers::FinancialLogs($row->empID, $row->name,  ($row->amount != 0) ? number_format($row->amount, 2) . ' ' . $row->currency : $row->percent . '%', ($row->amount != 0) ? number_format($row->amount, 2) . ' ' . $row->currency : $row->percent . '%', 'Payroll Input', $date);
+                                }
+                                InputSubmission::create(['empid' => auth()->user()->emp_id, 'date' => $date]);
+                                echo "<p class='alert alert-success text-center'>Inputs  submitted Successfuly</p>";
+                            } else {
+                                echo "<p class='alert alert-danger text-center'>Inputs for this payroll month already submitted</p>";
                             }
-
-                            // Get assigned deductions and log financial details
-                            $deductions = $this->payroll_model->getAssignedDeduction();
-                            foreach ($deductions as $row) {
-                                // dd($row);
-                                SysHelpers::FinancialLogs(
-                                    $row->empID,
-                                    $row->name,
-                                    ($row->amount != 0) ? number_format($row->amount, 2) . ' ' . $row->currency : $row->percent . '%',
-                                    ($row->amount != 0) ? number_format($row->amount, 2) . ' ' . $row->currency : $row->percent . '%',
-                                    'Payroll Input',
-                                    $date
-                                );
-                            }
-
-                            // Create input submission record
-                            InputSubmission::create(['empid' => auth()->user()->emp_id, 'date' => $date]);
-                            return response()->json(['message' => 'Inputs submitted successfully']);
                         } else {
-                            return response()->json(['message' => 'Inputs for this payroll month already submitted']);
+                            echo "<p class='alert alert-danger text-center'>You cant submit inputs to previous payroll Month</p>";
                         }
-                    } else {
-                        return response()->json(['message' => 'You can\'t submit inputs to a previous payroll month']);
                     }
                 } else {
 
-                    // If not a POST request, return the view for input submission
                     return view('payroll.submit_inputs', $data);
                 }
+
+                // Check if date is provided
+                // if ($date) {
+                //     // Format the date to 'YYYY-MM' for comparison
+                //     $formattedDate = date('Y-m', strtotime($date));
+
+                //     // Construct the query to count records matching the formatted date
+                //     $query = "SELECT count(id) as total FROM payroll_months WHERE TO_CHAR(payroll_date, 'YYYY-MM') = '" . $formattedDate . "'";
+
+                //     // Debug: Log the query for inspection
+                //     \Log::info('Executing query: ' . $query);
+
+                //     // Execute the count query using Laravel's DB::select method
+
+                //     $result = DB::select(DB::raw($query));
+
+
+                //     // Check if result is found
+                //     if (count($result) > 0 && $result[0]->total > 0) {
+                //         $total = $result[0]->total;
+                //     } else {
+                //         $total = 0;
+                //     }
+
+                //     // Return the result as JSON response
+                //     if ($total > 0) {
+                //         response()->json(['total' => 0]);
+
+                //     } else {
+                //         // If total is 0, return early to avoid further processing
+                //         return response()->json(['total' => 0]);
+                //     }
+                // }
+
+                // // Add previous month salary arrears
+
+                // $this->addPrevMonthSalaryArrears($date);
+
+
+                // // Handle form submission logic
+                // if ($request->isMethod('post')) {
+                //     // dd($this->payroll_model->checkPayrollMonth($date));
+                //     // Check if the payroll month exists and if inputs for the month have already been submitted
+                //     // dd($this->payroll_model->checkPayrollMonth($formattedDate));
+                //     // dd($request);
+                //     $month = $this->payroll_model->checkPayrollMonth($date);
+                //     // dd($month);
+                //     $submission = $this->payroll_model->checkInputMonth($date);
+                //    $month =0;
+                //     if ($month < 1) {
+                //         if ($submission < 1) {
+                //             // Get active allowances and log financial details
+                //             $allowances = $this->payroll_model->getAssignedAllowanceActive($date);
+                //             foreach ($allowances as $row) {
+
+                //                 if ($row->state == 1) {
+
+                //                     SysHelpers::FinancialLogs(
+                //                         $row->empid,
+                //                         $row->name,
+                //                         ($row->amount != 0) ? number_format($row->amount, 2) . ' ' . $row->currency : $row->percent . '%',
+                //                         ($row->amount != 0) ? number_format($row->amount, 2) . ' ' . $row->currency : $row->percent . '%',
+                //                         'Payroll Input',
+                //                         $date
+                //                     );
+                //                 }
+                //             }
+
+                //             // Get assigned deductions and log financial details
+                //             $deductions = $this->payroll_model->getAssignedDeduction();
+                //             foreach ($deductions as $row) {
+                //                 // dd($row);
+                //                 SysHelpers::FinancialLogs(
+                //                     $row->empID,
+                //                     $row->name,
+                //                     ($row->amount != 0) ? number_format($row->amount, 2) . ' ' . $row->currency : $row->percent . '%',
+                //                     ($row->amount != 0) ? number_format($row->amount, 2) . ' ' . $row->currency : $row->percent . '%',
+                //                     'Payroll Input',
+                //                     $date
+                //                 );
+                //             }
+
+                //             // Create input submission record
+                //             InputSubmission::create(['empid' => auth()->user()->emp_id, 'date' => $date]);
+                //             return response()->json(['message' => 'Inputs submitted successfully']);
+                //         } else {
+                //             return response()->json(['message' => 'Inputs for this payroll month already submitted']);
+                //         }
+                //     } else {
+                //         return response()->json(['message' => 'You can\'t submit inputs to a previous payroll month']);
+                //     }
+                // } else {
+
+                //     // If not a POST request, return the view for input submission
+                //     return view('payroll.submit_inputs', $data);
+                // }
             }
 
 
