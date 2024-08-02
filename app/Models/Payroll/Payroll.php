@@ -155,7 +155,7 @@ class Payroll extends Model
     }
     public function payrollMonthListpending()
     {
-        $query = 'SELECT (@s:=@s+1) as SNo, pm.* FROM payroll_months pm, (SELECT @s:=0) as s WHERE pm.state=1 OR pm.state=2  ORDER BY pm.id DESC';
+        $query = "SELECT ROW_NUMBER() OVER (ORDER BY pm.id DESC) AS SNo, pm.* FROM payroll_months pm WHERE pm.state = 1 OR pm.state = 2 ORDER BY pm.id DESC";
         return DB::select(DB::raw($query));
     }
     public function employee_bonuses()
@@ -3299,14 +3299,13 @@ as gross,
 
         $employees = Employee::select([
             'emp_id',
-            DB::raw("({$daysInMonth} - DAY(hire_date) + 1) * salary / 30 as partialpayment"),
-
+            DB::raw("({$daysInMonth} - EXTRACT(DAY FROM hire_date) + 1) * salary / 30 AS partialpayment")
         ])
-            ->where(function ($query) use ($startDate, $endDate) {
-                $query->where('hire_date', '>', $startDate,)
-                    ->where('hire_date', '<=', $endDate);
-            })
-            ->get();
+        ->where(function ($query) use ($startDate, $endDate) {
+            $query->where('hire_date', '>', $startDate)
+                  ->where('hire_date', '<=', $endDate);
+        })
+        ->get();
 
             foreach ($employees as $employee) {
 
