@@ -2070,7 +2070,7 @@ and e.branch = b.code and e.line_manager = el.emp_id and c.id = e.contract_type 
 
         }
 
-        $query = "SELECT count(pl.\"empID\") as total from " . $table . " pl where pl.payroll_date = '" . $date . "' and pl.\"empID\" NOT IN (SELECT pl2.\"empID\" from payroll_logs pl2 where pl2.payroll_date = '" . $date2 . "')";
+        $query = "SELECT count(pl.\"empID\") as total from " . $table . " pl where pl.payroll_date::text = '" . $date . "' and pl.\"empID\" NOT IN (SELECT pl2.\"empID\" from payroll_logs pl2 where pl2.payroll_date::text = '" . $date2 . "')";
 
         $row = DB::select(DB::raw($query));
 
@@ -2228,7 +2228,7 @@ and e.branch = b.code and e.line_manager = el.emp_id and c.id = e.contract_type 
         $subquery = "SELECT SUM(tm.actual_salary - tm.\"salaryEnrollment\") as amount from terminations tm where  tm.\"terminationDate\"::text like '$current_terminationDate'";
         $row1 = DB::select(DB::raw($subquery));
 
-        $query = "SELECT SUM(pl.actual_salary-pl.salary) as amount from " . $payroll_log . " pl where pl.actual_salary > pl.salary and pl.salary != (SELECT salary from payroll_logs where pl.\"empID\" = payroll_logs.\"empID\" and payroll_logs.payroll_date = '" . $previous_payroll_month . "') and pl.payroll_date = '" . $current_payroll_month . "'";
+        $query = "SELECT SUM(pl.actual_salary-pl.salary) as amount from " . $payroll_log . " pl where pl.actual_salary > pl.salary and pl.salary != (SELECT salary from payroll_logs where pl.\"empID\" = payroll_logs.\"empID\" and payroll_logs.payroll_date::text = '" . $previous_payroll_month . "') and pl.payroll_date::text = '" . $current_payroll_month . "'";
         $row = DB::select(DB::raw($query));
         $data['basic_decrease'] = $row[0]->amount + $row1[0]->amount;
 
@@ -2236,7 +2236,7 @@ and e.branch = b.code and e.line_manager = el.emp_id and c.id = e.contract_type 
         $subquery = "SELECT SUM(tm.actual_salary) as amount from terminations tm where tm.actual_salary > tm.\"salaryEnrollment\" and  tm.\"terminationDate\"::text like '$current_terminationDate'";
         $row1 = DB::select(DB::raw($subquery));
 
-        $query = "SELECT SUM(pl.actual_salary) as amount from " . $payroll_log . " pl where   pl.actual_salary > pl.salary and pl.salary != (SELECT salary from payroll_logs where pl.\"empID\" = payroll_logs.\"empID\" and payroll_logs.payroll_date = '" . $previous_payroll_month . "') and pl.payroll_date = '" . $current_payroll_month . "'";
+        $query = "SELECT SUM(pl.actual_salary) as amount from " . $payroll_log . " pl where   pl.actual_salary > pl.salary and pl.salary != (SELECT salary from payroll_logs where pl.\"empID\" = payroll_logs.\"empID\" and payroll_logs.payroll_date::text = '" . $previous_payroll_month . "') and pl.payroll_date::text = '" . $current_payroll_month . "'";
         $row = DB::select(DB::raw($query));
 
         $data['actual_amount'] = $row[0]->amount + $row1[0]->amount;
@@ -2299,11 +2299,11 @@ and e.branch = b.code and e.line_manager = el.emp_id and c.id = e.contract_type 
         $row1 = DB::select(DB::raw($subquery));
         //dd($row1);
 
-        $query = "SELECT SUM(pl.salary - pl.actual_salary) as amount from " . $payroll_log . " pl where pl.actual_salary < pl.salary and pl.salary != (SELECT salary from payroll_logs where pl.\"empID\" = payroll_logs.\"empID\" and payroll_logs.payroll_date = '" . $previous_payroll_month . "') and pl.payroll_date = '" . $current_payroll_month . "'";
+        $query = "SELECT SUM(pl.salary - pl.actual_salary) as amount from " . $payroll_log . " pl where pl.actual_salary < pl.salary and pl.salary != (SELECT salary from payroll_logs where pl.\"empID\" = payroll_logs.\"empID\" and payroll_logs.payroll_date::text = '" . $previous_payroll_month . "') and pl.payroll_date::text = '" . $current_payroll_month . "'";
         $row = DB::select(DB::raw($query));
         //dd($row);
 
-        $query = "SELECT SUM(pl.salary - (SELECT salary from payroll_logs where pl.\"empID\" = payroll_logs.\"empID\" and payroll_logs.payroll_date = '" . $previous_payroll_month . "')) as amount,SUM(pl.actual_salary) as actual_salary from " . $payroll_log . " pl where pl.actual_salary = pl.salary and pl.actual_salary > (SELECT salary from payroll_logs where pl.\"empID\" = payroll_logs.\"empID\" and payroll_logs.payroll_date = '" . $previous_payroll_month . "') and pl.payroll_date = '" . $current_payroll_month . "'";
+        $query = "SELECT SUM(pl.salary - (SELECT salary from payroll_logs where pl.\"empID\" = payroll_logs.\"empID\" and payroll_logs.payroll_date::text = '" . $previous_payroll_month . "')) as amount,SUM(pl.actual_salary) as actual_salary from " . $payroll_log . " pl where pl.actual_salary = pl.salary and pl.actual_salary > (SELECT salary from payroll_logs where pl.\"empID\" = payroll_logs.\"empID\" and payroll_logs.payroll_date::text = '" . $previous_payroll_month . "') and pl.payroll_date::text = '" . $current_payroll_month . "'";
         $row2 = DB::select(DB::raw($query));
 
         $data['basic_increase'] = $row[0]->amount + $row1[0]->amount + $row2[0]->amount;
@@ -3182,19 +3182,19 @@ and e.branch = b.code and e.line_manager = el.emp_id and c.id = e.contract_type 
       $query = "SELECT DISTINCT CONCAT('Add/Less ', al.description) as description, al.description as allowance,
             COALESCE((SELECT SUM(amount) FROM " . $allowance_log . "
                       WHERE " . $allowance_log . ".description = al.description
-                      AND " . $allowance_log . ".payment_date = '" . $current_payroll_month . "'
+                      AND " . $allowance_log . ".payment_date::text = '" . $current_payroll_month . "'
                       GROUP BY description), 0) as current_amount,
             COALESCE((SELECT SUM(amount) FROM allowance_logs
                       WHERE allowance_logs.description = al.description
-                      AND payment_date = '" . $previous_payroll_month . "'
+                      AND payment_date::text = '" . $previous_payroll_month . "'
                       GROUP BY description), 0) as previous_amount,
             COALESCE((SELECT SUM(amount) FROM " . $allowance_log . "
                       WHERE " . $allowance_log . ".description = al.description
-                      AND payment_date = '" . $current_payroll_month . "'
+                      AND payment_date::text = '" . $current_payroll_month . "'
                       GROUP BY description), 0)
             - COALESCE((SELECT SUM(amount) FROM allowance_logs
                         WHERE allowance_logs.description = al.description
-                        AND payment_date = '" . $previous_payroll_month . "'
+                        AND payment_date::text = '" . $previous_payroll_month . "'
                         GROUP BY description), 0) as difference
         FROM " . $allowance_log . " al
         GROUP BY al.description
@@ -3208,20 +3208,20 @@ and e.branch = b.code and e.line_manager = el.emp_id and c.id = e.contract_type 
                       GROUP BY description), 0) as current_amount,
             COALESCE((SELECT SUM(amount) FROM allowance_logs
                       WHERE allowance_logs.description = al.description
-                      AND payment_date = '" . $previous_payroll_month . "'
+                      AND payment_date::text = '" . $previous_payroll_month . "'
                       GROUP BY description), 0) as previous_amount,
             COALESCE((SELECT SUM(amount) FROM " . $allowance_log . "
                       WHERE " . $allowance_log . ".description = al.description
-                      AND payment_date = '" . $current_payroll_month . "'
+                      AND payment_date::text = '" . $current_payroll_month . "'
                       GROUP BY description), 0)
             - COALESCE((SELECT SUM(amount) FROM allowance_logs
                         WHERE allowance_logs.description = al.description
-                        AND payment_date = '" . $previous_payroll_month . "'
+                        AND payment_date::text = '" . $previous_payroll_month . "'
                         GROUP BY description), 0) as difference
         FROM allowance_logs al
         WHERE al.description NOT IN (
             SELECT description FROM " . $allowance_log . "
-            WHERE payment_date = '" . $current_payroll_month . "'
+            WHERE payment_date::text = '" . $current_payroll_month . "'
         )
         GROUP BY al.description";
         $row = DB::select(DB::raw($query));

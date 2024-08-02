@@ -4977,6 +4977,7 @@ class GeneralController extends Controller
         if ($request->method() == "POST") {
 
             $members = $this->flexperformance_model->get_deduction_members($request->input('deduction'), $request->input('group'));
+            $result = false;
             foreach ($members as $row) {
                 $data = array(
                     'empID' => $row->empid,

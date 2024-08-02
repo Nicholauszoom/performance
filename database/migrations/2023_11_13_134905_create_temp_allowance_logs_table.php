@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('temp_allowance_logs', function (Blueprint $table) {
             $table->id();
-            $table->string('empid', 10);
+            $table->string('empID', 10);
             $table->integer('allowanceID');
             $table->integer('allowanceCode');
             $table->string('description', 50)->default('Unclassified');
