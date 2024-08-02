@@ -64,16 +64,11 @@ class FlexPerformanceModel extends Model
 
         // Calculate the date after the start_date
         $next_day = date('Y-m-d', strtotime($start_date . ' +1 day'));
-        $query = "SELECT Date(fn.created_at) as created_date, fn.*,
-                        CONCAT(e.fname,' ', IF(e.mname IS NOT NULL, e.mname, ''),' ', e.lname) as empName,
-                        CONCAT(au.fname,' ', IF(au.mname IS NOT NULL, au.mname, ''),' ', au.lname) as authName
-                FROM financial_logs fn
-                JOIN employee e ON fn.payrollno = e.emp_id
-                JOIN employee au ON fn.changed_by = au.emp_id
-                WHERE Date(fn.created_at) BETWEEN :next_day AND :end_date
-                ORDER BY fn.created_at DESC";
+        $query = "SELECT DATE(fn.created_at) AS created_date, fn.*, CONCAT(e.fname, ' ', COALESCE(e.mname, ''), ' ', e.lname) AS \"empName\", CONCAT(au.fname, ' ', COALESCE(au.mname, ''), ' ', au.lname) AS \"authName\"
+        FROM financial_logs fn JOIN employee e ON fn.payrollno = e.emp_id JOIN employee au ON fn.changed_by = au.emp_id
+        WHERE DATE(fn.created_at::text) BETWEEN '$next_day' AND '$end_date'";
 
-        return DB::select(DB::raw($query), ['next_day' => $next_day, 'end_date' => $end_date]);
+        return DB::select(DB::raw($query));
     }
 
 
