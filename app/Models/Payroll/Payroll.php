@@ -3411,8 +3411,29 @@ return $row;
     }
     public function getPayroll($payrollMonth)
     {
-        $query = "SELECT CONCAT(ie.fname,' ', ie.mname,' ', ie.lname) as initName, IF( (pm.state=0), (SELECT CONCAT(ae.fname,' ', ae.mname,' ', ae.lname) FROM employee ae WHERE ae.emp_id = pm.appr_author and ae.state = 1 and ae.login_user != 1), 1) as apprName, pm.* FROM payroll_months pm, employee ie WHERE ie.emp_id = pm.init_author and ie.state = 1 and ie.login_user != 1 AND pm.payroll_date = '" . $payrollMonth . "' ";
-        return DB::select(DB::raw($query));
+        $query = "SELECT 
+        ie.fname || ' ' || ie.mname || ' ' || ie.lname AS initName,
+        CASE 
+            WHEN pm.state = 0 THEN 
+                (SELECT ae.fname || ' ' || ae.mname || ' ' || ae.lname 
+                 FROM employee ae 
+                 WHERE ae.emp_id = pm.appr_author 
+                   AND ae.state = 1 
+                   AND ae.login_user != 1)
+            ELSE 
+                '1'
+        END AS apprName,
+        pm.*
+    FROM 
+        payroll_months pm
+    JOIN 
+        employee ie ON ie.emp_id = pm.init_author 
+                    AND ie.state = 1 
+                    AND ie.login_user != 1
+    WHERE 
+        pm.payroll_date = '" . $payrollMonth . "'
+    ";
+        return $query;
     }
     public function payrollTotals($table, $payrollMonth)
     {
@@ -3465,7 +3486,7 @@ return $row;
 
 
         $query = "SELECT sum(tlg.paid) as paid, sum(tlg.remained) as remained, l.description
-FROM temp_loan_logs tlg, loan l WHERE l.id = tlg.loanID and payment_date = '" . $payrollMonth . "' group by l.description";
+FROM temp_loan_logs tlg, loan l WHERE l.id = tlg.\"loanID\" and payment_date = '" . $payrollMonth . "' group by l.description";
         return DB::select(DB::raw($query));
     }
     public function total_heslb($table, $payrollMonth)
@@ -3564,14 +3585,53 @@ FROM temp_loan_logs tlg, loan l WHERE l.id = tlg.loanID and payment_date = '" . 
     public function employeePayrollList($date, $table_allowance_logs, $table_deduction_logs, $table_loan_logs, $table_payroll_logs)
     {
 
-
-        $query = "SELECT @s:=@s+1 AS SNo, pl.empID,  CONCAT(e.fname,' ', IF(e.mname != null,e.mname,' '),' ', e.lname) AS empName,
-		IF((SELECT SUM(al.amount) FROM " . $table_allowance_logs . " al WHERE al.empID = e.emp_id AND al.payment_date = '" . $date . "' GROUP BY al.empID)>0, (SELECT SUM(al.amount) FROM " . $table_allowance_logs . " al WHERE al.empID = e.emp_id AND al.payment_date = '" . $date . "' GROUP BY al.empID), 0) AS allowances, p.name as position, d.name as department,
-		pl.salary, pl.meals, pl.pension_employee AS pension, pl.taxdue,
-		IF((SELECT SUM(ll.paid) FROM " . $table_loan_logs . " ll, loan l WHERE l.empID = e.emp_id AND  ll.payment_date = '" . $date . "' GROUP BY l.empID)>0,(SELECT SUM(ll.paid) FROM " . $table_loan_logs . " ll, loan l WHERE e.emp_id = l.empID AND ll.loanID = l.id AND ll.payment_date = '" . $date . "' GROUP BY l.empID),0) AS loans,
-		IF((SELECT SUM(dl.paid) FROM " . $table_deduction_logs . " dl WHERE dl.empID = e.emp_id AND dl.payment_date = '" . $date . "' GROUP BY dl.empID)>0,(SELECT SUM(dl.paid) FROM " . $table_deduction_logs . " dl WHERE dl.empID = e.emp_id AND dl.payment_date = '" . $date . "' GROUP BY dl.empID),0) AS deductions
-		FROM employee e, " . $table_payroll_logs . "  pl, department d, position p, (SELECT @s:=0) AS s WHERE pl.empID = e.emp_id AND e.state = 1 and e.login_user != 1 and pl.position = p.id and pl.department = d.id AND pl.payroll_date = '" . $date . "'";
-        return DB::select(DB::raw($query));
+        $query = DB::table('employee as e')
+        ->join(DB::raw('payroll_logs pl'), function ($join) use ($date) {
+            $join->on('pl.empID', '=', 'e.emp_id')
+                 ->where('pl.payroll_date', '=', $date);
+        })
+        ->join('department as d', 'pl.department', '=', 'd.id')
+        ->join('position as p', 'pl.position', '=', 'p.id')
+        ->where('e.state', '=', 1)
+        ->where('e.login_user', '!=', 1)
+        ->select(
+            DB::raw("row_number() OVER () AS SNo"),
+            'pl.empID',
+            DB::raw("e.fname || ' ' || COALESCE(e.mname, '') || ' ' || e.lname AS empName"),
+            DB::raw("COALESCE(
+                        (SELECT SUM(al.amount) 
+                         FROM " . $table_allowance_logs . " al 
+                         WHERE al.empID = e.emp_id 
+                         AND al.payment_date = '" . $date . "' 
+                         GROUP BY al.empID), 
+                        0
+                     ) AS allowances"),
+            'p.name as position',
+            'd.name as department',
+            'pl.salary',
+            'pl.meals',
+            'pl.pension_employee AS pension',
+            'pl.taxdue',
+            DB::raw("COALESCE(
+                        (SELECT SUM(ll.paid) 
+                         FROM " . $table_loan_logs . " ll 
+                         JOIN loan l ON ll.\"loanID\" = l.id 
+                         WHERE l.empID = e.emp_id 
+                         AND ll.payment_date = '" . $date . "' 
+                         GROUP BY l.empID), 
+                        0
+                     ) AS loans"),
+            DB::raw("COALESCE(
+                        (SELECT SUM(dl.paid) 
+                         FROM " . $table_deduction_logs . " dl 
+                         WHERE dl.empID = e.emp_id 
+                         AND dl.payment_date = '" . $date . "' 
+                         GROUP BY dl.empID), 
+                        0
+                     ) AS deductions")
+        )
+        ->get();
+          return $query;
     }
     public function employeeTempPayrollList($date, $table_allowance_logs, $table_deduction_logs, $table_loan_logs, $table_payroll_logs, $table_arrears)
     {

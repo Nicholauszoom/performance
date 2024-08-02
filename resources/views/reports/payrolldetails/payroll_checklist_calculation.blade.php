@@ -138,60 +138,10 @@
                                 </td>
                                 <td class=" {{ $accountNumber_col }} " style="margin-right: 0px" colspan="">{{ $row->account_no }}
                                 </td>
-                                <!-- <td class=" {{ $pensionNumber_col }} " style="margin-right: 0px" colspan="">{{ $row->pf_membership_no }}
-                                </td> -->
+                                
                                 <td class=" {{$currency_col }} " style="margin-right: 0px" colspan="">{{ $row->currency}}
                                 </td>
-                                <!-- <td class=" {{ $department_col }} " style="margin-right: 0px" colspan="">{{ $row->name}}
-                                </td>
-                                <td class=" {{ $costCenter_col }} " style="margin-right: 0px" colspan="">{{ $row->costCenterName}}
-                                </td>
-
-                                <td class=" {{ $basicSalary_col }} text-end">{{ number_format($row->actual_salary, 2) }}</td>
-                                <td class=" {{ $netBasic_col }} text-end">{{ number_format($row->salary, 2) }}</td>
-
-                                <td class=" {{ $overtime_col }} text-end">{{ number_format($row->overtime, 2) }}</td>
-
-
-                                @foreach($allowance_categories as $category)
-
-                                @php
-
-                                $category_id="category".$category->id;
-
-                                $categories_total["category".$category->id]+= round($row->$category_id,2);
-
-
-                                @endphp
-
-                                <td class="{{ $allowanceCat_col }} text-end">{{ number_format($row->$category_id, 2) }}</td>
-
-                                @endforeach
-                                <td class=" {{ $otherPayments_col }} text-end">{{ number_format($row->other_payments,2) }}
-                                </td>
-
-                                <td class=" {{ $grossSalary_col }} text-end">{{ number_format($row->salary + $row->allowances, 2) }}
-                                </td>
-                                <td class=" {{ $taxBenefit_col }} text-end">{{ number_format(0, 2) }}</td>
-                                <td class=" {{ $taxableGross_col }} text-end">
-                                    {{ number_format($row->salary + $row->allowances - $row->pension_employer, 2) }}
-                                </td>
-                                <td class=" {{ $paye_col }} text-end">{{ number_format($row->taxdue, 2) }}</td>
-
-                                <td class=" {{ $nssfEmployee_col }} text-end">{{ number_format($row->pension_employer, 2) }}</td>
-                                <td class=" {{ $nssfEmployer_col }} text-end">{{ number_format($row->pension_employer, 2) }}</td>
-                                <td class=" {{ $nssfPayable_col }} text-end">{{ number_format($row->pension_employer*2, 2) }}</td>
-                                <td class=" {{ $sdl_col }} text-end">{{ number_format($row->sdl, 2) }}</td>
-                                <td class=" {{ $wcf_col }} text-end">{{ number_format($row->wcf, 2) }}</td>
-                                <td class=" {{ $loanBoard_col }} text-end">{{ number_format($row->loans, 2) }}</td>
-
-                                <td class=" {{ $advanceOthers_col }} text-end">{{ number_format($row->deductions, 2) }}</td>
-
-                                <td class=" {{ $totalDeduction_col }} text-end">
-
-
-                                    {{ number_format($row->salary + $row->allowances - $amount, 2) }}
-                                </td> -->
+                               
                                 <td class=" {{ $amountPayable_col }} text-end">{{ number_format($amount/$row->rate, 2) }}</td>
 
 
