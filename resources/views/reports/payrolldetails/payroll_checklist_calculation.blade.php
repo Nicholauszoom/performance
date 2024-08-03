@@ -52,6 +52,7 @@
                 <tbody>
 
 
+            
                     <?php
                     $i = 0;
                     if (!empty($summary)) {

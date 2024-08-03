@@ -161,7 +161,7 @@
 
                                     @foreach ($my_loans as $row)
                                         <tr>
-                                            <td width="1px"><?php echo $row->sNo; ?></td>
+                                            <td width="1px"><?php echo $row->SNo;?></td>
                                             <td><?php echo $row->description; ?></td>
                                             <td><?php echo number_format($row->amount, 2); ?></td>
                                             <td><?php echo number_format($row->paid, 2); ?></td>

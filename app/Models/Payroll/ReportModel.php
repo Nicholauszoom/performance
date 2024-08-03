@@ -1136,11 +1136,6 @@ FROM payroll_logs pl, employee e WHERE e.emp_id = pl.\"empID\" and e.contract_ty
         ";
 
 
-
-
-
-
-
         return DB::select(DB::raw($query));
     }
 
@@ -1482,9 +1477,14 @@ IF((( SELECT sum(days)  FROM `leaves` where nature=6 AND e.emp_id=leaves.empID G
 
     function payslipcheck($datecheck, $empID)
     {
-        $query = " SELECT id  FROM payroll_logs WHERE payroll_date LIKE '%" . $datecheck . "%' AND empID = '" . $empID . "' ";
 
-        return count(DB::select(DB::raw($query)));
+       
+        $query = DB::table('payroll_logs')
+        ->where('payroll_date', 'LIKE', '%' . $datecheck . '%')
+        ->where('empID', '=', $empID)
+        ->count();
+
+        return $query;
     }
 
     function temp_payslipcheck($datecheck, $empID)
@@ -1553,26 +1553,40 @@ FROM payroll_logs pl, employee e, department d, position p  WHERE e.emp_id = pl.
     function payslip_info($empID, $payroll_month_end, $payroll_month)
     {
         $query = "SELECT
-    pl.empID as empID,
-    e.salary as basic_salary,
-    pl.salary as net_basic,
-    e.old_emp_id as oldID,
-    pl.rate as rate,
-    CONCAT(e.fname,' ', IF(e.mname != null,e.mname,' '),' ', e.lname) as name,
-    d.name as department_name,
-    p.name as position_name,
-    br.name as branch_name,
-    bn.name as bank_name,
-    pf.name as pension_fund_name,
-    pf.abbrv as pension_fund_abbrv,
-    e.hire_date,
-    (SELECT SUM(plg.pension_employee) FROM  payroll_logs plg WHERE plg.empID = e.emp_id and e.emp_id = '" . $empID . "' and plg.payroll_date BETWEEN e.hire_date and '" . $payroll_month_end . "' ) as pension_employee_todate,
-    (SELECT SUM(plg.pension_employer) FROM  payroll_logs plg WHERE plg.empID = e.emp_id and e.emp_id = '" . $empID . "' and plg.payroll_date BETWEEN e.hire_date and '" . $payroll_month_end . "' ) as pension_employer_todate,
-    pl.*
-    FROM payroll_logs pl, employee e, department d, position p, bank bn, pension_fund pf, branch br
-     WHERE e.emp_id = pl.empID AND pl.branch = br.id AND pl.bank = bn.id AND pl.pension_fund = pf.id
-     AND e.position = p.id AND d.id = e.department AND pl.payroll_date LIKE '%" . $payroll_month . "%' and pl.empID = '" . $empID . "'";
-
+        pl.\"empID\" as \"empID\",
+        e.salary as basic_salary,
+        pl.salary as net_basic,
+        e.old_emp_id as \"oldID\",
+        pl.rate as rate,
+        CONCAT(e.fname, ' ', COALESCE(e.mname, ''), ' ', e.lname) as name,
+        d.name as department_name,
+        p.name as position_name,
+        br.name as branch_name,
+        bn.name as bank_name,
+        pf.name as pension_fund_name,
+        pf.abbrv as pension_fund_abbrv,
+        e.hire_date,
+        (SELECT SUM(plg.pension_employee)
+         FROM payroll_logs plg
+         WHERE plg.\"empID\" = e.emp_id
+           AND e.emp_id = '" . $empID . "'
+           AND plg.payroll_date BETWEEN e.hire_date AND '" . $payroll_month_end . "') as pension_employee_todate,
+        (SELECT SUM(plg.pension_employer)
+         FROM payroll_logs plg
+         WHERE plg.\"empID\" = e.emp_id
+           AND e.emp_id = '" . $empID . "'
+           AND plg.payroll_date BETWEEN e.hire_date AND '" . $payroll_month_end . "') as pension_employer_todate,
+        pl.*
+    FROM payroll_logs pl
+    JOIN employee e ON e.emp_id = pl.\"empID\"
+    JOIN department d ON d.id = e.department
+    JOIN position p ON p.id = e.position
+    JOIN bank bn ON bn.id = pl.bank
+    JOIN pension_fund pf ON pf.id = CAST(pl.pension_fund AS bigint)
+    JOIN branch br ON br.id = pl.branch
+    WHERE pl.payroll_date::text LIKE '%" . $payroll_month . "%'
+      AND pl.\"empID\" = '" . $empID . "'";
+    
         return DB::select(DB::raw($query));
     }
 
@@ -1598,20 +1612,70 @@ FROM payroll_logs pl, employee e, department d, position p  WHERE e.emp_id = pl.
 
     function leaves($empID, $payroll_month_end)
     {
-        $query = "SELECT lt.type AS nature, l.nature as type, SUM(l.days) AS days FROM leaves l, employee e, leave_type lt WHERE e.emp_id = l.empID AND lt.id = l.nature AND l.start BETWEEN e.hire_date AND '" . $payroll_month_end . "' AND e.emp_id = '" . $empID . "' GROUP BY l.empID, l.nature";
-        return DB::select(DB::raw($query));
+        $query = "SELECT 
+            lt.type AS nature, 
+            l.nature AS type, 
+            SUM(l.days) AS days 
+          FROM 
+            leaves l 
+          JOIN 
+            employee e ON e.emp_id =CAST(l.empID AS character varying) 
+          JOIN 
+            leave_type lt ON CAST(lt.id AS character varying) = l.nature  
+          WHERE 
+            l.start BETWEEN e.hire_date AND :payroll_month_end 
+            AND e.emp_id = :empID 
+          GROUP BY 
+            l.empID, l.nature, lt.type";
+
+// Assuming $payroll_month_end and $empID are your parameters
+$results = DB::select(DB::raw($query), [
+    'payroll_month_end' => $payroll_month_end,
+    'empID' => $empID
+]);
+
     }
     function annualLeaveSpent($empID, $payroll_month_end)
     {
-        $query = "SELECT IF( (SELECT SUM(l.days) FROM leaves l WHERE e.emp_id = l.empID AND l.nature = 1 AND l.start BETWEEN e.hire_date AND '" . $payroll_month_end . "' AND e.emp_id = '" . $empID . "'  GROUP BY l.empID, l.nature)>0, (SELECT SUM(l.days) FROM leaves l WHERE e.emp_id = l.empID AND l.nature = 1 AND l.start BETWEEN e.hire_date AND '" . $payroll_month_end . "' AND e.emp_id = '" . $empID . "' GROUP BY l.empID, l.nature), 0 ) AS days FROM employee e";
-        $row = DB::select(DB::raw($query));
+        $query = "SELECT 
+    COALESCE(
+        (SELECT 
+            SUM(l.days) 
+         FROM 
+            leaves l 
+         WHERE 
+            e.emp_id = l.empID 
+            AND l.nature = '1' 
+            AND l.start BETWEEN e.hire_date AND :payroll_month_end 
+            AND e.emp_id = :empID 
+         GROUP BY 
+            l.empID, l.nature
+        ), 
+        0
+    ) AS days 
+FROM 
+    employee e
+WHERE 
+    e.emp_id = :empID";
+
+// Assuming $payroll_month_end and $empID are your parameters
+        $row = DB::select($query, [
+            'payroll_month_end' => $payroll_month_end,
+            'empID' => $empID
+        ]);
+
         return $row[0]->days;
     }
 
     function allowances($empID, $payroll_month)
     {
-        $query = "SELECT description, amount FROM allowance_logs WHERE empID =  '" . $empID . "' and payment_date like '%" . $payroll_month . "%'";
-        return DB::select(DB::raw($query));
+        $query = DB::table('allowance_logs')
+    ->select('description', 'amount')
+    ->where('empid', '=', $empID)
+    ->whereRaw('TO_CHAR(payment_date, \'YYYY-MM\') LIKE ?', [$payroll_month])
+    ->get();
+    
+        return $query;
     }
 
     function temp_allowances($empID, $payroll_month)
@@ -1622,8 +1686,13 @@ FROM payroll_logs pl, employee e, department d, position p  WHERE e.emp_id = pl.
 
     function deductions($empID, $payroll_month)
     {
-        $query = "SELECT description, paid FROM deduction_logs WHERE empID =  '" . $empID . "' and payment_date like '%" . $payroll_month . "%'";
-        return DB::select(DB::raw($query));
+        $query = DB::table('allowance_logs')
+    ->select('description', 'amount')
+    ->where('empid', $empID)
+    ->where(DB::raw('CAST(payment_date AS TEXT)'), 'LIKE', $payroll_month)
+    ->get();
+
+        return $query;
     }
 
     function temp_deductions($empID, $payroll_month)
@@ -1641,8 +1710,18 @@ FROM payroll_logs pl, employee e, department d, position p  WHERE e.emp_id = pl.
     }*/
     function total_allowances($empID, $payroll_month)
     {
-        $query = "SELECT IF( (SELECT SUM(amount)  FROM allowance_logs WHERE empID = '" . $empID . "' and payment_date like '%" . $payroll_month . "%' GROUP BY empID)>0, (SELECT SUM(amount)  FROM allowance_logs WHERE empID =  '" . $empID . "' and payment_date like '%" . $payroll_month . "%' GROUP BY empID), 0) AS total";
-        $row = DB::select(DB::raw($query));
+        $query =DB::table('allowance_logs')
+        ->select(DB::raw("
+            CASE
+                WHEN (SELECT SUM(amount) FROM allowance_logs WHERE empID = ? AND CAST(payment_date AS TEXT) LIKE ? GROUP BY empID) > 0
+                THEN (SELECT SUM(amount) FROM allowance_logs WHERE empID = ? AND CAST(payment_date AS TEXT) LIKE ? GROUP BY empID)
+                ELSE 0
+            END AS total
+        "))
+        ->setBindings([$empID, $payroll_month, $empID, $payroll_month])
+        ->first();
+
+        $row = $query;
         return $row[0]->total;
     }
 
@@ -1707,8 +1786,14 @@ FROM payroll_logs pl, employee e, department d, position p  WHERE e.emp_id = pl.
 
     function loans($empID, $payroll_month)
     {
-        $query = "SELECT l.description, ll.paid, ll.remained, ll.policy FROM loan_logs ll, loan l WHERE ll.loanID = l.id AND l.empID =  '" . $empID . "' AND ll.payment_date like '%" . $payroll_month . "%'";
-        return DB::select(DB::raw($query));
+        $query = DB::table('loan_logs as ll')
+        ->join('loan as l', 'll.loanID', '=', 'l.id')
+        ->select('l.description', 'll.paid', 'll.remained', 'll.policy')
+        ->where('l.empid', $empID)
+        ->where(DB::raw('CAST(ll.payment_date AS TEXT)'), 'LIKE', $payroll_month)
+        ->get();
+        
+        return $query;
     }
     function getALlLoanHistory2($empID)
     {
@@ -1733,9 +1818,19 @@ FROM payroll_logs pl, employee e, department d, position p  WHERE e.emp_id = pl.
 
     function loansPolicyAmount($empID, $payroll_month)
     {
-        $query = "SELECT amount FROM loan where empID = '" . $empID . "'";
-        $query_prev = "SELECT sum(paid) as prev_paid FROM loan_logs where remained > 0 and payment_date <= '" . $payroll_month . "'";
-        return [DB::select(DB::raw($query)), DB::select(DB::raw($query_prev))];
+        $query = DB::table('loan')
+        ->select('amount')
+        ->where('empid', $empID)
+        ->get();
+
+        $query_prev = DB::table('loan_logs')
+        ->select(DB::raw('SUM(paid) as prev_paid'))
+        ->where('remained', '>', 0)
+        ->where('payment_date', '<=', $payroll_month)
+        ->get(); 
+        
+        
+        return [$query, $query_prev];
     }
 
     function temp_loansPolicyAmount($empID, $payroll_month)

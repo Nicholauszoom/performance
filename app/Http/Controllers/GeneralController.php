@@ -4274,6 +4274,7 @@ class GeneralController extends Controller
         $data['title'] = "Organisation Reports";
         $data['leave_type'] = $this->attendance_model->leave_type();
         $data['employee'] = Employee::all();
+
         return view('app.organisation_reports', $data);
         // } else {
         //     echo 'Unauthorized Access';
@@ -11474,6 +11475,8 @@ class GeneralController extends Controller
 
         $data['parent'] = 'My Services';
         $data['child'] = 'Loans';
+
+        
         return view('my-services/loans', $data);
     }
 

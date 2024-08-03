@@ -3227,7 +3227,7 @@ last_paid_date='" . $date . "' WHERE  state = 1 and type = 3";
     public function my_confirmedloan($empID)
     {
         $queryResult = "SELECT
-        ROW_NUMBER() OVER () AS SNo,
+        ROW_NUMBER() OVER () AS \"SNo\",
         l.\"empid\",
         l.*,
         CONCAT(e.fname, ' ', COALESCE(e.mname, ''), ' ', e.lname) AS name,

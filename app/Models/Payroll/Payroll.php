@@ -141,8 +141,8 @@ class Payroll extends Model
     public function payrollMonthList()
     {
         // $query = 'SELECT (@s:=@s+1) as SNo, pm.*,e.fname,e.mname,e.lname FROM payroll_months pm,employee e, ((SELECT @s:=0) as s ORDER BY pm.id DESC) where pm.init_author = e.emp_id ';
-        $query1 = 'SELECT (@s:=@s+1) as SNo, pm.*,e.fname,e.mname,e.lname FROM payroll_months pm,employee e where pm.init_author = e.emp_id ';
-        $query = 'SELECT ROW_NUMBER() OVER () AS SNo, pm.*, e.fname, e.mname, e.lname
+        // $query1 = 'SELECT (@s:=@s+1) as SNo, pm.*,e.fname,e.mname,e.lname FROM payroll_months pm,employee e where pm.init_author = e.emp_id ';
+        $query = 'SELECT ROW_NUMBER() OVER () AS "SNo", pm.*, e.fname, e.mname, e.lname
         FROM payroll_months pm
         JOIN employee e ON pm.init_author = e.emp_id
          ';
