@@ -2085,6 +2085,11 @@ class ReportController extends Controller
         $current_payroll_month = $request->input('payrolldate');
         $previous_payroll_month_raw = date('Y-m', strtotime(date('Y-m-d', strtotime($current_payroll_month . "-1 month"))));
         $previous_payroll_month = $this->reports_model->prevPayrollMonth($previous_payroll_month_raw);
+        if($previous_payroll_month == NULL) {
+            $previous_payroll_month = date('Y-m-d', strtotime($current_payroll_month . "-1 month"));
+        } else {
+            $previous_payroll_month;
+        }
 
         $current_decrease =  $this->reports_model->basic_decrease($previous_payroll_month, $current_payroll_month, $payrollState);
         $current_increase = $this->reports_model->basic_increase($previous_payroll_month, $current_payroll_month, $payrollState);
@@ -3155,6 +3160,8 @@ EOD;
         $date = $request->payrolldate;
         $data['summary'] = $this->reports_model->get_payroll_summary($date, $request->payrollState);
 
+
+        // dd($data['summary']);
         $data['termination'] = $this->reports_model->get_termination($date);
 
 

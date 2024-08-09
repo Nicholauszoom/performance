@@ -3321,8 +3321,7 @@ last_paid_date='" . $date . "' WHERE  state = 1 and type = 3";
     {
         DB::transaction(function () use ($loanID, $signatory, $todate) {
             $query = "INSERT INTO loan(
-
-		empID,
+		empid,
 		description,
 		type,
 		form_four_index_no,
@@ -3337,8 +3336,7 @@ last_paid_date='" . $date . "' WHERE  state = 1 and type = 3";
 		paid,
 		amount_last_paid,
 		last_paid_date )
-
-		SELECT la.empID, IF((la.type=2), la.reason, lt.name) as description, la.type, la.form_four_index_no, la.amount, la.deduction_amount, la.application_date, 1, la.approved_hr, '" . $signatory . "', la.approved_date_hr, '" . $todate . "', 0, 0, '" . $todate . "' FROM loan_application la, loan_type lt WHERE lt.id = la.type AND la.id ='" . $loanID . "' ";
+        SELECT la.empid, CASE WHEN la.type = '2' THEN la.reason ELSE lt.name END AS description, la.type::NUMERIC, la.form_four_index_no, la.amount, la.deduction_amount, la.application_date, 1, la.approved_hr, '" . $signatory . "', la.approved_date_hr, '" . $todate . "', 0, 0, '" . $todate . "' FROM loan_application la, loan_type lt WHERE lt.id = la.type::BIGINT AND la.id ='" . $loanID . "' ";
             DB::insert(DB::raw($query));
             $query = "UPDATE loan_application SET status = 2, notification=1, approved_cd = '" . $signatory . "', time_approved_cd = '" . $todate . "'  WHERE id ='" . $loanID . "'";
             DB::insert(DB::raw($query));
@@ -4727,7 +4725,7 @@ FROM payroll_logs pl, employee e, position p, department d where e.emp_id=pl.emp
     public function updatePartialPayment($date)
     {
         DB::transaction(function () use ($date) {
-            $query = "update partial_payment set status = 1, payroll_date = '" . $date . "' where status = 0 ";
+            $query = "update partial_payment set status = '1', payroll_date = '" . $date . "' where status = '0' ";
             DB::insert(DB::raw($query));
         });
     }
@@ -4837,7 +4835,7 @@ FROM payroll_logs pl, employee e, position p, department d where e.emp_id=pl.emp
             $query = "insert into assignment_task_logs (assignment_employee_id,emp_id,task_name,description,start_date,end_date,remarks,status,payroll_date)
                 select ae.assignment_id, ae.emp_id, ast.task_name, ast.description, ast.start_date,
                 ast.end_date, ast.remarks, ast.status, '" . $payroll_date . "' from assignment_employee ae, assignment_task ast
-                where ae.id = ast.assignment_employee_id and ast.status = 1 and ast.date is null;";
+                where ae.id = ast.assignment_employee_id::NUMERIC and ast.status = 1 and ast.date is null;";
             DB::insert(DB::raw($query));
             $query = "update assignment_task set date = '" . $payroll_date . "' where date is null ";
             DB::insert(DB::raw($query));

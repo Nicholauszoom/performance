@@ -16,8 +16,8 @@ return new class extends Migration
         Schema::create('temp_allowance_logs', function (Blueprint $table) {
             $table->id();
             $table->string('empID', 10);
-            $table->integer('allowanceID');
-            $table->integer('allowanceCode');
+            $table->integer('allowanceID')->default(0);
+            $table->integer('allowanceCode')->default(0);
             $table->string('description', 50)->default('Unclassified');
             $table->string('policy', 50)->default('Fixed Amount');
             $table->decimal('amount', 20)->nullable();

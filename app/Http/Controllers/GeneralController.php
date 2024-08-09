@@ -5918,7 +5918,7 @@ class GeneralController extends Controller
                                 foreach ($allowances as $row) {
                                     if ($row->state == 1) {
 
-                                        SysHelpers::FinancialLogs($row->empID, $row->name,  ($row->amount != 0) ? number_format($row->amount, 2) . ' ' . $row->currency : $row->percent . '%', ($row->amount != 0) ? number_format($row->amount, 2) . ' ' . $row->currency : $row->percent . '%', 'Payroll Input', $date);
+                                        SysHelpers::FinancialLogs($row->empid, $row->name,  ($row->amount != 0) ? number_format($row->amount, 2) . ' ' . $row->currency : $row->percent . '%', ($row->amount != 0) ? number_format($row->amount, 2) . ' ' . $row->currency : $row->percent . '%', 'Payroll Input', $date);
                                     }
                                 }
                                 $deductions = $this->payroll_model->getAssignedDeduction();

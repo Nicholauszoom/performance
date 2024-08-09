@@ -891,7 +891,7 @@ FROM payroll_logs pl, employee e WHERE e.emp_id = pl.\"empID\" and e.contract_ty
                 $loan_table = "temp_loan_logs";
             }
 
-            $query = "SELECT ROW_NUMBER() OVER () AS SNo, a.* FROM allowance_categories a";
+            $query = "SELECT ROW_NUMBER() OVER () AS \"SNo\", a.* FROM allowance_categories a";
 
             $categories = DB::select(DB::raw($query));
 
@@ -901,10 +901,10 @@ FROM payroll_logs pl, employee e WHERE e.emp_id = pl.\"empID\" and e.contract_ty
             COALESCE((SELECT SUM(al.amount)
                 FROM {$allowance_table} al
                 JOIN allowances ON allowances.id = al.\"allowanceID\"
-                WHERE al.empid = e.emp_id
+                WHERE al.\"empID\" = e.emp_id
                 AND allowances.allowance_category_id = {$category->id}
                 AND al.payment_date = '{$date}'
-                GROUP BY al.empid LIMIT 1
+                GROUP BY al.\"empID\" LIMIT 1
             ), 0) AS category{$category->id},";
             }
 
@@ -913,10 +913,10 @@ FROM payroll_logs pl, employee e WHERE e.emp_id = pl.\"empID\" and e.contract_ty
             COALESCE((SELECT SUM(al.amount)
                 FROM {$allowance_table} al
                 JOIN allowances ON allowances.id = al.\"allowanceID\"
-                WHERE al.empID = e.emp_id
+                WHERE al.\"empID\" = e.emp_id
                 AND allowances.allowance_category_id IS NULL
                 AND al.payment_date = '{$date}'
-                GROUP BY al.empID LIMIT 1
+                GROUP BY al.\"empID\" LIMIT 1
             ), 0) AS other_payments,";
 
             // Trim the trailing comma and space
@@ -924,29 +924,29 @@ FROM payroll_logs pl, employee e WHERE e.emp_id = pl.\"empID\" and e.contract_ty
 
                 $query = "SELECT
                     pl.*,
-                    e.fname, e.mname, e.lname, e.account_no, e.pf_membership_no, pl.sdl, pl.wcf, e.currency, de.name, e.cost_center as costCenterName, b.name as bank_name, e.branch as branch_code,
+                    e.fname, e.mname, e.lname, e.account_no, e.pf_membership_no, pl.sdl, pl.wcf, e.currency, de.name, e.cost_center as \"costCenterName\", b.name as bank_name, e.branch as branch_code,
                     e.emp_id, e.rate,
                     0 as allowance_amount,
                     COALESCE((SELECT SUM(al.amount)
                         FROM {$allowance_table} al
-                        WHERE al.empid = e.emp_id
+                        WHERE al.\"empID\" = e.emp_id
                         AND al.description LIKE '%Overtime%'
                         AND al.payment_date = '{$date}'
-                        GROUP BY al.empid
+                        GROUP BY al.\"empID\"
                     ), 0) AS overtime,
                     {$allowance_categories_query},
                     COALESCE((SELECT SUM(al.amount)
                         FROM {$allowance_table} al
-                        WHERE al.empid = e.emp_id
+                        WHERE al.\"empID\" = e.emp_id
                         AND al.description = 'Arrears'
                         AND al.payment_date = '{$date}'
-                        GROUP BY al.empid
+                        GROUP BY al.\"empID\"
                     ), 0) AS arrears_allowance,
                     COALESCE((SELECT SUM(dl.paid)
                         FROM {$deduction_table} dl
-                        WHERE dl.empid = e.emp_id
+                        WHERE dl.\"empID\" = e.emp_id
                         AND dl.payment_date = '{$date}'
-                        GROUP BY dl.empid
+                        GROUP BY dl.\"empID\"
                     ), 0) AS deductions,
                     COALESCE((SELECT SUM(ll.paid)
                         FROM {$loan_table} ll
@@ -982,7 +982,7 @@ FROM payroll_logs pl, employee e WHERE e.emp_id = pl.\"empID\" and e.contract_ty
         $query = "SELECT t.*, e.pf_membership_no, e.cost_center as \"costCenterName\", e.account_no, de.name as department_name, e.emp_id, e.mname, e.fname, e.lname, CONCAT(e.fname, ' ', COALESCE(e.mname, ''), ' ', e.lname) as name
         FROM terminations t JOIN employee e ON e.emp_id = t.\"employeeID\" JOIN department de ON e.department = de.id
         WHERE t.\"terminationDate\"::text LIKE '$date'";
-        return (DB::select(DB::raw($query)));
+        return DB::select(DB::raw($query));
     }
 
     function get_payroll_temp_summary1($date)
@@ -2202,7 +2202,7 @@ and e.branch = b.code and e.line_manager = el.emp_id and c.id = e.contract_type 
         }
 
 
-        $query = "SELECT SUM(pl.salary) as total from " . $table . " pl where pl.payroll_date = '" . $date . "' and pl.empID NOT IN (SELECT pl2.empID from payroll_logs pl2 where pl2.payroll_date = '" . $date2 . "')";
+        $query = "SELECT SUM(pl.salary) as total from " . $table . " pl where pl.payroll_date::text = '" . $date . "' and pl.\"empID\" NOT IN (SELECT pl2.\"empID\" from payroll_logs pl2 where pl2.payroll_date::text = '" . $date2 . "')";
 
         $row = DB::select(DB::raw($query));
         return $row[0]->total;
@@ -2581,9 +2581,8 @@ and e.branch = b.code and e.line_manager = el.emp_id and c.id = e.contract_type 
 
         }
 
-        $query = "
-        (SELECT  'Add Employee' as description,e.emp_id,e.hire_date,e.contract_end,e.fname,e.lname,pl.salary,pl.salary as current_amount,0 as previous_amount
-        from employee e," . $payroll_table . " pl where e.emp_id = pl.empID and pl.payroll_date = '" . $current_payroll_month . "' and e.emp_id NOT IN (SELECT empID from  payroll_logs where payroll_date = '" . $previous_payroll_month . "') )";
+        $query = "(SELECT  'Add Employee' as description, e.emp_id, e.hire_date, e.contract_end, e.fname, e.lname, pl.salary, pl.salary as current_amount, 0 as previous_amount
+        from employee e," . $payroll_table . " pl where e.emp_id = pl.\"empID\" and pl.payroll_date::text = '" . $current_payroll_month . "' and e.emp_id NOT IN (SELECT \"empID\" from  payroll_logs where payroll_date::text = '" . $previous_payroll_month . "') )";
         $row = DB::select(DB::raw($query));
 
         return $row;
@@ -2827,208 +2826,208 @@ and e.branch = b.code and e.line_manager = el.emp_id and c.id = e.contract_type 
 
         //Employee terminated last month
 
-        $query = "
-
-
-
-          (SELECT  CONCAT('Add/Less ',al.description) as description,e.emp_id,e.hire_date,e.contract_end,e.fname,e.lname,
-          (IF((SELECT amount  FROM " . $allowance_log . " WHERE " . $allowance_log . ".description = al.description and e.emp_id = " . $allowance_log . ".empID  and  " . $allowance_log . ".payment_date = '" . $current_payroll_month . "' LIMIT 1 ) > 0,(SELECT amount  FROM " . $allowance_log . " WHERE " . $allowance_log . ".description = al.description and e.emp_id = " . $allowance_log . ".empID and  " . $allowance_log . ".payment_date = '" . $current_payroll_month . "' LIMIT 1),0)) as current_amount,
-         (IF((SELECT amount  FROM allowance_logs WHERE allowance_logs.description = al.description and e.emp_id = allowance_logs.empID and  allowance_logs.payment_date = '" . $previous_payroll_month . "' LIMIT 1)  > 0,(SELECT amount  FROM allowance_logs WHERE allowance_logs.description = al.description and e.emp_id = allowance_logs.empID and  allowance_logs.payment_date = '" . $previous_payroll_month . "'),0)) as previous_amount
-           from employee e," . $allowance_log . " al where e.emp_id = al.empID and e.state!=4)
-
-           UNION
-
-           (SELECT  CONCAT('Add/Less ',al.description) as description,e.emp_id,e.hire_date,e.contract_end,e.fname,e.lname,
-           0 as current_amount,
-          (IF((SELECT amount  FROM allowance_logs WHERE allowance_logs.description = al.description and e.emp_id = allowance_logs.empID and  allowance_logs.payment_date = '" . $previous_payroll_month . "' LIMIT 1)  > 0,(SELECT amount  FROM allowance_logs WHERE allowance_logs.description = al.description and e.emp_id = allowance_logs.empID and  allowance_logs.payment_date = '" . $previous_payroll_month . "'),0)) as previous_amount
-            from employee e,allowance_logs al where e.emp_id = al.empID and al.description not in (select description from " . $allowance_log . " where  " . $allowance_log . ".payment_date = '" . $current_payroll_month . "' and e.emp_id = " . $allowance_log . ".empID) and e.state!=4)
-
-           UNION
-
-
-            SELECT 'Add/Less N-Overtime' as description,e.emp_id,e.hire_date,e.contract_end,e.fname,e.lname,
-            IF(normal_days_overtime_amount > 0,normal_days_overtime_amount,0) as current_amount,
-            IF((SELECT sum(amount)  FROM allowance_logs WHERE allowance_logs.description = 'N-Overtime' and e.emp_id = allowance_logs.empID and allowance_logs.empId = e.emp_id and  payment_date = '" . $previous_payroll_month . "' limit 1) > 0,(SELECT sum(amount)  FROM allowance_logs WHERE allowance_logs.description = 'N-Overtime' and allowance_logs.empId = e.emp_id  and  payment_date = '" . $previous_payroll_month . "' limit 1),0) as  previous_amount
-            from terminations,employee e where e.emp_id = terminations.employeeID and terminationDate like '%" . $current_termination_date . "%'
+        $query = "(SELECT CONCAT('Add/Less ', al.description) as description, e.emp_id, e.hire_date, e.contract_end, e.fname, e.lname,
+            COALESCE((SELECT amount  FROM " . $allowance_log . " WHERE " . $allowance_log . ".description = al.description and e.emp_id = " . $allowance_log . ".\"empID\"  and  " . $allowance_log . ".payment_date = '" . $current_payroll_month . "' LIMIT 1), 0) AS current_amount,
+            COALESCE((SELECT amount  FROM allowance_logs WHERE allowance_logs.description = al.description and e.emp_id = allowance_logs.\"empID\" and  allowance_logs.payment_date = '" . $previous_payroll_month . "' LIMIT 1), 0) AS previous_amount
+            FROM employee e, " . $allowance_log . " al WHERE e.emp_id = al.\"empID\" AND e.state!=4)
 
             UNION
 
-
-
-            SELECT 'Add/Less S-Overtime' as description,e.emp_id,e.hire_date,e.contract_end,e.fname,e.lname,
-            IF(public_overtime_amount > 0,public_overtime_amount,0) as current_amount,
-            IF((SELECT sum(amount)  FROM allowance_logs WHERE allowance_logs.description = 'S-Overtime' and e.emp_id = allowance_logs.empID and allowance_logs.empId = e.emp_id and  payment_date = '" . $previous_payroll_month . "' limit 1) > 0,(SELECT sum(amount)  FROM allowance_logs WHERE allowance_logs.description = 'S-Overtime' and allowance_logs.empId = e.emp_id and  payment_date = '" . $previous_payroll_month . "' limit 1),0) as  previous_amount
-            from terminations,employee e where e.emp_id = terminations.employeeID and terminationDate like '%" . $current_termination_date . "%'
+            (SELECT  CONCAT('Add/Less ', al.description) as description, e.emp_id, e.hire_date, e.contract_end, e.fname, e.lname, 0 as current_amount,
+            COALESCE((SELECT amount  FROM allowance_logs WHERE allowance_logs.description = al.description and e.emp_id = allowance_logs.\"empID\" AND  allowance_logs.payment_date = '" . $previous_payroll_month . "' LIMIT 1), 0) AS previous_amount
+            FROM employee e, allowance_logs al WHERE e.emp_id = al.\"empID\" AND al.description NOT IN (SELECT description FROM " . $allowance_log . " WHERE  " . $allowance_log . ".payment_date = '" . $current_payroll_month . "' AND e.emp_id = " . $allowance_log . ".\"empID\") AND e.state != 4)
 
             UNION
 
-            SELECT 'Add/Less Leave Allowance' as description,e.emp_id,e.hire_date,e.contract_end,e.fname,e.lname,
-            IF(leaveAllowance > 0,leaveAllowance,0) as current_amount,
-            IF((SELECT amount  FROM allowance_logs WHERE allowance_logs.description = 'Leave Allowance' and e.emp_id = allowance_logs.empID and  payment_date = '" . $previous_payroll_month . "') > 0,(SELECT amount  FROM allowance_logs WHERE allowance_logs.description = 'Leave Allowance' and allowance_logs.empId = e.emp_id and  payment_date = '" . $previous_payroll_month . "'),0) as  previous_amount
-            from terminations,employee e where e.emp_id = terminations.employeeID and terminationDate like '%" . $current_termination_date . "%'
+            (SELECT 'Add/Less N-Overtime' as description, e.emp_id, e.hire_date, e.contract_end, e.fname, e.lname,
+            COALESCE((normal_days_overtime_amount), 0) AS current_amount,
+            COALESCE((SELECT SUM(amount) FROM allowance_logs WHERE allowance_logs.description = 'N-Overtime' AND e.emp_id = allowance_logs.\"empID\" AND allowance_logs.\"empID\" = e.emp_id AND payment_date = '" . $previous_payroll_month . "' LIMIT 1), 0) AS previous_amount
+            FROM terminations, employee e WHERE e.emp_id = terminations.\"employeeID\" AND \"terminationDate\"::text like '%" . $current_termination_date . "%')
 
             UNION
 
-            SELECT 'Add/Less House Rent' as description,e.emp_id,e.hire_date,e.contract_end,e.fname,e.lname,
-            IF(houseAllowance > 0,houseAllowance,0) as current_amount,
-            IF((SELECT amount  FROM allowance_logs WHERE allowance_logs.description = 'House Rent' and e.emp_id = allowance_logs.empID and  payment_date = '" . $previous_payroll_month . "') > 0,(SELECT amount  FROM allowance_logs WHERE allowance_logs.description = 'House Rent'  and e.emp_id = allowance_logs.empID  and  payment_date = '" . $previous_payroll_month . "'),0) as  previous_amount
-            from terminations,employee e where e.emp_id = terminations.employeeID and terminationDate like '%" . $current_termination_date . "%'
+            (SELECT 'Add/Less S-Overtime' as description, e.emp_id, e.hire_date, e.contract_end, e.fname, e.lname,
+            COALESCE((public_overtime_amount), 0) AS current_amount,
+            COALESCE((SELECT SUM(amount) FROM allowance_logs WHERE allowance_logs.description = 'S-Overtime' AND e.emp_id = allowance_logs.\"empID\" AND allowance_logs.\"empID\" = e.emp_id AND payment_date = '" . $previous_payroll_month . "' LIMIT 1), 0) AS previous_amount
+            FROM terminations, employee e WHERE e.emp_id = terminations.\"employeeID\" AND \"terminationDate\"::text like '%" . $current_termination_date . "%')
 
             UNION
 
-            SELECT 'Add/Less Teller Allowance' as description,e.emp_id,e.hire_date,e.contract_end,e.fname,e.lname,
-            IF(tellerAllowance > 0,tellerAllowance,0) as current_amount,
-            IF((SELECT amount  FROM allowance_logs WHERE allowance_logs.description = 'Teller Allowance' and e.emp_id = allowance_logs.empID and  payment_date = '" . $previous_payroll_month . "' group by e.emp_id) > 0,(SELECT amount  FROM allowance_logs WHERE allowance_logs.description = 'Teller Allowance' and e.emp_id = allowance_logs.empID  and  payment_date = '" . $previous_payroll_month . "' group by e.emp_id),0) as  previous_amount
-            from terminations,employee e where e.emp_id = terminations.employeeID and terminationDate like '%" . $current_termination_date . "%'
+            (SELECT 'Add/Less Leave Allowance' as description, e.emp_id, e.hire_date, e.contract_end, e.fname, e.lname,
+            COALESCE((\"leaveAllowance\"), 0) AS current_amount,
+            COALESCE((SELECT amount FROM allowance_logs WHERE allowance_logs.description = 'Leave Allowance' AND e.emp_id = allowance_logs.\"empID\" AND payment_date = '" . $previous_payroll_month . "'), 0) AS previous_amount
+            FROM terminations, employee e WHERE e.emp_id = terminations.\"employeeID\" AND \"terminationDate\"::text like '%" . $current_termination_date . "%')
 
             UNION
 
-            SELECT 'Add/Less Arrears' as description,e.emp_id,e.hire_date,e.contract_end,e.fname,e.lname,
-            IF(arrears > 0,arrears,0) as current_amount,
-            IF((SELECT amount  FROM allowance_logs WHERE allowance_logs.description = 'Arrears' and e.emp_id = allowance_logs.empID and  payment_date = '" . $previous_payroll_month . "' group by e.emp_id) > 0,(SELECT amount  FROM allowance_logs WHERE allowance_logs.description = 'Arrears' and e.emp_id = allowance_logs.empID and  payment_date = '" . $previous_payroll_month . "' group by e.emp_id),0) as  previous_amount
-            from terminations,employee e where e.emp_id = terminations.employeeID and terminationDate like '%" . $current_termination_date . "%'
+            (SELECT 'Add/Less House Rent' as description, e.emp_id, e.hire_date, e.contract_end, e.fname, e.lname,
+            COALESCE((\"houseAllowance\"), 0) AS current_amount,
+            COALESCE((SELECT amount  FROM allowance_logs WHERE allowance_logs.description = 'House Rent' AND e.emp_id = allowance_logs.\"empID\" AND payment_date = '" . $previous_payroll_month . "'), 0) AS previous_amount
+            FROM terminations, employee e WHERE e.emp_id = terminations.\"employeeID\" AND \"terminationDate\"::text like '%" . $current_termination_date . "%')
 
             UNION
 
-            SELECT 'Add/Less LSA' as description,e.emp_id,e.hire_date,e.contract_end,e.fname,e.lname,
-            IF(longServing > 0,longServing,0) as current_amount,
-            IF((SELECT amount  FROM allowance_logs WHERE allowance_logs.description = 'LSA' and e.emp_id = allowance_logs.empID and  payment_date = '" . $previous_payroll_month . "') > 0,(SELECT amount  FROM allowance_logs WHERE allowance_logs.description = 'Long Serving allowance'  and e.emp_id = allowance_logs.empID and  payment_date = '" . $previous_payroll_month . "'),0) as  previous_amount
-            from terminations,employee e where e.emp_id = terminations.employeeID and terminationDate like '%" . $current_termination_date . "%'
+            (SELECT 'Add/Less Teller Allowance' as description, e.emp_id, e.hire_date, e.contract_end, e.fname, e.lname,
+            COALESCE((\"tellerAllowance\"), 0) AS current_amount,
+            COALESCE((SELECT amount  FROM allowance_logs WHERE allowance_logs.description = 'Teller Allowance' AND e.emp_id = allowance_logs.\"empID\" AND payment_date = '" . $previous_payroll_month . "' GROUP BY e.emp_id, allowance_logs.amount), 0) AS previous_amount
+            FROM terminations, employee e WHERE e.emp_id = terminations.\"employeeID\" AND \"terminationDate\"::text like '%" . $current_termination_date . "%')
 
             UNION
 
-            SELECT 'Add/Less LSA' as description,e.emp_id,e.hire_date,e.contract_end,e.fname,e.lname,
-            IF(longServing > 0,longServing,0) as current_amount, 0 as previous_amount
-            from terminations,employee e where e.emp_id = terminations.employeeID and terminationDate like '%" . $current_termination_date . "%'
+            (SELECT 'Add/Less Arrears' as description, e.emp_id, e.hire_date, e.contract_end, e.fname, e.lname,
+            COALESCE((arrears), 0) AS current_amount,
+            COALESCE((SELECT amount  FROM allowance_logs WHERE allowance_logs.description = 'Arrears' AND e.emp_id = allowance_logs.\"empID\" AND payment_date = '" . $previous_payroll_month . "' GROUP BY e.emp_id, allowance_logs.amount), 0) AS previous_amount
+            FROM terminations, employee e WHERE e.emp_id = terminations.\"employeeID\" AND \"terminationDate\"::text like '%" . $current_termination_date . "%')
 
             UNION
 
-            SELECT 'Add/Less Notice Pay' as description,e.emp_id,e.hire_date,e.contract_end,e.fname,e.lname,
-            IF(noticePay > 0,noticePay,0) as current_amount, 0 as previous_amount
-            from terminations,employee e where e.emp_id = terminations.employeeID and terminationDate like '%" . $current_termination_date . "%'
+            (SELECT 'Add/Less LSA' as description, e.emp_id, e.hire_date, e.contract_end, e.fname, e.lname,
+            COALESCE((\"longServing\"), 0) AS current_amount,
+            COALESCE((SELECT amount  FROM allowance_logs WHERE allowance_logs.description = 'LSA' AND e.emp_id = allowance_logs.\"empID\" AND payment_date = '" . $previous_payroll_month . "' GROUP BY e.emp_id, allowance_logs.amount), 0) AS previous_amount
+            FROM terminations, employee e WHERE e.emp_id = terminations.\"employeeID\" AND \"terminationDate\"::text like '%" . $current_termination_date . "%')
 
             UNION
 
-            SELECT 'Add/Less Ex-Gratia' as description,e.emp_id,e.hire_date,e.contract_end,e.fname,e.lname,
-            IF(exgracia > 0,exgracia,0) as current_amount, 0 as previous_amount
-            from terminations,employee e where e.emp_id = terminations.employeeID and terminationDate like '%" . $current_termination_date . "%'
+            (SELECT 'Add/Less LSA' as description, e.emp_id, e.hire_date, e.contract_end, e.fname, e.lname,
+            COALESCE((\"longServing\"), 0) AS current_amount,
+            0 AS previous_amount
+            FROM terminations, employee e WHERE e.emp_id = terminations.\"employeeID\" AND \"terminationDate\"::text like '%" . $current_termination_date . "%')
 
             UNION
 
-            SELECT 'Add/Less Severance Pay' as description,e.emp_id,e.hire_date,e.contract_end,e.fname,e.lname,
-            IF(serevancePay > 0,serevancePay,0) as current_amount, 0 as previous_amount
-            from terminations,employee e where e.emp_id = terminations.employeeID and terminationDate like '%" . $current_termination_date . "%'
+            (SELECT 'Add/Less Notice Pay' as description, e.emp_id, e.hire_date, e.contract_end, e.fname, e.lname,
+            COALESCE((\"noticePay\"), 0) AS current_amount,
+            0 AS previous_amount
+            FROM terminations, employee e WHERE e.emp_id = terminations.\"employeeID\" AND \"terminationDate\"::text like '%" . $current_termination_date . "%')
 
             UNION
 
-            SELECT 'Add/Less Leave Pay' as description,e.emp_id,e.hire_date,e.contract_end,e.fname,e.lname,
-            IF(leavePay != 0,leavePay,0) as current_amount, 0 as previous_amount
-            from terminations,employee e where e.emp_id = terminations.employeeID and terminationDate like '%" . $current_termination_date . "%'
-
-
-            UNION
-
-            SELECT 'Add/Less Night Shift Allowance' as description,e.emp_id,e.hire_date,e.contract_end,e.fname,e.lname,
-            IF(nightshift_allowance != 0,nightshift_allowance,0) as current_amount, 0 as previous_amount
-            from terminations,employee e where e.emp_id = terminations.employeeID and terminationDate like '%" . $current_termination_date . "%'
+            (SELECT 'Add/Less Ex-Gratia' as description, e.emp_id, e.hire_date, e.contract_end, e.fname, e.lname,
+            COALESCE((exgracia), 0) AS current_amount,
+            0 AS previous_amount
+            FROM terminations, employee e WHERE e.emp_id = terminations.\"employeeID\" AND \"terminationDate\"::text like '%" . $current_termination_date . "%')
 
             UNION
 
-            SELECT 'Add/Less Transport Allowance' as description,e.emp_id,e.hire_date,e.contract_end,e.fname,e.lname,
-            IF(transport_allowance != 0,transport_allowance,0) as current_amount, 0 as previous_amount
-            from terminations,employee e where e.emp_id = terminations.employeeID and terminationDate like '%" . $current_termination_date . "%'
-
-
-
-            /* employee terminated last month  */
+            (SELECT 'Add/Less Severance Pay' as description, e.emp_id, e.hire_date, e.contract_end, e.fname, e.lname,
+            COALESCE((\"serevancePay\"), 0) AS current_amount,
+            0 AS previous_amount
+            FROM terminations, employee e WHERE e.emp_id = terminations.\"employeeID\" AND \"terminationDate\"::text like '%" . $current_termination_date . "%')
 
             UNION
 
-            SELECT 'Add/Less N-Overtime' as description,e.emp_id,e.hire_date,e.contract_end,e.fname,e.lname,
-
-            IF((SELECT amount  FROM allowance_logs WHERE allowance_logs.description = 'N-Overtime' and e.emp_id = allowance_logs.empID and  payment_date = '" . $current_payroll_month . "') > 0,(SELECT amount  FROM allowance_logs WHERE allowance_logs.description = 'N-Overtime' and  payment_date = '" . $current_payroll_month . "'),0) as  current_amount,
-            IF(tm.normal_days_overtime_amount > 0,tm.normal_days_overtime_amount,0) as previous_amount
-            from terminations tm,employee e where e.emp_id = tm.employeeID and tm.terminationDate like '%" . $previous_termination_date . "%'
-
-            UNION
-
-            SELECT 'Add/Less S-Overtime' as description,e.emp_id,e.hire_date,e.contract_end,e.fname,e.lname,
-            0 as current_amount,IF(public_overtime_amount > 0,public_overtime_amount,0) as previous_amount
-            from terminations,employee e where e.emp_id = terminations.employeeID and terminationDate like '%" . $previous_termination_date . "%'
-
+            (SELECT 'Add/Less Leave Pay' as description, e.emp_id, e.hire_date, e.contract_end, e.fname, e.lname,
+            CASE WHEN \"leavePay\" != 0 THEN \"leavePay\" ELSE 0 END AS current_amount,
+            0 AS previous_amount
+            FROM terminations, employee e WHERE e.emp_id = terminations.\"employeeID\" AND \"terminationDate\"::text like '%" . $current_termination_date . "%')
 
             UNION
 
-            SELECT 'Add/Less Leave Allowance' as description,e.emp_id,e.hire_date,e.contract_end,e.fname,e.lname,
-            0 as current_amount,IF(leaveAllowance > 0,leaveAllowance,0) as previous_amount
-            from terminations,employee e where e.emp_id = terminations.employeeID and terminationDate like '%" . $previous_termination_date . "%'
-            UNION
-
-
-            SELECT 'Add/Less House Rent' as description,e.emp_id,e.hire_date,e.contract_end,e.fname,e.lname,
-            0 as current_amount,IF(houseAllowance > 0,houseAllowance,0) as previous_amount
-            from terminations,employee e where e.emp_id = terminations.employeeID and terminationDate like '%" . $previous_termination_date . "%'
-
+            (SELECT 'Add/Less Night Shift Allowance' as description, e.emp_id, e.hire_date, e.contract_end, e.fname, e.lname,
+            CASE WHEN nightshift_allowance != 0 THEN nightshift_allowance ELSE 0 END AS current_amount,
+            0 AS previous_amount
+            FROM terminations, employee e WHERE e.emp_id = terminations.\"employeeID\" AND \"terminationDate\"::text like '%" . $current_termination_date . "%')
 
             UNION
 
-            SELECT 'Add/Less Teller Allowance' as description,e.emp_id,e.hire_date,e.contract_end,e.fname,e.lname,
-            0 as current_amount,IF(tellerAllowance > 0,tellerAllowance,0) as previous_amount
-            from terminations,employee e where e.emp_id = terminations.employeeID and terminationDate like '%" . $previous_termination_date . "%'
+            (SELECT 'Add/Less Transport Allowance' as description, e.emp_id, e.hire_date, e.contract_end, e.fname, e.lname,
+            CASE WHEN transport_allowance != 0 THEN transport_allowance ELSE 0 END AS current_amount,
+            0 AS previous_amount
+            FROM terminations, employee e WHERE e.emp_id = terminations.\"employeeID\" AND \"terminationDate\"::text like '%" . $current_termination_date . "%')
 
-
-            UNION
-
-            SELECT 'Add/Less Arrears' as description,e.emp_id,e.hire_date,e.contract_end,e.fname,e.lname,
-            0 as current_amount,IF(arrears > 0,arrears,0) as previous_amount
-            from terminations,employee e where e.emp_id = terminations.employeeID and terminationDate like '%" . $previous_termination_date . "%'
-            UNION
-
-            SELECT 'Add/Less LSA' as description,e.emp_id,e.hire_date,e.contract_end,e.fname,e.lname,
-            0 as current_amount,IF(longServing > 0,longServing,0) as previous_amount
-            from terminations,employee e where e.emp_id = terminations.employeeID and terminationDate like '%" . $previous_termination_date . "%'
+            /*employee terminated last month*/
 
             UNION
 
-            SELECT 'Add/Less Notice Pay' as description,e.emp_id,e.hire_date,e.contract_end,e.fname,e.lname,
-            0 as current_amount,IF(noticePay > 0,noticePay,0) as previous_amount
-            from terminations,employee e where e.emp_id = terminations.employeeID and terminationDate like '%" . $previous_termination_date . "%'
+            (SELECT 'Add/Less N-Overtime' as description, e.emp_id, e.hire_date, e.contract_end, e.fname, e.lname,
+            COALESCE((tm.normal_days_overtime_amount), 0) AS current_amount,
+            0 AS previous_amount
+            FROM terminations tm, employee e WHERE e.emp_id = tm.\"employeeID\" AND tm.\"terminationDate\"::text like '%" . $previous_termination_date . "%')
 
             UNION
 
-            SELECT 'Add/Less Ex-Gratia' as description,e.emp_id,e.hire_date,e.contract_end,e.fname,e.lname,
-            0 as current_amount,IF(exgracia > 0,exgracia,0) as previous_amount
-            from terminations,employee e where e.emp_id = terminations.employeeID and terminationDate like '%" . $previous_termination_date . "%'
-
-
-
-            UNION
-
-            SELECT 'Add/Less Severance Pay' as description,e.emp_id,e.hire_date,e.contract_end,e.fname,e.lname,
-            0 as current_amount,IF(serevancePay > 0,serevancePay,0) as previous_amount
-            from terminations,employee e where e.emp_id = terminations.employeeID and terminationDate like '%" . $previous_termination_date . "%'
+            (SELECT 'Add/Less S-Overtime' as description, e.emp_id, e.hire_date, e.contract_end, e.fname, e.lname,
+            0 AS current_amount,
+            COALESCE((public_overtime_amount), 0) AS previous_amount
+            FROM terminations, employee e WHERE e.emp_id = terminations.\"employeeID\" AND \"terminationDate\"::text like '%" . $previous_termination_date . "%')
 
             UNION
 
-            SELECT 'Add/Less Leave Pay' as description,e.emp_id,e.hire_date,e.contract_end,e.fname,e.lname,
-            0 as current_amount,IF(leavePay > 0,leavePay,0) as previous_amount
-            from terminations,employee e where e.emp_id = terminations.employeeID and terminationDate like '%" . $previous_termination_date . "%'
-
-
-            UNION
-
-            SELECT 'Add/Less Night Shift Allowance' as description,e.emp_id,e.hire_date,e.contract_end,e.fname,e.lname,
-            0 as current_amount,IF(nightshift_allowance > 0,nightshift_allowance,0) as previous_amount
-            from terminations,employee e where e.emp_id = terminations.employeeID and terminationDate like '%" . $previous_termination_date . "%'
+            (SELECT 'Add/Less Leave Allowance' as description, e.emp_id, e.hire_date, e.contract_end, e.fname, e.lname,
+            0 AS current_amount,
+            COALESCE((\"leaveAllowance\"), 0) AS previous_amount
+            FROM terminations, employee e WHERE e.emp_id = terminations.\"employeeID\" AND \"terminationDate\"::text like '%" . $previous_termination_date . "%')
 
             UNION
 
-            SELECT 'Add/Less Transport Allowance' as description,e.emp_id,e.hire_date,e.contract_end,e.fname,e.lname,
-            0 as current_amount,IF(transport_allowance > 0,transport_allowance,0) as previous_amount
-            from terminations,employee e where e.emp_id = terminations.employeeID and terminationDate like '%" . $previous_termination_date . "%'
+            (SELECT 'Add/Less House Rent' as description, e.emp_id, e.hire_date, e.contract_end, e.fname, e.lname,
+            0 AS current_amount,
+            COALESCE((\"houseAllowance\"), 0) AS previous_amount
+            FROM terminations, employee e WHERE e.emp_id = terminations.\"employeeID\" AND \"terminationDate\"::text like '%" . $previous_termination_date . "%')
 
+            UNION
 
-           ";
+            (SELECT 'Add/Less Teller Allowance' as description, e.emp_id, e.hire_date, e.contract_end, e.fname, e.lname,
+            0 AS current_amount,
+            COALESCE((\"tellerAllowance\"), 0) AS previous_amount
+            FROM terminations, employee e WHERE e.emp_id = terminations.\"employeeID\" AND \"terminationDate\"::text like '%" . $previous_termination_date . "%')
+
+            UNION
+
+            (SELECT 'Add/Less Arrears' as description, e.emp_id, e.hire_date, e.contract_end, e.fname, e.lname,
+            0 AS current_amount,
+            COALESCE((arrears), 0) AS previous_amount
+            FROM terminations, employee e WHERE e.emp_id = terminations.\"employeeID\" AND \"terminationDate\"::text like '%" . $previous_termination_date . "%')
+
+            UNION
+
+            (SELECT 'Add/Less LSA' as description, e.emp_id, e.hire_date, e.contract_end, e.fname, e.lname,
+            0 AS current_amount,
+            COALESCE((\"longServing\"), 0) AS previous_amount
+            FROM terminations, employee e WHERE e.emp_id = terminations.\"employeeID\" AND \"terminationDate\"::text like '%" . $previous_termination_date . "%')
+
+            UNION
+
+            (SELECT 'Add/Less Notice Pay' as description, e.emp_id, e.hire_date, e.contract_end, e.fname, e.lname,
+            0 AS current_amount,
+            COALESCE((\"noticePay\"), 0) AS previous_amount
+            FROM terminations, employee e WHERE e.emp_id = terminations.\"employeeID\" AND \"terminationDate\"::text like '%" . $previous_termination_date . "%')
+
+            UNION
+
+            (SELECT 'Add/Less Ex-Gratia' as description, e.emp_id, e.hire_date, e.contract_end, e.fname, e.lname,
+            0 AS current_amount,
+            COALESCE((exgracia), 0) AS previous_amount
+            FROM terminations, employee e WHERE e.emp_id = terminations.\"employeeID\" AND \"terminationDate\"::text like '%" . $previous_termination_date . "%')
+
+            UNION
+
+            (SELECT 'Add/Less Severance Pay' as description, e.emp_id, e.hire_date, e.contract_end, e.fname, e.lname,
+            0 AS current_amount,
+            COALESCE((\"serevancePay\"), 0) AS previous_amount
+            FROM terminations, employee e WHERE e.emp_id = terminations.\"employeeID\" AND \"terminationDate\"::text like '%" . $previous_termination_date . "%')
+
+            UNION
+
+            (SELECT 'Add/Less Leave Pay' as description, e.emp_id, e.hire_date, e.contract_end, e.fname, e.lname,
+            0 AS current_amount,
+            COALESCE((\"leavePay\"), 0) AS previous_amount
+            FROM terminations, employee e WHERE e.emp_id = terminations.\"employeeID\" AND \"terminationDate\"::text like '%" . $previous_termination_date . "%')
+
+            UNION
+
+            (SELECT 'Add/Less Night Shift Allowance' as description, e.emp_id, e.hire_date, e.contract_end, e.fname, e.lname,
+            0 AS current_amount,
+            COALESCE((nightshift_allowance), 0) AS previous_amount
+            FROM terminations, employee e WHERE e.emp_id = terminations.\"employeeID\" AND \"terminationDate\"::text like '%" . $previous_termination_date . "%')
+
+            UNION
+
+            (SELECT 'Add/Less Transport Allowance' as description, e.emp_id, e.hire_date, e.contract_end, e.fname, e.lname,
+            0 AS current_amount,
+            COALESCE((transport_allowance), 0) AS previous_amount
+            FROM terminations, employee e WHERE e.emp_id = terminations.\"employeeID\" AND \"terminationDate\"::text like '%" . $previous_termination_date . "%')
+            ";
 
         $row = DB::select(DB::raw($query));
 

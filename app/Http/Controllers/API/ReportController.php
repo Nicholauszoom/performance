@@ -349,7 +349,7 @@ class ReportController extends Controller
 
         // include(app_path() . '/reports/temp_payroll.php');
     }
-    
+
     function get_payroll_temp_summary1(Request $request)
     {
 

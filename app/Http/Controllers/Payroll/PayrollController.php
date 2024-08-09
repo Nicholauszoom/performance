@@ -93,7 +93,7 @@ class PayrollController extends Controller
 
                         foreach ($all_allocations as $all_allocation) {
                             $data_allocation_log = array(
-                                'empID' => $all_allocation->empID,
+                                'empID' => $all_allocation->empid,
                                 'activity_code' => $all_allocation->activity_code,
                                 'grant_code' => $all_allocation->grant_code,
                                 'percent' => $all_allocation->percent,
@@ -174,7 +174,7 @@ class PayrollController extends Controller
         $data['employee'] = $this->payroll_model->customemployee();
         $data['title'] = "Financial Reports";
         return view('app.financial_reports', $data);
-        
+
     }
 
     public function employee_payslip()
@@ -1671,7 +1671,7 @@ class PayrollController extends Controller
                 );
 
                 //kmarealle@bancabc.co.tz
-                Notification::route('mail', $email_data['email'])->notify(new EmailRequests($email_data));
+                // Notification::route('mail', $email_data['email'])->notify(new EmailRequests($email_data));
                 $description = "Generating checklist of full payment of payroll of date " . $payrollMonth;
                 //$result = SysHelpers::auditLog(2,$description,$request);
 

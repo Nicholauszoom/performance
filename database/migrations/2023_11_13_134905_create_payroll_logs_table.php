@@ -42,7 +42,7 @@ return new class extends Migration
             $table->integer('bank_branch')->default(1);
             $table->string('account_no', 20)->default('0128J092341550');
             $table->double('rate')->nullable();
-            $table->double('currency')->nullable();
+            $table->string('currency')->nullable();
             $table->string('years')->nullable();
             $table->string('receipt_no')->nullable();
             $table->string('receipt_date')->nullable();
