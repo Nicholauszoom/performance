@@ -1671,7 +1671,7 @@ WHERE
     {
         $query = DB::table('allowance_logs')
     ->select('description', 'amount')
-    ->where('empid', '=', $empID)
+    ->where('empID', '=', $empID)
     ->whereRaw('TO_CHAR(payment_date, \'YYYY-MM\') LIKE ?', [$payroll_month])
     ->get();
     
@@ -1688,7 +1688,7 @@ WHERE
     {
         $query = DB::table('allowance_logs')
     ->select('description', 'amount')
-    ->where('empid', $empID)
+    ->where('empID', $empID)
     ->where(DB::raw('CAST(payment_date AS TEXT)'), 'LIKE', $payroll_month)
     ->get();
 
@@ -1713,16 +1713,15 @@ WHERE
         $query =DB::table('allowance_logs')
         ->select(DB::raw("
             CASE
-                WHEN (SELECT SUM(amount) FROM allowance_logs WHERE empID = ? AND CAST(payment_date AS TEXT) LIKE ? GROUP BY empID) > 0
-                THEN (SELECT SUM(amount) FROM allowance_logs WHERE empID = ? AND CAST(payment_date AS TEXT) LIKE ? GROUP BY empID)
+                WHEN (SELECT SUM(amount) FROM allowance_logs WHERE \"empID\" = ? AND CAST(payment_date AS TEXT) LIKE ? GROUP BY \"empID\") > 0
+                THEN (SELECT SUM(amount) FROM allowance_logs WHERE \"empID\" = ? AND CAST(payment_date AS TEXT) LIKE ? GROUP BY \"empID\")
                 ELSE 0
             END AS total
         "))
         ->setBindings([$empID, $payroll_month, $empID, $payroll_month])
         ->first();
-
         $row = $query;
-        return $row[0]->total;
+        return $row->total;
     }
 
     function temp_total_allowances($empID, $payroll_month)
@@ -1738,7 +1737,7 @@ WHERE
 
     function total_pensions($empID, $payroll_date)
     {
-        $query = "SELECT SUM(pl.pension_employee) as total_pension_employee, SUM(pl.pension_employer) as total_pension_employer,pl.rate as rate  FROM payroll_logs pl, employee e WHERE pl.empID = e.emp_id AND pl.empID =  '" . $empID . "' AND pl.payroll_date <= '" . $payroll_date . "' GROUP BY pl.empID";
+        $query = "SELECT SUM(pl.pension_employee) as total_pension_employee, SUM(pl.pension_employer) as total_pension_employer,MAX(pl.rate) as rate  FROM payroll_logs pl, employee e WHERE pl.\"empID\" = e.emp_id AND pl.\"empID\" =  '" . $empID . "' AND pl.payroll_date <= '" . $payroll_date . "' GROUP BY pl.\"empID\"";
         return DB::select(DB::raw($query));
     }
 
@@ -1757,11 +1756,17 @@ WHERE
     }*/
     function total_deductions($empID, $payroll_month)
     {
-        $query = "SELECT IF( (SELECT SUM(paid) FROM deduction_logs WHERE  empID = '" . $empID . "' AND payment_date like '%" . $payroll_month . "%' GROUP BY empID)>0, (SELECT SUM(paid) FROM deduction_logs WHERE  empID =  '" . $empID . "' AND payment_date like '%" . $payroll_month . "%' GROUP BY empID), 0) AS total";
-        $row = DB::select(DB::raw($query));
-
+        // Format the payroll_month variable to ensure it's in 'YYYY-MM' format
+        $query = "
+            SELECT CASE WHEN (SELECT SUM(paid) FROM deduction_logs WHERE \"empID\" = ?  AND payment_date::text = ? GROUP BY \"empID\") > 0 
+                    THEN (SELECT SUM(paid)  FROM deduction_logs WHERE \"empID\" = ? AND payment_date::text = ? GROUP BY \"empID\")
+                    ELSE 0 END AS total";
+    
+        $row = DB::select(DB::raw($query), [$empID, $payroll_month, $empID, $payroll_month]);
+    
         return $row[0]->total;
     }
+    
     function sum_bank_loans($empID, $payroll_date)
     {
         $data = DB::table('bank_loans')->where('employee_id', 1)->where('created_at', 'like', $payroll_date . '%')->sum('amount');
@@ -1826,7 +1831,7 @@ WHERE
         $query_prev = DB::table('loan_logs')
         ->select(DB::raw('SUM(paid) as prev_paid'))
         ->where('remained', '>', 0)
-        ->where('payment_date', '<=', $payroll_month)
+        ->where(DB::raw("TO_CHAR(payment_date, 'YYYY-MM')"), '<=', $payroll_month)
         ->get(); 
         
         
@@ -1845,10 +1850,9 @@ WHERE
         $query = "SELECT remained
         FROM (
           SELECT remained
-          FROM loan_logs ll, loan l where l.id = ll.loanID and l.empID = '" . $empID . "' and last_paid_date = '" . $payroll_month . "'
+          FROM loan_logs ll, loan l where l.id = ll.\"loanID\" and l.empID = '" . $empID . "' and last_paid_date = '" . $payroll_month . "'
           ORDER BY remained ASC LIMIT 2
-        ) z
-        where remained != 0 ORDER BY remained asc LIMIT 1";
+        ) where remained != 0 ORDER BY remained asc LIMIT 1";
 
 
         $row = DB::select(DB::raw($query));

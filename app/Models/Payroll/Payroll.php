@@ -145,9 +145,10 @@ class Payroll extends Model
     }
     public function payrollMonthList()
     {
-        $query = 'SELECT ROW_NUMBER() OVER () AS \"SNo\", pm.*, e.fname, e.mname, e.lname
+        $query = 'SELECT ROW_NUMBER() OVER () AS "SNo", pm.*, e.fname, e.mname, e.lname
         FROM payroll_months pm
         JOIN employee e ON pm.init_author = e.emp_id';
+       
         return DB::select(DB::raw($query));
     }
     public function getNotifications()
