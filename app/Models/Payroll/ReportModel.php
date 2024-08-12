@@ -3851,7 +3851,7 @@ FROM terminations tm";
 
 
         $query2 = "SELECT SUM(al.amount) as total_gross FROM allowance_logs al,employee e
-        WHERE  al.empID = e.emp_id and al.benefit_in_kind = 'NO'   and e.cost_center = 'Management'  and  al.payment_date = '" . $payroll_date . "'";
+        WHERE  al.\"empID\" = e.emp_id and al.benefit_in_kind = 'NO'   and e.cost_center = 'Management'  and  al.payment_date = '" . $payroll_date . "'";
 
         $query3 = "SELECT SUM(al.amount) as total_gross FROM allowance_logs al,employee e
         WHERE   al.empID = e.emp_id and al.benefit_in_kind = 'NO'   and e.cost_center = 'Management'  and  al.payment_date = '" . $payroll_date . "'";
@@ -3902,7 +3902,7 @@ FROM terminations tm";
     {
 
         $query = "SELECT SUM(al.amount) as amount,al.description as description,e.cost_center as account_name FROM allowance_logs al,employee e
-        WHERE   al.empid = e.emp_id and al.benefit_in_kind = 'YES'  and  al.payment_date = '" . $payroll_date . "' group by al.description, e.cost_center";
+        WHERE   al.\"empID\" = e.emp_id and al.benefit_in_kind = 'YES'  and  al.payment_date = '" . $payroll_date . "' group by al.description, e.cost_center";
 
         $row = DB::select(DB::raw($query));
 
@@ -4004,7 +4004,7 @@ FROM terminations tm";
     public function journal_deductions($payroll_date)
     {
         $query = "SELECT SUM(dl.paid) as amount,dl.description as description,CONCAT(dl.description,'-',e.fname,' ',e.lname) as naration FROM deduction_logs dl,employee e
-        WHERE   dl.empid = e.emp_id   and  dl.payment_date = '" . $payroll_date . "' group by dl.description, e.fname, e.lname";
+        WHERE   dl.\"empID\" = e.emp_id   and  dl.payment_date = '" . $payroll_date . "' group by dl.description, e.fname, e.lname";
 
         $row = DB::select(DB::raw($query));
 
@@ -4023,7 +4023,7 @@ FROM terminations tm";
         WHERE e.cost_center = 'Non Management' AND e.contract_type != '2' AND pl.payroll_date = '" . $payroll_date . "'";
 
         $query2 = "SELECT SUM(al.amount) as total_gross FROM allowance_logs al,employee e
-        WHERE  al.empID = e.emp_id and al.benefit_in_kind = 'NO'   and e.cost_center = 'Non Management'  and  al.payment_date = '" . $payroll_date . "'";
+        WHERE  al.\"empID\" = e.emp_id and al.benefit_in_kind = 'NO'   and e.cost_center = 'Non Management'  and  al.payment_date = '" . $payroll_date . "'";
 
 
 

@@ -970,7 +970,7 @@ $row = DB::select(DB::raw($query));
     function get_anualLeave($empID, $nature = null)
     {
 
-        $leaves = DB::table('leaves')->where('empID', $empID)->where('nature', $nature)->sum('days');
+        $leaves = DB::table('leaves')->where('empid', $empID)->where('nature', $nature)->sum('days');
 
         return $leaves;
     }
@@ -1661,7 +1661,7 @@ $row = DB::select(DB::raw($query));
             } elseif ($department != 'All' && $position == 'All') {
 
                 $monthlyleave = DB::table('leaves')
-                    ->join('employee', 'leaves.empID', '=', 'employee.emp_id')
+                    ->join('employee', 'leaves.empid', '=', 'employee.emp_id')
                     ->join('department', 'department.id', '=', 'employee.department')
                     ->join('position', 'position.id', '=', 'employee.position')
                     ->where('leaves.status', 3)
@@ -1798,7 +1798,7 @@ $row = DB::select(DB::raw($query));
         } else {
 
             $monthlyleave = DB::table('leaves')
-                ->join('employee', 'leaves.empID', '=', 'employee.emp_id')
+                ->join('employee', 'leaves.empid', '=', 'employee.emp_id')
                 ->join('department', 'department.id', '=', 'employee.department')
                 ->join('position', 'position.id', '=', 'employee.position')
                 ->where('leaves.status', 3)
@@ -1908,10 +1908,10 @@ $row = DB::select(DB::raw($query));
         } else {
 
             $monthlyleave = DB::table('leaves')
-                ->join('employee', 'leaves.empID', '=', 'employee.emp_id')
+                ->join('employee', 'leaves.empid', '=', 'employee.emp_id')
                 ->join('department', 'department.id', '=', 'employee.department')
                 ->join('position', 'position.id', '=', 'employee.position')
-                ->join('leave_approvals', 'leave_approvals.empID', '=', 'leaves.empID')
+                ->join('leave_approvals', 'leave_approvals.empID', '=', 'leaves.empid')
                 ->select('leaves.*', 'leave_approvals.level1', 'employee.*', 'department.name as department_name', 'position.name as  position_name')
                 ->where('start', '>=', $january)
                 ->where('nature', $nature)
@@ -2008,7 +2008,7 @@ $row = DB::select(DB::raw($query));
             $monthlyleave = DB::table('leaves')
                 ->join('employee', 'leaves.empid', '=', 'employee.emp_id')
                 ->join('department', 'department.id', '=', 'employee.department')
-                ->join('leave_approvals', 'leave_approvals.empID', '=', 'leaves.empID')
+                ->join('leave_approvals', 'leave_approvals.empID', '=', 'leaves.empid')
                 ->join('position', 'position.id', '=', 'employee.position')
                 ->select('leaves.*', 'employee.*', 'department.name as department_name', 'position.name as  position_name')
                 ->where(function ($query) use ($firstDayOfMonth, $lastDayOfMonth) {

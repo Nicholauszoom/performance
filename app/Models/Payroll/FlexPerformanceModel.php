@@ -1744,18 +1744,18 @@ public function skills_missing($empID)
 
         $query = "SELECT
         e.*,
-        bank.name as bankName,
+        bank.name as \"bankName\",
         ctry.description as country,
         b.name as branch_name,
-        bb.name as bankBranch,
+        bb.name as \"bankBranch\",
         d.name as deptname,
-        c.name as CONTRACT,
-        p.name as pName,
+        c.name as \"CONTRACT\",
+        p.name as \"pName\",
         (
             SELECT CONCAT(fname,' ', mname,' ', lname)
             FROM employee
             WHERE emp_id = e.line_manager
-        ) as LINEMANAGER
+        ) as \"LINEMANAGER\"
     FROM
         employee e
         JOIN department d ON d.id = e.department
@@ -1770,7 +1770,7 @@ public function skills_missing($empID)
 ";
 
         $row = DB::select(DB::raw($query));
-        // dd($row);
+        
 
 return $row;
 

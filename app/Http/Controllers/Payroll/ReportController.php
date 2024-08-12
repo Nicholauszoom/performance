@@ -3661,14 +3661,15 @@ EOD;
     $january = $calendar[0] . '-01-01';
     $data['excelTitle'] = $leave_name . ' Leave Report | ' . $other . ' | Date : From ' . date('d-M-Y', strtotime($january)) . ' To ' . date('d-M-Y', strtotime($data['date']));
 
-    $nts = array_map(function($employee) {
+    $nts = $data['employees']->map(function($employee) {
         return [
             'nature' => $employee->nature,
             'name' => $employee->fname,
             'accurated_days' => $employee->accrual_days,
             'spent_days' => $employee->days_spent
         ];
-    }, $data['employees']);
+    });
+    
 
     if ($request->type == 1) {
         $view = ($nature == 1) ? 'reports.leave_balance' : 'reports.other_leave_balance';
