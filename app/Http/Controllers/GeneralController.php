@@ -9200,14 +9200,15 @@ class GeneralController extends Controller
         if (SysHelpers::ApprovalLastLevel("Promotion Approval")) {
 
             $promotion = Promotion::where('id', $id)->first();
-            // dd($promotion);
+             @dd($promotion);
             $promotion->status = "Successful";
             $promotion->update();
 
-            $increment = Employee::where('emp_id', $promotion->employeeID)->first();
-            $increment->salary = $promotion->newSalary;
-            $increment->position = $promotion->newPosition;
-            $increment->emp_level = $promotion->newLevel;
+            $increment = Employee::where('emp_id', $promotion->employeeid)->first();
+//            @dd($increment);
+            $increment->salary = $promotion->newsalary;
+            $increment->position = $promotion->newposition;
+            $increment->emp_level = $promotion->newlevel;
             $promotion->approval_status = $promotion->approval_status + 1;
 
             $increment->update();
@@ -11476,7 +11477,7 @@ class GeneralController extends Controller
         $data['parent'] = 'My Services';
         $data['child'] = 'Loans';
 
-        
+
         return view('my-services/loans', $data);
     }
 

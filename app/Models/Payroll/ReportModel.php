@@ -1478,7 +1478,7 @@ IF((( SELECT sum(days)  FROM `leaves` where nature=6 AND e.emp_id=leaves.empID G
     function payslipcheck($datecheck, $empID)
     {
 
-       
+
         $query = DB::table('payroll_logs')
         ->where('payroll_date', 'LIKE', '%' . $datecheck . '%')
         ->where('empID', '=', $empID)
@@ -1586,7 +1586,7 @@ FROM payroll_logs pl, employee e, department d, position p  WHERE e.emp_id = pl.
     JOIN branch br ON br.id = pl.branch
     WHERE pl.payroll_date::text LIKE '%" . $payroll_month . "%'
       AND pl.\"empID\" = '" . $empID . "'";
-    
+
         return DB::select(DB::raw($query));
     }
 
@@ -1612,20 +1612,20 @@ FROM payroll_logs pl, employee e, department d, position p  WHERE e.emp_id = pl.
 
     function leaves($empID, $payroll_month_end)
     {
-        $query = "SELECT 
-            lt.type AS nature, 
-            l.nature AS type, 
-            SUM(l.days) AS days 
-          FROM 
-            leaves l 
-          JOIN 
-            employee e ON e.emp_id =CAST(l.empID AS character varying) 
-          JOIN 
-            leave_type lt ON CAST(lt.id AS character varying) = l.nature  
-          WHERE 
-            l.start BETWEEN e.hire_date AND :payroll_month_end 
-            AND e.emp_id = :empID 
-          GROUP BY 
+        $query = "SELECT
+            lt.type AS nature,
+            l.nature AS type,
+            SUM(l.days) AS days
+          FROM
+            leaves l
+          JOIN
+            employee e ON e.emp_id =CAST(l.empID AS character varying)
+          JOIN
+            leave_type lt ON CAST(lt.id AS character varying) = l.nature
+          WHERE
+            l.start BETWEEN e.hire_date AND :payroll_month_end
+            AND e.emp_id = :empID
+          GROUP BY
             l.empID, l.nature, lt.type";
 
 // Assuming $payroll_month_end and $empID are your parameters
@@ -1637,25 +1637,25 @@ $results = DB::select(DB::raw($query), [
     }
     function annualLeaveSpent($empID, $payroll_month_end)
     {
-        $query = "SELECT 
+        $query = "SELECT
     COALESCE(
-        (SELECT 
-            SUM(l.days) 
-         FROM 
-            leaves l 
-         WHERE 
-            e.emp_id = l.empID 
-            AND l.nature = '1' 
-            AND l.start BETWEEN e.hire_date AND :payroll_month_end 
-            AND e.emp_id = :empID 
-         GROUP BY 
+        (SELECT
+            SUM(l.days)
+         FROM
+            leaves l
+         WHERE
+            e.emp_id = l.empID
+            AND l.nature = '1'
+            AND l.start BETWEEN e.hire_date AND :payroll_month_end
+            AND e.emp_id = :empID
+         GROUP BY
             l.empID, l.nature
-        ), 
+        ),
         0
-    ) AS days 
-FROM 
+    ) AS days
+FROM
     employee e
-WHERE 
+WHERE
     e.emp_id = :empID";
 
 // Assuming $payroll_month_end and $empID are your parameters
@@ -1674,7 +1674,7 @@ WHERE
     ->where('empID', '=', $empID)
     ->whereRaw('TO_CHAR(payment_date, \'YYYY-MM\') LIKE ?', [$payroll_month])
     ->get();
-    
+
         return $query;
     }
 
@@ -1758,15 +1758,15 @@ WHERE
     {
         // Format the payroll_month variable to ensure it's in 'YYYY-MM' format
         $query = "
-            SELECT CASE WHEN (SELECT SUM(paid) FROM deduction_logs WHERE \"empID\" = ?  AND payment_date::text = ? GROUP BY \"empID\") > 0 
+            SELECT CASE WHEN (SELECT SUM(paid) FROM deduction_logs WHERE \"empID\" = ?  AND payment_date::text = ? GROUP BY \"empID\") > 0
                     THEN (SELECT SUM(paid)  FROM deduction_logs WHERE \"empID\" = ? AND payment_date::text = ? GROUP BY \"empID\")
                     ELSE 0 END AS total";
-    
+
         $row = DB::select(DB::raw($query), [$empID, $payroll_month, $empID, $payroll_month]);
-    
+
         return $row[0]->total;
     }
-    
+
     function sum_bank_loans($empID, $payroll_date)
     {
         $data = DB::table('bank_loans')->where('employee_id', 1)->where('created_at', 'like', $payroll_date . '%')->sum('amount');
@@ -1797,7 +1797,7 @@ WHERE
         ->where('l.empid', $empID)
         ->where(DB::raw('CAST(ll.payment_date AS TEXT)'), 'LIKE', $payroll_month)
         ->get();
-        
+
         return $query;
     }
     function getALlLoanHistory2($empID)
@@ -1832,9 +1832,9 @@ WHERE
         ->select(DB::raw('SUM(paid) as prev_paid'))
         ->where('remained', '>', 0)
         ->where(DB::raw("TO_CHAR(payment_date, 'YYYY-MM')"), '<=', $payroll_month)
-        ->get(); 
-        
-        
+        ->get();
+
+
         return [$query, $query_prev];
     }
 
@@ -2620,12 +2620,12 @@ and e.branch = b.code and e.line_manager = el.emp_id and c.id = e.contract_type 
         }
 
         $query = "SELECT  'Add Increase in Basic Pay incomparison to Last M' as description,e.emp_id,e.hire_date,e.contract_end,e.fname,e.lname,
-        (SELECT salary from " . $allowance_log . " pl where e.emp_id = pl.empID and payroll_date = '" . $current_payroll_month . "' limit 1) as current_amount,
-         (SELECT salary from payroll_logs pl where e.emp_id = pl.empID and payroll_date = '" . $previous_payroll_month . "' limit 1) as previous_amount
+        (SELECT salary from " . $allowance_log . " pl where e.emp_id = pl.\"empID\" and payroll_date = '" . $current_payroll_month . "' limit 1) as current_amount,
+         (SELECT salary from payroll_logs pl where e.emp_id = pl.\"empID\" and payroll_date = '" . $previous_payroll_month . "' limit 1) as previous_amount
 
-         from employee e where (SELECT salary from " . $allowance_log . " pl where e.emp_id = pl.empID and payroll_date = '" . $current_payroll_month . "' limit 1) > (SELECT salary from payroll_logs pl where e.emp_id = pl.empID and payroll_date = '" . $previous_payroll_month . "' limit 1)
-         and e.emp_id IN (SELECT emp_id from payroll_logs pl where e.emp_id = pl.empID and payroll_date = '" . $previous_payroll_month . "')
-         and e.emp_id IN (SELECT emp_id from " . $allowance_log . " pl where e.emp_id = pl.empID and payroll_date = '" . $current_payroll_month . "')
+         from employee e where (SELECT salary from " . $allowance_log . " pl where e.emp_id = pl.\"empID\" and payroll_date = '" . $current_payroll_month . "' limit 1) > (SELECT salary from payroll_logs pl where e.emp_id = pl.\"empID\" and payroll_date = '" . $previous_payroll_month . "' limit 1)
+         and e.emp_id IN (SELECT emp_id from payroll_logs pl where e.emp_id = pl.\"empID\" and payroll_date = '" . $previous_payroll_month . "')
+         and e.emp_id IN (SELECT emp_id from " . $allowance_log . " pl where e.emp_id = pl.\"empID\" and payroll_date = '" . $current_payroll_month . "')
 
         ";
         $row = DB::select(DB::raw($query));

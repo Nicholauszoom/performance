@@ -21,7 +21,7 @@
         <div class="">
             <div class="row  py-2">
                 <div class="col-md-7">
-                    <h6 class="mb-0 text-warning text-start">Promotion| Increment</h6>
+                    <h6 class="mb-0 text-warning text-start">Promotion | Increment</h6>
                 </div>
                 <div class="col-md-5">
 
@@ -43,7 +43,7 @@
                 </div>
             </div>
             <hr class="text-warning">
-    
+
 
 
         </div>
@@ -73,12 +73,12 @@
 
         <tbody>
                @foreach ($promotions as $item)
-            <tr>                
+            <tr>
             <td>{{$i++}}</td>
              <td>{{ $item->employee->fname}} {{ $item->employee->mname}} {{ $item->employee->lname}}</td>
              <td>{{ $item->position->name}}</td>
-             <td>{{ number_format($item->oldSalary,2)}} </td>
-             <td>{{ number_format($item->newSalary,2)}} </td>
+             <td>{{ number_format($item->oldsalary,2)}} </td>
+             <td>{{ number_format($item->newsalary,2)}} </td>
              <td>
                 @if($item->action=="incremented")
                     <span class="badge bg-main  bg-opacity-40 text-light">{{ $item->action}}</span>
@@ -96,9 +96,9 @@
 
                 @if($item->status!='Successful')
           @if ($level_check == $item->approval_status)
-           
+
                 {{-- start of termination confirm button --}}
-         
+
                 <a href="javascript:void(0)" title="Approve" class="me-2"
                 onclick="approvePromotion(<?php echo $item->id; ?>)">
                 <button class="btn btn-main btn-sm"><i class="ph-check"></i> Confirm</button>
@@ -111,12 +111,12 @@
                 <button class="btn btn-danger btn-sm"><i class="ph-x"></i>  Cancel</button>
                  </a>
                 {{-- / --}}
-           
+
                 @endif
                 @endif
                 </td>
                 @endcan
-    
+
             </tr>
             @endforeach
         </tbody>
@@ -127,7 +127,7 @@
 
 @push('footer-script')
     <script>
-      
+
         function approvePromotion(id) {
 
 
