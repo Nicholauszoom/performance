@@ -1709,20 +1709,15 @@ WHERE
 
     }*/
     function total_allowances($empID, $payroll_month)
-    {
-        $query =DB::table('allowance_logs')
-        ->select(DB::raw("
-            CASE
-                WHEN (SELECT SUM(amount) FROM allowance_logs WHERE \"empID\" = ? AND CAST(payment_date AS TEXT) LIKE ? GROUP BY \"empID\") > 0
-                THEN (SELECT SUM(amount) FROM allowance_logs WHERE \"empID\" = ? AND CAST(payment_date AS TEXT) LIKE ? GROUP BY \"empID\")
-                ELSE 0
-            END AS total
-        "))
-        ->setBindings([$empID, $payroll_month, $empID, $payroll_month])
-        ->first();
-        $row = $query;
-        return $row->total;
-    }
+{
+    $total = DB::table('allowance_logs')
+        ->where('empID', $empID)
+        ->where('payment_date', 'like', '%' . $payroll_month . '%')
+        ->sum('amount');
+
+    return $total > 0 ? $total : 0;
+}
+
 
     function temp_total_allowances($empID, $payroll_month)
     {
