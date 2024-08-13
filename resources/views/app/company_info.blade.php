@@ -29,7 +29,7 @@
                     <form action="{{ route('flex.updatecompanyInfo') }}" method="POST">
                         @csrf
 
-                        <input type="hidden" name="id" value='{{ empty(!$data->id) ?  $data->id : null  }}'  />
+                        <input type="hidden" name="id" value="{{ isset($data) && isset($data->id) ? $data->id : null }}" />
 
                         <div class="row">
                             <div class="col-lg-6 col-sm-6 mb-3">

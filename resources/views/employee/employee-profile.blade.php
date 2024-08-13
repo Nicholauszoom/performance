@@ -19,6 +19,7 @@
 @section('content')
 <?php
     foreach ($employee as $row) {
+        // dd($row);
         $name = $row->fname." ".$row->mname." ".$row->lname;
         $fname = $row->fname;
         $mname = $row->mname;
@@ -29,6 +30,7 @@
         $department = $row->deptname;
         $branch = $row->branch_name;
         $branchCode = $row->branch;
+        // $emp_code = $row->emp_code;
         $emp_level = $row->emp_level;
         $empID = $row->emp_id;
         $old_empID = $row->old_emp_id;
@@ -40,7 +42,7 @@
         $departmentID = $row->department;
         $position = $row->pname;
         $bankName = $row->bankname;
-        // $bankBranch = $row->bankBranch;
+        $bankBranch = $row->bankbranch;
         $positionID = $row->position;
         $ctype = $row->contract_type;
         $emp_shift = $row->shift;
@@ -132,7 +134,7 @@
                                             <div class="card-img-actions d-inline-block my-3">
                                                 {{-- <img class="" src="{{ ($photo == 'user.png') ? 'https://ui-avatars.com/api/?name='.$name.'&background=00204e&color=fff' : asset('storage/profile/' . $photo) }}" width="150" height="150" alt=""> --}}
 
-                            <img class="img" src="{{ auth()->user()->photo ? asset('assets/images/profile-default.jpg') : asset('storage/profile/' . $photo) }}" width="150" height="150" alt="">
+                                 <img class="img" src="{{ auth()->user()->photo ? asset('assets/images/profile-default.jpg') : asset('storage/profile/' . $photo) }}" width="150" height="150" alt="">
 
                                             </div>
 
