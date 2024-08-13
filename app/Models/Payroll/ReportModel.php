@@ -1842,12 +1842,15 @@ WHERE
 
     function loansAmountRemained($empID, $payroll_month)
     {
-        $query = "SELECT remained
-        FROM (
-          SELECT remained
-          FROM loan_logs ll, loan l where l.id = ll.\"loanID\" and l.empID = '" . $empID . "' and last_paid_date = '" . $payroll_month . "'
-          ORDER BY remained ASC LIMIT 2
-        ) where remained != 0 ORDER BY remained asc LIMIT 1";
+        $query= "SELECT remained
+         FROM (
+            SELECT remained 
+            FROM loan_logs ll, loan l
+            WHERE l.id = ll.\"loanID\" AND l.empID ='" . $empID . "' AND last_paid_date = '". $payroll_month ."'
+            ORDER BY remained ASC LIMIT 2
+            )AS subq
+            WHERE remained != 0
+            ORDER BY remained ASC LIMIT 1";
 
 
         $row = DB::select(DB::raw($query));
