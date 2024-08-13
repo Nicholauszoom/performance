@@ -9200,7 +9200,6 @@ class GeneralController extends Controller
         if (SysHelpers::ApprovalLastLevel("Promotion Approval")) {
 
             $promotion = Promotion::where('id', $id)->first();
-             @dd($promotion);
             $promotion->status = "Successful";
             $promotion->update();
 
@@ -9291,13 +9290,13 @@ class GeneralController extends Controller
 
         // saving old employee data
         $old = new Promotion();
-        $old->employeeID = $id;
-        $old->oldSalary = $empl->salary;
-        $old->newSalary = $request->newSalary;
-        $old->oldPosition = $empl->position;
-        $old->newPosition = $empl->position;
-        $old->oldLevel = $empl->emp_level;
-        $old->newLevel = $empl->emp_level;
+        $old->employeeid = $id;
+        $old->oldsalary = $empl->salary;
+        $old->newsalary = $request->newSalary;
+        $old->oldposition = $empl->position;
+        $old->newposition = $empl->position;
+        $old->oldlevel = $empl->emp_level;
+        $old->newlevel = $empl->emp_level;
         $old->effective_date = $empl->effective_date;
         $old->created_by = Auth::user()->id;
         $old->action = "incremented";
