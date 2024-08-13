@@ -398,7 +398,6 @@ class ReportController extends Controller
         $heslb = $data['heslb'];
         $total = $data['total'];
         $info = $data['info'];
-
         if ($reportformat == 1)
             include(app_path() . '/reports/heslb.php');
         else
@@ -570,9 +569,9 @@ class ReportController extends Controller
         $data['payroll_date'] = $payroll_month;
 
         if ($reportformat == 1) {
-            // include(app_path() . '/reports/pension.php');
-            $pdf = Pdf::loadView('reports.pension', $data)->setPaper('a4', 'potrait');
-            return $pdf->download("pension_report" . $payroll_month . ".pdf");
+             include(app_path() . '/reports/pension.php');
+//            $pdf = Pdf::loadView('reports.pension', $data)->setPaper('a4', 'potrait');
+//            return $pdf->download("pension_report" . $payroll_month . ".pdf");
         } else
             return view('reports/pension_datatable', $data);
     }
@@ -581,8 +580,6 @@ class ReportController extends Controller
     {
         $reportformat = $request->input('type');
 
-
-        // dd($request->all());
         $reportType = 1;
         if (1) {
             $calendar = $request->input('payrolldate');
@@ -606,7 +603,6 @@ class ReportController extends Controller
             $data['payroll_month'] = $yyyy . "-" . $mm . "-" . $dd;
 
             $wcf = $data['wcf'];
-
             $totalwcf = $data['totalwcf'];
             $info = $data['info'];
             $payroll_month = $data['payroll_month'];
@@ -615,8 +611,6 @@ class ReportController extends Controller
                 //include(app_path() . '/reports/wcf.php');
                 $pdf = Pdf::loadView('reports.wcf_pdf', $data)->setPaper('a4', 'potrait');
                 return $pdf->download("wcf-report-" . $payroll_month . ".pdf");
-                //pdf
-                // return view('reports/wcf', $data);
             } else
                 return view('reports/wcf', $data);
         }
@@ -3669,7 +3663,7 @@ EOD;
             'spent_days' => $employee->days_spent
         ];
     });
-    
+
 
     if ($request->type == 1) {
         $view = ($nature == 1) ? 'reports.leave_balance' : 'reports.other_leave_balance';
