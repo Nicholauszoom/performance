@@ -324,12 +324,13 @@
                                     class="nav-link {{ request()->routeIs('flex.financial_group') || request()->routeIs('flex.allowance_overtime') || request()->routeIs('flex.allowance') || request()->routeIs('flex.statutory_deductions') || request()->routeIs('flex.non_statutory_deductions') || request()->routeIs('flex.allowance_category') || request()->routeIs('flex.financial_groups_details') ? 'active' : null }}"
                                     href="{{ route('flex.financial_group') }}"><i class="ph-arrow-circle-right"></i>
                                     Payroll inputs </a></li>
+                                    
                             @can('view-payslip')
                                 <li class="nav-item"><a
-                                        class="nav-link {{ request()->routeIs('flex.submitInputsPage') ? 'active' : null }}"
-                                        href="{{ route('flex.submitInputsPage') }}"><i class="ph-paper-plane-tilt"></i> Submit
-                                        Inputs </a></li>
+                                        class="nav-link {{ request()->routeIs('flex.submitInputs') ? 'active' : null }}"
+                                        href="{{ route('flex.submitInputs') }}"><i class="ph-paper-plane-tilt"></i> Submit Inputs </a></li>
                             @endcan
+                            
                             @can('view-payroll')
                                 <li class="nav-item"><a
                                         class="nav-link {{ request()->routeIs('payroll.payroll') || request()->routeIs('payroll.temp_payroll_info') || request()->routeIs('reports.payrollReconciliationSummary') || request()->routeIs('reports.payrollReconciliationDetails') || request()->routeIs('reports.payrolldetails') || request()->routeIs('reports.payrollReportLogs') || request()->routeIs('reports.payroll_inputs') ? 'active' : null }}"
@@ -668,8 +669,8 @@
 
 
 
-                            <li class=" nav-item {{ request()->routeIs('permissions.index') ? 'active' : null }} "><a
-                                    class="nav-link " href="{{ url('permissions') }}"><i
+                            <li class=" nav-item"> <a class="nav-link  {{ request()->routeIs('permissions.index') ? 'active' : null }}" href="{{ url('permissions') }}">
+                                    <i
                                         class="ph-check-square-offset"></i>Permission</a>
 
                             </li>
