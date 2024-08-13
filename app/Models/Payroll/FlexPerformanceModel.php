@@ -1770,7 +1770,7 @@ public function skills_missing($empID)
 ";
 
         $row = DB::select(DB::raw($query));
-        
+
 
 return $row;
 
@@ -2257,7 +2257,7 @@ public function getpropertyexit($id)
         $total_amount = $salaryEnrollment + $leavePay + $arrears + $overtime_amount + $serevancePay + $exgracia + $noticePay+$tellerAllowance;
         // + $pesionable_amount;
 
-        $query = "SELECT pf.amount_employee FROM employee e,pension_fund pf where e.pension_fund = pf.id AND  e.emp_id =" . $emp_id . " ";
+        $query = "SELECT pf.amount_employee FROM employee e,pension_fund pf where e.pension_fund = pf.id AND  e.emp_id = '" . $emp_id . "' ";
         $row = DB::select(DB::raw($query));
         $rate = $row[0]->amount_employee;
 
@@ -2314,7 +2314,7 @@ public function getpropertyexit($id)
         $query = "SELECT a.id, a.name, ea.amount
         FROM emp_allowances ea
         JOIN allowances a ON a.id = ea.allowance
-        WHERE ea.empID = {$empID}";
+        WHERE ea.empID = {$empID}::VARCHAR";
 
         $rows = DB::select(DB::raw($query));
         return $rows;
@@ -2356,14 +2356,12 @@ public function getpropertyexit($id)
     {
         $days = intval(date('t', strtotime($termination_date)));
 
-        $query = "
-        SELECT
-        IF((month(e.hire_date) = month('" . $termination_date . "')) AND (year(e.hire_date) = year('" . $termination_date . "'))
-        ,
-          ((" . $termination_day . " - day(e.hire_date)+1)*e.salary/30)
-
-          ,e.salary) as salary
-          from employee e where e.emp_id = " . $empID . "";
+        $query = "SELECT CASE
+                            WHEN EXTRACT(MONTH FROM e.hire_date) = EXTRACT(MONTH FROM DATE '" . $termination_date . "') AND EXTRACT(YEAR FROM e.hire_date) = EXTRACT(YEAR FROM DATE '" . $termination_date . "') THEN
+                            ((" . $termination_day . " - EXTRACT(DAY FROM e.hire_date) + 1) * e.salary / 30)
+                            ELSE e.salary
+                           END AS salary
+                   FROM employee e where e.emp_id = '" . $empID . "'";
 
         $row = DB::select(DB::raw($query));
         $salary = $row[0]->salary;
@@ -2373,22 +2371,12 @@ public function getpropertyexit($id)
 
     public function get_leave_allowance($empID, $termination_date, $january_date)
     {
-
-        $query = "
-SELECT
-IF(
-  (YEAR('" . $termination_date . "') = YEAR(e.hire_date)),
-(
-  ((DATEDIFF('" . $termination_date . "',e.hire_date)+1)/365)*e.salary
-)
-  ,
-
- (
-    ((DATEDIFF('" . $termination_date . "','" . $january_date . "')+1)/365)*e.salary
- )
-
-  ) as leave_allowance
-  from employee e where e.emp_id = " . $empID . "";
+        $query = "SELECT CASE
+                            WHEN EXTRACT(YEAR FROM DATE '" . $termination_date . "') = EXTRACT(YEAR FROM e.hire_date) THEN
+                            ((EXTRACT(DAY FROM AGE(DATE '" . $termination_date . "', e.hire_date)) + 1) / 365) * e.salary
+                            ELSE ((EXTRACT(DAY FROM AGE(DATE '" . $termination_date . "', '" . $january_date . "')) + 1) / 365) * e.salary
+                          END AS leave_allowance
+                   FROM employee e where e.emp_id = '" . $empID . "'";
 
         $leave_allowance = DB::select(DB::raw($query))[0]->leave_allowance;
 
@@ -2553,7 +2541,7 @@ IF(
         $datalog = array(
             'state' => 4,
             'current_state' => 4,
-            'empID' => $termination->employeeID,
+            'empid' => $termination->employeeID,
             'author' => session('emp_id'),
         );
 
@@ -3723,11 +3711,11 @@ public function positionFetcher($id)
 
     public function employeestatelog($data)
     {
-        $empID = $data['empID'];
+        $empID = $data['empid'];
         $state = $data['state'];
         $query = "UPDATE employee SET state = '" . $state . "' WHERE emp_id = '" . $empID . "'";
 
-        DB::insert(DB::raw($query));
+        DB::update(DB::raw($query));
 
         DB::table('activation_deactivation')->insert($data);
 

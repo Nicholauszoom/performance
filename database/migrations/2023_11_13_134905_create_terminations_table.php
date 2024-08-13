@@ -43,13 +43,13 @@ return new class extends Migration
             $table->decimal('otherDeductions', 10);
             $table->decimal('otherPayments', 10);
             $table->decimal('paye', 10);
-            $table->boolean('taxable');
+            $table->double('taxable', 10);
             $table->decimal('pension_employee', 10);
             $table->decimal('net_pay', 10);
             $table->decimal('take_home', 10);
             $table->decimal('total_deductions', 10);
             $table->timestamps();
-            $table->string('status');
+            $table->string('status')->default(0);
             $table->decimal('wcf', 10);
             $table->decimal('sdl', 10);
             $table->decimal('transport_allowance', 10);

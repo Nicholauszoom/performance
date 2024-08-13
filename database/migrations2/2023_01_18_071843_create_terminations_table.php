@@ -43,7 +43,7 @@ return new class extends Migration
             $table->decimal('otherDeductions', 10, 2);
             $table->decimal('otherPayments', 10, 2);
             $table->decimal('paye', 10, 2);
-            $table->boolean('taxable');
+            $table->double('taxable', 10);
             $table->decimal('pension_employee', 10, 2);
             $table->decimal('net_pay', 10, 2);
             $table->decimal('take_home', 10, 2);
@@ -54,7 +54,7 @@ return new class extends Migration
             $table->decimal('sdl', 10, 2);
             $table->decimal('transport_allowance', 10, 2);
             $table->decimal('nightshift_allowance', 10, 2);
-            
+
         });
     }
 

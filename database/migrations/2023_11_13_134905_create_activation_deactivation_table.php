@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
@@ -19,7 +20,7 @@ return new class extends Migration
             $table->integer('state')->comment('0-Deactivated, 1-Activated, 2-Request for Activation, 3-Request for Deactivation');
             $table->integer('current_state')->default(0)->comment('0-active, 1-committed');
             $table->integer('notification')->default(1)->comment('0-seen, 1-not seen');
-            $table->dateTime('dated');
+            $table->dateTime('dated')->default(DB::raw('CURRENT_TIMESTAMP'));
             $table->string('author', 10);
             $table->timestamps();
         });
