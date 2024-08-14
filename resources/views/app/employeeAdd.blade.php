@@ -173,7 +173,7 @@
                             <span id="position-error" class="text-danger error-message"></span>
                         </div>
                     </div>
-                 
+
 
                     <div class="col-md-4 col-lg-4">
                         <div class="mb-3">
@@ -488,7 +488,7 @@
                     <div class="col-md-6">
                         <div class="mb-3">
                             <label class="form-label">Upload Employees In Batch</label>
-                            <input type="file" requiredes accept=".xls, .xlsx"
+                            <input type="file" required accept=".xls, .xlsx"
                                 class="form-control @error('file') is-invalid @enderror" name="file">
                             <div class="form-text text-muted">Accepted formats xls, xlsx. Max file size 2Mb</div>
                         </div>
@@ -812,7 +812,7 @@
             })
         });
     </script>
-{{-- 
+{{--
     <script>
         $(function() {
             var today = new Date();
@@ -987,7 +987,7 @@
             });
         });
     </script>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+{{--    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>--}}
 
 
     <script>

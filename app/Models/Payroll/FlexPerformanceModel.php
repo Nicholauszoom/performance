@@ -3397,14 +3397,12 @@ last_paid_date='" . $date . "' WHERE  state = 1 and type = 3";
 
     public function linemanagerdropdown()
     {
-        // $query = "SELECT DISTINCT er.userID as empID,  CONCAT(e.fname,' ',IF( e.mname != null,e.mname,' '),' ', e.lname) as NAME FROM employee e, emp_role er, role r WHERE er.role = r.id and er.userID = e.emp_id and  r.permissions like '%p%'";
         $query = "SELECT DISTINCT
             e.emp_id as empID,
-            CONCAT(e.fname, ' ', COALESCE(e.mname, ''), ' ', e.lname) as NAME
+            CONCAT(e.fname, ' ', COALESCE(e.mname, ''), ' ', e.lname) as name
         FROM employee e
-        WHERE e.state != 4
-            AND e.emp_id NOT LIKE '%JOB_%'
-    ";        return DB::select(DB::raw($query));
+        WHERE e.state != 4 AND e.emp_id NOT LIKE '%JOB_%'";
+        return DB::select(DB::raw($query));
     }
 
     public function departmentdropdown()
@@ -3455,7 +3453,7 @@ last_paid_date='" . $date . "' WHERE  state = 1 and type = 3";
     {
         $query = DB::table('bank')
         ->select(
-            DB::raw('ROW_NUMBER() OVER () as SNo'),
+            DB::raw('ROW_NUMBER() OVER () as "SNo"'),
             'bank.*'
         )
         ->get();
