@@ -154,14 +154,13 @@ FROM employee e, department dpt, position p, branch br, contract ct, pension_fun
 
     function pay_checklist($date)
     {
-
-        $query = "SELECT @s:=@s+1 AS SNo, pl.empID,pl.rate,pl.currency,  CONCAT(e.fname,' ', IF(e.mname != null,e.mname,' '),' ', e.lname) AS name,
-	IF((SELECT SUM(al.amount) FROM allowance_logs al WHERE al.empID = e.emp_id AND al.payment_date = '" . $date . "' GROUP BY al.empID)>0, (SELECT SUM(al.amount) FROM allowance_logs al WHERE al.empID = e.emp_id AND al.payment_date = '" . $date . "' GROUP BY al.empID), 0) AS allowances,
-	pl.salary, pl.less_takehome, pl.meals, pl.pension_employee AS pension, pl.taxdue,
-	IF((SELECT SUM(ll.paid) FROM loan_logs ll, loan l WHERE l.empID = e.emp_id AND  ll.payment_date = '" . $date . "' GROUP BY l.empID)>0,(SELECT SUM(ll.paid) FROM loan_logs ll, loan l WHERE e.emp_id = l.empID AND ll.loanID = l.id AND ll.payment_date = '" . $date . "' GROUP BY l.empID),0) AS loans,
-	IF((SELECT SUM(dl.paid) FROM deduction_logs dl WHERE dl.empID = e.emp_id AND dl.payment_date = '" . $date . "' GROUP BY dl.empID)>0,(SELECT SUM(dl.paid) FROM deduction_logs dl WHERE dl.empID = e.emp_id AND dl.payment_date = '" . $date . "' GROUP BY dl.empID),0) AS deductions,
-	b.name as bank, bb.name as branch, bb.branch_code as swiftcode, pl.account_no
-	FROM employee e, payroll_logs pl,  bank_branch bb, bank b, (SELECT @s:=0) AS s WHERE pl.empID = e.emp_id AND bb.id= e.bank_branch AND b.id = e.bank AND pl.payroll_date = '" . $date . "' order by e.emp_id ASC";
+        $query = "SELECT ROW_NUMBER() OVER (ORDER BY e.emp_id DESC) AS \"SNo\", pl.\"empID\",pl.rate,pl.currency, CONCAT(e.fname,' ', COALESCE(e.mname,''),' ', e.lname) AS name,
+        COALESCE((SELECT SUM(al.amount) FROM allowance_logs al WHERE al.\"empID\" = e.emp_id AND al.payment_date = '" . $date . "' GROUP BY al.\"empID\"), 0) AS allowances,
+        pl.salary, pl.less_takehome, pl.meals, pl.pension_employee AS pension, pl.taxdue,
+        COALESCE((SELECT SUM(ll.paid) FROM loan_logs ll, loan l WHERE l.empID = e.emp_id AND  ll.payment_date = '" . $date . "' GROUP BY l.empID), 0) AS loans,
+        COALESCE((SELECT SUM(dl.paid) FROM deduction_logs dl WHERE dl.\"empID\" = e.emp_id AND dl.payment_date = '" . $date . "' GROUP BY dl.\"empID\"), 0) AS deductions,
+        b.name as bank, bb.name as branch, bb.branch_code as swiftcode, pl.account_no
+        FROM employee e, payroll_logs pl,  bank_branch bb, bank b WHERE pl.\"empID\" = e.emp_id AND bb.id= e.bank_branch AND b.id = e.bank AND pl.payroll_date = '" . $date . "' order by e.emp_id ASC";
 
         return DB::select(DB::raw($query));
     }
@@ -212,50 +211,20 @@ FROM employee e, department dpt, position p, branch br, contract ct, pension_fun
 
     function payrollAuthorization($payrollMonth)
     {
-        $query = "SELECT CONCAT(e.fname,' ', IF(e.mname != null,e.mname,' '),' ', e.lname) AS initName, CONCAT(er.fname,' ', er.mname,' ', er.lname) AS recomName, CONCAT(er.fname,' ', er.mname,' ', er.lname) AS financeRecomName, CONCAT(ea.fname,' ', ea.mname,' ', ea.lname) AS confName, pm.appr_date, pm.init_date, pm.recom_date,pm.recom_date2 FROM employee e, employee ea, employee er, payroll_months pm WHERE pm.init_author = e.emp_id AND pm.appr_author = ea.emp_id AND pm.recom_author = er.emp_id AND pm.recom_author2 = er.emp_id and pm.payroll_date = '" . $payrollMonth . "'";
+        $query = "SELECT CONCAT(e.fname,' ', COALESCE(e.mname, ''),' ', e.lname) AS \"initName\", CONCAT(er.fname,' ', COALESCE(er.mname, ''),' ', er.lname) AS \"recomName\", CONCAT(er.fname,' ', COALESCE(er.mname, ''),' ', er.lname) AS \"financeRecomName\", CONCAT(ea.fname,' ', COALESCE(ea.mname, ''),' ', ea.lname) AS \"confName\", pm.appr_date, pm.init_date, pm.recom_date,pm.recom_date2 FROM employee e, employee ea, employee er, payroll_months pm WHERE pm.init_author = e.emp_id AND pm.appr_author = ea.emp_id AND pm.recom_author = er.emp_id AND pm.recom_author2 = er.emp_id and pm.payroll_date = '" . $payrollMonth . "'";
         return DB::select(DB::raw($query));
     }
 
     function sum_take_home($date)
     {
-        $query = "SELECT
-                    -- SUM(takehome) as total_takehome,
-                    -- SUM(takehome_less) as total_takehome_less
-                  FROM (
-                    SELECT
-                        pl.\"id\",
-                        CONCAT(e.fname, ' ', COALESCE(NULLIF(e.mname, ''), ' '), ' ', e.lname) AS name,
-                        COALESCE(
-                            (SELECT SUM(al.amount) FROM allowance_logs al WHERE al.\"empID\" = e.\"emp_id\" AND al.payment_date = pl.payroll_date GROUP BY al.\"empID\"),
-                            0
-                        ) AS allowances,
-                        pl.less_takehome,
-                        pl.salary,
-                        pl.meals,
-                        pl.pension_employee AS pension,
-                        pl.taxdue,
-                        COALESCE(
-                            (SELECT SUM(ll.paid) FROM loan_logs ll JOIN loan l ON e.\"emp_id\" = l.\"empID\" AND ll.\"loanID\" = l.id WHERE ll.payment_date = pl.payroll_date GROUP BY l.\"empID\"),
-                            0
-                        ) AS loans,
-                        COALESCE(
-                            (SELECT SUM(dl.paid) FROM deduction_logs dl WHERE dl.\"empID\" = e.\"emp_id\" AND dl.payment_date = pl.payroll_date GROUP BY dl.\"empID\"),
-                            0
-                        ) AS deductions,
-                        b.name as bank,
-                        bb.name as branch,
-                        bb.swiftcode,
-                        pl.account_no
-                    FROM
-                        employee e
-                        JOIN payroll_logs pl ON pl.\"id\" = e.\"id\"
-                        JOIN bank_branch bb ON bb.id = e.bank_branch
-                        JOIN bank b ON b.id = e.bank
-                    WHERE
-                        pl.payroll_date = :date
-                  ) as parent_query";
-
-        return DB::select(DB::raw($query), ['date' => $date]);
+        $query = "SELECT SUM(salary + allowances-pension-loans-deductions-meals-taxdue) as takehome, SUM(less_takehome) as takehome_less FROM (SELECT  pl.\"empID\",  CONCAT(e.fname,' ', COALESCE(e.mname, ''),' ', e.lname) AS name,
+                COALESCE((SELECT SUM(al.amount) FROM allowance_logs al WHERE al.\"empID\" = e.emp_id AND al.payment_date = '" . $date . "' GROUP BY al.\"empID\"), 0) AS allowances,
+                pl.less_takehome, pl.salary, pl.meals, pl.pension_employee AS pension, pl.taxdue,
+                COALESCE((SELECT SUM(ll.paid) FROM loan_logs ll, loan l WHERE l.empID = e.emp_id AND  ll.payment_date = '" . $date . "' GROUP BY l.empID), 0) AS loans,
+                COALESCE((SELECT SUM(ll.paid) FROM loan_logs ll, loan l WHERE l.empID = e.emp_id AND  ll.payment_date = '" . $date . "' GROUP BY l.empID), 0) AS deductions,
+                b.name as bank, bb.name as branch, bb.swiftcode, pl.account_no
+                FROM employee e, payroll_logs pl,  bank_branch bb, bank b  WHERE pl.\"empID\" = e.emp_id AND bb.id= e.bank_branch AND b.id = e.bank AND pl.payroll_date = '" . $date . "') as parent_query";
+        return DB::select(DB::raw($query));
     }
 
 
@@ -1820,7 +1789,7 @@ WHERE
     {
         $query= "SELECT remained
          FROM (
-            SELECT remained 
+            SELECT remained
             FROM loan_logs ll, loan l
             WHERE l.id = ll.\"loanID\" AND l.empID ='" . $empID . "' AND last_paid_date = '". $payroll_month ."'
             ORDER BY remained ASC LIMIT 2

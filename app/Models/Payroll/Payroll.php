@@ -148,7 +148,7 @@ class Payroll extends Model
         $query = 'SELECT ROW_NUMBER() OVER () AS "SNo", pm.*, e.fname, e.mname, e.lname
         FROM payroll_months pm
         JOIN employee e ON pm.init_author = e.emp_id';
-       
+
         return DB::select(DB::raw($query));
     }
     public function getNotifications()
@@ -1072,8 +1072,8 @@ class Payroll extends Model
             //  dd($query);
             DB::insert(DB::raw($query));
 
-            $query = "update temp_payroll_logs set wcf = gross*(SELECT rate_employer from deduction where id=2)";
-            DB::update(DB::raw($query));
+//            $query = "update temp_payroll_logs set wcf = gross*(SELECT rate_employer from deduction where id=2)";
+//            DB::update(DB::raw($query));
         });
         return true;
     }
@@ -1232,7 +1232,7 @@ e.salary),
             DB::update(DB::raw($query));
 
             //INSERT ALLOWANCES
-            $query = "INSERT INTO temp_allowance_logs (\"empID\", description, policy, amount, \"allowanceID\", payment_date, benefit_in_kind)
+            $query = "INSERT INTO allowance_logs (\"empID\", description, policy, amount, \"allowanceID\", payment_date, benefit_in_kind)
             SELECT ea.empid AS \"empID\", a.name AS description,
                 CASE
                     WHEN ea.mode = '1' THEN 'Fixed Amount'
@@ -2128,12 +2128,12 @@ e.salary),
             DB::update(DB::raw($query));
 
             $query = "UPDATE allowances SET state = 0 WHERE type = '1' and \"Isrecursive\" = 'NO'";
-            DB::insert(DB::raw($query));
+            DB::update(DB::raw($query));
 
 
             //UPDATING WCF AMOUNT AND CALCULATING IT FROM GROSS
-            $query = "update payroll_logs set wcf = gross*(SELECT rate_employer from deduction where id = 2)";
-            DB::insert(DB::raw($query));
+//            $query = "update payroll_logs set wcf = COALESCE(gross, 0)*(SELECT rate_employer from deduction where id = 2)";
+//            DB::update(DB::raw($query));
 
             //CLEAR TEMPORARY PAYROLL LOGS
             DB::table('temp_allowance_logs')->delete();
@@ -2145,7 +2145,7 @@ e.salary),
             DB::table('once_off_deduction')->delete();
 
             $query = "UPDATE allowances SET state = 0 WHERE type = '0' and \"Isrecursive\" = 'NO'";
-            DB::insert(DB::raw($query));
+            DB::update(DB::raw($query));
         });
         return true;
     }
@@ -2530,7 +2530,7 @@ FROM temp_loan_logs tlg, loan l WHERE l.id = tlg.\"loanID\" and payment_date = '
     public function total_heslb($table, $payrollMonth)
     {
 
-        $query = "SELECT SUM(ll.paid) as paid FROM  " . $table . " ll, loan lo WHERE ll.payment_date = '" . $payrollMonth . "' AND ll.loanID = lo.id AND lo.type = 3";
+        $query = "SELECT SUM(ll.paid) as paid FROM  " . $table . " ll, loan lo WHERE ll.payment_date = '" . $payrollMonth . "' AND ll.\"loanID\" = lo.id AND lo.type = 3";
         $row = DB::select(DB::raw($query));
         return $row[0]->paid;
     }

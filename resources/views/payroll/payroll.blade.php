@@ -169,7 +169,7 @@
                                 <?php if($row->pay_checklist==1){ ?>
 
                                 {{-- start of print report button --}}
-                                <a href="{{route('reports.payroll_report',['pdate'=>base64_encode($row->payroll_date)])}}<?php //echo base_url(); ?>index.php/reports/payroll_report/?pdate=<?php echo base64_encode($row->payroll_date); ?>"
+                                <a href="{{route('reports.payroll_report',['pdate'=>base64_encode($row->payroll_date)])}}"
                                     target="blank" title="Print Report" class="icon-2 info-tooltip">
                                     <button type="button" class="btn btn-main btn-xs">
                                         <i class="ph-printer"></i>

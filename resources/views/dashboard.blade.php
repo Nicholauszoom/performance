@@ -3,15 +3,15 @@
 @section('content')
     <?php
 
-    foreach ($appreciated as $row) {
-        $name = $row->NAME;
-        $id = $row->empID;
-        $position = $row->POSITION;
-        $department = $row->DEPARTMENT;
-        $description = $row->description;
-        $date = $row->date_apprd;
-        $photo = $row->photo;
-    }
+//    foreach ($appreciated as $row) {
+//        $name = $row->NAME;
+//        $id = $row->empID;
+//        $position = $row->POSITION;
+//        $department = $row->DEPARTMENT;
+//        $description = $row->description;
+//        $date = $row->date_apprd;
+//        $photo = $row->photo;
+//    }
 
     foreach ($overview as $row) {
         $employees = $row->emp_count;
@@ -22,7 +22,7 @@
         $local_employee = $row->local_employee;
     }
 
-    
+
     ?>
     @php
     $brandSetting = \App\Models\BrandSetting::first();

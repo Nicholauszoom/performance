@@ -4712,13 +4712,13 @@ FROM payroll_logs pl, employee e, position p, department d where e.emp_id=pl.emp
     {
         DB::transaction(function () use ($date) {
             $query = "update partial_payment set status = '1', payroll_date = '" . $date . "' where status = '0' ";
-            DB::insert(DB::raw($query));
+            DB::update(DB::raw($query));
         });
     }
 
     public function presentPartialPayment($payroll_date)
     {
-        $query = "select * from partial_payment where payroll_date = '" . $payroll_date . "' and status = 1 ";
+        $query = "select * from partial_payment where payroll_date = '" . $payroll_date . "' and status = '1'";
         return DB::select(DB::raw($query));
     }
 
@@ -4748,7 +4748,7 @@ FROM payroll_logs pl, employee e, position p, department d where e.emp_id=pl.emp
             $query = "update payroll_logs set salary = '" . $data['salary'] . "', pension_employee = '" . $data['pension_employee'] . "',
 		 pension_employer = '" . $data['pension_employer'] . "', taxdue = '" . $data['taxdue'] . "', sdl = '" . $data['sdl'] . "',
 		 wcf = '" . $data['wcf'] . "' where payroll_date = '" . $payroll_date . "' and empID = '" . $empID . "' ";
-            DB::insert(DB::raw($query));
+            DB::update(DB::raw($query));
         });
     }
 
@@ -4818,13 +4818,13 @@ FROM payroll_logs pl, employee e, position p, department d where e.emp_id=pl.emp
     public function assignment_task_log($payroll_date)
     {
         DB::transaction(function () use ($payroll_date) {
-            $query = "insert into assignment_task_logs (assignment_employee_id,emp_id,task_name,description,start_date,end_date,remarks,status,payroll_date)
-                select ae.assignment_id, ae.emp_id, ast.task_name, ast.description, ast.start_date,
-                ast.end_date, ast.remarks, ast.status, '" . $payroll_date . "' from assignment_employee ae, assignment_task ast
-                where ae.id = ast.assignment_employee_id::NUMERIC and ast.status = 1 and ast.date is null;";
+            $query = "INSERT INTO assignment_task_logs (assignment_employee_id,emp_id,task_name,description,start_date,end_date,remarks,status,payroll_date)
+                SELECT ae.assignment_id, ae.emp_id, ast.task_name, ast.description, ast.start_date,
+                ast.end_date, ast.remarks, ast.status, '" . $payroll_date . "' FROM assignment_employee ae, assignment_task ast
+                WHERE ae.id = ast.assignment_employee_id::BIGINT and ast.status = '1' AND ast.date IS NULL";
             DB::insert(DB::raw($query));
-            $query = "update assignment_task set date = '" . $payroll_date . "' where date is null ";
-            DB::insert(DB::raw($query));
+            $query = "UPDATE assignment_task SET date = '" . $payroll_date . "' WHERE date IS NULL";
+            DB::update(DB::raw($query));
         });
 
         return true;
