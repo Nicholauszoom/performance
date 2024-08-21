@@ -1066,7 +1066,7 @@ ORDER BY
     {
         $result = DB::table('employee')
             ->select(
-                DB::raw('ROW_NUMBER() OVER () as SNo'),
+                DB::raw('ROW_NUMBER() OVER () as "SNo"'),
                 'position.name as POSITION',
                 'department.name as DEPARTMENT',
                 'employee.*',
@@ -1116,7 +1116,7 @@ ORDER BY
     {
         $result = DB::table('employee as e')
             ->select(
-                DB::raw('ROW_NUMBER() OVER () as SNo'),
+                DB::raw('ROW_NUMBER() OVER () as "SNo"'),
                 'p.name as POSITION',
                 'd.name as DEPARTMENT',
                 'ad.state as log_state',
@@ -1124,8 +1124,8 @@ ORDER BY
                 'ad.author as initiator',
                 'e.*',
                 'ad.id as logID',
-                DB::raw("CONCAT(e.fname, ' ', CASE WHEN e.mname IS NOT NULL THEN e.mname ELSE '' END, ' ', e.lname) as NAME"),
-                DB::raw("(SELECT CONCAT(el.fname, ' ', el.mname, ' ', el.lname) FROM employee el WHERE el.emp_id = e.line_manager) as LINEMANAGER")
+                DB::raw("CONCAT(e.fname, ' ', CASE WHEN e.mname IS NOT NULL THEN e.mname ELSE '' END, ' ', e.lname) as \"NAME\""),
+                DB::raw("(SELECT CONCAT(el.fname, ' ', el.mname, ' ', el.lname) FROM employee el WHERE el.emp_id = e.line_manager) as \"LINEMANAGER\"")
             )
             ->join('activation_deactivation as ad', 'ad.empid', '=', 'e.emp_id')
             ->join('department as d', 'd.id', '=', 'e.department')
@@ -1206,10 +1206,12 @@ $query = "SELECT
 
     public function newDepartmentTransfer($id)
 {
+    $id = (int) $id;
     $row = DB::table('department')
         ->select('name')
         ->where('id', $id)
         ->first();
+        
 
     if ($row) {
         return $row->name;
@@ -4639,7 +4641,7 @@ FROM payroll_logs pl, employee e, position p, department d where e.emp_id=pl.emp
                 'g.id',
                 'g.*',
                 DB::raw('CAST(g.timed as date) as DATED'),
-                DB::raw("CONCAT(e.fname, ' ', CASE WHEN e.mname IS NOT NULL THEN e.mname ELSE '' END, ' ', e.lname) as NAME"),
+                DB::raw("CONCAT(e.fname, ' ', CASE WHEN e.mname IS NOT NULL THEN e.mname ELSE '' END, ' ', e.lname) as \"NAME\""),
                 'p.name as POSITION',
                 'd.name as DEPARTMENT',
                 'g.description'

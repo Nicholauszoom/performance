@@ -459,11 +459,6 @@
                                                                             <img src="https://ik.imagekit.io/7ch2jnezz/hc-hub-logo3.png?updatedAt=1704882790217" alt="Logo" height="100px" width="">
 
                                                                             @endif
-
-
-
-
-<br><br>
                                                                                           <h1 style="margin-top:0;margin-bottom:1.38em;font-size:1.953em;line-height:1.3;font-weight:bold;letter-spacing:-0.02em;">Leave Approval</h1>
                                                                             </div>
                                                                         </td>
@@ -490,8 +485,8 @@
                                         <table width="100%" border="0" cellspacing="0" cellpadding="0"
                                             role="presentation">
                                             <tr>
-                                                <td valign="top" class="pc-w620-padding-30-40-30-40" style="
-                                    padding: 30px 40px 30px 40px;
+                                                <td valign="top" class="pc-w620-spacing-0-0-0-0" style="
+                                    padding: 0px 0px 0px 0px;
                                     border-radius: 0px;
                                     background-color: #ffffff;
                                   " bgcolor="#ffffff">
@@ -510,12 +505,13 @@
                                           text-align-last: left;
                                         ">
                                                                 <div>
-                                                                <td style="padding:30px; padding-top:0px; background-color:#ffffff;">
-                <p style="margin:0;">Dear, {{$full_name}}</p>
+                <td style="padding:20px; padding-top:0px; background-color:#ffffff;">
+                <p style="margin:0;">Dear, <strong>{{ $full_name }}</strong></p>
+               </br>
                 <p>This is to notify you that there is Leave request from {{ $employee_name }} to be approved,</p>
                 <p>Please login to the system so that you can approve.</p>
                 <p>Regards,</p>
-                <p>{{ $organization_name }}</p>
+                <p><p>{{ $organization_name ?? 'default Oganization Name' }}</p></p>
                 <p style="text-align: center;margin: 2.5em auto;">
                   <a class="button" href="{{url($next)}}" style="background: #00204e;
                        text-decoration: none;
@@ -530,14 +526,6 @@
                   </a>
                 </p>
                 <div class="imm" style="display: flex; justify-content: center">
-{{--
-                    @if ($brandSetting->dashboard_logo)
-                    <img src="{{ asset('storage/' . $brandSetting->dashboard_logo) }}" alt="Logo" height="70px" width="400" class="img-fluid">
-
-                @else
-                <img src="https://ik.imagekit.io/7ch2jnezz/logo.png?updatedAt=1704882148575" alt="" height="70px" width="400">
-
-                @endif --}}
 
                 </div>
               </td>
