@@ -29,7 +29,7 @@
    @endphp
 
 
-   
+
 <style>
 
 
@@ -371,7 +371,7 @@
 
 
     <style>
-       
+
 
         .text-center{
             margin-left: 100px
@@ -407,7 +407,7 @@
             <td align="center" valign="top">
                 <table class="pc-project-container" style="width: 600px; max-width: 600px" width="600" align="center"
                     border="0" cellpadding="0" cellspacing="0" role="presentation">
-                    
+
 
                     <tr>
                         <td valign="top">
@@ -454,15 +454,15 @@
 
                                                                                 @if ($brandSetting->dashboard_logo)
                                                                                 <img src="{{ asset('storage/' . $brandSetting->dashboard_logo) }}" alt="Logo" height="100px" width="" class="img-fluid">
-                                                        
+
                                                                             @else
                                                                             <img src="https://ik.imagekit.io/7ch2jnezz/hc-hub-logo3.png?updatedAt=1704882790217" alt="Logo" height="100px" width="">
-                                        
-                                                                            @endif
-                                                                            
-                                                                                
 
-                                                                                
+                                                                            @endif
+
+
+
+
 <br><br>
                                                                                           <h1 style="margin-top:0;margin-bottom:1.38em;font-size:1.953em;line-height:1.3;font-weight:bold;letter-spacing:-0.02em;">Leave Approval</h1>
                                                                             </div>
@@ -515,9 +515,9 @@
                 <p>This is to notify you that there is Leave request from {{ $employee_name }} to be approved,</p>
                 <p>Please login to the system so that you can approve.</p>
                 <p>Regards,</p>
-                <p>HC HUB</p>
+                <p>{{ $organization_name }}</p>
                 <p style="text-align: center;margin: 2.5em auto;">
-                  <a class="button" href="{{url('/login',['next' => $next])}}" style="background: #00204e;
+                  <a class="button" href="{{url($next)}}" style="background: #00204e;
                        text-decoration: none;
                        padding: 1em 1.5em;
                        color: #ffffff;
@@ -530,7 +530,7 @@
                   </a>
                 </p>
                 <div class="imm" style="display: flex; justify-content: center">
-{{-- 
+{{--
                     @if ($brandSetting->dashboard_logo)
                     <img src="{{ asset('storage/' . $brandSetting->dashboard_logo) }}" alt="Logo" height="70px" width="400" class="img-fluid">
 
@@ -557,7 +557,7 @@
                     <tr>
                         <td valign="top">
                             <!-- BEGIN MODULE: Feature 5 -->
-                            
+
                             <!-- END MODULE: Feature 5 -->
                         </td>
                     </tr>
@@ -634,13 +634,13 @@
                                     background-color: #ffffff;
                                   " bgcolor="#ffffff">
 
-{{-- 
+{{--
 <div class="text-center">
     <p>
     Bibi Titi Mohammed Road <br>
     P.O. Box 31, Dar es salaam <br>
     +255 22 22119422/2111990 <br>
-    web: www.hermes.com 
+    web: www.hermes.com
 </p>
 </div> --}}
 
@@ -648,7 +648,7 @@
 
                                     <p>
 
-                                  
+
                                     {{-- @if ($brandSetting->address_1)
                                                     {{ $brandSetting->address_1 }}
                                                 @else
@@ -656,7 +656,7 @@
                                                 @endif
                                                 <br>
 
-                                                
+
 
                                             @if ($brandSetting->address_2)
                                             {{ $brandSetting->address_2}}
@@ -683,7 +683,7 @@
                                                 www.bancabc.co.tz
                                             @endif --}}
                                     </p>
-                                  </div>                       
+                                  </div>
             </td>
         </tr>
     </table>

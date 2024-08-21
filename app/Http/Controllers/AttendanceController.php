@@ -642,6 +642,8 @@ class AttendanceController extends Controller
         $leaveApproval = new LeaveApproval();
         $leaveApproval = $leaveApproval::where('empID', Auth::user()->emp_id)->first();
 
+        $organization_name = DB::table('brand_settings')->select('organization_name')->first();
+
         if (!$leaveApproval) {
             $leaveApproval = new LeaveApproval();
             $leaveApproval->empID = Auth::user()->emp_id;
@@ -830,6 +832,7 @@ class AttendanceController extends Controller
                             'email' => $linemanager_data['email'],
                             'full_name' => $fullname,
                             'employee_name' => $employee_data['full_name'],
+                            'organization_name' => $organization_name->organization_name,
                             'next' => parse_url(route('attendance.leave'), PHP_URL_PATH),
                         );
 
@@ -1026,6 +1029,7 @@ class AttendanceController extends Controller
                             'email' => $linemanager_data['email'],
                             'full_name' => $fullname,
                             'employee_name' => $employee_data['full_name'],
+                            'organization_name' => $organization_name->organization_name,
                             'next' => parse_url(route('attendance.leave'), PHP_URL_PATH),
                         );
                         try {
@@ -1243,6 +1247,7 @@ class AttendanceController extends Controller
                         'email' => $linemanager_data['email'],
                         'full_name' => $fullname,
                         'employee_name' => $employee_data['full_name'],
+                        'organization_name' => $organization_name->organization_name,
                         'next' => parse_url(route('attendance.leave'), PHP_URL_PATH),
                     );
                     try {
@@ -1258,7 +1263,7 @@ class AttendanceController extends Controller
                         Notification::route('mail', $linemanager_data['email'])->notify(new EmailRequests($email_data));
 
                     } catch (Exception $exception) {
-                        // dd($exception->getMessage());
+                         dd($exception->getMessage());
                         $msg = $type_name . " Leave Request is submitted successfully but email not sent(SMTP Problem)!";
                         return $url->with('msg', $msg);
                     }
