@@ -642,6 +642,7 @@ class AttendanceController extends Controller
         $leaveApproval = new LeaveApproval();
         $leaveApproval = $leaveApproval::where('empID', Auth::user()->emp_id)->first();
 
+        // Get Organization Name
         $organization_name = DB::table('brand_settings')->select('organization_name')->first();
 
         if (!$leaveApproval) {
@@ -2473,6 +2474,8 @@ class AttendanceController extends Controller
         $employee = EMPL::where('emp_id', $request->empID)->first();
         // dd($employee);
 
+        // Get Organization Name
+        $organization_name = DB::table('brand_settings')->select('organization_name')->first();
 
         if ($start <= $end) {
 
@@ -2634,6 +2637,7 @@ class AttendanceController extends Controller
                             'email' => $linemanager_data['email'],
                             'full_name' => $fullname,
                             'employee_name' => $employee_data['full_name'],
+                            'organization_name' => $organization_name->organization_name,
                             'next' => parse_url(route('attendance.leave'), PHP_URL_PATH),
                         );
 
@@ -2821,6 +2825,7 @@ class AttendanceController extends Controller
                             'email' => $linemanager_data['email'],
                             'full_name' => $fullname,
                             'employee_name' => $employee_data['full_name'],
+                            'organization_name' => $organization_name->organization_name,
                             'next' => parse_url(route('attendance.leave'), PHP_URL_PATH),
                         );
                         try {
@@ -2938,6 +2943,7 @@ class AttendanceController extends Controller
                             'email' => $linemanager_data['email'],
                             'full_name' => $fullname,
                             'employee_name' => $employee_data['full_name'],
+                            'organization_name' => $organization_name->organization_name,
                             'next' => parse_url(route('attendance.leave'), PHP_URL_PATH),
                         );
 
@@ -3037,6 +3043,7 @@ class AttendanceController extends Controller
                             'email' => $linemanager_data['email'],
                             'full_name' => $fullname,
                             'employee_name' => $employee_data['full_name'],
+                            'organization_name' => $organization_name->organization_name,
                             'next' => parse_url(route('attendance.leave'), PHP_URL_PATH),
                         );
 
@@ -3221,6 +3228,7 @@ class AttendanceController extends Controller
                     'email' => $linemanager_data['email'],
                     'full_name' => $fullname,
                     'employee_name' => $employee_data['full_name'],
+                    'organization_name' => $organization_name->organization_name,
                     'next' => parse_url(route('attendance.leave'), PHP_URL_PATH),
                 );
                 try {
@@ -3262,6 +3270,9 @@ class AttendanceController extends Controller
         $url = redirect('flex/attendance/leave');
 
         $employee = EMPL::where('emp_id', $request->empID)->first();
+
+        // Get Organization Name
+        $organization_name = DB::table('brand_settings')->select('organization_name')->first();
 
         if ($start <= $end) {
             $gender = $this->getEmployeeGender($request->empID);
@@ -3412,6 +3423,7 @@ class AttendanceController extends Controller
                 'email' => $linemanager_data['email'],
                 'full_name' => $fullname,
                 'employee_name' => $employee_data['full_name'],
+                'organization_name' => $organization_name->organization_name,
                 'next' => parse_url(route('attendance.leave'), PHP_URL_PATH),
             );
             try {
@@ -3473,15 +3485,15 @@ class AttendanceController extends Controller
             $condition = [
                 'emp_id' => $empID,
                 'appliedby' => Auth::user()->emp_id,
-                'leaveId' => $leaves->id,
+                'leaveid' => $leaves->id,
                 'nature' => $leaves->nature,
 
             ];
 
             $extraData = [
                 'emp_id' => $condition['emp_id'],
-                'appliedby' => $condition['appliedBy']??null,
-                'leaveid' => $condition['leaveId'],
+                'appliedby' => $condition['appliedby']??null,
+                'leaveid' => $condition['leaveid'],
                 'nature' => $condition['nature'],
                 'forfeit_days' => $extradays
             ];
@@ -3489,7 +3501,7 @@ class AttendanceController extends Controller
             DB::table('sick_leave_forfeit_days')->updateOrInsert($condition, array_merge($extraData, ['updated_at' => now(), 'created_at' => now()]));
             $leave_type = LeaveType::where('id', $nature)->first();
             $type_name = $leave_type->type;
-            $linemanager = LeaveApproval::where('empid', $empID)->first();
+            $linemanager = LeaveApproval::where('empID', $empID)->first();
             $linemanager_data = SysHelpers::employeeData($linemanager->level1);
             $employee_data = SysHelpers::employeeData($empID);
             $fullname = $linemanager_data['full_name'];
@@ -3500,6 +3512,7 @@ class AttendanceController extends Controller
                 'email' => $linemanager_data['email'],
                 'full_name' => $fullname,
                 'employee_name' => $employee_data['full_name'],
+                'organization_name' => $organization_name->organization_name,
                 'next' => parse_url(route('attendance.leave'), PHP_URL_PATH),
             );
             try {
