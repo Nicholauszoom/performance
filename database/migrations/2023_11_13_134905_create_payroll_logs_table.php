@@ -18,10 +18,10 @@ return new class extends Migration
             $table->string('empID', 10);
             $table->double('salary')->nullable();
             $table->double('allowances')->default(0);
-            $table->double('pension2')->default(0);
-            $table->double('taxable_amount')->default(0);
-            $table->double('gross')->default(0);
-            $table->double('excess_added')->default(0);
+            $table->double('pension2')->nullable()->default(0);
+            $table->double('taxable_amount')->nullable()->default(0);
+            $table->double('gross')->nullable()->default(0);
+            $table->double('excess_added')->nullable()->default(0);
             $table->double('pension_employee')->nullable();
             $table->double('pension_employer')->nullable();
             $table->double('medical_employee')->default(0);

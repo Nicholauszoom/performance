@@ -16,11 +16,11 @@ return new class extends Migration
         Schema::create('temp_loan_logs', function (Blueprint $table) {
             $table->id();
             $table->integer('loanID');
-            $table->integer('loanTypeID')->default(0);
-            $table->integer('loanCode')->default(0);
+            $table->integer('loanTypeID')->nullable()->default(0);
+            $table->integer('loanCode')->nullable()->default(0);
             $table->double('policy')->default(0);
             $table->bigInteger('paid')->nullable();
-            $table->bigInteger('remained');
+            $table->bigInteger('remained')->nullable();
             $table->date('payment_date')->nullable();
             $table->timestamps();
         });

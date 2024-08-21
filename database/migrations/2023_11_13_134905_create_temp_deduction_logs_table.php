@@ -16,8 +16,8 @@ return new class extends Migration
         Schema::create('temp_deduction_logs', function (Blueprint $table) {
             $table->id();
             $table->string('empID', 10);
-            $table->integer('deductionID')->default(0);
-            $table->integer('deductionCode')->default(0);
+            $table->integer('deductionID')->nullable()->default(0);
+            $table->integer('deductionCode')->nullable()->default(0);
             $table->string('description', 50)->default('Unclassified');
             $table->string('policy', 50)->default('Fixed Amount');
             $table->bigInteger('paid')->nullable();

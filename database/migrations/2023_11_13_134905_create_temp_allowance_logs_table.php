@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->string('empID', 10);
             $table->integer('allowanceID')->default(0);
-            $table->integer('allowanceCode')->default(0);
+            $table->integer('allowanceCode')->nullable()->default(0);
             $table->string('description', 50)->default('Unclassified');
             $table->string('policy', 50)->default('Fixed Amount');
             $table->decimal('amount', 20)->nullable();

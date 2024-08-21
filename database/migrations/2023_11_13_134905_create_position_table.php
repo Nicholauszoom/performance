@@ -21,7 +21,7 @@ return new class extends Migration
             $table->string('dept_code', 5)->default('001');
             $table->integer('organization_level');
             $table->string('purpose', 300)->default('N/A');
-            $table->string('minimum_qualification', 200)->default('N/A');
+            $table->string('minimum_qualification', 200)->nullable()->default('N/A');
             $table->integer('driving_licence')->default(0);
             $table->string('created_by', 50)->nullable();
             $table->dateTime('created_on')->useCurrent();

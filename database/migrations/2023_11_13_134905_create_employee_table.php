@@ -41,11 +41,11 @@ return new class extends Migration
             $table->string('currency')->nullable();
             $table->decimal('rate', 10)->nullable();
             $table->string('postal_address')->nullable();
-            $table->string('postal_city', 50)->default('Mwanza');
+            $table->string('postal_city', 50)->nullable()->default('Mwanza');
             $table->string('physical_address')->nullable();
             $table->string('mobile')->nullable();
             $table->string('email')->nullable();
-            $table->string('photo', 100)->default('/uploads/userprofile/user.png');
+            $table->string('photo', 100)->nullable()->default('/uploads/userprofile/user.png');
             $table->integer('is_expatriate')->default(0);
             $table->string('home')->nullable();
             $table->integer('payroll_no')->nullable();

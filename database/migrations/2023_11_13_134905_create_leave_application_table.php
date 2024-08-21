@@ -30,6 +30,8 @@ return new class extends Migration
             $table->date('approved_date_hr')->nullable();
             $table->string('approved_by_line', 15)->nullable();
             $table->date('approved_date_line')->nullable();
+            $table->string('approved_by_hod', 100)->nullable();
+            $table->date('approved_date_hod')->nullable();
             $table->timestamps();
         });
     }

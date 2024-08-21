@@ -21,7 +21,7 @@ return new class extends Migration
             $table->double('salaryEnrollment', 10);
             $table->decimal('actual_salary', 10);
             $table->unsignedInteger('normalDays');
-            $table->unsignedInteger('publicDays');
+            $table->unsignedInteger('publicDays')->nullable();
             $table->decimal('noticePay', 10);
             $table->decimal('leavePay', 10);
             $table->decimal('livingCost', 10);
@@ -39,7 +39,7 @@ return new class extends Migration
             $table->decimal('public_overtime_amount', 10);
             $table->decimal('longServing', 10);
             $table->decimal('salaryAdvance', 10);
-            $table->decimal('loan_balance', 10);
+            $table->decimal('loan_balance', 11);
             $table->decimal('otherDeductions', 10);
             $table->decimal('otherPayments', 10);
             $table->decimal('paye', 10);

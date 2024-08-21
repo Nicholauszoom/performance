@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('mode', 10)->comment('1-fixed value 2-percent');
             $table->integer('group_name')->default(0);
             $table->string('percent', 10);
-            $table->string('amount', 10);
+            $table->string('amount', 15);
             $table->string('currency', 10);
             $table->string('rate', 10);
             $table->timestamps();
