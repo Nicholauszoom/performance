@@ -1476,19 +1476,19 @@ class PayrollController extends Controller
                             $position2 = "Human Capital";
                             $position_data = SysHelpers::approvalEmp($position1, $position2);
                             // dd($position_data[3]->employees[0]);
-//                            foreach ($position_data as $position) {
-//                                # code...
-//                                foreach ($position->employees as $employee) {
-//                                    $fullname = $employee->full_name;
-//                                    $email_data = array(
-//                                        'subject' => 'Payroll Approval Notification',
-//                                        'view' => 'emails.payroll-approval',
-//                                        'email' => $employee->email,
-//                                        'full_name' => $fullname,
-//                                    );
-//                                    Notification::route('mail', $email_data['email'])->notify(new EmailRequests($email_data));
-//                                }
-//                            }
+                            foreach ($position_data as $position) {
+                                # code...
+                                foreach ($position->employees as $employee) {
+                                    $fullname = $employee->full_name;
+                                    $email_data = array(
+                                        'subject' => 'Payroll Approval Notification',
+                                        'view' => 'emails.payroll-approval',
+                                        'email' => $employee->email,
+                                        'full_name' => $fullname,
+                                    );
+                                    Notification::route('mail', $email_data['email'])->notify(new EmailRequests($email_data));
+                                }
+                            }
 
                         return true;
                         }

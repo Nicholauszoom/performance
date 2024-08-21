@@ -1306,12 +1306,12 @@ e.salary),
                     WHEN (paid + deduction_amount) > amount THEN amount
                     ELSE deduction_amount
                 END AS paid,
-                (amount -
+                COALESCE(amount -
                     CASE
                         WHEN (paid + deduction_amount) >= amount THEN amount - paid
                         ELSE paid + deduction_amount
                     END
-                ) AS remained,
+                , 0) AS remained,
                 DATE '" . $payroll_date . "' AS payment_date
             FROM loan WHERE state = 1 AND type != 3";
             DB::insert(DB::raw($query));
@@ -1337,7 +1337,7 @@ e.salary),
                                 END
                             FROM employee e WHERE e.emp_id = empid AND e.state != 4 AND e.login_user != 1)
                     END AS paid,
-                    (amount -
+                    COALESCE(amount -
                         CASE
                             WHEN (paid + deduction_amount) >= amount THEN amount - paid
                             ELSE
@@ -1354,7 +1354,7 @@ e.salary),
                                     FROM employee e WHERE e.emp_id = empid AND e.state != 4 AND e.login_user != 1))
                                 )
                         END
-                    ) AS remained,
+                    , 0) AS remained,
                     DATE '" . $payroll_date . "' AS payment_date
                     FROM loan WHERE state = 1 AND type = 3";
             DB::insert(DB::raw($query));
