@@ -4628,7 +4628,7 @@ FROM payroll_logs pl, employee e, position p, department d where e.emp_id=pl.emp
             )
             ->where('g.id', '=', $id)
             ->get();
-
+ 
         return $result;
     }
 

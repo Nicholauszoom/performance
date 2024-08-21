@@ -181,6 +181,8 @@ class AttendanceController extends Controller
             $data['leaveForfeiting'][$key]['leaveBalance'] = $this->attendance_model->getLeaveBalance($leaveforfeit->empID, $employeeDate, date('Y-m-d'));
         }
 
+        dd($data);
+
         $data['title'] = "Leaves";
         $data['today'] = date('Y-m-d');
         return view('app.leave_forfeiting_report', $data);
@@ -250,7 +252,7 @@ class AttendanceController extends Controller
 
                 // Fetch 'appliedBy' value from 'sick_leave_forfeit_days' based on the unique 'leaveID'
                 $appliedByValue = DB::table('sick_leave_forfeit_days')
-                    ->where('leaveID', $uniqueLeaveID)
+                    ->where('leaveid', $uniqueLeaveID)
                     ->value('appliedby');
                 // Fetch 'forfeit_days' value from 'sick_leave_forfeit_days' based on the unique 'leaveID'
                 $forfeitDaysValue = DB::table('sick_leave_forfeit_days')

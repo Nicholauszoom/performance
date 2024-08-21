@@ -487,7 +487,7 @@ $row = DB::select($query,['nature' => (string) $nature,'empId' => (string) $empI
         $remaining_after_forfeitDays = LeaveForfeiting::where('empid', $empID)->value('days') ?? 0;
         $broughtFowardDays = LeaveForfeiting::where('empid', $empID)->value('opening_balance') ?? 0;
 
-        if ($employee->leave_effective_date) {
+        if ($employee && $employee->leave_effective_date) {
              $dateeffective = $employee->leave_effective_date;
              $date = new DateTime($dateeffective);
              $year_effective = $date->format('Y');
@@ -501,12 +501,12 @@ $row = DB::select($query,['nature' => (string) $nature,'empId' => (string) $empI
                      $accrual_days = (($days * $employee->accrual_rate) / 30) + $employee->earlier_accrual_days;
                  }
              }else{
-                 $accrual_rate =  $employee->accrual_rate;
+                 $accrual_rate =  optional($employee)->accrual_rate ?? '0';
                  $accrual_days = $this->calculate($accrual_rate, $hireDate, $today);
              }
          }
          else {
-            $accrual_rate =  $employee->accrual_rate;
+            $accrual_rate =  optional($employee)->accrual_rate ?? '0';
             $accrual_days = $this->calculate($accrual_rate, $hireDate, $today);
          }
 

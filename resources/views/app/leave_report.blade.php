@@ -45,7 +45,7 @@
         {{-- @if ( $item->employee->line_manager  ==  Auth::user()->emp_id) --}}
         <tr>
           <td>{{ $item->empID }}</td>
-          <td>{{ $item->employee->fname }} {{ $item->employee->mname }} {{ $item->employee->lname }}</td>
+          <td>{{ optional($item->employee)->fname ?? 'N/A' }} {{ optional($item->employee)->mname ?? 'N/A' }} {{ optional($item->employee)->lname ?? 'N/A' }}</td>
           <td>
             {{ $item->days }} Days
             <br>From <b>{{ \Carbon\Carbon::parse($item->start)->format('d-m-Y') }}</b><br>To <b>{{ \Carbon\Carbon::parse($item->end)->format('d-m-Y') }}</b>

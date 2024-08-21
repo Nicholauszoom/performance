@@ -267,19 +267,21 @@
                                     <?php
                                      $employee =   App\Models\Employee::where('emp_id', $item->empID) ->first();
 
-                                if ($employee->leave_effective_date) {
+                                if ($employee && $employee->leave_effective_date) {
                                     if (date('Y-m-d') <= $employee->leave_effective_date) {
                                         // If the current date is before or equal to the leave effective date
                                         $employee->days_entitled = $employee->old_leave_days_entitled;
                                         echo   $employee->days_entitled . ' Days';
                                     } else {
-                                        $employee->days_entitled = $employee->leave_days_entitled;
+                                        $employee->days_entitled = optional($employee)->leave_days_entitled??'0';
                                         echo   $employee->days_entitled . ' Days';
                                     }
                                 } else {
                                     // If leave_effective_date is null
-                                    $employee->days_entitled = $employee->leave_days_entitled;
-                                    echo   $employee->days_entitled . ' Days';
+                                    // $employee->days_entitled = optional($employee)->leave_days_entitled??'0';
+                                    $days_entitled = optional($employee)->leave_days_entitled??'0';
+
+                                    echo   $days_entitled . ' Days';
                                 }
 
                                     ?>
