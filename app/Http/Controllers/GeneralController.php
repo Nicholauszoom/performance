@@ -458,7 +458,7 @@ class GeneralController extends Controller
         $method = $request->method();
         if ($method == 'POST' && $ID != '') {
             $updates = array(
-                'minSalary' => $request->input('minSalary'),
+                'minsalary' => $request->input('minSalary'),
             );
             $result = $this->flexperformance_model->updateOrganizationLevel($updates, $ID);
             if ($result == true) {
@@ -475,7 +475,7 @@ class GeneralController extends Controller
         $method = $request->method();
         if ($method == 'POST' && $ID != '') {
             $updates = array(
-                'maxSalary' => $request->input('maxSalary'),
+                'maxsalary' => $request->input('maxSalary'),
             );
             $result = $this->flexperformance_model->updateOrganizationLevel($updates, $ID);
             if ($result == true) {
@@ -1175,6 +1175,7 @@ class GeneralController extends Controller
         $data['parent_department'] = $this->flexperformance_model->departmentdropdown();
         $data['data'] = $this->flexperformance_model->getdepartmentbyid($id);
         $data['title'] = "Department";
+        
         return view('app.department_info', $data);
     }
 
