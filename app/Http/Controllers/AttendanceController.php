@@ -176,12 +176,11 @@ class AttendanceController extends Controller
         $employeeDate = $year . ('-01-01');
 
         $data['leaves'] = Leaves::where('state', 0)->latest()->get();
-
+        
         foreach ($leaveforfeitings as $key => $leaveforfeit) {
             $data['leaveForfeiting'][$key]['leaveBalance'] = $this->attendance_model->getLeaveBalance($leaveforfeit->empID, $employeeDate, date('Y-m-d'));
         }
 
-        dd($data);
 
         $data['title'] = "Leaves";
         $data['today'] = date('Y-m-d');

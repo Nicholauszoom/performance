@@ -287,6 +287,7 @@
                                     ?>
                                 </td>
                                 <td>
+                                   
                                     {{ $item->opening_balance ? $item->opening_balance . ' Days' : '0 Days' }}
 
                                 </td>
@@ -296,7 +297,7 @@
                                     $startDate = $currentYear . '-01-01'; // Start of the current year
                                     $endDate = $currentYear . '-12-31'; // Current date
 
-                                    $daysSpent = App\Models\Leaves::where('empId', $item->empID)
+                                    $daysSpent = App\Models\Leaves::where('empid', $item->empid)
                                         ->where('nature', $natureId)
                                         ->whereBetween('created_at', [$startDate, $endDate])
                                         ->where('state', 0)
@@ -324,7 +325,7 @@
 
                                 @can('edit-leave-forfeit')
                                     <td class="text-center">
-                                        <a href="{{ route('flex.editLeaveForfeitings', $item->empID) }}" class="btn btn-sm bg-main"
+                                        <a href="{{ route('flex.editLeaveForfeitings', $item->empid) }}" class="btn btn-sm bg-main"
                                             title="Edit This Leave Approval">
                                             <i class="ph-note-pencil"></i>
                                         </a>

@@ -27,7 +27,7 @@ class ClearLeavesImport implements ToCollection, WithHeadingRow
             if (isset($row['payroll_number'])) {
                 $empId = $row['payroll_number'];
                 $remaining = $row['leave_days_forfeited'];
-
+                 
                 // Check if a record with the same empID and forfeiting_year exists
                 // Check if a record with the same empID, forfeiting_year, or opening_balance_year exists
                     $existingRecord = LeaveForfeiting::where('empid', $empId)

@@ -1360,8 +1360,18 @@ public function updatedepartment($data, $id)
     public function getaccountability($id)
     {
 
-        $query = "SELECT  @s:=@s+1 as SNo, CONCAT(e.fname,' ',IF( e.mname != null,e.mname,' '),' ', e.lname) as AUTHOR,  acc.* FROM accountability acc, employee e, (SELECT @s:=0) as s  WHERE acc.author = e.emp_id and acc.position_ref ='" . $id . "'";
-
+        $query = "
+        SELECT 
+            ROW_NUMBER() OVER () AS SNo, 
+            CONCAT(e.fname, ' ', COALESCE(e.mname, ''), ' ', e.lname) AS AUTHOR, 
+            acc.* 
+        FROM 
+            accountability acc
+        JOIN 
+            employee e ON acc.author = e.emp_id 
+        WHERE 
+            acc.position_ref = ".$id."";
+    
         return DB::select(DB::raw($query));
     }
 
@@ -1436,9 +1446,9 @@ public function updatedepartment($data, $id)
             employee e ON s.created_by = e.emp_id
         WHERE
             s.\"isActive\" = 1
-            AND s.position_ref = :id
+            AND s.position_ref = ".$id."
     ";
-        return DB::select(DB::raw($query));
+        return DB::select(DB::raw($query), );
     }
 
     public function confirm_graduation($data, $id)
@@ -3256,7 +3266,15 @@ last_paid_date='" . $date . "' WHERE  state = 1 and type = 3";
 
     public function getloan($loanID)
     {
-        $query = "SELECT l.empID, l.*,  CONCAT(e.fname,' ',IF( e.mname != null,e.mname,' '),' ', e.lname) as name, d.name as department, p.name as position FROM loan l, employee e, position p, department d WHERE l.empID=e.emp_id and e.position=p.id and e.department=d.id AND l.id = " . $loanID . " ";
+        $query = "SELECT l.empID, l.*,  
+        CONCAT(e.fname, ' ', COALESCE(e.mname, ''), ' ', e.lname) AS name, 
+        d.name AS department, 
+        p.name AS position 
+        FROM loan l
+        JOIN employee e ON l.empID = e.emp_id
+        JOIN position p ON e.position = p.id
+        JOIN department d ON e.department = d.id 
+        WHERE l.id = " . $loanID . " ";
 
         return DB::select(DB::raw($query));
     }

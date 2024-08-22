@@ -1955,8 +1955,8 @@ class GeneralController extends Controller
 
             $data = array(
                 'name' => $request->input('name'),
-                'minSalary' => $request->input('minSalary'),
-                'maxSalary' => $request->input('maxSalary'),
+                'minsalary' => $request->input('minSalary'),
+                'maxsalary' => $request->input('maxSalary'),
 
             );
             $result = $this->flexperformance_model->addOrganizationLevel($data);
@@ -10919,7 +10919,7 @@ class GeneralController extends Controller
 
         $data['parent'] = 'Settings';
 
-        $data['child'] = $approval->process_name . '/Approval Levels';
+        $data['child'] = ($approval->process_name ?? 'Process Name Missing') . '/Approval Levels';
         return view('setting.view-approval', $data, compact('i'));
     }
 

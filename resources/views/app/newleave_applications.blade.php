@@ -32,6 +32,7 @@
                     @php
 
                         $line_manager = auth()->user()->emp_id;
+                        
                         // $approve=App\Models\LeaveApproval::where('empID',$item->empID)->first();
                         $level1 = App\Models\LeaveApproval::where('empID', $item->empID)
                             ->where('level1', $line_manager)
